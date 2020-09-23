@@ -7,10 +7,8 @@ configure({enforceActions: 'always'});
 
 class ActivityStore {
     @observable activityRegistery = new Map();
-    @observable activities: IActivity[] = [];
-    @observable selectedActivity: IActivity | undefined;
+    @observable activity: IActivity | null = null;
     @observable loadingInitial = false;
-    @observable editMode = false;
     @observable submitting = false;
     @observable target = '';
 
@@ -26,18 +24,50 @@ class ActivityStore {
             runInAction('Loading activities',() => {
                 activities.forEach((activity) =>{
                     activity.date = activity.date.split('.')[0];
-                    //this.activities.push(activity);
                     this.activityRegistery.set(activity.id, activity);
                 });
                 this.loadingInitial = false
             })
             } catch (error) {
                 console.log(error);
-                runInAction(() => {
+                runInAction('Loading activities error',() => {
                   this.loadingInitial = false
                 });
             }
     };
+
+    @action loadActivity = async (id:string) => {
+        let activity = this.getActivity(id);
+        if(activity){
+            this.activity = activity;
+        } 
+        else{
+            this.loadingInitial = true;
+            try {
+                activity = await agent.Activities.details(id);
+                runInAction('Getting activity',() => {
+                    this.activity = activity;
+                    this.loadingInitial = false
+                })
+                } catch (error) {
+                    console.log(error);
+                    runInAction('Getting activity error',() => {
+                      this.loadingInitial = false
+                    });
+                }
+
+
+        }
+      
+    };
+
+    @action clearActivity = () => {
+        this.activity = null;
+    }
+
+    getActivity = (id:string) => {
+        return this.activityRegistery.get(id);
+    }
 
     @action createActivity = async (activity: IActivity) =>{
         this.submitting = true;
@@ -45,7 +75,6 @@ class ActivityStore {
             await agent.Activities.create(activity);
             runInAction('Creating activity', () => {
                 this.activityRegistery.set(activity.id, activity);
-                this.editMode = false;
                 this.submitting = false;
             });
         } catch (error) {
@@ -56,19 +85,13 @@ class ActivityStore {
         }
     };
 
-    @action selectActivity = ( id: string) => {
-        this.selectedActivity = this.activityRegistery.get(id);// this.activities.find(a => a.id === id);
-        this.editMode = false;
-    };
-
     @action editActivity = async (activity: IActivity) =>{
         this.submitting = true;
         try {
             await agent.Activities.update(activity);
             runInAction('Editing activity', () => {
             this.activityRegistery.set(activity.id, activity);
-            this.selectedActivity = activity;
-            this.editMode = false;
+            this.activity = activity;
             this.submitting = false;
             });
         } catch (error) {
@@ -98,23 +121,6 @@ class ActivityStore {
         }
     }
 
-    @action openCreateForm = () => {
-        this.editMode = true;
-        this.selectedActivity = undefined;
-    }
-
-    @action openEditForm = (id: string) => {
-        this.selectedActivity = this.activityRegistery.get(id);
-        this.editMode = true;
-    }
-
-    @action cancelSelectedActivity = () =>{
-        this.selectedActivity = undefined;
-    }
-
-    @action cancelFormOpen = () => {
-        this.editMode = false;
-    }
 }
 
 export default createContext(new ActivityStore())

@@ -13,7 +13,7 @@ const ActivityList: React.FC = () => {
       <Item.Group divided>
         {activitiesByDate.map((activity) => (
           <Item key={activity.id}>
-            <Item.Image size="tiny" src="/images/wireframe/image.png" />
+            <Item.Image size="tiny" />
             <Item.Content>
               <Item.Header as="a">{activity.title}</Item.Header>
               <Item.Meta>{activity.date}</Item.Meta>

@@ -1,16 +1,20 @@
 ﻿import React, {useContext, useEffect} from 'react';
-import { Card, Icon, Image, Button } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import ActivityStore from '../../../app/stores/activityStore';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import {  RouteComponentProps } from 'react-router-dom';
 import { LoadingComponent } from '../../../app/layout/LoadingComponent';
+import  ActivityDetailedHeader from './ActivityDetailedHeader';
+import { ActivityDetailedChat } from './ActivityDetailedChat';
+import { ActivityDetailedSideBar } from './ActivityDetailedSideBar';
+import ActivityDetailedInfo from './ActivityDetailedInfo';
 
 
 interface DetailParams{
     id:string
 }
 
-const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, history}) => {
+const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match}) => {
 
     const activityStore = useContext(ActivityStore);
     const { activity, loadActivity, loadingInitial } = activityStore;
@@ -22,30 +26,17 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
     if(loadingInitial || !activity) return <LoadingComponent content='Loading activity...'/>  
 
     return (
-        <Card fluid>
-            <Image src={`/assets/categoryImages/${activity!.category}.jpg`} wrapped ui={false} />
-            <Card.Content>
-                <Card.Header>{activity!.title}</Card.Header>
-                <Card.Meta>
-                    <span className='date'>{activity!.date}</span>
-                </Card.Meta>
-                <Card.Description>
-                    {activity!.description}
-                 </Card.Description>
-            </Card.Content>
-            <Card.Content extra>
-                <a>
-                    <Icon name='user' />
-                    22 Friends
-               </a>
-            </Card.Content>
-            <Card.Content extra>
-                <Button.Group widths={2}>
-                    <Button basic color='blue' as={Link} to={`/manage/${activity.id}`} content='Edit' />
-                    <Button basic color='grey' onClick={() => history.push('/activities')} content='Cancel' />
-                </Button.Group>
-            </Card.Content>
-        </Card>
+      <Grid>
+          <Grid.Column width={10}>
+            <ActivityDetailedHeader activity={activity}/>
+            <ActivityDetailedInfo activity={activity} />
+            <ActivityDetailedChat />
+          </Grid.Column>
+
+          <Grid.Column width={6}>
+              <ActivityDetailedSideBar />
+          </Grid.Column>
+      </Grid>
     )
 }
 

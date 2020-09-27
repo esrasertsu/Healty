@@ -64,10 +64,10 @@ class ActivityStore {
                     this.loadingInitial = false
                 })
                 } catch (error) {
-                    console.log(error);
                     runInAction('Getting activity error',() => {
                       this.loadingInitial = false
                     });
+                    console.log(error);
                 }
 
 

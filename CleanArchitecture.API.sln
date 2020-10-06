@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.902
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchitecture.API", "CleanArchitecture.API\CleanArchitecture.API.csproj", "{8ADC5572-803A-401A-9E16-22428E7A7469}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchitecture.Domain", "CleanArchitecture.Domain\CleanArchitecture.Domain.csproj", "{6B62E439-0ED0-4E54-82AA-2865380A818F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchitecture.Persistence", "CleanArchitecture.Persistence\CleanArchitecture.Persistence.csproj", "{E63CB559-833F-4E67-B245-C3762618941C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{6F7AFD6A-7021-4AEB-84C3-B334ED4DE421}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{E63CB559-833F-4E67-B245-C3762618941C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E63CB559-833F-4E67-B245-C3762618941C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E63CB559-833F-4E67-B245-C3762618941C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F7AFD6A-7021-4AEB-84C3-B334ED4DE421}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F7AFD6A-7021-4AEB-84C3-B334ED4DE421}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F7AFD6A-7021-4AEB-84C3-B334ED4DE421}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F7AFD6A-7021-4AEB-84C3-B334ED4DE421}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

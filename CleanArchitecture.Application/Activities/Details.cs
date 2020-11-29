@@ -1,7 +1,9 @@
-﻿using CleanArchitecture.Application.Errors;
+﻿using AutoMapper;
+using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Net;
 using System.Threading;
@@ -11,26 +13,32 @@ namespace CleanArchitecture.Application.Activities
 {
     public class Details
     {
-        public class Query : IRequest<Activity>
+        public class Query : IRequest<ActivityDto>
         {
             public Guid Id { get; set; }
         }
-        public class Handler : IRequestHandler<Query, Activity>
+        public class Handler : IRequestHandler<Query, ActivityDto>
         {
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IMapper _mapper;
+
+            public Handler(DataContext context, IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
             }
 
-            public async Task<Activity> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ActivityDto> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities.FindAsync(request.Id);
+                var activity = await _context.Activities
+                                               .FindAsync(request.Id);
 
                 if (activity == null)
                     throw new RestException(HttpStatusCode.NotFound, new { activity = "Not Found" });
 
-                return activity;
+                var activityReturn = _mapper.Map<Activity, ActivityDto>(activity);
+
+                return activityReturn;
             }
         }
     }

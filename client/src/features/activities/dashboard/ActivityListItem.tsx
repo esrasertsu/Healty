@@ -1,26 +1,34 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Item, Button, Segment, Icon } from 'semantic-ui-react'
+import { Item, Button, Segment, Icon, Label } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity';
 import { format } from 'date-fns';
+import {ActivityListItemAttendees } from './ActivityListItemAttendees';
 
 export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
-
+    const host = activity.attendees.filter(x => x.isHost === true)[0];
     return (
         <Segment.Group>
             <Segment>
                 <Item.Group>
                 <Item>
-                    <Item.Image size="tiny" circular src='/assets/user.png' />
+                    <Item.Image size="tiny" circular src={host.image || '/assets/user.png'} />
                     <Item.Content>
-                    <Item.Header as="a">{activity.title}</Item.Header>
+                    <Item.Header as={Link} to={`/activities/${activity.id}`}>{activity.title}</Item.Header>
                     <Item.Description>
                         <div>{activity.description}</div>
                         <div>
                         {activity.city},{activity.venue}
                         </div>
                     </Item.Description>
-                    {/* <Item.Extra>
+                    <Item.Description>Hosted by {host.displayName}</Item.Description>
+                    {activity.isHost && 
+                    <Item.Description><Label basic color="orange" content="You're hosting this activity"></Label></Item.Description>
+                    }
+                 {activity.isGoing && !activity.isHost &&
+                    <Item.Description><Label basic color="green" content="You're going to this activity"></Label></Item.Description>
+                }
+                {/* <Item.Extra>
                         <Button
                         name={activity.id}
                         loading={target === activity.id && submitting}
@@ -41,7 +49,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                 <Icon name='marker' /> {activity.venue}, {activity.city}
             </Segment>
             <Segment secondary>
-                Attendees will go here
+               <ActivityListItemAttendees attendees={activity.attendees}/>
             </Segment>
             <Segment clearing>
                <span> {activity.description} </span>

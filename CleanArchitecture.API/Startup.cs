@@ -60,10 +60,10 @@ namespace CleanArchitecture.API
             {
                 cfg.RegisterValidatorsFromAssemblyContaining<Create>();
                 cfg.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-            })
-            .AddNewtonsoftJson(options =>
-            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-            );
+            });
+            // .AddNewtonsoftJson(options =>
+            //     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            // );
 
             var builder = services.AddIdentityCore<AppUser>();
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);

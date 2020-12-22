@@ -12,7 +12,8 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
             <Segment>
                 <Item.Group>
                 <Item>
-                    <Item.Image size="tiny" circular src={host.image || '/assets/user.png'} />
+                    <Item.Image size="tiny" circular src={host.image || '/assets/user.png'}
+                    style={{marginBottom:50}}/>
                     <Item.Content>
                     <Item.Header as={Link} to={`/activities/${activity.id}`}>{activity.title}</Item.Header>
                     <Item.Description>
@@ -21,7 +22,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                         {activity.city},{activity.venue}
                         </div>
                     </Item.Description>
-                    <Item.Description>Hosted by {host.displayName}</Item.Description>
+                    <Item.Description>Hosted by <Link to={`/profile/${host.userName}`} >{host.displayName}</Link></Item.Description>
                     {activity.isHost && 
                     <Item.Description><Label basic color="orange" content="You're hosting this activity"></Label></Item.Description>
                     }

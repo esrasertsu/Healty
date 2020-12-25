@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CleanArchitecture.Application.Comments;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -17,5 +18,7 @@ namespace CleanArchitecture.Application.Activities
 
         [JsonPropertyName("attendees")]
         public ICollection<AttendeeDto> UserActivities { get; set; }
+        public ICollection<CommentDto> Comments { get; set; }
+
     }
 }

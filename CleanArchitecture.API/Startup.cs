@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchitecture.API.Middleware;
+using CleanArchitecture.API.SignalR;
 using CleanArchitecture.Application.Activities;
 using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Domain;
@@ -20,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CleanArchitecture.API
 {
@@ -46,12 +48,14 @@ namespace CleanArchitecture.API
             {
                 opt.AddPolicy("CorsPolicy", policy => 
                 {
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000")
+                    .AllowCredentials();
                 });
             });
 
             services.AddMediatR(typeof(List.Handler).Assembly);
             services.AddAutoMapper(typeof(List.Handler));
+            services.AddSignalR();
 
             services.AddControllers( opt => {
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
@@ -92,6 +96,19 @@ namespace CleanArchitecture.API
                         ValidateAudience = false, //alıcı verici urller
                         ValidateIssuer = false
                     };
+                    opt.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+                            var path = context.HttpContext.Request.Path;
+                            if(!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/chat")))
+                            {
+                                context.Token = accessToken;
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                 }
                );
 
@@ -122,6 +139,7 @@ namespace CleanArchitecture.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
             });
         }
     }

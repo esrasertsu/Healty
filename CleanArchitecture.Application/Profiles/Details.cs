@@ -38,7 +38,8 @@ namespace CleanArchitecture.Application.Profiles
                     UserName = user.UserName,
                     Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
                     Photos = user.Photos,
-                    Bio = user.Bio
+                    Bio = user.Bio,
+                    Role = user.Role
                 };
 
             }

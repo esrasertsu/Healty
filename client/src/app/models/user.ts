@@ -3,6 +3,7 @@ export interface IUser {
     displayName: string;
     token: string;
     image?: string;
+    role: string;
 }
 
 export interface IUserFormValues {

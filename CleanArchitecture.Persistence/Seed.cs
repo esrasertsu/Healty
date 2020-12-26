@@ -11,7 +11,7 @@ namespace Persistence
     public class Seed
     {
         public static async Task SeedData(DataContext context,
-            UserManager<AppUser> userManager)
+            UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             if (!userManager.Users.Any())
             {
@@ -22,27 +22,36 @@ namespace Persistence
                         Id = "a",
                         DisplayName = "Bob",
                         UserName = "bob",
-                        Email = "bob@test.com"
+                        Email = "bob@test.com",
+                        Role="Trainer"
                     },
                     new AppUser
                     {
                         Id = "b",
                         DisplayName = "Jane",
                         UserName = "jane",
-                        Email = "jane@test.com"
+                        Email = "jane@test.com",
+                        Role = "User"
                     },
                     new AppUser
                     {
                         Id = "c",
                         DisplayName = "Tom",
                         UserName = "tom",
-                        Email = "tom@test.com"
+                        Email = "tom@test.com",
+                        Role="Trainer"
                     },
                 };
 
+
                 foreach (var user in users)
                 {
-                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                    await roleManager.CreateAsync(new IdentityRole(user.Role));
+                    var result = await userManager.CreateAsync(user, "Pa$$w0rd");
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(user, user.Role);
+                    }
                 }
             }
 

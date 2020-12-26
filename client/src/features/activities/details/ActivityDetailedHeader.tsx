@@ -47,8 +47,8 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                       </Item.Group>
                     </Segment>
                   </Segment>
-                  <Segment clearing attached='bottom'>
-                    {activity.isHost ? (
+                <Segment clearing attached='bottom'>
+                    {activity.isHost && host.userRole!=="User" ? (
                       <Button as={Link} to={`/manage/${activity.id}`} color='orange' floated='right'>
                          Manage Event
                       </Button>

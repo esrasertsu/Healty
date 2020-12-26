@@ -71,7 +71,9 @@ namespace CleanArchitecture.API
             // );
 
             var builder = services.AddIdentityCore<AppUser>();
+
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
+            identityBuilder.AddRoles<IdentityRole>();
             identityBuilder.AddEntityFrameworkStores<DataContext>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
 
@@ -81,8 +83,13 @@ namespace CleanArchitecture.API
                 {
                     policy.Requirements.Add(new HostRequirement());
                 });
+                opt.AddPolicy("CanCreateActivity", policy =>
+                {
+                    policy.Requirements.Add(new ActivityRoleRequirement());
+                });
             });
             services.AddTransient<IAuthorizationHandler, HostRequirementHandler>();//only available for the liftetime of the operation not the complete request
+            services.AddTransient<IAuthorizationHandler, ActivityRoleRequirementHandler>();
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"]));
 

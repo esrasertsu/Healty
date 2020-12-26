@@ -25,6 +25,7 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new Details.Query { Id = id});
         }
         [HttpPost]
+        [Authorize(Policy = "CanCreateActivity")]
         public async Task<ActionResult<Unit>> Create(Create.Command command)
         {
             return await Mediator.Send(command);

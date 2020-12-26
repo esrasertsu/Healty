@@ -21,15 +21,18 @@ const NavBar: React.FC = () => {
             />
             Reactivity
           </Menu.Item>
-          <Menu.Item name="activities" as={NavLink} to="/activities" />
-          <Menu.Item>
-            <Button
-              as={NavLink}
-              to="/createActivity"
-              positive
-              content="Create Activity"
-            />
-          </Menu.Item>
+                <Menu.Item name="activities" as={NavLink} to="/activities" />
+                {user && user.role !="User" &&
+                    <Menu.Item>
+                        <Button
+                            as={NavLink}
+                            to="/createActivity"
+                            positive
+                            content="Create Activity"
+                        />
+                    </Menu.Item>
+                }
+          
           {user && (
             <Menu.Item position="right">
               <Image avatar spaced="right" src={user.image || "/assets/user.png"} />

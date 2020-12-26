@@ -10,5 +10,7 @@ namespace CleanArchitecture.Application.Activities
         public string DisplayName { get; set; }
         public string Image { get; set; }
         public bool IsHost { get; set; }
+        public string UserRole { get; set; }
+
     }
 }

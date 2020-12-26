@@ -3,6 +3,7 @@ using CleanArchitecture.API.Middleware;
 using CleanArchitecture.API.SignalR;
 using CleanArchitecture.Application.Activities;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Application.Profiles;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using FluentValidation.AspNetCore;
@@ -122,6 +123,8 @@ namespace CleanArchitecture.API
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+            services.AddScoped<IProfileReader, ProfileReader>();
+
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
         }
 

@@ -49,4 +49,5 @@ export interface IAttendee{
     image: string;
     isHost: boolean;
     userRole: string;
+    isFollowing?: boolean;
 }

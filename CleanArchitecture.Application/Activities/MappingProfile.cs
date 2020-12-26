@@ -16,7 +16,8 @@ namespace CleanArchitecture.Application.Activities
                 .ForMember(dest => dest.UserName, o => o.MapFrom(s => s.AppUser.UserName))
                 .ForMember(dest => dest.DisplayName, o => o.MapFrom(s => s.AppUser.DisplayName))
                 .ForMember(dest => dest.Image, o => o.MapFrom(s => s.AppUser.Photos.FirstOrDefault(x => x.IsMain).Url))
-                .ForMember(dest => dest.UserRole, o => o.MapFrom(s => s.AppUser.Role));
+                .ForMember(dest => dest.UserRole, o => o.MapFrom(s => s.AppUser.Role))
+                .ForMember(dest => dest.IsFollowing, o => o.MapFrom<FollowingResolver>());
         }
     }
 }

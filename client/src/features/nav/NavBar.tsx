@@ -22,7 +22,7 @@ const NavBar: React.FC = () => {
             Reactivity
           </Menu.Item>
                 <Menu.Item name="activities" as={NavLink} to="/activities" />
-                {user && user.role !="User" &&
+                {user && user.role !== "User" &&
                     <Menu.Item>
                         <Button
                             as={NavLink}

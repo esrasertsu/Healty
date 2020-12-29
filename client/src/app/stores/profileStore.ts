@@ -25,12 +25,14 @@ export default class ProfileStore{
 
     @observable profile: IProfile | null = null;
     @observable loadingProfile = true;
-
+    @observable loadingProfiles = true;
     @observable uploadingPhoto = false;
     @observable loadingForPhotoDeleteMain = false;
     @observable loading = false;
-    @observable followings: IProfile[] = []
+    @observable followings: IProfile[] = [];
     @observable activeTab: number = 0;
+    @observable profileList: IProfile[] = [];
+
 
     @computed get isCurrentUser(){
         if (this.rootStore.userStore.user && this.profile){
@@ -44,6 +46,15 @@ export default class ProfileStore{
         this.activeTab = activeIndex;
     }
     
+    @action setLoadingProfile = (lp : boolean) =>{
+        this.loadingProfile = lp;
+    }
+
+    
+    @action setLoadingProfiles = (lp : boolean) =>{
+        this.loadingProfiles = lp;
+    }
+
     @action loadProfile = async (username: string) =>{
         this.loadingProfile = true;
 
@@ -61,6 +72,23 @@ export default class ProfileStore{
         }
     }
 
+    @action loadProfiles = async () =>{
+        this.loadingProfiles = true;
+
+        try {
+            var role = "tra";
+            const profileList = await agent.Profiles.list(role);
+            runInAction(()=>{
+                this.profileList = profileList;
+                this.loadingProfiles = false;
+            })
+        } catch (error) {
+            runInAction(()=>{
+                this.loadingProfiles = false;
+            })
+            console.log(error);
+        }
+    }
     @action uploadPhoto = async (file: Blob) => {
         this.uploadingPhoto = true;
 

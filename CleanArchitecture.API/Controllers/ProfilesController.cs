@@ -9,10 +9,16 @@ namespace CleanArchitecture.API.Controllers
 {
     public class ProfilesController : BaseController
     {
-        [HttpGet("{username}")]
+        [HttpGet("{username}/details")]
         public async Task<ActionResult<Profile>> Get(string username)
         {
             return await Mediator.Send(new Details.Query { UserName = username });
+        }
+
+        [HttpGet("role={role}")]
+        public async Task<ActionResult<List<Profile>>> List(string role)
+        {
+            return await Mediator.Send(new ProfileList.Query { Role = role });
         }
     }
 }

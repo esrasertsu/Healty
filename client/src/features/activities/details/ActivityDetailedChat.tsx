@@ -42,7 +42,7 @@ import { formatDistance } from 'date-fns';
                       <Comment key={comment.id}>
                       <Comment.Avatar src={comment.image || '/assets/user.png'} />
                       <Comment.Content>
-                        <Comment.Author as={Link} to={`profile/${comment.username}`}>{comment.displayName}</Comment.Author>
+                        <Comment.Author as={Link} to={`/profile/${comment.username}`} replace>{comment.displayName}</Comment.Author>
                         <Comment.Metadata>
                           <div>{formatDistance(new Date(comment.createdAt), new Date())}</div>
                         </Comment.Metadata>

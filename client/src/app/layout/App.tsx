@@ -1,4 +1,4 @@
-import React, {  Fragment, useContext, useEffect } from 'react';
+import React, {  Component, Fragment, useContext, useEffect } from 'react';
 import { Container } from 'semantic-ui-react';
 import NavBar from '../../features/nav/NavBar';
 import { observer } from 'mobx-react-lite';
@@ -14,6 +14,7 @@ import { RootStoreContext } from '../stores/rootStore';
 import { LoadingComponent } from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
 import ProfilePage  from '../../features/profiles/ProfilePage';
+import ProfileList  from '../../features/profiles/ProfileList';
 
 const App: React.FC<RouteComponentProps> = ({location}) => {
 
@@ -45,6 +46,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                   <Route path="/activities/:id" component={ActivityDetails} />
                   <Route key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
                   <Route path="/profile/:username" component={ProfilePage}/>
+                  <Route path="/profiles" component={ProfileList}/>
                   <Route path="/login" component={LoginForm}/>
                   <Route component={NotFound}/>
                 </Switch>

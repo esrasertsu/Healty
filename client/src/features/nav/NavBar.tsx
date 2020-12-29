@@ -3,12 +3,13 @@ import { Menu, Container, Button, Image, Dropdown } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { Link, NavLink } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
-
+import {history} from '../../index';
 
 const NavBar: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
     const { user, logout} = rootStore.userStore;
-
+    const { setLoadingProfiles } = rootStore.profileStore;
+    const { setLoadingInitial } = rootStore.activityStore;
 
     return (
       <Menu fixed="top" inverted>
@@ -21,7 +22,17 @@ const NavBar: React.FC = () => {
             />
             Reactivity
           </Menu.Item>
-                <Menu.Item name="activities" as={NavLink} to="/activities" />
+                <Menu.Item name="activities"   onClick={() => {
+                   setLoadingInitial(true);
+                    history.push(`/activities`);
+                    }} />
+
+                <Menu.Item name="profiles" 
+                onClick={() => {
+                   setLoadingProfiles(true);
+                    history.push(`/profiles`);
+                    }} />
+
                 {user && user.role !== "User" &&
                     <Menu.Item>
                         <Button

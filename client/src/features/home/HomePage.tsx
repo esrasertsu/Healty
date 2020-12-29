@@ -24,6 +24,9 @@ const HomePage = () => {
                         <Button as={Link} to='/activities' size='huge' inverted>
                             See the activities
                         </Button>
+                        <Button as={Link} to='/profiles' size='huge' inverted>
+                            Find your couch
+                        </Button>
                    </Fragment>
                    ): (
                        <Fragment>

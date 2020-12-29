@@ -59,30 +59,38 @@ namespace CleanArchitecture.Application.User
                 if (await _context.Users.AnyAsync(x => x.UserName == request.UserName))
                     throw new RestException(HttpStatusCode.BadRequest, new { UserName = "UserName already exists." });
 
-                var user = new AppUser
+                try
                 {
-                    DisplayName = request.DisplayName,
-                    Email = request.Email,
-                    UserName = request.UserName,
-                    Role = "User"
-                };
-
-                var result = await _userManager.CreateAsync(user, request.Password);
-                
-                if(result.Succeeded)
-                {
-                    return new User
+                    var user = new AppUser
                     {
-                        DisplayName = user.DisplayName,
-                        Token = _jwtGenerator.CreateToken(user),
-                        UserName = user.UserName,
-                        Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
-                        Role = user.Role
+                        DisplayName = request.DisplayName,
+                        Email = request.Email,
+                        UserName = request.UserName,
+                        Role = "User"
                     };
+
+                    var result = await _userManager.CreateAsync(user, request.Password);
+
+                    if (result.Succeeded)
+                    {
+                        return new User
+                        {
+                            DisplayName = user.DisplayName,
+                            Token = _jwtGenerator.CreateToken(user),
+                            UserName = user.UserName,
+                            Role = user.Role
+                        };
+                    }
+
+                }
+                catch (Exception)
+                {
+
+                    throw new RestException(HttpStatusCode.BadRequest, new { UserName = "Problem creating user" });
                 }
 
-               
-                throw new Exception("Problem creating user");
+                throw new RestException(HttpStatusCode.BadRequest, new { UserName = "Problem creating user" });
+
             }
         }
     }

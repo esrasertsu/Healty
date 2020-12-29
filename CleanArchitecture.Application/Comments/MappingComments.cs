@@ -7,9 +7,9 @@ using System.Text;
 
 namespace CleanArchitecture.Application.Comments
 {
-    public class MappingProfile :  Profile
+    public class MappingComments :  Profile
     {
-        public MappingProfile()
+        public MappingComments()
         {
             CreateMap<Comment, CommentDto>()
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.Author.UserName))

@@ -18,6 +18,8 @@ export default class ActivityStore {
     @observable activityRegistery = new Map();
     @observable activity: IActivity | null = null;
     @observable loadingInitial = false;
+    @observable loadingActivity = false;
+    
     @observable submitting = false;
     @observable target = '';
     @observable loading = false;
@@ -55,6 +57,11 @@ export default class ActivityStore {
             toast.info(message);
         })
     };
+
+
+    @action setLoadingInitial = (lp : boolean) =>{
+        this.loadingInitial = lp;
+    }
 
     @action stopHubConnection = () => {
         this.hubConnection!.invoke('RemoveFromGroup', this.activity!.id)
@@ -122,19 +129,19 @@ export default class ActivityStore {
             return activity;
         } 
         else{
-            this.loadingInitial = true;
+            this.loadingActivity = true;
             try {
                 activity = await agent.Activities.details(id);
                 runInAction('Getting activity',() => {
                     setActivityProps(activity,this.rootStore.userStore.user!)
                     this.activity = activity;
                     this.activityRegistery.set(activity.id, activity);
-                    this.loadingInitial = false
+                    this.loadingActivity = false
                 })
                 return activity;
                 } catch (error) {
                     runInAction('Getting activity error',() => {
-                      this.loadingInitial = false
+                      this.loadingActivity = false
                     });
                     console.log(error);
                 }

@@ -51,3 +51,36 @@ export interface IAttendee{
     userRole: string;
     isFollowing?: boolean;
 }
+
+
+export interface IActivitySearch {
+    _id: string,
+    accommodates: number,
+         bathrooms : number,
+         bed_type :  string ,
+         bedrooms : number,
+         beds : number,
+         date_from : Date,
+         date_to : Date,
+         has_availability : boolean,
+         host_image :  string ,
+         host_name :  string ,
+         image : string ,
+         listing_url :  string ,
+         location: {
+            lat: number,
+            long : number
+        },
+         name :  string ,
+         price : number,
+         property_type :  string ,
+         room_type :  string 
+}
+
+export interface IActivityMapItem {
+        lat: number,
+        lng : number,
+        time : Date,
+
+}
+

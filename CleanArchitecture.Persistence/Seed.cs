@@ -41,6 +41,14 @@ namespace Persistence
                         Email = "tom@test.com",
                         Role="Trainer"
                     },
+                    new AppUser
+                    {
+                        Id = "d",
+                        DisplayName = "Esra",
+                        UserName = "esra",
+                        Email = "esra@test.com",
+                        Role="User"
+                    },
                 };
 
 

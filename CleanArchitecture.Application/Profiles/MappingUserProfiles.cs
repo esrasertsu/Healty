@@ -13,7 +13,7 @@ namespace CleanArchitecture.Application.Profiles
         {
             CreateMap<AppUser, Profile>()
                 .ForMember(dest => dest.Image, o => o.MapFrom(s => s.Photos.FirstOrDefault(x => x.IsMain).Url))
-                .ForMember(dest => dest.IsFollowed, o => o.MapFrom<FollowingResolver>()); 
+                .ForMember(dest => dest.IsFollowed, o => o.MapFrom<FollowingResolver>());
         }
     }
 }

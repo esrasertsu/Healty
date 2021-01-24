@@ -1,3 +1,5 @@
+import { IPost } from "./post";
+
 export interface IProfile {
     displayName: string,
     userName: string,
@@ -7,6 +9,7 @@ export interface IProfile {
     followingCount: number,
     followerCount: number,
     photos: IPhoto[]
+
 }
 
 export interface IPhoto {

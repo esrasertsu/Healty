@@ -18,7 +18,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "types": ["googlemaps"]
   },
   "include": [
     "src",

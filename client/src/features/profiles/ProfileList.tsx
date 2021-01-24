@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import React, { Fragment, useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Card, Grid, Header } from 'semantic-ui-react'
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import { RootStoreContext } from '../../app/stores/rootStore';

@@ -3,22 +3,41 @@ body {
     background-color: rgb(234, 234, 234) !important;
 }
 
-.ui.inverted.top.fixed.menu {
-    background-image: linear-gradient( 135deg, rgb(24, 42, 115) 0%, rgb(33, 138, 174) 69%, rgb(32, 167, 172) 89% ) !important;
+.ui.top.fixed.menu {
+  background-color:#fff0 !important;
+    padding-right: 5rem;
+    border:0em;
+    
+  }
+.ui.vertical.menu{
+  background-color: #fff !important;
+  border-radius: 1.28571429rem !important;
+
 }
+
+@media only screen and (min-width: 1200px){
+.pageContainer.ui.container {
+    width: 1200px;
+    margin-top: 5em;
+    margin-right: auto!important;
+    margin-left: 16rem !important;
+  }
+}
+
+
 
 /*home page styles*/
 
 .masthead {
   display: flex;
   align-items: center;
-  background-image: linear-gradient(
-          135deg,
-          rgb(24, 42, 115) 0%,
-          rgb(33, 138, 174) 69%,
-          rgb(32, 167, 172) 89%
-  ) !important;
-  height: 100vh;
+  height: 35%;
+  width: 100%;
+  float: right;
+  background-image: url("../layout/img/homepage.jpg") !important;
+  background-size: cover !important;
+  background-position-y: -309px !important;
+  border-radius: .28571429rem !important;
 }
 
 .masthead .ui.menu .ui.button,
@@ -37,3 +56,9 @@ body {
 }
 
 /*end home page styles*/
+
+
+/*map page styles*/
+
+
+/*end map page styles*/

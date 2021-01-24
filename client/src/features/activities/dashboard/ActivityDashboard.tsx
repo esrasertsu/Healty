@@ -1,9 +1,10 @@
 import React,  { useEffect, useContext}  from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Button, Grid } from 'semantic-ui-react';
 import ActivityList from './ActivityList';
 import { observer } from 'mobx-react-lite';
 import { LoadingComponent } from '../../../app/layout/LoadingComponent';
 import { RootStoreContext } from '../../../app/stores/rootStore';
+import {history} from '../../../index'
 
 const ActivityDashboard: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
@@ -17,12 +18,19 @@ const ActivityDashboard: React.FC = () => {
 
   return (
     <Grid>
+      <Grid.Row>
       <Grid.Column width={10}>
         <ActivityList />
       </Grid.Column>
       <Grid.Column width={6}>
-       <h2> Activity Filters </h2>
+      <Button
+                        onClick={() => history.push('/activitysearch')}
+                        floated="right"
+                        content="Map View"
+                        color="yellow"
+                        />
       </Grid.Column>
+      </Grid.Row>
     </Grid>
   );
 };

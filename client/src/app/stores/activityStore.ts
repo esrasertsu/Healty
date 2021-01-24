@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { history } from '../..';
 import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
-import { IActivity } from '../models/activity';
+import { IActivity, IActivityMapItem } from '../models/activity';
 import { RootStore } from './rootStore';
 
 export default class ActivityStore {
@@ -23,6 +23,9 @@ export default class ActivityStore {
     @observable submitting = false;
     @observable target = '';
     @observable loading = false;
+
+    @observable markers : IActivityMapItem[] | null = null;
+    @observable selected : IActivityMapItem | null = null;
 
     @observable.ref hubConnection : HubConnection | null = null;
 
@@ -61,6 +64,14 @@ export default class ActivityStore {
 
     @action setLoadingInitial = (lp : boolean) =>{
         this.loadingInitial = lp;
+    }
+
+    @action setMarkers = (markers : IActivityMapItem[]) =>{
+        this.markers = markers;
+    }
+
+    @action setSelected = (selected : IActivityMapItem | null) =>{
+        this.selected = selected;
     }
 
     @action stopHubConnection = () => {

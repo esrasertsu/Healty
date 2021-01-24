@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Segment, Item, Header, Button, Grid, Statistic, Divider, Reveal } from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
+import { history } from '../../';
 
 interface IProps{
     profile: IProfile,
@@ -34,6 +35,16 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
             <Statistic label='Followers' value={profile.followerCount}/>
             <Statistic label='Following' value={profile.followingCount}/>
           </Statistic.Group>
+          <Divider/>
+          {isCurrentUser && 
+            <Button
+            fluid
+            basic
+            color={'green'}
+            content={'Blog Post'}
+            onClick={()=> history.push('/postForm')}
+          />
+          }
           <Divider/>
           {!isCurrentUser &&
           <Reveal animated='move'>

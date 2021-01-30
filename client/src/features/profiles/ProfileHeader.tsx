@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { Segment, Item, Header, Button, Grid, Statistic, Divider, Reveal } from 'semantic-ui-react';
+import { Segment, Item, Header, Button, Grid, Statistic, Divider, Reveal, ButtonGroup } from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { history } from '../../';
 
@@ -37,15 +37,21 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
           </Statistic.Group>
           <Divider/>
           {isCurrentUser && 
+          <ButtonGroup widths={2}>
             <Button
-            fluid
+              basic
+              color={'green'}
+              content={'Write Blog'}
+              onClick={()=> history.push('/createPost')}
+            />
+            <Button
             basic
-            color={'green'}
-            content={'Blog Post'}
-            onClick={()=> history.push('/postForm')}
+            color={'blue'}
+            content={'Create Activity'}
+            onClick={()=> history.push('/createActivity')}
           />
+          </ButtonGroup>
           }
-          <Divider/>
           {!isCurrentUser &&
           <Reveal animated='move'>
             <Reveal.Content visible style={{ width: '100%' }}>

@@ -34,7 +34,8 @@ body {
   height: 35%;
   width: 100%;
   float: right;
-  background-image: url("../layout/img/homepage.jpg") !important;
+  background: #84c68f !important;
+  /* background-image: url("../layout/img/homepage.jpg") !important; */
   background-size: cover !important;
   background-position-y: -309px !important;
   border-radius: .28571429rem !important;

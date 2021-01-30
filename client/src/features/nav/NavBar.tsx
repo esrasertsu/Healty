@@ -118,7 +118,7 @@ const NavBar: React.FC = () => {
           }
             }} />
 
-        {user && user.role !== "User" &&
+        {/* {user && user.role !== "User" &&
         <>
             <Menu.Item>
                 <Button
@@ -137,7 +137,7 @@ const NavBar: React.FC = () => {
              />
          </Menu.Item>
          </>
-        }
+        } */}
 {/*   
   {user && (
     <Menu.Item position="right">

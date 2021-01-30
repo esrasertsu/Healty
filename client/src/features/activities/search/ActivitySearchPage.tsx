@@ -42,6 +42,7 @@ const center = {
   lng: -79.3832,
 };
 const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
+const markerList : IActivityMapItem[] = [];
 
 const ActivitySearchPage: React.FC = () => {
    // const REACT_APP_GOOGLE_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string;
@@ -55,7 +56,6 @@ const ActivitySearchPage: React.FC = () => {
   const {setMarkers,markers,selected, setSelected} = rootStore.activityStore;
   
    const mapRef = React.useRef<google.maps.Map | null>(null);
-  const markerList : IActivityMapItem[] = [];
   const onMapClick = React.useCallback((e) => {
 
     const item : IActivityMapItem = { lat: e.latLng.lat(),

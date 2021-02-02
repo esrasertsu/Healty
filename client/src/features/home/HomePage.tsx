@@ -1,11 +1,9 @@
 import React, { Fragment, useContext } from 'react'
 import { Link } from 'react-router-dom';
-import { Button, Container, Header, Segment, Image, Grid, Card, Icon } from 'semantic-ui-react'
+import { Button, Container, Header, Segment, Image, Grid, Card } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
-import ProfileCard from '../profiles/ProfileCard';
 import { LoginForm } from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
-import { history } from '../../index'
 
 const HomePage = () => {
 

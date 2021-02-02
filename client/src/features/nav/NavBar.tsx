@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
-import { Menu, Container, Button, Image, Dropdown } from 'semantic-ui-react';
+import { Menu, Container, Image, Dropdown } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import {history} from '../../index';
 

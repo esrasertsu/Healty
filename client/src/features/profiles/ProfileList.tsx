@@ -8,7 +8,7 @@ import ProfileCard from './ProfileCard'
  const ProfileList: React.FC = () => {
 
     const rootStore = useContext(RootStoreContext);
-    const {loadingProfiles, loadProfiles, profileList, follow, unfollow, isCurrentUser} = rootStore.profileStore;
+    const {loadingProfiles, loadProfiles, profileList} = rootStore.profileStore;
     useEffect(() => {
         loadProfiles();
     }, [loadProfiles])

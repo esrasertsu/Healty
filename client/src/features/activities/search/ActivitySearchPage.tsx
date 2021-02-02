@@ -1,10 +1,9 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext} from "react";
 import {
   GoogleMap,
   useLoadScript,
   Marker,
-  InfoWindow,
-  LoadScript,
+  InfoWindow
 } from "@react-google-maps/api";
 import usePlacesAutocomplete, {
   getGeocode,
@@ -64,7 +63,7 @@ const ActivitySearchPage: React.FC = () => {
     
       markerList.push(item);
       setMarkers(markerList);
-  }, [markerList, setMarkers]);
+  }, [setMarkers]);
 
   const onMapLoad = React.useCallback((map: google.maps.Map) => {
     mapRef.current = map;

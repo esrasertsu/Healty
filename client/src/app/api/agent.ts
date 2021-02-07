@@ -3,7 +3,7 @@ import { IActivitiesEnvelope, IActivity } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
-import { IPhoto, IProfile } from '../models/profile';
+import { IPhoto, IProfile, IProfileComment, IProfileCommentEnvelope } from '../models/profile';
 import { IPost } from '../models/post';
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
@@ -87,7 +87,10 @@ const Profiles = {
     follow: (username:string) => requests.post(`/profiles/${username}/follow`, {}),
     unfollow:  (username:string) => requests.del(`/profiles/${username}/follow`),
     listFollowings: (username: string, predicate: string) => requests.get(`/profiles/${username}/follow?predicate=${predicate}`),
-    listActivities: (username:string, predicate: string) => requests.get(`/profiles/${username}/activities?predicate=${predicate}`)
+    listActivities: (username:string, predicate: string) => requests.get(`/profiles/${username}/activities?predicate=${predicate}`),
+    createComment: (comment:IProfileComment) => requests.post(`/profiles/`, comment),
+    listComments: (username: string, limit?:number, page?:number): Promise<IProfileCommentEnvelope> => 
+                requests.get(`/profiles/${username}/comments?username=${username}&limit=${limit}&offset=${page ? page*limit! :0}`)
 }
 
 
@@ -98,6 +101,7 @@ const Posts = {
     update: (post: IPost) => requests.put(`/post/${post.id}`, post),
     delete: (id: string) => requests.del(`/post/${id}`),
 }
+
 export default {
     Activities,
     User,

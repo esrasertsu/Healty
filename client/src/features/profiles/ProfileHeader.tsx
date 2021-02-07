@@ -1,8 +1,9 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { Segment, Item, Header, Button, Grid, Statistic, Divider, Reveal, ButtonGroup } from 'semantic-ui-react';
+import { Segment, Item, Header, Button, Grid, Statistic, Divider, Reveal, ButtonGroup, Icon } from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { history } from '../../';
+import { StarRating } from '../../app/common/form/StarRating';
 
 interface IProps{
     profile: IProfile,
@@ -13,6 +14,9 @@ interface IProps{
 }
 
 const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCurrentUser}) => {
+  
+  const profileRating = profile.starCount;
+
   return (
     <Segment>
       <Grid>
@@ -25,15 +29,27 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                 src={profile.image || '/assets/user.png'}
               />
               <Item.Content verticalAlign='middle'>
-                <Header as='h1'>{profile.displayName}</Header>
+                <Grid.Row>
+                  <Header as='h1'>{profile.displayName}</Header>
+                </Grid.Row>
+                <br/>
+                <Grid.Row>
+                <StarRating rating={profileRating} editing={false} key={"header"}/>
+                </Grid.Row>
               </Item.Content>
             </Item>
           </Item.Group>
         </Grid.Column>
         <Grid.Column width={4}>
-          <Statistic.Group widths={2}>
-            <Statistic label='Followers' value={profile.followerCount}/>
-            <Statistic label='Following' value={profile.followingCount}/>
+        <Statistic.Group widths={2} size='small'>
+          <Statistic>
+            <Statistic.Value>{profile.followerCount}</Statistic.Value>
+            <Statistic.Label>Followers</Statistic.Label>
+          </Statistic>
+          <Statistic>
+            <Statistic.Value>{profile.followingCount}</Statistic.Value>
+            <Statistic.Label>Following</Statistic.Label>
+          </Statistic>
           </Statistic.Group>
           <Divider/>
           {isCurrentUser && 

@@ -6,9 +6,7 @@ using CleanArchitecture.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,7 +14,7 @@ namespace CleanArchitecture.Application.Comments
 {
     public class Create
     {
-        public class Command : IRequest<CommentDto>
+        public class Command : IRequest<ActivityCommentDto>
         {
             public string Body { get; set; }
             public Guid ActivityId { get; set; }
@@ -24,7 +22,7 @@ namespace CleanArchitecture.Application.Comments
             
         }
 
-        public class Handler : IRequestHandler<Command, CommentDto>
+        public class Handler : IRequestHandler<Command, ActivityCommentDto>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
@@ -38,7 +36,7 @@ namespace CleanArchitecture.Application.Comments
                 _userAccessor = userAccessor;
             }
 
-            public async Task<CommentDto> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<ActivityCommentDto> Handle(Command request, CancellationToken cancellationToken)
             {
               
                 var activity = await _context.Activities.FindAsync(request.ActivityId); 
@@ -48,7 +46,7 @@ namespace CleanArchitecture.Application.Comments
 
                 var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.Username);
 
-                var comment = new Comment
+                var comment = new ActivityComment
                 {
                     Author = user,
                     Activity = activity,
@@ -62,7 +60,7 @@ namespace CleanArchitecture.Application.Comments
                 var success = await _context.SaveChangesAsync() > 0;
 
                 if (success) 
-                    return _mapper.Map<CommentDto>(comment);
+                    return _mapper.Map<ActivityCommentDto>(comment);
 
                 throw new Exception("Problem saving changes");
             }

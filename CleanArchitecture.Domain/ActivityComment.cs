@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CleanArchitecture.Domain
 {
-    public class Comment
+    public class ActivityComment
     {
         public Guid Id { get; set; }
         public string Body { get; set; }

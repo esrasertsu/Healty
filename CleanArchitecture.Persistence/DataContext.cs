@@ -13,24 +13,18 @@ namespace CleanArchitecture.Persistence
         {
 
         }
-        public DbSet<Value> Values { get; set; }
         public DbSet<Activity> Activities { get; set; }
         public DbSet<UserActivity> UserActivities { get; set; }
         public DbSet<Photo> Photos { get; set; }
-        public DbSet<Comment> Comments { get; set; }
+        public DbSet<ActivityComment> Comments { get; set; }
         public DbSet<UserFollowing> Followings { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<UserProfileComment> UserProfileComments { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder); //pk vermeyi sağlıyor migration sırasında
-
-            builder.Entity<Value>()
-                .HasData(
-                   new Value { Id = 1, Name = "Value 101" },
-                   new Value { Id = 2, Name = "value 102" }
-
-                );
 
             builder.Entity<UserActivity>(x => x.HasKey(ua => 
                 new {ua.AppUserId, ua.ActivityId}));
@@ -60,6 +54,17 @@ namespace CleanArchitecture.Persistence
                   .HasForeignKey(o => o.TargetId)
                   .OnDelete(DeleteBehavior.Restrict);
             });
+
+
+            builder.Entity<UserProfileComment>()
+                .HasOne(u => u.Author)
+                .WithMany(a => a.SendComments)
+                .HasForeignKey(u => u.AuthorId);
+
+            builder.Entity<UserProfileComment>()
+              .HasOne(u => u.Target)
+              .WithMany(a => a.ReceivedComments)
+              .HasForeignKey(u => u.TargetId);
 
         }
     }

@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -40,15 +41,21 @@ namespace CleanArchitecture.Application.Profiles
                 Bio = user.Bio,
                 Role = user.Role,
                 FollowerCount = user.Followers.Count(),
-                FollowingCount = user.Followings.Count()
+                FollowingCount = user.Followings.Count(),
+                StarCount = CalculateStarCount(user)
             };
 
-            if(currentUser.Followings.Any(x => x.TargetId == user.Id))
+            if (currentUser.Followings.Any(x => x.TargetId == user.Id))
             {
                 profile.IsFollowed = true;
             }
 
             return profile;
+        }
+
+        private int CalculateStarCount(AppUser user)
+        {
+            return  Convert.ToInt32(user.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).Average());
         }
     }
 }

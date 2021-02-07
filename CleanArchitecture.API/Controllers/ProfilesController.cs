@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Application.Profiles;
+using CleanArchitecture.Application.UserProfileComments;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -21,10 +22,22 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new ProfileList.Query { Role = role });
         }
 
-         [HttpGet("{username}/activities")]
+        [HttpGet("{username}/activities")]
         public async Task<ActionResult<List<UserActivityDto>>> GetUserActivities(string username, string predicate)
         {
             return await Mediator.Send(new ListActivities.Query { Username = username, Predicate = predicate });
+        }
+        [HttpGet("{username}/comments")]
+        public async Task<ActionResult<ListComments.UserProfileCommentsEnvelope>> GetUserComments(string username, int? limit, int? offset)
+        {
+            return await Mediator.Send(new ListComments.Query { Username = username , Limit= limit, Offset= offset});
+        }
+
+        [HttpPost]
+        //     [Authorize(Policy = "CanCommentTrainer")]
+        public async Task<ActionResult<UserProfileCommentDto>> CreateComment(Create.Command command)
+        {
+            return await Mediator.Send(command);
         }
     }
 }

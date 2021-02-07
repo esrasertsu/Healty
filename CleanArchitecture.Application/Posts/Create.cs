@@ -17,13 +17,13 @@ namespace CleanArchitecture.Application.Posts
 {
     public class Create
     {
-    public class Command : IRequest<PostDto>
-        {
-            public string Title { get; set; }
-            public string Description { get; set; }
-            public string Category { get; set; }
+        public class Command : IRequest<PostDto>
+            {
+                public string Title { get; set; }
+                public string Description { get; set; }
+                public string Category { get; set; }
 
-       }
+           }
         public class Handler : IRequestHandler<Command, PostDto>
         {
                 private readonly DataContext _context;

@@ -1,5 +1,3 @@
-import { IPost } from "./post";
-
 export interface IProfile {
     displayName: string,
     userName: string,
@@ -8,8 +6,8 @@ export interface IProfile {
     isFollowing: boolean,
     followingCount: number,
     followerCount: number,
-    photos: IPhoto[]
-
+    photos: IPhoto[],
+    starCount: number
 }
 
 export interface IPhoto {
@@ -23,4 +21,20 @@ export interface IUserActivity {
     title: string,
     category: string,
     date: Date
+}
+
+export interface IProfileCommentEnvelope {
+    profileComments :IProfileComment[];
+    profileCommentCount: number;
+}
+export interface IProfileComment {
+    id: string;
+    createdAt: Date;
+    body: string;
+    username: string;
+    authorName: string;
+    image: string;
+    displayName : string;
+    starCount: number;
+    allowDisplayName: boolean;
 }

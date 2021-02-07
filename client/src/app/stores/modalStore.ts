@@ -9,16 +9,19 @@ export default class ModalStore {
 
     @observable.shallow modal = {
         open: false,
-        body: null
+        body: null,
+        header: null
     }
 
-    @action openModal = (content: any) =>{
+    @action openModal = (header:any, content: any) =>{
         this.modal.open = true;
         this.modal.body = content;
+        this.modal.header = header;
     }
 
     @action closeModal = () => {
         this.modal.open = false;
         this.modal.body = null;
+        this.modal.header = null;
     }
 }

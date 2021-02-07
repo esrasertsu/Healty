@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'react-router-dom'
 import { Grid } from 'semantic-ui-react'
 import { LoadingComponent } from '../../app/layout/LoadingComponent'
 import { RootStoreContext } from '../../app/stores/rootStore'
+import ProfileComments from './ProfileComments'
 import ProfileContent from './ProfileContent'
 import ProfileHeader from './ProfileHeader'
 
@@ -17,7 +18,6 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
 
     const rootStore = useContext(RootStoreContext);
     const {loadingProfile, loadProfile, profile, follow, unfollow, isCurrentUser, loading,setActiveTab} = rootStore.profileStore;
-
     useEffect(() => {
         loadProfile(match.params.username);
         setActiveTab(0);
@@ -32,6 +32,11 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
                 <ProfileHeader profile={profile!} isCurrentUser={isCurrentUser} follow={follow} unfollow={unfollow} loading={loading} />
                 <ProfileContent setActiveTab={setActiveTab}/>
             </Grid.Column>
+            <Grid.Row>
+                <Grid.Column width={12} >
+                <ProfileComments />
+                </Grid.Column>
+            </Grid.Row>
         </Grid>
     )
 }

@@ -18,7 +18,7 @@ namespace CleanArchitecture.Application.Activities
 
         [JsonPropertyName("attendees")]
         public ICollection<AttendeeDto> UserActivities { get; set; }
-        public ICollection<CommentDto> Comments { get; set; }
+        public ICollection<ActivityCommentDto> Comments { get; set; }
 
     }
 }

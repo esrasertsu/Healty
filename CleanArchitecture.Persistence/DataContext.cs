@@ -18,7 +18,12 @@ namespace CleanArchitecture.Persistence
         public DbSet<Photo> Photos { get; set; }
         public DbSet<ActivityComment> Comments { get; set; }
         public DbSet<UserFollowing> Followings { get; set; }
-        public DbSet<Post> Posts { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<BlogImage> BlogImages { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<SubCategory> SubCategories { get; set; }
+        public DbSet<SubCatBlogs> SubCatBlogs { get; set; }
+
         public DbSet<UserProfileComment> UserProfileComments { get; set; }
 
 
@@ -66,6 +71,20 @@ namespace CleanArchitecture.Persistence
               .WithMany(a => a.ReceivedComments)
               .HasForeignKey(u => u.TargetId);
 
+
+            builder.Entity<SubCatBlogs>(x => x.HasKey(ua =>
+               new { ua.SubCategoryId, ua.BlogId }));
+
+            builder.Entity<SubCatBlogs>()
+                .HasOne(u => u.Blog)
+                .WithMany(a => a.SubCategories)
+                .HasForeignKey(u => u.BlogId);
+
+
+            builder.Entity<SubCatBlogs>()
+                .HasOne(a => a.SubCategory)
+                .WithMany(u => u.Blogs)
+                .HasForeignKey(a => a.SubCategoryId);
         }
     }
 }

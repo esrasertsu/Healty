@@ -42,7 +42,8 @@ namespace CleanArchitecture.Application.Profiles
                 Role = user.Role,
                 FollowerCount = user.Followers.Count(),
                 FollowingCount = user.Followings.Count(),
-                StarCount = CalculateStarCount(user)
+                StarCount = GetStarCount(user),
+                Star = CalculateStar(user)
             };
 
             if (currentUser.Followings.Any(x => x.TargetId == user.Id))
@@ -53,9 +54,13 @@ namespace CleanArchitecture.Application.Profiles
             return profile;
         }
 
-        private int CalculateStarCount(AppUser user)
+        private int GetStarCount(AppUser user)
         {
-            return  Convert.ToInt32(user.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).Average());
+            return  Convert.ToInt32(user.ReceivedComments.Count() >0 ? user.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Count() : 0);
+        }
+        private int CalculateStar(AppUser user)
+        {
+            return Convert.ToInt32(user.ReceivedComments.Count() > 0 ? user.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Average() : 0);
         }
     }
 }

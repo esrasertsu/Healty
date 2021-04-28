@@ -20,5 +20,7 @@ namespace CleanArchitecture.Application.Profiles
         public int FollowingCount { get; set; }
         public ICollection<Photo> Photos { get; set; }
         public int StarCount { get; set; }
+        public int Star { get; set; }
+
     }
 }

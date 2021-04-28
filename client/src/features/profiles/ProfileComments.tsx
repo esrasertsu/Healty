@@ -34,17 +34,15 @@ import ProfileCommentList from './ProfileCommentList';
     return (
            <Fragment>
              <Segment
-               textAlign='center'
+               textAlign='left'
                attached='top'
-               inverted
-               color='teal'
-               style={{ border: 'none' }}
+               style={{ border: 'none'}}
              >
                <Header>Comments about this trainer &nbsp;&nbsp;
                    <Icon name="comment outline"></Icon>
                </Header>
              </Segment>
-             <Segment attached>
+             <Segment>
               <ProfileCommentList />
              <Button
                  floated="right"

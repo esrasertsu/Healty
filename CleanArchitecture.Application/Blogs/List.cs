@@ -9,13 +9,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Application.Posts
+namespace CleanArchitecture.Application.Blogs
 {
     public class List
     {
-        public class Query : IRequest<List<PostDto>> { }
+        public class Query : IRequest<List<BlogDto>> { }
 
-        public class Handler : IRequestHandler<Query, List<PostDto>>
+        public class Handler : IRequestHandler<Query, List<BlogDto>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -26,11 +26,11 @@ namespace CleanArchitecture.Application.Posts
                  _mapper = mapper;
 
             }
-            public async Task<List<PostDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<BlogDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var posts = await _context.Posts.ToListAsync(cancellationToken);
+                var posts = await _context.Blogs.ToListAsync(cancellationToken);
 
-                return _mapper.Map<List<Post>, List<PostDto>>(posts);
+                return _mapper.Map<List<Blog>, List<BlogDto>>(posts);
 
             }
         }

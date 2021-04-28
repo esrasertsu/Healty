@@ -88,7 +88,7 @@ const Profiles = {
     unfollow:  (username:string) => requests.del(`/profiles/${username}/follow`),
     listFollowings: (username: string, predicate: string) => requests.get(`/profiles/${username}/follow?predicate=${predicate}`),
     listActivities: (username:string, predicate: string) => requests.get(`/profiles/${username}/activities?predicate=${predicate}`),
-    createComment: (comment:IProfileComment) => requests.post(`/profiles/`, comment),
+    createComment: (comment:IProfileComment) => requests.post(`/profiles`, comment),
     listComments: (username: string, limit?:number, page?:number): Promise<IProfileCommentEnvelope> => 
                 requests.get(`/profiles/${username}/comments?username=${username}&limit=${limit}&offset=${page ? page*limit! :0}`)
 }

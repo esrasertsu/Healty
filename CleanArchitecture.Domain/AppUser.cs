@@ -12,7 +12,7 @@ namespace CleanArchitecture.Domain
         public virtual ICollection<Photo> Photos { get; set; }
         public virtual ICollection<UserFollowing> Followings { get; set; }
         public virtual ICollection<UserFollowing> Followers { get; set; }
-        public virtual ICollection<Post> Posts { get; set; }
+        public virtual ICollection<Blog> Blogs { get; set; }
         public virtual ICollection<UserProfileComment> ReceivedComments { get; set; }
         public virtual ICollection<UserProfileComment> SendComments { get; set; }
 

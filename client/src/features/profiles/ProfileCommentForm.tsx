@@ -5,6 +5,7 @@ import { StarRating } from '../../app/common/form/StarRating';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { IProfileComment } from '../../app/models/profile';
+import { v4 as uuid } from "uuid";
 
 interface IProps{
     closeModal:() => void;
@@ -19,6 +20,17 @@ interface IProps{
 
     const [rating, setRating] = useState(0);
 
+    
+    const handleFinalFormSubmit = async (values: IProfileComment) => {
+      // const { ...comment } = values;
+  
+    
+      //       let newComment = {
+      //         ...comment,
+      //         id: uuid(),
+      //       };
+           await sendTrainerComment(values);
+    };
 
     return (
         <Grid>
@@ -39,10 +51,7 @@ interface IProps{
             <Grid.Row>
             <Grid.Column>
         <FinalForm 
-        onSubmit ={async (values:IProfileComment) => {
-          values.starCount = rating;
-          await sendTrainerComment(values)
-        }}
+        onSubmit ={handleFinalFormSubmit}
         initialValues={{ allowDisplayName:false,body:"" }}
         render={({handleSubmit, submitting, form,values,initialValues}) => (
           <Form widths={"equal"} 

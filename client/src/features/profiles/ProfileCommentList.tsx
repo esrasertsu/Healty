@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { formatDistance } from 'date-fns';
 import { Link } from 'react-router-dom';
+import { StarRating } from '../../app/common/form/StarRating';
 
 const ProfileCommentList: React.FC = () => {
 
@@ -21,6 +22,9 @@ const ProfileCommentList: React.FC = () => {
                         <Comment.Author as={Link} to={`/profile/${comment.authorName}`} replace>{comment.displayName}</Comment.Author>
                         <Comment.Metadata>
                           <div>{formatDistance(new Date(comment.createdAt), new Date())}</div>
+                        </Comment.Metadata>
+                        <Comment.Metadata>
+                        <StarRating rating={comment.starCount} editing={false} key={comment.id} size="small"/>
                         </Comment.Metadata>
                         <Comment.Text>{comment.body}</Comment.Text>
                       </Comment.Content>

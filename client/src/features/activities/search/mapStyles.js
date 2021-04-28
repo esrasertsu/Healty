@@ -1,22 +1,32 @@
 export default [
-    {
-      featureType: "all",
-      elementType: "geometry.fill",
-      stylers: [
+  {
+    featureType: "poi",
+    elementType: "geometry",
+    stylers: [
         {
-          weight: "2.00",
+            color: "#eeeeee",
         },
-      ],
-    },
-    {
-      featureType: "all",
-      elementType: "geometry.stroke",
-      stylers: [
+    ],
+},
+{
+    featureType: "poi",
+    elementType: "labels.text",
+    stylers: [
         {
-          color: "#9c9c9c",
+            visibility: "off",
         },
-      ],
-    },
+    ],
+},
+{
+    featureType: "water",
+    elementType: "labels.text.fill",
+    stylers: [
+        {
+            color: "#9e9e9e",
+        },
+    ],
+},
+   
     {
       featureType: "all",
       elementType: "labels.text",
@@ -26,108 +36,75 @@ export default [
         },
       ],
     },
-    {
-      featureType: "landscape",
-      elementType: "all",
-      stylers: [
-        {
-          color: "#f2f2f2",
-        },
-      ],
-    },
-    {
-      featureType: "landscape",
-      elementType: "geometry.fill",
-      stylers: [
-        {
-          color: "#ffffff",
-        },
-      ],
-    },
-    {
-      featureType: "landscape.man_made",
-      elementType: "geometry.fill",
-      stylers: [
-        {
-          color: "#ffffff",
-        },
-      ],
-    },
-    {
-      featureType: "poi",
-      elementType: "all",
-      stylers: [
-        {
-          visibility: "off",
-        },
-      ],
-    },
-    {
-      featureType: "road",
-      elementType: "all",
-      stylers: [
-        {
-          saturation: -100,
-        },
-        {
-          lightness: 45,
-        },
-      ],
-    },
-    {
-      featureType: "road",
-      elementType: "geometry.fill",
-      stylers: [
-        {
-          color: "#eeeeee",
-        },
-      ],
-    },
-    {
-      featureType: "road",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#7b7b7b",
-        },
-      ],
-    },
-    {
-      featureType: "road",
-      elementType: "labels.text.stroke",
-      stylers: [
-        {
-          color: "#ffffff",
-        },
-      ],
-    },
-    {
-      featureType: "road.highway",
-      elementType: "all",
-      stylers: [
-        {
-          visibility: "simplified",
-        },
-      ],
-    },
-    {
-      featureType: "road.arterial",
-      elementType: "labels.icon",
-      stylers: [
-        {
-          visibility: "off",
-        },
-      ],
-    },
-    {
-      featureType: "transit",
-      elementType: "all",
-      stylers: [
-        {
-          visibility: "off",
-        },
-      ],
-    },
+   
+   
+  
+    // {
+    //   featureType: "road",
+    //   elementType: "all",
+    //   stylers: [
+    //     {
+    //       saturation: -100,
+    //     },
+    //     {
+    //       lightness: 45,
+    //     },
+    //   ],
+    // },
+    // {
+    //   featureType: "road",
+    //   elementType: "geometry.fill",
+    //   stylers: [
+    //     {
+    //       color: "#eeeeee",
+    //     },
+    //   ],
+    // },
+    // {
+    //   featureType: "road",
+    //   elementType: "labels.text.fill",
+    //   stylers: [
+    //     {
+    //       color: "#7b7b7b",
+    //     },
+    //   ],
+    // },
+    // {
+    //   featureType: "road",
+    //   elementType: "labels.text.stroke",
+    //   stylers: [
+    //     {
+    //       color: "#ffffff",
+    //     },
+    //   ],
+    // },
+    // {
+    //   featureType: "road.highway",
+    //   elementType: "all",
+    //   stylers: [
+    //     {
+    //       visibility: "simplified",
+    //     },
+    //   ],
+    // },
+    // {
+    //   featureType: "road.arterial",
+    //   elementType: "labels.icon",
+    //   stylers: [
+    //     {
+    //       visibility: "off",
+    //     },
+    //   ],
+    // },
+    // {
+    //   featureType: "transit",
+    //   elementType: "all",
+    //   stylers: [
+    //     {
+    //       visibility: "off",
+    //     },
+    //   ],
+    // },
     {
       featureType: "water",
       elementType: "all",

@@ -145,6 +145,68 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Domain.Blog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AuthorId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BlogImageId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("BlogImageId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Blogs");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Domain.BlogImage", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BlogImages");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Domain.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Domain.Photo", b =>
                 {
                     b.Property<string>("Id")
@@ -166,32 +228,41 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.ToTable("Photos");
                 });
 
-            modelBuilder.Entity("CleanArchitecture.Domain.Post", b =>
+            modelBuilder.Entity("CleanArchitecture.Domain.SubCatBlogs", b =>
+                {
+                    b.Property<Guid>("SubCategoryId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BlogId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("SubCategoryId", "BlogId");
+
+                    b.HasIndex("BlogId");
+
+                    b.ToTable("SubCatBlogs");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Domain.SubCategory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("AuthorId")
+                    b.Property<Guid?>("CategoryId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Category")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Title")
+                    b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("CategoryId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.UserActivity", b =>
@@ -402,6 +473,21 @@ namespace CleanArchitecture.Persistence.Migrations
                         .HasForeignKey("AuthorId");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Domain.Blog", b =>
+                {
+                    b.HasOne("CleanArchitecture.Domain.AppUser", "Author")
+                        .WithMany("Blogs")
+                        .HasForeignKey("AuthorId");
+
+                    b.HasOne("CleanArchitecture.Domain.BlogImage", "BlogImage")
+                        .WithMany()
+                        .HasForeignKey("BlogImageId");
+
+                    b.HasOne("CleanArchitecture.Domain.Category", "Category")
+                        .WithMany("Blogs")
+                        .HasForeignKey("CategoryId");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Domain.Photo", b =>
                 {
                     b.HasOne("CleanArchitecture.Domain.AppUser", null)
@@ -409,11 +495,26 @@ namespace CleanArchitecture.Persistence.Migrations
                         .HasForeignKey("AppUserId");
                 });
 
-            modelBuilder.Entity("CleanArchitecture.Domain.Post", b =>
+            modelBuilder.Entity("CleanArchitecture.Domain.SubCatBlogs", b =>
                 {
-                    b.HasOne("CleanArchitecture.Domain.AppUser", "Author")
-                        .WithMany("Posts")
-                        .HasForeignKey("AuthorId");
+                    b.HasOne("CleanArchitecture.Domain.Blog", "Blog")
+                        .WithMany("SubCategories")
+                        .HasForeignKey("BlogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchitecture.Domain.SubCategory", "SubCategory")
+                        .WithMany("Blogs")
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Domain.SubCategory", b =>
+                {
+                    b.HasOne("CleanArchitecture.Domain.Category", "Category")
+                        .WithMany("SubCategories")
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.UserActivity", b =>

@@ -9,15 +9,15 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Application.Posts
+namespace CleanArchitecture.Application.Blogs
 {
     public class Details
     {
-        public class Query : IRequest<PostDto>
+        public class Query : IRequest<BlogDto>
         {
             public Guid Id { get; set; }
         }
-        public class Handler : IRequestHandler<Query, PostDto>
+        public class Handler : IRequestHandler<Query, BlogDto>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -28,17 +28,17 @@ namespace CleanArchitecture.Application.Posts
                 _mapper = mapper;
             }
 
-            public async Task<PostDto> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<BlogDto> Handle(Query request, CancellationToken cancellationToken)
             {
-                var post = await _context.Posts
+                var blog = await _context.Blogs
                                                .FindAsync(request.Id);
 
-                if (post == null)
+                if (blog == null)
                     throw new RestException(HttpStatusCode.NotFound, new { post = "Not Found" });
 
-                var postReturn = _mapper.Map<Post, PostDto>(post);
+                var blogReturn = _mapper.Map<Blog, BlogDto>(blog);
 
-                return postReturn;
+                return blogReturn;
 
             }
         }

@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
-import { Card, Image, Icon} from 'semantic-ui-react';
+import { Card, Image, Icon, Grid} from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { history } from '../../index'
 import { RootStoreContext } from '../../app/stores/rootStore';
+import { StarRating } from '../../app/common/form/StarRating';
 interface IProps {
     profile: IProfile
 }
@@ -22,10 +23,17 @@ const ProfileCard: React.FC<IProps> = ({profile}) => {
         <Card.Header>{profile.displayName}</Card.Header>
       </Card.Content>
       <Card.Content extra>
-        <div>
-          <Icon name='user' />
+        <Grid>
+          <Grid.Row className="profileCard_footer">
+          {/* <Grid.Column className="followerCountColumn">
+          <Icon size="mini" name='user' />
           {profile.followerCount}
-        </div>
+          </Grid.Column>  */}
+          <Grid.Column className="starRatingColumn">
+          <StarRating rating={profile.star} editing={false} size={'tiny'} count={profile.starCount}/>
+          </Grid.Column>  
+          </Grid.Row>
+        </Grid>
       </Card.Content>
     </Card>
   );

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Application.Posts
+namespace CleanArchitecture.Application.Categories
 {
     public class Delete
     {
@@ -28,12 +28,12 @@ namespace CleanArchitecture.Application.Posts
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var post = await _context.Posts.FindAsync(request.Id);
+                var cat = await _context.Categories.FindAsync(request.Id);
 
-                if (post == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { post = "Not Found" });
+                if (cat == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { category = "Not Found" });
 
-                _context.Remove(post);
+                _context.Categories.Remove(cat);
 
                 var success = await _context.SaveChangesAsync() > 0;
 

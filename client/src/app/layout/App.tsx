@@ -17,6 +17,7 @@ import ProfilePage  from '../../features/profiles/ProfilePage';
 import ProfileList  from '../../features/profiles/ProfileList';
 import ActivitySearchPage from '../../features/activities/search/ActivitySearchPage';
 import PostForm from '../../features/posts/PostForm';
+import PersonalFeed from '../../features/feed/PersonalFeed';
 
 const App: React.FC<RouteComponentProps> = ({location}) => {
 
@@ -39,15 +40,14 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
          <ModalContainer />
          <ToastContainer position= 'bottom-right' />
          <NavBar/>
-         <Container className="pageContainer">
          <Route exact path="/" component={HomePage} />
-         </Container>
          <Route path={'/(.+)'} render={()=>(
            <Fragment>
               <Container className="pageContainer">
                 <Switch>
                   <Route exact path="/activities" component={ActivityDashboard} />
                   <Route path="/activities/:id" component={ActivityDetails} />
+                  <Route exact path="/feed" component={PersonalFeed} />
                   <Route key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
                   <Route key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
                   <Route path="/profile/:username" component={ProfilePage}/>

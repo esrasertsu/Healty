@@ -19,8 +19,8 @@ const panes = [
 const ProfileContent: React.FC<IProps> = ({setActiveTab}) => {
     return (
        <Tab 
-           menu={{fluid:true, vertical:true}}
-           menuPosition='right'
+        //    menu={{fluid:true, vertical:true}}
+        //    menuPosition='right'
            panes={panes}
            onTabChange={(e, data) => setActiveTab(data.activeIndex)}
        />

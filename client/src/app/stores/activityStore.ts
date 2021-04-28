@@ -8,7 +8,7 @@ import { createAttendee, setActivityProps } from '../common/util/util';
 import { IActivity, IActivityMapItem } from '../models/activity';
 import { RootStore } from './rootStore';
 
-const LIMIT = 2;
+const LIMIT = 3;
 export default class ActivityStore {
 
     rootStore:RootStore;
@@ -219,6 +219,7 @@ export default class ActivityStore {
         this.submitting = true;
         try {
             await agent.Activities.create(activity);
+            debugger;
             const attendee = createAttendee(this.rootStore.userStore.user!);
             attendee.isHost = true;
             let attendees = [];

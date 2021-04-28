@@ -1,5 +1,5 @@
 import React,  { useEffect, useContext, useState}  from 'react';
-import { Button, Grid, Loader } from 'semantic-ui-react';
+import { Button, Grid, Icon, Loader } from 'semantic-ui-react';
 import ActivityList from './ActivityList';
 import { observer } from 'mobx-react-lite';
 import { LoadingComponent } from '../../../app/layout/LoadingComponent';
@@ -7,6 +7,7 @@ import { RootStoreContext } from '../../../app/stores/rootStore';
 import {history} from '../../../index';
 import InfiniteScroll from 'react-infinite-scroller';
 import ActivityFilters from './ActivityFilters';
+import NavBar from '../../nav/NavBar';
 
 const ActivityDashboard: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
@@ -26,9 +27,20 @@ const ActivityDashboard: React.FC = () => {
       return <LoadingComponent content='Loading Activities'/>
 
   return (
+    <>
+    <NavBar />
     <Grid>
       <Grid.Row>
-      <Grid.Column width={10}>
+      <Grid.Column width={4}>
+      <Button
+                        onClick={() => history.push('/activitysearch')}
+                        floated="right"
+                        style={{backgroundColor:"#F76425", color:"white"}}
+                        >Map View&nbsp;&nbsp;<Icon name="map marker alternate"/> </Button>
+                        <br></br>
+      <ActivityFilters />
+      </Grid.Column>
+      <Grid.Column width={12}>
         <InfiniteScroll
           pageStart={0}
           loadMore={handleGetNext}
@@ -45,22 +57,16 @@ const ActivityDashboard: React.FC = () => {
         disabled={totalPages === page +1}
         /> */}
       </Grid.Column>
-      <Grid.Column width={6}>
-      <Button
-                        onClick={() => history.push('/activitysearch')}
-                        floated="right"
-                        content="Map View"
-                        color="yellow"
-                        />
-                        <br></br>
-      <ActivityFilters />
+      <Grid.Column width={4}>
       </Grid.Column>
-      <Grid.Column width={10}>
+      <Grid.Column width={12}>
+        <br></br>
         <br></br>
         <Loader active={loadingNext} />
       </Grid.Column>
       </Grid.Row>
     </Grid>
+    </>
   );
 };
 

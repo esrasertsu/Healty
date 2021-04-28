@@ -27,6 +27,13 @@ namespace CleanArchitecture.API.Controllers
         {
             return await Mediator.Send(new ListActivities.Query { Username = username, Predicate = predicate });
         }
+
+        [HttpGet("{username}/blogs")]
+        public async Task<ActionResult<ListBlogs.UserProfileBlogsEnvelope>> GetUserBlogs(string username, int? limit, int? offset)
+        {
+            return await Mediator.Send(new ListBlogs.Query { Username = username, Limit = limit, Offset = offset });
+        }
+
         [HttpGet("{username}/comments")]
         public async Task<ActionResult<ListComments.UserProfileCommentsEnvelope>> GetUserComments(string username, int? limit, int? offset)
         {
@@ -39,5 +46,6 @@ namespace CleanArchitecture.API.Controllers
         {
             return await Mediator.Send(command);
         }
+
     }
 }

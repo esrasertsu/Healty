@@ -49,6 +49,46 @@ namespace Persistence
                         Email = "esra@test.com",
                         Role="User"
                     },
+                    new AppUser
+                    {
+                        Id = "e",
+                        DisplayName = "Steve",
+                        UserName = "Steve",
+                        Email = "steve@test.com",
+                        Role="User"
+                    },
+                    new AppUser
+                    {
+                        Id = "f",
+                        DisplayName = "Ahmet",
+                        UserName = "ahmet",
+                        Email = "ahmet@test.com",
+                        Role="User"
+                    },
+                    new AppUser
+                    {
+                        Id = "g",
+                        DisplayName = "Semih",
+                        UserName = "semih",
+                        Email = "semih@test.com",
+                        Role="User"
+                    },
+                     new AppUser
+                    {
+                        Id = "h",
+                        DisplayName = "Jack",
+                        UserName = "jack",
+                        Email = "jack@test.com",
+                        Role="User"
+                    },
+                     new AppUser
+                    {
+                        Id = "j",
+                        DisplayName = "Johny",
+                        UserName = "johny",
+                        Email = "johny@test.com",
+                        Role="User"
+                    },
                 };
 
 

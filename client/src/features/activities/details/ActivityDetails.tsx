@@ -8,8 +8,13 @@ import  ActivityDetailedChat  from './ActivityDetailedChat';
 import ActivityDetailedSideBar  from './ActivityDetailedSideBar';
 import ActivityDetailedInfo from './ActivityDetailedInfo';
 import { RootStoreContext } from '../../../app/stores/rootStore';
+import ActivitySearchPage from '../search/ActivitySearchPage';
+import ActivityDetailsMap from './ActivityDetailsMap';
 
-
+const center = {
+    lat: 38.4237,
+    lng: 27.1428,
+  };
 interface DetailParams{
     id:string
 }
@@ -38,6 +43,7 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
 
           <Grid.Column width={6}>
               <ActivityDetailedSideBar attendees={activity.attendees}/>
+              <ActivityDetailsMap centerLocation={center} />
           </Grid.Column>
       </Grid>
     )

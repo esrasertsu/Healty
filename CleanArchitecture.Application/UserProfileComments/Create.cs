@@ -59,7 +59,7 @@ namespace CleanArchitecture.Application.UserProfileComments
                     Body = request.Body,
                     CreatedAt = DateTime.Now
                 };
-
+                _context.UserProfileComments.Add(comment);
                 trainer.ReceivedComments.Add(comment);
 
                 var success = await _context.SaveChangesAsync() > 0;

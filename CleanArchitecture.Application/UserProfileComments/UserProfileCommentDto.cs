@@ -8,7 +8,7 @@ namespace CleanArchitecture.Application.UserProfileComments
     {
         public Guid Id { get; set; }
         public string Body { get; set; }
-        public int StarCount { get; set; }
+        public int Star { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Username { get; set; }
         public string AuthorName { get; set; }

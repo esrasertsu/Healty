@@ -15,11 +15,11 @@ interface IProps{
 
 const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCurrentUser}) => {
   
-  const profileRating = profile.starCount;
+  const profileRating = profile ? profile.star : 0;
 
   return (
     <Segment>
-      <Grid>
+      <Grid stackable>
         <Grid.Column width={12}>
           <Item.Group>
             <Item>
@@ -28,13 +28,13 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                 size='small'
                 src={profile.image || '/assets/user.png'}
               />
-              <Item.Content verticalAlign='middle'>
+              <Item.Content verticalAlign='middle' className="profileHeader_content">
                 <Grid.Row>
                   <Header as='h1'>{profile.displayName}</Header>
                 </Grid.Row>
                 <br/>
                 <Grid.Row>
-                <StarRating rating={profileRating} editing={false} key={"header"}/>
+                <StarRating rating={profileRating} editing={false} key={"header"} count={profile.starCount}/>
                 </Grid.Row>
               </Item.Content>
             </Item>
@@ -73,7 +73,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
             <Reveal.Content visible style={{ width: '100%' }}>
               <Button
                 fluid
-                color='teal'
+                className="followingButtonOut"
                 content={profile.isFollowing ? 'Following' : 'Not Following'}
               />
             </Reveal.Content>
@@ -82,7 +82,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                 loading={loading}
                 fluid
                 basic
-                color={profile.isFollowing ? 'red' : 'green'}
+                className={profile.isFollowing ? 'followingButtonOut_redClassName' : 'followingButtonOut_greenClassName'}
                 content={profile.isFollowing ? 'Unfollow' : 'Follow'}
                 onClick={profile.isFollowing ? () => unfollow(profile.userName): () => follow(profile.userName)}
               />

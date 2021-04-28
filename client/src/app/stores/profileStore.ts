@@ -83,9 +83,9 @@ export default class ProfileStore{
         comment.username= this.profile!.userName;
         this.submittingComment = true;
         try {
-            await agent.Profiles.createComment(comment);
+            var newComment = await agent.Profiles.createComment(comment);
             runInAction('Creating comment', () => {
-                this.commentRegistery.set(comment.id, comment);
+                this.commentRegistery.set(newComment.id, newComment);
                 this.submittingComment = false;
             });
         } catch (error) {
@@ -122,6 +122,7 @@ export default class ProfileStore{
 
 
     @action loadProfile = async (username: string) =>{
+        debugger;
         this.loadingProfile = true;
         this.commentRegistery.clear();
         try {

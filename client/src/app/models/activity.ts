@@ -88,3 +88,8 @@ export interface IActivityMapItem {
 
 }
 
+export interface IActivityLocation {
+    lat: number,
+    lng : number
+}
+

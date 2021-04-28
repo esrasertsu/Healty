@@ -25,20 +25,20 @@ import { RootStoreContext } from "../../../app/stores/rootStore";
 import { observer } from "mobx-react-lite";
 import { LoadingComponent } from "../../../app/layout/LoadingComponent";
 import { LoadScriptUrlOptions } from "@react-google-maps/api/dist/utils/make-load-script-url";
-import { Button } from "semantic-ui-react";
+import { Button, Segment } from "semantic-ui-react";
 
 const mapContainerStyle = {
-  height: "100vh",
-  width: "100vw",
+  height: "70vh",
+  width: "41vw",
 };
 const options = {
   styles: mapStyles,
-  disableDefaultUI: true,
+ // disableDefaultUI: true,
   zoomControl: true,
 };
 const center = {
-  lat: 43.6532,
-  lng: -79.3832,
+  lat: 38.4237,
+  lng: 27.1428,
 };
 const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 const markerList : IActivityMapItem[] = [];
@@ -51,15 +51,22 @@ const ActivitySearchPage: React.FC = () => {
       libraries
   });
 
+  const geocoder = React.useRef<google.maps.Geocoder | null>(null);
+  // const geocoder = new google.maps.Geocoder();
+  // const infowindow = new google.maps.InfoWindow();
+
+
   const rootStore = useContext(RootStoreContext);
   const {setMarkers,markers,selected, setSelected} = rootStore.activityStore;
   
    const mapRef = React.useRef<google.maps.Map | null>(null);
   const onMapClick = React.useCallback((e) => {
 
-    const item : IActivityMapItem = { lat: e.latLng.lat(),
+    const item : IActivityMapItem = { 
+        lat: e.latLng.lat(),
         lng: e.latLng.lng(),
-        time: new Date() };
+        time: new Date()
+       };
     
       markerList.push(item);
       setMarkers(markerList);
@@ -71,7 +78,7 @@ const ActivitySearchPage: React.FC = () => {
 
   const panTo = React.useCallback(({ lat, lng } : google.maps.LatLng | google.maps.LatLngLiteral)  => {
      mapRef.current!.panTo(new google.maps.LatLng( lat as number, lng as number ))
-     mapRef.current!.setZoom(14);
+     mapRef.current!.setZoom(18);
   }, []);
 
    if (loadError) return <LoadingComponent content='Loading Activities'/>
@@ -79,20 +86,23 @@ const ActivitySearchPage: React.FC = () => {
 
   return (
     <div>
-      <h1>
+      {/* <h1>
         Bears{" "}
         <span role="img" aria-label="tent">
           ⛺️
         </span>
-      </h1>
-
-     <Locate panTo={panTo} />
-     <Search panTo={panTo} /> 
+      </h1> */}
+<Segment>
+<Locate panTo={panTo} />
+</Segment>
+<Segment>
+<Search panTo={panTo} /> 
+</Segment>
 
       <GoogleMap
         id = "map"
         mapContainerStyle={mapContainerStyle}
-        zoom={8}
+        zoom={10}
         center={center}
         options={options as google.maps.MapOptions} 
         onClick={onMapClick}
@@ -141,6 +151,7 @@ const Locate = ({ panTo }: any) => {
   return (
     <Button
       className="locate"
+      content="My Location"
       onClick={() => {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -153,10 +164,12 @@ const Locate = ({ panTo }: any) => {
         );
       }}
     >
-      <img src="/compass.svg" alt="compass" />
+      {/* <img src="/compass.svg" alt="" /> */}
     </Button>
   );
 }
+
+
 
 const Search = ({ panTo }: any) => {
   
@@ -194,8 +207,9 @@ const Search = ({ panTo }: any) => {
 
   return (
     <div className="search">
-      <Combobox onSelect={handleSelect}>
+      <Combobox className="pink" onSelect={handleSelect}>
         <ComboboxInput
+         style={{ width: "100%", height:"35px", border:"1px solid rgba(34,36,38,.15)" }}
           value={value}
           onChange={handleInput}
           disabled={!ready}

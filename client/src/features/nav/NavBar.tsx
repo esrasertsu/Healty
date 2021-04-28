@@ -12,33 +12,48 @@ const NavBar: React.FC = () => {
     const { setLoadingInitial } = rootStore.activityStore;
 
     const [activeMenu, setActiveMenu] = useState(0);
+    const fixed = "top";
     return (
       <>
-      <Menu fixed="top" pointing secondary>
-               {/* <Menu.Item name="activities"   onClick={() => {
+      <Menu 
+      fixed={fixed ? 'top' : undefined}
+      secondary
+      size='massive'
+       >
+       <Container>
+       <Menu.Item as='a' header  
+        onClick={() => {
+          setActiveMenu(-1);
+            history.push(`/`);
+          }}
+          >
+                <div style={{display:"flex", alignItems:"center"}}>
+                  <img
+                      src="/assets/logo.png"
+                      alt="logo"
+                      style={{ height:"40px"}}
+                    />
+                </div>
+                  
+                  </Menu.Item>
+                 <Menu.Item as='a' position="right" name="feed"   onClick={() => {
+                   setLoadingInitial(true);
+                    history.push(`/feed`);
+                    }} />
+               <Menu.Item as='a' name="activities"   onClick={() => {
                    setLoadingInitial(true);
                     history.push(`/activities`);
                     }} />
 
-                <Menu.Item name="profiles" 
+                <Menu.Item as='a' name="profiles" 
                 onClick={() => {
                    setLoadingProfiles(true);
                     history.push(`/profiles`);
                     }} /> 
-                {user && user.role !== "User" &&
-                    <Menu.Item>
-                        <Button
-                            as={NavLink}
-                            to="/createActivity"
-                            positive
-                            content="Create Activity"
-                        />
-                    </Menu.Item>
-                }
-          */}
+         
 
           {user && (
-            <Menu.Item position="right">
+            <Menu.Item as='a'>
               <Image avatar spaced="right" src={user.image || "/assets/user.png"} />
               <Dropdown pointing="top left" text={user.displayName}>
                 <Dropdown.Menu>
@@ -53,8 +68,10 @@ const NavBar: React.FC = () => {
               </Dropdown>
             </Menu.Item>
           )}
+         </Container>         
+       
       </Menu>
-
+{/* 
 <Menu fixed="left" vertical>
 
 <Menu.Item header  
@@ -116,7 +133,7 @@ const NavBar: React.FC = () => {
             setLoadingProfiles(true);
             history.push(`/profiles`);
           }
-            }} />
+            }} /> */}
 
         {/* {user && user.role !== "User" &&
         <>
@@ -155,8 +172,8 @@ const NavBar: React.FC = () => {
       </Dropdown>
     </Menu.Item>
   )} */}
-</Container>
-</Menu>
+{/* </Container>
+</Menu> */}
 </>
     );
 }

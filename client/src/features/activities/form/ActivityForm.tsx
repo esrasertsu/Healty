@@ -15,6 +15,7 @@ import DateInput from "../../../app/common/form/DateInput";
 import { combineDateAndTime } from "../../../app/common/util/util";
 import {combineValidators, composeValidators, hasLengthGreaterThan, isRequired} from 'revalidate';
 import { RootStoreContext } from "../../../app/stores/rootStore";
+import ActivityFormMap from "./ActivityFormMap";
 
 const validate = combineValidators({
   title: isRequired({message: 'The event title is required'}),
@@ -28,7 +29,6 @@ const validate = combineValidators({
   date: isRequired('Date'),
   time: isRequired('Time')
 })
-
 interface DetailParams {
   id: string;
 }
@@ -75,7 +75,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
 
   return (
     <Grid>
-      <Grid.Column width={10}>
+      <Grid.Column width={7}>
         <Segment clearing>
           <FinalForm
             validate = {validate}
@@ -94,11 +94,25 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   placeholder="Description"
                   value={activity.description}
                   component={TextAreaInput}
-                  rows={3}
+                  rows={6}
                 />
                 <Field
                   name="category"
                   placeholder="Category"
+                  value={activity.category}
+                  component={SelectInput}
+                  options={category}
+                />
+                 <Field
+                  name="abc"
+                  placeholder="Level"
+                  value={activity.category}
+                  component={SelectInput}
+                  options={category}
+                />
+                  <Field
+                  name="online"
+                  placeholder="Online"
                   value={activity.category}
                   component={SelectInput}
                   options={category}
@@ -140,6 +154,13 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   value={activity.venue}
                   component={TextInput}
                 />
+                 <Field
+                  name="Adres"
+                  placeholder="Adres"
+                  value={activity.venue}
+                  component={TextAreaInput}
+                  rows={2}
+                />
                 <Button
                   loading={submitting}
                   disabled={loading || invalid || pristine}
@@ -162,6 +183,12 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
               </Form>
             )}
           />
+        </Segment>
+      </Grid.Column>
+      <Grid.Column width={9}>
+        <Segment>
+          <ActivityFormMap />
+          {/* <ActivitySearchPage /> */}
         </Segment>
       </Grid.Column>
     </Grid>

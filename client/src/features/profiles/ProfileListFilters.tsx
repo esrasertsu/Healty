@@ -1,37 +1,50 @@
 import { observer } from 'mobx-react-lite';
-import React, { useContext,useState } from 'react'
-import {  Button,Form } from 'semantic-ui-react'
+import React, { useContext,useEffect,useState } from 'react'
+import {  Button,Dimmer,Form, Loader } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { Form as FinalForm, Field } from "react-final-form";
 import {
-  ActivityFormValues
-} from "../../app/models/activity";
+  ProfilesFilterFormValues
+} from "../../app/models/profile";
 import SelectInput from "../../app/common/form/SelectInput";
 import { category } from "../../app/common/options/categoryOptions";
+import DropdownInput from '../../app/common/form/DropdownInput';
 
 
 const ProfileListFilters: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
   const {
-    createActivity,
-    editActivity,
-    submitting,
-    loadActivity
-  } = rootStore.activityStore;
+     categoryList,
+     subcategoryList,
+     loadingCategories,
+     loadingSubCategories,
+     loadCategories,
+     loadSubCategories
+  } = rootStore.categoryStore;
 
-  const [activity, setActivity] = useState(new ActivityFormValues());
+  const [filters, setFilters] = useState(new ProfilesFilterFormValues());
   const [loading, setLoading] = useState(false);
 
- 
+  useEffect(() => {
+    loadCategories();
+}, [loadCategories])
 
   const handleFinalFormSubmit = (values: any) => {
     
   };
 
+  const handleCategoryChanged = (e: any, data: string) => {
+     setFilters({...filters,category: data});
+     loadSubCategories(data);
+  }
+
+  const handleSubCategoryChanged = (e: any, data: string) => {    
+         setFilters({...filters,subCategory: data});
+      }
   return (
    
         <FinalForm
-            // initialValues={activity}
+            initialValues={filters}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid, pristine }) => (
               <Form onSubmit={handleSubmit} loading={loading} >
@@ -39,35 +52,38 @@ const ProfileListFilters: React.FC = () => {
                 <Field 
                   name="category"
                   placeholder="Kategori"
-                  value={activity.category}
-                  component={SelectInput}
-                  options={category}
+                  component={DropdownInput}
+                  options={categoryList}
+                  value={filters.category}
+                  onChange={(e: any,data: any)=>handleCategoryChanged(e,data)}
                 />
                  <Field
-                  name="abc"
+                  name="subCategory"
                   placeholder="Alt Kategori"
-                  value={activity.category}
-                  component={SelectInput}
-                  options={category}
-                />
-                  <Field
+                  value={filters.subCategory}
+                  component={DropdownInput}
+                  options={subcategoryList}
+                  onChange={(e: any,data: any)=>handleSubCategoryChanged(e,data)}
+                > 
+              </Field>
+                  {/* <Field
                   name="online"
                   placeholder="Tecrübe"
-                  value={activity.category}
+               //   value={activity.category}
                   component={SelectInput}
                   options={category}
-                />
+                /> */}
 	            	<Field
                   name="city"
                   placeholder="Şehir"
-                  value={activity.category}
+               //   value={activity.category}
                   component={SelectInput}
                   options={category}
                 />
                 	<Field
                   name="online"
                   placeholder="Hizmet tipi"
-                  value={activity.category}
+                //  value={activity.category}
                   component={SelectInput}
                   options={category}
                 />

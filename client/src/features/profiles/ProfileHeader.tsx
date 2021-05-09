@@ -18,7 +18,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
   const profileRating = profile ? profile.star : 0;
 
   return (
-    <Segment>
+    <Segment className="profieHeader_segment">
       <Grid stackable>
         <Grid.Column width={12}>
           <Item.Group>
@@ -34,7 +34,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                 </Grid.Row>
                 <br/>
                 <Grid.Row>
-                <StarRating rating={profileRating} editing={false} key={"header"} count={profile.starCount}/>
+                <StarRating rating={profileRating} editing={false} key={"header"} count={profile.starCount} showCount={true}/>
                 </Grid.Row>
               </Item.Content>
             </Item>

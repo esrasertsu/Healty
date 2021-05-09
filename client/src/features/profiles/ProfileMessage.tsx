@@ -18,13 +18,13 @@ const ProfileMessage: React.FC<IProps> = ({profile}) => {
         <Segment className="profileMessageSegment">
                 <Grid container className="profileMessageGrid" stackable>
                     <Grid.Row columns={2}>
-                        <Grid.Column width={6}>
-                            <Image circular size={'tiny'} src={profile.image}></Image>
+                        <Grid.Column width={5}>
+                            <Image circular size={'tiny'} src={profile.image || '/assets/user.png'}></Image>
                         </Grid.Column>
-                        <Grid.Column width={10}>
+                        <Grid.Column width={11}>
                             <Header>{profile.displayName} Desidero</Header>
                             <Label>Cevap verme %60&nbsp;
-                                <Icon size="large" name="question circle" className="questionmarkicon"></Icon>
+                                {/* <Icon size="large" name="question circle" className="questionmarkicon"></Icon> */}
                             </Label>
                         </Grid.Column>
                     </Grid.Row>

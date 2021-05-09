@@ -10,7 +10,7 @@ import SelectInput from "../../app/common/form/SelectInput";
 import { category } from "../../app/common/options/categoryOptions";
 import {combineValidators, composeValidators, hasLengthGreaterThan, isRequired} from 'revalidate';
 import { RootStoreContext } from "../../app/stores/rootStore";
-import { PostFormValues } from "../../app/models/post";
+import { PostFormValues } from "../../app/models/blog";
 
 const validate = combineValidators({
   title: isRequired({message: 'The event title is required'}),
@@ -31,11 +31,11 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
 }) => {
   const rootStore = useContext(RootStoreContext);
   const {
-    loadPost,
+    loadBlog,
     createPost,
     editPost,
     submitting
-  } = rootStore.postStore;
+  } = rootStore.blogStore;
 
   const [post, setPost] = useState(new PostFormValues());
   const [loading, setLoading] = useState(false);
@@ -43,11 +43,11 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
   useEffect(() => {
     if (match.params.id) {
       setLoading(true);
-      loadPost(match.params.id)
+      loadBlog(match.params.id)
         .then((post) => setPost(new PostFormValues()))
         .finally(() => setLoading(false));
     }
-  }, [loadPost, match.params.id]);
+  }, [loadBlog, match.params.id]);
 
   const handleFinalFormSubmit = (values: any) => {
     const { ...post } = values;
@@ -108,8 +108,8 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   content="Cancel"
                   onClick={
                     post.id
-                      ? () => history.push(`/post/${post.id}`)
-                      : () => history.push("/post")
+                      ? () => history.push(`/blog/${post.id}`)
+                      : () => history.push("/blog")
                   }
                 />
               </Form>

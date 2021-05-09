@@ -15,8 +15,9 @@ const ProfileCard: React.FC<IProps> = ({profile}) => {
 
   return (
     <Card onClick={() => {
-      history.push(`/profile/${profile.userName}`)
       setLoadingProfile(true);
+      history.push(`/profile/${profile.userName}`)
+      
       }} >
       <Image src={profile.image || '/assets/user.png'} />
       <Card.Content>
@@ -30,7 +31,7 @@ const ProfileCard: React.FC<IProps> = ({profile}) => {
           {profile.followerCount}
           </Grid.Column>  */}
           <Grid.Column className="starRatingColumn">
-          <StarRating rating={profile.star} editing={false} size={'tiny'} count={profile.starCount}/>
+          <StarRating rating={profile.star} editing={false} size={'tiny'} count={profile.starCount} showCount={true}/>
           </Grid.Column>  
           </Grid.Row>
         </Grid>

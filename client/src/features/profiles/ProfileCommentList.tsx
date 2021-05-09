@@ -1,15 +1,26 @@
 import React, { Fragment, useContext } from 'react'
-import {  Comment } from 'semantic-ui-react'
+import {  Button, Comment } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { formatDistance } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { StarRating } from '../../app/common/form/StarRating';
+import ProfileCommentForm from './ProfileCommentForm';
 
-const ProfileCommentList: React.FC = () => {
+
+interface IProps {
+  handleGetNext: () => void;
+  totalPages: number;
+  loadingNext: boolean;
+  commentPage:number;
+  getCommentsByDate: any[]
+}
+
+const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentPage,loadingNext,getCommentsByDate}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const { getCommentsByDate } = rootStore.profileStore;
+  const {openModal, closeModal} = rootStore.modalStore;
+
 
   return (
 <Fragment>
@@ -17,14 +28,16 @@ const ProfileCommentList: React.FC = () => {
                  {getCommentsByDate.map((comment) => (
                      <Fragment key={comment.id}>
                       <Comment key={comment.id}>
-                      <Comment.Avatar src={comment.image || '/assets/user.png'} />
+                      <Comment.Avatar circular src={comment.image || '/assets/user.png'} />
                       <Comment.Content>
                         <Comment.Author as={Link} to={`/profile/${comment.authorName}`} replace>{comment.displayName}</Comment.Author>
                         <Comment.Metadata>
                           <div>{formatDistance(new Date(comment.createdAt), new Date())}</div>
                         </Comment.Metadata>
-                        <Comment.Metadata>
-                        <StarRating rating={comment.starCount} editing={false} key={comment.id} size="small"/>
+                        <Comment.Metadata style={{display:"flex", justifyContent:"flex-end"}}>
+                        {
+                          (comment.star > 0) &&  <StarRating rating={comment.star} editing={false} key={comment.id} size="small" count={comment.starCount} showCount={false}/>
+                        }
                         </Comment.Metadata>
                         <Comment.Text>{comment.body}</Comment.Text>
                       </Comment.Content>
@@ -32,6 +45,21 @@ const ProfileCommentList: React.FC = () => {
                       </Fragment>
                  ))}
                </Comment.Group>
+               <Button
+                 floated="right"
+                 content="More..." 
+                 positive
+                 onClick={handleGetNext}
+                 style={totalPages === 0 ? {display:"none"}: {display:"inline"}}
+                 disabled={totalPages === commentPage + 1 || totalPages === 0}
+                 loading={loadingNext}/>
+                  <Button
+                      content='Comment'
+                      labelPosition='left'
+                      icon='edit'
+                      primary
+                      onClick={()=>openModal("Leave a comment",<ProfileCommentForm closeModal={closeModal} />)}
+                    />
       </Fragment>
     
   );

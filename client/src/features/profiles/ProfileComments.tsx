@@ -4,8 +4,11 @@ import { RootStoreContext } from '../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
 import ProfileCommentForm from './ProfileCommentForm';
 import ProfileCommentList from './ProfileCommentList';
-
- const ProfileComments = () => {
+import { IProfile } from '../../app/models/profile';
+// interface IProps{
+//   profile: IProfile;
+// }
+ const ProfileComments:React.FC = () => {
 
   const rootStore = useContext(RootStoreContext);
 
@@ -14,10 +17,11 @@ import ProfileCommentList from './ProfileCommentList';
     loadComments,
     commentPage,
     setCommentPage,
-    totalPages
+    totalPages,
+    getCommentsByDate,
+    commentCount
   } = rootStore.profileStore;
 
-  const {openModal, closeModal} = rootStore.modalStore;
 
   const [loadingNext, setLoadingNext] = useState(false);
 
@@ -27,37 +31,24 @@ import ProfileCommentList from './ProfileCommentList';
     setCommentPage(commentPage +1);
     loadComments(profile!.userName).then(() => setLoadingNext(false))
   }
-  useEffect(() => {
-    loadComments(profile!.userName);
-  },[loadComments]); 
+  // useEffect(() => {
+  //   loadComments(profile!.userName);
+  // },[loadComments,profile]); 
 
     return (
            <Fragment>
              <Segment
                textAlign='left'
                attached='top'
-               style={{ border: 'none'}}
+               className="profile_segmentHeaders"
              >
-               <Header>Comments about this trainer &nbsp;&nbsp;
-                   <Icon name="comment outline"></Icon>
+               <Header>Yorumlar &nbsp;&nbsp;({getCommentsByDate.length}/{commentCount})
+                   {/* <Icon name="comment outline"></Icon> */}
                </Header>
              </Segment>
              <Segment>
-              <ProfileCommentList />
-             <Button
-                 floated="right"
-                 content="More..." 
-                 positive
-                 onClick={handleGetNext}
-                 disabled={totalPages === commentPage + 1}
-                 loading={loadingNext}/>
-                  <Button
-                      content='Comment'
-                      labelPosition='left'
-                      icon='edit'
-                      primary
-                      onClick={()=>openModal("Leave a comment",<ProfileCommentForm closeModal={closeModal} />)}
-                    />
+              <ProfileCommentList handleGetNext={handleGetNext} commentPage={commentPage}
+               totalPages={totalPages} loadingNext={loadingNext} getCommentsByDate={getCommentsByDate}/>
              </Segment>
            </Fragment>
     )

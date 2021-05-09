@@ -8,7 +8,15 @@ export interface IProfile {
     followerCount: number,
     photos: IPhoto[],
     star: number,
-    starCount: number
+    starCount: number,
+    comments: IProfileComment[]
+}
+
+
+export class ProfilesFilterFormValues {
+    category: string = '';
+    subCategory: string = '';
+ 
 }
 
 export interface IPhoto {
@@ -38,4 +46,24 @@ export interface IProfileComment {
     displayName : string;
     starCount: number;
     allowDisplayName: boolean;
+}
+
+
+export interface IProfileBlogsEnvelope {
+    profileBlogs :IProfileBlog[];
+    profileBlogsCount: number;
+}
+
+
+export interface IProfileBlog {
+    id: string;
+    title:string;
+    description: string;
+    categoryId:string;
+    subCategoryIds:string[];
+    date: Date;
+    username: string;
+    photo: string;
+    displayName : string;
+    userImage:string;
 }

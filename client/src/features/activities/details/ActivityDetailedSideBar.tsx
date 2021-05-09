@@ -17,7 +17,8 @@ interface IProps{
               attached='top'
               secondary
               inverted
-              color='teal'
+              className="segmentHeader"
+
             >
               {attendees.length} {attendees.length === 1 ? 'Person' : 'People'} going
             </Segment>

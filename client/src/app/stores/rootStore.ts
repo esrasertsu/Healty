@@ -5,7 +5,8 @@ import { configure } from "mobx";
 import CommonStore from "./commonStore";
 import ModalStore from "./modalStore";
 import ProfileStore from "./profileStore";
-import PostStore from "./postStore";
+import BlogStore from "./blogStore";
+import CategoryStore from "./categoryStore";
 
 configure({enforceActions: 'always'});
 
@@ -15,7 +16,8 @@ export class RootStore {
     commonStore: CommonStore;
     modalStore: ModalStore;
     profileStore: ProfileStore;
-    postStore: PostStore;
+    blogStore: BlogStore;
+    categoryStore: CategoryStore;
 
     constructor() {
         this.activityStore = new ActivityStore(this);
@@ -23,7 +25,8 @@ export class RootStore {
         this.commonStore = new CommonStore(this);
         this.modalStore = new ModalStore(this);
         this.profileStore = new ProfileStore(this);
-        this.postStore = new PostStore(this);
+        this.blogStore = new BlogStore(this);
+        this.categoryStore = new CategoryStore(this);
     }
 }
 

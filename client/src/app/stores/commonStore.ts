@@ -22,11 +22,17 @@ export default class CommonStore {
     @observable token: string | null = window.localStorage.getItem('jwt');
     @observable appLoaded  = false;
 
+    @observable activeMenu  = -1;
+
     @action setToken = (token: string | null) => {
         this.token = token;
     }
 
     @action setAppLoaded = () => {
         this.appLoaded = true;
+    }
+
+    @action setActiveMenu = (index: number) => {
+        this.activeMenu = index;
     }
 }

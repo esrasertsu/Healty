@@ -73,15 +73,19 @@ const ActivityFilters = () => {
         <Menu.Item
          active={predicate.size === 0}
          onClick= {() => {setPredicate('all', 'true')}}
-         color={'blue'} name={'all'} content={'Hepsi'} />
+          name={'all'} content={'Hepsi'} />
         <Menu.Item
         active = { predicate.has('isGoing')}
         onClick= {() => { setPredicate('isGoing', 'true')}}
-        color={'blue'} name={'username'} content={"Gidiyorum"} />
+         name={'username'} content={"Gidiyorum"} />
         <Menu.Item
         active = { predicate.has('isHost')}
         onClick= {() => { setPredicate('isHost', 'true')}}
-        color={'blue'} name={'host'} content={"Düzenlediklerim"} />
+         name={'host'} content={"Düzenlediklerim"} />
+         <Menu.Item
+        active = { predicate.has('isFollowed')}
+        onClick= {() => { setPredicate('isFollowed', 'true')}}
+         name={'follow'} content={"Takip Ettiğim Eğitmenlerin"} />
       </Menu>
 
       <Accordion as={Menu} vertical style={{ width: '100%', boxShadow:'none', border:'none'}}>

@@ -8,8 +8,9 @@ interface IProps{
     editing: boolean;
     size?:"large" | "mini" | "tiny" | "small" | "big" | "huge" | "massive" | undefined;
     count?:number;
+    showCount: boolean;
 }
-export const StarRating:React.FC<IProps> = ({rating,setRating,editing,size,count}) => {
+export const StarRating:React.FC<IProps> = ({rating,setRating,editing,size,count, showCount}) => {
 
     const clickStar = (nextValue:number, prevValue:number, name:string) => {
         setRating!(nextValue);
@@ -32,7 +33,10 @@ export const StarRating:React.FC<IProps> = ({rating,setRating,editing,size,count
         />
          <span className="starRating_Rating">{rating}</span>
        </div>
-       <div className="starRating_Count">{count} Değerlendirme</div> 
+       {showCount && 
+          <div className="starRating_Count">{count} Değerlendirme</div> 
+        }
+       
      </div>
     )
 }

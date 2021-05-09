@@ -18,6 +18,7 @@ export default class ActivityStore {
         reaction(
             () => this.predicate.keys(),
             () => {
+                debugger;
                 this.page=0;
                 this.activityRegistery.clear();
                 this.loadActivities();
@@ -178,6 +179,7 @@ export default class ActivityStore {
     };
 
     @action loadActivity = async (id:string) => {
+        debugger;
         let activity = this.getActivity(id);
 
         if(activity){

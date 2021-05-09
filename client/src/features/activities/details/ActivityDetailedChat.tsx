@@ -31,8 +31,8 @@ import { formatDistance } from 'date-fns';
                textAlign='center'
                attached='top'
                inverted
-               color='teal'
                style={{ border: 'none' }}
+               className="segmentHeader"
              >
                <Header>Chat about this event</Header>
              </Segment>

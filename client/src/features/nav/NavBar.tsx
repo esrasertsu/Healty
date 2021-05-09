@@ -4,19 +4,19 @@ import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import {history} from '../../index';
+import SearchArea from '../home/SearchArea';
 
 const NavBar: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
     const { user, logout} = rootStore.userStore;
-    const { setLoadingProfiles } = rootStore.profileStore;
-    const { setLoadingInitial } = rootStore.activityStore;
-
-    const [activeMenu, setActiveMenu] = useState(0);
+    const { activeMenu,setActiveMenu } = rootStore.commonStore;
+   
     const fixed = "top";
     return (
       <>
       <Menu 
       fixed={fixed ? 'top' : undefined}
+      pointing
       secondary
       size='massive'
        >
@@ -31,26 +31,37 @@ const NavBar: React.FC = () => {
                   <img
                       src="/assets/logo.png"
                       alt="logo"
-                      style={{ height:"40px"}}
+                      style={{ height:"30px"}}
                     />
                 </div>
                   
                   </Menu.Item>
-                 <Menu.Item as='a' position="right" name="feed"   onClick={() => {
-                   setLoadingInitial(true);
-                    history.push(`/feed`);
-                    }} />
-               <Menu.Item as='a' name="activities"   onClick={() => {
-                   setLoadingInitial(true);
-                    history.push(`/activities`);
+                  <Menu.Item>
+                    <SearchArea className="nav_SearchArea" placeholder="Kategori ara"/>
+                  </Menu.Item>
+                  <Menu.Item position="right" as={Link} to="/profiles"  name="Eğitmenler" 
+                  active={activeMenu === 0}
+                onClick={() => {
+                   //setLoadingProfiles(true);
+                   setActiveMenu(0);
+                  //  history.push(`/profiles`);
+                    }} /> 
+               <Menu.Item as={Link} to="/activities" name="Aktiviteler"
+                active={activeMenu === 1}
+                  onClick={() => {
+                 //   setLoadingInitial(true);
+                    setActiveMenu(1)
+                   // history.push(`/activities`);
                     }} />
 
-                <Menu.Item as='a' name="profiles" 
-                onClick={() => {
-                   setLoadingProfiles(true);
-                    history.push(`/profiles`);
-                    }} /> 
-         
+                
+          <Menu.Item as={Link} to="/blog" name="Blog" 
+           active={activeMenu === 2}
+             onClick={() => {
+                 //  setLoadingPosts(true);
+                   // history.push(`/blog`);
+                    setActiveMenu(2)
+                    }} />
 
           {user && (
             <Menu.Item as='a'>

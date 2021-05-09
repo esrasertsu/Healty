@@ -17,13 +17,25 @@ import ProfilePage  from '../../features/profiles/ProfilePage';
 import ProfileList  from '../../features/profiles/ProfileList';
 import ActivitySearchPage from '../../features/activities/search/ActivitySearchPage';
 import PostForm from '../../features/posts/PostForm';
-import PersonalFeed from '../../features/feed/PersonalFeed';
+import BlogList from '../../features/blog/BlogList';
+import Footer from '../../features/home/Footer';
+import BlogPage from '../../features/blog/BlogPage';
 
 const App: React.FC<RouteComponentProps> = ({location}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const {setAppLoaded, token, appLoaded } = rootStore.commonStore;
+  const {setAppLoaded, token, appLoaded,setActiveMenu } = rootStore.commonStore;
   const { getUser } = rootStore.userStore;
+
+
+  // useEffect(() => {
+  //   return history.listen((location) => { 
+  //     if(location.pathname === "/profiles")
+  //        setActiveMenu(0);
+
+  //      console.log(`You changed the page to: ${location.pathname}`) 
+  //   }) 
+  // },[history]) 
 
   useEffect(() => {
     if(token) {
@@ -47,7 +59,8 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                 <Switch>
                   <Route exact path="/activities" component={ActivityDashboard} />
                   <Route path="/activities/:id" component={ActivityDetails} />
-                  <Route exact path="/feed" component={PersonalFeed} />
+                  <Route exact path="/blog" component={BlogList} />
+                  <Route exact path="/blog/:id" component={BlogPage} />
                   <Route key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
                   <Route key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
                   <Route path="/profile/:username" component={ProfilePage}/>
@@ -59,6 +72,8 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
               </Container>
            </Fragment>
          )} />
+                 <Footer />
+
         </Fragment>    
     );
 };

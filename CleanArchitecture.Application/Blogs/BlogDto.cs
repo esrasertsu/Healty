@@ -8,6 +8,7 @@ namespace CleanArchitecture.Application.Blogs
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public string Summary { get; set; }
         public Guid CategoryId { get; set; }
         public List<Guid> SubCategoryIds { get; set; }
         public DateTime Date { get; set; }

@@ -8,11 +8,11 @@ interface IProps{
     setActiveTab: (activeIndex:any) => void
 }
 const panes = [
-    {menuItem: 'About', render:() => <Tab.Pane>About</Tab.Pane>},
-    {menuItem: 'Photos', render:() => <ProfilePhotos />},
-    {menuItem: 'Activities', render:() => <ProfileActivities/>},
-    {menuItem: 'Following', render:() => <ProfileFollowings />},
-    {menuItem: 'Followers', render:() => <ProfileFollowings />},
+    {menuItem: 'Hakkında', render:() => <Tab.Pane>About</Tab.Pane>},
+    {menuItem: 'Fotoğraflar', render:() => <ProfilePhotos />},
+    {menuItem: 'Etkinlikler', render:() => <ProfileActivities/>},
+    {menuItem: 'Takip Edilenler', render:() => <ProfileFollowings />},
+    {menuItem: 'Takipçiler', render:() => <ProfileFollowings />},
 
 ]
 
@@ -21,6 +21,7 @@ const ProfileContent: React.FC<IProps> = ({setActiveTab}) => {
        <Tab 
         //    menu={{fluid:true, vertical:true}}
         //    menuPosition='right'
+           menu={{ secondary: true, pointing: true }}
            panes={panes}
            onTabChange={(e, data) => setActiveTab(data.activeIndex)}
        />

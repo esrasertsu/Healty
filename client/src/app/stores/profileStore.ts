@@ -2,7 +2,7 @@ import { action, observable, runInAction, computed, reaction } from "mobx";
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { toast } from "react-toastify";
 import agent from "../api/agent";
-import { IPhoto, IProfile, IProfileComment, IUserActivity } from "../models/profile";
+import { IPhoto, IProfile, IProfileBlog, IProfileComment, IUserActivity } from "../models/profile";
 import { RootStore } from "./rootStore";
 
 const LIMIT = 5;
@@ -28,19 +28,28 @@ export default class ProfileStore{
 
     @observable profile: IProfile | null = null;
     @observable commentRegistery = new Map();
+    @observable profileRegistery = new Map();
+    @observable blogRegistery = new Map();
     @observable loadingProfile = true;
     @observable loadingProfiles = true;
     @observable uploadingPhoto = false;
     @observable submittingComment = false;
     @observable loadingForPhotoDeleteMain = false;
     @observable loading = false;
-    @observable loadingComments = false;
+    @observable loadingComments = true;
+    @observable loadingBlogs = true;
     @observable followings: IProfile[] = [];
     @observable activeTab: number = 0;
     @observable profileList: IProfile[] = [];
     @observable commentCount = 0;
     @observable commentPage = 0;
+
+    @observable blogCount = 0;
+    @observable blogPage = 0;
     @observable userActivities: IUserActivity[] = [];
+    // @observable profileBlogs: IProfileBlog[] = [];
+     @observable profileComments: IProfileComment[] = [];
+
     @observable loadingActivities = false;
     @observable.ref hubConnection : HubConnection | null = null;
     @computed get isCurrentUser(){
@@ -58,12 +67,27 @@ export default class ProfileStore{
         this.commentPage = page;
     }
 
+    @action setBlogPagination = (page:number) =>{
+        this.blogPage = page;
+    }
+
+    @computed get totalBlogPages(){
+        debugger;
+        return Math.ceil(this.blogCount / LIMIT);
+    }
+
     @computed get getCommentsByDate(){
+        debugger;
         // return this.activities.sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
       //  return Array.from(this.activityRegistery.values()).sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
           return Array.from(this.commentRegistery.values());
      }
  
+     @computed get getBlogsByDate(){
+        // return this.activities.sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
+      //  return Array.from(this.activityRegistery.values()).sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
+          return Array.from(this.blogRegistery.values());
+     }
 
     @action setActiveTab = (activeIndex: number) => {
         this.activeTab = activeIndex;
@@ -98,6 +122,7 @@ export default class ProfileStore{
     };
 
     @action loadComments = async (username: string) =>{
+        debugger;
         this.loadingComments = true;
 
         try {
@@ -109,6 +134,7 @@ export default class ProfileStore{
                     //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
                     this.commentRegistery.set(comment.id, comment);
                 });
+                this.profileComments = profileComments;
                 this.commentCount = profileCommentCount;
                 this.loadingComments = false;
             })
@@ -121,31 +147,74 @@ export default class ProfileStore{
     }
 
 
-    @action loadProfile = async (username: string) =>{
+    @action loadBlogs = async (username: string) =>{
         debugger;
-        this.loadingProfile = true;
-        this.commentRegistery.clear();
+        this.loadingBlogs = true;
+
         try {
-            const profile = await agent.Profiles.get(username);
+            const profileBlogListEnvelope = await agent.Profiles.listBlogs(username, LIMIT, this.blogPage);
+            const {profileBlogs, profileBlogsCount } = profileBlogListEnvelope;
+
             runInAction(()=>{
-                this.profile = profile;
-                this.loadingProfile = false;
+                profileBlogs.forEach((blog) =>{
+                    //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
+                    this.blogRegistery.set(blog.id, blog);
+                });
+              //  this.profileBlogs = profileBlogs;
+                this.blogCount = profileBlogsCount;
+                this.loadingBlogs = false;
             })
         } catch (error) {
             runInAction(()=>{
-                this.loadingProfile = false;
+                this.loadingBlogs = false;
             })
             console.log(error);
         }
     }
 
+    getProfile = (username:string) => {
+        return this.profileRegistery.get(username);
+    }
+    @action loadProfile = async (username: string) =>{
+       debugger;
+            this.loadingProfile = true;
+            this.setCommentPage(0);
+            this.setBlogPagination(0);
+            this.commentRegistery.clear();
+            this.blogRegistery.clear();
+            try {
+                const profile = await agent.Profiles.get(username);
+                runInAction(()=>{
+                    this.profile = profile;
+                    this.profileRegistery.set(profile.userName, profile);
+                    this.loadingBlogs = true;
+                    this.loadingComments = true;
+                    this.loadBlogs(profile.userName);
+                    this.loadComments(profile.userName);
+                    this.loadingProfile = false;
+                })
+            } catch (error) {
+                runInAction(()=>{
+                    this.loadingProfile = false;
+                })
+                console.log(error);
+            }
+        
+        
+    }
     @action loadProfiles = async () =>{
         this.loadingProfiles = true;
 
         try {
             var role = "tra";
             const profileList = await agent.Profiles.list(role);
-            runInAction(()=>{
+            runInAction('Loading profiles',()=>{
+
+                profileList.forEach((profile) =>{
+                   // setActivityProps(activity,this.rootStore.userStore.user!)
+                    this.profileRegistery.set(profile.userName, profile);
+                });
+
                 this.profileList = profileList;
                 this.loadingProfiles = false;
             })

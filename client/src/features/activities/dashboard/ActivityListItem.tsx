@@ -45,10 +45,10 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                             </Item.Description>
                         <Item.Meta></Item.Meta>
                         {activity.isHost && 
-                        <Item.Description><Label basic color="orange" content="You're hosting this activity"></Label></Item.Description>
+                        <Item.Description><Label size="small" basic color="orange" content="You're hosting this activity"></Label></Item.Description>
                         }
                     {activity.isGoing && !activity.isHost &&
-                        <Item.Description><Label basic color="green" content="You're going to this activity"></Label></Item.Description>
+                        <Item.Description><Label size="small" basic color="green" content="You're going to this activity"></Label></Item.Description>
                     }
                     
                     <Item.Description>
@@ -58,12 +58,12 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                             content="İncele"
                             color="blue"
                             /> */}
-                            <Label basic>{activity.category}</Label>
+                            <Label basic size="small">{activity.category}</Label>
                         </Item.Description> 
                     </Item.Content>
                     <Item.Content className="activity_listItem_extraContent">
-                    <Item.Description style={{textAlign:"right"}}>
-                     <StarRating rating={3} editing={false} size={'small'}/>
+                    <Item.Description style={{textAlign:"right", display: "flex", justifyContent: "flex-end"}}>
+                     <StarRating rating={3} editing={false} size={'small'} showCount/>
                     </Item.Description>
                     <Item.Description style={{flex:"end"}}>
                     <div className="baseline-pricing">

@@ -1,38 +1,96 @@
-import { action, observable, runInAction } from "mobx";
+import { action, computed, observable, reaction, runInAction } from "mobx";
 import { toast } from "react-toastify";
 import agent from "../api/agent";
-import { IPost } from "../models/post";
+import { IBlog } from "../models/blog";
 import { RootStore } from "./rootStore";
 import { history } from '../..';
 import { SyntheticEvent } from 'react';
 
-export default class PostStore{
+const LIMIT = 6;
+
+export default class BlogStore{
     rootStore: RootStore
     constructor(rootStore: RootStore){
-        this.rootStore = rootStore
+        this.rootStore = rootStore;
+        
+        reaction(
+            () => this.predicate.keys(),
+            () => {
+                debugger;
+                this.page=0;
+                this.blogRegistery.clear();
+                this.loadBlogs();
+            }
+        )
     }
-
-    @observable post: IPost | null = null;
+    @observable blogRegistery = new Map();
+    @observable post: IBlog | null = null;
     @observable loadingPosts = true;
     @observable loadingPost = true;
     @observable loadingForDelete = true;
     @observable submitting = false;
-    @observable postList: IPost[] = [];
+    @observable postList: IBlog[] = [];
     @observable postRegistery = new Map();
     @observable target = '';
+    @observable blogCount = 0;
+    @observable predicate = new Map();
+    @observable page = 0;
 
-    
+    @action setPage = (page:number) =>{
+        this.page = page;
+    }
+
+    @computed get totalPages(){
+        return Math.ceil(this.blogCount / LIMIT);
+    }
+    @computed get isCurrentUserAuthor(){
+        if (this.rootStore.userStore.user && this.post){
+            return this.rootStore.userStore.user.userName === this.post!.username;
+        }else {
+            return false;
+        }
+    }
+    @computed get axiosParams(){
+        const params = new URLSearchParams();
+        params.append('limit', String(LIMIT));
+        params.append('offset', `${this.page ? this.page * LIMIT : 0}`);
+        this.predicate.forEach((value,key) => {
+                params.append(key, value);
+        })
+        return params;
+    }
+
+    @action setPredicate = (predicate:string, value:string) => {
+        this.predicate.clear();
+        if(predicate !== 'all')
+        {
+            this.predicate.set(predicate,value);
+        }
+    }
     @action setLoadingPosts = (lp : boolean) =>{
         this.loadingPosts = lp;
     }
 
-    @action loadPosts = async () =>{
+    @computed get getBlogsByDate(){
+        debugger;
+        // return this.activities.sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
+      //  return Array.from(this.activityRegistery.values()).sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
+          return Array.from(this.blogRegistery.values());
+     }
+
+    @action loadBlogs = async () =>{
+        debugger;
         this.loadingPosts = true;
 
         try {
-            const postList = await agent.Posts.list();
-            runInAction(()=>{
-                this.postList = postList;
+            const blogsEnvelope = await agent.Blogs.list(this.axiosParams);
+            const {blogs, blogCount } = blogsEnvelope;
+            runInAction('Loading blogs',()=>{
+                blogs.forEach((blog) =>{
+                  //  setActivityProps(activity,this.rootStore.userStore.user!)
+                    this.blogRegistery.set(blog.id, blog);
+                });
+                this.blogCount = blogCount;
                 this.loadingPosts = false;
             })
         } catch (error) {
@@ -44,7 +102,7 @@ export default class PostStore{
     }
 
     
-    @action loadPost = async (id:string) => {
+    @action loadBlog = async (id:string) => {
         let post =  this.postRegistery.get(id);
 
         if(post){
@@ -54,7 +112,7 @@ export default class PostStore{
         else{
             this.loadingPost = true;
             try {
-                post = await agent.Posts.details(id);
+                post = await agent.Blogs.details(id);
                 runInAction('Getting post',() => {
                     this.post = post;
                     this.postRegistery.set(post.id, post);
@@ -124,10 +182,10 @@ export default class PostStore{
     //     }
     // }
 
-    @action createPost = async (post: IPost) =>{
+    @action createPost = async (post: IBlog) =>{
         this.submitting = true;
         try {
-            await agent.Posts.create(post);
+            await agent.Blogs.create(post);
             runInAction('Creating post', () => {
                 this.postRegistery.set(post.id, post);
                 this.submitting = false;
@@ -142,10 +200,10 @@ export default class PostStore{
         }
     };
 
-    @action editPost = async (post: IPost) =>{
+    @action editPost = async (post: IBlog) =>{
         this.submitting = true;
         try {
-            await agent.Posts.update(post);
+            await agent.Blogs.update(post);
             runInAction('Editing post', () => {
             this.postRegistery.set(post.id, post);
             this.post = post;

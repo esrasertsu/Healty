@@ -19,7 +19,7 @@ const [deleteTarget, setDeleteTarget] = useState<string | undefined>(undefined);
     <Tab.Pane>
       <Grid>
         <Grid.Column width={16} style={{ paddingBottom: 0 }}>
-          <Header floated="left" icon="image" content="Photos" />
+          {/* <Header floated="left" icon="image" content="Photos" /> */}
           {isCurrentUser && (
             <Button
               floated="right"

@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,9 +14,29 @@ namespace CleanArchitecture.Application.Blogs
 {
     public class List
     {
-        public class Query : IRequest<List<BlogDto>> { }
+        public class BlogsEnvelope
+        {
+            public List<BlogDto> Blogs { get; set; }
+            public int BlogCount { get; set; }
 
-        public class Handler : IRequestHandler<Query, List<BlogDto>>
+        }
+        public class Query : IRequest<BlogsEnvelope> {
+            public Query(int? limit, int? offset, string userName, Guid? categoryId, Guid? subCategoryId)
+            {
+                Limit = limit;
+                Offset = offset;
+                UserName = userName;
+                CategoryId = categoryId;
+                SubCategoryId = subCategoryId;
+            }
+            public int? Limit { get; set; }
+            public int? Offset { get; set; }
+            public string UserName { get; set; }
+            public Guid? CategoryId { get; set; }
+            public Guid? SubCategoryId { get; set; }
+        }
+
+        public class Handler : IRequestHandler<Query, BlogsEnvelope>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -26,11 +47,35 @@ namespace CleanArchitecture.Application.Blogs
                  _mapper = mapper;
 
             }
-            public async Task<List<BlogDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<BlogsEnvelope> Handle(Query request, CancellationToken cancellationToken)
             {
-                var posts = await _context.Blogs.ToListAsync(cancellationToken);
+                var queryablePosts = _context.Blogs
+                   .OrderByDescending(x => x.Date)
+                   .AsQueryable();
 
-                return _mapper.Map<List<Blog>, List<BlogDto>>(posts);
+                if (!string.IsNullOrEmpty(request.UserName))
+                {
+                    queryablePosts = queryablePosts.Where(x => x.Author.UserName == request.UserName);
+                }
+                if (request.CategoryId != null)
+                {
+                    queryablePosts = queryablePosts.Where(x => x.Category.Id == request.CategoryId);
+                }
+                if (request.SubCategoryId != null)
+                {
+                    queryablePosts = queryablePosts.Where(x => x.SubCategories.Any(
+                        a => a.SubCategoryId == request.SubCategoryId));
+                }
+
+                var blogs = await queryablePosts
+                   .Skip(request.Offset ?? 0)
+                   .Take(request.Limit ?? 3).ToListAsync();
+
+                return new BlogsEnvelope
+                {
+                    Blogs = _mapper.Map<List<Blog>, List<BlogDto>>(blogs),
+                    BlogCount = queryablePosts.Count()
+                };
 
             }
         }

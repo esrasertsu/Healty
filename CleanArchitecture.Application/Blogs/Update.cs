@@ -62,7 +62,7 @@ namespace CleanArchitecture.Application.Blogs
 
                 if(request.File != null)
                 {
-                    var photoUploadResults = _photoAccessor.AddPhoto(request.File);
+                    var photoUploadResults = _photoAccessor.AddBlogPhoto(request.File);
 
                     var image = new BlogImage
                     {

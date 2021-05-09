@@ -50,6 +50,60 @@ namespace Infrastructure.Photos
             };
         }
 
+        public PhotoUploadResult AddBlogPhoto(IFormFile file)
+        {
+            var uploadResult = new ImageUploadResult();
+
+            if (file.Length > 0)
+            {
+                using (var stream = file.OpenReadStream())
+                {
+                    var uploadParams = new ImageUploadParams
+                    {
+                        File = new FileDescription(file.FileName, stream),
+                        Transformation = new Transformation().Height(647).Width(1485).Crop("fill").Gravity("face")
+                    };
+                    uploadResult = _cloudinary.Upload(uploadParams);
+                }
+            }
+
+            if (uploadResult.Error != null)
+                throw new Exception(uploadResult.Error.Message);
+
+            return new PhotoUploadResult
+            {
+                PublicId = uploadResult.PublicId,
+                Url = uploadResult.SecureUrl.AbsoluteUri
+            };
+        }
+
+        public PhotoUploadResult AddActivityImage(IFormFile file)
+        {
+            var uploadResult = new ImageUploadResult();
+
+            if (file.Length > 0)
+            {
+                using (var stream = file.OpenReadStream())
+                {
+                    var uploadParams = new ImageUploadParams
+                    {
+                        File = new FileDescription(file.FileName, stream),
+                        Transformation = new Transformation().Height(330).Width(770).Crop("fill").Gravity("face")
+                    };
+                    uploadResult = _cloudinary.Upload(uploadParams);
+                }
+            }
+
+            if (uploadResult.Error != null)
+                throw new Exception(uploadResult.Error.Message);
+
+            return new PhotoUploadResult
+            {
+                PublicId = uploadResult.PublicId,
+                Url = uploadResult.SecureUrl.AbsoluteUri
+            };
+        }
+
         public string DeletePhoto(string publicId)
         {
             var deleteParams = new DeletionParams(publicId);

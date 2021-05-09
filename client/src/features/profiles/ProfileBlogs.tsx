@@ -1,80 +1,45 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { Segment, Header, Button, Icon, TabProps } from 'semantic-ui-react'
+import { Segment, Header, Button, Icon } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
-import ProfileCommentForm from './ProfileCommentForm';
-import ProfileCommentList from './ProfileCommentList';
+import ProfileBlogList from './ProfileBlogList';
 
- const ProfileBlogs = () => {
+ const ProfileBlogs: React.FC = () => {
+  
     const rootStore = useContext(RootStoreContext);
+
     const {
-    //  loadUserBlogs,
       profile,
-      loadingActivities,
-      userActivities
-    } = rootStore.profileStore!;
+      loadBlogs,
+      blogPage,
+      setBlogPagination,
+      totalBlogPages,
+      getBlogsByDate
+    } = rootStore.profileStore;
   
-    // useEffect(() => {
-    //   loadUserActivities(profile!.userName);
-    // }, [loadUserActivities, profile]);
-  
-    const handleTabChange = (
-      e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-      data: TabProps
-    ) => {
-      let predicate;
-      switch (data.activeIndex) {
-        case 1:
-          predicate = 'past';
-          break;
-        case 2:
-          predicate = 'hosting';
-          break;
-        default:
-          predicate = 'future';
-          break;
-      }
-     // loadUserActivities(profile!.userName, predicate);
-    };
-  
+    const [loadingNext, setLoadingNext] = useState(false);
+    
+    const handleGetNext = () => {
+      setLoadingNext(true);
+      setBlogPagination(blogPage +1);
+      loadBlogs(profile!.userName).then(() => setLoadingNext(false))
+    }
+   
     return (
-        <div></div>
-    //   <Tab.Pane loading={loadingActivities}>
-    //     <Grid>
-    //       <Grid.Column width={16}>
-    //         <Header floated='left' icon='calendar' content={'Activities'} />
-    //       </Grid.Column>
-    //       <Grid.Column width={16}>
-    //         <Tab
-    //           panes={panes}
-    //           menu={{ secondary: true, pointing: true }}
-    //           onTabChange={(e, data) => handleTabChange(e, data)}
-    //         />
-    //         <br />
-    //         <Card.Group itemsPerRow={4}>
-    //           {userActivities.map((activity: IUserActivity) => (
-    //             <Card
-    //               as={Link}
-    //               to={`/activities/${activity.id}`}
-    //               key={activity.id}
-    //             >
-    //               <Image
-    //                 src={`/assets/categoryImages/${activity.category}.jpg`}
-    //                 style={{ minHeight: 100, objectFit: 'cover' }}
-    //               />
-    //               <Card.Content>
-    //                 <Card.Header textAlign='center'>{activity.title}</Card.Header>
-    //                 <Card.Meta textAlign='center'>
-    //                   <div>{format(new Date(activity.date), 'do LLL')}</div>
-    //                   <div>{format(new Date(activity.date), 'h:mm a')}</div>
-    //                 </Card.Meta>
-    //               </Card.Content>
-    //             </Card>
-    //           ))}
-    //         </Card.Group>
-    //       </Grid.Column>
-    //     </Grid>
-    //   </Tab.Pane>
+        <Fragment>
+        <Segment
+          textAlign='left'
+          attached='top'
+          className="profile_segmentHeaders"
+        >
+          <Header>Blog Yazılar &nbsp; ({getBlogsByDate.length})
+              {/* <Icon name="comment outline"></Icon> */}
+          </Header>
+        </Segment>
+        {getBlogsByDate.length === 0 && "Henüz paylaştığı bir blog bulunmamaktadır."}
+        <ProfileBlogList handleGetNext={handleGetNext} totalBlogPages={totalBlogPages} loadingNext={loadingNext}
+         blogPage={blogPage} getBlogsByDate={getBlogsByDate} />
+      </Fragment>
     );
 }
 

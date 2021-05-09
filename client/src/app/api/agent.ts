@@ -3,8 +3,9 @@ import { IActivitiesEnvelope, IActivity } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
-import { IPhoto, IProfile, IProfileComment, IProfileCommentEnvelope } from '../models/profile';
-import { IPost } from '../models/post';
+import { IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope } from '../models/profile';
+import { IBlogsEnvelope, IBlog } from '../models/blog';
+import { ICategory, ISubCategory } from '../models/category';
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
@@ -90,21 +91,29 @@ const Profiles = {
     listActivities: (username:string, predicate: string) => requests.get(`/profiles/${username}/activities?predicate=${predicate}`),
     createComment: (comment:IProfileComment) => requests.post(`/profiles`, comment),
     listComments: (username: string, limit?:number, page?:number): Promise<IProfileCommentEnvelope> => 
-                requests.get(`/profiles/${username}/comments?username=${username}&limit=${limit}&offset=${page ? page*limit! :0}`)
+                requests.get(`/profiles/${username}/comments?username=${username}&limit=${limit}&offset=${page ? page*limit! :0}`),
+    listBlogs: (username: string, limit?:number, page?:number): Promise<IProfileBlogsEnvelope> => 
+                requests.get(`/profiles/${username}/blogs?username=${username}&limit=${limit}&offset=${page ? page*limit! :0}`)
 }
 
 
-const Posts = {
-    list: (): Promise<IPost[]> => requests.get('/post'),
-    details: (id:string) => requests.get(`/post/${id}`),
-    create: (post: IPost) => requests.post('/post', post),
-    update: (post: IPost) => requests.put(`/post/${post.id}`, post),
-    delete: (id: string) => requests.del(`/post/${id}`),
+const Blogs = {
+    list: (params: URLSearchParams): Promise<IBlogsEnvelope> => 
+            axios.get(`/blog`, {params:params}).then(sleep(1000)).then(responseBody),
+    details: (id:string) => requests.get(`/blog/${id}`),
+    create: (post: IBlog) => requests.post('/blog', post),
+    update: (post: IBlog) => requests.put(`/blog/${post.id}`, post),
+    delete: (id: string) => requests.del(`/blog/${id}`),
 }
 
+const Categories = {
+    list: (): Promise<ICategory[]> => requests.get('/category'),
+    listSubCats: (categoryId: string): Promise<ISubCategory[]> => requests.get(`/category/${categoryId}/sub`),
+}
 export default {
     Activities,
     User,
     Profiles,
-    Posts
+    Blogs,
+    Categories
 }

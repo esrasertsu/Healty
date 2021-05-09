@@ -13,9 +13,9 @@ namespace CleanArchitecture.API.Controllers
     public class BlogController : BaseController
     {
         [HttpGet]
-        public async Task<ActionResult<List<BlogDto>>> List()
+        public async Task<ActionResult<List.BlogsEnvelope>> List(int? limit, int? offset, string userName, Guid? categoryId, Guid? subCategoryId)
         {
-            return await Mediator.Send(new List.Query());
+            return await Mediator.Send(new List.Query(limit, offset, userName, categoryId, subCategoryId));
         }
 
         [HttpGet("{id}")]

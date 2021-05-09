@@ -4,6 +4,7 @@ import { IProfile } from '../../app/models/profile';
 import { history } from '../../index'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { StarRating } from '../../app/common/form/StarRating';
+import { Link } from 'react-router-dom';
 interface IProps {
     profile: IProfile
 }
@@ -12,13 +13,14 @@ const ProfileListItem: React.FC<IProps> = ({profile}) => {
 
   const rootStore = useContext(RootStoreContext);
   const {setLoadingProfile} = rootStore.profileStore;
-
+  
   return (
     <Card onClick={() => {
-      history.push(`/profile/${profile.userName}`)
       setLoadingProfile(true);
-      }} >
-      <Image src={profile.image || '/assets/user.png'} />
+      history.push(`/profile/${profile.userName}`)
+      }}
+    key={profile.userName} >
+      <Image circular src={profile.image || '/assets/user.png'} />
       <Label className="profileCard_Label" color="blue" horizontal>
         Fitness
       </Label>
@@ -33,7 +35,7 @@ const ProfileListItem: React.FC<IProps> = ({profile}) => {
         <Grid>
           <Grid.Row className="profileCard_footer">
           <Grid.Column className="starRatingColumn">
-          <StarRating rating={profile.star} editing={false} size={'small'} count={profile.starCount}/>
+          <StarRating rating={profile.star} editing={false} size={'small'} count={profile.starCount} showCount/>
           </Grid.Column> 
           <Grid.Column className="followerCountColumn">
           <Icon name='user' />

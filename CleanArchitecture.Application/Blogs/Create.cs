@@ -55,7 +55,7 @@ namespace CleanArchitecture.Application.Blogs
                    if (category == null)
                           throw new RestException(HttpStatusCode.NotFound, new { Category = "NotFound" });
 
-                var photoUploadResults = _photoAccessor.AddPhoto(request.File);
+                var photoUploadResults = _photoAccessor.AddBlogPhoto(request.File);
 
                 var image = new BlogImage
                 {

@@ -22,14 +22,14 @@ interface IProps{
 
     
     const handleFinalFormSubmit = async (values: IProfileComment) => {
-      // const { ...comment } = values;
+       const { ...comment } = values;
   
     
-      //       let newComment = {
-      //         ...comment,
-      //         id: uuid(),
-      //       };
-           await sendTrainerComment(values);
+            let newComment = {
+              ...comment,
+              StarCount: rating,
+            };
+           await sendTrainerComment(newComment);
     };
 
     return (
@@ -65,7 +65,7 @@ interface IProps{
                 />  
           <br/>
           {/* <Rating icon='star' defaultRating={3} maxRating={4} /> */}
-           <StarRating rating={rating} setRating={setRating} editing={true} />
+           <StarRating rating={rating} setRating={setRating} editing={true} showCount={false}/>
            <br/>
            <Label>
            <Field

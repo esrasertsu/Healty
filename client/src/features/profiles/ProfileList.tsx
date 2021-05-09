@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { Fragment, useContext, useEffect,useState } from 'react'
-import { Card, Container, Grid, Header, Segment, Select } from 'semantic-ui-react'
+import { Card, Container, Grid, Header, Label, Segment, Select } from 'semantic-ui-react'
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileListItem from './ProfileListItem'
@@ -8,6 +8,7 @@ import ProfileListFilters from './ProfileListFilters';
 import { category } from "../../app/common/options/categoryOptions";
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import ProfileListItemsPlaceholder from './ProfileListItemsPlaceholder';
 const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
@@ -42,8 +43,8 @@ const responsive = {
     const handleSortingChange = (e:any,data:any) => {
       setSortingInput(data.value);
     }
-    if(loadingProfiles) 
-    return <LoadingComponent content='Loading profiles...' />
+    // if(loadingProfiles) 
+    // return <LoadingComponent content='Loading profiles...' />
 
     return (
       <Fragment>
@@ -54,12 +55,16 @@ const responsive = {
                </Container>
       </Segment>
                {/* <Header as='h2' inverted content={`Welcome back ${user.displayName}`} /> */}
-       <Header style={{ fontSize: '18px', marginTop:"30px" }}>
+               <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff", fontSize: '16px', marginBottom:"10px", marginTop:"30px"}}>
+               En popüler 10
+               </Label>
+       {/* <Header style={{ fontSize: '18px', marginTop:"30px" }}>
         En popüler 10
-        </Header>
+        </Header> */}
         <Grid stackable>
           <Grid.Column width={16}>
              {/* <Card.Group itemsPerRow={5} stackable>  */}
+          {loadingProfiles ?  <ProfileListItemsPlaceholder /> :
             <Carousel
             // arrows={false} 
             // renderButtonGroupOutside={true}
@@ -81,17 +86,21 @@ const responsive = {
            // dotListClass="custom-dot-list-style"
              itemClass="carousel-item-padding-10-px"
            >
-                {profileList.map((profile) => (
+                {
+                profileList.map((profile) => (
                     <ProfileListItem key={profile.userName} profile={profile} />
                 ))}
-            </Carousel>
-            {/* </Card.Group>  */}
+            </Carousel> 
+            }
           </Grid.Column>
+          </Grid>
+          <Grid>
           <Grid.Column width={16} className="profileList_headerAndSorting">
           <div>
-          <Header style={{ fontSize: '18px', marginTop:"30px" }}>
+          <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff",marginTop:"30px",fontSize: '16px'}}> Tümü ({profileList.length}) </Label>
+          {/* <Header style={{ fontSize: '18px', marginTop:"30px" }}>
           Tümü ({profileList.length})
-          </Header>
+          </Header> */}
           </div>
           <div>
           <Select 
@@ -102,13 +111,19 @@ const responsive = {
          />  </div>
           </Grid.Column>
          <Grid.Column width={16}>
+         {loadingProfiles ? <ProfileListItemsPlaceholder /> :
           <Card.Group itemsPerRow={6} stackable className="allProfileCards">
-              {profileList.map((profile) => (
-                   <ProfileListItem key={profile.userName} profile={profile} />
-              ))}
+              {
+                profileList.map((profile) => (
+                  <ProfileListItem key={profile.userName} profile={profile} />
+                ))
+              }
           </Card.Group>
+          }
           </Grid.Column>
       </Grid>
+      <br></br>
+      <br></br>
       </Fragment>
     )
 }

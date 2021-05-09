@@ -29,7 +29,7 @@ const ProfileBlogList: React.FC<IProps> = ({handleGetNext,totalBlogPages,loading
               {getBlogsByDate.map((blog: IProfileBlog) => (
                       <Card
                       as={Link}
-                      to={`/activities/${blog.id}`}
+                      to={`/blog/${blog.id}`}
                       key={blog.id}
                     >
                       <Image

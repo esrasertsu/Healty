@@ -2,23 +2,12 @@ import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
-import { Segment, Header, Button, Image, Container, Icon } from 'semantic-ui-react'
+import { Segment, Header, Button, Image, Container, Icon, Label } from 'semantic-ui-react'
 import { IBlog } from '../../app/models/blog';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { history } from '../../index'
 
-const activityImageStyle = {
-    width:"100%"
-};
 
-const activityImageTextStyle = {
-  position: 'absolute',
-  bottom: '5%',
-  left: '5%',
-  width: '100%',
-  height: 'auto',
-  color: 'white'
-};
 const BlogPageDesc:React.FC<{blog:IBlog}> = ({blog}) => {
 
   const rootStore = useContext(RootStoreContext);
@@ -44,13 +33,22 @@ const BlogPageDesc:React.FC<{blog:IBlog}> = ({blog}) => {
                 </Header>
                 <p className="description"> { blog.description} </p>
                 <br/>
+                <Label className="blog_desc_category_label">{blog.categoryName}</Label>
+                {
+                  blog.subCategoryNames.map((subCatName)=>(
+                    <Label className="blog_desc_category_label">{subCatName}</Label>
+                  ))
+                }
                 <Container className="blog_userdetail">
                     <div className="blog_user">
                     <Image circular size="tiny" src={blog.userImage} onClick={()=>history.push(`/profile/${blog.username}`)}></Image>
-                    <div style={{marginLeft:"10px"}}><Link to={`/profile/${blog.username}`} ><strong>{blog.displayName}</strong></Link> </div>
+                     <div style={{marginLeft:"10px"}}>
+                       <Link to={`/profile/${blog.username}`} >
+                      <strong>{blog.displayName}</strong></Link> 
+                    </div>
                     </div>
                     <div>
-                      <p className="blogListItem_Readmore">Diğer yazılarını gör <Icon name='arrow right' /> </p>
+                      <p className="blogListItem_Readmore">Bu kategoride daha fazlası <Icon name='arrow right' /> </p>
                     </div>
 
                 </Container>

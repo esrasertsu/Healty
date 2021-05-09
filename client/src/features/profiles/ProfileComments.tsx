@@ -47,8 +47,10 @@ import { IProfile } from '../../app/models/profile';
                </Header>
              </Segment>
              <Segment>
-              <ProfileCommentList handleGetNext={handleGetNext} commentPage={commentPage}
+               
+               <ProfileCommentList handleGetNext={handleGetNext} commentPage={commentPage}
                totalPages={totalPages} loadingNext={loadingNext} getCommentsByDate={getCommentsByDate}/>
+               
              </Segment>
            </Fragment>
     )

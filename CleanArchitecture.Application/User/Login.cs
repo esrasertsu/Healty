@@ -61,7 +61,7 @@ namespace CleanArchitecture.Application.User
                         Token = _jwtGenerator.CreateToken(user),
                         UserName = user.UserName,
                         Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
-                        Role = user.Role
+                        Role = user.Role.ToString()
                     };
                 }
 

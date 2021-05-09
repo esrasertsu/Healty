@@ -6,7 +6,7 @@ namespace CleanArchitecture.Domain
     public class AppUser : IdentityUser
     {
         public string DisplayName { get; set; }
-        public string Role { get; set; }
+        public Role Role { get; set; }
         public string Bio { get; set; }
         public virtual ICollection<UserActivity> UserActivities { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
@@ -15,6 +15,14 @@ namespace CleanArchitecture.Domain
         public virtual ICollection<Blog> Blogs { get; set; }
         public virtual ICollection<UserProfileComment> ReceivedComments { get; set; }
         public virtual ICollection<UserProfileComment> SendComments { get; set; }
+
+    }
+
+    public enum Role
+    {
+        Admin = 100,
+        User = 110,
+        Trainer = 120
 
     }
 

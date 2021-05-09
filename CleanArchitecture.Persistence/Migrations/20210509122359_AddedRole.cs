@@ -3,12 +3,18 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CleanArchitecture.Persistence.Migrations
 {
-    public partial class AddedCategory : Migration
+    public partial class AddedRole : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Values");
+
+            migrationBuilder.AddColumn<int>(
+                name: "Role",
+                table: "AspNetUsers",
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.CreateTable(
                 name: "BlogImages",
@@ -32,6 +38,30 @@ namespace CleanArchitecture.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Followings",
+                columns: table => new
+                {
+                    ObserverId = table.Column<string>(nullable: false),
+                    TargetId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Followings", x => new { x.ObserverId, x.TargetId });
+                    table.ForeignKey(
+                        name: "FK_Followings_AspNetUsers_ObserverId",
+                        column: x => x.ObserverId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Followings_AspNetUsers_TargetId",
+                        column: x => x.TargetId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -158,6 +188,11 @@ namespace CleanArchitecture.Persistence.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Followings_TargetId",
+                table: "Followings",
+                column: "TargetId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SubCatBlogs_BlogId",
                 table: "SubCatBlogs",
                 column: "BlogId");
@@ -181,6 +216,9 @@ namespace CleanArchitecture.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Followings");
+
+            migrationBuilder.DropTable(
                 name: "SubCatBlogs");
 
             migrationBuilder.DropTable(
@@ -197,6 +235,10 @@ namespace CleanArchitecture.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropColumn(
+                name: "Role",
+                table: "AspNetUsers");
 
             migrationBuilder.CreateTable(
                 name: "Values",

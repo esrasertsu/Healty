@@ -5,7 +5,7 @@ import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../app/common/form/TextInput";
-import TextAreaInput from "../../app/common/form/TextAreaInput";
+import WYSIWYGEditor from "../../app/common/form/WYSIWYGEditor";
 import SelectInput from "../../app/common/form/SelectInput";
 import { category } from "../../app/common/options/categoryOptions";
 import {combineValidators, composeValidators, hasLengthGreaterThan, isRequired} from 'revalidate';
@@ -16,8 +16,8 @@ const validate = combineValidators({
   title: isRequired({message: 'The event title is required'}),
   category: isRequired('Category'),
   description: composeValidators(
-    isRequired('Description'),
-    hasLengthGreaterThan(4)({message: 'Description needs to be at least 100 characters'})
+    isRequired('description'),
+    hasLengthGreaterThan(150)({message: 'Blog needs to be at least 150 characters'})
   )()
 })
 
@@ -50,6 +50,7 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
   }, [loadBlog, match.params.id]);
 
   const handleFinalFormSubmit = (values: any) => {
+    debugger;
     const { ...post } = values;
 
     if (!post.id) {
@@ -79,12 +80,10 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   value={post.title}
                   component={TextInput}
                 />
-                <Field
+               <Field
                   name="description"
-                  placeholder="Description"
+                  component={WYSIWYGEditor}
                   value={post.description}
-                  component={TextAreaInput}
-                  rows={3}
                 />
                 <Field
                   name="category"

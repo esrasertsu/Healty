@@ -23,7 +23,7 @@ namespace Persistence
                         DisplayName = "Bob",
                         UserName = "bob",
                         Email = "bob@test.com",
-                        Role="Trainer"
+                        Role=Role.Trainer
                     },
                     new AppUser
                     {
@@ -31,7 +31,7 @@ namespace Persistence
                         DisplayName = "Jane",
                         UserName = "jane",
                         Email = "jane@test.com",
-                        Role = "User"
+                        Role=Role.Trainer
                     },
                     new AppUser
                     {
@@ -39,7 +39,7 @@ namespace Persistence
                         DisplayName = "Tom",
                         UserName = "tom",
                         Email = "tom@test.com",
-                        Role="Trainer"
+                        Role=Role.Trainer
                     },
                     new AppUser
                     {
@@ -47,7 +47,7 @@ namespace Persistence
                         DisplayName = "Esra",
                         UserName = "esra",
                         Email = "esra@test.com",
-                        Role="User"
+                        Role=Role.Trainer
                     },
                     new AppUser
                     {
@@ -55,7 +55,7 @@ namespace Persistence
                         DisplayName = "Steve",
                         UserName = "Steve",
                         Email = "steve@test.com",
-                        Role="User"
+                        Role=Role.Trainer
                     },
                     new AppUser
                     {
@@ -63,7 +63,7 @@ namespace Persistence
                         DisplayName = "Ahmet",
                         UserName = "ahmet",
                         Email = "ahmet@test.com",
-                        Role="User"
+                        Role=Role.Trainer
                     },
                     new AppUser
                     {
@@ -71,7 +71,7 @@ namespace Persistence
                         DisplayName = "Semih",
                         UserName = "semih",
                         Email = "semih@test.com",
-                        Role="User"
+                        Role=Role.Trainer
                     },
                      new AppUser
                     {
@@ -79,7 +79,7 @@ namespace Persistence
                         DisplayName = "Jack",
                         UserName = "jack",
                         Email = "jack@test.com",
-                        Role="User"
+                        Role=Role.User
                     },
                      new AppUser
                     {
@@ -87,18 +87,18 @@ namespace Persistence
                         DisplayName = "Johny",
                         UserName = "johny",
                         Email = "johny@test.com",
-                        Role="User"
+                        Role=Role.Trainer
                     },
                 };
 
 
                 foreach (var user in users)
                 {
-                    await roleManager.CreateAsync(new IdentityRole(user.Role));
+                    await roleManager.CreateAsync(new IdentityRole(user.Role.ToString()));
                     var result = await userManager.CreateAsync(user, "Pa$$w0rd");
                     if (result.Succeeded)
                     {
-                        await userManager.AddToRoleAsync(user, user.Role);
+                        await userManager.AddToRoleAsync(user, user.Role.ToString());
                     }
                 }
             }

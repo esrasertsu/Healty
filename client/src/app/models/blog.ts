@@ -9,6 +9,8 @@ export interface IBlog {
     summary: string;
     categoryId: string;
     subCategoryIds: string[];
+    categoryName: string;
+    subCategoryNames: string[];
     date: Date;
     username: string;
     displayName: string;

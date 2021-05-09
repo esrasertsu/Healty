@@ -18,10 +18,13 @@ namespace CleanArchitecture.Application.Blogs
                 .ForMember(d => d.CategoryId, o => o.MapFrom(s => s.Category.Id))
                 .ForMember(d => d.SubCategoryIds, o => o.MapFrom(s => s.SubCategories.Select(x => x.SubCategoryId).ToList()))
                 .ForMember(d => d.UserImage, o => o.MapFrom(s => s.Author.Photos.FirstOrDefault(x => x.IsMain).Url))
-                .ForMember(d => d.Summary, o => o.MapFrom(s => s.Description.Truncate(100)));
+                .ForMember(d => d.Summary, o => o.MapFrom(s => s.Description.Truncate(100)))
+                .ForMember(d => d.CategoryName, o => o.MapFrom(s => s.Category.Name))
+                .ForMember(d => d.SubCategoryNames, o => o.MapFrom(s => s.SubCategories.Select(x => x.SubCategory.Name).ToList()));
+
 
         }
-       
+
     }
 
     public static class StringExtension

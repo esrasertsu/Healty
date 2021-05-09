@@ -24,6 +24,10 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
 
   return (
 <Fragment>
+{getCommentsByDate.length === 0 ? 
+              <p>
+Eğitmen hakkında ilk yorumu sen yap!
+              </p>  :
     <Comment.Group style={{maxWidth: "100%"}}>
                  {getCommentsByDate.map((comment) => (
                      <Fragment key={comment.id}>
@@ -45,6 +49,7 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
                       </Fragment>
                  ))}
                </Comment.Group>
+}
                <Button
                  floated="right"
                  content="More..." 

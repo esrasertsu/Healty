@@ -39,7 +39,7 @@ namespace CleanArchitecture.Application.Profiles
                 Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
                 Photos = user.Photos,
                 Bio = user.Bio,
-                Role = user.Role,
+                Role = user.Role.ToString(),
                 FollowerCount = user.Followers.Count(),
                 FollowingCount = user.Followings.Count(),
                 StarCount = GetStarCount(user),

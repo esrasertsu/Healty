@@ -47,7 +47,7 @@ export default class ProfileStore{
     @observable blogCount = 0;
     @observable blogPage = 0;
     @observable userActivities: IUserActivity[] = [];
-    // @observable profileBlogs: IProfileBlog[] = [];
+     @observable profileBlogs: IProfileBlog[] = [];
      @observable profileComments: IProfileComment[] = [];
 
     @observable loadingActivities = false;
@@ -146,7 +146,6 @@ export default class ProfileStore{
         }
     }
 
-
     @action loadBlogs = async (username: string) =>{
         debugger;
         this.loadingBlogs = true;
@@ -160,7 +159,7 @@ export default class ProfileStore{
                     //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
                     this.blogRegistery.set(blog.id, blog);
                 });
-              //  this.profileBlogs = profileBlogs;
+                this.profileBlogs = profileBlogs;
                 this.blogCount = profileBlogsCount;
                 this.loadingBlogs = false;
             })

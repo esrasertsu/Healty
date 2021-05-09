@@ -40,7 +40,7 @@ namespace CleanArchitecture.Application.User
                     UserName = user.UserName,
                     Token = _jwtGenerator.CreateToken(user),
                     Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
-                    Role = user.Role
+                    Role = user.Role.ToString()
                 };
                 
             }

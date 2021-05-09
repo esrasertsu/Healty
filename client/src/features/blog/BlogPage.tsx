@@ -6,6 +6,7 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import BlogPageHeader from './BlogPageHeader';
 import BlogPageDesc from './BlogPageDesc';
+import BlogMoreFromUser from './BlogMoreFromUser';
 
 
 const center = {
@@ -35,6 +36,7 @@ debugger;
           <Grid.Column>
             <BlogPageHeader blog={post!} />
             <BlogPageDesc blog={post!} />
+            <BlogMoreFromUser userName={post!.username} />
           </Grid.Column>
       </Grid>
     )

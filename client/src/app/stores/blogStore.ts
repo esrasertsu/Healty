@@ -24,6 +24,7 @@ export default class BlogStore{
         )
     }
     @observable blogRegistery = new Map();
+    @observable moreuserblogRegistery = new Map();
     @observable post: IBlog | null = null;
     @observable loadingPosts = true;
     @observable loadingPost = true;
@@ -104,6 +105,7 @@ export default class BlogStore{
     
     @action loadBlog = async (id:string) => {
         let post =  this.postRegistery.get(id);
+       // this.moreuserblogRegistery.clear();
 
         if(post){
             this.post = post;

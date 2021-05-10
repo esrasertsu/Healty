@@ -2,11 +2,14 @@ import React from 'react';
 import { Card, Placeholder } from 'semantic-ui-react'
 import _ from "lodash";
 
-const BlogMainPageItemsPlaceholder = () => {
+interface IProps {
+  count : number;
+}
+const BlogMainPageItemsPlaceholder:React.FC<IProps> = ({count}) => {
   return (
    
     <Card.Group doubling stackable>
-    {_.times(3, (i) => (
+    {_.times(count, (i) => (
       <Card key={i}>
           <Placeholder>
             <Placeholder.Image square />

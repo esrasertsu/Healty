@@ -20,6 +20,7 @@ namespace CleanArchitecture.Application.Blogs
     {
         public class Command : IRequest<BlogDto>
             {
+                public Guid Id { get; set; }
                 public string Title { get; set; }
                 public string Description { get; set; }
                 public Guid CategoryId { get; set; }
@@ -65,6 +66,7 @@ namespace CleanArchitecture.Application.Blogs
 
                     var blog = new Blog
                     {
+                        Id = request.Id,
                         Title = request.Title,
                         Description = request.Description,
                         Date = DateTime.Now,

@@ -11,12 +11,8 @@ import { history } from '../../index'
 const BlogMoreFromUser:React.FC<{userName:string}> = ({userName}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const { profileBlogs,loadBlogs } = rootStore.profileStore;
+  const { userBlogs } = rootStore.blogStore;
   
-  useEffect(() => {  
-    loadBlogs(userName)
-}, [loadBlogs])
-
   
     return (
            <Segment className="blog_morefromuser">
@@ -25,7 +21,7 @@ const BlogMoreFromUser:React.FC<{userName:string}> = ({userName}) => {
                 </Header>
              <Card.Group itemsPerRow="5" stackable>
                 {
-                    profileBlogs.map((blog) => (
+                    userBlogs.map((blog) => (
                         <Card
                         as={Link}
                         to={`/blog/${blog.id}`}

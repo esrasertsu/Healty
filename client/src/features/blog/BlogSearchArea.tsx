@@ -9,16 +9,19 @@ interface IProps{
     placeholder:string;
 }
 
- const SearchArea:React.FC<IProps> = ({className,placeholder}) => {
+ const BlogSearchArea:React.FC<IProps> = ({className,placeholder}) => {
 
     const rootStore = useContext(RootStoreContext);
 
     const {
-      loadAllCategoryList,
-      allDetailedList
-    } = rootStore.categoryStore;
+      loadProfiles,
+      profileList
+    } = rootStore.profileStore;
+
+    const {
+        setPredicate, predicate
+      } = rootStore.blogStore;
   
-    const [loadingNext, setLoadingNext] = useState(false);
     const [results, setResults] = useState([] as any);
     const [value, setValue] = useState('');
 
@@ -26,28 +29,37 @@ interface IProps{
     
     
     useEffect(() => {
-      loadAllCategoryList();
-    },[loadAllCategoryList]); 
+        loadProfiles();
+    },[loadProfiles]); 
 
 
     const handleResultSelect = (e:any, { result}:any) => {
-        setValue(result.text);
+        setValue(result.displayName);
+        setPredicate("username",result.displayName);
     }
     const handleSearchChange = (e:any, { value }: any) => {
-        debugger;
-      setSearchLoading(true);
-      setValue(value);
-  
-      setTimeout(() => {  
-        const re = new RegExp(_.escapeRegExp(value), 'i')
-        const isMatch = (result:any) => re.test(result.text)
-  
-        setSearchLoading(false);
-        setResults(_.filter(allDetailedList, isMatch));
-      }, 300)
+        if(value !=="")
+         {
+            setSearchLoading(true);
+            setValue(value);
+        
+            setTimeout(() => {  
+              const re = new RegExp(_.escapeRegExp(value), 'i')
+              const isMatch = (result:any) => re.test(result.displayName)
+        
+              setSearchLoading(false);
+              setResults(_.filter(profileList, isMatch));
+            }, 300)
+         }else {
+            setValue(value);
+            setPredicate('all', 'true');
+        }
+
+        
+    
     }
    
-    const resultRenderer = ({ text }:any) => <span>{text}</span>
+    const resultRenderer = ({ displayName }:any) => <span>{displayName}</span>
 
     return (
         <Search
@@ -62,8 +74,9 @@ interface IProps{
                         resultRenderer={resultRenderer}
                         className={className}
                         placeholder={placeholder}
+                        
                       />
     );
 }
 
-export default observer(SearchArea);
+export default observer(BlogSearchArea);

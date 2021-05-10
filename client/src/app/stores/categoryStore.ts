@@ -1,7 +1,7 @@
 import { action, observable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { RootStore } from "./rootStore";
-import { ICategory, ISubCategory } from "../models/category";
+import { IAllCategoryList, ICategory, ISubCategory } from "../models/category";
 
 export default class CategoryStore{
     rootStore: RootStore
@@ -11,14 +11,30 @@ export default class CategoryStore{
 
     @observable category: ICategory | null = null;
     @observable loadingCategories = true;
+    @observable loadingAllDetailedList = true;
     @observable categoryList: ICategory[] = [];
 
     @observable subcategoryList: ISubCategory[] = [];
+
+    @observable allDetailedList: IAllCategoryList[] = [];
     @observable loadingSubCategories = true;
     @observable categoryRegistery = new Map();
     @observable subCategoryRegistery = new Map();
+    @observable allCategoriesRegistery = new Map();
+
     @observable target = '';
 
+    @action getPredicateText = (value:string) =>{
+      var cat =  this.categoryRegistery.get(value);
+      if(cat)
+      return cat.text;
+      else {
+        var subCat =  this.subCategoryRegistery.get(value);
+        if(subCat)
+        return subCat.text;
+      }
+      return null;
+    }
     
     @action setLoadingCategories = (lp : boolean) =>{
         this.loadingCategories = lp;
@@ -31,6 +47,10 @@ export default class CategoryStore{
             const categoryList = await agent.Categories.list();
             runInAction(()=>{
                 this.categoryList = categoryList;
+                categoryList.forEach((cat) =>{
+                    //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
+                    this.categoryRegistery.set(cat.key, cat);
+                });
                 this.loadingCategories = false;
             })
         } catch (error) {
@@ -50,6 +70,10 @@ export default class CategoryStore{
             runInAction(()=>{
                 this.subcategoryList = subcategoryList;
                 this.loadingSubCategories = false;
+                subcategoryList.forEach((cat) =>{
+                    //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
+                    this.subCategoryRegistery.set(cat.key, cat);
+                });
             })
         } catch (error) {
             runInAction(()=>{
@@ -59,6 +83,30 @@ export default class CategoryStore{
         }
     }
 
+
+    @action loadAllCategoryList = async () =>{
+        
+            this.loadingAllDetailedList = true;
+
+            try {
+                const allDetailedList = await agent.Categories.listAll();
+                runInAction(()=>{
+                    this.allDetailedList = allDetailedList;
+                    this.loadingSubCategories = false;
+    
+                    allDetailedList.forEach((item) =>{
+                        //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
+                        this.allCategoriesRegistery.set(item.key, item);
+                    });
+                    
+                })
+            } catch (error) {
+                runInAction(()=>{
+                    this.loadingAllDetailedList = false;
+                })
+                console.log(error);
+            }
+    }
     
     // @action loadPost = async (id:string) => {
     //     let post =  this.postRegistery.get(id);

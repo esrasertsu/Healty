@@ -38,7 +38,7 @@ import ProfileBlogList from './ProfileBlogList';
         </Segment>
         {getBlogsByDate.length === 0 && "Henüz paylaştığı bir blog bulunmamaktadır."}
         <ProfileBlogList handleGetNext={handleGetNext} totalBlogPages={totalBlogPages} loadingNext={loadingNext}
-         blogPage={blogPage} getBlogsByDate={getBlogsByDate} />
+         blogPage={blogPage} getBlogsByDate={getBlogsByDate} profileUserName={profile!.userName}/>
       </Fragment>
     );
 }

@@ -23,6 +23,9 @@ const PhotoUploadWidget:React.FC<IProps> = ({loading,uploadPhoto}) => {
         }
     })
 
+    
+
+
     return(
         <Fragment>
             <Grid>

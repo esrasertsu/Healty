@@ -1,3 +1,5 @@
+import { ISubCategory } from "./category";
+
 export interface IBlogsEnvelope {
     blogs: IBlog[];
     blogCount: number;
@@ -15,17 +17,21 @@ export interface IBlog {
     username: string;
     displayName: string;
     userImage: string;
-    photo : string;
+    photo : Blob;
 }
 
 export interface IPostFormValues extends Partial<IBlog>{
-    time?: Date
+    file: Blob;
+
 }
 export class PostFormValues {
     id?: string = undefined;
     title: string = '';
-    category: string = '';
+    categoryId: string = '';
     description:string = '';
+    subCategoryIds: string[] = [];
+    photo: string ="";
 
 }
+
 

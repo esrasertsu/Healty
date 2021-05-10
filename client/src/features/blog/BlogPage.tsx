@@ -24,12 +24,10 @@ debugger;
 
     useEffect(() => {
         loadBlog(match.params.id);
+        debugger;
     }, [loadBlog, match.params.id, history]) // sadece 1 kere çalışcak, koymazsak her component render olduğunda
 
     if(loadingPost) return <LoadingComponent content='Loading blog...'/>  
-
-    if(!post)
-       history.push('/notFound');
 
     return (
       <Grid>

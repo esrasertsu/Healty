@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { Button, Card, Grid,Image } from 'semantic-ui-react';
 import { IProfileBlog } from '../../app/models/profile';
+import { history } from '../..';
 
 
 interface IProps 
@@ -13,13 +14,14 @@ interface IProps
   totalBlogPages: number;
   loadingNext: boolean;
   blogPage:number;
-  getBlogsByDate: any[]
+  getBlogsByDate: any[];
+  profileUserName:string;
 }
 
-const ProfileBlogList: React.FC<IProps> = ({handleGetNext,totalBlogPages,loadingNext,blogPage,getBlogsByDate}) => {
+const ProfileBlogList: React.FC<IProps> = ({handleGetNext,totalBlogPages,loadingNext,blogPage,getBlogsByDate,profileUserName}) => {
 
   const rootStore = useContext(RootStoreContext);
-  // const { getBlogsByDate } = rootStore.profileStore;
+   const { setPredicate } = rootStore.blogStore;
 
   return (
     <Fragment>
@@ -48,8 +50,10 @@ const ProfileBlogList: React.FC<IProps> = ({handleGetNext,totalBlogPages,loading
           <Button
             content="Tümünü Gör" 
             positive
-            onClick={handleGetNext}
-            disabled={totalBlogPages === blogPage + 1 || totalBlogPages === 0}
+            onClick={()=>
+              {
+                setPredicate('username', profileUserName);
+                history.push('/blog')}}
             style={totalBlogPages === 0 ? {display:"none"}: {display:"inline", marginTop: "20px"}}
             loading={loadingNext}/>
         </Grid.Column>

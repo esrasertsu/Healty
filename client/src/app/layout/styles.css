@@ -13,7 +13,7 @@
 }
 
 body {
-  background-color: #fff !important;
+  background-color: #fafafa !important;
   font-family: AssistantRegular, Arial, Helvetica, sans-serif;
   
 }
@@ -27,6 +27,7 @@ body {
 
 .ui.vertical.menu,.ui.accordion.menu .item .title {
   font-family: AssistantRegular, Arial, Helvetica, sans-serif;
+  background: #fff
 
 }
 .ui.button,.ui.input>input{
@@ -54,9 +55,22 @@ body {
 .SearchArea {
   width: 65%;
 }
+.BlogUserSearchArea {
+  width: 100%;
+  font-size: 1.1em !important
+}
 
+.BlogUserSearchArea input{
+  -webkit-box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5 !important;
+  box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5 !important;
+}
 .ui.input{
   width: 100% !important
+}
+
+.ui.search.BlogUserSearchArea > * {
+  border-color: #335084 !important;
+  color:#335084 !important;
 }
 
 .ui.card>.content>.header, .ui.cards>.card>.content>.header,.ui.secondary.menu .item {
@@ -92,8 +106,8 @@ body {
 }
 
 .blogFilterPlaceholder{
-  background: #fafafa;
-  color:#fafafa;
+  background: #f3f4f5;
+  color:#f3f4f5;
 }
 .blogListItem_Header{
   color: #263a5e !important;
@@ -161,7 +175,7 @@ h1, h2, h3, h4, h5 {
 }
 .ui.segment.blogFilter_Category_Filter {
   border: none;
-  background: #fafafa;
+  background: #f3f4f5;
   color: #335084;
 }
 
@@ -181,7 +195,7 @@ h1, h2, h3, h4, h5 {
    width: 100% !important;
    box-shadow: none !important;
    border: none !important;
-   background: #fafafa !important;
+   background: #f3f4f5 !important;
    font-size: 1.1rem !important;
   min-height: 2em !important;
 }
@@ -414,7 +428,7 @@ a.ui.card:hover {
   background-size: cover !important;
   background-position-y: -260px !important;
   border-radius: .28571429rem !important;
-  margin-top:80px !important;
+  margin-top:65px !important;
 }
 
 
@@ -428,7 +442,7 @@ a.ui.card:hover {
   background-size: cover !important;
   background-position-y: -260px !important;
   border-radius: .28571429rem !important;
-  margin-top:80px !important;
+  margin-top:65px !important;
 
 }
 

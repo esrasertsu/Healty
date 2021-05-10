@@ -26,13 +26,13 @@ const PhotoWidgetDropzone: React.FC<IProps> = ({setFiles}) => {
             preview : URL.createObjectURL(file)
         })))
   }, [setFiles])
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, multiple: false})
 
   return (
     <div {...getRootProps()} style={isDragActive ? {...dropzoneStyles, ...dropzoneActive}: dropzoneStyles}>
       <input {...getInputProps()} />
       <Icon name='upload' size='huge'/>
-      <Header content='Drop images here' />
+      <Header content='Resmi buraya sürükleyin ya da tıklayın.' />
     </div>
   )
 }

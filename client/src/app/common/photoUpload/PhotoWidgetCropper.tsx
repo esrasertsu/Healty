@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactCrop, { Crop } from "react-image-crop";
 import 'react-image-crop/dist/ReactCrop.css';
 
@@ -13,20 +13,28 @@ interface IProps{
 
     const [crop, setCrop] = useState<Crop>({
         unit: "%",
-        aspect:1,
+        aspect:1500/650,
         width:100
     });
 
+
+
     const [imageRef, setImageRef] = useState<any>();
 
-    
+
+    useEffect(() => {
+        makeClientCrop(crop);
+    }, [imageRef]);
+
     const handleImageLoaded = (image:any) => {
+        debugger;
         setImageRef(image);
         setCroppedImageUrl(imagePreview);
     };
 
       
     const handleCropComplete = (crop:Crop) => {
+        debugger;
         makeClientCrop(crop);
     };
 
@@ -75,13 +83,15 @@ interface IProps{
     }
 
     const handleCropChange = (crop:Crop) => {
+        debugger;
         setCrop(crop);
+    
     };
 
     return (
         <ReactCrop
             src={imagePreview}
-            style={{  maxWidth: "100%", height:"100%", maxHeight:"200"}}
+            style={{  maxWidth: "100%", maxHeight:"300"}}
             crop={crop}
             ruleOfThirds
             onImageLoaded={handleImageLoaded}

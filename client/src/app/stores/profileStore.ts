@@ -151,7 +151,7 @@ export default class ProfileStore{
         this.loadingBlogs = true;
 
         try {
-            const profileBlogListEnvelope = await agent.Profiles.listBlogs(username, LIMIT, this.blogPage);
+            const profileBlogListEnvelope = await agent.Profiles.listBlogs(username, 4, this.blogPage);
             const {profileBlogs, profileBlogsCount } = profileBlogListEnvelope;
 
             runInAction(()=>{

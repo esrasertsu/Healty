@@ -1,5 +1,5 @@
-import React,  { useEffect, useContext, useState}  from 'react';
-import { Button, Card, Grid, Icon } from 'semantic-ui-react';
+import React,  { useEffect, useContext, useState, Fragment}  from 'react';
+import { Button, Card, Grid, Icon, Label } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import { RootStoreContext } from '../../app/stores/rootStore';
@@ -13,7 +13,9 @@ import BlogListItem from './BlogListItem';
 
 const BlogList: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
-  const {getBlogsByDate,loadBlogs, loadingPosts, setPage, page, totalPages} = rootStore.blogStore;
+  const {getBlogsByDate,loadBlogs, loadingPosts, setPage, page, totalPages,predicate,setPredicate} = rootStore.blogStore;
+  const {getPredicateText} = rootStore.categoryStore;
+
   const [loadingNext, setLoadingNext] = useState(false);
 
   const handleGetNext = () => {
@@ -22,6 +24,7 @@ const BlogList: React.FC = () => {
     loadBlogs().then(() => setLoadingNext(false))
   }
   useEffect(() => {
+    debugger;
     loadBlogs();
   },[loadBlogs]); //[] provides the same functionality with componentDidMounth..   dependency array
 
@@ -29,13 +32,30 @@ const BlogList: React.FC = () => {
     <>
     <Grid className="blogPageGrid">
       <Grid.Row>
-      <Grid.Column width={4}>              
+      <Grid.Column width={4}>   
       <BlogFilters />
       </Grid.Column>
       <Grid.Column width={12}>
       {
       loadingPosts && page === 0?
-       <BlogMainPageItemsPlaceholder /> :
+       <BlogMainPageItemsPlaceholder count={6} /> :
+       <Fragment>
+         { predicate.has('categoryId') &&
+              <>
+              <Button labelPosition="right" icon='cancel' content={getPredicateText(predicate.get("categoryId"))} style={{backgroundColor:"#335084", color:"#fff", marginBottom:"20px"}} key={predicate.get("categoryId")}
+              onClick={()=>
+              setPredicate('all','true')
+              }></Button>
+              <br/>
+              </>
+       }
+       { predicate.has('username') && predicate.get('username') !== "" ?
+              <>
+              <h2 style={{color:"#335084"}} key={predicate.get("username")}>"{predicate.get("username")}" kullanıcısının paylaştığı bloglar:</h2>
+              <br/>
+              </>
+             :""
+       }
         <InfiniteScroll
         pageStart={0}
         loadMore={handleGetNext}
@@ -49,6 +69,10 @@ const BlogList: React.FC = () => {
               }
             </Card.Group>
             </InfiniteScroll>
+          {loadingNext && <BlogMainPageItemsPlaceholder count={3} />}
+
+       </Fragment>
+       
           }        
         </Grid.Column>
     </Grid.Row>

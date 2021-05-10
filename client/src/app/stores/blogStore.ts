@@ -1,12 +1,13 @@
 import { action, computed, observable, reaction, runInAction } from "mobx";
 import { toast } from "react-toastify";
 import agent from "../api/agent";
-import { IBlog } from "../models/blog";
+import { IBlog, IPostFormValues } from "../models/blog";
 import { RootStore } from "./rootStore";
 import { history } from '../..';
 import { SyntheticEvent } from 'react';
+import { IProfileBlog } from "../models/profile";
 
-const LIMIT = 6;
+const LIMIT = 8;
 
 export default class BlogStore{
     rootStore: RootStore
@@ -36,6 +37,9 @@ export default class BlogStore{
     @observable blogCount = 0;
     @observable predicate = new Map();
     @observable page = 0;
+
+    @observable userBlogs: IProfileBlog[] = [];
+    @observable loadingUserBlogs = true;
 
     @action setPage = (page:number) =>{
         this.page = page;
@@ -68,6 +72,7 @@ export default class BlogStore{
             this.predicate.set(predicate,value);
         }
     }
+
     @action setLoadingPosts = (lp : boolean) =>{
         this.loadingPosts = lp;
     }
@@ -102,23 +107,45 @@ export default class BlogStore{
         }
     }
 
+    @action loadUserBlogs = async (username: string) =>{
+        debugger;
+        this.loadingUserBlogs = true;
+
+        try {
+            const profileBlogListEnvelope = await agent.Profiles.listBlogs(username, 5, 0);
+            const {profileBlogs, profileBlogsCount } = profileBlogListEnvelope;
+
+            runInAction(()=>{
+                profileBlogs.forEach((blog) =>{
+                    //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
+                    this.blogRegistery.set(blog.id, blog);
+                });
+                debugger;
+                this.userBlogs = profileBlogs;
+                this.blogCount = profileBlogsCount;
+                this.loadingUserBlogs = false;
+            })
+        } catch (error) {
+            runInAction(()=>{
+                this.loadingUserBlogs = false;
+            })
+            console.log(error);
+        }
+    }
     
     @action loadBlog = async (id:string) => {
-        let post =  this.postRegistery.get(id);
+        debugger;
        // this.moreuserblogRegistery.clear();
 
-        if(post){
-            this.post = post;
-            return post;
-        } 
-        else{
+    
             this.loadingPost = true;
             try {
-                post = await agent.Blogs.details(id);
+                let post = await agent.Blogs.details(id);
                 runInAction('Getting post',() => {
+                    debugger;
                     this.post = post;
-                    this.postRegistery.set(post.id, post);
-                    this.loadingPost = false
+                    this.loadUserBlogs(post.username);
+                    this.loadingPost = false;
                 })
                 return post;
                 } catch (error) {
@@ -129,70 +156,20 @@ export default class BlogStore{
                 }
 
 
-        }
+        
       
     };
-    // @action uploadPhoto = async (file: Blob) => {
-    //     this.uploadingPhoto = true;
 
-    //     try {
-    //         const photo = await agent.Profiles.uploadPhoto(file);
-    //         runInAction(() => {
-    //             if(this.profile)
-    //             {
-    //                 this.profile.photos.push(photo);
-    //                 if(photo.isMain && this.rootStore.userStore.user)
-    //                 {
-    //                     this.rootStore.userStore.user.image = photo.url;
-    //                     this.profile.image = photo.url;
-    //                 }
-    //             }
-
-    //             this.uploadingPhoto = false;
-    //         })
-    //     } catch (error) {
-    //         console.log(error);
-    //         toast.error('Problem uploading photo');
-    //         runInAction(() => {
-    //             this.uploadingPhoto = false;
-    //         })
-            
-    //     }
-    // }
-
-
-    // @action setMainPhoto = async (photo: IPhoto) => {
-    //     this.loadingForPhotoDeleteMain = true;
-
-    //     try {
-    //         await agent.Profiles.setMainPhoto(photo.id);
-    //         runInAction(() => {
-    //             this.rootStore.userStore.user!.image = photo.url;
-    //             this.profile!.photos.find(e => e.isMain)!.isMain = false;
-    //             this.profile!.photos.find(e => e.id === photo.id)!.isMain = true;
-    //             this.profile!.image = photo.url;
-    //             this.loadingForPhotoDeleteMain = false;
-
-    //         })
-    //     } catch (error) {
-    //         console.log(error);
-    //         toast.error('Problem setting main photo');
-    //         runInAction(() => {
-    //             this.loadingForPhotoDeleteMain = false;
-    //         })
-            
-    //     }
-    // }
-
-    @action createPost = async (post: IBlog) =>{
+    @action createPost = async (post: IPostFormValues) =>{
+        debugger;
         this.submitting = true;
         try {
             await agent.Blogs.create(post);
             runInAction('Creating post', () => {
-                this.postRegistery.set(post.id, post);
                 this.submitting = false;
             });
-            history.push(`/posts/${post.id}`);
+            history.push(`/blog/${post.id}`);
+
         } catch (error) {
             runInAction('Creating post error', () => {
                 this.submitting = false;

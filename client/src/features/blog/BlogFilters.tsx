@@ -2,6 +2,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { Menu, Header, Segment, Accordion, List, Placeholder, Label } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
+import BlogSearchArea from './BlogSearchArea';
 
 
 const BlogFilters: React.FC = () => {
@@ -45,6 +46,8 @@ const BlogFilters: React.FC = () => {
       {/* <Calendar
       onChange={(date)=> {setPredicate('startDate', date!)}}
       value={predicate.get('startDate') || new Date()} /> */}
+     <BlogSearchArea className="BlogUserSearchArea" placeholder="Uzman" />
+     <br></br>
      <Segment className="blogFilter_Category_Filter">
       <h2>Kategoriler</h2>
     { loadingCategories ?  (
@@ -107,26 +110,8 @@ const BlogFilters: React.FC = () => {
         
     }
      </Segment>
-       
     </Fragment>
   );
 }
 
 export default observer(BlogFilters);
-
-
-// JSX ORNEK
-// const ActivityFilters = () => (
-//   <Fragment>
-//     <Menu vertical size={'large'} style={{ width: '100%', marginTop: 30 }}>
-//       <Header icon={'filter'} attached color={'teal'} content={'Filters'} />
-//       <Menu.Item color={'blue'} name={'all'} content={'All Activities'} />
-//       <Menu.Item color={'blue'} name={'username'} content={"I'm Going"} />
-//       <Menu.Item color={'blue'} name={'host'} content={"I'm hosting"} />
-//     </Menu>
-//     <Header icon={'calendar'} attached color={'teal'} content={'Select Date'} />
-//     <Calendar />
-//   </Fragment>
-// );
-
-// export default ActivityFilters;

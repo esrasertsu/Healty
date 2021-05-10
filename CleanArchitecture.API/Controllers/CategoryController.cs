@@ -18,6 +18,12 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new List.Query());
         }
 
+        [HttpGet("allcategories")]
+        public async Task<ActionResult<List<CategoryListDto>>> ListAllCategories()
+        {
+            return await Mediator.Send(new ListAllCategories.Query());
+        }
+
         [HttpPost]
         public async Task<ActionResult<Unit>> Create(Create.Command command)
         {
@@ -30,7 +36,7 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new ListSubCategories.Query { CategoryId = categoryId });
         }
 
-        [HttpPost("sub")]  //create categories'e gidiyor
+        [HttpPost("sub")]  
         public async Task<ActionResult<Unit>> CreateSubCategory(CreateSubCategory.Command command)
         {
             return await Mediator.Send(command);

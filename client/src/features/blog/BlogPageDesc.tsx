@@ -36,7 +36,7 @@ const BlogPageDesc:React.FC<{blog:IBlog}> = ({blog}) => {
                 <Label className="blog_desc_category_label">{blog.categoryName}</Label>
                 {
                   blog.subCategoryNames.map((subCatName)=>(
-                    <Label className="blog_desc_category_label">{subCatName}</Label>
+                    <Label key={subCatName} className="blog_desc_category_label">{subCatName}</Label>
                   ))
                 }
                 <Container className="blog_userdetail">

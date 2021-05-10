@@ -4,8 +4,8 @@ import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
 import { IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope } from '../models/profile';
-import { IBlogsEnvelope, IBlog } from '../models/blog';
-import { ICategory, ISubCategory } from '../models/category';
+import { IBlogsEnvelope, IBlog, IPostFormValues } from '../models/blog';
+import { IAllCategoryList, ICategory, ISubCategory } from '../models/category';
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
@@ -59,6 +59,20 @@ const requests = {
         return axios.post(url, formData, {
             headers: {'Content-type': 'multipart/form-data'}
         }).then(responseBody)
+    },
+    postBlogForm: async (url: string, file: Blob, title:string, description: string, categoryId: string,subCategoryIds: string[]| null) =>{
+        let formData = new FormData();
+        formData.append('File',file);
+        formData.append('Title', title);
+        formData.append('description', description);
+        formData.append('categoryId', categoryId);
+        
+        subCategoryIds && subCategoryIds.map((subCategoryId:string)=>(
+            formData.append('SubCategoryIds', subCategoryId)
+        ));
+        return axios.post(url, formData, {
+            headers: {'Content-type': 'application/json'}
+        }).then(responseBody)
     }
 }
 
@@ -101,14 +115,16 @@ const Blogs = {
     list: (params: URLSearchParams): Promise<IBlogsEnvelope> => 
             axios.get(`/blog`, {params:params}).then(sleep(1000)).then(responseBody),
     details: (id:string) => requests.get(`/blog/${id}`),
-    create: (post: IBlog) => requests.post('/blog', post),
     update: (post: IBlog) => requests.put(`/blog/${post.id}`, post),
     delete: (id: string) => requests.del(`/blog/${id}`),
+    create: (post: IPostFormValues): Promise<IBlog> => requests.postBlogForm(`/blog`,post.file!, post.title!,post.description!,post.categoryId!,post.subCategoryIds || null),
 }
 
 const Categories = {
     list: (): Promise<ICategory[]> => requests.get('/category'),
     listSubCats: (categoryId: string): Promise<ISubCategory[]> => requests.get(`/category/${categoryId}/sub`),
+    listAll: (): Promise<IAllCategoryList[]> => requests.get('/category/allcategories'),
+
 }
 export default {
     Activities,

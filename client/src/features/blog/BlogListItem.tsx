@@ -27,7 +27,7 @@ const BlogListItem: React.FC<IProps> = ({blog}) => {
         <br></br>
         <Card.Header className="blogListItem_Header">{blog.title}</Card.Header>
         <Card.Description>
-          <div className="homepage_subheader">{blog.summary}...</div>
+          <div key={blog.id+"_desc"} className="homepage_subheader" dangerouslySetInnerHTML={{__html:blog.summary}} />
         </Card.Description>
       </Card.Content>
       <Card.Content extra>

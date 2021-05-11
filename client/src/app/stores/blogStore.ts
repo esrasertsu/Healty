@@ -126,6 +126,7 @@ export default class BlogStore{
             runInAction('Loading blogs',()=>{
                 blogs.forEach((blog) =>{
                   //  setActivityProps(activity,this.rootStore.userStore.user!)
+                    blog.summary = blog.summary.replace(/<[^>]+>/g, '');
                     this.blogRegistery.set(blog.id, blog);
                 });
                 this.blogCount = blogCount;

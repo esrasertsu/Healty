@@ -31,7 +31,7 @@ const BlogPageDesc:React.FC<{blog:IBlog}> = ({blog}) => {
                 <Header as='h1'  className="blog_description_header">
                 {blog.title}
                 </Header>
-                <p className="description"> { blog.description} </p>
+                <div key={blog.id+"_pagedesc"} className="description" dangerouslySetInnerHTML={{__html:blog.description}} />
                 <br/>
                 <Label className="blog_desc_category_label">{blog.categoryName}</Label>
                 {

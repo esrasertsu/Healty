@@ -126,7 +126,6 @@ export default class BlogStore{
             runInAction('Loading blogs',()=>{
                 blogs.forEach((blog) =>{
                   //  setActivityProps(activity,this.rootStore.userStore.user!)
-                    blog.summary = blog.summary.replace(/<[^>]+>/g, '');
                     this.blogRegistery.set(blog.id, blog);
                 });
                 this.blogCount = blogCount;
@@ -149,10 +148,10 @@ export default class BlogStore{
             const {profileBlogs, profileBlogsCount } = profileBlogListEnvelope;
 
             runInAction(()=>{
-                profileBlogs.forEach((blog) =>{
-                    //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
-                    this.blogRegistery.set(blog.id, blog);
-                });
+                // profileBlogs.forEach((blog) =>{
+                //     //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
+                //     this.blogRegistery.set(blog.id, blog);
+                // });
                 debugger;
                 this.userBlogs = profileBlogs;
                 this.blogCount = profileBlogsCount;

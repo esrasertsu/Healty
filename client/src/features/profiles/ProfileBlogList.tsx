@@ -16,12 +16,13 @@ interface IProps
   blogPage:number;
   getBlogsByDate: any[];
   profileUserName:string;
+  displayName:string;
 }
 
-const ProfileBlogList: React.FC<IProps> = ({handleGetNext,totalBlogPages,loadingNext,blogPage,getBlogsByDate,profileUserName}) => {
+const ProfileBlogList: React.FC<IProps> = ({handleGetNext,totalBlogPages,loadingNext,blogPage,getBlogsByDate,profileUserName,displayName}) => {
 
   const rootStore = useContext(RootStoreContext);
-   const { setPredicate } = rootStore.blogStore;
+   const { setPredicate,clearPredicates ,setPredicateDisplayName,setClearedBeforeNewPredicateComing} = rootStore.blogStore;
 
   return (
     <Fragment>
@@ -52,6 +53,11 @@ const ProfileBlogList: React.FC<IProps> = ({handleGetNext,totalBlogPages,loading
             positive
             onClick={()=>
               {
+                setPredicateDisplayName(displayName);
+
+                setClearedBeforeNewPredicateComing(true);
+                clearPredicates(null);
+                setClearedBeforeNewPredicateComing(false);
                 setPredicate('username', profileUserName);
                 history.push('/blog')}}
             style={totalBlogPages === 0 ? {display:"none"}: {display:"inline", marginTop: "20px"}}
@@ -62,5 +68,7 @@ const ProfileBlogList: React.FC<IProps> = ({handleGetNext,totalBlogPages,loading
     
   );
 };
+
+       
 
 export default observer(ProfileBlogList)

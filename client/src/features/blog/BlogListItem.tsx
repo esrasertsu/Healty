@@ -15,7 +15,6 @@ const BlogListItem: React.FC<IProps> = ({blog}) => {
   
   return (
     <Card onClick={() => {
-      setLoadingProfile(true);
       history.push(`/blog/${blog.id}`)
       }}
     key={blog.id} >

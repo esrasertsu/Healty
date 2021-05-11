@@ -27,7 +27,6 @@ const BlogList: React.FC = () => {
   }
   useEffect(() => {
     debugger;
-    clearBlogRegistery();
     loadBlogs();
   },[loadBlogs]); //[] provides the same functionality with componentDidMounth..   dependency array
 

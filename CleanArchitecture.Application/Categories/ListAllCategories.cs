@@ -53,7 +53,8 @@ namespace CleanArchitecture.Application.Categories
                         Key = item.Id.ToString(),
                         Value= item.Id.ToString(),
                         Text = item.Name.ToString(),
-                        Parent = item.Category.Name,
+                        ParentName = item.Category.Name,
+                        ParentId = item.Category.Id.ToString(),
                         BlogCount = item.Blogs.Count
                     }) ;
                 }

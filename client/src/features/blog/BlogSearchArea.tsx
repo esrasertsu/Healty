@@ -15,18 +15,18 @@ interface IProps{
 
     const {
       loadProfiles,
-      profileList
+      profileList,
     } = rootStore.profileStore;
 
     const {
-        setPredicate, predicate
+        setPredicate, predicate,setClearedBeforeNewPredicateComing,clearPredicates,predicateDisplayName,
+        setPredicateDisplayName
       } = rootStore.blogStore;
   
     const [results, setResults] = useState([] as any);
-    const [value, setValue] = useState('');
 
     const [isSearchLoading, setSearchLoading] = useState(false);
-    
+    const [value, setvalue] = useState("")
     
     useEffect(() => {
         loadProfiles();
@@ -34,14 +34,19 @@ interface IProps{
 
 
     const handleResultSelect = (e:any, { result}:any) => {
-        setValue(result.displayName);
-        setPredicate("username",result.displayName);
+        debugger;
+        setvalue(result.displayName);
+        setPredicateDisplayName(result.displayName);
+        setClearedBeforeNewPredicateComing(true);
+        clearPredicates("username");
+        setClearedBeforeNewPredicateComing(false);
+        setPredicate("username",result.userName);
     }
     const handleSearchChange = (e:any, { value }: any) => {
         if(value !=="")
          {
             setSearchLoading(true);
-            setValue(value);
+            setvalue(value);
         
             setTimeout(() => {  
               const re = new RegExp(_.escapeRegExp(value), 'i')
@@ -50,9 +55,9 @@ interface IProps{
               setSearchLoading(false);
               setResults(_.filter(profileList, isMatch));
             }, 300)
-         }else {
-            setValue(value);
-            setPredicate('all', 'true');
+         }
+         else {
+            setvalue(value);
         }
 
         

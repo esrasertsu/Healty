@@ -6,21 +6,27 @@ import { RootStore } from "./rootStore";
 import { history } from '../..';
 import { SyntheticEvent } from 'react';
 import { IProfileBlog } from "../models/profile";
+import CategoryStore from "./categoryStore";
 
 const LIMIT = 8;
 
 export default class BlogStore{
-    rootStore: RootStore
+    rootStore: RootStore;
     constructor(rootStore: RootStore){
         this.rootStore = rootStore;
         
         reaction(
-            () => this.predicate.keys(),
+            () => this.predicate.keys() ,
             () => {
                 debugger;
-                this.page=0;
-                this.blogRegistery.clear();
-                this.loadBlogs();
+                if(!this.clearedBeforeNewPredicateComing)
+                {
+                    this.page=0;
+                    this.blogRegistery.clear();
+                    this.rootStore.categoryStore.getPredicateTexts(this.predicate);
+                    this.loadBlogs();
+                }
+                
             }
         )
     }
@@ -28,6 +34,7 @@ export default class BlogStore{
     @observable moreuserblogRegistery = new Map();
     @observable post: IBlog | null = null;
     @observable loadingPosts = true;
+    @observable clearedBeforeNewPredicateComing = false;
     @observable loadingPost = true;
     @observable loadingForDelete = true;
     @observable submitting = false;
@@ -37,6 +44,7 @@ export default class BlogStore{
     @observable blogCount = 0;
     @observable predicate = new Map();
     @observable page = 0;
+    @observable predicateDisplayName:string ="";
 
     @observable userBlogs: IProfileBlog[] = [];
     @observable loadingUserBlogs = true;
@@ -44,7 +52,9 @@ export default class BlogStore{
     @action setPage = (page:number) =>{
         this.page = page;
     }
-
+    @action setPredicateDisplayName = (name:string) =>{
+        this.predicateDisplayName = name;
+    }
     @computed get totalPages(){
         return Math.ceil(this.blogCount / LIMIT);
     }
@@ -65,14 +75,32 @@ export default class BlogStore{
         return params;
     }
 
+    @action setClearedBeforeNewPredicateComing = (value: boolean) => {
+        this.clearedBeforeNewPredicateComing =value;
+    }
+
     @action setPredicate = (predicate:string, value:string) => {
-        this.predicate.clear();
+       debugger;
         if(predicate !== 'all')
         {
             this.predicate.set(predicate,value);
+        }else {
+            this.setClearedBeforeNewPredicateComing(false);
+            this.clearPredicates(null);
         }
     }
+    @action clearPredicates = (pre:string|null) => {
+        debugger;
+        if(pre)
+          this.predicate.delete(pre);
+        else
+          this.predicate.clear();
+       
+    }
 
+    @action removeOnePredicate = (key:string) => {
+        this.predicate.delete(key);
+    }
     @action setLoadingPosts = (lp : boolean) =>{
         this.loadingPosts = lp;
     }
@@ -83,7 +111,11 @@ export default class BlogStore{
       //  return Array.from(this.activityRegistery.values()).sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
           return Array.from(this.blogRegistery.values());
      }
-
+     @action clearBlogRegistery = () => {
+        debugger;
+        this.blogRegistery.clear();
+       
+    }
     @action loadBlogs = async () =>{
         debugger;
         this.loadingPosts = true;

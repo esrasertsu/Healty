@@ -8,13 +8,15 @@ import InfiniteScroll from 'react-infinite-scroller';
 import BlogFilters from './BlogFilters';
 import BlogMainPageItemsPlaceholder from './BlogMainPageItemsPlaceholder';
 import BlogListItem from './BlogListItem';
+import { IPredicate } from '../../app/models/category';
 
 
 
 const BlogList: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
-  const {getBlogsByDate,loadBlogs, loadingPosts, setPage, page, totalPages,predicate,setPredicate} = rootStore.blogStore;
-  const {getPredicateText} = rootStore.categoryStore;
+  const {getBlogsByDate,loadBlogs, loadingPosts, setPage, page, totalPages,predicate,removeOnePredicate,clearBlogRegistery
+  ,predicateDisplayName,setPredicateDisplayName} = rootStore.blogStore;
+  const {getPredicateTexts, predicateTexts} = rootStore.categoryStore;
 
   const [loadingNext, setLoadingNext] = useState(false);
 
@@ -25,8 +27,14 @@ const BlogList: React.FC = () => {
   }
   useEffect(() => {
     debugger;
+    clearBlogRegistery();
     loadBlogs();
   },[loadBlogs]); //[] provides the same functionality with componentDidMounth..   dependency array
+
+  // useEffect(() => {
+  //   debugger;
+  //   getPredicateTexts(predicate);
+  // },[getPredicateTexts]);
 
   return (
     <>
@@ -40,18 +48,38 @@ const BlogList: React.FC = () => {
       loadingPosts && page === 0?
        <BlogMainPageItemsPlaceholder count={6} /> :
        <Fragment>
-         { predicate.has('categoryId') &&
+         { 
               <>
-              <Button labelPosition="right" icon='cancel' content={getPredicateText(predicate.get("categoryId"))} style={{backgroundColor:"#335084", color:"#fff", marginBottom:"20px"}} key={predicate.get("categoryId")}
-              onClick={()=>
-              setPredicate('all','true')
-              }></Button>
+              {predicateTexts.map((predi:IPredicate)=>(
+                <Button key={predi.key} labelPosition="right" icon='cancel' content={predi.value} style={{backgroundColor:"#335084", color:"#fff", marginBottom:"20px"}}
+                onClick={()=>
+                  {
+                    debugger;
+                    removeOnePredicate(predi.predicateName);
+                  }
+                  
+                  }></Button>
+                ))}
+             { predicate.has('username') && predicate.get('username') !== "" ?
+              <>
+              <Button key={predicate.get('username')} labelPosition="right" icon='cancel' content={predicateDisplayName} style={{backgroundColor:"#335084", color:"#fff", marginBottom:"20px"}}
+                onClick={()=>
+                  {
+                    debugger;
+                    removeOnePredicate("username")
+                  }
+                  
+                  }></Button>
+              </>
+             :""
+       }
+
               <br/>
               </>
        }
        { predicate.has('username') && predicate.get('username') !== "" ?
               <>
-              <h2 style={{color:"#335084"}} key={predicate.get("username")}>"{predicate.get("username")}" kullanıcısının paylaştığı bloglar:</h2>
+              <h2 style={{color:"#335084"}} key={predicate.get("username")}>"{predicateDisplayName}" kullanıcısının paylaştığı bloglar:</h2>
               <br/>
               </>
              :""

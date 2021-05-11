@@ -1,7 +1,7 @@
 import { action, observable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { RootStore } from "./rootStore";
-import { IAllCategoryList, ICategory, ISubCategory } from "../models/category";
+import { IAllCategoryList, ICategory, IPredicate, ISubCategory } from "../models/category";
 
 export default class CategoryStore{
     rootStore: RootStore
@@ -20,20 +20,23 @@ export default class CategoryStore{
     @observable loadingSubCategories = true;
     @observable categoryRegistery = new Map();
     @observable subCategoryRegistery = new Map();
-    @observable allCategoriesRegistery = new Map();
-
+    @observable allCategoriesRegistery = new Map<string,IAllCategoryList>();
+    @observable predicateTexts: IPredicate[] = [];
     @observable target = '';
 
-    @action getPredicateText = (value:string) =>{
-      var cat =  this.categoryRegistery.get(value);
-      if(cat)
-      return cat.text;
-      else {
-        var subCat =  this.subCategoryRegistery.get(value);
-        if(subCat)
-        return subCat.text;
-      }
-      return null;
+    @action getPredicateTexts = (predicate:Map<any,any>) =>{
+        debugger;
+        this.predicateTexts = [];
+        Array.from(predicate.keys()).forEach(item => 
+            {
+                var cat =   this.allCategoriesRegistery.get(predicate.get(item));
+                if(cat)
+               {
+                    const newPre:IPredicate = { key: cat!.key, value: cat!.text, predicateName: item};
+                    this.predicateTexts.push(newPre);
+                }
+            }
+            )
     }
     
     @action setLoadingCategories = (lp : boolean) =>{
@@ -92,7 +95,7 @@ export default class CategoryStore{
                 const allDetailedList = await agent.Categories.listAll();
                 runInAction(()=>{
                     this.allDetailedList = allDetailedList;
-                    this.loadingSubCategories = false;
+                    this.loadingAllDetailedList = false;
     
                     allDetailedList.forEach((item) =>{
                         //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..

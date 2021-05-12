@@ -96,6 +96,11 @@ const BlogFilters: React.FC = () => {
                                 if(subActiveIndex!==subItem.value)
                                {   var array: string[] = [];
                                    array.push(subItem.value);
+
+                                   setClearedBeforeNewPredicateComing(true);
+                                   clearPredicates("subCategoryIds");
+                                   setClearedBeforeNewPredicateComing(false);
+
                                    setPredicate('subCategoryIds',array);
                                    getPredicateTexts(predicate);
                                    setSubActiveIndex(subItem.value);

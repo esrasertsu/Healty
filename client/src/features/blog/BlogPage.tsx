@@ -7,6 +7,7 @@ import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import BlogPageHeader from './BlogPageHeader';
 import BlogPageDesc from './BlogPageDesc';
 import BlogMoreFromUser from './BlogMoreFromUser';
+import BlogMoreFromThisCategory from './BlogMoreFromThisCategory';
 
 
 const center = {
@@ -34,7 +35,8 @@ debugger;
           <Grid.Column>
             <BlogPageHeader blog={post!} />
             <BlogPageDesc blog={post!} />
-            <BlogMoreFromUser userName={post!.username} />
+            <BlogMoreFromUser blog={post!} />
+            <BlogMoreFromThisCategory blog={post!} />
           </Grid.Column>
       </Grid>
     )

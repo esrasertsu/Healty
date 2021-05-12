@@ -740,6 +740,11 @@ i.search.inverted.icon {
   color: #263a5e   !important;
   font-style: italic;
   font-family: 'AssistantMedium';
+  text-decoration: underline;
+  cursor: pointer;
+}
+.blogListItem_Readmore .icon{
+  text-decoration:none !important
 }
 
 .blog_userdetail{
@@ -762,7 +767,11 @@ i.search.inverted.icon {
 
 .blog_morefromuser{
   padding: 40px 80px 40px 80px !important;
-  margin: 50px 100px 100px 100px !important;
+  margin: 50px 100px 50px 100px !important;
+}
+.blog_morefromcat{
+  padding: 40px 80px 40px 80px !important;
+  margin: 0px 100px 100px 100px !important;
 }
 
 .blog_morefromuser_header{
@@ -799,4 +808,8 @@ i.search.inverted.icon {
 .html-editor{
   padding: .78571429em 2.1em .78571429em 1em;
 
+}
+
+.postFormHeader{
+  margin: 30px 0 10px 0 !important
 }

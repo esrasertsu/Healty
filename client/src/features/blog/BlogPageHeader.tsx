@@ -22,6 +22,8 @@ const BlogPageHeader:React.FC<{blog:IBlog}> = ({blog}) => {
   const { isCurrentUserAuthor } = rootStore.blogStore;
 
     return (
+
+      //placeholder yerleştir olur da blog undefined null vs gelirse diye
                   <Segment basic attached='top' style={{ padding: '0' }}>
                     <Image src={blog.photo} fluid style={activityImageStyle}/>
                   </Segment>

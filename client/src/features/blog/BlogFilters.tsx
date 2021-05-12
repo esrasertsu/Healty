@@ -29,7 +29,7 @@ const BlogFilters: React.FC = () => {
     {  
         setClearedBeforeNewPredicateComing(true);
         clearPredicates("categoryId");
-        clearPredicates("subCategoryId");
+        clearPredicates("subCategoryIds");
         setClearedBeforeNewPredicateComing(false);
         setPredicate('categoryId', index);
         getPredicateTexts(predicate);
@@ -94,8 +94,9 @@ const BlogFilters: React.FC = () => {
                             active={subActiveIndex===subItem.value}
                             onClick= {() => {
                                 if(subActiveIndex!==subItem.value)
-                               {   
-                                   setPredicate('subCategoryId',subItem.value);
+                               {   var array: string[] = [];
+                                   array.push(subItem.value);
+                                   setPredicate('subCategoryIds',array);
                                    getPredicateTexts(predicate);
                                    setSubActiveIndex(subItem.value);
                             }

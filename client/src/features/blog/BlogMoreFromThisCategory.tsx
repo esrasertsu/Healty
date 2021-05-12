@@ -8,20 +8,20 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { history } from '../../index'
 
 
-const BlogMoreFromUser:React.FC<{blog:IBlog}> = ({blog}) => {
+const BlogMoreFromThisCategory:React.FC<{blog:IBlog}> = ({blog}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const { userBlogs,setPredicateDisplayName ,setClearedBeforeNewPredicateComing,clearPredicates,setPredicate} = rootStore.blogStore;
-  
+  const { sameCategoryBlogs,setPredicateDisplayName ,setClearedBeforeNewPredicateComing,clearPredicates,setPredicate} = rootStore.blogStore;
+
   
     return (
-           <Segment className="blog_morefromuser">
+           <Segment className="blog_morefromcat">
             <Header as='h1'  className="blog_morefromuser_header">
-                Bu danışmanın diğer paylaşımları
+                Bu kategorideki diğer paylaşımlar
                 </Header>
              <Card.Group itemsPerRow="5" stackable>
                 {
-                    userBlogs.map((blog) => (
+                    sameCategoryBlogs.map((blog) => (
                         <Card
                         as={Link}
                         to={`/blog/${blog.id}`}
@@ -44,12 +44,16 @@ const BlogMoreFromUser:React.FC<{blog:IBlog}> = ({blog}) => {
                 <Container className="blog_morefromuser_readmore">
                 <div onClick={()=>
               {
-                setPredicateDisplayName(blog.displayName);
-
                 setClearedBeforeNewPredicateComing(true);
                 clearPredicates(null);
-                setClearedBeforeNewPredicateComing(false);
-                setPredicate('username', blog.username);
+                if(blog.subCategoryIds.length>0)
+                     {
+                     setPredicate('subCategoryIds', blog.subCategoryIds);
+                     setClearedBeforeNewPredicateComing(false);
+                     setPredicate('categoryId', blog.categoryId);
+                    }
+                else setPredicate('categoryId', blog.categoryId);
+
                 history.push('/blog')}}>
                       <p className="blogListItem_Readmore">Devamını gör <Icon name='arrow right' /> </p>
                 </div>
@@ -59,4 +63,4 @@ const BlogMoreFromUser:React.FC<{blog:IBlog}> = ({blog}) => {
     )
 }
 
-export default observer(BlogMoreFromUser)
+export default observer(BlogMoreFromThisCategory)

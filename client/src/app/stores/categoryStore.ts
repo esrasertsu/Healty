@@ -29,12 +29,27 @@ export default class CategoryStore{
         this.predicateTexts = [];
         Array.from(predicate.keys()).forEach(item => 
             {
-                var cat =   this.allCategoriesRegistery.get(predicate.get(item));
-                if(cat)
-               {
-                    const newPre:IPredicate = { key: cat!.key, value: cat!.text, predicateName: item};
-                    this.predicateTexts.push(newPre);
+                if(item==="subCategoryIds")
+                  {
+                    predicate.get(item).forEach((subCat:string) =>{
+                        var cat =   this.allCategoriesRegistery.get(subCat);
+                        if(cat)
+                        {
+                                const newPre:IPredicate = { key: cat!.key, value: cat!.text, predicateName: item};
+                                this.predicateTexts.push(newPre);
+                            }
+                    })
+                  }  
+                else{ 
+                    var cat =   this.allCategoriesRegistery.get(predicate.get(item));
+                    if(cat)
+                   {
+                        const newPre:IPredicate = { key: cat!.key, value: cat!.text, predicateName: item};
+                        this.predicateTexts.push(newPre);
+                    }
+
                 }
+               
             }
             )
     }

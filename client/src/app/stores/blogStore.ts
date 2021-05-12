@@ -8,7 +8,7 @@ import { SyntheticEvent } from 'react';
 import { IProfileBlog } from "../models/profile";
 import CategoryStore from "./categoryStore";
 
-const LIMIT = 8;
+const LIMIT = 9;
 
 export default class BlogStore{
     rootStore: RootStore;
@@ -39,9 +39,11 @@ export default class BlogStore{
     @observable loadingForDelete = true;
     @observable submitting = false;
     @observable postList: IBlog[] = [];
+    @observable sameCategoryBlogs: IBlog[] = [];
     @observable postRegistery = new Map();
     @observable target = '';
     @observable blogCount = 0;
+    @observable sameCatBlogCount = 0;
     @observable predicate = new Map();
     @observable page = 0;
     @observable predicateDisplayName:string ="";
@@ -70,7 +72,14 @@ export default class BlogStore{
         params.append('limit', String(LIMIT));
         params.append('offset', `${this.page ? this.page * LIMIT : 0}`);
         this.predicate.forEach((value,key) => {
-                params.append(key, value);
+            if(key === "subCategoryIds")
+            {   
+                value.forEach((item:string) =>{
+                params.append(key, item);
+            })
+            }
+            else 
+              params.append(key, value);
         })
         return params;
     }
@@ -79,11 +88,18 @@ export default class BlogStore{
         this.clearedBeforeNewPredicateComing =value;
     }
 
-    @action setPredicate = (predicate:string, value:string) => {
+    @action setPredicate = (predicate:string, value:string | string[]) => {
        debugger;
         if(predicate !== 'all')
         {
-            this.predicate.set(predicate,value);
+            if(value && value.length>0)
+            {
+                this.setClearedBeforeNewPredicateComing(true);
+                this.clearPredicates(predicate);
+                this.setClearedBeforeNewPredicateComing(false);
+                this.predicate.set(predicate,value);
+            }
+            else this.clearPredicates(predicate);
         }else {
             this.setClearedBeforeNewPredicateComing(false);
             this.clearPredicates(null);
@@ -100,6 +116,11 @@ export default class BlogStore{
 
     @action removeOnePredicate = (key:string) => {
         this.predicate.delete(key);
+    }
+    @action removeSubCatPredicate = (deleteValue:string) => {
+       let values:string[] = this.predicate.get("subCategoryIds");
+       values = values.filter(x=> x != deleteValue);
+       this.setPredicate("subCategoryIds",values);
     }
     @action setLoadingPosts = (lp : boolean) =>{
         this.loadingPosts = lp;
@@ -148,10 +169,6 @@ export default class BlogStore{
             const {profileBlogs, profileBlogsCount } = profileBlogListEnvelope;
 
             runInAction(()=>{
-                // profileBlogs.forEach((blog) =>{
-                //     //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
-                //     this.blogRegistery.set(blog.id, blog);
-                // });
                 debugger;
                 this.userBlogs = profileBlogs;
                 this.blogCount = profileBlogsCount;
@@ -167,8 +184,6 @@ export default class BlogStore{
     
     @action loadBlog = async (id:string) => {
         debugger;
-       // this.moreuserblogRegistery.clear();
-
     
             this.loadingPost = true;
             try {
@@ -177,6 +192,7 @@ export default class BlogStore{
                     debugger;
                     this.post = post;
                     this.loadUserBlogs(post.username);
+                    this.loadSameCategoryBlogs(post.subCategoryIds);
                     this.loadingPost = false;
                 })
                 return post;
@@ -186,21 +202,48 @@ export default class BlogStore{
                     });
                     console.log(error);
                 }
-
-
-        
       
     };
+
+
+    @action loadSameCategoryBlogs = async (subCategoryNames:string[]) =>{
+        debugger;
+        this.loadingPost = true;
+
+        try {
+
+            const params = new URLSearchParams();
+            params.append('limit', String(5));
+            params.append('offset', String(0));
+            subCategoryNames.forEach((item) => {
+                    params.append("subCategoryIds", item);
+            })
+            const blogsEnvelope = await agent.Blogs.list(params);
+            const {blogs, blogCount } = blogsEnvelope;
+            runInAction('Loading blogs',()=>{
+                this.sameCategoryBlogs =blogs;
+                this.sameCatBlogCount = blogCount;
+                this.loadingPost = false;
+            })
+        } catch (error) {
+            runInAction(()=>{
+                this.loadingPost = false;
+            })
+            console.log(error);
+        }
+    }
 
     @action createPost = async (post: IPostFormValues) =>{
         debugger;
         this.submitting = true;
         try {
-            await agent.Blogs.create(post);
+            const blog = await agent.Blogs.create(post);
             runInAction('Creating post', () => {
                 this.submitting = false;
+                this.blogRegistery.set(blog.id, blog);
+                history.push(`/blog/${blog.id}`);
+
             });
-            history.push(`/blog/${post.id}`);
 
         } catch (error) {
             runInAction('Creating post error', () => {

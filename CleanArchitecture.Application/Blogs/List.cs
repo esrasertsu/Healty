@@ -3,6 +3,7 @@ using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,20 +21,21 @@ namespace CleanArchitecture.Application.Blogs
             public int BlogCount { get; set; }
 
         }
+
         public class Query : IRequest<BlogsEnvelope> {
-            public Query(int? limit, int? offset, string userName, Guid? categoryId, Guid? subCategoryId)
+            public Query(int? limit, int? offset, string userName, Guid? categoryId, List<Guid> subCategoryIds)
             {
                 Limit = limit;
                 Offset = offset;
                 UserName = userName;
                 CategoryId = categoryId;
-                SubCategoryId = subCategoryId;
+                SubCategoryIds = subCategoryIds;
             }
             public int? Limit { get; set; }
             public int? Offset { get; set; }
             public string UserName { get; set; }
             public Guid? CategoryId { get; set; }
-            public Guid? SubCategoryId { get; set; }
+            public List<Guid> SubCategoryIds { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, BlogsEnvelope>
@@ -61,15 +63,17 @@ namespace CleanArchitecture.Application.Blogs
                 {
                     queryablePosts = queryablePosts.Where(x => x.Category.Id == request.CategoryId);
                 }
-                if (request.SubCategoryId != null)
+                if (request.SubCategoryIds != null && request.SubCategoryIds.Count>0)
                 {
+                   // List<Guid> subIds = JsonConvert.DeserializeObject<List<Guid>>(request.SubCategoryIds);
+
                     queryablePosts = queryablePosts.Where(x => x.SubCategories.Any(
-                        a => a.SubCategoryId == request.SubCategoryId));
+                        a => request.SubCategoryIds.Contains(a.SubCategoryId))); //tostring çevirisi sakın qureylerde yapma client side olarak algılıyor
                 }
 
                 var blogs = await queryablePosts
                    .Skip(request.Offset ?? 0)
-                   .Take(request.Limit ?? 3).ToListAsync();
+                   .Take(request.Limit ?? 6).ToListAsync();
 
                 return new BlogsEnvelope
                 {

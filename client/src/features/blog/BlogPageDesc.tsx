@@ -48,7 +48,7 @@ const BlogPageDesc:React.FC<{blog:IBlog}> = ({blog}) => {
                     </div>
                     </div>
                     <div>
-                      <p className="blogListItem_Readmore">Bu kategoride daha fazlası <Icon name='arrow right' /> </p>
+                      <div onClick={()=>history.push(`/profile/${blog.username}`)} className="blogListItem_Readmore"> Uzman profilini gör <Icon name='arrow right' /> </div>
                     </div>
 
                 </Container>

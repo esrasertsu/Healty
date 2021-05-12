@@ -118,14 +118,14 @@ debugger;
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid, pristine }) => (
               <Form onSubmit={handleSubmit} loading={loading}>
-                <Header color='teal' sub content='Adım 1 - Metin başlığınızı girin ' />
+                <Header className="postFormHeader" color='teal' sub content='Adım 1 - Metin başlığınızı girin ' />
                 <Field
                   name="title"
                   placeholder="Title"
                   value={post.title}
                   component={TextInput}
                 />
-                <Header color='teal' sub content='Adım 2 - Metnin temel görselini yükleyin' />
+                <Header className="postFormHeader" color='teal' sub content='Adım 2 - Metnin temel görselini yükleyin' />
               {
                 files.length === 0 ? 
                 <PhotoWidgetDropzone setFiles={setFiles} />
@@ -135,24 +135,25 @@ debugger;
                   <Grid.Column width="eight">
                   <Header sub content='*Boyutlandır' />
                   <PhotoWidgetCropper setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} />
-                  <Button type="danger" icon='close' disabled={loading} onClick={()=> setFiles([])}>Değiştir/Sil</Button>
                   </Grid.Column>
                   <Grid.Column width="eight">
                     <Header sub content='*Önizleme' />
                     <Image src={croppedImageUrl} style={{minHeight:'200px', overflow:'hidden'}}/>
-                    <Button positive icon='check' loading={loading} onClick={()=> handleUploadImage(image!)}></Button>
+                  </Grid.Column>
 
+                  <Grid.Column width="eight">
+                  <Button type="danger" icon='close' disabled={loading} onClick={()=> setFiles([])}>Değiştir/Sil</Button>
                   </Grid.Column>
                </Grid>
                )
               }  
-                <Header color='teal' sub content='Adım 3 - Bloğunuzu oluşturun' />
+                <Header className="postFormHeader" color='teal' sub content='Adım 3 - Bloğunuzu oluşturun' />
                <Field
                   name="description"
                   component={WYSIWYGEditor}
                   value={post.description}
                 />
-                <Header color='teal' sub content='Adım 4 - Kategori seçin' />
+                <Header className="postFormHeader" color='teal' sub content='Adım 4 - Kategori seçin' />
                 <Field 
                   name="categoryId"
                   placeholder="Kategori"
@@ -161,7 +162,7 @@ debugger;
                   value={post.categoryId}
                   onChange={(e: any,data: any)=>handleCategoryChanged(e,data)}
                 />
-                  <Header color='teal' sub content='Adım 5 - Alt Kategorileri seçin' />
+                  <Header className="postFormHeader" color='teal' sub content='Adım 5 - Alt Kategorileri seçin' />
                  <Field
                   name="subCategoryIds"
                   placeholder="Alt Kategori"
@@ -181,17 +182,6 @@ debugger;
                   positive
                   type="submit"
                   content="Submit"
-                />
-                <Button
-                  floated="left"
-                  disabled={loading}
-                  type="cancel"
-                  content="Cancel"
-                  onClick={
-                    post.id
-                      ? () => history.push(`/blog/${post.id}`)
-                      : () => history.push("/blog")
-                  }
                 />
               </Form>
             )}

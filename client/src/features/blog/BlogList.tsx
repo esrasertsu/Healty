@@ -14,7 +14,7 @@ import { IPredicate } from '../../app/models/category';
 
 const BlogList: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
-  const {getBlogsByDate,loadBlogs, loadingPosts, setPage, page, totalPages,predicate,removeOnePredicate,clearBlogRegistery
+  const {getBlogsByDate,loadBlogs, loadingPosts, setPage, page, totalPages,predicate,removeOnePredicate,removeSubCatPredicate
   ,predicateDisplayName,setPredicateDisplayName} = rootStore.blogStore;
   const {getPredicateTexts, predicateTexts} = rootStore.categoryStore;
 
@@ -53,7 +53,9 @@ const BlogList: React.FC = () => {
                 <Button key={predi.key} labelPosition="right" icon='cancel' content={predi.value} style={{backgroundColor:"#335084", color:"#fff", marginBottom:"20px"}}
                 onClick={()=>
                   {
-                    debugger;
+                    if(predi.predicateName === "subCategoryIds") 
+                      removeSubCatPredicate(predi.key);
+                    else
                     removeOnePredicate(predi.predicateName);
                   }
                   

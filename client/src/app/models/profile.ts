@@ -9,7 +9,9 @@ export interface IProfile {
     photos: IPhoto[],
     star: number,
     starCount: number,
-    comments: IProfileComment[]
+    comments: IProfileComment[],
+    hasConversation: boolean
+
 }
 
 

@@ -6,6 +6,7 @@ import TextAreaInput from '../../app/common/form/TextAreaInput';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { IProfileComment } from '../../app/models/profile';
 import { v4 as uuid } from "uuid";
+import { IMessageForm } from '../../app/models/message';
 
 // interface IProps{
 //     sendMessage:() => void;
@@ -15,21 +16,15 @@ import { v4 as uuid } from "uuid";
   const rootStore = useContext(RootStoreContext);
 
   const {
-    sendTrainerComment
+    sendTrainerComment,profile,sendMessageFromProfile
   } = rootStore.profileStore;
 
-    const [rating, setRating] = useState(0);
-
     
-    const handleFinalFormSubmit = async (values: IProfileComment) => {
-      // const { ...comment } = values;
-  
-    
-      //       let newComment = {
-      //         ...comment,
-      //         id: uuid(),
-      //       };
-           await sendTrainerComment(values);
+    const handleFinalFormSubmit = async (values: IMessageForm) => {
+      let newMessage = {
+        ...values
+      };
+           await sendMessageFromProfile(newMessage);
     };
 
     return (
@@ -38,10 +33,10 @@ import { v4 as uuid } from "uuid";
             <Grid.Column>
         <FinalForm 
         onSubmit ={handleFinalFormSubmit}
-        initialValues={{ allowDisplayName:false,body:"" }}
-        render={({handleSubmit, submitting, form,values,initialValues}) => (
+       // initialValues={{ body:"" }}
+        render={({handleSubmit, submitting, form}) => (
           <Form widths={"equal"} 
-          onSubmit={() => handleSubmit()!.then(()=> {form.reset(); setRating(0);})}
+          onSubmit={() => handleSubmit()!.then(()=> {form.reset();})}
           >
            <Field
                   name="body"

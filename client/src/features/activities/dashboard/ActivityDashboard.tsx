@@ -27,12 +27,13 @@ const ActivityDashboard: React.FC = () => {
     <Grid>
       <Grid.Row>
       <Grid.Column width={4}>
-      <Button
+      {/* <Button
                         onClick={() => history.push('/activitysearch')}
                         floated="right"
                         style={{backgroundColor:"#00b5ad", color:"white"}}
                         >Map View&nbsp;&nbsp;<Icon name="map marker alternate"/> </Button>
-                        <br></br>                  
+                        <br></br>                   */}
+                        <br></br> 
       <ActivityFilters />
       </Grid.Column>
       <Grid.Column width={12}>

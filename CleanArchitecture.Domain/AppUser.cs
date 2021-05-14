@@ -15,6 +15,7 @@ namespace CleanArchitecture.Domain
         public virtual ICollection<Blog> Blogs { get; set; }
         public virtual ICollection<UserProfileComment> ReceivedComments { get; set; }
         public virtual ICollection<UserProfileComment> SendComments { get; set; }
+        public virtual ICollection<UserChatRooms> ChatRooms { get; set; }
 
     }
 

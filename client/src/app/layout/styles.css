@@ -13,7 +13,7 @@
 }
 
 body {
-  background-color: #fafafa !important;
+  background-color: #fff !important;
   font-family: AssistantRegular, Arial, Helvetica, sans-serif;
   
 }
@@ -175,7 +175,7 @@ h1, h2, h3, h4, h5 {
 }
 .ui.segment.blogFilter_Category_Filter {
   border: none;
-  background: #f3f4f5;
+  background: #fafafa;
   color: #335084;
 }
 
@@ -195,7 +195,7 @@ h1, h2, h3, h4, h5 {
    width: 100% !important;
    box-shadow: none !important;
    border: none !important;
-   background: #f3f4f5 !important;
+   background: #fafafa !important;
    font-size: 1.1rem !important;
   min-height: 2em !important;
 }

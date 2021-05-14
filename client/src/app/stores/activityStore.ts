@@ -59,6 +59,20 @@ export default class ActivityStore {
         }
     }
 
+    
+    @action setLoadingInitial = (lp : boolean) =>{
+        this.loadingInitial = lp;
+    }
+
+    @action setMarkers = (markers : IActivityMapItem[]) =>{
+        this.markers = markers;
+    }
+
+    @action setSelected = (selected : IActivityMapItem | null) =>{
+        this.selected = selected;
+    }
+
+
     @computed get axiosParams(){
         const params = new URLSearchParams();
         params.append('limit', String(LIMIT));
@@ -107,18 +121,6 @@ export default class ActivityStore {
         })
     };
 
-
-    @action setLoadingInitial = (lp : boolean) =>{
-        this.loadingInitial = lp;
-    }
-
-    @action setMarkers = (markers : IActivityMapItem[]) =>{
-        this.markers = markers;
-    }
-
-    @action setSelected = (selected : IActivityMapItem | null) =>{
-        this.selected = selected;
-    }
 
     @action stopHubConnection = () => {
         this.hubConnection!.invoke('RemoveFromGroup', this.activity!.id)

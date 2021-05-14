@@ -3,6 +3,7 @@ using CleanArchitecture.API.Middleware;
 using CleanArchitecture.API.SignalR;
 using CleanArchitecture.Application.Activities;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Application.Messages;
 using CleanArchitecture.Application.Profiles;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
@@ -54,8 +55,8 @@ namespace CleanArchitecture.API
                 });
             });
 
-            services.AddMediatR(typeof(List.Handler).Assembly);
-            services.AddAutoMapper(typeof(List.Handler));
+            services.AddMediatR(typeof(Application.Activities.List.Handler).Assembly);
+            services.AddAutoMapper(typeof(Application.Activities.List.Handler));
             services.AddSignalR();
 
             services.AddControllers( opt => {
@@ -64,7 +65,7 @@ namespace CleanArchitecture.API
             })
             .AddFluentValidation(cfg =>
             {
-                cfg.RegisterValidatorsFromAssemblyContaining<Create>();
+                cfg.RegisterValidatorsFromAssemblyContaining<Application.Activities.Create>();
                 cfg.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
             });
             // .AddNewtonsoftJson(options =>
@@ -110,7 +111,7 @@ namespace CleanArchitecture.API
                         {
                             var accessToken = context.Request.Query["access_token"];
                             var path = context.HttpContext.Request.Path;
-                            if(!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/chat")))
+                            if(!string.IsNullOrEmpty(accessToken) && ((path.StartsWithSegments("/chat")) || (path.StartsWithSegments("/messages"))))
                             {
                                 context.Token = accessToken;
                             }
@@ -124,6 +125,7 @@ namespace CleanArchitecture.API
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
             services.AddScoped<IProfileReader, ProfileReader>();
+            services.AddScoped<IChatRoomReader, ChatRoomReader>();
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
         }
@@ -150,6 +152,8 @@ namespace CleanArchitecture.API
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/chat");
+                endpoints.MapHub<MessagesHub>("/messages");
+
             });
         }
     }

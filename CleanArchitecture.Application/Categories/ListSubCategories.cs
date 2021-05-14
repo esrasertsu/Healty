@@ -16,7 +16,7 @@ namespace CleanArchitecture.Application.Categories
     {
         public class Query : IRequest<List<SubCategoryDto>>
         {
-            public Guid CategoryId { get; set; }
+           public Guid CategoryId { get; set; }
 
         }
 

@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Application.Profiles;
 using CleanArchitecture.Application.UserProfileComments;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -47,5 +48,11 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(command);
         }
 
+        [HttpPost("message")]
+        public async Task<ActionResult<Unit>> SendMessage(SendMessage.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+       
     }
 }

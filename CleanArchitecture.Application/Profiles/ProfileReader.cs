@@ -43,13 +43,30 @@ namespace CleanArchitecture.Application.Profiles
                 FollowerCount = user.Followers.Count(),
                 FollowingCount = user.Followings.Count(),
                 StarCount = GetStarCount(user),
-                Star = CalculateStar(user)
+                Star = CalculateStar(user),
             };
 
             if (currentUser.Followings.Any(x => x.TargetId == user.Id))
             {
                 profile.IsFollowed = true;
             }
+
+            var queryable = _context.UserChatRooms.AsQueryable();
+
+            var chatRooms = queryable.Where(x => x.AppUserId == currentUser.Id);
+
+           
+
+                var existingChatRoomWithReceiver =  queryable
+                     .Where(x => chatRooms.Any(y => y.ChatRoomId == x.ChatRoomId) && x.AppUserId == user.Id);
+
+                if (existingChatRoomWithReceiver.Count() >0 )
+                {
+                    profile.HasConversation = true;
+                }
+
+            
+         
 
             return profile;
         }

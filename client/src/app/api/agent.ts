@@ -6,6 +6,7 @@ import { IUser, IUserFormValues } from '../models/user';
 import { IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope } from '../models/profile';
 import { IBlogsEnvelope, IBlog, IPostFormValues } from '../models/blog';
 import { IAllCategoryList, ICategory, ISubCategory } from '../models/category';
+import { IChatRoom, IMessage, IMessageEnvelope, IMessageForm } from '../models/message';
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
@@ -107,8 +108,10 @@ const Profiles = {
     listComments: (username: string, limit?:number, page?:number): Promise<IProfileCommentEnvelope> => 
                 requests.get(`/profiles/${username}/comments?username=${username}&limit=${limit}&offset=${page ? page*limit! :0}`),
     listBlogs: (username: string, limit?:number, page?:number): Promise<IProfileBlogsEnvelope> => 
-                requests.get(`/profiles/${username}/blogs?username=${username}&limit=${limit}&offset=${page ? page*limit! :0}`)
-}
+                requests.get(`/profiles/${username}/blogs?username=${username}&limit=${limit}&offset=${page ? page*limit! :0}`),
+
+    sendMessage:(message:IMessageForm) => requests.post(`/profiles/message`, message),
+    }
 
 
 const Blogs = {
@@ -126,10 +129,18 @@ const Categories = {
     listAll: (): Promise<IAllCategoryList[]> => requests.get('/category/allcategories'),
 
 }
+
+const Messages = {
+    list: (): Promise<IChatRoom[]> => requests.get('/message'),
+    listMessages: (chatRoomId: string,limit?:number, page?:number): Promise<IMessageEnvelope> => 
+                requests.get(`/message/chat?chatRoomId=${chatRoomId}&limit=${limit}&offset=${page ? page*limit! :0}`),
+
+}
 export default {
     Activities,
     User,
     Profiles,
     Blogs,
-    Categories
+    Categories,
+    Messages
 }

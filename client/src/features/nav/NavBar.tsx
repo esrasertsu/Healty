@@ -64,15 +64,23 @@ const NavBar: React.FC = () => {
                     }} />
 
           {user && (
-            <Menu.Item as='a'>
+            <Menu.Item>
               <Image avatar spaced="right" src={user.image || "/assets/user.png"} />
               <Dropdown pointing="top left" text={user.displayName}>
                 <Dropdown.Menu>
                   <Dropdown.Item
+                    key="profil"
                     as={Link}
                     to={`/profile/${user.userName}`}
-                    text="My profile"
+                    text="Profil"
                     icon="user"
+                  />
+                  <Dropdown.Item
+                    key="mesaj"
+                    as={Link}
+                    to={`/messages`}
+                    text="Mesajlar"
+                    icon="mail"
                   />
                   <Dropdown.Item text="Logout" onClick={logout} icon="power" />
                 </Dropdown.Menu>

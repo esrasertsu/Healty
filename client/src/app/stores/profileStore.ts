@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import agent from "../api/agent";
 import { IPhoto, IProfile, IProfileBlog, IProfileComment, IUserActivity } from "../models/profile";
 import { RootStore } from "./rootStore";
+import { IMessageForm } from "../models/message";
 
 const LIMIT = 5;
 
@@ -51,6 +52,8 @@ export default class ProfileStore{
      @observable profileComments: IProfileComment[] = [];
 
     @observable loadingActivities = false;
+    @observable submittingMessage = false;
+
     @observable.ref hubConnection : HubConnection | null = null;
     @computed get isCurrentUser(){
         if (this.rootStore.userStore.user && this.profile){
@@ -374,5 +377,24 @@ export default class ProfileStore{
         }
 
     }
+
+
+    @action sendMessageFromProfile = async (message: IMessageForm) =>{
+        debugger;
+        message.receiver= this.profile!.userName;
+        this.submittingMessage = true;
+        try {
+            await agent.Profiles.sendMessage(message);
+            runInAction('Sending message', () => {
+                this.submittingMessage = false;
+            });
+        } catch (error) {
+            runInAction('Sending message error', () => {
+                this.submittingMessage = false;
+            });
+            toast.error('Problem sending message');
+            console.log(error);
+        }
+    };
 
 }

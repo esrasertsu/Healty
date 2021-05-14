@@ -20,6 +20,7 @@ import PostForm from '../../features/posts/PostForm';
 import BlogList from '../../features/blog/BlogList';
 import Footer from '../../features/home/Footer';
 import BlogPage from '../../features/blog/BlogPage';
+import MessagesPage from '../../features/messages/MessagesPage';
 
 const App: React.FC<RouteComponentProps> = ({location}) => {
 
@@ -65,6 +66,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                   <Route key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
                   <Route path="/profile/:username" component={ProfilePage}/>
                   <Route path="/profiles" component={ProfileList}/>
+                  <Route path="/messages" component={MessagesPage}/>
                   <Route path="/login" component={LoginForm}/>
                   <Route exact path="/activitysearch" component={ActivitySearchPage}/>
                   <Route component={NotFound}/>

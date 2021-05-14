@@ -47,7 +47,7 @@ namespace CleanArchitecture.Application.Profiles
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
 
                 var queryable = _context.UserProfileComments
-                   .Where(x => x.Target == user)
+                   .Where(x => x.Target == user) //approved eklenecek
                    .OrderBy(x => x.CreatedAt)
                    .AsQueryable();
 

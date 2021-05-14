@@ -23,9 +23,10 @@ namespace CleanArchitecture.Persistence
         public DbSet<Category> Categories { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<SubCatBlogs> SubCatBlogs { get; set; }
-
         public DbSet<UserProfileComment> UserProfileComments { get; set; }
-
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<ChatRoom> ChatRooms { get; set; }
+        public DbSet<UserChatRooms> UserChatRooms { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -85,6 +86,29 @@ namespace CleanArchitecture.Persistence
                 .HasOne(a => a.SubCategory)
                 .WithMany(u => u.Blogs)
                 .HasForeignKey(a => a.SubCategoryId);
+
+            builder.Entity<Message>()
+               .HasOne(a => a.ChatRoom)
+               .WithMany(u => u.Messages)
+               .HasForeignKey(a => a.ChatRoomId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<UserChatRooms>(x => x.HasKey(ua =>
+             new { ua.ChatRoomId, ua.AppUserId }));
+
+            builder.Entity<UserChatRooms>()
+              .HasOne(a => a.AppUser)
+              .WithMany(u => u.ChatRooms)
+              .HasForeignKey(a => a.AppUserId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+
+            builder.Entity<UserChatRooms>()
+              .HasOne(a => a.ChatRoom)
+              .WithMany(u => u.Users)
+              .HasForeignKey(a => a.ChatRoomId)
+              .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

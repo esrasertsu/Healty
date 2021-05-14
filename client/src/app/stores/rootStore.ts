@@ -7,6 +7,7 @@ import ModalStore from "./modalStore";
 import ProfileStore from "./profileStore";
 import BlogStore from "./blogStore";
 import CategoryStore from "./categoryStore";
+import MessageStore from "./messageStore";
 
 configure({enforceActions: 'always'});
 
@@ -18,6 +19,7 @@ export class RootStore {
     profileStore: ProfileStore;
     blogStore: BlogStore;
     categoryStore: CategoryStore;
+    messageStore: MessageStore;
 
     constructor() {
         this.activityStore = new ActivityStore(this);
@@ -27,6 +29,8 @@ export class RootStore {
         this.profileStore = new ProfileStore(this);
         this.blogStore = new BlogStore(this);
         this.categoryStore = new CategoryStore(this);
+        this.messageStore = new MessageStore(this);
+
     }
 }
 

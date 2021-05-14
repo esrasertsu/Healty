@@ -21,6 +21,9 @@ namespace CleanArchitecture.Application.Profiles
         public ICollection<Photo> Photos { get; set; }
         public int StarCount { get; set; }
         public int Star { get; set; }
+        public bool HasConversation { get; set; }
+        public List<string> convIds { get; set; }
+
 
     }
 }

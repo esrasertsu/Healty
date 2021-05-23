@@ -20,9 +20,9 @@ namespace CleanArchitecture.API.SignalR
 
         public async Task SendMessage(Create.Command command)
         {
-          //  string username = GetUserName();
+            string username = GetUserName();
 
-          //  command.Username = username;
+            command.Username = username;
 
             var message = await _mediator.Send(command);
             await Clients.Group(command.ChatRoomId.ToString()).SendAsync("ReceiveMessage", message);

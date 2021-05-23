@@ -3,6 +3,7 @@ import {observable, action, computed, runInAction, reaction} from 'mobx';
 import { SyntheticEvent } from 'react';
 import { toast } from 'react-toastify';
 import agent from '../api/agent';
+import { setMessageProps } from '../common/util/util';
 import { IChatRoom, IMessage } from '../models/message';
 
 import { RootStore } from './rootStore';
@@ -14,21 +15,54 @@ export default class MessageStore {
     constructor(rootStore: RootStore){
         this.rootStore = rootStore;
 
+        reaction(
+            () => this.chatRoomId,
+            () => {
+                debugger;
+                if(this.chatRoomId !== null)
+                {
+                    this.setPage(0);
+                    this.messageRegistery.clear();
+                    this.hubConnection !== null ? this.stopHubConnection(this.chatRoomId!) : this.createHubConnection(this.chatRoomId!);;
+               
+                }
+                }
+        )
        
     }
 
     @observable.ref hubConnection : HubConnection | null = null;
-    @observable chatRoom: IChatRoom | null = null;
 
     @observable message: IMessage | null = null;
     @observable loadingMessages : boolean = false;
     @observable loadingChatRooms : boolean = true;
     @observable chatRooms : IChatRoom[] | null = null;
+    @observable chatRoomId : string | null = null;
+    @observable prevChatRoomId : string | null = null;
     @observable messageRegistery = new Map();
     @observable messageCount = 0;
+    @observable page = 0;
+    @observable stoppingHubConnection:boolean = true;
 
 
+    @computed get totalPages(){
+        return Math.ceil(this.messageCount / LIMIT);
+    }
+
+    @action setPage = (page:number) =>{
+        this.page = page;
+    }
+    @action setHubConnectionNull = () =>{
+        this.hubConnection = null;
+    }
+    @action setChatRoomId = (id:string|null) =>{
+        this.chatRoomId = id;
+    }
+    @action setPrevChatRoomId = (id:string | null) =>{
+        this.prevChatRoomId = id;
+    }
     @action createHubConnection = (chatRoomId: string) => {
+        debugger;
         this.hubConnection = new HubConnectionBuilder()
         .withUrl('http://localhost:5000/message',{
             accessTokenFactory: () => this.rootStore.commonStore.token!
@@ -44,14 +78,24 @@ export default class MessageStore {
             {
                 this.hubConnection!.invoke('AddToChat', chatRoomId);
             }
+        }).then(() => {
+            if(this.hubConnection!.state === 'Connected')
+            {
+                this.setPage(0);
+                this.loadMessages(chatRoomId);
+            }
         })
         .catch(error => 
             console.log('Error establishing connection:', error));
 
 
-        this.hubConnection.on('ReceiveMessage', comment => {
+        this.hubConnection.on('ReceiveMessage', message => {
             runInAction(() => {
-                this.chatRoom!.messages.push(comment);
+                debugger;
+                message.createdAt= new Date();
+                this.messageRegistery.set(message.id, message);
+                const crIndex = this.chatRooms!.findIndex(x => x.id === this.chatRoomId);
+                this.chatRooms![crIndex].lastMessage = message.body;
             })
         })
 
@@ -61,20 +105,31 @@ export default class MessageStore {
     };
 
 
-    @action stopHubConnection = () => {
-        this.hubConnection!.invoke('RemoveFromChat', this.chatRoom!.id)
+    @action stopHubConnection = (nextConnection:string|null) => {
+        let crId = null;
+        debugger;
+        if(nextConnection != null)
+        {
+            crId =  this.prevChatRoomId;
+        }else {
+            crId = this.chatRoomId;
+        }
+        this.hubConnection!.invoke('RemoveFromChat', crId)
         .then(() => {
+            debugger;
             this.hubConnection!.stop();
         })
-        .then(() => console.log('Connection stopped'))
+        .then(() => {
+            debugger;
+            console.log('Connection stopped');
+            nextConnection && this.createHubConnection(nextConnection)})
         .catch(err => console.log(err))
     }
 
-    @observable page = 0;
-
 
     @action addComment = async (values: any) => {
-        values.chatRoomId = this.chatRoom!.id;
+        debugger;
+        values.chatRoomId = this.chatRoomId;
         try {
             await this.hubConnection!.invoke("SendMessage", values);
         } catch (error) {
@@ -107,15 +162,37 @@ export default class MessageStore {
             }
     };
 
+
+    @computed get messagesByDate(){
+        debugger;
+        // return this.activities.sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
+      //  return Array.from(this.activityRegistery.values()).sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
+          return this.groupMessagesByDate(Array.from(this.messageRegistery.values()));
+     }
+ 
+     groupMessagesByDate(messages: IMessage[]){
+         const sortedMessages = messages.sort(
+             (a,b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+         )
+ 
+         return Object.entries(sortedMessages.reduce((messages, message) =>{
+             const date = new Date(message.createdAt).toISOString().split('T')[0];
+             messages[date] = messages[date] ? [...messages[date], message]: [message];
+             return messages;
+          },
+        {} as {[key:string]: IMessage[]}));
+     }
+
     @action loadMessages = async (id:string) => {
         debugger;
+            this.chatRoomId = id;
             this.loadingMessages = true;
             try {
                 const messagesEnvelope = await agent.Messages.listMessages(id,LIMIT,this.page);
                 const {messages, messageCount } = messagesEnvelope;
                 runInAction('Loading messages',() => {
                     messages.forEach((message) =>{
-                       // setActivityProps(activity,this.rootStore.userStore.user!)
+                        setMessageProps(message,this.rootStore.userStore.user!)
                         this.messageRegistery.set(message.id, message);
                     });
                     this.messageCount = messageCount;

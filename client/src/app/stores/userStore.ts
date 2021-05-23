@@ -53,6 +53,15 @@ export default class UserStore {
 
     @action logout = () => {
         this.rootStore.commonStore.setToken(null);
+        if(this.rootStore.messageStore.chatRoomId!== null)
+        {
+            this.rootStore.messageStore.stopHubConnection(null);
+            this.rootStore.messageStore.setHubConnectionNull();
+            this.rootStore.messageStore.setPage(0);
+            this.rootStore.messageStore.messageRegistery.clear();
+            this.rootStore.messageStore.setChatRoomId(null);
+        }
+       
         this.user = null;
         history.push('/');
     }

@@ -19,7 +19,8 @@ export interface IMessage{
     username:string,
     createdAt: Date,
     displayName :string,
-    image :string
+    image :string,
+    isSender:boolean
 
 }
 

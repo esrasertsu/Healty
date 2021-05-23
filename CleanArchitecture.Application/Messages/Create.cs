@@ -41,7 +41,7 @@ namespace CleanArchitecture.Application.Messages
 
             public async Task<ChatMessageDto> Handle(Command request, CancellationToken cancellationToken)
             {
-                var currentUser = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
+                var currentUser = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.Username);
 
                 if (currentUser == null)
                     throw new RestException(HttpStatusCode.NotFound, new { Login = "User Not Found" });
@@ -51,30 +51,30 @@ namespace CleanArchitecture.Application.Messages
                 if (chatRoom == null)
                     throw new RestException(HttpStatusCode.NotFound, new { ChatRoom = "Chat not found" });
 
-                var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.Username);
-                if (currentUser == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { User = "Receiver Not Found" });
 
-                if (chatRoom.Users.Any(x => x.AppUserId != currentUser.Id))
-                    throw new RestException(HttpStatusCode.NotFound, new { User = "Permission denied" });
-
-                var message = new Message
+                if (chatRoom.Users.Any(x => x.AppUserId == currentUser.Id))
                 {
-                    Sender = currentUser,
-                    ChatRoom = chatRoom,
-                    Body = request.Body,
-                    CreatedAt = DateTime.Now
-                };
+                    var message = new Message
+                    {
+                        Sender = currentUser,
+                        ChatRoom = chatRoom,
+                        Body = request.Body,
+                        CreatedAt = DateTime.Now
+                    };
 
-                chatRoom.Messages.Add(message);
-                chatRoom.LastMessageAt = DateTime.Now;
+                    chatRoom.Messages.Add(message);
+                    chatRoom.LastMessageAt = DateTime.Now;
 
-                var success = await _context.SaveChangesAsync() > 0;
+                    var success = await _context.SaveChangesAsync() > 0;
 
-                if (success)
-                    return _mapper.Map<ChatMessageDto>(message);
+                    if (success)
+                        return _mapper.Map<ChatMessageDto>(message);
 
-                throw new Exception("Problem saving changes");
+                    throw new Exception("Problem saving changes");
+                }
+                else
+                throw new RestException(HttpStatusCode.NotFound, new { User = "Permission denied" });
+               
             }
         }
     }

@@ -1,4 +1,5 @@
 import { IActivity, IAttendee } from "../../models/activity";
+import { IMessage } from "../../models/message";
 import { IUser } from "../../models/user";
 
 export const combineDateAndTime = (date: Date, time: Date) => {
@@ -22,6 +23,11 @@ export const setActivityProps = (activity: IActivity, user:IUser) =>{
     return activity;
 } 
 
+export const setMessageProps = (message: IMessage, user: IUser) =>{
+    message.createdAt = new Date(message.createdAt);
+    message.isSender = message.username === user.userName;
+    return message;
+}
 
 export const createAttendee = ( user: IUser): IAttendee => {
     return {

@@ -8,6 +8,7 @@ import BlogPageHeader from './BlogPageHeader';
 import BlogPageDesc from './BlogPageDesc';
 import BlogMoreFromUser from './BlogMoreFromUser';
 import BlogMoreFromThisCategory from './BlogMoreFromThisCategory';
+import Footer from '../home/Footer';
 
 
 const center = {
@@ -31,6 +32,7 @@ debugger;
     if(loadingPost) return <LoadingComponent content='Loading blog...'/>  
 
     return (
+     <> 
       <Grid>
           <Grid.Column>
             <BlogPageHeader blog={post!} />
@@ -39,6 +41,8 @@ debugger;
             <BlogMoreFromThisCategory blog={post!} />
           </Grid.Column>
       </Grid>
+                       {/* <Footer /> */}
+                       </>
     )
 }
 

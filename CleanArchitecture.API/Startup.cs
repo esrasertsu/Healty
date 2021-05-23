@@ -111,7 +111,7 @@ namespace CleanArchitecture.API
                         {
                             var accessToken = context.Request.Query["access_token"];
                             var path = context.HttpContext.Request.Path;
-                            if(!string.IsNullOrEmpty(accessToken) && ((path.StartsWithSegments("/chat")) || (path.StartsWithSegments("/messages"))))
+                            if(!string.IsNullOrEmpty(accessToken) && ((path.StartsWithSegments("/chat")) || (path.StartsWithSegments("/message"))))
                             {
                                 context.Token = accessToken;
                             }
@@ -152,7 +152,7 @@ namespace CleanArchitecture.API
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/chat");
-                endpoints.MapHub<MessagesHub>("/messages");
+                endpoints.MapHub<MessagesHub>("/message");
 
             });
         }

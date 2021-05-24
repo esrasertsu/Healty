@@ -63,9 +63,6 @@ const MessageChat: React.FC = () => {
              >
                  <Loader active={loadingNext}/>
                  {
-                     messagesByDate.length===0 ? 
-                    <div className="emptyMessageBox"><h3>Mesajlaşmaya başlamak için birini seçin...</h3></div>
-                    :
                     <div
                     onScroll={handleScroll}
                     ref={scrollRef}
@@ -87,7 +84,8 @@ const MessageChat: React.FC = () => {
                    useWindow={false}
                    target="scrollableDiv"
                  >
-                   {messagesByDate.map(([group, messages]) =>(
+                   {
+                   messagesByDate.map(([group, messages]) =>(
                    <div key={group}>
                        <div className="chatLabels">
                            <Label size='tiny' style={{marginTop:"10px"}}>

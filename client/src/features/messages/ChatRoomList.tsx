@@ -10,7 +10,7 @@ import Scrollbars from 'react-custom-scrollbars';
 const ChatRoomList: React.FC = () => {
 
     const rootStore = useContext(RootStoreContext);
-    const {loadingChatRooms, chatRooms,chatRoomId,setChatRoomId,hubConnection,setHubConnectionNull,setPrevChatRoomId } = rootStore.messageStore;
+    const {loadingChatRooms, chatRooms,chatRoomId,setChatRoomId } = rootStore.messageStore;
     const [activeChatRoomIndex, setActiveChatRoomIndex] = useState<string|null>(null)
 
     useEffect(() => {
@@ -21,7 +21,6 @@ const ChatRoomList: React.FC = () => {
     })
 
     const handleChatRoomClick = (e:any, id:any) => {
-          setPrevChatRoomId(chatRoomId);
           setChatRoomId(id);
           setActiveChatRoomIndex(id);
     }

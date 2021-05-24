@@ -22,16 +22,16 @@ export default class MessageStore {
                 if(this.chatRoomId !== null)
                 {
                     this.setPage(0);
-                    this.messageRegistery.clear();
-                    this.hubConnection !== null ? this.stopHubConnection(this.chatRoomId!) : this.createHubConnection(this.chatRoomId!);;
-               
+                    this.rootStore.userStore.hubConnection === null ? 
+                    this.rootStore.userStore.createHubConnection().then(()=>{this.loadMessages(this.chatRoomId!)})
+                    : 
+                    this.loadMessages(this.chatRoomId!);
                 }
                 }
         )
        
     }
 
-    @observable.ref hubConnection : HubConnection | null = null;
 
     @observable message: IMessage | null = null;
     @observable loadingMessages : boolean = false;
@@ -52,86 +52,83 @@ export default class MessageStore {
     @action setPage = (page:number) =>{
         this.page = page;
     }
-    @action setHubConnectionNull = () =>{
-        this.hubConnection = null;
-    }
     @action setChatRoomId = (id:string|null) =>{
         this.chatRoomId = id;
     }
-    @action setPrevChatRoomId = (id:string | null) =>{
-        this.prevChatRoomId = id;
-    }
-    @action createHubConnection = (chatRoomId: string) => {
-        debugger;
-        this.hubConnection = new HubConnectionBuilder()
-        .withUrl('http://localhost:5000/message',{
-            accessTokenFactory: () => this.rootStore.commonStore.token!
-        })
-            .configureLogging(LogLevel.Information)
-            .build();
+    // @action setPrevChatRoomId = (id:string | null) =>{
+    //     this.prevChatRoomId = id;
+    // }
+    // @action createHubConnection = (chatRoomId: string) => {
+    //     debugger;
+    //     this.hubConnection = new HubConnectionBuilder()
+    //     .withUrl('http://localhost:5000/message',{
+    //         accessTokenFactory: () => this.rootStore.commonStore.token!
+    //     })
+    //         .configureLogging(LogLevel.Information)
+    //         .build();
 
-        this.hubConnection
-        .start()
-        .then(() => console.log(this.hubConnection!.state))
-        .then(() => {
-            if(this.hubConnection!.state === 'Connected')
-            {
-                this.hubConnection!.invoke('AddToChat', chatRoomId);
-            }
-        }).then(() => {
-            if(this.hubConnection!.state === 'Connected')
-            {
-                this.setPage(0);
-                this.loadMessages(chatRoomId);
-            }
-        })
-        .catch(error => 
-            console.log('Error establishing connection:', error));
-
-
-        this.hubConnection.on('ReceiveMessage', message => {
-            runInAction(() => {
-                debugger;
-                message.createdAt= new Date();
-                this.messageRegistery.set(message.id, message);
-                const crIndex = this.chatRooms!.findIndex(x => x.id === this.chatRoomId);
-                this.chatRooms![crIndex].lastMessage = message.body;
-            })
-        })
-
-        this.hubConnection.on('Send', message => {
-            toast.info(message);
-        })
-    };
+    //     this.hubConnection
+    //     .start()
+    //     .then(() => console.log(this.hubConnection!.state))
+    //     .then(() => {
+    //         if(this.hubConnection!.state === 'Connected')
+    //         {
+    //             this.hubConnection!.invoke('AddToChat', chatRoomId);
+    //         }
+    //     }).then(() => {
+    //         if(this.hubConnection!.state === 'Connected')
+    //         {
+    //             this.setPage(0);
+    //             this.loadMessages(chatRoomId);
+    //         }
+    //     })
+    //     .catch(error => 
+    //         console.log('Error establishing connection:', error));
 
 
-    @action stopHubConnection = (nextConnection:string|null) => {
-        let crId = null;
-        debugger;
-        if(nextConnection != null)
-        {
-            crId =  this.prevChatRoomId;
-        }else {
-            crId = this.chatRoomId;
-        }
-        this.hubConnection!.invoke('RemoveFromChat', crId)
-        .then(() => {
-            debugger;
-            this.hubConnection!.stop();
-        })
-        .then(() => {
-            debugger;
-            console.log('Connection stopped');
-            nextConnection && this.createHubConnection(nextConnection)})
-        .catch(err => console.log(err))
-    }
+    //     this.hubConnection.on('ReceiveMessage', message => {
+    //         runInAction(() => {
+    //             debugger;
+    //             message.createdAt= new Date();
+    //             this.messageRegistery.set(message.id, message);
+    //             const crIndex = this.chatRooms!.findIndex(x => x.id === this.chatRoomId);
+    //             this.chatRooms![crIndex].lastMessage = message.body;
+    //         })
+    //     })
+
+    //     this.hubConnection.on('Send', message => {
+    //         toast.info(message);
+    //     })
+    // };
+
+
+    // @action stopHubConnection = (nextConnection:string|null) => {
+    //     let crId = null;
+    //     debugger;
+    //     if(nextConnection != null)
+    //     {
+    //         crId =  this.prevChatRoomId;
+    //     }else {
+    //         crId = this.chatRoomId;
+    //     }
+    //     this.hubConnection!.invoke('RemoveFromChat', crId)
+    //     .then(() => {
+    //         debugger;
+    //         this.hubConnection!.stop();
+    //     })
+    //     .then(() => {
+    //         debugger;
+    //         console.log('Connection stopped');
+    //         nextConnection && this.createHubConnection(nextConnection)})
+    //     .catch(err => console.log(err))
+    // }
 
 
     @action addComment = async (values: any) => {
         debugger;
         values.chatRoomId = this.chatRoomId;
         try {
-            await this.hubConnection!.invoke("SendMessage", values);
+            await this.rootStore.userStore.hubConnection!.invoke("SendMessage", values);
         } catch (error) {
             console.log(error);
         }
@@ -152,7 +149,11 @@ export default class MessageStore {
             runInAction('Loading chat rooms',() => {
                 
                 this.chatRooms = chatRooms;
-                this.loadingChatRooms = false
+                this.loadingChatRooms = false;
+                debugger;
+                chatRooms.forEach((chatRoom) =>{
+                    this.messageRegistery.set(chatRoom.id, null);
+                });
             })
             } catch (error) {
                 console.log(error);
@@ -167,7 +168,11 @@ export default class MessageStore {
         debugger;
         // return this.activities.sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
       //  return Array.from(this.activityRegistery.values()).sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
-          return this.groupMessagesByDate(Array.from(this.messageRegistery.values()));
+          return this.groupMessagesByDate(
+              Array.from(
+                  this.messageRegistery.get(this.chatRoomId) !== null && 
+                  this.messageRegistery.get(this.chatRoomId)!
+                  ));
      }
  
      groupMessagesByDate(messages: IMessage[]){
@@ -193,8 +198,9 @@ export default class MessageStore {
                 runInAction('Loading messages',() => {
                     messages.forEach((message) =>{
                         setMessageProps(message,this.rootStore.userStore.user!)
-                        this.messageRegistery.set(message.id, message);
                     });
+                    this.messageRegistery.delete(id);
+                    this.messageRegistery.set(id, messages);
                     this.messageCount = messageCount;
                     this.loadingMessages = false
                 })

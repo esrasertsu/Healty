@@ -26,7 +26,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
 
   const rootStore = useContext(RootStoreContext);
   const {setAppLoaded, token, appLoaded,setActiveMenu } = rootStore.commonStore;
-  const { getUser } = rootStore.userStore;
+  const { getUser,user,createHubConnection,hubConnection } = rootStore.userStore;
 
 
   // useEffect(() => {
@@ -47,6 +47,9 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   },[getUser, setAppLoaded, token])
 
   if(!appLoaded) return <LoadingComponent content='Loading app...' />
+
+  if(appLoaded && user!==null && hubConnection === null)
+    createHubConnection();
 
     return (
        <Fragment>

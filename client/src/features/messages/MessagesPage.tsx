@@ -11,7 +11,7 @@ import Scrollbars from 'react-custom-scrollbars';
 const MessagesPage: React.FC = () => {
 
     const rootStore = useContext(RootStoreContext);
-    const { loadingChatRooms, loadChatRooms , chatRoomId} = rootStore.messageStore;
+    const { loadingChatRooms, loadChatRooms , chatRoomId, setChatRoomId} = rootStore.messageStore;
     const { hubConnection,createHubConnection} = rootStore.userStore;
 
     useEffect(() => {
@@ -20,6 +20,9 @@ const MessagesPage: React.FC = () => {
         loadChatRooms()
          }): 
          loadChatRooms()
+         return () => {
+            setChatRoomId(null);
+        }
     }, [loadChatRooms]) // sadece 1 kere çalışcak, koymazsak her component render olduğunda
 
     if(loadingChatRooms) return <LoadingComponent content='Loading messages...'/>  

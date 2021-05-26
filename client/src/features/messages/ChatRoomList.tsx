@@ -1,12 +1,14 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react';
-import { Grid, Image, List, Segment } from 'semantic-ui-react';
+import { Grid, Icon, Image, List, Popup, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import { format } from 'date-fns';
 import Scrollbars from 'react-custom-scrollbars';
 
-
+const styles = {
+  color:"#000"
+}
 const ChatRoomList: React.FC = () => {
 
     const rootStore = useContext(RootStoreContext);
@@ -38,7 +40,8 @@ const ChatRoomList: React.FC = () => {
                 <List selection divided verticalAlign='middle'>
             {chatRooms!.map((room)=>(
               <List.Item
-              key={room.id} 
+              key={room.id}
+              style={room.unReadMessageCount>0 ? styles : null}
               className="messagePage_listItem"
               active={activeChatRoomIndex===room.id}
               onClick={(e) => handleChatRoomClick(e,room.id)}
@@ -47,7 +50,21 @@ const ChatRoomList: React.FC = () => {
                 <span>{format(new Date(room.lastMessageDate), 'eeee do MMMM')}</span>
               </List.Content>
               <List.Content floated='left' className="messagePage_listItem_Content">
-              <Image avatar className="messagePage_listItem_image" src={room.userImage  || '/assets/user.png'} />
+              <Popup
+              header={room.unReadMessageCount +" okunmamış mesaj"}
+              className="popup"
+              position="left center"
+              trigger={
+                <Image
+                  size="mini"
+                  circular
+                  avatar
+                  src={room.userImage  || '/assets/user.png'}
+                  bordered = {room.unReadMessageCount === 0 ? true : false}
+                  className="messagePage_listItem_image"
+                />
+              }
+            />
               <List.Content>
                 <List.Header>{room.userName}</List.Header>
                 <span>{room.lastMessage.length > 50 ? room.lastMessage.substring(0, 50) + "..." : room.lastMessage}</span>

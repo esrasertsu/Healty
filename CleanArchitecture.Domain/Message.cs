@@ -8,6 +8,7 @@ namespace CleanArchitecture.Domain
     {
         public Guid Id { get; set; }
         public string Body { get; set; }
+        public bool Seen { get; set; }
         public string SenderId { get; set; }
         public virtual AppUser Sender { get; set; }
         public Guid ChatRoomId { get; set; }

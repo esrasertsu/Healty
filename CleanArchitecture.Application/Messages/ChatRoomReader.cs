@@ -38,10 +38,12 @@ namespace CleanArchitecture.Application.Messages
             var chatRoomDto = new ChatRoomDto
             {
                 Id = chatRoomId,
+                DisplayName = user.AppUser.DisplayName,
                 UserName = user.AppUser.UserName,
                 UserImage = user.AppUser.Photos.FirstOrDefault(x => x.IsMain)?.Url,
                 LastMessage = chatRoom.Messages.LastOrDefault().Body,
-                LastMessageDate = chatRoom.LastMessageAt
+                LastMessageDate = chatRoom.LastMessageAt,
+                UnReadMessageCount = chatRoom.Messages.Where(x => x.Seen == false && x.SenderId != currentUser.Id).Count()
             };
 
             return chatRoomDto;

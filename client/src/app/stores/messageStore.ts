@@ -22,6 +22,10 @@ export default class MessageStore {
                 if(this.chatRoomId !== null)
                 {
                     this.setPage(0);
+                    if(this.messageRegistery.get(this.chatRoomId)!==null){
+                        this.messageRegistery.delete(this.chatRoomId);
+                    }
+                    this.messageRegistery.set(this.chatRoomId, null);
                     this.rootStore.userStore.hubConnection === null ? 
                     this.rootStore.userStore.createHubConnection().then(()=>{this.loadMessages(this.chatRoomId!)})
                     : 
@@ -40,6 +44,7 @@ export default class MessageStore {
     @observable chatRoomId : string | null = null;
     @observable prevChatRoomId : string | null = null;
     @observable messageRegistery = new Map();
+
     @observable messageCount = 0;
     @observable page = 0;
     @observable stoppingHubConnection:boolean = true;
@@ -181,6 +186,7 @@ export default class MessageStore {
          )
  
          return Object.entries(sortedMessages.reduce((messages, message) =>{
+             debugger;
              const date = new Date(message.createdAt).toISOString().split('T')[0];
              messages[date] = messages[date] ? [...messages[date], message]: [message];
              return messages;
@@ -190,6 +196,7 @@ export default class MessageStore {
 
     @action loadMessages = async (id:string) => {
         debugger;
+            let messageList:IMessage[] = [];
             this.chatRoomId = id;
             this.loadingMessages = true;
             try {
@@ -197,12 +204,23 @@ export default class MessageStore {
                 const {messages, messageCount } = messagesEnvelope;
                 runInAction('Loading messages',() => {
                     messages.forEach((message) =>{
-                        setMessageProps(message,this.rootStore.userStore.user!)
+                        setMessageProps(message,this.rootStore.userStore.user!);
+                        messageList.push(message);
                     });
-                    this.messageRegistery.delete(id);
-                    this.messageRegistery.set(id, messages);
+                    this.messageRegistery.get(id) !== null 
+                    ?
+                    this.messageRegistery.get(id).push(...messageList)
+                    :  
+                    this.messageRegistery.set(id,messageList)
                     this.messageCount = messageCount;
-                    this.loadingMessages = false
+                    this.loadingMessages = false;
+                    const crIndex = this.chatRooms!.findIndex(x => x.id === id);
+                    this.rootStore.userStore.notificationCount > 0 &&
+                    this.rootStore.userStore.setNotificationCount(
+                        this.rootStore.userStore.notificationCount - this.chatRooms![crIndex].unReadMessageCount 
+                    );
+                    this.chatRooms![crIndex].unReadMessageCount = 0;
+
                 })
                 } catch (error) {
                     console.log(error);

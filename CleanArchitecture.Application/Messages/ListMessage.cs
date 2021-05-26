@@ -68,6 +68,19 @@ namespace CleanArchitecture.Application.Messages
 
                 if(chatRoom.Users.Any(x => x.AppUserId == currentUser.Id))
                 {
+                    var unreadmessages = chatRoom.Messages.Where(x => x.Seen == false && x.Sender.Id != currentUser.Id).ToList();
+
+                    if(unreadmessages.Count>0)
+                    {
+                        foreach (var item in unreadmessages)
+                        {
+                            var message = await _context.Messages.FindAsync(item.Id);
+                            message.Seen = true;
+                        }
+
+                        var success = await _context.SaveChangesAsync() > 0;
+                    }
+
                     var allmessages = chatRoom.Messages.OrderByDescending(x => x.CreatedAt).ToList();
 
                     var messages = allmessages

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Menu, Container, Image, Dropdown } from 'semantic-ui-react';
+import { Menu, Container, Image, Dropdown, Label, Icon } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
@@ -10,7 +10,8 @@ const NavBar: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
     const { user, logout} = rootStore.userStore;
     const { activeMenu,setActiveMenu } = rootStore.commonStore;
-   
+    const { notificationCount } = rootStore.userStore;
+
     const fixed = "top";
     return (
       <>
@@ -74,14 +75,17 @@ const NavBar: React.FC = () => {
                     to={`/profile/${user.userName}`}
                     text="Profil"
                     icon="user"
-                  />
+                  ></Dropdown.Item>
                   <Dropdown.Item
                     key="mesaj"
                     as={Link}
                     to={`/messages`}
-                    text="Mesajlar"
-                    icon="mail"
-                  />
+                  >  <Icon name='mail' />
+                       Mesajlar
+                    <Label style={{margin:"0 0 0 10px"}} color='teal'>
+                    {notificationCount}
+                    </Label>
+                  </Dropdown.Item>
                   <Dropdown.Item text="Logout" onClick={logout} icon="power" />
                 </Dropdown.Menu>
               </Dropdown>

@@ -14,8 +14,13 @@
 
 body {
   background-color: #fff !important;
-  font-family: AssistantRegular, Arial, Helvetica, sans-serif;
+  font-family: AssistantRegular, Arial, Helvetica, sans-serif
   
+}
+.popup{
+  font-family: AssistantRegular, Arial, Helvetica, sans-serif  !important;
+  color: black !important;
+  font-size: smaller !important
 }
 .a {
   color: #263a5e 
@@ -827,8 +832,10 @@ i.search.inverted.icon {
   width: 50px !important;
   height: auto !important;
   font-size: .78571429rem;
-  margin-right: 10px !important
+  margin-right: 10px !important;
+  border: 2px solid #c77931 ;
 }
+
 .messagePage_listItem_Content{
   display: flex;
   align-items: center;

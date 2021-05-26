@@ -9,7 +9,8 @@ export interface IChatRoom{
     userImage: string,
     lastMessageDate: Date,
     lastMessage: string,
-    messages: IMessage[]
+    messages: IMessage[],
+    unReadMessageCount: number
 }
 
 export interface IMessage{
@@ -20,7 +21,8 @@ export interface IMessage{
     createdAt: Date,
     displayName :string,
     image :string,
-    isSender:boolean
+    isSender:boolean,
+    seen: boolean
 
 }
 

@@ -59,7 +59,8 @@ namespace CleanArchitecture.Application.Messages
                         Sender = currentUser,
                         ChatRoom = chatRoom,
                         Body = request.Body,
-                        CreatedAt = DateTime.Now
+                        CreatedAt = DateTime.Now,
+                        Seen = false
                     };
 
                     chatRoom.Messages.Add(message);

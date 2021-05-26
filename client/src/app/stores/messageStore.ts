@@ -169,6 +169,20 @@ export default class MessageStore {
     };
 
 
+    @action seenMessageUpdate = async(message:IMessage) => {
+        try {
+            await agent.Messages.seenMessage(message);
+            // runInAction('Seen message', () => {
+            // });
+        } catch (error) {
+            runInAction('Seen message error', () => {
+              message.seen=false;
+            });
+            console.log(error);
+        }
+    }
+
+
     @computed get messagesByDate(){
         debugger;
         // return this.activities.sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
@@ -213,13 +227,13 @@ export default class MessageStore {
                     :  
                     this.messageRegistery.set(id,messageList)
                     this.messageCount = messageCount;
-                    this.loadingMessages = false;
                     const crIndex = this.chatRooms!.findIndex(x => x.id === id);
                     this.rootStore.userStore.notificationCount > 0 &&
                     this.rootStore.userStore.setNotificationCount(
                         this.rootStore.userStore.notificationCount - this.chatRooms![crIndex].unReadMessageCount 
                     );
                     this.chatRooms![crIndex].unReadMessageCount = 0;
+                    this.loadingMessages = false;
 
                 })
                 } catch (error) {

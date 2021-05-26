@@ -134,6 +134,7 @@ const Messages = {
     list: (): Promise<IChatRoom[]> => requests.get('/message'),
     listMessages: (chatRoomId: string,limit?:number, page?:number): Promise<IMessageEnvelope> => 
                 requests.get(`/message/chat?chatRoomId=${chatRoomId}&limit=${limit}&offset=${page ? page*limit! :0}`),
+    seenMessage: (message: IMessage) => requests.put(`/message/${message.id}`, message),
 
 }
 export default {

@@ -91,7 +91,9 @@ const Activities = {
 const User ={
     current: () : Promise<IUser> => requests.get('/user'),
     login: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/login', user),
-    register: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/register', user)
+    register: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/register', user),
+    update: (status:boolean) => requests.put(`/user?status=${status}`,{}),
+
 }
 
 const Profiles = {

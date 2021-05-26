@@ -78,7 +78,8 @@ namespace CleanArchitecture.Application.Profiles
                         Id = new Guid(),
                         CreatedAt = DateTime.Now,
                         Messages = messages,
-                        LastMessageAt = DateTime.Now
+                        LastMessageAt = DateTime.Now,
+                        StarterId = message.SenderId
                     };
                     _context.ChatRooms.Add(newchatRoom);
 

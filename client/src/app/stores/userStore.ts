@@ -17,6 +17,7 @@ export default class UserStore {
     @observable.ref hubConnection : HubConnection | null = null;
     
     @observable initialMessages: IMessage[]  = [];
+    @observable onlineUsers: String[]  = [];
 
     @observable notificationCount: number = 0;
     @computed get isLoggedIn() {return !!this.user}
@@ -30,6 +31,17 @@ export default class UserStore {
         this.notificationCount = count;
     }
 
+    @action setUserOffline = (username:string) =>{
+        debugger;
+        var index = this.onlineUsers.indexOf(username);
+                if (index > -1) {
+                    this.onlineUsers.splice(index, 1);
+                }
+    }
+
+    @action setUserOnline = (username:string) =>{
+        this.onlineUsers.push(username);
+    }
     @action login = async (values : IUserFormValues) =>{
         try {
             const user = await agent.User.login(values);
@@ -71,6 +83,7 @@ export default class UserStore {
         .then(async() => {
             if(this.hubConnection!.state === 'Connected')
             {
+                await agent.User.update(true);
                 this.rootStore.messageStore.loadChatRooms().then(() => {
                     let count = 0; 
                     debugger;
@@ -114,8 +127,16 @@ export default class UserStore {
                 })
             })
     
-            this.hubConnection.on('Send', message => {
-                toast.info(message);
+            this.hubConnection.on('Online', user => {
+                runInAction(async() => {
+                    this.setUserOnline(user);
+                })
+            })
+
+            this.hubConnection.on('Offline', user => {
+                runInAction(async() => {
+                    this.setUserOffline(user);
+                })
             })
     }
 
@@ -131,8 +152,12 @@ export default class UserStore {
             debugger;
             this.hubConnection!.stop();
         })
-        .then(() => {
+        .then(async() => {
             debugger;
+            await agent.User.update(false);
+            runInAction(async() => {
+                this.setUserOffline(this.user!.userName);
+            })
             console.log('Connection stopped');
         })
         .catch(err => console.log(err))
@@ -150,19 +175,20 @@ export default class UserStore {
         }
     }
 
-    @action logout = () => {
-        this.rootStore.commonStore.setToken(null);
-        if(this.rootStore.messageStore.chatRoomId!== null)
-        {
-            this.stopHubConnection();
-            this.setHubConnectionNull();
-            this.rootStore.messageStore.setPage(0);
-            this.rootStore.messageStore.messageRegistery.clear();
-            this.initialMessages = [];
-            this.rootStore.messageStore.setChatRoomId(null);
-        }
+    @action logout = async () => {
        
-        this.user = null;
-        history.push('/');
+            await this.stopHubConnection();
+            runInAction(()=>{
+                this.setHubConnectionNull();
+                this.rootStore.messageStore.setPage(0);
+                this.rootStore.messageStore.messageRegistery.clear();
+                this.initialMessages = [];
+                this.rootStore.messageStore.setChatRoomId(null);
+            
+            this.rootStore.commonStore.setToken(null);
+            this.user = null;
+            history.push('/');
+            })
+          
     }
 }

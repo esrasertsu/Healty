@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Application.Messages;
+using CleanArchitecture.Application.User;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using System;
@@ -39,7 +40,7 @@ namespace CleanArchitecture.API.SignalR
 
             var username = GetUserName();
 
-            await Clients.Group(groupName).SendAsync("Send", $"{username} has joined the group");
+            await Clients.Group(groupName).SendAsync("Online", username);
         }
 
         public async Task RemoveFromChat(string groupName)
@@ -48,7 +49,7 @@ namespace CleanArchitecture.API.SignalR
 
             var username = GetUserName();
 
-            await Clients.Group(groupName).SendAsync("Send", $"{username} has left the group");
+            await Clients.Group(groupName).SendAsync("Offline", username);
         }
     }
 }

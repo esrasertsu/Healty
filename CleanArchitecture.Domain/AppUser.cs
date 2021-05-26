@@ -8,6 +8,7 @@ namespace CleanArchitecture.Domain
         public string DisplayName { get; set; }
         public Role Role { get; set; }
         public string Bio { get; set; }
+        public bool IsOnline { get; set; }
         public virtual ICollection<UserActivity> UserActivities { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
         public virtual ICollection<UserFollowing> Followings { get; set; }

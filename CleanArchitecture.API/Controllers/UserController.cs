@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CleanArchitecture.Application.User;
 using CleanArchitecture.Domain;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,13 @@ namespace CleanArchitecture.API.Controllers
         public async Task<ActionResult<User>> CurrentUser()
         {
             return await Mediator.Send(new CurrentUser.Query());
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<Unit>> Update(bool status)
+        {
+            UpdateStatus.Command command = new UpdateStatus.Command{ Status = status };
+            return await Mediator.Send(command);
         }
     }
 }

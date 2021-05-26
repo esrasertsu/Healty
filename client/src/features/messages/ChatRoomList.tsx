@@ -14,7 +14,7 @@ const ChatRoomList: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
     const {loadingChatRooms, chatRooms,chatRoomId,setChatRoomId } = rootStore.messageStore;
     const [activeChatRoomIndex, setActiveChatRoomIndex] = useState<string|null>(null)
-
+    const {onlineUsers} = rootStore.userStore;
     useEffect(() => {
       setActiveChatRoomIndex(chatRoomId);
       return () => {
@@ -55,7 +55,7 @@ const ChatRoomList: React.FC = () => {
               className="popup"
               position="left center"
               trigger={
-                <Image
+               <> <Image
                   size="mini"
                   circular
                   avatar
@@ -63,6 +63,8 @@ const ChatRoomList: React.FC = () => {
                   bordered = {room.unReadMessageCount === 0 ? true : false}
                   className="messagePage_listItem_image"
                 />
+                <Icon name="circle" color={onlineUsers.indexOf(room.userName) > -1 ? "green": "grey"} />
+                </>
               }
             />
               <List.Content>

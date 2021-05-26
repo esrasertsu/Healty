@@ -4,6 +4,7 @@ export interface IUser {
     token: string;
     image?: string;
     role: string;
+    isOnline: boolean;
 }
 
 export interface IUserFormValues {

@@ -22,8 +22,8 @@ namespace CleanArchitecture.Application.Profiles
         public int StarCount { get; set; }
         public int Star { get; set; }
         public bool HasConversation { get; set; }
-        public List<string> convIds { get; set; }
-
+        public bool IsOnline { get; set; }
+        public int ResponseRate { get; set; }
 
     }
 }

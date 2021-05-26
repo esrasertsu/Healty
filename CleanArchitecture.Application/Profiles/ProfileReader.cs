@@ -44,6 +44,8 @@ namespace CleanArchitecture.Application.Profiles
                 FollowingCount = user.Followings.Count(),
                 StarCount = GetStarCount(user),
                 Star = CalculateStar(user),
+                IsOnline = user.IsOnline,
+                ResponseRate = CalculateResponseRate(user)
             };
 
             if (currentUser.Followings.Any(x => x.TargetId == user.Id))
@@ -78,6 +80,14 @@ namespace CleanArchitecture.Application.Profiles
         private int CalculateStar(AppUser user)
         {
             return Convert.ToInt32(user.ReceivedComments.Count() > 0 ? user.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Average() : 0);
+        }
+        private int CalculateResponseRate(AppUser user)
+        {
+           var receivedFirstMessagesCount = user.ChatRooms.Where(x => x.ChatRoom.StarterId != user.Id).DefaultIfEmpty().Count();
+           var respondedMessagesCount = user.ChatRooms.Where(x => x.ChatRoom.Messages.Any(x => x.SenderId == user.Id)).DefaultIfEmpty().Count();
+
+           var rate = Convert.ToInt32(100 * respondedMessagesCount / receivedFirstMessagesCount);
+            return rate;
         }
     }
 }

@@ -1,5 +1,5 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react';
-import { Button, Container, Form, Grid, Item, Label, Loader, Segment } from 'semantic-ui-react';
+import { Button, Container, Form, Grid, Icon, Item, Label, Loader, Popup, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
@@ -99,7 +99,19 @@ const MessageChat: React.FC = () => {
                                <Item.Content className={message.username === user!.userName ? "currentUserMessage_content": "otherUserMessage_content" } verticalAlign='middle'>
                                    {message.body}
                                    <Item.Extra>
-                              <div>{format(message.createdAt, 'h:mm a')}</div>
+                              <div>{format(message.createdAt, 'h:mm a') + " "}
+                              {
+                                  message.username === user!.userName &&
+                                  message.seen && 
+                                  <Popup
+                                    header={"Okundu"}
+                                    className="popup"
+                                    position="right center"
+                                    trigger={
+                                        <Icon name="eye"></Icon>
+                                    } />
+                              }   
+                              </div>
    
                               </Item.Extra>
                               </Item.Content>

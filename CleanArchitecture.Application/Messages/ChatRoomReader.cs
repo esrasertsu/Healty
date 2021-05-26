@@ -43,7 +43,9 @@ namespace CleanArchitecture.Application.Messages
                 UserImage = user.AppUser.Photos.FirstOrDefault(x => x.IsMain)?.Url,
                 LastMessage = chatRoom.Messages.LastOrDefault().Body,
                 LastMessageDate = chatRoom.LastMessageAt,
-                UnReadMessageCount = chatRoom.Messages.Where(x => x.Seen == false && x.SenderId != currentUser.Id).Count()
+                UnReadMessageCount = chatRoom.Messages.Where(x => x.Seen == false && x.SenderId != currentUser.Id).Count(),
+                StarterId= chatRoom.StarterId,
+                UserStatus = user.AppUser.IsOnline
             };
 
             return chatRoomDto;

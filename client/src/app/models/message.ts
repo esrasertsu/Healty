@@ -10,7 +10,8 @@ export interface IChatRoom{
     lastMessageDate: Date,
     lastMessage: string,
     messages: IMessage[],
-    unReadMessageCount: number
+    unReadMessageCount: number,
+    userStatus: boolean
 }
 
 export interface IMessage{

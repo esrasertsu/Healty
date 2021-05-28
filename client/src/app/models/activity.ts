@@ -1,3 +1,6 @@
+import { ICategory, ISubCategory } from "./category";
+import { IPhoto } from "./profile";
+
 export interface IActivitiesEnvelope {
     activities: IActivity[];
     activityCount: number;
@@ -6,7 +9,8 @@ export interface IActivity {
     id: string;
     title: string;
     description: string;
-    category: string;
+    category: ICategory;
+    subCategories: ISubCategory[];
     date: Date;
     city: string;
     venue: string;
@@ -14,6 +18,9 @@ export interface IActivity {
     isGoing:boolean;
     isHost: boolean;
     comments: IComment[];
+    online: boolean,
+    photos: IPhoto[],
+    image: string
 }
 
 export interface IComment {
@@ -31,12 +38,14 @@ export interface IActivityFormValues extends Partial<IActivity>{
 export class ActivityFormValues implements IActivityFormValues {
     id?: string = undefined;
     title: string = '';
-    category: string = '';
+    categories: string = '';
     description:string = '';
     date?: Date = undefined;
     time?: Date = undefined;
     city: string = '';
     venue:string = '';
+    level: string = '';
+    online: boolean = false;
 
     constructor(init?: IActivityFormValues){
         if(init && init.date)

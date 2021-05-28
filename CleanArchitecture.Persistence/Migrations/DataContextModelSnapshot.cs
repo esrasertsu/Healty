@@ -16,13 +16,35 @@ namespace CleanArchitecture.Persistence.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.3");
 
+            modelBuilder.Entity("CleanArchitecture.Domain.Accessibility", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("Accessibilities");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Domain.Activity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Category")
+                    b.Property<int>("AttendanceCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("CategoryId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("City")
@@ -34,6 +56,15 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Level")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Online")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
@@ -41,6 +72,8 @@ namespace CleanArchitecture.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Activities");
                 });
@@ -83,8 +116,14 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("Bio")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Certificates")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Dependency")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DisplayName")
@@ -96,6 +135,12 @@ namespace CleanArchitecture.Persistence.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Experience")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ExperienceYear")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsOnline")
                         .HasColumnType("INTEGER");
@@ -202,10 +247,15 @@ namespace CleanArchitecture.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("Categories");
                 });
@@ -265,6 +315,9 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("ActivityId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("AppUserId")
                         .HasColumnType("TEXT");
 
@@ -275,6 +328,8 @@ namespace CleanArchitecture.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
 
                     b.HasIndex("AppUserId");
 
@@ -305,6 +360,12 @@ namespace CleanArchitecture.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("ActivityId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("CategoryId")
                         .HasColumnType("TEXT");
 
@@ -312,6 +373,10 @@ namespace CleanArchitecture.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
+
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("CategoryId");
 
@@ -533,6 +598,20 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Domain.Accessibility", b =>
+                {
+                    b.HasOne("CleanArchitecture.Domain.AppUser", null)
+                        .WithMany("Accessibilities")
+                        .HasForeignKey("AppUserId");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Domain.Activity", b =>
+                {
+                    b.HasOne("CleanArchitecture.Domain.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Domain.ActivityComment", b =>
                 {
                     b.HasOne("CleanArchitecture.Domain.Activity", "Activity")
@@ -559,6 +638,13 @@ namespace CleanArchitecture.Persistence.Migrations
                         .HasForeignKey("CategoryId");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Domain.Category", b =>
+                {
+                    b.HasOne("CleanArchitecture.Domain.AppUser", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("AppUserId");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Domain.Message", b =>
                 {
                     b.HasOne("CleanArchitecture.Domain.ChatRoom", "ChatRoom")
@@ -574,6 +660,10 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.Photo", b =>
                 {
+                    b.HasOne("CleanArchitecture.Domain.Activity", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("ActivityId");
+
                     b.HasOne("CleanArchitecture.Domain.AppUser", null)
                         .WithMany("Photos")
                         .HasForeignKey("AppUserId");
@@ -596,6 +686,14 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.SubCategory", b =>
                 {
+                    b.HasOne("CleanArchitecture.Domain.Activity", null)
+                        .WithMany("SubCategories")
+                        .HasForeignKey("ActivityId");
+
+                    b.HasOne("CleanArchitecture.Domain.AppUser", null)
+                        .WithMany("SubCategories")
+                        .HasForeignKey("AppUserId");
+
                     b.HasOne("CleanArchitecture.Domain.Category", "Category")
                         .WithMany("SubCategories")
                         .HasForeignKey("CategoryId");

@@ -1,4 +1,6 @@
-﻿using CleanArchitecture.Application.Errors;
+﻿using AutoMapper;
+using CleanArchitecture.Application.Categories;
+using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
@@ -16,11 +18,14 @@ namespace CleanArchitecture.Application.Profiles
     {
         private readonly DataContext _context;
         private readonly IUserAccessor _userAccessor;
+        private readonly IMapper _mapper;
 
-        public ProfileReader(DataContext context, IUserAccessor userAccessor)
+
+        public ProfileReader(DataContext context, IUserAccessor userAccessor, IMapper mapper)
         {
             _context = context;
             _userAccessor = userAccessor;
+            _mapper = mapper;
         }
 
         public async Task<Profile> ReadProfile(string username)
@@ -45,7 +50,10 @@ namespace CleanArchitecture.Application.Profiles
                 StarCount = GetStarCount(user),
                 Star = CalculateStar(user),
                 IsOnline = user.IsOnline,
-                ResponseRate = CalculateResponseRate(user)
+                ResponseRate = CalculateResponseRate(user),
+                Accessibilities = user.Accessibilities,
+                Categories= _mapper.Map<ICollection<Category>, ICollection<CategoryDto>>(user.Categories),
+                SubCategories = _mapper.Map<ICollection<SubCategory>, ICollection<SubCategoryDto>>(user.SubCategories),
             };
 
             if (currentUser.Followings.Any(x => x.TargetId == user.Id))
@@ -66,9 +74,6 @@ namespace CleanArchitecture.Application.Profiles
                 {
                     profile.HasConversation = true;
                 }
-
-            
-         
 
             return profile;
         }

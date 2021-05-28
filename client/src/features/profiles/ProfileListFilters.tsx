@@ -66,13 +66,13 @@ const ProfileListFilters: React.FC = () => {
                   onChange={(e: any,data: any)=>handleSubCategoryChanged(e,data)}
                 > 
               </Field>
-                  {/* <Field
-                  name="online"
-                  placeholder="Tecrübe"
+                   <Field
+                  name="gender"
+                  placeholder="Cinsiyet"
                //   value={activity.category}
                   component={SelectInput}
                   options={category}
-                /> */}
+                /> 
 	            	<Field
                   name="city"
                   placeholder="Şehir"

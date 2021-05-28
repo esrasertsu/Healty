@@ -2,6 +2,7 @@
 using CleanArchitecture.Persistence;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Net;
 using System.Threading;
@@ -16,7 +17,7 @@ namespace CleanArchitecture.Application.Activities
             public Guid Id { get; set; }
             public string Title { get; set; }
             public string Description { get; set; }
-            public string Category { get; set; }
+            public Guid Category { get; set; }
             public DateTime? Date { get; set; }
             public string City { get; set; }
             public string Venue { get; set; }
@@ -53,9 +54,15 @@ namespace CleanArchitecture.Application.Activities
                 if (activity == null)
                     throw new RestException(HttpStatusCode.NotFound, new { activity = "Not Found" });
 
+                if (request.Category != null)
+                {
+                    var category = await _context.Categories.SingleOrDefaultAsync(x => x.Id == request.Category);
+                    activity.Category = category ?? activity.Category;
+                }
+
+
                 activity.Title = request.Title ?? activity.Title;
                 activity.Description = request.Description ?? activity.Description;
-                activity.Category = request.Category ?? activity.Category;
                 activity.Date = request.Date ?? activity.Date;
                 activity.City = request.City ?? activity.City;
                 activity.Venue = request.Venue ?? activity.Venue;

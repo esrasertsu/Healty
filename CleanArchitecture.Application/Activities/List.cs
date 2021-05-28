@@ -74,7 +74,7 @@ namespace CleanArchitecture.Application.Activities
 
                 var activities = await queryable
                     .Skip(request.Offset ?? 0)
-                    .Take(request.Limit ?? 3).ToListAsync();
+                    .Take(request.Limit ?? 10).ToListAsync();
 
                 return new ActivitiesEnvelope
                 {

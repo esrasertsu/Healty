@@ -8,7 +8,7 @@ import { createAttendee, setActivityProps } from '../common/util/util';
 import { IActivity, IActivityMapItem } from '../models/activity';
 import { RootStore } from './rootStore';
 
-const LIMIT = 3;
+const LIMIT = 10;
 export default class ActivityStore {
 
     rootStore:RootStore;

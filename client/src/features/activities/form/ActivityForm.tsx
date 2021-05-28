@@ -99,24 +99,24 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                 <Field
                   name="category"
                   placeholder="Category"
-                  value={activity.category}
+                  value={activity.categories}
                   component={SelectInput}
                   options={category}
                 />
                  <Field
                   name="abc"
                   placeholder="Level"
-                  value={activity.category}
+                  value={activity.level}
                   component={SelectInput}
                   options={category}
                 />
-                  <Field
+                  {/* <Field
                   name="online"
                   placeholder="Online"
-                  value={activity.category}
+                  value={activity.online}
                   component={SelectInput}
                   options={category}
-                />
+                /> */}
                 <Form.Group widths="equal">
                   <Field
                     name="date"

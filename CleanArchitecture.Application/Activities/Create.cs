@@ -17,7 +17,7 @@ namespace CleanArchitecture.Application.Activities
             public Guid Id { get; set; }
             public string Title { get; set; }
             public string Description { get; set; }
-            public string Category { get; set; }
+            public Guid Category { get; set; }
             public DateTime Date { get; set; }
             public string City { get; set; }
             public string Venue { get; set; }
@@ -50,12 +50,14 @@ namespace CleanArchitecture.Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
+                var category = await _context.Categories.SingleOrDefaultAsync(x => x.Id == request.Category);
+
                 var activity = new Activity
                 {
                     Id = request.Id,
                     Title = request.Title,
                     Description = request.Description,
-                    Category = request.Category,
+                    Category = category,
                     Date = request.Date,
                     City = request.City,
                     Venue = request.Venue

@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Domain;
+﻿using CleanArchitecture.Application.Categories;
+using CleanArchitecture.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +14,13 @@ namespace CleanArchitecture.Application.Profiles
         public string Image { get; set; }
         public string Bio { get; set; }
         public string Role { get; set; }
+        public decimal ExperienceYear { get; set; }
+        public string Experience { get; set; }
+        public string Certificates { get; set; }
+        public string Dependency { get; set; }//şirket , freelance vs
+        public ICollection<Accessibility> Accessibilities { get; set; }
+        public ICollection<CategoryDto> Categories { get; set; }
+        public ICollection<SubCategoryDto> SubCategories { get; set; }
 
         [JsonPropertyName("isFollowing")]
         public bool IsFollowed { get; set; }

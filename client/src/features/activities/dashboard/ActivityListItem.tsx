@@ -7,8 +7,18 @@ import {ActivityListItemAttendees } from './ActivityListItemAttendees';
 import { history } from '../../../index'
 import { StarRating } from '../../../app/common/form/StarRating';
 
+const colors = [
+    { key:"Psikoloji", value: "#c38a8a"},
+    { key:"Meditasyon", value: "#e0c022" },
+    { key:"Spor", value: "#3f609c"},
+    { key:"Diyet", value: "#3a7949"}
+
+  ];
+
 export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
     const host = activity.attendees.filter(x => x.isHost === true)[0];
+    const index = colors.findIndex(x => x.key === activity.category.text);
+    const color = colors[index].value;
     return (
        
         <Card className="activityListItem" onClick={() => {
@@ -18,20 +28,21 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                
         <Segment.Group>
         <Label
-                    style={{ position: 'absolute', zIndex:"1", marginLeft:"13px", marginTop:"10px" }}
-                    color='orange'
+                    style={{ position: 'absolute', zIndex:"1", marginLeft:"13px", marginTop:"10px" , background:color}}
                     ribbon
                   >
-                    {activity.category}
+                    {activity.category.text}
                   </Label>
             <Segment>
             
                 <Item.Group>
                 <Item style={{ zIndex: '1' }}>
-                    <Image src={`/assets/categoryImages/${activity.category}.jpg`} 
-                    style={{height:"100% important!", width:"20%"}}/>
+                    <Item.Image size='big' style={{height:"100%", width:"25%"}} src={activity.image || '/assets/placeholder.png'} ></Item.Image>
                     <Item.Content style={{width:"60%"}}>
                         <Item.Header as={Link} to={`/activities/${activity.id}`}>{activity.title}</Item.Header>
+                        {activity.isGoing && !activity.isHost &&
+                        <Label size="small" basic color="green" content="Bu aktiviteye gidiyorsun!"></Label>
+                    }
                         {/* <Item.Description>
                             <div>{activity.description}</div>
                             <div>
@@ -41,16 +52,12 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                         <Item.Description>
                             <Item.Image size="mini" circular src={host.image || '/assets/user.png'}
                              style={{}}/>
-                             &nbsp; Hosted by <Link to={`/profile/${host.userName}`} >{host.displayName}</Link>
+                             &nbsp; Hosted by <Link to={`/profile/${host.userName}`} >{host.displayName + "  "}</Link>
+                             {activity.isHost && 
+                       <Label size="small" basic color="orange" content="Bu aktivitenin düzenleyeni sensin!"></Label>
+                        }
                             </Item.Description>
                         <Item.Meta></Item.Meta>
-                        {activity.isHost && 
-                        <Item.Description><Label size="small" basic color="orange" content="You're hosting this activity"></Label></Item.Description>
-                        }
-                    {activity.isGoing && !activity.isHost &&
-                        <Item.Description><Label size="small" basic color="green" content="You're going to this activity"></Label></Item.Description>
-                    }
-                    
                     <Item.Description>
                     {/* <Button
                             as={Link} to={`/activities/${activity.id}`}
@@ -58,7 +65,9 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                             content="İncele"
                             color="blue"
                             /> */}
-                            <Label basic size="small">{activity.category}</Label>
+                              {activity.subCategories.map((sub)=>(
+                                    <Label basic size="small">{sub.text}</Label>
+                              ))}
                         </Item.Description> 
                     </Item.Content>
                     <Item.Content className="activity_listItem_extraContent">

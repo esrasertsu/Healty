@@ -9,6 +9,8 @@ import {
 import SelectInput from "../../app/common/form/SelectInput";
 import { category } from "../../app/common/options/categoryOptions";
 import DropdownInput from '../../app/common/form/DropdownInput';
+import { ISubCategory } from '../../app/models/category';
+import DropdownMultiple from '../../app/common/form/DropdownMultiple';
 
 
 const ProfileListFilters: React.FC = () => {
@@ -37,10 +39,11 @@ const ProfileListFilters: React.FC = () => {
      setFilters({...filters,category: data});
      loadSubCategories(data);
   }
-
-  const handleSubCategoryChanged = (e: any, data: string) => {    
-         setFilters({...filters,subCategory: data});
-      }
+     
+   const handleSubCategoryChanged = (e: any, data: string[]) => {  
+    setFilters({...filters,subCategoryIds: data});
+    //setPost({...post,subCategories: data});
+   }
   return (
    
         <FinalForm
@@ -48,7 +51,7 @@ const ProfileListFilters: React.FC = () => {
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid, pristine }) => (
               <Form onSubmit={handleSubmit} loading={loading} >
-                <Form.Group style={{alignItems:"center", margin:"0px"}} stackable>
+                <Form.Group style={{alignItems:"center", margin:"0px"}} stackable ="true">
                 <Field 
                   name="category"
                   placeholder="Kategori"
@@ -58,21 +61,15 @@ const ProfileListFilters: React.FC = () => {
                   onChange={(e: any,data: any)=>handleCategoryChanged(e,data)}
                 />
                  <Field
+                 width={5}
                   name="subCategory"
                   placeholder="Alt Kategori"
-                  value={filters.subCategory}
-                  component={DropdownInput}
+                  value={filters.subCategoryIds}
+                  component={DropdownMultiple}
                   options={subcategoryList}
                   onChange={(e: any,data: any)=>handleSubCategoryChanged(e,data)}
                 > 
               </Field>
-                   <Field
-                  name="gender"
-                  placeholder="Cinsiyet"
-               //   value={activity.category}
-                  component={SelectInput}
-                  options={category}
-                /> 
 	            	<Field
                   name="city"
                   placeholder="Şehir"
@@ -82,13 +79,13 @@ const ProfileListFilters: React.FC = () => {
                 />
                 	<Field
                   name="online"
-                  placeholder="Hizmet tipi"
+                  placeholder="Erişilebilirlik"
                 //  value={activity.category}
                   component={SelectInput}
                   options={category}
                 />
-               
-                <Button
+               <div>
+               <Button
                  // loading={submitting}
                   disabled={loading || invalid || pristine}
                   floated="right"
@@ -102,12 +99,15 @@ const ProfileListFilters: React.FC = () => {
                   disabled={loading}
                   type="cancel"
                   content="Temizle"
+
                   // onClick={
                   //   activity.id
                   //     ? () => history.push(`/activities/${activity.id}`)
                   //     : () => history.push("/activities")
                   // }
                 />
+               </div>
+               
                   </Form.Group>
               </Form>
             )}

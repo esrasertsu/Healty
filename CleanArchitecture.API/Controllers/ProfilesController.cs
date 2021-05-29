@@ -53,6 +53,12 @@ namespace CleanArchitecture.API.Controllers
         {
             return await Mediator.Send(command);
         }
-       
+
+        [HttpPut]
+        public async Task<ActionResult<Unit>> Edit([FromForm] Edit.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
     }
 }

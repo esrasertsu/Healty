@@ -7,13 +7,14 @@ interface IProps{
     setImage: (file: Blob) => void;
     imagePreview: string;
     setCroppedImageUrl: (url: string) => void;
+    aspect:number;
 }
 
- const PhotoWidgetCropper:React.FC<IProps> = ({setImage, imagePreview, setCroppedImageUrl}) =>  {
+ const PhotoWidgetCropper:React.FC<IProps> = ({setImage, imagePreview, setCroppedImageUrl, aspect}) =>  {
 
     const [crop, setCrop] = useState<Crop>({
         unit: "%",
-        aspect:1500/650,
+        aspect:aspect,
         width:100
     });
 

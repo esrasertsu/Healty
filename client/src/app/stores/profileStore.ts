@@ -53,6 +53,8 @@ export default class ProfileStore{
 
     @observable loadingActivities = false;
     @observable submittingMessage = false;
+    @observable updatedProfile = false;
+
 
     @observable.ref hubConnection : HubConnection | null = null;
     @computed get isCurrentUser(){
@@ -103,6 +105,10 @@ export default class ProfileStore{
     
     @action setLoadingProfiles = (lp : boolean) =>{
         this.loadingProfiles = lp;
+    }
+
+    @action setUpdatedProfile = (up: boolean) =>{
+        this.updatedProfile = up;
     }
 
     @action sendTrainerComment = async (comment: IProfileComment) =>{
@@ -180,6 +186,7 @@ export default class ProfileStore{
     @action loadProfile = async (username: string) =>{
        debugger;
             this.loadingProfile = true;
+            this.updatedProfile = false;             
             this.setCommentPage(0);
             this.setBlogPagination(0);
             this.commentRegistery.clear();
@@ -227,6 +234,24 @@ export default class ProfileStore{
             console.log(error);
         }
     }
+
+    @action updateProfile = async (profile: Partial<IProfile>) =>{
+
+        try {
+           await agent.Profiles.updateProfile(profile);
+            runInAction(()=>{
+
+                if(profile.displayName !== this.rootStore.userStore.user!.displayName){
+                    this.rootStore.userStore.user!.displayName = profile.displayName!;
+                }
+                this.profile = {...this.profile!, ...profile};  
+                this.updatedProfile = true;             
+            })
+        } catch (error) {
+            toast.error('Problem saving changes');
+        }
+    }
+
     @action uploadPhoto = async (file: Blob) => {
         this.uploadingPhoto = true;
 

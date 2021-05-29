@@ -1,3 +1,5 @@
+import { ICategory, ISubCategory } from "./category";
+
 export interface IProfile {
     displayName: string,
     userName: string,
@@ -10,14 +12,26 @@ export interface IProfile {
     star: number,
     starCount: number,
     comments: IProfileComment[],
-    hasConversation: boolean
-
+    hasConversation: boolean,
+    experienceYear: number,
+    experience:string,
+    certificates:string,
+    dependency:string,
+    accessibilities: IAccessibility[],
+    categories: ICategory[],
+    subCategories: ISubCategory[],
+    isOnline: boolean,
+    responseRate: number
 }
 
+export interface IAccessibility{
+    id: string,
+    name: string
+}
 
 export class ProfilesFilterFormValues {
     category: string = '';
-    subCategory: string = '';
+    subCategoryIds: string[] = [];
  
 }
 
@@ -68,4 +82,17 @@ export interface IProfileBlog {
     photo: string;
     displayName : string;
     userImage:string;
+}
+
+export class ProfileFormValues {
+    id?: string = undefined;
+    categories: string = '';
+    subCategories: string[] = [];
+    displayName: string = '';
+    bio: string= '';
+    experienceYear: number = 0;
+    experience:string = '';
+    certificates:string = '';
+    dependency:string = '';
+    accessibilities: string[] = [];
 }

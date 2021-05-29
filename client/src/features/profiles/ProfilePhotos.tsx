@@ -34,6 +34,7 @@ const [deleteTarget, setDeleteTarget] = useState<string | undefined>(undefined);
             <PhotoUploadWidget
               uploadPhoto={handleUploadImage}
               loading={uploadingPhoto}
+              aspect={1}
             />
           ) : (
             <Card.Group itemsPerRow={5}>

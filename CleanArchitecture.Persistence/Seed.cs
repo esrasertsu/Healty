@@ -86,22 +86,215 @@ namespace Persistence
                    
                     new SubCategory
                     {
-                        Name = "Fitness",
+                        Name = "Atletizm",
                         Category= Spor
                     },
                     new SubCategory
                     {
-                        Name = "Vücut Geliştirme",
+                        Name = "Avcılık ve Atıcılık",
                         Category= Spor
                     },
                     new SubCategory
                     {
-                        Name = "Pilates",
+                        Name = "Badminton",
                         Category= Spor
-                    }
-                        
-                    ,
-                    
+                    },
+                      new SubCategory
+                    {
+                        Name = "Bedensel Engelliler",
+                        Category= Spor
+                    },
+                        new SubCategory
+                    {
+                        Name = "Bilardo",
+                        Category= Spor
+                    },
+                          new SubCategory
+                    {
+                        Name = "Binicilik",
+                        Category= Spor
+                    },
+                            new SubCategory
+                    {
+                        Name = "Bisiklet",
+                        Category= Spor
+                    },
+                              new SubCategory
+                    {
+                        Name = "Bocce-Bowling-Dart",
+                        Category= Spor
+                    },
+                                new SubCategory
+                    {
+                        Name = "Boks",
+                        Category= Spor
+                    },
+                                  new SubCategory
+                    {
+                        Name = "Briç",
+                        Category= Spor
+                    },
+                                    new SubCategory
+                    {
+                        Name = "Buz Hokeyi",
+                        Category= Spor
+                    },
+                                      new SubCategory
+                    {
+                        Name = "Buz Pateni",
+                        Category= Spor
+                    },
+                      new SubCategory
+                    {
+                        Name = "Cimnastik",
+                        Category= Spor
+                    },
+                      new SubCategory
+                    {
+                        Name = "Dağcılık",
+                        Category= Spor
+                    },
+                     new SubCategory
+                    {
+                        Name = "Eskrim",
+                        Category= Spor
+                    },
+                    new SubCategory
+                    {
+                        Name = "Futbol",
+                        Category= Spor
+                    },
+                     new SubCategory
+                    {
+                        Name = "Golf",
+                        Category= Spor
+                    },
+                      new SubCategory
+                    {
+                        Name = "Görme Engelliler",
+                        Category= Spor
+                    },
+                    new SubCategory
+                    {
+                        Name = "Güreş",
+                        Category= Spor
+                    },
+                     new SubCategory
+                    {
+                        Name = "Halk Oyunları",
+                        Category= Spor
+                    },
+                    new SubCategory
+                    {
+                        Name = "Halter",
+                        Category= Spor
+                    },
+                      new SubCategory
+                    {
+                        Name = "Hentbol",
+                        Category= Spor
+                    },
+                     new SubCategory
+                    {
+                        Name = "Hokey",
+                        Category= Spor
+                    },
+                    new SubCategory
+                    {
+                        Name = "İşitme Engelliler",
+                        Category= Spor
+                    },
+                      new SubCategory
+                    {
+                        Name = "Judo",
+                        Category= Spor
+                    },
+                     new SubCategory
+                    {
+                        Name = "Kano",
+                        Category= Spor
+                    },
+                    new SubCategory
+                    {
+                        Name = "Karate",
+                        Category= Spor
+                    },
+                      new SubCategory
+                    {
+                        Name = "Kayak",
+                        Category= Spor
+                    },
+                     new SubCategory
+                    {
+                        Name = "Kick Boks",
+                        Category= Spor
+                    },
+                    new SubCategory
+                    {
+                        Name = "Kürek",
+                        Category= Spor
+                    },
+                       new SubCategory
+                    {
+                        Name = "Okçuluk",
+                        Category= Spor
+                    },
+                     new SubCategory
+                    {
+                        Name = "Ragbi",
+                        Category= Spor
+                    },
+                    new SubCategory
+                    {
+                        Name = "Satranç",
+                        Category= Spor
+                    },
+                    new SubCategory
+                    {
+                        Name = "Su Altı Sporları",
+                        Category= Spor
+                    },
+                    new SubCategory
+                    {
+                        Name = "Su Topu",
+                        Category= Spor
+                    },
+                       new SubCategory
+                    {
+                        Name = "Taekwon-do",
+                        Category= Spor
+                    },
+                     new SubCategory
+                    {
+                        Name = "Tenis",
+                        Category= Spor
+                    },
+                    new SubCategory
+                    {
+                        Name = "Triatlon",
+                        Category= Spor
+                    },
+                      new SubCategory
+                    {
+                        Name = "Voleybol",
+                        Category= Spor
+                    },
+                     new SubCategory
+                    {
+                        Name = "Fitness - Vücut Geliştirme",
+                        Category= Spor
+                    },
+                    new SubCategory
+                    {
+                        Name = "Yelken",
+                        Category= Spor
+                    },
+                    new SubCategory
+                    {
+                        Name = "Yüzme",
+                        Category= Spor
+                    },
+
                     new SubCategory
                     {
                         Name = "Diyabet",
@@ -145,13 +338,13 @@ namespace Persistence
             }
 
 
-            var online =  context.Accessibilities.FirstOrDefault(x => x.Name == "Online");
-            var OwnPlace =  context.Accessibilities.FirstOrDefault(x => x.Name == "OwnPlace");
+            var online =  await context.Accessibilities.SingleOrDefaultAsync(x => x.Name == "Online");
+            var OwnPlace = await context.Accessibilities.SingleOrDefaultAsync(x => x.Name == "OwnPlace");
 
-            var Fitness =  context.SubCategories.FirstOrDefault(x => x.Name == "Fitness");
-            var Diyabet =  context.SubCategories.FirstOrDefault(x => x.Name == "Diyabet");
-            var Yoga =  context.SubCategories.FirstOrDefault(x => x.Name == "Yoga");
-            var Pedagoji =  context.SubCategories.FirstOrDefault(x => x.Name == "Pedagoji");
+            var Swim = await context.SubCategories.SingleOrDefaultAsync(x => x.Name == "Yüzme");
+            var Diyabet = await context.SubCategories.SingleOrDefaultAsync(x => x.Name == "Diyabet");
+            var Yoga = await context.SubCategories.SingleOrDefaultAsync(x => x.Name == "Yoga");
+            var Pedagoji = await context.SubCategories.SingleOrDefaultAsync(x => x.Name == "Pedagoji");
 
             if (!userManager.Users.Any())
             {
@@ -168,8 +361,6 @@ namespace Persistence
                         ExperienceYear=5,
                         Dependency="MacFit",
                         Accessibilities= new List<Accessibility>(){ online, OwnPlace },
-                        Categories= new List<Category>(){ context.Categories.FirstOrDefault(x => x.Name == "Spor") },
-                       SubCategories= new List<SubCategory>(){ context.SubCategories.FirstOrDefault(x => x.Name == "Fitness") },
 
                     },
                     new AppUser
@@ -182,7 +373,7 @@ namespace Persistence
                          ExperienceYear=5,
                         Dependency="MacFit",
                          Accessibilities= new List<Accessibility>(){OwnPlace},
-                        SubCategories= new List<SubCategory>(){ Fitness },
+                        SubCategories= new List<SubCategory>(){ Swim },
                         Categories= new List<Category>(){ Spor },
                     },
                     new AppUser
@@ -222,7 +413,7 @@ namespace Persistence
                         Role=Role.Trainer,
                         ExperienceYear=1,
                         Categories = new List<Category>(){Spor},
-                        SubCategories= new List<SubCategory>(){ Fitness },
+                        SubCategories= new List<SubCategory>(){ Swim },
                         Accessibilities= new List<Accessibility>(){ online }
 
                     },
@@ -259,7 +450,7 @@ namespace Persistence
                         Email = "jack@test.com",
                         Role=Role.User,
                         Categories = new List<Category>(){Spor},
-                         SubCategories= new List<SubCategory>(){ Fitness },
+                         SubCategories= new List<SubCategory>(){ Swim },
                          Accessibilities= new List<Accessibility>(){ online }
 
                     },
@@ -271,7 +462,7 @@ namespace Persistence
                         Email = "johny@test.com",
                         Role=Role.Trainer,
                            Categories = new List<Category>(){Spor,Diyet},
-                         SubCategories= new List<SubCategory>(){ Fitness },
+                         SubCategories= new List<SubCategory>(){ Swim },
                          Accessibilities= new List<Accessibility>(){ online }
                     },
                 };
@@ -299,7 +490,7 @@ namespace Persistence
                         Date = DateTime.Now.AddMonths(-2),
                         Description = "Activity 2 months ago",
                         Category = await context.Categories.SingleOrDefaultAsync(x => x.Name == "Spor"),
-                        SubCategories =  new List<SubCategory>(){ await context.SubCategories.SingleOrDefaultAsync(x => x.Name == "Fitness") },
+                        SubCategories =  new List<SubCategory>(){  context.SubCategories.FirstOrDefault(x => x.Name == "Yüzme") },
                         City = "London",
                         Venue = "Pub",
                         Level= Level.Beginner,
@@ -321,7 +512,7 @@ namespace Persistence
                         Title = "Past Activity 2",
                         Date = DateTime.Now.AddMonths(-1),
                         Description = "Activity 1 month ago",
-                        Category =  context.Categories.FirstOrDefault(x => x.Name == "Meditasyon"),
+                        Category = await context.Categories.SingleOrDefaultAsync(x => x.Name == "Meditasyon"),
                         SubCategories =  new List<SubCategory>(){  context.SubCategories.FirstOrDefault(x => x.Name == "Yoga") },
                         City = "Paris",
                         Venue = "The Louvre",
@@ -349,8 +540,8 @@ namespace Persistence
                         Title = "Future Activity 1",
                         Date = DateTime.Now.AddMonths(1),
                         Description = "Activity 1 month in future",
-                        Category = context.Categories.FirstOrDefault(x => x.Name == "Psikoloji"),
-                        SubCategories =  new List<SubCategory>(){ context.SubCategories.FirstOrDefault(x => x.Name == "Yoga") },
+                        Category = await context.Categories.SingleOrDefaultAsync(x => x.Name == "Psikoloji"),
+                        SubCategories =  new List<SubCategory>(){ await context.SubCategories.SingleOrDefaultAsync(x => x.Name == "Yoga") },
                         City = "London",
                         Venue = "Wembly Stadium",
                         Price= Convert.ToDecimal("200"),
@@ -375,36 +566,9 @@ namespace Persistence
                     new Activity
                     {
                         Title = "Future Activity 2",
-                        Date = DateTime.Now.AddMonths(2),
-                        Description = "Activity 2 months in future",
-                        Category = context.Categories.FirstOrDefault(x => x.Name == "Spor"),
-                        City = "London",
-                        Venue = "Jamies Italian",
-                        Price= Convert.ToDecimal("300"),
-                        Level= Level.MidLevel,
-                         AttendanceCount=10,
-                        UserActivities = new List<UserActivity>
-                        {
-                            new UserActivity
-                            {
-                                AppUserId = "c",
-                                IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(2)
-                            },
-                            new UserActivity
-                            {
-                                AppUserId = "a",
-                                IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(2)
-                            },
-                        }
-                    },
-                    new Activity
-                    {
-                        Title = "Future Activity 3",
                         Date = DateTime.Now.AddMonths(3),
-                        Description = "Activity 3 months in future",
-                        Category = context.Categories.FirstOrDefault(x => x.Name == "Meditasyon"),
+                        Description = "The header spscroll, which smooth scrolls some link clicks, was globally targeting any element with data-scroll… a shared attribute that your plugin also uses. I updated the specificity on this to target the header data-scroll elements only, and all is right in the universe.Thanks for the quick response.Close this puppy up as resolved",
+                        Category = await context.Categories.FirstOrDefaultAsync(x => x.Name == "Meditasyon"),
                         City = "London",
                         Venue = "Pub",
                          Online= true,

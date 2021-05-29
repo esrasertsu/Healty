@@ -7,9 +7,10 @@ import PhotoWidgetCropper from './PhotoWidgetCropper';
 interface IProps {
     loading: boolean,
     uploadPhoto: (file:Blob) => void;
+    aspect:number;
 }
 
-const PhotoUploadWidget:React.FC<IProps> = ({loading,uploadPhoto}) => {
+const PhotoUploadWidget:React.FC<IProps> = ({loading,uploadPhoto, aspect}) => {
     
     const [files, setFiles] = useState<any[]>([]);
     const [image, setImage] = useState<Blob | null>(null);
@@ -38,7 +39,7 @@ const PhotoUploadWidget:React.FC<IProps> = ({loading,uploadPhoto}) => {
             <Grid.Column width={4}>
                 <Header sub color='teal' content='Step 2 - Resize image' />
                 {files.length > 0 && 
-                <PhotoWidgetCropper setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} />}
+                <PhotoWidgetCropper aspect={aspect} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} />}
             </Grid.Column>
             <Grid.Column width={1} />
             <Grid.Column width={4}>

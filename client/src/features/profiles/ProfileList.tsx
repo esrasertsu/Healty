@@ -50,7 +50,8 @@ const responsive = {
       <Fragment>
       <Segment inverted textAlign='center' vertical className='masthead_page'>
                {/* <Header as='h2' inverted content={`Welcome back ${user.displayName}`} /> */}
-               <Container className='masthead-button_Container'>
+               {/* <Container className='masthead-button_Container'> */}
+               <Container>
                <ProfileListFilters />
                </Container>
       </Segment>

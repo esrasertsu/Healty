@@ -134,7 +134,7 @@ debugger;
                 <Grid>
                   <Grid.Column width="eight">
                   <Header sub content='*Boyutlandır' />
-                  <PhotoWidgetCropper setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} />
+                  <PhotoWidgetCropper setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1500/650}/>
                   </Grid.Column>
                   <Grid.Column width="eight">
                     <Header sub content='*Önizleme' />

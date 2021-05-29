@@ -6,14 +6,7 @@ import { format } from 'date-fns';
 import {ActivityListItemAttendees } from './ActivityListItemAttendees';
 import { history } from '../../../index'
 import { StarRating } from '../../../app/common/form/StarRating';
-
-const colors = [
-    { key:"Psikoloji", value: "#c38a8a"},
-    { key:"Meditasyon", value: "#e0c022" },
-    { key:"Spor", value: "#3f609c"},
-    { key:"Diyet", value: "#3a7949"}
-
-  ];
+import { colors } from '../../../app/models/category';
 
 export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
     const host = activity.attendees.filter(x => x.isHost === true)[0];

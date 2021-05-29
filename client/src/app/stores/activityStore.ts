@@ -18,7 +18,6 @@ export default class ActivityStore {
         reaction(
             () => this.predicate.keys(),
             () => {
-                debugger;
                 this.page=0;
                 this.activityRegistery.clear();
                 this.loadActivities();
@@ -181,7 +180,6 @@ export default class ActivityStore {
     };
 
     @action loadActivity = async (id:string) => {
-        debugger;
         let activity = this.getActivity(id);
 
         if(activity){
@@ -223,7 +221,6 @@ export default class ActivityStore {
         this.submitting = true;
         try {
             await agent.Activities.create(activity);
-            debugger;
             const attendee = createAttendee(this.rootStore.userStore.user!);
             attendee.isHost = true;
             let attendees = [];

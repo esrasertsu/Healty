@@ -28,14 +28,12 @@ interface IProps{
     }, [imageRef]);
 
     const handleImageLoaded = (image:any) => {
-        debugger;
         setImageRef(image);
         setCroppedImageUrl(imagePreview);
     };
 
       
     const handleCropComplete = (crop:Crop) => {
-        debugger;
         makeClientCrop(crop);
     };
 
@@ -84,7 +82,6 @@ interface IProps{
     }
 
     const handleCropChange = (crop:Crop) => {
-        debugger;
         setCrop(crop);
     
     };

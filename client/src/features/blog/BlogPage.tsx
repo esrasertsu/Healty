@@ -20,13 +20,12 @@ interface DetailParams{
 }
 
 const BlogPage: React.FC<RouteComponentProps<DetailParams>> = ({match, history}) => {
-debugger;
+
     const rootStore = useContext(RootStoreContext);
     const { post, loadBlog, loadingPost } = rootStore.blogStore;
 
     useEffect(() => {
         loadBlog(match.params.id);
-        debugger;
     }, [loadBlog, match.params.id, history]) // sadece 1 kere çalışcak, koymazsak her component render olduğunda
 
     if(loadingPost) return <LoadingComponent content='Loading blog...'/>  

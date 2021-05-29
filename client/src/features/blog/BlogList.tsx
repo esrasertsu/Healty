@@ -26,7 +26,6 @@ const BlogList: React.FC = () => {
     loadBlogs().then(() => setLoadingNext(false))
   }
   useEffect(() => {
-    debugger;
     loadBlogs();
   },[loadBlogs]); //[] provides the same functionality with componentDidMounth..   dependency array
 
@@ -66,7 +65,6 @@ const BlogList: React.FC = () => {
               <Button key={predicate.get('username')} labelPosition="right" icon='cancel' content={predicateDisplayName} style={{backgroundColor:"#335084", color:"#fff", marginBottom:"20px"}}
                 onClick={()=>
                   {
-                    debugger;
                     removeOnePredicate("username")
                   }
                   

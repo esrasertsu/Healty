@@ -1,8 +1,9 @@
 import { observer } from 'mobx-react-lite'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import { Grid } from 'semantic-ui-react'
 import { LoadingComponent } from '../../app/layout/LoadingComponent'
+import { ProfileFormValues } from '../../app/models/profile'
 import { RootStoreContext } from '../../app/stores/rootStore'
 import ProfileBlogPlaceHolder from './ProfileBlogPlaceHolder'
 import ProfileBlogs from './ProfileBlogs'
@@ -19,11 +20,16 @@ interface RouteParams {
 interface IProps extends RouteComponentProps<RouteParams> {}
 
 const ProfilePage: React.FC<IProps> = ({match}) => {
-debugger;
+
     const rootStore = useContext(RootStoreContext);
-    const {loadingProfile, loadProfile, loadingBlogs, loadingComments, profile, follow, unfollow, isCurrentUser, loading,setActiveTab} = rootStore.profileStore;
+    const {loadingProfile, loadProfile, loadingBlogs, loadingComments, profile, follow,
+         unfollow, isCurrentUser, loading,setActiveTab, profileForm, setProfileForm} = rootStore.profileStore;
+
     useEffect(() => {
-        loadProfile(match.params.username);
+        loadProfile(match.params.username)
+        .then((profile) => 
+        {debugger;
+            setProfileForm(new ProfileFormValues(profile))})
         setActiveTab(0);
     }, [loadProfile,match,setActiveTab])
 

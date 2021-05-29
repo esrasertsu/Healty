@@ -25,7 +25,6 @@ export default class CategoryStore{
     @observable target = '';
 
     @action getPredicateTexts = (predicate:Map<any,any>) =>{
-        debugger;
         this.predicateTexts = [];
         Array.from(predicate.keys()).forEach(item => 
             {

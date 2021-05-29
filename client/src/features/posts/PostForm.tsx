@@ -75,18 +75,17 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
   }, [loadBlog, match.params.id]);
 
   const handleCategoryChanged = (e: any, data: string) => {
-    debugger;
+    
     setCategory(data);
     loadSubCategories(data);
  }
 
    const handleSubCategoryChanged = (e: any, data: string[]) => {  
      setSubCategory(data)  
-       //setPost({...post,subCategories: data});
+       setPost({...post,subCategoryIds: [...data]});
     }
 
   const handleFinalFormSubmit = (values: any) => {
-    debugger;
     const { ...post } = values;
 
     if (!post.id) {
@@ -102,11 +101,6 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
           editPost(post);
         }
   };
-
-  const handleUploadImage = (photo: Blob) => {
-debugger;
-      setPhoto(photo);
-  }
 
   return (
     <Grid>
@@ -171,7 +165,6 @@ debugger;
                   options={subcategoryList}
                   onChange={(e: any,data:[])=>
                     {
-                      debugger;
                       handleSubCategoryChanged(e,data)}}
                 > 
               </Field>

@@ -55,8 +55,8 @@ namespace CleanArchitecture.Application.Profiles
                 Star = CalculateStar(user),
                 IsOnline = user.IsOnline,
                 ResponseRate = CalculateResponseRate(user),
-                Accessibilities = user.Accessibilities,
-                Categories= _mapper.Map<ICollection<Category>, ICollection<CategoryDto>>(user.Categories),
+                Accessibilities = _mapper.Map<ICollection<Accessibility>, ICollection<AccessibilityDto>>(user.Accessibilities),
+                Categories = _mapper.Map<ICollection<Category>, ICollection<CategoryDto>>(user.Categories),
                 SubCategories = _mapper.Map<ICollection<SubCategory>, ICollection<SubCategoryDto>>(user.SubCategories),
             };
 

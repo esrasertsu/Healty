@@ -54,6 +54,12 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(command);
         }
 
+        [HttpGet("accessibilities")]
+        public async Task<ActionResult<List<AccessibilityDto>>> GetAccessibilities()
+        {
+            return await Mediator.Send(new ListAccessibilities.Query());
+        }
+
         [HttpPut]
         public async Task<ActionResult<Unit>> Edit([FromForm] Edit.Command command)
         {

@@ -11,7 +11,6 @@ export default class CommonStore {
             () => this.token,
             token => {
                 if(token) {
-                    debugger;
                     window.localStorage.setItem('jwt', token);
                 } else {
                     window.localStorage.removeItem('jwt');
@@ -30,7 +29,6 @@ export default class CommonStore {
     }
 
     @action setAppLoaded = () => {
-        debugger;
         this.appLoaded = true;
     }
 

@@ -9,7 +9,7 @@ interface IProps extends FieldRenderProps<string[], HTMLElement>, FormFieldProps
     return (
         <Form.Field error={touched && !!error} width={width}>
          <Dropdown 
-            // value={input.value|| []}
+          value={input.value || []}
              onChange={(e, data) => onChange(e,data.value)}
             fluid
             multiple

@@ -21,12 +21,14 @@ export interface IProfile {
     categories: ICategory[],
     subCategories: ISubCategory[],
     isOnline: boolean,
-    responseRate: number
+    responseRate: number,
+
 }
 
 export interface IAccessibility{
-    id: string,
-    name: string
+    key: string;
+    text: string;
+    value: string;
 }
 
 export class ProfilesFilterFormValues {
@@ -83,16 +85,57 @@ export interface IProfileBlog {
     displayName : string;
     userImage:string;
 }
-
-export class ProfileFormValues {
+export interface IProfileFormValues extends Partial<IProfile>{
+    // time?: Date
+    subCategoryIds: string[],
+    categoryIds: string[],
+    accessibilityIds: string[]
+}
+export class ProfileFormValues implements IProfileFormValues {
     id?: string = undefined;
-    categories: string = '';
-    subCategories: string[] = [];
+    categories: ICategory[] = [];
+    subCategories: ISubCategory[] = [];
     displayName: string = '';
     bio: string= '';
     experienceYear: number = 0;
     experience:string = '';
     certificates:string = '';
     dependency:string = '';
-    accessibilities: string[] = [];
+    accessibilities: IAccessibility[] = [];
+    subCategoryIds: string[] =[];
+    categoryIds: string[]  =[];
+    accessibilityIds: string[] =[];
+
+    constructor(init?: IProfileFormValues){
+         if(init && init.accessibilities)
+        {    
+            debugger;
+            init.accessibilityIds = [];
+            init.subCategoryIds=[];
+            init.categoryIds=[];
+
+              init.accessibilities!.forEach(s=>
+                {
+                    init.accessibilityIds.push(s.value.toString())
+
+                }
+                );
+
+                init.categories!.forEach(s=>
+                    {
+                        init.categoryIds.push(s.value.toString())
+    
+                    }
+                    );
+
+                    init.subCategories!.forEach(s=>
+                        {
+                            init.subCategoryIds.push(s.value.toString())
+        
+                        }
+                        );
+
+         }
+        Object.assign(this, init);
+    }
 }

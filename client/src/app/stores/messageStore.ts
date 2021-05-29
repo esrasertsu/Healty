@@ -18,7 +18,6 @@ export default class MessageStore {
         reaction(
             () => this.chatRoomId,
             () => {
-                debugger;
                 if(this.chatRoomId !== null)
                 {
                     this.setPage(0);
@@ -62,7 +61,6 @@ export default class MessageStore {
     }
     
     @action addComment = async (values: any) => {
-        debugger;
         values.chatRoomId = this.chatRoomId;
         try {
             await this.rootStore.userStore.hubConnection!.invoke("SendMessage", values);
@@ -87,7 +85,6 @@ export default class MessageStore {
                 
                 this.chatRooms = chatRooms;
                 this.loadingChatRooms = false;
-                debugger;
                 chatRooms.forEach((chatRoom) =>{
                     chatRoom.userStatus && this.rootStore.userStore.onlineUsers.push(chatRoom.userName);
                     this.messageRegistery.set(chatRoom.id, null);
@@ -117,7 +114,6 @@ export default class MessageStore {
 
 
     @computed get messagesByDate(){
-        debugger;
         // return this.activities.sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
       //  return Array.from(this.activityRegistery.values()).sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
           return this.groupMessagesByDate(
@@ -133,7 +129,6 @@ export default class MessageStore {
          )
  
          return Object.entries(sortedMessages.reduce((messages, message) =>{
-             debugger;
              const date = new Date(message.createdAt).toISOString().split('T')[0];
              messages[date] = messages[date] ? [...messages[date], message]: [message];
              return messages;
@@ -142,7 +137,6 @@ export default class MessageStore {
      }
 
     @action loadMessages = async (id:string) => {
-        debugger;
             let messageList:IMessage[] = [];
             this.chatRoomId = id;
             this.loadingMessages = true;

@@ -8,7 +8,6 @@ const CheckboxInput:React.FC<IProps> = ({input, placeholder,checked, setChecked 
 
 
     const handleChange = (e:any) => {
-        debugger;
          setChecked(e.target.checked);
     }
     return (

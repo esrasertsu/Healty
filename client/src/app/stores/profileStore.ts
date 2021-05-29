@@ -2,7 +2,7 @@ import { action, observable, runInAction, computed, reaction } from "mobx";
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { toast } from "react-toastify";
 import agent from "../api/agent";
-import { IPhoto, IProfile, IProfileBlog, IProfileComment, IUserActivity } from "../models/profile";
+import { IAccessibility, IPhoto, IProfile, IProfileBlog, IProfileComment, IProfileFormValues, IUserActivity, ProfileFormValues } from "../models/profile";
 import { RootStore } from "./rootStore";
 import { IMessageForm } from "../models/message";
 
@@ -33,6 +33,7 @@ export default class ProfileStore{
     @observable blogRegistery = new Map();
     @observable loadingProfile = true;
     @observable loadingProfiles = true;
+    @observable loadingAccessibilities = false;
     @observable uploadingPhoto = false;
     @observable submittingComment = false;
     @observable loadingForPhotoDeleteMain = false;
@@ -42,6 +43,7 @@ export default class ProfileStore{
     @observable followings: IProfile[] = [];
     @observable activeTab: number = 0;
     @observable profileList: IProfile[] = [];
+    @observable accessibilities: IAccessibility[] = [];
     @observable commentCount = 0;
     @observable commentPage = 0;
 
@@ -54,7 +56,7 @@ export default class ProfileStore{
     @observable loadingActivities = false;
     @observable submittingMessage = false;
     @observable updatedProfile = false;
-
+    @observable profileForm: IProfileFormValues = new ProfileFormValues();
 
     @observable.ref hubConnection : HubConnection | null = null;
     @computed get isCurrentUser(){
@@ -77,12 +79,10 @@ export default class ProfileStore{
     }
 
     @computed get totalBlogPages(){
-        debugger;
         return Math.ceil(this.blogCount / LIMIT);
     }
 
     @computed get getCommentsByDate(){
-        debugger;
         // return this.activities.sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
       //  return Array.from(this.activityRegistery.values()).sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
           return Array.from(this.commentRegistery.values());
@@ -96,6 +96,10 @@ export default class ProfileStore{
 
     @action setActiveTab = (activeIndex: number) => {
         this.activeTab = activeIndex;
+    }
+    
+    @action setProfileForm = (profile: IProfileFormValues) => {
+        this.profileForm = profile;
     }
     
     @action setLoadingProfile = (lp : boolean) =>{
@@ -112,7 +116,6 @@ export default class ProfileStore{
     }
 
     @action sendTrainerComment = async (comment: IProfileComment) =>{
-        debugger;
         comment.username= this.profile!.userName;
         this.submittingComment = true;
         try {
@@ -131,7 +134,6 @@ export default class ProfileStore{
     };
 
     @action loadComments = async (username: string) =>{
-        debugger;
         this.loadingComments = true;
 
         try {
@@ -156,7 +158,6 @@ export default class ProfileStore{
     }
 
     @action loadBlogs = async (username: string) =>{
-        debugger;
         this.loadingBlogs = true;
 
         try {
@@ -184,7 +185,6 @@ export default class ProfileStore{
         return this.profileRegistery.get(username);
     }
     @action loadProfile = async (username: string) =>{
-       debugger;
             this.loadingProfile = true;
             this.updatedProfile = false;             
             this.setCommentPage(0);
@@ -201,7 +201,11 @@ export default class ProfileStore{
                     this.loadBlogs(profile.userName);
                     this.loadComments(profile.userName);
                     this.loadingProfile = false;
+                    this.loadAccessibilities();
+                    this.rootStore.categoryStore.loadCategories();
+
                 })
+                return profile;
             } catch (error) {
                 runInAction(()=>{
                     this.loadingProfile = false;
@@ -335,7 +339,6 @@ export default class ProfileStore{
                 // this.followings = [...this.followings, this.profile!];
                 this.loading = false;
                 const predicate = this.activeTab ===4 ? 'followers' : this.activeTab === 3 ? 'following' : null ;
-                debugger;
                 if(predicate)
                  this.loadFollowings(predicate);
             })
@@ -357,7 +360,6 @@ export default class ProfileStore{
                 // this.followings = this.followings.filter(x => x.userName === username);
                 this.loading = false;
                 const predicate = this.activeTab ===4 ? 'followers' : this.activeTab === 3 ? 'following' : null ;
-                debugger;
                 if(predicate)
                  this.loadFollowings(predicate);
             })
@@ -405,7 +407,6 @@ export default class ProfileStore{
 
 
     @action sendMessageFromProfile = async (message: IMessageForm) =>{
-        debugger;
         message.receiver= this.profile!.userName;
         this.submittingMessage = true;
         try {
@@ -421,5 +422,24 @@ export default class ProfileStore{
             console.log(error);
         }
     };
+
+
+    @action loadAccessibilities = async () =>{
+             this.loadingAccessibilities = true;
+             try {
+                 const accessibilities = await agent.Profiles.getAccessibilities();
+                 runInAction(()=>{
+                     this.accessibilities = accessibilities;
+                     this.loadingAccessibilities = false;
+                 })
+             } catch (error) {
+                 runInAction(()=>{
+                     this.loadingAccessibilities = false;
+                 })
+                 console.log(error);
+             }
+         
+         
+     }
 
 }

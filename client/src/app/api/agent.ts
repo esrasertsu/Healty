@@ -52,10 +52,7 @@ const requests = {
     put: (url: string, body:{}) => axios.put(url, body).then(sleep(1000)).then(responseBody),
     del:(url:string) => axios.delete(url).then(sleep(1000)).then(responseBody),
     postForm: async (url: string, file: Blob) =>{
-        debugger;
         let formData = new FormData();
-        //const blob = await fetch(file.toString()).then((res) => res.blob());
-
         formData.append('File',file);
         return axios.post(url, formData, {
             headers: {'Content-type': 'multipart/form-data'}
@@ -92,7 +89,7 @@ const requests = {
             formData.append('CategoryIds', category.value)
         ));
         profile.accessibilities!.length>0 && profile.accessibilities!.map((acc:IAccessibility)=>(
-            formData.append('Accessibilities', acc.id)
+            formData.append('Accessibilities', acc.value)
         ));
         return axios.put(url, formData, {
             headers: {'Content-type': 'application/json'}
@@ -120,7 +117,7 @@ const User ={
 }
 
 const Profiles = {
-    get: (userName: string): Promise<IProfile> => requests.get(`/profiles/${userName}/details`),
+    get: (userName: string) => requests.get(`/profiles/${userName}/details`),
     list: (role: string): Promise<IProfile[]> => requests.get(`/profiles/role=${role}`),
     uploadPhoto: ( photo: Blob): Promise<IPhoto> => requests.postForm(`/photos`, photo),
     setMainPhoto: (id:string) => requests.post(`/photos/${id}/setMain`,{}),
@@ -137,6 +134,7 @@ const Profiles = {
 
     sendMessage:(message:IMessageForm) => requests.post(`/profiles/message`, message),
     updateProfile: (profile: Partial<IProfile>) => requests.editProfile(`/profiles`,profile),
+    getAccessibilities : (): Promise<IAccessibility[]>  => requests.get(`/profiles/accessibilities`)
 
     }
 

@@ -18,7 +18,7 @@ namespace CleanArchitecture.Application.Profiles
         public string Experience { get; set; }
         public string Certificates { get; set; }
         public string Dependency { get; set; }//şirket , freelance vs
-        public ICollection<Accessibility> Accessibilities { get; set; }
+        public ICollection<AccessibilityDto> Accessibilities { get; set; }
         public ICollection<CategoryDto> Categories { get; set; }
         public ICollection<SubCategoryDto> SubCategories { get; set; }
 

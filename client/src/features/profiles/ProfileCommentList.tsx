@@ -32,7 +32,7 @@ Eğitmen hakkında ilk yorumu sen yap!
                  {getCommentsByDate.map((comment) => (
                      <Fragment key={comment.id}>
                       <Comment key={comment.id}>
-                      <Comment.Avatar circular src={comment.image || '/assets/user.png'} />
+                      <Comment.Avatar circular="true" src={comment.image || '/assets/user.png'} />
                       <Comment.Content>
                         <Comment.Author as={Link} to={`/profile/${comment.authorName}`} replace>{comment.displayName}</Comment.Author>
                         <Comment.Metadata>

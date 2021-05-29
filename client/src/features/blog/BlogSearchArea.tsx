@@ -34,7 +34,6 @@ interface IProps{
 
 
     const handleResultSelect = (e:any, { result}:any) => {
-        debugger;
         setvalue(result.displayName);
         setPredicateDisplayName(result.displayName);
         setClearedBeforeNewPredicateComing(true);

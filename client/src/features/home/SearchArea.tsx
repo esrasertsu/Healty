@@ -34,7 +34,6 @@ interface IProps{
         setValue(result.text);
     }
     const handleSearchChange = (e:any, { value }: any) => {
-        debugger;
       setSearchLoading(true);
       setValue(value);
   

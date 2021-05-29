@@ -1,15 +1,16 @@
 import React from 'react'
 import {Tab} from 'semantic-ui-react';
+import { IProfileFormValues } from '../../app/models/profile';
 import ProfileActivities from './ProfileActivities';
 import ProfileDescription from './ProfileDescription';
 import ProfileFollowings from './ProfileFollowings';
 import ProfilePhotos  from './ProfilePhotos';
 
 interface IProps{
-    setActiveTab: (activeIndex:any) => void
+    setActiveTab: (activeIndex:any) => void;
 }
 const panes = [
-    {menuItem: 'Hakkında', render:() => <ProfileDescription />},
+    {menuItem: 'Hakkında', render:() => <ProfileDescription  />},
     {menuItem: 'Fotoğraflar', render:() => <ProfilePhotos />},
     {menuItem: 'Etkinlikler', render:() => <ProfileActivities/>},
     {menuItem: 'Takip Edilenler', render:() => <ProfileFollowings />},

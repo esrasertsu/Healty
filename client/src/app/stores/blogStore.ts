@@ -18,7 +18,6 @@ export default class BlogStore{
         reaction(
             () => this.predicate.keys() ,
             () => {
-                debugger;
                 if(!this.clearedBeforeNewPredicateComing)
                 {
                     this.page=0;
@@ -89,7 +88,6 @@ export default class BlogStore{
     }
 
     @action setPredicate = (predicate:string, value:string | string[]) => {
-       debugger;
         if(predicate !== 'all')
         {
             if(value && value.length>0)
@@ -106,7 +104,6 @@ export default class BlogStore{
         }
     }
     @action clearPredicates = (pre:string|null) => {
-        debugger;
         if(pre)
           this.predicate.delete(pre);
         else
@@ -127,18 +124,15 @@ export default class BlogStore{
     }
 
     @computed get getBlogsByDate(){
-        debugger;
         // return this.activities.sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
       //  return Array.from(this.activityRegistery.values()).sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
           return Array.from(this.blogRegistery.values());
      }
      @action clearBlogRegistery = () => {
-        debugger;
         this.blogRegistery.clear();
        
     }
     @action loadBlogs = async () =>{
-        debugger;
         this.loadingPosts = true;
 
         try {
@@ -161,7 +155,6 @@ export default class BlogStore{
     }
 
     @action loadUserBlogs = async (username: string) =>{
-        debugger;
         this.loadingUserBlogs = true;
 
         try {
@@ -169,7 +162,6 @@ export default class BlogStore{
             const {profileBlogs, profileBlogsCount } = profileBlogListEnvelope;
 
             runInAction(()=>{
-                debugger;
                 this.userBlogs = profileBlogs;
                 this.blogCount = profileBlogsCount;
                 this.loadingUserBlogs = false;
@@ -183,13 +175,11 @@ export default class BlogStore{
     }
     
     @action loadBlog = async (id:string) => {
-        debugger;
     
             this.loadingPost = true;
             try {
                 let post = await agent.Blogs.details(id);
                 runInAction('Getting post',() => {
-                    debugger;
                     this.post = post;
                     this.loadUserBlogs(post.username);
                     this.loadSameCategoryBlogs(post.subCategoryIds);
@@ -207,7 +197,6 @@ export default class BlogStore{
 
 
     @action loadSameCategoryBlogs = async (subCategoryNames:string[]) =>{
-        debugger;
         this.loadingPost = true;
 
         try {
@@ -234,7 +223,6 @@ export default class BlogStore{
     }
 
     @action createPost = async (post: IPostFormValues) =>{
-        debugger;
         this.submitting = true;
         try {
             const blog = await agent.Blogs.create(post);

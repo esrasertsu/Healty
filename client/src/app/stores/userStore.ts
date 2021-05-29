@@ -32,7 +32,6 @@ export default class UserStore {
     }
 
     @action setUserOffline = (username:string) =>{
-        debugger;
         var index = this.onlineUsers.indexOf(username);
                 if (index > -1) {
                     this.onlineUsers.splice(index, 1);
@@ -69,7 +68,6 @@ export default class UserStore {
     }
 
     @action createHubConnection = async () => {
-        debugger;
         this.hubConnection = new HubConnectionBuilder()
         .withUrl('http://localhost:5000/message',{
             accessTokenFactory: () => this.rootStore.commonStore.token!
@@ -86,7 +84,6 @@ export default class UserStore {
                 await agent.User.update(true);
                 this.rootStore.messageStore.loadChatRooms().then(() => {
                     let count = 0; 
-                    debugger;
                     this.rootStore.messageStore.chatRooms &&  
                     this.rootStore.messageStore.chatRooms.forEach((chatroom)=>{
                         this.hubConnection!.invoke('AddToChat', chatroom.id);
@@ -102,7 +99,6 @@ export default class UserStore {
 
             this.hubConnection.on('ReceiveMessage', message => {
                 runInAction(() => {
-                    debugger;
                     message.createdAt= new Date();
                     this.initialMessages.push(message);
                     this.rootStore.messageStore.messageRegistery.get(message.chatRoomId)!==null ?
@@ -149,11 +145,9 @@ export default class UserStore {
             })
         )
         .then(() => {
-            debugger;
             this.hubConnection!.stop();
         })
         .then(async() => {
-            debugger;
             await agent.User.update(false);
             runInAction(async() => {
                 this.setUserOffline(this.user!.userName);

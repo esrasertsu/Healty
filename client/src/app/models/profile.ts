@@ -1,4 +1,5 @@
 import { ICategory, ISubCategory } from "./category";
+import { ICity } from "./location";
 
 export interface IProfile {
     displayName: string,
@@ -20,6 +21,7 @@ export interface IProfile {
     accessibilities: IAccessibility[],
     categories: ICategory[],
     subCategories: ISubCategory[],
+    city: ICity,
     isOnline: boolean,
     responseRate: number,
 
@@ -89,10 +91,12 @@ export interface IProfileFormValues extends Partial<IProfile>{
     // time?: Date
     subCategoryIds: string[],
     categoryIds: string[],
-    accessibilityIds: string[]
+    accessibilityIds: string[],
+    cityId:string
 }
-export class ProfileFormValues implements IProfileFormValues {
+export class ProfileFormValues implements IProfileFormValues{
     id?: string = undefined;
+    cityId:string = "";
     categories: ICategory[] = [];
     subCategories: ISubCategory[] = [];
     displayName: string = '';
@@ -105,15 +109,17 @@ export class ProfileFormValues implements IProfileFormValues {
     subCategoryIds: string[] =[];
     categoryIds: string[]  =[];
     accessibilityIds: string[] =[];
+    
+
 
     constructor(init?: IProfileFormValues){
-         if(init && init.accessibilities)
+         if(init)
         {    
             debugger;
             init.accessibilityIds = [];
             init.subCategoryIds=[];
             init.categoryIds=[];
-
+            init.cityId = init.city ? init.city.value : "";
               init.accessibilities!.forEach(s=>
                 {
                     init.accessibilityIds.push(s.value.toString())

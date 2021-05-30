@@ -239,18 +239,31 @@ export default class ProfileStore{
         }
     }
 
-    @action updateProfile = async (profile: Partial<IProfile>) =>{
+    @action updateProfile = async (profile: Partial<IProfileFormValues>) =>{
 
         try {
-           await agent.Profiles.updateProfile(profile);
-            runInAction(()=>{
-
-                if(profile.displayName !== this.rootStore.userStore.user!.displayName){
-                    this.rootStore.userStore.user!.displayName = profile.displayName!;
-                }
-                this.profile = {...this.profile!, ...profile};  
-                this.updatedProfile = true;             
-            })
+            if(profile.categoryIds && profile.categoryIds.length === 0)
+              {
+                toast.warning("Kategori boş seçilemez!")
+                return;
+              }  
+            if(profile.subCategoryIds && profile.subCategoryIds.length === 0)
+            {
+                toast.warning("Branş boş seçilemez!")
+                return;
+              }  
+           
+                const pro = await agent.Profiles.updateProfile(profile);
+                runInAction(()=>{
+    
+                    if(profile.displayName !== this.rootStore.userStore.user!.displayName){
+                        this.rootStore.userStore.user!.displayName = profile.displayName!;
+                    }
+                    this.profile = pro;  
+                    this.updatedProfile = true;  
+                })
+            
+           
         } catch (error) {
             toast.error('Problem saving changes');
         }

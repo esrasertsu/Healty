@@ -28,6 +28,7 @@ namespace CleanArchitecture.Persistence
         public DbSet<ChatRoom> ChatRooms { get; set; }
         public DbSet<UserChatRooms> UserChatRooms { get; set; }
         public DbSet<Accessibility> Accessibilities { get; set; }
+        public DbSet<City> Cities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

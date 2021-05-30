@@ -119,6 +119,9 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("Certificates")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("CityId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
@@ -182,6 +185,8 @@ namespace CleanArchitecture.Persistence.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -278,6 +283,20 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ChatRooms");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Domain.City", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.Message", b =>
@@ -621,6 +640,13 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.HasOne("CleanArchitecture.Domain.AppUser", "Author")
                         .WithMany()
                         .HasForeignKey("AuthorId");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Domain.AppUser", b =>
+                {
+                    b.HasOne("CleanArchitecture.Domain.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.Blog", b =>

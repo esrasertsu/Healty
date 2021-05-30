@@ -7,7 +7,7 @@ interface IProps extends FieldRenderProps<string, HTMLElement>, FormFieldProps {
 const TextAreaInput:React.FC<IProps> = ({input, rows, placeholder,className, meta:{ touched, error}}) => {
     return (
         <Form.Field className={className} error={touched && !!error}>
-        <textarea {...input} placeholder={placeholder} rows={rows}/>
+        <textarea {...input} placeholder={placeholder} rows={rows}  maxLength={500}/>
         {touched && error && (
             <Label basic color='red'>{error}</Label>
         )}

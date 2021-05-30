@@ -1,7 +1,7 @@
 import { action, observable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { RootStore } from "./rootStore";
-import { IAllCategoryList, ICategory, IPredicate, ISubCategory } from "../models/category";
+import { IAllCategoryList, IAllCategoryOption, ICategory, IPredicate, ISubCategory } from "../models/category";
 
 export default class CategoryStore{
     rootStore: RootStore
@@ -17,6 +17,7 @@ export default class CategoryStore{
     @observable subcategoryList: ISubCategory[] = [];
 
     @observable allDetailedList: IAllCategoryList[] = [];
+    @observable allCategoriesOptionList : IAllCategoryOption[] = [];
     @observable loadingSubCategories = true;
     @observable categoryRegistery = new Map();
     @observable subCategoryRegistery = new Map();
@@ -109,6 +110,7 @@ export default class CategoryStore{
                 const allDetailedList = await agent.Categories.listAll();
                 runInAction(()=>{
                     this.allDetailedList = allDetailedList;
+                    this.allCategoriesOptionList = allDetailedList;
                     this.loadingAllDetailedList = false;
     
                     allDetailedList.forEach((item) =>{

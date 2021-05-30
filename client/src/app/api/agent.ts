@@ -3,10 +3,11 @@ import { IActivitiesEnvelope, IActivity } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
-import { IAccessibility, IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope, ProfileFormValues } from '../models/profile';
+import { IAccessibility, IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope, IProfileFormValues, ProfileFormValues } from '../models/profile';
 import { IBlogsEnvelope, IBlog, IPostFormValues } from '../models/blog';
 import { IAllCategoryList, ICategory, ISubCategory } from '../models/category';
 import { IChatRoom, IMessage, IMessageEnvelope, IMessageForm } from '../models/message';
+import { ICity } from '../models/location';
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
@@ -72,24 +73,25 @@ const requests = {
             headers: {'Content-type': 'application/json'}
         }).then(responseBody)
     },
-    editProfile: async (url: string, profile: Partial<IProfile>) =>{
+    editProfile: async (url: string, profile: Partial<IProfileFormValues>) =>{
         let formData = new FormData();
        debugger;
-        formData.append('DisplayName',profile.displayName!);
-        formData.append('Experience', profile.experience!);
-        formData.append('Bio', profile.bio!);
-        formData.append('ExperienceYear', profile.experienceYear!.toString());
-        formData.append('Certificates', profile.certificates!);
-        formData.append('Dependency', profile.dependency!);
+        profile.displayName && formData.append('DisplayName', profile.displayName);
+        profile.experience && profile.experience!="" && formData.append('Experience', profile.experience);
+        profile.bio && profile.bio != undefined && formData.append('Bio', profile.bio);
+        formData.append('ExperienceYear', profile.experienceYear ? profile.experienceYear.toString(): "0");
+        profile.certificates && profile.certificates!="" && formData.append('Certificates', profile.certificates);
+        profile.dependency && profile.dependency != "" && formData.append('Dependency', profile.dependency);
+        profile.cityId && profile.cityId != "" && formData.append('CityId', profile.cityId);
 
-        profile.subCategories!.length>0 && profile.subCategories!.map((subCategoryId:ISubCategory)=>(
-            formData.append('SubCategoryIds', subCategoryId.value)
+        profile.subCategoryIds!.length>0 && profile.subCategoryIds!.map((subCategoryId:string)=>(
+            formData.append('SubCategoryIds', subCategoryId)
         ));
-        profile.categories!.length>0 && profile.categories!.map((category:ICategory)=>(
-            formData.append('CategoryIds', category.value)
+        profile.categoryIds!.length>0 && profile.categoryIds!.map((category:string)=>(
+            formData.append('CategoryIds', category)
         ));
-        profile.accessibilities!.length>0 && profile.accessibilities!.map((acc:IAccessibility)=>(
-            formData.append('Accessibilities', acc.value)
+        profile.accessibilityIds!.length>0 && profile.accessibilityIds!.map((acc:string)=>(
+            formData.append('Accessibilities', acc)
         ));
         return axios.put(url, formData, {
             headers: {'Content-type': 'application/json'}
@@ -133,7 +135,7 @@ const Profiles = {
                 requests.get(`/profiles/${username}/blogs?username=${username}&limit=${limit}&offset=${page ? page*limit! :0}`),
 
     sendMessage:(message:IMessageForm) => requests.post(`/profiles/message`, message),
-    updateProfile: (profile: Partial<IProfile>) => requests.editProfile(`/profiles`,profile),
+    updateProfile: (profile: Partial<IProfile>):Promise<IProfile> => requests.editProfile(`/profiles`,profile),
     getAccessibilities : (): Promise<IAccessibility[]>  => requests.get(`/profiles/accessibilities`)
 
     }
@@ -149,7 +151,7 @@ const Blogs = {
 
 const Categories = {
     list: (): Promise<ICategory[]> => requests.get('/category'),
-    listSubCats: (categoryId: string): Promise<ISubCategory[]> => requests.get(`/category/${categoryId}/sub`),
+    listSubCats: (categoryId: string): Promise<ISubCategory[]> => requests.get(`/category/${categoryId}/sub`, ),
     listAll: (): Promise<IAllCategoryList[]> => requests.get('/category/allcategories'),
 
 }
@@ -161,11 +163,17 @@ const Messages = {
     seenMessage: (message: IMessage) => requests.put(`/message/${message.id}`, message),
 
 }
+
+const Cities = {
+    list: (): Promise<ICity[]> => requests.get('/city'),
+
+}
 export default {
     Activities,
     User,
     Profiles,
     Blogs,
     Categories,
-    Messages
+    Messages,
+    Cities
 }

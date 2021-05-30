@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Application.Categories;
+using CleanArchitecture.Application.Location;
 using CleanArchitecture.Domain;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace CleanArchitecture.Application.Profiles
         public string Experience { get; set; }
         public string Certificates { get; set; }
         public string Dependency { get; set; }//şirket , freelance vs
+        public CityDto City { get; set; }
         public ICollection<AccessibilityDto> Accessibilities { get; set; }
         public ICollection<CategoryDto> Categories { get; set; }
         public ICollection<SubCategoryDto> SubCategories { get; set; }

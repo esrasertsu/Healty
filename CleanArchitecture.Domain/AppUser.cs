@@ -11,6 +11,7 @@ namespace CleanArchitecture.Domain
         public string Certificates { get; set; }
         public string Dependency { get; set; }//þirket , freelance vs
         public Role Role { get; set; }
+        public virtual City City { get; set; }
         public virtual ICollection<Accessibility> Accessibilities { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<SubCategory> SubCategories { get; set; }

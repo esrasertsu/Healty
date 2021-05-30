@@ -25,7 +25,7 @@ import MessagesPage from '../../features/messages/MessagesPage';
 const App: React.FC<RouteComponentProps> = ({location}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const {setAppLoaded, token, appLoaded,setActiveMenu } = rootStore.commonStore;
+  const {setAppLoaded, token, appLoaded,loadCities } = rootStore.commonStore;
   const { getUser,user,createHubConnection,hubConnection } = rootStore.userStore;
 
 
@@ -40,9 +40,10 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
 
   useEffect(() => {
     if(token) {
-      getUser().finally(() => setAppLoaded())
+      getUser().finally(() => {setAppLoaded(); loadCities();})
     }else {
-      setAppLoaded()
+      setAppLoaded();
+      loadCities();
     }
   },[getUser, setAppLoaded, token])
 

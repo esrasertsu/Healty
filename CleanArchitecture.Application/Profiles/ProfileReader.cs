@@ -2,6 +2,7 @@
 using CleanArchitecture.Application.Categories;
 using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Application.Location;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +50,7 @@ namespace CleanArchitecture.Application.Profiles
                 ExperienceYear = user.ExperienceYear,
                 Certificates = user.Certificates,
                 Dependency= user.Dependency,
+                City = _mapper.Map<City, CityDto>(user.City),
                 FollowerCount = user.Followers.Count(),
                 FollowingCount = user.Followings.Count(),
                 StarCount = GetStarCount(user),

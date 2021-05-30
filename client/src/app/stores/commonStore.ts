@@ -1,4 +1,6 @@
-import { action, observable, reaction } from "mobx";
+import { action, observable, reaction, runInAction } from "mobx";
+import agent from "../api/agent";
+import { ICity } from "../models/location";
 import { RootStore } from "./rootStore";
 
 export default class CommonStore {
@@ -23,6 +25,9 @@ export default class CommonStore {
     @observable appLoaded  = false;
 
     @observable activeMenu  = -1;
+    @observable loadingCities = false;
+    @observable cities: ICity[] = [];
+    @observable cityRegistery = new Map();
 
     @action setToken = (token: string | null) => {
         this.token = token;
@@ -34,5 +39,26 @@ export default class CommonStore {
 
     @action setActiveMenu = (index: number) => {
         this.activeMenu = index;
+    }
+
+    @action loadCities = async () =>{
+        this.loadingCities = true;
+
+        try {
+            const list = await agent.Cities.list();
+            runInAction(()=>{
+                this.cities = list;
+                list.forEach((city) =>{
+                    //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
+                    this.cityRegistery.set(city.key, city);
+                });
+                this.loadingCities = false;
+            })
+        } catch (error) {
+            runInAction(()=>{
+                this.loadingCities = false;
+            })
+            console.log(error);
+        }
     }
 }

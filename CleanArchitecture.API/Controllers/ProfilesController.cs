@@ -61,7 +61,7 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Unit>> Edit([FromForm] Edit.Command command)
+        public async Task<ActionResult<Profile>> Edit([FromForm] Edit.Command command)
         {
             return await Mediator.Send(command);
         }

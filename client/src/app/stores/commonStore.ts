@@ -1,4 +1,5 @@
 import { action, observable, reaction, runInAction } from "mobx";
+import React from "react";
 import agent from "../api/agent";
 import { ICity } from "../models/location";
 import { RootStore } from "./rootStore";
@@ -23,6 +24,7 @@ export default class CommonStore {
 
     @observable token: string | null = window.localStorage.getItem('jwt');
     @observable appLoaded  = false;
+    @observable userCity  = "";
 
     @observable activeMenu  = -1;
     @observable loadingCities = false;
@@ -32,7 +34,9 @@ export default class CommonStore {
     @action setToken = (token: string | null) => {
         this.token = token;
     }
-
+    @action setUserCity = (city: string) => {
+        this.userCity = city;
+    }
     @action setAppLoaded = () => {
         this.appLoaded = true;
     }
@@ -53,6 +57,7 @@ export default class CommonStore {
                     this.cityRegistery.set(city.key, city);
                 });
                 this.loadingCities = false;
+                this.getUserLocation();
             })
         } catch (error) {
             runInAction(()=>{
@@ -61,4 +66,85 @@ export default class CommonStore {
             console.log(error);
         }
     }
+
+    @action getUserLocation = async () => {
+       
+        var setUserCity = this.setUserCity;
+        var cityRegistery = this.cityRegistery;
+
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0,
+          };
+
+        if (navigator.geolocation) {
+            navigator.permissions
+              .query({ name: "geolocation" })
+              .then(function (result) {
+                if (result.state === "granted") {
+                  console.log(result.state);
+                  navigator.geolocation.getCurrentPosition((pos:any) => success(pos,setUserCity,cityRegistery));
+                  //If granted then you can directly call your function here
+                } else if (result.state === "prompt") {
+                  console.log(result.state);
+                  navigator.geolocation.getCurrentPosition((pos:any) => success(pos,setUserCity,cityRegistery), errors, options);
+                } else if (result.state === "denied") {
+                    debugger;
+                  //If denied then you have to show instructions to enable location
+                }
+                result.onchange = function () {
+                  console.log(result.state);
+                };
+              });
+          } else {
+            alert("Sorry Not available!");
+          }
+        }
+    
 }
+
+function success(pos:any,setUserCity:any,cityRegistery:Map<any,any>) {
+    const geocoder = new google.maps.Geocoder();
+
+    var crd = pos.coords;
+    debugger;
+
+
+    var latlng = new window.google.maps.LatLng(crd.latitude, crd.longitude);
+    
+
+    geocoder!.geocode(
+      {'location': latlng}, 
+    function(results, status) {
+        if (status == "OK") {
+            var cityName = results.filter(x => x.types.includes("locality"))[0].address_components[0].long_name;
+            setUserCity(cityName);
+
+            //alert("city name is: " + cityName);
+                 var userCity = Array.from(cityRegistery.values()).filter(x => x.text === cityName);
+                if (cityName && userCity.length > 0) {
+                    setUserCity(userCity[0].key);
+                   // alert("city name is: " + userCity[0].key);
+                    // debugger;
+                    // var add= results[6].formatted_address ;
+                    // var  value=add.split(",");
+    
+                    // var count=value.length;
+                    // var country=value[count-1];
+                    // var city=value[count-2];
+                }
+                else  {
+                    alert("address not found");
+                }
+        }
+         else {
+            alert("Geocoder failed due to: " + status);
+        }
+    })
+
+ }
+
+function errors(err: any): void {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+   }

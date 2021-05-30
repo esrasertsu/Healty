@@ -21,13 +21,21 @@ import BlogList from '../../features/blog/BlogList';
 import Footer from '../../features/home/Footer';
 import BlogPage from '../../features/blog/BlogPage';
 import MessagesPage from '../../features/messages/MessagesPage';
+import { useLoadScript } from "@react-google-maps/api";
+import { LoadScriptUrlOptions } from "@react-google-maps/api/dist/utils/make-load-script-url";
+const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
 const App: React.FC<RouteComponentProps> = ({location}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const {setAppLoaded, token, appLoaded,loadCities } = rootStore.commonStore;
+  const {setAppLoaded, token, appLoaded,loadCities,getUserLocation , userCity} = rootStore.commonStore;
   const { getUser,user,createHubConnection,hubConnection } = rootStore.userStore;
-
+  
+  const { isLoaded, loadError } = useLoadScript({
+      googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
+      //libraries:["places"] düzgün çalışıyor ama console a hata veriyor 
+      libraries
+  });
 
   // useEffect(() => {
   //   return history.listen((location) => { 
@@ -39,9 +47,14 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   // },[history]) 
 
   useEffect(() => {
+
     if(token) {
-      getUser().finally(() => {setAppLoaded(); loadCities();})
+      getUser().finally(() => {
+        setAppLoaded(); 
+        loadCities();
+      })
     }else {
+      debugger;
       setAppLoaded();
       loadCities();
     }

@@ -3,7 +3,7 @@ import { IActivitiesEnvelope, IActivity } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
-import { IAccessibility, IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope, IProfileFormValues, ProfileFormValues } from '../models/profile';
+import { IAccessibility, IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope, IProfileEnvelope, IProfileFormValues, ProfileFormValues } from '../models/profile';
 import { IBlogsEnvelope, IBlog, IPostFormValues } from '../models/blog';
 import { IAllCategoryList, ICategory, ISubCategory } from '../models/category';
 import { IChatRoom, IMessage, IMessageEnvelope, IMessageForm } from '../models/message';
@@ -120,7 +120,7 @@ const User ={
 
 const Profiles = {
     get: (userName: string) => requests.get(`/profiles/${userName}/details`),
-    list: (role: string): Promise<IProfile[]> => requests.get(`/profiles/role=${role}`),
+    list: (params: URLSearchParams): Promise<IProfileEnvelope> => axios.get(`/profiles`, {params:params}).then(sleep(1000)).then(responseBody),
     uploadPhoto: ( photo: Blob): Promise<IPhoto> => requests.postForm(`/photos`, photo),
     setMainPhoto: (id:string) => requests.post(`/photos/${id}/setMain`,{}),
     deletePhoto: (id:string) => requests.del(`/photos/${id}`),

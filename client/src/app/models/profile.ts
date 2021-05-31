@@ -1,8 +1,14 @@
 import { ICategory, ISubCategory } from "./category";
 import { ICity } from "./location";
 
+export interface IProfileEnvelope {
+    profileList :IProfile[];
+    profileCount: number;
+    popularProfiles :IProfile[];
+}
 export interface IProfile {
     displayName: string,
+    mainCategory: string,
     userName: string,
     bio: string,
     image: string,
@@ -31,12 +37,6 @@ export interface IAccessibility{
     key: string;
     text: string;
     value: string;
-}
-
-export class ProfilesFilterFormValues {
-    category: string = '';
-    subCategoryIds: string[] = [];
- 
 }
 
 export interface IPhoto {
@@ -87,6 +87,58 @@ export interface IProfileBlog {
     displayName : string;
     userImage:string;
 }
+
+export interface IProfileFilterFormValues{
+    // time?: Date
+    subCategoryIds: string[],
+    categoryId: string,
+    accessibilityId: string,
+    cityId:string,
+    followingTrainers: boolean
+}
+
+
+export class ProfileFilterFormValues implements IProfileFilterFormValues{
+    cityId:string = "";
+    subCategoryIds: string[] =[];
+    categoryId: string  ="";
+    accessibilityId: string ="";
+    followingTrainers:boolean= false;
+
+    constructor(init?: IProfileFilterFormValues){
+        //  if(init)
+        // {    
+        //     debugger;
+        //     init.accessibilityIds = [];
+        //     init.subCategoryIds=[];
+        //     init.categoryId="";
+        //     init.cityId = init.city ? init.city.value : "";
+        //       init.accessibilities!.forEach(s=>
+        //         {
+        //             init.accessibilityIds.push(s.value.toString())
+
+        //         }
+        //         );
+
+        //         init.categories!.forEach(s=>
+        //             {
+        //                 init.categoryIds.push(s.value.toString())
+    
+        //             }
+        //             );
+
+        //             init.subCategories!.forEach(s=>
+        //                 {
+        //                     init.subCategoryIds.push(s.value.toString())
+        
+        //                 }
+        //                 );
+
+        //  }
+        Object.assign(this, init);
+    }
+}
+
 export interface IProfileFormValues extends Partial<IProfile>{
     // time?: Date
     subCategoryIds: string[],
@@ -94,6 +146,7 @@ export interface IProfileFormValues extends Partial<IProfile>{
     accessibilityIds: string[],
     cityId:string
 }
+
 export class ProfileFormValues implements IProfileFormValues{
     id?: string = undefined;
     cityId:string = "";

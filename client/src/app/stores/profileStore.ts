@@ -2,9 +2,10 @@ import { action, observable, runInAction, computed, reaction } from "mobx";
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { toast } from "react-toastify";
 import agent from "../api/agent";
-import { IAccessibility, IPhoto, IProfile, IProfileBlog, IProfileComment, IProfileFormValues, IUserActivity, ProfileFormValues } from "../models/profile";
+import { IAccessibility, IPhoto, IProfile, IProfileBlog, IProfileComment, IProfileFilterFormValues, IProfileFormValues, IUserActivity, ProfileFilterFormValues, ProfileFormValues } from "../models/profile";
 import { RootStore } from "./rootStore";
 import { IMessageForm } from "../models/message";
+import { setProfileProps } from "../common/util/util";
 
 const LIMIT = 5;
 
@@ -30,6 +31,7 @@ export default class ProfileStore{
     @observable profile: IProfile | null = null;
     @observable commentRegistery = new Map();
     @observable profileRegistery = new Map();
+    @observable popularProfileList: IProfile[] = [];
     @observable blogRegistery = new Map();
     @observable loadingProfile = true;
     @observable loadingProfiles = true;
@@ -46,6 +48,7 @@ export default class ProfileStore{
     @observable accessibilities: IAccessibility[] = [];
     @observable commentCount = 0;
     @observable commentPage = 0;
+    @observable profilePageCount = 0;
 
     @observable blogCount = 0;
     @observable blogPage = 0;
@@ -57,7 +60,8 @@ export default class ProfileStore{
     @observable submittingMessage = false;
     @observable updatedProfile = false;
     @observable profileForm: IProfileFormValues = new ProfileFormValues();
-
+    @observable profileFilterForm: IProfileFilterFormValues = new ProfileFilterFormValues();
+    @observable page = 0;
     @observable.ref hubConnection : HubConnection | null = null;
     @computed get isCurrentUser(){
         if (this.rootStore.userStore.user && this.profile){
@@ -66,7 +70,9 @@ export default class ProfileStore{
             return false;
         }
     }
-
+    @computed get totalProfileListPages(){
+        return Math.ceil(this.profilePageCount / LIMIT);
+    }
     @computed get totalPages(){
         return Math.ceil(this.commentCount / LIMIT);
     }
@@ -77,9 +83,15 @@ export default class ProfileStore{
     @action setBlogPagination = (page:number) =>{
         this.blogPage = page;
     }
-
+    @action setPage = (page:number) =>{
+        this.page = page;
+    }
     @computed get totalBlogPages(){
         return Math.ceil(this.blogCount / LIMIT);
+    }
+
+    @action clearProfileRegistery = () => {
+        this.profileRegistery.clear();
     }
 
     @computed get getCommentsByDate(){
@@ -100,6 +112,9 @@ export default class ProfileStore{
     
     @action setProfileForm = (profile: IProfileFormValues) => {
         this.profileForm = profile;
+    }
+    @action setProfileFilterForm = (profile: IProfileFilterFormValues) => {
+        this.profileFilterForm = profile;
     }
     
     @action setLoadingProfile = (lp : boolean) =>{
@@ -215,20 +230,54 @@ export default class ProfileStore{
         
         
     }
+
+    @computed get axiosParams(){
+        const params = new URLSearchParams();
+        params.append('limit', String(LIMIT));
+        params.append('offset', `${this.page ? this.page * LIMIT : 0}`);
+            
+        if(this.profileFilterForm.categoryId !== "")
+        {   
+          params.append("categoryId", this.profileFilterForm.categoryId);
+        }
+        if(this.profileFilterForm.subCategoryIds.length > 0)
+        {  
+            this.profileFilterForm.subCategoryIds.map((subId) => (
+                params.append("subCategoryIds", subId)
+            )); 
+        }
+        if(this.profileFilterForm.cityId !== "")
+        {   
+          params.append("cityId", this.profileFilterForm.cityId);
+        }
+        if(this.profileFilterForm.accessibilityId !== "")
+        {   
+          params.append("accessibilityId", this.profileFilterForm.accessibilityId);
+        }
+      
+        return params;
+    }
+
     @action loadProfiles = async () =>{
         this.loadingProfiles = true;
-
         try {
-            var role = "tra";
-            const profileList = await agent.Profiles.list(role);
-            runInAction('Loading profiles',()=>{
+            debugger;
+            const profilesEnvelope= await agent.Profiles.list(this.axiosParams);
+            const {profileList, profileCount,popularProfiles } = profilesEnvelope;
 
+            runInAction('Loading profiles',()=>{
+                this.popularProfileList=popularProfiles;
                 profileList.forEach((profile) =>{
-                   // setActivityProps(activity,this.rootStore.userStore.user!)
+                    var cat = this.rootStore.categoryStore.categoryList.filter(x => x.value === this.profileFilterForm.categoryId);
+                    if(cat.length>0)
+                    setProfileProps(profile,cat[0].text)
                     this.profileRegistery.set(profile.userName, profile);
                 });
-
+                this.loadAccessibilities();
+                if(this.rootStore.categoryStore.categoryList.length===0)
+                     this.rootStore.categoryStore.loadCategories();
                 this.profileList = profileList;
+                this.profilePageCount = profileCount;
                 this.loadingProfiles = false;
             })
         } catch (error) {

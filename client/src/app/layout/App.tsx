@@ -23,12 +23,14 @@ import BlogPage from '../../features/blog/BlogPage';
 import MessagesPage from '../../features/messages/MessagesPage';
 import { useLoadScript } from "@react-google-maps/api";
 import { LoadScriptUrlOptions } from "@react-google-maps/api/dist/utils/make-load-script-url";
+import { ProfileFilterFormValues } from '../models/profile';
 const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
 const App: React.FC<RouteComponentProps> = ({location}) => {
 
   const rootStore = useContext(RootStoreContext);
   const {setAppLoaded, token, appLoaded,loadCities,getUserLocation , userCity} = rootStore.commonStore;
+  const {setProfileFilterForm,profileFilterForm} = rootStore.profileStore;
   const { getUser,user,createHubConnection,hubConnection } = rootStore.userStore;
   
   const { isLoaded, loadError } = useLoadScript({
@@ -50,13 +52,11 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
 
     if(token) {
       getUser().finally(() => {
-        setAppLoaded(); 
-        loadCities();
+        loadCities().finally(()=>setAppLoaded());
       })
     }else {
       debugger;
-      setAppLoaded();
-      loadCities();
+      loadCities().finally(()=>setAppLoaded());
     }
   },[getUser, setAppLoaded, token])
 

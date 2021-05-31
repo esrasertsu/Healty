@@ -6,16 +6,12 @@ import { RouteComponentProps } from "react-router-dom";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../app/common/form/TextInput";
 import WYSIWYGEditor from "../../app/common/form/WYSIWYGEditor";
-import SelectInput from "../../app/common/form/SelectInput";
-import { category } from "../../app/common/options/categoryOptions";
-import {combineValidators, composeValidators, hasLengthGreaterThan, isRequired} from 'revalidate';
 import { RootStoreContext } from "../../app/stores/rootStore";
 import { PostFormValues } from "../../app/models/blog";
 import PhotoWidgetDropzone from "../../app/common/photoUpload/PhotoWidgetDropzone";
 import PhotoWidgetCropper from "../../app/common/photoUpload/PhotoWidgetCropper";
 import DropdownInput from "../../app/common/form/DropdownInput";
 import DropdownMultiple from "../../app/common/form/DropdownMultiple";
-import { ISubCategory } from "../../app/models/category";
 
 // const validate = combineValidators({
 //   title: isRequired({message: 'The event title is required'}),

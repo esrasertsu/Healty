@@ -9,6 +9,7 @@ import { category } from "../../app/common/options/categoryOptions";
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import ProfileListItemsPlaceholder from './ProfileListItemsPlaceholder';
+import InfiniteScroll from 'react-infinite-scroller';
 const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
@@ -33,15 +34,24 @@ const responsive = {
  const ProfileList: React.FC = () => {
 
     const rootStore = useContext(RootStoreContext);
-    const {loadingProfiles, loadProfiles, profileList} = rootStore.profileStore;
+    const {loadingProfiles, loadProfiles, profileList, profileRegistery,setPage,page,totalProfileListPages,popularProfileList,profilePageCount} = rootStore.profileStore;
+    const {appLoaded, userCity} = rootStore.commonStore;
     const [sortingInput, setSortingInput] = useState("drinks");
     useEffect(() => {
+      if(appLoaded && userCity!=="")
         loadProfiles();
-    }, [loadProfiles])
+    }, [loadProfiles,userCity])
 
 
     const handleSortingChange = (e:any,data:any) => {
       setSortingInput(data.value);
+    }
+    const [loadingNext, setLoadingNext] = useState(false);
+
+    const handleGetNext = () => {
+      setLoadingNext(true);
+      setPage(page +1);
+      loadProfiles().then(() => setLoadingNext(false))
     }
     // if(loadingProfiles) 
     // return <LoadingComponent content='Loading profiles...' />
@@ -65,7 +75,7 @@ const responsive = {
         <Grid stackable>
           <Grid.Column width={16}>
              {/* <Card.Group itemsPerRow={5} stackable>  */}
-          {loadingProfiles ?  <ProfileListItemsPlaceholder /> :
+          {loadingProfiles && page === 0 ?  <ProfileListItemsPlaceholder /> :
             <Carousel
             // arrows={false} 
             // renderButtonGroupOutside={true}
@@ -88,7 +98,7 @@ const responsive = {
              itemClass="carousel-item-padding-10-px"
            >
                 {
-                profileList.map((profile) => (
+                popularProfileList.map((profile) => (
                     <ProfileListItem key={profile.userName} profile={profile} />
                 ))}
             </Carousel> 
@@ -98,7 +108,7 @@ const responsive = {
           <Grid>
           <Grid.Column width={16} className="profileList_headerAndSorting">
           <div>
-          <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff",marginTop:"30px",fontSize: '16px'}}> Tümü ({profileList.length}) </Label>
+          <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff",marginTop:"30px",fontSize: '16px'}}> Tümü ({profilePageCount}) </Label>
           {/* <Header style={{ fontSize: '18px', marginTop:"30px" }}>
           Tümü ({profileList.length})
           </Header> */}
@@ -113,13 +123,19 @@ const responsive = {
           </Grid.Column>
          <Grid.Column width={16}>
          {loadingProfiles ? <ProfileListItemsPlaceholder /> :
-          <Card.Group itemsPerRow={6} stackable className="allProfileCards">
-              {
-                profileList.map((profile) => (
-                  <ProfileListItem key={profile.userName} profile={profile} />
-                ))
-              }
-          </Card.Group>
+          <InfiniteScroll
+          pageStart={0}
+          loadMore={handleGetNext}
+          hasMore={!loadingNext && page +1 < totalProfileListPages}
+          initialLoad={false}>
+            <Card.Group itemsPerRow={6} stackable className="allProfileCards">
+                {
+                 Array.from(profileRegistery.values()).map((profile) => (
+                    <ProfileListItem key={profile!.userName} profile={profile} />
+                    ))
+                }
+              </Card.Group>
+              </InfiniteScroll>         
           }
           </Grid.Column>
       </Grid>

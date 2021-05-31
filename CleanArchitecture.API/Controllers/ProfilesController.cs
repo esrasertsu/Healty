@@ -17,11 +17,17 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new Details.Query { UserName = username });
         }
 
-        [HttpGet("role={role}")]
-        public async Task<ActionResult<List<Profile>>> List(string role)
+        [HttpGet]
+        public async Task<ActionResult<ProfileList.ProfilesEnvelope>> List(int? limit, int? offset, Guid? categoryId, [FromQuery(Name = "subCategoryIds")] List<Guid> subCategoryIds, Guid? accessibilityId, Guid? cityId)
         {
-            return await Mediator.Send(new ProfileList.Query { Role = role });
+            return await Mediator.Send(new ProfileList.Query(limit, offset, categoryId, subCategoryIds,accessibilityId,cityId));
         }
+
+        //[HttpGet]
+        //public async Task<ActionResult<List<Profile>>> List()
+        //{
+        //    return await Mediator.Send(new ProfileList.Query { Role = role });
+        //}
 
         [HttpGet("{username}/activities")]
         public async Task<ActionResult<List<UserActivityDto>>> GetUserActivities(string username, string predicate)

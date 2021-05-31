@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import {history} from '../../index';
 import SearchArea from '../home/SearchArea';
+import NavSearchArea from './NavSearchArea';
 
 const NavBar: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
@@ -38,7 +39,7 @@ const NavBar: React.FC = () => {
                   
                   </Menu.Item>
                   <Menu.Item>
-                    <SearchArea className="nav_SearchArea" placeholder="Kategori ara"/>
+                    <NavSearchArea />
                   </Menu.Item>
                   <Menu.Item position="right" as={Link} to="/profiles"  name="Eğitmenler" 
                   active={activeMenu === 0}

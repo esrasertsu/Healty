@@ -13,8 +13,10 @@ interface IProps {
 const ProfileListItem: React.FC<IProps> = ({profile}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const {setLoadingProfile} = rootStore.profileStore;
-        let index = colors.findIndex(x => x.key === (profile.categories.length>0 ? profile.categories[0].text : "Spor"));
+  const {setLoadingProfile, profileFilterForm} = rootStore.profileStore;
+  const {allDetailedList} = rootStore.categoryStore;
+
+        let index = colors.findIndex(x => x.key === (profile.mainCategory ? profile.mainCategory:  (profile.categories.length>0 ? profile.categories[0].text: "Spor")));
         let color = colors[index].value
  
   return (
@@ -25,7 +27,7 @@ const ProfileListItem: React.FC<IProps> = ({profile}) => {
     key={profile.userName} >
       <Image circular src={profile.image || '/assets/user.png'} />
       <Label className="profileCard_Label" style={{background:color}} horizontal>
-        {profile.categories.length>0 && profile.categories[0].text}
+        {profile.mainCategory ? profile.mainCategory:  (profile.categories.length>0 ? profile.categories[0].text: "Spor")}
       </Label>
       <Card.Content className="profileCard_Content">
         <Card.Header>{profile.displayName}</Card.Header>

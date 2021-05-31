@@ -6,7 +6,6 @@ import { RootStore } from "./rootStore";
 import { history } from '../..';
 import { SyntheticEvent } from 'react';
 import { IProfileBlog } from "../models/profile";
-import CategoryStore from "./categoryStore";
 
 const LIMIT = 9;
 

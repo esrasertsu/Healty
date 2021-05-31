@@ -5,7 +5,7 @@ import { ISubCategory } from '../../models/category'
 
 interface IProps extends FieldRenderProps<string[], HTMLElement>, FormFieldProps {}
 
- const DropdownMultiple:React.FC<IProps> = ({input,onChange, width, options, placeholder, meta:{ touched, error}}) => {
+ const DropdownMultiple:React.FC<IProps> = ({input,onChange,loading=false, width, options, placeholder, meta:{ touched, error}}) => {
     return (
         <Form.Field error={touched && !!error} width={width}>
          <Dropdown 
@@ -15,6 +15,7 @@ interface IProps extends FieldRenderProps<string[], HTMLElement>, FormFieldProps
             multiple
             search
             selection
+            loading={loading}
             placeholder={placeholder}
             options={options}
          />

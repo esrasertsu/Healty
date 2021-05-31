@@ -10,7 +10,7 @@ export default class CategoryStore{
     }
 
     @observable category: ICategory | null = null;
-    @observable loadingCategories = true;
+    @observable loadingCategories = false;
     @observable loadingAllDetailedList = true;
     @observable categoryList: ICategory[] = [];
 
@@ -18,7 +18,7 @@ export default class CategoryStore{
 
     @observable allDetailedList: IAllCategoryList[] = [];
     @observable allCategoriesOptionList : IAllCategoryOption[] = [];
-    @observable loadingSubCategories = true;
+    @observable loadingSubCategories = false;
     @observable categoryRegistery = new Map();
     @observable subCategoryRegistery = new Map();
     @observable allCategoriesRegistery = new Map<string,IAllCategoryList>();
@@ -105,7 +105,6 @@ export default class CategoryStore{
     @action loadAllCategoryList = async () =>{
         
             this.loadingAllDetailedList = true;
-
             try {
                 const allDetailedList = await agent.Categories.listAll();
                 runInAction(()=>{

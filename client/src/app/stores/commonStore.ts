@@ -36,6 +36,7 @@ export default class CommonStore {
     }
     @action setUserCity = (city: string) => {
         this.userCity = city;
+        this.rootStore.profileStore.setProfileFilterForm({...this.rootStore.profileStore.profileFilterForm, cityId:city})
     }
     @action setAppLoaded = () => {
         this.appLoaded = true;
@@ -68,7 +69,7 @@ export default class CommonStore {
     }
 
     @action getUserLocation = async () => {
-       
+
         var setUserCity = this.setUserCity;
         var cityRegistery = this.cityRegistery;
 
@@ -119,9 +120,9 @@ function success(pos:any,setUserCity:any,cityRegistery:Map<any,any>) {
     function(results, status) {
         if (status == "OK") {
             var cityName = results.filter(x => x.types.includes("locality"))[0].address_components[0].long_name;
-            setUserCity(cityName);
+            //setUserCity(cityName);
 
-            //alert("city name is: " + cityName);
+           // alert("city name is: " + cityName);
                  var userCity = Array.from(cityRegistery.values()).filter(x => x.text === cityName);
                 if (cityName && userCity.length > 0) {
                     setUserCity(userCity[0].key);

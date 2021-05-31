@@ -1,16 +1,14 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext,useEffect,useState } from 'react'
-import {  Button,Dimmer,Form, Loader } from 'semantic-ui-react'
+import {  Button,Dimmer,Form } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { Form as FinalForm, Field } from "react-final-form";
-import {
-  ProfilesFilterFormValues
-} from "../../app/models/profile";
 import SelectInput from "../../app/common/form/SelectInput";
-import { category } from "../../app/common/options/categoryOptions";
 import DropdownInput from '../../app/common/form/DropdownInput';
-import { ISubCategory } from '../../app/models/category';
 import DropdownMultiple from '../../app/common/form/DropdownMultiple';
+import { IProfileFilterFormValues, ProfileFilterFormValues } from '../../app/models/profile';
+import { OnChange } from 'react-final-form-listeners';
+import { ICity } from '../../app/models/location';
 
 
 const ProfileListFilters: React.FC = () => {
@@ -20,79 +18,111 @@ const ProfileListFilters: React.FC = () => {
      subcategoryList,
      loadingCategories,
      loadingSubCategories,
-     loadCategories,
      loadSubCategories
   } = rootStore.categoryStore;
+  const {
+    cities
+ } = rootStore.commonStore;
 
-  const [filters, setFilters] = useState(new ProfilesFilterFormValues());
+  const {accessibilities, profileFilterForm, setProfileFilterForm, loadProfiles, clearProfileRegistery} = rootStore.profileStore;
+
+  //const [filters, setFilters] = useState(new ProfilesFilterFormValues());
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    loadCategories();
-}, [loadCategories])
-
+  const [buttonDisabled, setButtonDisabled] = useState(true);
   const handleFinalFormSubmit = (values: any) => {
     
   };
 
   const handleCategoryChanged = (e: any, data: string) => {
-     setFilters({...filters,category: data});
+    if(data !== profileFilterForm!.categoryId)
+    {
+     setProfileFilterForm({...profileFilterForm,categoryId: data,subCategoryIds:[]});
      loadSubCategories(data);
+     setButtonDisabled(false);
+    }
   }
      
    const handleSubCategoryChanged = (e: any, data: string[]) => {  
-    setFilters({...filters,subCategoryIds: data});
-    //setPost({...post,subCategories: data});
+    setProfileFilterForm({...profileFilterForm,subCategoryIds: [...data]});
+    setButtonDisabled(false);
    }
+   const handleCityChanged = (e: any, data: string) => {  
+     debugger;
+    if(data !== profileFilterForm!.cityId)
+    {
+      setProfileFilterForm({...profileFilterForm,cityId: data});
+      setButtonDisabled(false);
+    }
+ }
   return (
    
         <FinalForm
-            initialValues={filters}
+            initialValues={profileFilterForm}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid, pristine }) => (
               <Form onSubmit={handleSubmit} loading={loading} >
                 <Form.Group style={{alignItems:"center", margin:"0px"}} stackable ="true">
                 <Field 
-                  name="category"
+                  name="categoryId"
+                  width={3}
                   placeholder="Kategori"
                   component={DropdownInput}
                   options={categoryList}
-                  value={filters.category}
+                  loading={loadingCategories}
+                  value={profileFilterForm!.categoryId}
                   onChange={(e: any,data: any)=>handleCategoryChanged(e,data)}
                 />
                  <Field
                  width={5}
-                  name="subCategory"
+                  name="subCategoryIds"
                   placeholder="Alt Kategori"
-                  value={filters.subCategoryIds}
+                  value={profileFilterForm!.subCategoryIds}
                   component={DropdownMultiple}
                   options={subcategoryList}
+                  loading={loadingSubCategories}
                   onChange={(e: any,data: any)=>handleSubCategoryChanged(e,data)}
                 > 
               </Field>
-	            	<Field
-                  name="city"
+                 <Field 
+                  name="cityId"
+                  width={3}
                   placeholder="Şehir"
-               //   value={activity.category}
-                  component={SelectInput}
-                  options={category}
+                  component={DropdownInput}
+                  options={cities}
+                  value={profileFilterForm!.cityId}
+                  clearable={true}
+                  onChange={(e: any,data: any)=>handleCityChanged(e,data)}
                 />
                 	<Field
-                  name="online"
+                  name="accessibilityId"
                   placeholder="Erişilebilirlik"
-                //  value={activity.category}
+                  value={profileFilterForm!.accessibilityId}
                   component={SelectInput}
-                  options={category}
+                  options={accessibilities}
+
                 />
+                 <OnChange name="accessibilityId">
+                {(value, previous) => {
+                    if(value !== profileFilterForm!.accessibilityId)
+                    {
+                      setProfileFilterForm({...profileFilterForm,accessibilityId: value});
+                      setButtonDisabled(false);
+                    }
+                }}
+            </OnChange>
                <div>
                <Button
                  // loading={submitting}
-                  disabled={loading || invalid || pristine}
+                  disabled={loading || buttonDisabled}
                   floated="right"
                   positive
                   type="submit"
                   content="Ara"
                   style={{marginRight:"10px"}}
+                  onClick={() => {
+                    clearProfileRegistery();
+                    loadProfiles();
+                  }}
                 />
                 <Button
                   floated="left"
@@ -100,11 +130,10 @@ const ProfileListFilters: React.FC = () => {
                   type="cancel"
                   content="Temizle"
 
-                  // onClick={
-                  //   activity.id
-                  //     ? () => history.push(`/activities/${activity.id}`)
-                  //     : () => history.push("/activities")
-                  // }
+                  onClick={() =>{
+                    setProfileFilterForm(new ProfileFilterFormValues( {categoryId:"", subCategoryIds:[], cityId:"", accessibilityId:"", followingTrainers:false}));
+                  }
+                  }
                 />
                </div>
                

@@ -96,19 +96,7 @@ const HomePage = () => {
                    </Header>
                    {isLoggedIn && user ? ( 
                    <Fragment>
-                        {/* <Header as='h2' inverted content={`Welcome back ${user.displayName}`} /> */}
-                        <Container className='homePage-button_Container'>
-                        <SearchArea className="SearchArea" placeholder="Arama yapmak istediğin kategori.." />
-                        {/* <Button as={Link} to='/activities' size='big' inverted>
-                            See the activities
-                        </Button>
-                        <Button as={Link} to='/profiles' size='big' inverted>
-                            Find your couch
-                        </Button> */}
-                        <Button as={Link} to='/profiles' size='big' primary circular>
-                           <Icon name='search' inverted></Icon> Ara
-                        </Button>
-                        </Container>
+                        <SearchArea/>
                    </Fragment>
                    ): (
                        <Fragment>

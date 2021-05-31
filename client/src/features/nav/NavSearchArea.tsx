@@ -4,22 +4,19 @@ import { RootStoreContext } from '../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
-import { IAllCategoryList } from '../../app/models/category';
 
 
- const SearchArea:React.FC = () => {
+ const NavSearchArea:React.FC = () => {
 
     const rootStore = useContext(RootStoreContext);
 
     const {
       loadAllCategoryList,
-      loadCategories,
-      allDetailedList,
-      loadSubCategories
+      allDetailedList
     } = rootStore.categoryStore;
-    const {setProfileFilterForm,profileFilterForm} = rootStore.profileStore;
-
-    const [results, setResults] = useState<IAllCategoryList[]>([]);
+  
+    const [loadingNext, setLoadingNext] = useState(false);
+    const [results, setResults] = useState([] as any);
     const [value, setValue] = useState('');
 
     const [isSearchLoading, setSearchLoading] = useState(false);
@@ -31,19 +28,7 @@ import { IAllCategoryList } from '../../app/models/category';
 
 
     const handleResultSelect = (e:any, { result}:any) => {
-      debugger;
         setValue(result.text);
-        if(result.parentId === null)
-        {
-          loadCategories();
-          setProfileFilterForm({...profileFilterForm, categoryId:result.key});
-        }
-        else 
-        { 
-          loadSubCategories(result.parentId);
-          setProfileFilterForm({...profileFilterForm, categoryId:result.parentId, subCategoryIds:[result.key]});
-        }
-
     }
     const handleSearchChange = (e:any, { value }: any) => {
       setSearchLoading(true);
@@ -61,7 +46,6 @@ import { IAllCategoryList } from '../../app/models/category';
     const resultRenderer = ({ text }:any) => <span>{text}</span>
 
     return (
-       <Container className='homePage-button_Container'>
         <Search
                         fluid
                         loading={isSearchLoading}
@@ -72,14 +56,11 @@ import { IAllCategoryList } from '../../app/models/category';
                         results={results}
                         value={value}
                         resultRenderer={resultRenderer}
-                        className="SearchArea"
-                        placeholder="Arama yapmak istediğin kategori.." 
+                        className="nav_SearchArea"
+                        placeholder="Kategori ara" 
                 />
-                      <Button as={Link} to='/profiles' size='big' primary circular>
-                      <Icon name='search' inverted></Icon> Ara
-                   </Button>
-    </Container>
+                     
     );
 }
 
-export default observer(SearchArea);
+export default observer(NavSearchArea);

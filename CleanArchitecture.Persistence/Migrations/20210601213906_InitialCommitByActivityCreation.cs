@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CleanArchitecture.Persistence.Migrations
 {
-    public partial class InitialCommit : Migration
+    public partial class InitialCommitByActivityCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -357,8 +357,8 @@ namespace CleanArchitecture.Persistence.Migrations
                     Title = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     CategoryId = table.Column<Guid>(nullable: true),
-                    Level = table.Column<int>(nullable: false),
                     Online = table.Column<bool>(nullable: false),
+                    AttendancyLimit = table.Column<int>(nullable: true),
                     AttendanceCount = table.Column<int>(nullable: false),
                     Price = table.Column<decimal>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
@@ -434,6 +434,25 @@ namespace CleanArchitecture.Persistence.Migrations
                         name: "FK_Comments_AspNetUsers_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Levels",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    ActivityId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Levels", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Levels_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -522,6 +541,26 @@ namespace CleanArchitecture.Persistence.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Videos",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Url = table.Column<string>(nullable: true),
+                    IsMain = table.Column<bool>(nullable: false),
+                    ActivityId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Videos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Videos_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -637,6 +676,11 @@ namespace CleanArchitecture.Persistence.Migrations
                 column: "TargetId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Levels_ActivityId",
+                table: "Levels",
+                column: "ActivityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Messages_ChatRoomId",
                 table: "Messages",
                 column: "ChatRoomId");
@@ -695,6 +739,11 @@ namespace CleanArchitecture.Persistence.Migrations
                 name: "IX_UserProfileComments_TargetId",
                 table: "UserProfileComments",
                 column: "TargetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Videos_ActivityId",
+                table: "Videos",
+                column: "ActivityId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -724,6 +773,9 @@ namespace CleanArchitecture.Persistence.Migrations
                 name: "Followings");
 
             migrationBuilder.DropTable(
+                name: "Levels");
+
+            migrationBuilder.DropTable(
                 name: "Messages");
 
             migrationBuilder.DropTable(
@@ -740,6 +792,9 @@ namespace CleanArchitecture.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserProfileComments");
+
+            migrationBuilder.DropTable(
+                name: "Videos");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

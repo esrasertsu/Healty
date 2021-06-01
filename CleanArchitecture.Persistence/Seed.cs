@@ -14,6 +14,36 @@ namespace Persistence
         public static async Task SeedData(DataContext context,
             UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
+            if(!context.Levels.Any())
+            {
+                var levels = new List<Level>
+                {
+                    new Level
+                    {
+                        Name = "Başlangıç",
+
+                    },
+                    new Level
+                    {
+                        Name = "Orta",
+
+                    },
+                    new Level
+                    {
+                        Name = "İleri",
+
+                    },
+                    new Level
+                    {
+                        Name = "Tüm Seviyeler",
+
+                    }
+                };
+
+                await context.Levels.AddRangeAsync(levels);
+                var success = await context.SaveChangesAsync();
+
+            }
             if (!context.Cities.Any())
             {
                 var cities = new List<City>
@@ -868,7 +898,7 @@ namespace Persistence
                         DisplayName = "Jack",
                         UserName = "jack",
                         Email = "jack@test.com",
-                        Role=Role.User,
+                        Role=Role.Trainer,
                         Categories = new List<Category>(){Spor},
                          SubCategories= new List<SubCategory>(){ Swim },
                          Accessibilities= new List<Accessibility>(){ online }
@@ -885,10 +915,241 @@ namespace Persistence
                          SubCategories= new List<SubCategory>(){ Swim },
                          Accessibilities= new List<Accessibility>(){ online }
                     },
+                new AppUser
+                {
+                    Id = "k",
+                    DisplayName = "Kağan Onbaşılar",
+                    UserName = "kagan",
+                    Email = "kagan@test.com",
+                    Role = Role.Trainer,
+                    Experience = "çok tecrübeliyim yıllarıdr bu işi yapıyorum",
+                    ExperienceYear = 5,
+                    Dependency = "MacFit",
+                        Categories = new List<Category>(){Spor,Diyet},
+                         SubCategories= new List<SubCategory>(){ Swim },
+                         Accessibilities= new List<Accessibility>(){ online }
+                },
+                    new AppUser
+                    {
+                        Id = "l",
+                        DisplayName = "Lale Can",
+                        UserName = "lale",
+                        Email = "lale@test.com",
+                        Role = Role.Trainer,
+                        ExperienceYear = 5,
+                        Dependency = "MacFit",
+                         Categories = new List<Category>(){Spor,Diyet},
+                         SubCategories= new List<SubCategory>(){ Swim },
+                         Accessibilities= new List<Accessibility>(){ online }
+                    },
+                    new AppUser
+                    {
+                        Id = "m",
+                        DisplayName = "Murat Durak",
+                        UserName = "murat",
+                        Email = "murat@test.com",
+                        Role = Role.Trainer,
+                        ExperienceYear = 3,
+                        Dependency = "Tom'un Yeri",
+                         Categories = new List<Category>(){Spor,Diyet},
+                         SubCategories= new List<SubCategory>(){ Swim },
+                         Accessibilities= new List<Accessibility>(){ online }
+
+                    },
+                    new AppUser
+                    {
+                        Id = "n",
+                        DisplayName = "Ayse Sert",
+                        UserName = "ayse",
+                        Email = "ayse@test.com",
+                        Role = Role.Trainer,
+                        ExperienceYear = 2,
+                        Dependency = "Esra'un Yeri",
+                          Categories = new List<Category>(){Spor,Diyet},
+                         SubCategories= new List<SubCategory>(){ Swim },
+                         Accessibilities= new List<Accessibility>(){ online }
+
+                    },
+                    new AppUser
+                    {
+                        Id = "o",
+                        DisplayName = "Begüm",
+                        UserName = "begum",
+                        Email = "begum@test.com",
+                        Role = Role.Trainer,
+                        ExperienceYear = 1,
+                         Categories = new List<Category>(){Spor,Diyet},
+                         SubCategories= new List<SubCategory>(){ Swim },
+                         Accessibilities= new List<Accessibility>(){ online }
+
+                    },
+                    new AppUser
+                    {
+                        Id = "p",
+                        DisplayName = "Pınar Saylak",
+                        UserName = "pinar",
+                        Email = "pinar@test.com",
+                        Role = Role.Trainer,
+                        ExperienceYear = 3,
+                        Categories = new List<Category>() { Psikoloji },
+                        SubCategories = new List<SubCategory>() { Pedagoji },
+                        Accessibilities = new List<Accessibility>() { online }
+
+                    },
+                    new AppUser
+                    {
+                        Id = "r",
+                        DisplayName = "Rasim Ok",
+                        UserName = "rasim",
+                        Email = "rasim@test.com",
+                        Role = Role.Trainer,
+                        Categories = new List<Category>() { Psikoloji },
+                        SubCategories = new List<SubCategory>() { Pedagoji },
+                        Accessibilities = new List<Accessibility>() { online }
+
+                    },
+                     new AppUser
+                     {
+                         Id = "s",
+                         DisplayName = "Süleyman Soymanlı",
+                         UserName = "sulu",
+                         Email = "sulu@test.com",
+                         Role = Role.User,
+                         Categories = new List<Category>() { Spor },
+                         SubCategories = new List<SubCategory>() { Swim },
+                         Accessibilities = new List<Accessibility>() { online }
+
+                     },
+                     new AppUser
+                     {
+                         Id = "t",
+                         DisplayName = "Tayfun Demircili",
+                         UserName = "tayfun",
+                         Email = "tayfun@test.com",
+                         Role = Role.Trainer,
+                         Categories = new List<Category>(){Spor,Diyet},
+                         SubCategories= new List<SubCategory>(){ Swim },
+                         Accessibilities= new List<Accessibility>(){ online }
+                     },
+            new AppUser
+            {
+                Id = "u",
+                DisplayName = "Ulaş Çekmeköy",
+                UserName = "ulas",
+                Email = "ulas@test.com",
+                Role = Role.Trainer,
+                Experience = "çok tecrübeliyim yıllarıdr bu işi yapıyorum",
+                ExperienceYear = 5,
+                Dependency = "MacFit",
+                Accessibilities = new List<Accessibility>() { online, OwnPlace },
+
+            },
+                    new AppUser
+                    {
+                        Id = "v",
+                        DisplayName = "Veli Ali Elli",
+                        UserName = "veli",
+                        Email = "veli@test.com",
+                        Role = Role.Trainer,
+                        ExperienceYear = 5,
+                        Dependency = "MacFit",
+                        Accessibilities = new List<Accessibility>() { OwnPlace },
+                        SubCategories = new List<SubCategory>() { Swim },
+                        Categories = new List<Category>() { Spor },
+                    },
+                    new AppUser
+                    {
+                        Id = "y",
+                        DisplayName = "Yasin",
+                        UserName = "yasin",
+                        Email = "yasin@test.com",
+                        Role = Role.Trainer,
+                        ExperienceYear = 3,
+                        Dependency = "Tom'un Yeri",
+                        Accessibilities = new List<Accessibility>() { OwnPlace },
+                        Categories = new List<Category>() { Diyet },
+                        SubCategories = new List<SubCategory>() { Diyabet }
+
+                    },
+                    new AppUser
+                    {
+                        Id = "z",
+                        DisplayName = "Zehra Durali",
+                        UserName = "zehra",
+                        Email = "zehra@test.com",
+                        Role = Role.Trainer,
+                        ExperienceYear = 2,
+                        Dependency = "Esra'un Yeri",
+                        Accessibilities = new List<Accessibility>() { online, OwnPlace },
+                        Categories = new List<Category>() { Meditasyon },
+                        SubCategories = new List<SubCategory>() { Yoga }
+
+                    },
+                    new AppUser
+                    {
+                        Id = "i",
+                        DisplayName = "İnan Bektaşilili",
+                        UserName = "inan",
+                        Email = "inan@test.com",
+                        Role = Role.Trainer,
+                        ExperienceYear = 1,
+                        Categories = new List<Category>() { Spor },
+                        SubCategories = new List<SubCategory>() { Swim },
+                        Accessibilities = new List<Accessibility>() { online }
+
+                    },
+                    new AppUser
+                    {
+                        Id = "ab",
+                        DisplayName = "Ahmet Okçu",
+                        UserName = "ahmeto",
+                        Email = "ahmeto@test.com",
+                        Role = Role.Trainer,
+                        ExperienceYear = 3,
+                        Categories = new List<Category>() { Psikoloji },
+                        SubCategories = new List<SubCategory>() { Pedagoji },
+                        Accessibilities = new List<Accessibility>() { online }
+
+                    },
+                    new AppUser
+                    {
+                        Id = "st",
+                        DisplayName = "Semih Tınaztepe",
+                        UserName = "semiht",
+                        Email = "semiht@test.com",
+                        Role = Role.Trainer,
+                        Categories = new List<Category>() { Diyet },
+                        SubCategories = new List<SubCategory>() { Diyabet },
+                        Accessibilities = new List<Accessibility>() { online, OwnPlace }
+
+                    },
+                     new AppUser
+                     {
+                         Id = "iuc",
+                         DisplayName = "İbrahim Uğur Caner",
+                         UserName = "ibo",
+                         Email = "ibo@test.com",
+                         Role = Role.Trainer,
+                       Categories = new List<Category>() { Diyet },
+                        SubCategories = new List<SubCategory>() { Diyabet },
+                        Accessibilities = new List<Accessibility>() { online, OwnPlace }
+
+                     },
+                     new AppUser
+                     {
+                         Id = "kd",
+                         DisplayName = "Kerimcan Durmaz",
+                         UserName = "kerimcan",
+                         Email = "kerimcan@test.com",
+                         Role = Role.Trainer,
+                        Categories = new List<Category>() { Diyet },
+                        SubCategories = new List<SubCategory>() { Diyabet },
+                        Accessibilities = new List<Accessibility>() { online, OwnPlace }
+                     },
                 };
 
 
-                foreach (var user in users)
+            foreach (var user in users)
                 {
                  
                     await roleManager.CreateAsync(new IdentityRole(user.Role.ToString()));
@@ -913,10 +1174,10 @@ namespace Persistence
                         SubCategories =  new List<SubCategory>(){  context.SubCategories.FirstOrDefault(x => x.Name == "Yüzme") },
                         City = "London",
                         Venue = "Pub",
-                        Level= Level.Beginner,
                         Online= true,
                         Price= Convert.ToDecimal("100"),
-                         AttendanceCount=15,
+                        AttendancyLimit = 15,
+                         AttendanceCount=0,
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -936,7 +1197,7 @@ namespace Persistence
                         SubCategories =  new List<SubCategory>(){  context.SubCategories.FirstOrDefault(x => x.Name == "Yoga") },
                         City = "Paris",
                         Venue = "The Louvre",
-                        Level= Level.Beginner,
+                         AttendancyLimit = 5,
                          AttendanceCount=2,
                         Price= Convert.ToDecimal("500"),
                         UserActivities = new List<UserActivity>
@@ -954,6 +1215,7 @@ namespace Persistence
                                 DateJoined = DateTime.Now.AddMonths(-1)
                             },
                         }
+                        
                     },
                     new Activity
                     {
@@ -965,7 +1227,6 @@ namespace Persistence
                         City = "London",
                         Venue = "Wembly Stadium",
                         Price= Convert.ToDecimal("200"),
-                        Level= Level.Expert,
                          AttendanceCount=10,
                         UserActivities = new List<UserActivity>
                         {
@@ -993,7 +1254,6 @@ namespace Persistence
                         Venue = "Pub",
                          Online= true,
                          Price= Convert.ToDecimal("200"),
-                        Level= Level.MidLevel,
                          AttendanceCount=10,
                         UserActivities = new List<UserActivity>
                         {
@@ -1020,7 +1280,6 @@ namespace Persistence
                         City = "London",
                         Venue = "British Museum",
                         Price= Convert.ToDecimal("100"),
-                        Level= Level.MidLevel,
                          Online= true,
                           AttendanceCount=10,
                         UserActivities = new List<UserActivity>
@@ -1041,7 +1300,6 @@ namespace Persistence
                         Category = context.Categories.FirstOrDefault(x => x.Name == "Spor"),
                         City = "London",
                         Venue = "Punch and Judy",
-                        Level= Level.Expert,
                         Price= Convert.ToDecimal("200"),
                          Online= true,
                           AttendanceCount=10,
@@ -1097,7 +1355,6 @@ namespace Persistence
                         Venue = "All",
                         Price= Convert.ToDecimal("150"),
                         Online= true,
-                        Level= Level.Beginner,
                          AttendanceCount=10,
                         UserActivities = new List<UserActivity>
                         {
@@ -1143,6 +1400,7 @@ namespace Persistence
                         }
                     }
                 };
+             
 
                 await context.Activities.AddRangeAsync(activities);
                 await context.SaveChangesAsync();

@@ -24,7 +24,7 @@ const ProfileListFilters: React.FC = () => {
     cities
  } = rootStore.commonStore;
 
-  const {accessibilities, profileFilterForm, setProfileFilterForm, loadProfiles, clearProfileRegistery} = rootStore.profileStore;
+  const {accessibilities, profileFilterForm, setProfileFilterForm, loadProfiles, clearProfileRegistery,setPage} = rootStore.profileStore;
 
   //const [filters, setFilters] = useState(new ProfilesFilterFormValues());
   const [loading, setLoading] = useState(false);
@@ -121,6 +121,7 @@ const ProfileListFilters: React.FC = () => {
                   style={{marginRight:"10px"}}
                   onClick={() => {
                     clearProfileRegistery();
+                    setPage(0);
                     loadProfiles();
                   }}
                 />

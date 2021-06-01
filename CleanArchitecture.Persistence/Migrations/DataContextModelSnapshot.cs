@@ -44,6 +44,9 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<int>("AttendanceCount")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("AttendancyLimit")
+                        .HasColumnType("INTEGER");
+
                     b.Property<Guid?>("CategoryId")
                         .HasColumnType("TEXT");
 
@@ -55,9 +58,6 @@ namespace CleanArchitecture.Persistence.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Online")
                         .HasColumnType("INTEGER");
@@ -299,6 +299,25 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.ToTable("Cities");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Domain.Level", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ActivityId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
+
+                    b.ToTable("Levels");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Domain.Message", b =>
                 {
                     b.Property<Guid>("Id")
@@ -489,6 +508,27 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.ToTable("UserProfileComments");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Domain.Video", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ActivityId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
+
+                    b.ToTable("Videos");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -671,6 +711,13 @@ namespace CleanArchitecture.Persistence.Migrations
                         .HasForeignKey("AppUserId");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Domain.Level", b =>
+                {
+                    b.HasOne("CleanArchitecture.Domain.Activity", null)
+                        .WithMany("Levels")
+                        .HasForeignKey("ActivityId");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Domain.Message", b =>
                 {
                     b.HasOne("CleanArchitecture.Domain.ChatRoom", "ChatRoom")
@@ -779,6 +826,13 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.HasOne("CleanArchitecture.Domain.AppUser", "Target")
                         .WithMany("ReceivedComments")
                         .HasForeignKey("TargetId");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Domain.Video", b =>
+                {
+                    b.HasOne("CleanArchitecture.Domain.Activity", null)
+                        .WithMany("Videos")
+                        .HasForeignKey("ActivityId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

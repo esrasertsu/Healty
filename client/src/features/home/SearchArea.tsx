@@ -19,7 +19,7 @@ import { history } from '../..';
       loadSubCategories,
     } = rootStore.categoryStore;
     const {userCity} = rootStore.commonStore;
-    const {setProfileFilterForm,profileFilterForm,clearProfileRegistery} = rootStore.profileStore;
+    const {setProfileFilterForm,profileFilterForm,clearProfileRegistery, setPage} = rootStore.profileStore;
 
     const [results, setResults] = useState<IAllCategoryList[]>([]);
     const [value, setValue] = useState('');
@@ -78,6 +78,7 @@ import { history } from '../..';
                         placeholder="Arama yapmak istediğin kategori.." 
                 />
                       <Button size='big' primary circular onClick={() => {
+                           setPage(0);
                           clearProfileRegistery();
                           history.push("/profiles");
                         }}>

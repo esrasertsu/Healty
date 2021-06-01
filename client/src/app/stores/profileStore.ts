@@ -232,8 +232,8 @@ export default class ProfileStore{
 
     @computed get axiosParams(){
         const params = new URLSearchParams();
-        params.append('limit', String(LIMIT));
-        params.append('offset', `${this.page ? this.page * LIMIT : 0}`);
+        params.append('limit', String(12));
+        params.append('offset', `${this.page ? this.page * 12 : 0}`);
             
         if(this.profileFilterForm.categoryId !== "")
         {   

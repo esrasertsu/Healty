@@ -1,10 +1,15 @@
-﻿using CleanArchitecture.Application.Interfaces;
+﻿using CleanArchitecture.Application.Errors;
+using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,10 +22,17 @@ namespace CleanArchitecture.Application.Activities
             public Guid Id { get; set; }
             public string Title { get; set; }
             public string Description { get; set; }
-            public Guid Category { get; set; }
+            public Guid CategoryId { get; set; }
+            public List<Guid> SubCategoryIds { get; set; }
+            public List<Guid> Levels { get; set; }
             public DateTime Date { get; set; }
             public string City { get; set; }
             public string Venue { get; set; }
+            public bool Online { get; set; }
+            public string AttendanceCount { get; set; }
+            public string AttendancyLimit { get; set; }
+            public string Price { get; set; }
+            public virtual IFormFile Photo { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -29,10 +41,8 @@ namespace CleanArchitecture.Application.Activities
             {
                 RuleFor(x => x.Title).NotEmpty();
                 RuleFor(x => x.Description).NotEmpty();
-                RuleFor(x => x.Category).NotEmpty();
+                RuleFor(x => x.CategoryId).NotEmpty();
                 RuleFor(x => x.Date).NotEmpty();
-                RuleFor(x => x.City).NotEmpty();
-                RuleFor(x => x.Venue).NotEmpty();
 
             }
         }
@@ -41,16 +51,27 @@ namespace CleanArchitecture.Application.Activities
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
+            private readonly IPhotoAccessor _photoAccessor;
 
-            public Handler(DataContext context, IUserAccessor userAccessor)
+            public Handler(DataContext context, IUserAccessor userAccessor, IPhotoAccessor photoAccessor)
             {
                 _context = context;
                 _userAccessor = userAccessor;
+                _photoAccessor = photoAccessor;
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var category = await _context.Categories.SingleOrDefaultAsync(x => x.Id == request.Category);
+                var category = await _context.Categories.SingleOrDefaultAsync(x => x.Id == request.CategoryId);
+
+                var photoUploadResults = _photoAccessor.AddBlogPhoto(request.Photo);
+
+                var image = new Photo
+                {
+                    Url = photoUploadResults.Url,
+                    Id = photoUploadResults.PublicId,
+                    IsMain = true
+                };
 
                 var activity = new Activity
                 {
@@ -60,10 +81,44 @@ namespace CleanArchitecture.Application.Activities
                     Category = category,
                     Date = request.Date,
                     City = request.City,
-                    Venue = request.Venue
+                    Venue = request.Venue,
+                    AttendancyLimit = String.IsNullOrEmpty(request.AttendancyLimit) ? 0 : Convert.ToInt32(request.AttendancyLimit),
+                    AttendanceCount = 0,
+                    Price = String.IsNullOrEmpty(request.Price) ? 0 : Convert.ToDecimal(request.Price),
+                    Online = request.Online,
+                     
                 };
-
                 _context.Activities.Add(activity); //addsync is just for special creators
+
+                activity.Photos.Add(image);
+
+
+                if (request.SubCategoryIds != null)
+                    foreach (var subCatId in request.SubCategoryIds)
+                    {
+                        var subCat = await _context.SubCategories.SingleOrDefaultAsync(x => x.Id == subCatId);
+
+                        if (subCat == null)
+                            throw new RestException(HttpStatusCode.NotFound, new { SubCategory = "NotFound" });
+                        else
+                        {
+                            activity.SubCategories.Add(subCat);
+                        }
+                    }
+                if (request.Levels != null)
+                {
+                    foreach (var levelId in request.Levels)
+                    {
+                        var level = await _context.Levels.SingleOrDefaultAsync(x => x.Id == levelId);
+
+                        if (level == null)
+                            throw new RestException(HttpStatusCode.NotFound, new { level = "NotFound" });
+                        else
+                        {
+                            activity.Levels.Add(level);
+                        }
+                    }
+                }
 
                 var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
 

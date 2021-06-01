@@ -1,12 +1,17 @@
 import React from 'react';
-import { Card, Placeholder } from 'semantic-ui-react'
+import { Card, Placeholder, SemanticWIDTHS } from 'semantic-ui-react'
 import _ from "lodash";
+import { SemanticWIDTHSNUMBER } from 'semantic-ui-react/dist/commonjs/generic';
 
-const ProfileListItemsPlaceholder = () => {
+interface IProps{
+  itemPerRow: SemanticWIDTHSNUMBER
+}
+
+const ProfileListItemsPlaceholder:React.FC<IProps> = ({itemPerRow}) => {
   return (
    
-    <Card.Group doubling itemsPerRow={5} stackable>
-    {_.times(5, (i) => (
+    <Card.Group doubling itemsPerRow={itemPerRow} stackable>
+    {_.times(itemPerRow, (i) => (
       <Card key={i}>
           <Placeholder>
             <Placeholder.Image square />

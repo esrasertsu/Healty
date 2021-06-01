@@ -15,6 +15,7 @@ namespace CleanArchitecture.Persistence
         }
         public DbSet<Activity> Activities { get; set; }
         public DbSet<UserActivity> UserActivities { get; set; }
+        public DbSet<Video> Videos { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<ActivityComment> Comments { get; set; }
         public DbSet<UserFollowing> Followings { get; set; }
@@ -29,6 +30,7 @@ namespace CleanArchitecture.Persistence
         public DbSet<UserChatRooms> UserChatRooms { get; set; }
         public DbSet<Accessibility> Accessibilities { get; set; }
         public DbSet<City> Cities { get; set; }
+        public DbSet<Level> Levels { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -6,11 +6,13 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { StarRating } from '../../app/common/form/StarRating';
 import { Link } from 'react-router-dom';
 import { colors } from '../../app/models/category';
+import { observer } from 'mobx-react-lite';
+
 interface IProps {
     profile: IProfile
 }
 
-const ProfileListItem: React.FC<IProps> = ({profile}) => {
+ const ProfileListItem: React.FC<IProps> = ({profile}) => {
 
   const rootStore = useContext(RootStoreContext);
   const {setLoadingProfile, profileFilterForm} = rootStore.profileStore;
@@ -68,4 +70,4 @@ const ProfileListItem: React.FC<IProps> = ({profile}) => {
   );
 };
 
-export default ProfileListItem;
+ export default observer(ProfileListItem);

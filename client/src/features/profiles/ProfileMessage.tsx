@@ -22,7 +22,7 @@ const ProfileMessage: React.FC<IProps> = ({profile}) => {
                             <Image circular size={'tiny'} src={profile.image || '/assets/user.png'}></Image>
                         </Grid.Column>
                         <Grid.Column width={11}>
-                            <Header>{profile.displayName} Desidero</Header>
+                            <Header>{profile.displayName}</Header>
                             <Label>Cevap verme %60&nbsp;
                                 {/* <Icon size="large" name="question circle" className="questionmarkicon"></Icon> */}
                             </Label>

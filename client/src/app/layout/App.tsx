@@ -14,7 +14,7 @@ import { RootStoreContext } from '../stores/rootStore';
 import { LoadingComponent } from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
 import ProfilePage  from '../../features/profiles/ProfilePage';
-import ProfileList  from '../../features/profiles/ProfileList';
+import ProfileDashboard  from '../../features/profiles/ProfileDashboard';
 import ActivitySearchPage from '../../features/activities/search/ActivitySearchPage';
 import PostForm from '../../features/posts/PostForm';
 import BlogList from '../../features/blog/BlogList';
@@ -82,7 +82,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                   <Route key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
                   <Route key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
                   <Route path="/profile/:username" component={ProfilePage}/>
-                  <Route path="/profiles" component={ProfileList}/>
+                  <Route path="/profiles" component={ProfileDashboard}/>
                   <Route path="/messages" component={MessagesPage}/>
                   <Route path="/login" component={LoginForm}/>
                   <Route exact path="/activitysearch" component={ActivitySearchPage}/>

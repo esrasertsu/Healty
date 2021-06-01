@@ -1,9 +1,10 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { Segment, Item, Header, Button, Grid, Statistic, Divider, Reveal, ButtonGroup, Icon } from 'semantic-ui-react';
+import { Segment, Item, Header, Button, Grid, Statistic, Divider, Reveal, ButtonGroup, Icon, Label } from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { history } from '../../';
 import { StarRating } from '../../app/common/form/StarRating';
+import { colors } from '../../app/models/category';
 
 interface IProps{
     profile: IProfile,
@@ -16,6 +17,12 @@ interface IProps{
 const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCurrentUser}) => {
   
   const profileRating = profile ? profile.star : 0;
+
+  const getColor = (catName:string) =>{
+    let index = colors.findIndex(x => x.key === catName);
+    return colors[index].value;
+  }
+
 
   return (
     <Segment className="profieHeader_segment">
@@ -31,10 +38,12 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
               <Item.Content verticalAlign='middle' className="profileHeader_content">
                 <Grid.Row>
                   <Header as='h1'>{profile.displayName}</Header>
-                </Grid.Row>
-                <br/>
-                <Grid.Row>
-                <StarRating rating={profileRating} editing={false} key={"header"} count={profile.starCount} showCount={true}/>
+                  <StarRating rating={profileRating} editing={false} key={"header"} count={profile.starCount} showCount={true}/>
+                  <br/>
+                  {(profile.categories.map((cat) => (
+                    <Label className="profileCard_Label" style={{background:getColor(cat.text)}} horizontal>{cat.text}</Label>
+                  )))}
+              
                 </Grid.Row>
               </Item.Content>
             </Item>

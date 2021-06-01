@@ -82,10 +82,10 @@ namespace CleanArchitecture.Application.Profiles
                 }
 
 
-                var popularUsers = await queryableUsers.OrderBy(x => x.ReceivedComments.Count).ToListAsync();
+                var popularUsers = await queryableUsers.OrderByDescending(x => x.ReceivedComments.Count).ToListAsync();
                 var popularProfiles = _mapper.Map<List<AppUser>, List<Profile>>(popularUsers.ToList());
 
-                var lpopularProfiles = popularProfiles.OrderBy(x => x.Star).Take(10).ToList();
+                var lpopularProfiles = popularProfiles.OrderByDescending(x => x.Star).Take(10).ToList();
 
                 if (queryableUsers.ToList().Count < request.Limit)
                     request.Limit = queryableUsers.ToList().Count;

@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
 import { IAllCategoryList } from '../../app/models/category';
+import { history } from '../..';
 
 
  const SearchArea:React.FC = () => {
@@ -15,9 +16,10 @@ import { IAllCategoryList } from '../../app/models/category';
       loadAllCategoryList,
       loadCategories,
       allDetailedList,
-      loadSubCategories
+      loadSubCategories,
     } = rootStore.categoryStore;
-    const {setProfileFilterForm,profileFilterForm} = rootStore.profileStore;
+    const {userCity} = rootStore.commonStore;
+    const {setProfileFilterForm,profileFilterForm,clearProfileRegistery} = rootStore.profileStore;
 
     const [results, setResults] = useState<IAllCategoryList[]>([]);
     const [value, setValue] = useState('');
@@ -36,12 +38,12 @@ import { IAllCategoryList } from '../../app/models/category';
         if(result.parentId === null)
         {
           loadCategories();
-          setProfileFilterForm({...profileFilterForm, categoryId:result.key});
+          setProfileFilterForm({...profileFilterForm, categoryId:result.key, cityId: userCity});
         }
         else 
         { 
           loadSubCategories(result.parentId);
-          setProfileFilterForm({...profileFilterForm, categoryId:result.parentId, subCategoryIds:[result.key]});
+          setProfileFilterForm({...profileFilterForm,cityId: userCity, categoryId:result.parentId, subCategoryIds:[result.key]});
         }
 
     }
@@ -75,7 +77,10 @@ import { IAllCategoryList } from '../../app/models/category';
                         className="SearchArea"
                         placeholder="Arama yapmak istediğin kategori.." 
                 />
-                      <Button as={Link} to='/profiles' size='big' primary circular>
+                      <Button size='big' primary circular onClick={() => {
+                          clearProfileRegistery();
+                          history.push("/profiles");
+                        }}>
                       <Icon name='search' inverted></Icon> Ara
                    </Button>
     </Container>

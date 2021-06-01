@@ -210,7 +210,6 @@ export default class ProfileStore{
                 const profile = await agent.Profiles.get(username);
                 runInAction(()=>{
                     this.profile = profile;
-                    this.profileRegistery.set(profile.userName, profile);
                     this.loadingBlogs = true;
                     this.loadingComments = true;
                     this.loadBlogs(profile.userName);
@@ -288,34 +287,53 @@ export default class ProfileStore{
         }
     }
 
-    @action updateProfile = async (profile: Partial<IProfileFormValues>) =>{
+    @action updateProfile = async (profileDto: Partial<IProfileFormValues>) =>{
 
-        try {
-            if(profile.categoryIds && profile.categoryIds.length === 0)
+       
+            if(profileDto.categoryIds && profileDto.categoryIds.length === 0)
               {
                 toast.warning("Kategori boş seçilemez!")
                 return;
               }  
-            if(profile.subCategoryIds && profile.subCategoryIds.length === 0)
+            if(profileDto.subCategoryIds && profileDto.subCategoryIds.length === 0)
             {
                 toast.warning("Branş boş seçilemez!")
                 return;
-              }  
-           
-                const pro = await agent.Profiles.updateProfile(profile);
-                runInAction(()=>{
-    
-                    if(profile.displayName !== this.rootStore.userStore.user!.displayName){
-                        this.rootStore.userStore.user!.displayName = profile.displayName!;
-                    }
-                    this.profile = pro;  
-                    this.updatedProfile = true;  
-                })
-            
-           
-        } catch (error) {
-            toast.error('Problem saving changes');
-        }
+            }  
+
+
+            // if(
+            //     this.profile!.displayName === profileDto.displayName &&
+            //     this.profile!.bio === profileDto.bio &&
+            //     this.profile!.certificates === profileDto.certificates && 
+            //     this.profile!.city.key === profileDto.cityId  &&
+            //     (this.profile!.accessibilities.filter(x => profileDto.accessibilityIds!.findIndex(y => y !== x.key) > -1).length > 0 &&
+            //     profileDto.accessibilityIds!.filter(x => this.profile!.accessibilities.findIndex(y => y.key !== x) > -1).length > 0) &&
+            //     (this.profile!.categories.filter(x => profileDto.categoryIds!.findIndex(y => y !== x.key) > -1).length > 0 &&
+            //     (profileDto.categoryIds!.filter(x => this.profile!.categories.findIndex(y => y.key !== x) > -1).length > 0)) &&
+            //     (this.profile!.subCategories.filter(x => profileDto.subCategoryIds!.findIndex(y => y !== x.key) > -1).length > 0 &&
+            //     (profileDto.subCategoryIds!.filter(x => this.profile!.subCategories.findIndex(y => y.key !== x) > -1).length > 0)) &&
+               
+            //     this.profile!.experienceYear === profileDto.experienceYear  &&
+            //     this.profile!.experience === profileDto.experience )
+            //     toast.warning("Profil güncel")
+            //     else {
+                    try {
+                        debugger;
+                    const pro = await agent.Profiles.updateProfile(profileDto);
+                    runInAction(()=>{
+
+                        if(pro.displayName !== this.rootStore.userStore.user!.displayName){
+                            this.rootStore.userStore.user!.displayName = pro.displayName!;
+                        }
+                        this.profile = pro;  
+                        this.updatedProfile = true;  
+                    })
+                } catch (error) {
+                    toast.error('Problem saving changes');
+                }
+               // }
+ 
     }
 
     @action uploadPhoto = async (file: Blob) => {

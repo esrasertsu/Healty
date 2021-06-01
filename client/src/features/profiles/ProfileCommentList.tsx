@@ -20,13 +20,15 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
 
   const rootStore = useContext(RootStoreContext);
   const {openModal, closeModal} = rootStore.modalStore;
+  const {profile} = rootStore.profileStore;
+  const {user} = rootStore.userStore;
 
 
   return (
 <Fragment>
 {getCommentsByDate.length === 0 ? 
               <p>
-Eğitmen hakkında ilk yorumu sen yap!
+Eğitmen hakkında henüz yorum yapılmamış
               </p>  :
     <Comment.Group style={{maxWidth: "100%"}}>
                  {getCommentsByDate.map((comment) => (
@@ -50,7 +52,7 @@ Eğitmen hakkında ilk yorumu sen yap!
                  ))}
                </Comment.Group>
 }
-               <Button
+                <Button
                  floated="right"
                  content="More..." 
                  positive
@@ -58,13 +60,17 @@ Eğitmen hakkında ilk yorumu sen yap!
                  style={totalPages === 0 ? {display:"none"}: {display:"inline"}}
                  disabled={totalPages === commentPage + 1 || totalPages === 0}
                  loading={loadingNext}/>
+                 
+               {user && profile!.userName !== user.userName &&
+               (
                   <Button
                       content='Comment'
                       labelPosition='left'
                       icon='edit'
                       primary
                       onClick={()=>openModal("Leave a comment",<ProfileCommentForm closeModal={closeModal} />)}
-                    />
+                    />)
+                }
       </Fragment>
     
   );

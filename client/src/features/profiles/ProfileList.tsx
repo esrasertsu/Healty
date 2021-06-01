@@ -34,14 +34,17 @@ const responsive = {
  const ProfileList: React.FC = () => {
 
     const rootStore = useContext(RootStoreContext);
-    const {loadingProfiles, loadProfiles, profileList, profileRegistery,setPage,page,totalProfileListPages,popularProfileList,profilePageCount} = rootStore.profileStore;
+    const {loadingProfiles, loadProfiles, profileList, profileRegistery,setPage,page,totalProfileListPages,
+      popularProfileList,profilePageCount, clearProfileRegistery} = rootStore.profileStore;
     const {appLoaded, userCity} = rootStore.commonStore;
     const [sortingInput, setSortingInput] = useState("drinks");
     useEffect(() => {
       if(appLoaded && userCity!=="")
         loadProfiles();
+        return () => {
+          clearProfileRegistery();
+        }
     }, [loadProfiles,userCity])
-
 
     const handleSortingChange = (e:any,data:any) => {
       setSortingInput(data.value);
@@ -98,8 +101,8 @@ const responsive = {
              itemClass="carousel-item-padding-10-px"
            >
                 {
-                popularProfileList.map((profile) => (
-                    <ProfileListItem key={profile.userName} profile={profile} />
+                popularProfileList.map((pro) => (
+                    <ProfileListItem key={pro.userName+"_popularListItems"} profile={pro} />
                 ))}
             </Carousel> 
             }
@@ -130,8 +133,8 @@ const responsive = {
           initialLoad={false}>
             <Card.Group itemsPerRow={6} stackable className="allProfileCards">
                 {
-                 Array.from(profileRegistery.values()).map((profile) => (
-                    <ProfileListItem key={profile!.userName} profile={profile} />
+                 Array.from(profileRegistery.values()).map((pro2) => (
+                    <ProfileListItem key={pro2!.userName+Math.random()} profile={pro2} />
                     ))
                 }
               </Card.Group>

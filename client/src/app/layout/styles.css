@@ -564,6 +564,17 @@ i.search.inverted.icon {
 .profileList_carousel-container{
   padding: 10px 1px;
 }
+.profileListItem_badges{
+  margin-top: -5px;
+  z-index: 1;
+}
+.profileListItem_subCats{
+  margin-bottom: 5px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .carousel-item-padding-10-px{
   width: 230px !important;
   margin:0 20px 0 0;
@@ -932,4 +943,17 @@ i.search.inverted.icon {
   color: #345289;
   height: 100% !important;
     align-items: center;
+}
+
+.profile_desc_iconandtext {
+  display: flex !important;
+  flex-direction: row !important;
+}
+
+.profile_desc_list_item{
+  margin-top: 0 !important;
+}
+
+.profile_desc_grid_rows{
+  margin-bottom: 15px;
 }

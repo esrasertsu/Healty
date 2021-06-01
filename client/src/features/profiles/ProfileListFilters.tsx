@@ -132,6 +132,7 @@ const ProfileListFilters: React.FC = () => {
 
                   onClick={() =>{
                     setProfileFilterForm(new ProfileFilterFormValues( {categoryId:"", subCategoryIds:[], cityId:"", accessibilityId:"", followingTrainers:false}));
+                    setButtonDisabled(false);
                   }
                   }
                 />

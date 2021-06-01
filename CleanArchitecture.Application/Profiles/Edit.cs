@@ -132,10 +132,17 @@ namespace CleanArchitecture.Application.Profiles
                             }
                         }
                     }
-                  
-                    var success = await _context.SaveChangesAsync() > 0;
-                    if (success) return await _profileReader.ReadProfile(user.UserName);
-                    throw new Exception("Problem saving changes");
+
+                    try
+                    {
+                            await _context.SaveChangesAsync();
+                            return await _profileReader.ReadProfile(user.UserName);
+
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("Problem saving changes",e);
+                    }
 
                 }
             }

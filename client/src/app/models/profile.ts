@@ -186,7 +186,7 @@ export class ProfileFormValues implements IProfileFormValues{
     
                     }
                     );
-
+debugger;
                     init.subCategories!.forEach(s=>
                         {
                             init.subCategoryIds.push(s.value.toString())

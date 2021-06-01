@@ -16,24 +16,39 @@ const ProfileListItem: React.FC<IProps> = ({profile}) => {
   const {setLoadingProfile, profileFilterForm} = rootStore.profileStore;
   const {allDetailedList} = rootStore.categoryStore;
 
-        let index = colors.findIndex(x => x.key === (profile.mainCategory ? profile.mainCategory:  (profile.categories.length>0 ? profile.categories[0].text: "Spor")));
-        let color = colors[index].value
+  const getColor = (catName:string) =>{
+    let index = colors.findIndex(x => x.key === catName);
+    return colors[index].value;
+  }
  
   return (
     <Card onClick={() => {
       setLoadingProfile(true);
       history.push(`/profile/${profile.userName}`)
       }}
-    key={profile.userName} >
+    key={profile.userName+Math.random()} >
       <Image circular src={profile.image || '/assets/user.png'} />
-      <Label className="profileCard_Label" style={{background:color}} horizontal>
-        {profile.mainCategory ? profile.mainCategory:  (profile.categories.length>0 ? profile.categories[0].text: "Spor")}
-      </Label>
+      <div className="profileListItem_badges">   
+      {(profile.categories.map((cat) => (
+          <Label key={profile.userName+Math.random()+cat.text} className="profileCard_Label" style={{background:getColor(cat.text)}} horizontal>{cat.text}</Label>
+        )))}
+      </div>
+     
       <Card.Content className="profileCard_Content">
         <Card.Header>{profile.displayName}</Card.Header>
-        <Card.Description>
-          <div>{profile.subCategories.length> 0 && profile.subCategories.map<React.ReactNode>(s => <span>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])}</div>
-          <div> <Icon name="spinner" />{profile.experienceYear} yıl tecrübe</div>
+        <Card.Description key={profile.userName+Math.random()+"desc"}>
+          <div key={profile.userName+Math.random()+"sub"} className="profileListItem_subCats">
+          <Icon name="bookmark"></Icon>   
+            {profile.subCategories.length> 0 ?
+            profile.subCategories.map<React.ReactNode>(s => <span>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
+            : "Bilgi yok"
+          }
+            </div>
+            <div className="profileListItem_subCats"> <Icon name="bolt" /> {profile.accessibilities.length > 0 ? 
+          profile.accessibilities.map<React.ReactNode>(s => <span>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
+            : "Bilgi yok"}  </div>
+            <div className="profileListItem_subCats"> <Icon name="spinner" /> {profile.experienceYear > 0 ? profile.experienceYear +"yıl tecrübe" : "" } </div> 
+
         </Card.Description>
       </Card.Content>
       <Card.Content extra>

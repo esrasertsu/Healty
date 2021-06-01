@@ -62,7 +62,7 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
 
        const handleCityChanged = (e: any, data: string) => {  
         setProfileForm({...profileForm,cityId: data});
-        if(profile.city.key !== data)
+        if(profile.city===null || (profile.city && profile.city.key !== data))
             setUpdateEnabled(true);
      }
 
@@ -78,7 +78,8 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
             subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
         ))
         setSubCategoryOptions(subCategoryOptionFilteredList);
-        const renewedSubIds = profileForm!.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(x => x.key) > -1);
+        debugger;
+        const renewedSubIds = profileForm!.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
         setProfileForm({...profileForm,subCategoryIds: [...renewedSubIds]});
 
      }

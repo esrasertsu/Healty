@@ -29,7 +29,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
         loadProfile(match.params.username)
         .then((profile) => 
         {debugger;
-            setProfileForm(new ProfileFormValues(profile))})
+            setProfileForm(new ProfileFormValues(profile!))})
         setActiveTab(0);
     }, [loadProfile,match,setActiveTab])
 

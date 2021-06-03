@@ -18,9 +18,9 @@ namespace CleanArchitecture.Application.Profiles
                 .ForMember(dest => dest.FollowerCount, o => o.MapFrom(s => s.Followers.Count()))
                 .ForMember(dest => dest.StarCount, o => o.MapFrom(s => Convert.ToInt32(s.ReceivedComments.Count() > 0 ? s.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Count() : 0)))
                 .ForMember(dest => dest.Role, o => o.MapFrom(s => s.Role.ToString()))
-                .ForMember(dest => dest.SubCategories, o => o.MapFrom(s => s.SubCategories))
                 .ForMember(dest => dest.FollowerCount, o => o.MapFrom(s => s.Followers.Count()));
 
+                
         }
 
     }

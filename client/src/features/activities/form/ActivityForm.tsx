@@ -45,6 +45,10 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
     loadActivity
   } = rootStore.activityStore;
 
+  const {
+    cities
+  } = rootStore.commonStore;
+
   const [activity, setActivity] = useState(new ActivityFormValues());
   const [loading, setLoading] = useState(false);
 
@@ -97,19 +101,19 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   rows={6}
                 />
                 <Field
-                  name="category"
+                  name="categoryId"
                   placeholder="Category"
-                  value={activity.categories}
+                  value={activity.categoryIds[0]}
                   component={SelectInput}
                   options={category}
                 />
-                 <Field
+                 {/* <Field
                   name="abc"
                   placeholder="Level"
-                  value={activity.level}
+                  value={activity.le}
                   component={SelectInput}
                   options={category}
-                />
+                /> */}
                   {/* <Field
                   name="online"
                   placeholder="Online"
@@ -142,12 +146,13 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   />
                 </Form.Group>
 
-                <Field
+                 <Field
                   name="city"
                   placeholder="City"
-                  value={activity.city}
-                  component={TextInput}
-                />
+                  value={activity.cityId}
+                  component={SelectInput}
+                  options={cities}
+                /> 
                 <Field
                   name="venue"
                   placeholder="Avenue"
@@ -157,7 +162,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                  <Field
                   name="Adres"
                   placeholder="Adres"
-                  value={activity.venue}
+                  value={activity.address}
                   component={TextAreaInput}
                   rows={2}
                 />

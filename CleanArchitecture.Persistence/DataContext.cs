@@ -29,6 +29,13 @@ namespace CleanArchitecture.Persistence
         public DbSet<ChatRoom> ChatRooms { get; set; }
         public DbSet<UserChatRooms> UserChatRooms { get; set; }
         public DbSet<Accessibility> Accessibilities { get; set; }
+        public DbSet<UserAccessibility> UserAccessibilities { get; set; }
+        public DbSet<UserCategories> UserCategories { get; set; }
+        public DbSet<UserSubCategories> UserSubCategories { get; set; }
+        public DbSet<ActivityLevels> ActivityLevels { get; set; }
+        public DbSet<ActivityCategories> ActivityCategories { get; set; }
+        public DbSet<ActivitySubCategories> ActivitySubCategories { get; set; }
+
         public DbSet<City> Cities { get; set; }
         public DbSet<Level> Levels { get; set; }
 
@@ -112,6 +119,89 @@ namespace CleanArchitecture.Persistence
               .WithMany(u => u.Users)
               .HasForeignKey(a => a.ChatRoomId)
               .OnDelete(DeleteBehavior.Restrict);
+
+
+            builder.Entity<UserCategories>(x => x.HasKey(ua =>
+            new { ua.AppUserId, ua.CategoryId }));
+
+            builder.Entity<UserCategories>()
+                .HasOne(u => u.AppUser)
+                .WithMany(a => a.UserCategories)
+                .HasForeignKey(u => u.AppUserId);
+
+            builder.Entity<UserCategories>()
+                .HasOne(u => u.Category)
+                .WithMany(a => a.UserCategories)
+                .HasForeignKey(u => u.CategoryId);
+
+            builder.Entity<UserSubCategories>(x => x.HasKey(ua =>
+           new { ua.AppUserId, ua.SubCategoryId }));
+
+            builder.Entity<UserSubCategories>()
+                .HasOne(u => u.AppUser)
+                .WithMany(a => a.UserSubCategories)
+                .HasForeignKey(u => u.AppUserId);
+
+            builder.Entity<UserSubCategories>()
+                .HasOne(u => u.SubCategory)
+                .WithMany(a => a.UserSubCategories)
+                .HasForeignKey(u => u.SubCategoryId);
+
+
+            builder.Entity<UserAccessibility>(x => x.HasKey(ua =>
+        new { ua.AppUserId, ua.AccessibilityId }));
+
+            builder.Entity<UserAccessibility>()
+                .HasOne(u => u.AppUser)
+                .WithMany(a => a.UserAccessibilities)
+                .HasForeignKey(u => u.AppUserId);
+
+            builder.Entity<UserAccessibility>()
+                .HasOne(u => u.Accessibility)
+                .WithMany(a => a.UserAccessibilities)
+                .HasForeignKey(u => u.AccessibilityId);
+
+
+
+            builder.Entity<ActivityCategories>(x => x.HasKey(ua =>
+           new { ua.ActivityId, ua.CategoryId }));
+
+            builder.Entity<ActivityCategories>()
+                .HasOne(u => u.Activity)
+                .WithMany(a => a.Categories)
+                .HasForeignKey(u => u.ActivityId);
+
+            builder.Entity<ActivityCategories>()
+                .HasOne(u => u.Category)
+                .WithMany(a => a.ActivityCategories)
+                .HasForeignKey(u => u.CategoryId);
+
+            builder.Entity<ActivitySubCategories>(x => x.HasKey(ua =>
+           new { ua.ActivityId, ua.SubCategoryId }));
+
+            builder.Entity<ActivitySubCategories>()
+                .HasOne(u => u.Activity)
+                .WithMany(a => a.SubCategories)
+                .HasForeignKey(u => u.ActivityId);
+
+            builder.Entity<ActivitySubCategories>()
+                .HasOne(u => u.SubCategory)
+                .WithMany(a => a.ActivitySubCategories)
+                .HasForeignKey(u => u.SubCategoryId);
+
+
+            builder.Entity<ActivityLevels>(x => x.HasKey(ua =>
+           new { ua.ActivityId, ua.LevelId }));
+
+            builder.Entity<ActivityLevels>()
+                .HasOne(u => u.Activity)
+                .WithMany(a => a.Levels)
+                .HasForeignKey(u => u.ActivityId);
+
+            builder.Entity<ActivityLevels>()
+                .HasOne(u => u.Level)
+                .WithMany(a => a.Activities)
+                .HasForeignKey(u => u.LevelId);
 
         }
     }

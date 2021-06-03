@@ -810,7 +810,19 @@ namespace Persistence
                         Experience="çok tecrübeliyim yıllarıdr bu işi yapıyorum",
                         ExperienceYear=5,
                         Dependency="MacFit",
-                        Accessibilities= new List<Accessibility>(){ online, OwnPlace },
+                        UserAccessibilities = new List<UserAccessibility>
+                        {
+                            new UserAccessibility
+                            {
+                                AppUserId = "a",
+                                AccessibilityId = online.Id
+                            },
+                            new UserAccessibility
+                            {
+                                AppUserId = "a",
+                                AccessibilityId = OwnPlace.Id
+                            }
+                        }
 
                     },
                     new AppUser
@@ -822,9 +834,32 @@ namespace Persistence
                         Role=Role.Trainer,
                          ExperienceYear=5,
                         Dependency="MacFit",
-                         Accessibilities= new List<Accessibility>(){OwnPlace},
-                        SubCategories= new List<SubCategory>(){ Swim },
-                        Categories= new List<Category>(){ Spor },
+                        UserAccessibilities = new List<UserAccessibility>
+                        {
+                            new UserAccessibility
+                            {
+                                AppUserId = "b",
+                                AccessibilityId = online.Id
+                            },
+                            new UserAccessibility
+                            {
+                                AppUserId = "b",
+                                Accessibility = OwnPlace
+                            }
+                        } ,
+                         UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "b",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "b",
+                                Category = Spor
+                            },
+                        }                         
                     },
                     new AppUser
                     {
@@ -835,9 +870,32 @@ namespace Persistence
                         Role=Role.Trainer,
                          ExperienceYear=3,
                         Dependency="Tom'un Yeri",
-                         Accessibilities= new List<Accessibility>(){ OwnPlace},
-                         Categories= new List<Category>(){ Diyet },
-                         SubCategories= new List<SubCategory>(){ Diyabet }
+                          UserAccessibilities = new List<UserAccessibility>
+                        {
+                            new UserAccessibility
+                            {
+                                AppUserId = "c",
+                                Accessibility = online
+                            },
+                            new UserAccessibility
+                            {
+                                AppUserId = "c",
+                                Accessibility = OwnPlace
+                            }
+                        } ,
+                         UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "c",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "c",
+                                Category = Spor
+                            },
+                        }
 
                     },
                     new AppUser
@@ -849,9 +907,7 @@ namespace Persistence
                         Role=Role.Trainer,
                         ExperienceYear=2,
                         Dependency="Esra'un Yeri",
-                        Accessibilities= new List<Accessibility>(){ online, OwnPlace},
-                        Categories = new List<Category>(){ Meditasyon },
-                         SubCategories= new List<SubCategory>(){ Yoga }
+                     
 
                     },
                     new AppUser
@@ -862,9 +918,7 @@ namespace Persistence
                         Email = "steve@test.com",
                         Role=Role.Trainer,
                         ExperienceYear=1,
-                        Categories = new List<Category>(){Spor},
-                        SubCategories= new List<SubCategory>(){ Swim },
-                        Accessibilities= new List<Accessibility>(){ online }
+                       
 
                     },
                     new AppUser
@@ -875,9 +929,7 @@ namespace Persistence
                         Email = "ahmet@test.com",
                         Role=Role.Trainer,
                         ExperienceYear=3,
-                        Categories = new List<Category>(){Psikoloji},
-                        SubCategories= new List<SubCategory>(){ Pedagoji },
-                       Accessibilities= new List<Accessibility>(){ online }
+                       
 
                     },
                     new AppUser
@@ -887,9 +939,7 @@ namespace Persistence
                         UserName = "semih",
                         Email = "semih@test.com",
                         Role=Role.Trainer,
-                        Categories = new List<Category>(){Psikoloji},
-                        SubCategories= new List<SubCategory>(){ Pedagoji },
-                       Accessibilities= new List<Accessibility>(){ online }
+                       
 
                     },
                      new AppUser
@@ -899,9 +949,7 @@ namespace Persistence
                         UserName = "jack",
                         Email = "jack@test.com",
                         Role=Role.Trainer,
-                        Categories = new List<Category>(){Spor},
-                         SubCategories= new List<SubCategory>(){ Swim },
-                         Accessibilities= new List<Accessibility>(){ online }
+                     
 
                     },
                      new AppUser
@@ -911,9 +959,7 @@ namespace Persistence
                         UserName = "johny",
                         Email = "johny@test.com",
                         Role=Role.Trainer,
-                           Categories = new List<Category>(){Spor,Diyet},
-                         SubCategories= new List<SubCategory>(){ Swim },
-                         Accessibilities= new List<Accessibility>(){ online }
+                         
                     },
                 new AppUser
                 {
@@ -925,9 +971,7 @@ namespace Persistence
                     Experience = "çok tecrübeliyim yıllarıdr bu işi yapıyorum",
                     ExperienceYear = 5,
                     Dependency = "MacFit",
-                        Categories = new List<Category>(){Spor,Diyet},
-                         SubCategories= new List<SubCategory>(){ Swim },
-                         Accessibilities= new List<Accessibility>(){ online }
+                      
                 },
                     new AppUser
                     {
@@ -938,9 +982,7 @@ namespace Persistence
                         Role = Role.Trainer,
                         ExperienceYear = 5,
                         Dependency = "MacFit",
-                         Categories = new List<Category>(){Spor,Diyet},
-                         SubCategories= new List<SubCategory>(){ Swim },
-                         Accessibilities= new List<Accessibility>(){ online }
+                      
                     },
                     new AppUser
                     {
@@ -951,9 +993,7 @@ namespace Persistence
                         Role = Role.Trainer,
                         ExperienceYear = 3,
                         Dependency = "Tom'un Yeri",
-                         Categories = new List<Category>(){Spor,Diyet},
-                         SubCategories= new List<SubCategory>(){ Swim },
-                         Accessibilities= new List<Accessibility>(){ online }
+                       
 
                     },
                     new AppUser
@@ -965,9 +1005,7 @@ namespace Persistence
                         Role = Role.Trainer,
                         ExperienceYear = 2,
                         Dependency = "Esra'un Yeri",
-                          Categories = new List<Category>(){Spor,Diyet},
-                         SubCategories= new List<SubCategory>(){ Swim },
-                         Accessibilities= new List<Accessibility>(){ online }
+                         
 
                     },
                     new AppUser
@@ -978,9 +1016,7 @@ namespace Persistence
                         Email = "begum@test.com",
                         Role = Role.Trainer,
                         ExperienceYear = 1,
-                         Categories = new List<Category>(){Spor,Diyet},
-                         SubCategories= new List<SubCategory>(){ Swim },
-                         Accessibilities= new List<Accessibility>(){ online }
+                     
 
                     },
                     new AppUser
@@ -991,9 +1027,7 @@ namespace Persistence
                         Email = "pinar@test.com",
                         Role = Role.Trainer,
                         ExperienceYear = 3,
-                        Categories = new List<Category>() { Psikoloji },
-                        SubCategories = new List<SubCategory>() { Pedagoji },
-                        Accessibilities = new List<Accessibility>() { online }
+                       
 
                     },
                     new AppUser
@@ -1002,10 +1036,8 @@ namespace Persistence
                         DisplayName = "Rasim Ok",
                         UserName = "rasim",
                         Email = "rasim@test.com",
-                        Role = Role.Trainer,
-                        Categories = new List<Category>() { Psikoloji },
-                        SubCategories = new List<SubCategory>() { Pedagoji },
-                        Accessibilities = new List<Accessibility>() { online }
+                        Role = Role.Trainer
+                       
 
                     },
                      new AppUser
@@ -1015,9 +1047,7 @@ namespace Persistence
                          UserName = "sulu",
                          Email = "sulu@test.com",
                          Role = Role.User,
-                         Categories = new List<Category>() { Spor },
-                         SubCategories = new List<SubCategory>() { Swim },
-                         Accessibilities = new List<Accessibility>() { online }
+                      
 
                      },
                      new AppUser
@@ -1027,9 +1057,7 @@ namespace Persistence
                          UserName = "tayfun",
                          Email = "tayfun@test.com",
                          Role = Role.Trainer,
-                         Categories = new List<Category>(){Spor,Diyet},
-                         SubCategories= new List<SubCategory>(){ Swim },
-                         Accessibilities= new List<Accessibility>(){ online }
+                         
                      },
             new AppUser
             {
@@ -1041,7 +1069,6 @@ namespace Persistence
                 Experience = "çok tecrübeliyim yıllarıdr bu işi yapıyorum",
                 ExperienceYear = 5,
                 Dependency = "MacFit",
-                Accessibilities = new List<Accessibility>() { online, OwnPlace },
 
             },
                     new AppUser
@@ -1053,9 +1080,7 @@ namespace Persistence
                         Role = Role.Trainer,
                         ExperienceYear = 5,
                         Dependency = "MacFit",
-                        Accessibilities = new List<Accessibility>() { OwnPlace },
-                        SubCategories = new List<SubCategory>() { Swim },
-                        Categories = new List<Category>() { Spor },
+                       
                     },
                     new AppUser
                     {
@@ -1066,9 +1091,7 @@ namespace Persistence
                         Role = Role.Trainer,
                         ExperienceYear = 3,
                         Dependency = "Tom'un Yeri",
-                        Accessibilities = new List<Accessibility>() { OwnPlace },
-                        Categories = new List<Category>() { Diyet },
-                        SubCategories = new List<SubCategory>() { Diyabet }
+                        
 
                     },
                     new AppUser
@@ -1080,9 +1103,7 @@ namespace Persistence
                         Role = Role.Trainer,
                         ExperienceYear = 2,
                         Dependency = "Esra'un Yeri",
-                        Accessibilities = new List<Accessibility>() { online, OwnPlace },
-                        Categories = new List<Category>() { Meditasyon },
-                        SubCategories = new List<SubCategory>() { Yoga }
+                     
 
                     },
                     new AppUser
@@ -1093,9 +1114,7 @@ namespace Persistence
                         Email = "inan@test.com",
                         Role = Role.Trainer,
                         ExperienceYear = 1,
-                        Categories = new List<Category>() { Spor },
-                        SubCategories = new List<SubCategory>() { Swim },
-                        Accessibilities = new List<Accessibility>() { online }
+                       
 
                     },
                     new AppUser
@@ -1106,9 +1125,7 @@ namespace Persistence
                         Email = "ahmeto@test.com",
                         Role = Role.Trainer,
                         ExperienceYear = 3,
-                        Categories = new List<Category>() { Psikoloji },
-                        SubCategories = new List<SubCategory>() { Pedagoji },
-                        Accessibilities = new List<Accessibility>() { online }
+                       
 
                     },
                     new AppUser
@@ -1118,9 +1135,7 @@ namespace Persistence
                         UserName = "semiht",
                         Email = "semiht@test.com",
                         Role = Role.Trainer,
-                        Categories = new List<Category>() { Diyet },
-                        SubCategories = new List<SubCategory>() { Diyabet },
-                        Accessibilities = new List<Accessibility>() { online, OwnPlace }
+                      
 
                     },
                      new AppUser
@@ -1130,9 +1145,7 @@ namespace Persistence
                          UserName = "ibo",
                          Email = "ibo@test.com",
                          Role = Role.Trainer,
-                       Categories = new List<Category>() { Diyet },
-                        SubCategories = new List<SubCategory>() { Diyabet },
-                        Accessibilities = new List<Accessibility>() { online, OwnPlace }
+                      
 
                      },
                      new AppUser
@@ -1142,9 +1155,7 @@ namespace Persistence
                          UserName = "kerimcan",
                          Email = "kerimcan@test.com",
                          Role = Role.Trainer,
-                        Categories = new List<Category>() { Diyet },
-                        SubCategories = new List<SubCategory>() { Diyabet },
-                        Accessibilities = new List<Accessibility>() { online, OwnPlace }
+                      
                      },
                 };
 
@@ -1170,9 +1181,6 @@ namespace Persistence
                         Title = "Past Activity 1",
                         Date = DateTime.Now.AddMonths(-2),
                         Description = "Activity 2 months ago",
-                        Category = await context.Categories.SingleOrDefaultAsync(x => x.Name == "Spor"),
-                        SubCategories =  new List<SubCategory>(){  context.SubCategories.FirstOrDefault(x => x.Name == "Yüzme") },
-                        City = "London",
                         Venue = "Pub",
                         Online= true,
                         Price= Convert.ToDecimal("100"),
@@ -1193,9 +1201,20 @@ namespace Persistence
                         Title = "Past Activity 2",
                         Date = DateTime.Now.AddMonths(-1),
                         Description = "Activity 1 month ago",
-                        Category = await context.Categories.SingleOrDefaultAsync(x => x.Name == "Meditasyon"),
-                        SubCategories =  new List<SubCategory>(){  context.SubCategories.FirstOrDefault(x => x.Name == "Yoga") },
-                        City = "Paris",
+                        Categories  = new List<ActivityCategories>
+                        {
+                            new ActivityCategories
+                            {
+                                Category = Meditasyon
+                            }
+                        },
+                        SubCategories =  new List<ActivitySubCategories>
+                        {
+                            new ActivitySubCategories
+                            {
+                                SubCategoryId = Yoga.Id
+                            }
+                        },
                         Venue = "The Louvre",
                          AttendancyLimit = 5,
                          AttendanceCount=2,
@@ -1222,9 +1241,6 @@ namespace Persistence
                         Title = "Future Activity 1",
                         Date = DateTime.Now.AddMonths(1),
                         Description = "Activity 1 month in future",
-                        Category = await context.Categories.SingleOrDefaultAsync(x => x.Name == "Psikoloji"),
-                        SubCategories =  new List<SubCategory>(){ await context.SubCategories.SingleOrDefaultAsync(x => x.Name == "Yoga") },
-                        City = "London",
                         Venue = "Wembly Stadium",
                         Price= Convert.ToDecimal("200"),
                          AttendanceCount=10,
@@ -1249,8 +1265,6 @@ namespace Persistence
                         Title = "Future Activity 2",
                         Date = DateTime.Now.AddMonths(3),
                         Description = "The header spscroll, which smooth scrolls some link clicks, was globally targeting any element with data-scroll… a shared attribute that your plugin also uses. I updated the specificity on this to target the header data-scroll elements only, and all is right in the universe.Thanks for the quick response.Close this puppy up as resolved",
-                        Category = await context.Categories.FirstOrDefaultAsync(x => x.Name == "Meditasyon"),
-                        City = "London",
                         Venue = "Pub",
                          Online= true,
                          Price= Convert.ToDecimal("200"),
@@ -1276,8 +1290,6 @@ namespace Persistence
                         Title = "Future Activity 4",
                         Date = DateTime.Now.AddMonths(4),
                         Description = "Activity 4 months in future",
-                        Category = context.Categories.FirstOrDefault(x => x.Name == "Diyet"),
-                        City = "London",
                         Venue = "British Museum",
                         Price= Convert.ToDecimal("100"),
                          Online= true,
@@ -1297,8 +1309,6 @@ namespace Persistence
                         Title = "Future Activity 5",
                         Date = DateTime.Now.AddMonths(5),
                         Description = "Activity 5 months in future",
-                        Category = context.Categories.FirstOrDefault(x => x.Name == "Spor"),
-                        City = "London",
                         Venue = "Punch and Judy",
                         Price= Convert.ToDecimal("200"),
                          Online= true,
@@ -1324,8 +1334,6 @@ namespace Persistence
                         Title = "Future Activity 6",
                         Date = DateTime.Now.AddMonths(6),
                         Description = "Activity 6 months in future",
-                        Category = context.Categories.FirstOrDefault(x => x.Name == "Diyet"),
-                        City = "London",
                         Price= Convert.ToDecimal("300"),
                         Venue = "O2 Arena",
                          AttendanceCount=10,
@@ -1350,8 +1358,6 @@ namespace Persistence
                         Title = "Future Activity 7",
                         Date = DateTime.Now.AddMonths(7),
                         Description = "Activity 7 months in future",
-                        Category = context.Categories.FirstOrDefault(x => x.Name == "Meditasyon"),
-                        City = "Berlin",
                         Venue = "All",
                         Price= Convert.ToDecimal("150"),
                         Online= true,
@@ -1377,8 +1383,6 @@ namespace Persistence
                         Title = "Future Activity 8",
                         Date = DateTime.Now.AddMonths(8),
                         Description = "Activity 8 months in future",
-                        Category = context.Categories.FirstOrDefault(x => x.Name == "Psikoloji"),
-                        City = "London",
                         Venue = "Pub",
                          Online= true,
                          Price= null,

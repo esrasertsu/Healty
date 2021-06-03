@@ -10,5 +10,9 @@ namespace CleanArchitecture.Domain
         public string Name { get; set; }
         public virtual List<Blog> Blogs { get; set; }
         public virtual List<SubCategory> SubCategories { get; set; }
+        public virtual ICollection<UserCategories> UserCategories { get; set; }
+        public virtual ICollection<ActivityCategories> ActivityCategories { get; set; }
+
+
     }
 }

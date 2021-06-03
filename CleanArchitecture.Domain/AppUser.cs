@@ -12,9 +12,6 @@ namespace CleanArchitecture.Domain
         public string Dependency { get; set; }//þirket , freelance vs
         public Role Role { get; set; }
         public virtual City City { get; set; }
-        public virtual ICollection<Accessibility> Accessibilities { get; set; }
-        public virtual ICollection<Category> Categories { get; set; }
-        public virtual ICollection<SubCategory> SubCategories { get; set; }
         public string Bio { get; set; }
         public bool IsOnline { get; set; }
         public virtual ICollection<UserActivity> UserActivities { get; set; }
@@ -25,7 +22,9 @@ namespace CleanArchitecture.Domain
         public virtual ICollection<UserProfileComment> ReceivedComments { get; set; }
         public virtual ICollection<UserProfileComment> SendComments { get; set; }
         public virtual ICollection<UserChatRooms> ChatRooms { get; set; }
-
+        public virtual ICollection<UserAccessibility> UserAccessibilities { get; set; }
+        public virtual ICollection<UserSubCategories> UserSubCategories { get; set; }
+        public virtual ICollection<UserCategories> UserCategories { get; set; }
     }
 
     public enum Role

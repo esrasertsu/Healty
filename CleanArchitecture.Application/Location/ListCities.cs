@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,7 +29,10 @@ namespace CleanArchitecture.Application.Location
             }
             public async Task<List<CityDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var cities = await _context.Cities.ToListAsync(cancellationToken);
+                // CultureInfo culture = new CultureInfo("tr-TR");StringComparer.Create(culture, false) //  StringComparer.CurrentCulture
+
+                var cities = await _context.Cities.OrderBy(x => x.Name).ToListAsync(cancellationToken);
+
                 return _mapper.Map<List<City>, List<CityDto>>(cities);
 
             }

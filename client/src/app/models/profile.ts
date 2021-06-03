@@ -168,7 +168,7 @@ export class ProfileFormValues implements IProfileFormValues{
     constructor(init?: IProfileFormValues){
          if(init)
         {    
-            debugger;
+            
             init.accessibilityIds = [];
             init.subCategoryIds=[];
             init.categoryIds=[];
@@ -186,7 +186,6 @@ export class ProfileFormValues implements IProfileFormValues{
     
                     }
                     );
-debugger;
                     init.subCategories!.forEach(s=>
                         {
                             init.subCategoryIds.push(s.value.toString())

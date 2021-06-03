@@ -47,11 +47,12 @@ namespace CleanArchitecture.Application.Profiles
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
-
-            public Handler(DataContext context, IMapper mapper)
+            private readonly IProfileReader _profileReader;
+            public Handler(DataContext context, IMapper mapper, IProfileReader profileReader)
             {
                 _context = context;
                 _mapper = mapper;
+                _profileReader = profileReader;
             }
             public async Task<ProfilesEnvelope> Handle(Query request, CancellationToken cancellationToken)
             {
@@ -64,7 +65,7 @@ namespace CleanArchitecture.Application.Profiles
 
                 if (request.CategoryId != null)
                 {
-                    queryableUsers = queryableUsers.Where(x => x.Categories.Any(x => x.Id == request.CategoryId));
+                    queryableUsers = queryableUsers.Where(x => x.UserCategories.Any(x => x.CategoryId == request.CategoryId));
                 }
                 if (request.CityId != null)
                 {
@@ -72,20 +73,24 @@ namespace CleanArchitecture.Application.Profiles
                 }
                 if (request.AccessibilityId != null)
                 {
-                    queryableUsers = queryableUsers.Where(x => x.Accessibilities.Any(x => x.Id == request.AccessibilityId));
+                    queryableUsers = queryableUsers.Where(x => x.UserAccessibilities.Any(x => x.AccessibilityId == request.AccessibilityId));
                 }
             
                 if (request.SubCategoryIds != null && request.SubCategoryIds.Count > 0)
                 {
-                    queryableUsers = queryableUsers.Where(x => x.SubCategories.Any(
-                        a => request.SubCategoryIds.Contains(a.Id))); //tostring çevirisi sakın qureylerde yapma client side olarak algılıyor
+                    queryableUsers = queryableUsers.Where(x => x.UserSubCategories.Any(
+                        a => request.SubCategoryIds.Contains(a.SubCategoryId))); //tostring çevirisi sakın qureylerde yapma client side olarak algılıyor
                 }
 
 
                 var popularUsers = await queryableUsers.OrderByDescending(x => x.ReceivedComments.Count).ToListAsync();
-                var popularProfiles = _mapper.Map<List<AppUser>, List<Profile>>(popularUsers.ToList());
+                var popularProfiles = new List<Profile>();
+                foreach (var user in popularUsers)
+                {
+                    popularProfiles.Add(await _profileReader.ReadProfileCard(user.UserName));
+                }
 
-                var lpopularProfiles = popularProfiles.OrderByDescending(x => x.Star).Take(10).ToList();
+                var orderedpopularProfiles = popularProfiles.OrderByDescending(x => x.Star).Take(10).ToList();
 
                 if (queryableUsers.ToList().Count < request.Limit)
                     request.Limit = queryableUsers.ToList().Count;
@@ -94,11 +99,18 @@ namespace CleanArchitecture.Application.Profiles
                    .Skip(request.Offset ?? 0)
                    .Take(request.Limit ?? 6).ToListAsync();
 
+
+                var profiles = new List<Profile>();
+                foreach (var user in users)
+                {
+                    profiles.Add(await _profileReader.ReadProfileCard(user.UserName));
+                }
+
                 return new ProfilesEnvelope
                 {
-                    ProfileList = _mapper.Map<List<AppUser>, List<Profile>>(users),
+                    ProfileList = profiles,
                     ProfileCount = queryableUsers.Count(),
-                    PopularProfiles = lpopularProfiles
+                    PopularProfiles = orderedpopularProfiles
                 };
             }
         }

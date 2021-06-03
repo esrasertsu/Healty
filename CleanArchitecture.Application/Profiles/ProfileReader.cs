@@ -38,6 +38,50 @@ namespace CleanArchitecture.Application.Profiles
 
             var currentUser = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
 
+
+            var accessDtoToReturn = new List<AccessibilityDto>();
+
+            foreach (var access in user.UserAccessibilities)
+            {
+                var accDto = new AccessibilityDto
+                {
+                    Key = access.Accessibility.Id.ToString(),
+                    Text = access.Accessibility.Name,
+                    Value = access.Accessibility.Id.ToString(),
+                };
+
+                accessDtoToReturn.Add(accDto);
+            }
+
+            var catsToReturn = new List<CategoryDto>();
+
+            foreach (var cat in user.UserCategories)
+            {
+                var catDto = new CategoryDto
+                {
+                    Key = cat.Category.Id.ToString(),
+                    Text = cat.Category.Name,
+                    Value = cat.Category.Id.ToString(),
+                };
+
+                catsToReturn.Add(catDto);
+            }
+
+            var subcatsToReturn = new List<SubCategoryDto>();
+
+            foreach (var cat in user.UserSubCategories)
+            {
+                var catDto = new SubCategoryDto
+                {
+                    Key = cat.SubCategory.Id.ToString(),
+                    Text = cat.SubCategory.Name,
+                    Value = cat.SubCategory.Id.ToString(),
+                };
+
+                subcatsToReturn.Add(catDto);
+            }
+
+
             var profile = new Profile
             {
                 DisplayName = user.DisplayName,
@@ -57,9 +101,9 @@ namespace CleanArchitecture.Application.Profiles
                 Star = CalculateStar(user),
                 IsOnline = user.IsOnline,
                 ResponseRate = CalculateResponseRate(user),
-                Accessibilities = _mapper.Map<ICollection<Accessibility>, ICollection<AccessibilityDto>>(user.Accessibilities),
-                Categories = _mapper.Map<ICollection<Category>, ICollection<CategoryDto>>(user.Categories),
-                SubCategories = _mapper.Map<ICollection<SubCategory>, ICollection<SubCategoryDto>>(user.SubCategories),
+                Accessibilities = accessDtoToReturn,
+                Categories = catsToReturn,
+                SubCategories = subcatsToReturn,
             };
 
             if (currentUser.Followings.Any(x => x.TargetId == user.Id))
@@ -84,6 +128,83 @@ namespace CleanArchitecture.Application.Profiles
             return profile;
         }
 
+        public async Task<Profile> ReadProfileCard(string username)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == username);
+
+            if (user == null)
+                throw new RestException(HttpStatusCode.NotFound, new { User = "Not Found" });
+
+            var currentUser = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
+
+
+            var accessDtoToReturn = new List<AccessibilityDto>();
+
+            foreach (var access in user.UserAccessibilities)
+            {
+                var accDto = new AccessibilityDto
+                {
+                    Key = access.Accessibility.Id.ToString(),
+                    Text = access.Accessibility.Name,
+                    Value = access.Accessibility.Id.ToString(),
+                };
+
+                accessDtoToReturn.Add(accDto);
+            }
+
+            var catsToReturn = new List<CategoryDto>();
+
+            foreach (var cat in user.UserCategories)
+            {
+                var catDto = new CategoryDto
+                {
+                    Key = cat.Category.Id.ToString(),
+                    Text = cat.Category.Name,
+                    Value = cat.Category.Id.ToString(),
+                };
+
+                catsToReturn.Add(catDto);
+            }
+
+            var subcatsToReturn = new List<SubCategoryDto>();
+
+            foreach (var cat in user.UserSubCategories)
+            {
+                var catDto = new SubCategoryDto
+                {
+                    Key = cat.SubCategory.Id.ToString(),
+                    Text = cat.SubCategory.Name,
+                    Value = cat.SubCategory.Id.ToString(),
+                };
+
+                subcatsToReturn.Add(catDto);
+            }
+
+
+            var profile = new Profile
+            {
+                DisplayName = user.DisplayName,
+                UserName = user.UserName,
+                Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
+                ExperienceYear = user.ExperienceYear,
+                City = _mapper.Map<City, CityDto>(user.City),
+                FollowerCount = user.Followers.Count(),
+                StarCount = GetStarCount(user),
+                Star = CalculateStar(user),
+                IsOnline = user.IsOnline,
+                Accessibilities = accessDtoToReturn,
+                Categories = catsToReturn,
+                SubCategories = subcatsToReturn,
+            };
+
+            if (currentUser.Followings.Any(x => x.TargetId == user.Id))
+            {
+                profile.IsFollowed = true;
+            }
+
+            return profile;
+
+        }
         private int GetStarCount(AppUser user)
         {
             return  Convert.ToInt32(user.ReceivedComments.Count() >0 ? user.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Count() : 0);

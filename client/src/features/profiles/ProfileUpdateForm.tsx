@@ -42,6 +42,7 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
 
      const handleAccessChanged = (e: any, data: any) => {  
          setProfileForm({...profileForm,accessibilityIds: [...data]});
+         setUpdateEnabled(true);
         }
 
        const handleCategoryChanged = (e: any, data: string[]) => {

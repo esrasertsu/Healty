@@ -462,6 +462,7 @@ a.ui.card:hover {
   font-weight: 500;
     font-family:  AssistantRegular, Arial, Helvetica, sans-serif;
     margin-bottom: 50px;
+    text-shadow: 1.5px 1.5px #263a5e;
 }
 i.search.inverted.icon {
   opacity: 1 !important;

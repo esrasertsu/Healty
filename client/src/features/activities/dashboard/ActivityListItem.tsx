@@ -10,7 +10,7 @@ import { colors } from '../../../app/models/category';
 
 export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
     const host = activity.attendees.filter(x => x.isHost === true)[0];
-    const index = colors.findIndex(x => x.key === activity.category.text);
+    const index = activity.categories ? colors.findIndex(x => x.key === activity.categories[0].text): 0;
     const color = colors[index].value;
     return (
        
@@ -20,12 +20,17 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
             }} >
                
         <Segment.Group>
-        <Label
+            {
+                activity.categories && (
+                    <Label
                     style={{ position: 'absolute', zIndex:"1", marginLeft:"13px", marginTop:"10px" , background:color}}
                     ribbon
                   >
-                    {activity.category.text}
+                    {activity.categories[0].text}
                   </Label>
+                )
+            }
+       
             <Segment>
             
                 <Item.Group>

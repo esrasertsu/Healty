@@ -61,7 +61,7 @@ namespace CleanArchitecture.Application.Profiles
                     {
                         Id = activity.Activity.Id,
                         Title = activity.Activity.Title,
-                        Category = activity.Activity.Category.Name,
+                       // Category = activity.Activity.Category.Name,
                         Date = activity.Activity.Date
                     };
 

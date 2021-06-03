@@ -3,10 +3,22 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CleanArchitecture.Persistence.Migrations
 {
-    public partial class InitialCommitByActivityCreation : Migration
+    public partial class InitialCommits : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Accessibilities",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Accessibilities", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -31,6 +43,18 @@ namespace CleanArchitecture.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BlogImages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -60,6 +84,18 @@ namespace CleanArchitecture.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Levels",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Levels", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -78,6 +114,52 @@ namespace CleanArchitecture.Persistence.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubCategories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    CategoryId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Activities",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Title = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Online = table.Column<bool>(nullable: false),
+                    AttendancyLimit = table.Column<int>(nullable: true),
+                    AttendanceCount = table.Column<int>(nullable: false),
+                    Price = table.Column<decimal>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: false),
+                    CityId = table.Column<Guid>(nullable: true),
+                    Venue = table.Column<string>(nullable: true),
+                    Address = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Activities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Activities_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -121,20 +203,93 @@ namespace CleanArchitecture.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Accessibilities",
+                name: "ActivityCategories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    AppUserId = table.Column<string>(nullable: true)
+                    ActivityId = table.Column<Guid>(nullable: false),
+                    CategoryId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Accessibilities", x => x.Id);
+                    table.PrimaryKey("PK_ActivityCategories", x => new { x.ActivityId, x.CategoryId });
                     table.ForeignKey(
-                        name: "FK_Accessibilities_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
+                        name: "FK_ActivityCategories_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ActivityCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ActivityLevels",
+                columns: table => new
+                {
+                    ActivityId = table.Column<Guid>(nullable: false),
+                    LevelId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActivityLevels", x => new { x.ActivityId, x.LevelId });
+                    table.ForeignKey(
+                        name: "FK_ActivityLevels_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ActivityLevels_Levels_LevelId",
+                        column: x => x.LevelId,
+                        principalTable: "Levels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ActivitySubCategories",
+                columns: table => new
+                {
+                    ActivityId = table.Column<Guid>(nullable: false),
+                    SubCategoryId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActivitySubCategories", x => new { x.ActivityId, x.SubCategoryId });
+                    table.ForeignKey(
+                        name: "FK_ActivitySubCategories_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ActivitySubCategories_SubCategories_SubCategoryId",
+                        column: x => x.SubCategoryId,
+                        principalTable: "SubCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Videos",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Url = table.Column<string>(nullable: true),
+                    IsMain = table.Column<bool>(nullable: false),
+                    ActivityId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Videos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Videos_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -225,158 +380,6 @@ namespace CleanArchitecture.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    AppUserId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Categories_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Followings",
-                columns: table => new
-                {
-                    ObserverId = table.Column<string>(nullable: false),
-                    TargetId = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Followings", x => new { x.ObserverId, x.TargetId });
-                    table.ForeignKey(
-                        name: "FK_Followings_AspNetUsers_ObserverId",
-                        column: x => x.ObserverId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Followings_AspNetUsers_TargetId",
-                        column: x => x.TargetId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Messages",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Body = table.Column<string>(nullable: true),
-                    Seen = table.Column<bool>(nullable: false),
-                    SenderId = table.Column<string>(nullable: true),
-                    ChatRoomId = table.Column<Guid>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Messages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Messages_ChatRooms_ChatRoomId",
-                        column: x => x.ChatRoomId,
-                        principalTable: "ChatRooms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Messages_AspNetUsers_SenderId",
-                        column: x => x.SenderId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserChatRooms",
-                columns: table => new
-                {
-                    AppUserId = table.Column<string>(nullable: false),
-                    ChatRoomId = table.Column<Guid>(nullable: false),
-                    DateJoined = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserChatRooms", x => new { x.ChatRoomId, x.AppUserId });
-                    table.ForeignKey(
-                        name: "FK_UserChatRooms_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UserChatRooms_ChatRooms_ChatRoomId",
-                        column: x => x.ChatRoomId,
-                        principalTable: "ChatRooms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserProfileComments",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Body = table.Column<string>(nullable: true),
-                    StarCount = table.Column<int>(nullable: false),
-                    AuthorId = table.Column<string>(nullable: true),
-                    TargetId = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    AllowDisplayName = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserProfileComments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserProfileComments_AspNetUsers_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UserProfileComments_AspNetUsers_TargetId",
-                        column: x => x.TargetId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Activities",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    CategoryId = table.Column<Guid>(nullable: true),
-                    Online = table.Column<bool>(nullable: false),
-                    AttendancyLimit = table.Column<int>(nullable: true),
-                    AttendanceCount = table.Column<int>(nullable: false),
-                    Price = table.Column<decimal>(nullable: true),
-                    Date = table.Column<DateTime>(nullable: false),
-                    City = table.Column<string>(nullable: true),
-                    Venue = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Activities", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Activities_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Blogs",
                 columns: table => new
                 {
@@ -439,20 +442,53 @@ namespace CleanArchitecture.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Levels",
+                name: "Followings",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    ActivityId = table.Column<Guid>(nullable: true)
+                    ObserverId = table.Column<string>(nullable: false),
+                    TargetId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Levels", x => x.Id);
+                    table.PrimaryKey("PK_Followings", x => new { x.ObserverId, x.TargetId });
                     table.ForeignKey(
-                        name: "FK_Levels_Activities_ActivityId",
-                        column: x => x.ActivityId,
-                        principalTable: "Activities",
+                        name: "FK_Followings_AspNetUsers_ObserverId",
+                        column: x => x.ObserverId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Followings_AspNetUsers_TargetId",
+                        column: x => x.TargetId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Body = table.Column<string>(nullable: true),
+                    Seen = table.Column<bool>(nullable: false),
+                    SenderId = table.Column<string>(nullable: true),
+                    ChatRoomId = table.Column<Guid>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Messages_ChatRooms_ChatRoomId",
+                        column: x => x.ChatRoomId,
+                        principalTable: "ChatRooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Messages_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -485,36 +521,27 @@ namespace CleanArchitecture.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SubCategories",
+                name: "UserAccessibilities",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    CategoryId = table.Column<Guid>(nullable: true),
-                    ActivityId = table.Column<Guid>(nullable: true),
-                    AppUserId = table.Column<string>(nullable: true)
+                    AppUserId = table.Column<string>(nullable: false),
+                    AccessibilityId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubCategories", x => x.Id);
+                    table.PrimaryKey("PK_UserAccessibilities", x => new { x.AppUserId, x.AccessibilityId });
                     table.ForeignKey(
-                        name: "FK_SubCategories_Activities_ActivityId",
-                        column: x => x.ActivityId,
-                        principalTable: "Activities",
+                        name: "FK_UserAccessibilities_Accessibilities_AccessibilityId",
+                        column: x => x.AccessibilityId,
+                        principalTable: "Accessibilities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SubCategories_AspNetUsers_AppUserId",
+                        name: "FK_UserAccessibilities_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_SubCategories_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -544,23 +571,105 @@ namespace CleanArchitecture.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Videos",
+                name: "UserCategories",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    Url = table.Column<string>(nullable: true),
-                    IsMain = table.Column<bool>(nullable: false),
-                    ActivityId = table.Column<Guid>(nullable: true)
+                    AppUserId = table.Column<string>(nullable: false),
+                    CategoryId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Videos", x => x.Id);
+                    table.PrimaryKey("PK_UserCategories", x => new { x.AppUserId, x.CategoryId });
                     table.ForeignKey(
-                        name: "FK_Videos_Activities_ActivityId",
-                        column: x => x.ActivityId,
-                        principalTable: "Activities",
+                        name: "FK_UserCategories_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserChatRooms",
+                columns: table => new
+                {
+                    AppUserId = table.Column<string>(nullable: false),
+                    ChatRoomId = table.Column<Guid>(nullable: false),
+                    DateJoined = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserChatRooms", x => new { x.ChatRoomId, x.AppUserId });
+                    table.ForeignKey(
+                        name: "FK_UserChatRooms_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserChatRooms_ChatRooms_ChatRoomId",
+                        column: x => x.ChatRoomId,
+                        principalTable: "ChatRooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserProfileComments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Body = table.Column<string>(nullable: true),
+                    StarCount = table.Column<int>(nullable: false),
+                    AuthorId = table.Column<string>(nullable: true),
+                    TargetId = table.Column<string>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    AllowDisplayName = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserProfileComments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserProfileComments_AspNetUsers_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserProfileComments_AspNetUsers_TargetId",
+                        column: x => x.TargetId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserSubCategories",
+                columns: table => new
+                {
+                    AppUserId = table.Column<string>(nullable: false),
+                    SubCategoryId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserSubCategories", x => new { x.AppUserId, x.SubCategoryId });
+                    table.ForeignKey(
+                        name: "FK_UserSubCategories_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserSubCategories_SubCategories_SubCategoryId",
+                        column: x => x.SubCategoryId,
+                        principalTable: "SubCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -589,14 +698,24 @@ namespace CleanArchitecture.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Accessibilities_AppUserId",
-                table: "Accessibilities",
-                column: "AppUserId");
+                name: "IX_Activities_CityId",
+                table: "Activities",
+                column: "CityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Activities_CategoryId",
-                table: "Activities",
+                name: "IX_ActivityCategories_CategoryId",
+                table: "ActivityCategories",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ActivityLevels_LevelId",
+                table: "ActivityLevels",
+                column: "LevelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ActivitySubCategories_SubCategoryId",
+                table: "ActivitySubCategories",
+                column: "SubCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -656,11 +775,6 @@ namespace CleanArchitecture.Persistence.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_AppUserId",
-                table: "Categories",
-                column: "AppUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Comments_ActivityId",
                 table: "Comments",
                 column: "ActivityId");
@@ -674,11 +788,6 @@ namespace CleanArchitecture.Persistence.Migrations
                 name: "IX_Followings_TargetId",
                 table: "Followings",
                 column: "TargetId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Levels_ActivityId",
-                table: "Levels",
-                column: "ActivityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_ChatRoomId",
@@ -706,24 +815,24 @@ namespace CleanArchitecture.Persistence.Migrations
                 column: "BlogId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SubCategories_ActivityId",
-                table: "SubCategories",
-                column: "ActivityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SubCategories_AppUserId",
-                table: "SubCategories",
-                column: "AppUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SubCategories_CategoryId",
                 table: "SubCategories",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserAccessibilities_AccessibilityId",
+                table: "UserAccessibilities",
+                column: "AccessibilityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserActivities_ActivityId",
                 table: "UserActivities",
                 column: "ActivityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserCategories_CategoryId",
+                table: "UserCategories",
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserChatRooms_AppUserId",
@@ -741,6 +850,11 @@ namespace CleanArchitecture.Persistence.Migrations
                 column: "TargetId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserSubCategories_SubCategoryId",
+                table: "UserSubCategories",
+                column: "SubCategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Videos_ActivityId",
                 table: "Videos",
                 column: "ActivityId");
@@ -749,7 +863,13 @@ namespace CleanArchitecture.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Accessibilities");
+                name: "ActivityCategories");
+
+            migrationBuilder.DropTable(
+                name: "ActivityLevels");
+
+            migrationBuilder.DropTable(
+                name: "ActivitySubCategories");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -773,9 +893,6 @@ namespace CleanArchitecture.Persistence.Migrations
                 name: "Followings");
 
             migrationBuilder.DropTable(
-                name: "Levels");
-
-            migrationBuilder.DropTable(
                 name: "Messages");
 
             migrationBuilder.DropTable(
@@ -785,7 +902,13 @@ namespace CleanArchitecture.Persistence.Migrations
                 name: "SubCatBlogs");
 
             migrationBuilder.DropTable(
+                name: "UserAccessibilities");
+
+            migrationBuilder.DropTable(
                 name: "UserActivities");
+
+            migrationBuilder.DropTable(
+                name: "UserCategories");
 
             migrationBuilder.DropTable(
                 name: "UserChatRooms");
@@ -794,7 +917,13 @@ namespace CleanArchitecture.Persistence.Migrations
                 name: "UserProfileComments");
 
             migrationBuilder.DropTable(
+                name: "UserSubCategories");
+
+            migrationBuilder.DropTable(
                 name: "Videos");
+
+            migrationBuilder.DropTable(
+                name: "Levels");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -803,22 +932,25 @@ namespace CleanArchitecture.Persistence.Migrations
                 name: "Blogs");
 
             migrationBuilder.DropTable(
-                name: "SubCategories");
+                name: "Accessibilities");
 
             migrationBuilder.DropTable(
                 name: "ChatRooms");
 
             migrationBuilder.DropTable(
-                name: "BlogImages");
+                name: "SubCategories");
 
             migrationBuilder.DropTable(
                 name: "Activities");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "BlogImages");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Cities");

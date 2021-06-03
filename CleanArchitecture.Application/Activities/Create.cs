@@ -22,11 +22,11 @@ namespace CleanArchitecture.Application.Activities
             public Guid Id { get; set; }
             public string Title { get; set; }
             public string Description { get; set; }
-            public Guid CategoryId { get; set; }
+            public List<Guid> CategoryIds { get; set; }
             public List<Guid> SubCategoryIds { get; set; }
             public List<Guid> Levels { get; set; }
             public DateTime Date { get; set; }
-            public string City { get; set; }
+            public Guid CityId { get; set; }
             public string Venue { get; set; }
             public bool Online { get; set; }
             public string AttendanceCount { get; set; }
@@ -41,7 +41,7 @@ namespace CleanArchitecture.Application.Activities
             {
                 RuleFor(x => x.Title).NotEmpty();
                 RuleFor(x => x.Description).NotEmpty();
-                RuleFor(x => x.CategoryId).NotEmpty();
+                RuleFor(x => x.CategoryIds).NotEmpty();
                 RuleFor(x => x.Date).NotEmpty();
 
             }
@@ -62,7 +62,6 @@ namespace CleanArchitecture.Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var category = await _context.Categories.SingleOrDefaultAsync(x => x.Id == request.CategoryId);
 
                 var photoUploadResults = _photoAccessor.AddBlogPhoto(request.Photo);
 
@@ -73,14 +72,16 @@ namespace CleanArchitecture.Application.Activities
                     IsMain = true
                 };
 
+                var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == request.CityId);
+
+
                 var activity = new Activity
                 {
                     Id = request.Id,
                     Title = request.Title,
                     Description = request.Description,
-                    Category = category,
                     Date = request.Date,
-                    City = request.City,
+                    City = city,
                     Venue = request.Venue,
                     AttendancyLimit = String.IsNullOrEmpty(request.AttendancyLimit) ? 0 : Convert.ToInt32(request.AttendancyLimit),
                     AttendanceCount = 0,
@@ -93,29 +94,64 @@ namespace CleanArchitecture.Application.Activities
                 activity.Photos.Add(image);
 
 
-                if (request.SubCategoryIds != null)
-                    foreach (var subCatId in request.SubCategoryIds)
+                if (request.CategoryIds != null)
+                {
+                    foreach (var catId in request.CategoryIds)
                     {
-                        var subCat = await _context.SubCategories.SingleOrDefaultAsync(x => x.Id == subCatId);
+                        var cat = await _context.Categories.SingleOrDefaultAsync(x => x.Id == catId);
 
-                        if (subCat == null)
+                        if (cat == null)
+                            throw new RestException(HttpStatusCode.NotFound, new { Category = "NotFound" });
+                        else
+                        {
+                            var userCategory = new ActivityCategories()
+                            {
+                                Category = cat,
+                                Activity = activity
+                            };
+                            _context.ActivityCategories.Add(userCategory);
+                        }
+                    }
+                }
+
+
+                if (request.SubCategoryIds != null)
+                {
+                  foreach (var catId in request.SubCategoryIds)
+                    {
+                        var cat = await _context.SubCategories.SingleOrDefaultAsync(x => x.Id == catId);
+
+                        if (cat == null)
                             throw new RestException(HttpStatusCode.NotFound, new { SubCategory = "NotFound" });
                         else
                         {
-                            activity.SubCategories.Add(subCat);
+                            var userCategory = new ActivitySubCategories()
+                            {
+                                SubCategory = cat,
+                                Activity = activity
+                            };
+                            _context.ActivitySubCategories.Add(userCategory);
                         }
                     }
+                }
+
+
                 if (request.Levels != null)
                 {
-                    foreach (var levelId in request.Levels)
+                  foreach (var level in request.Levels)
                     {
-                        var level = await _context.Levels.SingleOrDefaultAsync(x => x.Id == levelId);
+                        var lvl = await _context.Levels.SingleOrDefaultAsync(x => x.Id == level);
 
-                        if (level == null)
-                            throw new RestException(HttpStatusCode.NotFound, new { level = "NotFound" });
+                        if (lvl == null)
+                            throw new RestException(HttpStatusCode.NotFound, new { Level = "NotFound" });
                         else
                         {
-                            activity.Levels.Add(level);
+                            var aclev = new ActivityLevels()
+                            {
+                                Level = lvl,
+                                Activity = activity
+                            };
+                            _context.ActivityLevels.Add(aclev);
                         }
                     }
                 }

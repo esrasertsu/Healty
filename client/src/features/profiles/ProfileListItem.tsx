@@ -31,7 +31,7 @@ interface IProps {
     key={profile.userName+Math.random()} >
       <Image circular src={profile.image || '/assets/user.png'} />
       <div className="profileListItem_badges">   
-      {(profile.categories.map((cat) => (
+      {(profile.categories && profile.categories.map((cat) => (
           <Label key={profile.userName+Math.random()+cat.text} className="profileCard_Label" style={{background:getColor(cat.text)}} horizontal>{cat.text}</Label>
         )))}
       </div>
@@ -41,12 +41,12 @@ interface IProps {
         <Card.Description key={profile.userName+Math.random()+"desc"}>
           <div key={profile.userName+Math.random()+"sub"} className="profileListItem_subCats">
           <Icon name="bookmark"></Icon>   
-            {profile.subCategories.length> 0 ?
+            {profile.subCategories && profile.subCategories.length> 0 ?
             profile.subCategories.map<React.ReactNode>(s => <span>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
             : "Bilgi yok"
           }
             </div>
-            <div className="profileListItem_subCats"> <Icon name="bolt" /> {profile.accessibilities.length > 0 ? 
+            <div className="profileListItem_subCats"> <Icon name="bolt" /> {profile.accessibilities && profile.accessibilities.length > 0 ? 
           profile.accessibilities.map<React.ReactNode>(s => <span>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
             : "Bilgi yok"}  </div>
             <div className="profileListItem_subCats"> <Icon name="spinner" /> {profile.experienceYear > 0 ? profile.experienceYear +"yıl tecrübe" : "" } </div> 

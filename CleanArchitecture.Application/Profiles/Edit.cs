@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -75,17 +76,15 @@ namespace CleanArchitecture.Application.Profiles
                             throw new RestException(HttpStatusCode.NotFound, new { City = "NotFound" });
                         else
                         {
-                            user.City = user.City == null ? new City
-                            {
-                                Id = city.Id,
-                                Name = city.Name
-                            } : city;
+                            user.City = city;
                         }
                     }
 
                     if (request.CategoryIds != null)
                     {
-                        user.Categories.Clear();
+                        var userCats = await _context.UserCategories.Where(x => x.AppUserId == user.Id).ToArrayAsync();
+                        _context.UserCategories.RemoveRange(userCats);
+
                         foreach (var catId in request.CategoryIds)
                         {
                             var cat = await _context.Categories.SingleOrDefaultAsync(x => x.Id == catId);
@@ -94,32 +93,46 @@ namespace CleanArchitecture.Application.Profiles
                                 throw new RestException(HttpStatusCode.NotFound, new { Category = "NotFound" });
                             else
                             {
-                                user.Categories.Add(cat);
+                                var userCategory = new UserCategories()
+                                {
+                                    Category = cat,
+                                    AppUser = user
+                                };
+                                _context.UserCategories.Add(userCategory);
                             }
                         }
-                    }//komple boş olamaz
+                    }
 
 
                     if (request.SubCategoryIds != null)
                     {
-                        user.SubCategories.Clear();
-                        foreach (var subCatId in request.SubCategoryIds)
-                        {
-                            var subCat = await _context.SubCategories.SingleOrDefaultAsync(x => x.Id == subCatId);
+                        var userSubCats = await _context.UserSubCategories.Where(x => x.AppUserId == user.Id).ToArrayAsync();
+                        _context.UserSubCategories.RemoveRange(userSubCats);
 
-                            if (subCat == null)
-                                throw new RestException(HttpStatusCode.NotFound, new { Category = "NotFound" });
+                        foreach (var catId in request.SubCategoryIds)
+                        {
+                            var cat = await _context.SubCategories.SingleOrDefaultAsync(x => x.Id == catId);
+
+                            if (cat == null)
+                                throw new RestException(HttpStatusCode.NotFound, new { SubCategory = "NotFound" });
                             else
                             {
-                                user.SubCategories.Add(subCat);
+                                var userCategory = new UserSubCategories()
+                                {
+                                    SubCategory = cat,
+                                    AppUser = user
+                                };
+                                _context.UserSubCategories.Add(userCategory);
                             }
                         }
                     }
-                   
+
 
                     if (request.Accessibilities != null)
                     {
-                        user.Accessibilities.Clear();
+                        var userAccs = await _context.UserAccessibilities.Where(x => x.AppUserId == user.Id).ToArrayAsync();
+                        _context.UserAccessibilities.RemoveRange(userAccs);
+
                         foreach (var accId in request.Accessibilities)
                         {
                             var acc = await _context.Accessibilities.SingleOrDefaultAsync(x => x.Id == accId);
@@ -128,15 +141,23 @@ namespace CleanArchitecture.Application.Profiles
                                 throw new RestException(HttpStatusCode.NotFound, new { Accessibility = "NotFound" });
                             else
                             {
-                                user.Accessibilities.Add(acc);
+                                var userCategory = new UserAccessibility()
+                                {
+                                    Accessibility = acc,
+                                    AppUser = user
+                                };
+                                _context.UserAccessibilities.Add(userCategory);
                             }
                         }
                     }
 
                     try
                     {
-                            await _context.SaveChangesAsync();
+                            var result = await _context.SaveChangesAsync() > 0;
+                        if(result)
                             return await _profileReader.ReadProfile(user.UserName);
+                        throw new Exception("Problem saving changes");
+
 
                     }
                     catch (Exception e)

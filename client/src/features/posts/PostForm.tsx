@@ -71,7 +71,7 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
   }, [loadBlog, match.params.id]);
 
   const handleCategoryChanged = (e: any, data: string) => {
-    
+    setPost({...post,categoryId: data});
     setCategory(data);
     loadSubCategories(data);
  }

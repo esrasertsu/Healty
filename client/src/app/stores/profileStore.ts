@@ -267,9 +267,7 @@ export default class ProfileStore{
             runInAction('Loading profiles',()=>{
                 this.popularProfileList=popularProfiles;
                 profileList.forEach((profile) =>{
-                    var cat = this.rootStore.categoryStore.categoryList.filter(x => x.value === this.profileFilterForm.categoryId);
-                    if(cat.length>0)
-                    setProfileProps(profile,cat[0].text)
+                    debugger;
                     this.profileRegistery.set(profile.userName, profile);
                 });
                 this.loadAccessibilities();

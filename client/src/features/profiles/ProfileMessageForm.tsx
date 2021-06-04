@@ -40,9 +40,10 @@ import { IMessageForm } from '../../app/models/message';
           >
            <Field
                   name="body"
-                  placeholder="Mesaj.."
+                  placeholder={profile!.hasConversation ? "Bu eğitmenle daha önce bir chat başlattın. Mesajlarına git." : "Eğitmene iletmek istediğiniz mesajınızı bırakın.."}
                   component={TextAreaInput}
                   rows={6}
+                  disabled={profile!.hasConversation}
                 />  
           <br/>
           <Button

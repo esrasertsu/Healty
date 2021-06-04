@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { IActivitiesEnvelope, IActivity } from '../models/activity';
+import { IActivitiesEnvelope, IActivity, ILevel } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
@@ -107,7 +107,9 @@ const Activities = {
     update: (activity: IActivity) => requests.put(`/activities/${activity.id}`, activity),
     delete: (id: string) => requests.del(`/activities/${id}`),
     attend: (id: string) => requests.post(`/activities/${id}/attend`,{}),
-    unattend: (id: string) => requests.del(`/activities/${id}/attend`)
+    unattend: (id: string) => requests.del(`/activities/${id}/attend`),
+    listLevels: (): Promise<ILevel[]> => requests.get('/activities/levels'),
+
 }
 
 const User ={

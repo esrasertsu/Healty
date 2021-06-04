@@ -58,5 +58,12 @@ namespace CleanArchitecture.API.Controllers
         }
 
 
+        [HttpGet("levels")]
+        public async Task<ActionResult<List<LevelDto>>> List()
+        {
+            return await Mediator.Send(new ListLevels.Query());
+        }
+
+
     }
 }

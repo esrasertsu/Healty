@@ -90,7 +90,6 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
               <Button
                 loading={loading}
                 fluid
-                basic
                 className={profile.isFollowing ? 'followingButtonOut_redClassName' : 'followingButtonOut_greenClassName'}
                 content={profile.isFollowing ? 'Unfollow' : 'Follow'}
                 onClick={profile.isFollowing ? () => unfollow(profile.userName): () => follow(profile.userName)}

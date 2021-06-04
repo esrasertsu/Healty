@@ -28,6 +28,7 @@ interface IProps {
       setLoadingProfile(true);
       history.push(`/profile/${profile.userName}`)
       }}
+      style={{height:"100%"}}
     key={profile.userName+Math.random()} >
       <Image circular src={profile.image || '/assets/user.png'} />
       <div className="profileListItem_badges">   

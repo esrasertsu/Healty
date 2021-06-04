@@ -24,7 +24,7 @@ namespace CleanArchitecture.Application.Activities
             public string Description { get; set; }
             public List<Guid> CategoryIds { get; set; }
             public List<Guid> SubCategoryIds { get; set; }
-            public List<Guid> Levels { get; set; }
+            public List<Guid> LevelIds { get; set; }
             public DateTime Date { get; set; }
             public Guid CityId { get; set; }
             public string Venue { get; set; }
@@ -136,9 +136,9 @@ namespace CleanArchitecture.Application.Activities
                 }
 
 
-                if (request.Levels != null)
+                if (request.LevelIds != null)
                 {
-                  foreach (var level in request.Levels)
+                  foreach (var level in request.LevelIds)
                     {
                         var lvl = await _context.Levels.SingleOrDefaultAsync(x => x.Id == level);
 

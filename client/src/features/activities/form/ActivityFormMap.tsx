@@ -29,7 +29,7 @@ import { Button, Segment } from "semantic-ui-react";
 
 const mapContainerStyle = {
   height: "70vh",
-  width: "41vw",
+  width: "100%",
 };
 const options = {
   styles: mapStyles,

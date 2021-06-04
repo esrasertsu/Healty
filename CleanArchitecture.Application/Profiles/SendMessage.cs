@@ -19,7 +19,7 @@ namespace CleanArchitecture.Application.Profiles
     {
         public class Command : IRequest
         {
-            public string Message { get; set; }
+            public string Body { get; set; }
             public string Receiver { get; set; }
 
         }
@@ -65,9 +65,10 @@ namespace CleanArchitecture.Application.Profiles
                     {
                         Id = new Guid(),
                         Sender = author,
-                        Body = request.Message,
+                        Body = request.Body,
                         CreatedAt = DateTime.Now,
-                        SenderId = author.Id
+                        SenderId = author.Id,
+                        Seen = false
                     };
                     _context.Messages.Add(message);
 
@@ -79,7 +80,7 @@ namespace CleanArchitecture.Application.Profiles
                         CreatedAt = DateTime.Now,
                         Messages = messages,
                         LastMessageAt = DateTime.Now,
-                        StarterId = message.SenderId
+                        StarterId = message.SenderId,
                     };
                     _context.ChatRooms.Add(newchatRoom);
 

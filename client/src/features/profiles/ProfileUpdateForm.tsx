@@ -11,8 +11,6 @@ import NumberInput from '../../app/common/form/NumberInput';
 import DropdownMultiple from '../../app/common/form/DropdownMultiple';
 import { RootStoreContext } from '../../app/stores/rootStore'
 import DropdownInput from '../../app/common/form/DropdownInput';
-import { toast } from 'react-toastify';
-import { profileEnd } from 'console';
 import { OnChange } from 'react-final-form-listeners';
 
 const validate = combineValidators({

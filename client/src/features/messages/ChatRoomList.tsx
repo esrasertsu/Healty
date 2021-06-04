@@ -62,14 +62,16 @@ const ChatRoomList: React.FC = () => {
                   src={room.userImage  || '/assets/user.png'}
                   bordered = {room.unReadMessageCount === 0 ? true : false}
                   className="messagePage_listItem_image"
-                />
-                <Icon name="circle" color={onlineUsers.indexOf(room.userName) > -1 ? "green": "grey"} />
+                >
+                </Image>
+                <Icon name="circle" className="onlineSymbol" color={onlineUsers.indexOf(room.userName) > -1 ? "green": "grey"} />
+
                 </>
               }
             />
               <List.Content>
                 <List.Header>{room.userName}</List.Header>
-                <span>{room.lastMessage.length > 50 ? room.lastMessage.substring(0, 50) + "..." : room.lastMessage}</span>
+                <span>{room.lastMessage && room.lastMessage.length > 50 ? room.lastMessage.substring(0, 50) + "..." : room.lastMessage}</span>
                 </List.Content>
               </List.Content>
           </List.Item>

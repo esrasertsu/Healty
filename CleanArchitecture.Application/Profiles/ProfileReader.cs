@@ -215,10 +215,12 @@ namespace CleanArchitecture.Application.Profiles
         }
         private int CalculateResponseRate(AppUser user)
         {
-           var receivedFirstMessagesCount = user.ChatRooms.Where(x => x.ChatRoom.StarterId != user.Id).DefaultIfEmpty().Count();
-           var respondedMessagesCount = user.ChatRooms.Where(x => x.ChatRoom.Messages.Any(x => x.SenderId == user.Id)).DefaultIfEmpty().Count();
+           var receivedFirstMessagesCount = user.ChatRooms.Where(x => x.ChatRoom.StarterId != user.Id).Count();
+           var respondedMessagesCount = user.ChatRooms.Where(x => x.ChatRoom.Messages.Any(x => x.SenderId == user.Id)).Count();
 
-           var rate = Convert.ToInt32(100 * respondedMessagesCount / receivedFirstMessagesCount);
+            var rate = 0;
+            if (receivedFirstMessagesCount > 0)
+                 rate = Convert.ToInt32(100 * respondedMessagesCount / receivedFirstMessagesCount);
             return rate;
         }
     }

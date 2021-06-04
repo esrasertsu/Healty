@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { history } from '../..';
 import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
-import { IActivity, IActivityMapItem } from '../models/activity';
+import { IActivity, IActivityMapItem, ILevel } from '../models/activity';
 import { RootStore } from './rootStore';
 
 const LIMIT = 10;
@@ -29,7 +29,9 @@ export default class ActivityStore {
     @observable activity: IActivity | null = null;
     @observable loadingInitial = false;
     @observable loadingActivity = false;
-    
+    @observable levelList: ILevel[] = [];
+    @observable loadingLevels = false;
+
     @observable submitting = false;
     @observable target = '';
     @observable loading = false;
@@ -70,7 +72,9 @@ export default class ActivityStore {
     @action setSelected = (selected : IActivityMapItem | null) =>{
         this.selected = selected;
     }
-
+    @action setLoadingLevels = (lp : boolean) =>{
+        this.loadingLevels = lp;
+    }
 
     @computed get axiosParams(){
         const params = new URLSearchParams();
@@ -194,7 +198,9 @@ export default class ActivityStore {
                     setActivityProps(activity,this.rootStore.userStore.user!)
                     this.activity = activity;
                     this.activityRegistery.set(activity.id, activity);
-                    this.loadingActivity = false
+                    this.loadingActivity = false;
+                    this.loadLevels();
+                    this.rootStore.categoryStore.loadCategories();
                 })
                 return activity;
                 } catch (error) {
@@ -325,6 +331,25 @@ export default class ActivityStore {
 
         }
        
+    }
+
+    @action loadLevels = async () =>{
+        this.loadingLevels = true;
+
+        try {
+            const levelList = await agent.Activities.listLevels();
+            runInAction(()=>{
+                debugger;
+                this.levelList = levelList;
+              
+                this.loadingLevels = false;
+            })
+        } catch (error) {
+            runInAction(()=>{
+                this.loadingLevels = false;
+            })
+            console.log(error);
+        }
     }
 
 }

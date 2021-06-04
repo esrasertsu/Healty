@@ -1,5 +1,5 @@
 ﻿import React, { useContext, useEffect, useState } from "react";
-import { Segment, Form, Button, Grid } from "semantic-ui-react";
+import { Segment, Form, Button, Grid, Label, Header, Image } from "semantic-ui-react";
 import {
   ActivityFormValues
 } from "../../../app/models/activity";
@@ -16,15 +16,23 @@ import { combineDateAndTime } from "../../../app/common/util/util";
 import {combineValidators, composeValidators, hasLengthGreaterThan, isRequired} from 'revalidate';
 import { RootStoreContext } from "../../../app/stores/rootStore";
 import ActivityFormMap from "./ActivityFormMap";
+import DropdownMultiple from "../../../app/common/form/DropdownMultiple";
+import { Category, ICategory } from "../../../app/models/category";
+import DropdownInput from "../../../app/common/form/DropdownInput";
+import NumberInput from "../../../app/common/form/NumberInput";
+import { OnChange } from "react-final-form-listeners";
+import WYSIWYGEditor from "../../../app/common/form/WYSIWYGEditor";
+import PhotoWidgetDropzone from "../../../app/common/photoUpload/PhotoWidgetDropzone";
+import PhotoWidgetCropper from "../../../app/common/photoUpload/PhotoWidgetCropper";
 
 const validate = combineValidators({
   title: isRequired({message: 'The event title is required'}),
-  category: isRequired('Category'),
+  categoryIds: isRequired('Category'),
   description: composeValidators(
     isRequired('Description'),
     hasLengthGreaterThan(4)({message: 'Description needs to be at least 5 characters'})
   )(),
-  city: isRequired('City'),
+  cityId: isRequired('City'),
   venue: isRequired('Venue'),
   date: isRequired('Date'),
   time: isRequired('Time')
@@ -42,16 +50,30 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
     createActivity,
     editActivity,
     submitting,
-    loadActivity
+    loadActivity,
+    loadLevels,
+    levelList
   } = rootStore.activityStore;
 
   const {
     cities
   } = rootStore.commonStore;
 
+  const {allCategoriesOptionList} = rootStore.categoryStore;
+  const categoryOptions: ICategory[] = [];
+  const subCategoryOptionFilteredList: ICategory[] = [];
+
+  const [updateEnabled, setUpdateEnabled] = useState<boolean>(false);
+
   const [activity, setActivity] = useState(new ActivityFormValues());
   const [loading, setLoading] = useState(false);
 
+   const [category, setCategory] = useState<string[]>([]);
+   const [subCategoryOptions, setSubCategoryOptions] = useState<ICategory[]>([]);
+
+   const [files, setFiles] = useState<any[]>([]);
+   const [image, setImage] = useState<Blob | null>(null);
+   const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
   useEffect(() => {
     if (match.params.id) {
       setLoading(true);
@@ -60,6 +82,60 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
         .finally(() => setLoading(false));
     }
   }, [loadActivity, match.params.id]);
+
+
+  const handleCategoryChanged = (e: any, data: string[]) => {
+    if((activity.categories.filter(x => data.findIndex(y => y !== x.key) === -1).length > 0) ||
+    (data.filter(x => activity.categories.findIndex(y => y.key !== x) === -1).length > 0))
+       setUpdateEnabled(true);
+
+    setActivity({...activity,categoryIds: [...data]});
+    setCategory(data);  
+  
+ }
+
+ const handleSubCategoryChanged = (e: any, data: string[]) => {  
+   
+  if((activity.subCategories.filter(x => data.findIndex(y => y !== x.key) === -1).length > 0) ||
+  (data.filter(x => activity.subCategories.findIndex(y => y.key !== x) === -1).length > 0))
+  setUpdateEnabled(true);
+
+      setActivity({...activity,subCategoryIds: [...data]});
+
+   }
+
+   const handleCityChanged = (e: any, data: string) => {  
+    if(activity.cityId===null || (activity.cityId !== data))
+    setUpdateEnabled(true);
+    setActivity({...activity,cityId: data});
+    
+ }
+ const handleLevelChanged = (e: any, data: any) => {  
+  setActivity({...activity,levelIds: [...data]});
+  setUpdateEnabled(true);
+ }
+ allCategoriesOptionList.filter(x=>x.parentId===null).map(option => (
+          categoryOptions.push(new Category({key: option.key, value: option.value, text: option.text}))
+     ));
+        useEffect(() => {
+            loadSubCatOptions();
+        }, [category])
+
+     const loadSubCatOptions = () =>{
+        allCategoriesOptionList.filter(x=> activity.categoryIds.findIndex(y=> y === x.parentId!) > -1).map(option => (
+            subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
+        ))
+        setSubCategoryOptions(subCategoryOptionFilteredList);
+        debugger;
+        const renewedSubIds = activity.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
+        setActivity({...activity,subCategoryIds: [...renewedSubIds]});
+
+     }
+
+  //    const formatPrice = (value:number) =>
+  // value === undefined
+  //   ? '' // make controlled
+  //   : numeral(value).format('0,0.00₺')
 
   const handleFinalFormSubmit = (values: any) => {
     const dateAndTime = combineDateAndTime(values.date, values.time);
@@ -78,49 +154,127 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
   };
 
   return (
-    <Grid>
-      <Grid.Column width={7}>
+    <Grid stackable>
+      <Grid.Row>
+      <Grid.Column>
         <Segment clearing>
           <FinalForm
             validate = {validate}
             initialValues={activity}
             onSubmit={handleFinalFormSubmit}
-            render={({ handleSubmit, invalid, pristine }) => (
+            render={({ handleSubmit, invalid }) => (
               <Form onSubmit={handleSubmit} loading={loading}>
+                <label>Aktivite Başlığı*</label>
                 <Field
                   name="title"
                   placeholder="Title"
                   value={activity.title}
                   component={TextInput}
                 />
-                <Field
+                 <label>Aktivite Liste Fotoğrafı*</label>
+                  {
+                files.length === 0 ? 
+                <div style={{marginBottom:15}}>
+                <PhotoWidgetDropzone setFiles={setFiles} />
+                </div>
+                :
+               (
+                <Grid>
+                  <Grid.Column width="eight">
+                  <Header sub content='*Boyutlandır' />
+                  <PhotoWidgetCropper setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={225/112}/>
+                  </Grid.Column>
+                  <Grid.Column width="eight">
+                    <Header sub content='*Önizleme' />
+                    <Image src={croppedImageUrl} style={{minHeight:'200px', overflow:'hidden'}}/>
+                  </Grid.Column>
+
+                  <Grid.Column width="eight">
+                  <Button type="danger" icon='close' disabled={loading} onClick={()=> setFiles([])}>Değiştir/Sil</Button>
+                  </Grid.Column>
+               </Grid>
+               )
+         }  
+                  <label>Açıklama*</label>
+                  <Field
                   name="description"
-                  placeholder="Description"
+                  component={WYSIWYGEditor}
                   value={activity.description}
-                  component={TextAreaInput}
-                  rows={6}
                 />
+                <label>Kategori*</label>
+                 <Field
+                  name="categoryIds"
+                  placeholder="Kategori"
+                  value={activity.categoryIds}
+                  component={DropdownMultiple}
+                  options = {categoryOptions}
+                  onChange={(e: any,data:[])=>
+                    {
+                      debugger;
+                      handleCategoryChanged(e,data)}}
+                /> 
+                 <label>Branşlar*</label>        
+                 <Field
+                  name="subCategoryIds"
+                  placeholder="Alt Kategori"
+                  value={activity.subCategoryIds}
+                  component={DropdownMultiple}
+                  options={subCategoryOptions}
+                  onChange={(e: any,data:[])=>
+                    {
+                      debugger;
+                      handleSubCategoryChanged(e,data)}}
+                />  
+                 <label>Seviye*</label>
                 <Field
-                  name="categoryId"
-                  placeholder="Category"
-                  value={activity.categoryIds[0]}
-                  component={SelectInput}
-                  options={category}
+                clearable
+                  name="levelIds"
+                  placeholder="Seviye"
+                  value={activity.levelIds}
+                  component={DropdownMultiple}
+                  options={levelList}
+                  onChange={(e: any,data:any)=>
+                    {
+                      handleLevelChanged(e,data)}}
+                /> 
+              <label>Katılımcı Sınırı</label>
+             <Field 
+                  name="attendancyLimit"
+                  type="number"
+                  placeholder=""
+                  component={NumberInput}
+                  value={activity.attendancyLimit}
+                  width={4}
                 />
-                 {/* <Field
-                  name="abc"
-                  placeholder="Level"
-                  value={activity.le}
-                  component={SelectInput}
-                  options={category}
-                /> */}
-                  {/* <Field
-                  name="online"
-                  placeholder="Online"
-                  value={activity.online}
-                  component={SelectInput}
-                  options={category}
-                /> */}
+                 <OnChange name="attendancyLimit">
+                {(value, previous) => {
+                    if(value !== activity.attendancyLimit)
+                    {
+                        setUpdateEnabled(true);
+                        setActivity({...activity,attendancyLimit: value});
+                    }
+                }}
+                </OnChange>
+                <div style={{marginBottom:15}}>
+                  <Field
+                      name="online"
+                      component="input"
+                      type="checkbox"
+                      width={4}
+                      format={v =>v === true}
+                      parse={v => (v ? true : false) }
+                    />&nbsp;&nbsp;
+                   <span>Online katılma açık</span> 
+                </div>
+                <OnChange name="online">
+                {(value, previous) => {
+                    if(value !== activity.online)
+                    {
+                        setUpdateEnabled(true);
+                        setActivity({...activity,online: value});
+                    }
+                }}
+                </OnChange>
                 <Form.Group widths="equal">
                   <Field
                     name="date"
@@ -145,30 +299,53 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                     }}
                   />
                 </Form.Group>
-
-                 <Field
-                  name="city"
+                <label>Fiyat(TL)*</label>
+                <Field
+                  name="price"
+                  component="input"
+                  type="number"
+                  value={activity.price}
+                  placeholder="0.00₺"
+                  style={{marginBottom:15}}
+                />
+                 <OnChange name="price">
+                {(value, previous) => {
+                    if(value !== activity.price)
+                    {
+                        setUpdateEnabled(true);
+                        setActivity({...activity,price: value});
+                    }
+                }}
+                </OnChange>
+                <label>Şehir</label>
+                <Field 
+                  name="cityId"
                   placeholder="City"
-                  value={activity.cityId}
-                  component={SelectInput}
+                  component={DropdownInput}
                   options={cities}
-                /> 
+                  value={activity.cityId}
+                  onChange={(e: any,data: any)=>handleCityChanged(e,data)}
+                  style={{marginBottom:15}}
+                />
+                <label>Mekan</label>
                 <Field
                   name="venue"
-                  placeholder="Avenue"
+                  placeholder="Örn: Mac Fit Balçova"
                   value={activity.venue}
                   component={TextInput}
+                  style={{marginBottom:15}}
                 />
+                <label>Adres</label>
                  <Field
                   name="Adres"
-                  placeholder="Adres"
+                  placeholder="Açık adres"
                   value={activity.address}
                   component={TextAreaInput}
                   rows={2}
                 />
                 <Button
                   loading={submitting}
-                  disabled={loading || invalid || pristine}
+                  disabled={loading || invalid || !updateEnabled}
                   floated="right"
                   positive
                   type="submit"
@@ -190,12 +367,23 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
           />
         </Segment>
       </Grid.Column>
-      <Grid.Column width={9}>
+      {/* <Grid.Column width={7}>
+        <Segment>
+    <>  
+          <ActivityFormMap />
+          </>
+           <ActivitySearchPage />
+        </Segment>
+      </Grid.Column> */}
+       </Grid.Row>
+      <Grid.Row>
+      <Grid.Column width={16}>
         <Segment>
           <ActivityFormMap />
           {/* <ActivitySearchPage /> */}
         </Segment>
-      </Grid.Column>
+        </Grid.Column>
+      </Grid.Row>
     </Grid>
   );
 };

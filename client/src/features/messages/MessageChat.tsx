@@ -95,7 +95,7 @@ const MessageChat: React.FC = () => {
                        <Item.Group key={group + "_message"}>
                        {messages.map((message) => (
                            <Item key={message.id} className={message.username === user!.userName ? "currentUserMessage": "otherUserMessage" }>
-                               <Item.Image size='mini' style={{ height: "100%"}} circular src={message.image} />
+                               <Item.Image size='mini' style={{ height: "100%"}} circular src={message.image  || '/assets/user.png'} />
                                <Item.Content className={message.username === user!.userName ? "currentUserMessage_content": "otherUserMessage_content" } verticalAlign='middle'>
                                    {message.body}
                                    <Item.Extra>

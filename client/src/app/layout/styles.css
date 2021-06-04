@@ -121,6 +121,11 @@ body {
   font-family: AssistantRegular, Arial, Helvetica, sans-serif !important;
 }
 
+.ui.form .disabled.field, .ui.form .disabled.fields .field, .ui.form .field :disabled {
+  pointer-events: none;
+  opacity: 1.45;
+}
+
 h1, h2, h3, h4, h5 {
   font-family:  AssistantRegular, Arial, Helvetica, sans-serif !important;
 }
@@ -688,17 +693,36 @@ i.search.inverted.icon {
   background-color: #263a5e  !important;
   color: rgb(255, 255, 255)  !important;
   border-radius: 8px  !important;
+  border:0.0625rem solid !important
 }
 .sendMessageButton:hover {
   background-color: rgb(5, 138, 138) !important;
   border: 0.0625rem solid rgb(5, 138, 138) !important
 }
 .followingButtonOut_redClassName{
-
+  border: 0.0625rem solid rgb(218, 35, 35) !important;
+  color: rgb(218, 35, 35) !important;
+  border-radius: 8px !important;
+  background: transparent none!important;
+    font-weight: 400;
+    text-transform: none;
+    text-shadow: none!important;
+    -webkit-box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
+    box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }
+
 .followingButtonOut_greenClassName{
-
+  border: 0.0625rem solid green !important;
+  color: green !important;
+  border-radius: 8px !important;
+  background: transparent none!important;
+    font-weight: 400;
+    text-transform: none;
+    text-shadow: none!important;
+    -webkit-box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
+    box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }
+
 
 .profieHeader_segment{
   -webkit-box-shadow: none !important;
@@ -844,8 +868,13 @@ i.search.inverted.icon {
   width: 50px !important;
   height: auto !important;
   font-size: .78571429rem;
-  margin-right: 10px !important;
   border: 2px solid #c77931 ;
+}
+.onlineSymbol{
+  margin-left: -15px !important;
+  position: relative;
+  margin-top: 25px !important;
+  margin-right: 10px !important;
 }
 
 .messagePage_listItem_Content{

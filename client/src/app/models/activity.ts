@@ -43,6 +43,13 @@ export interface IComment {
     displayName : string;
 }
 
+
+export interface ILevel {
+    key: string;
+    text: string;
+    value: string;
+}
+
 export interface IActivityFormValues extends Partial<IActivity>{
     time?: Date,
     subCategoryIds: string[],
@@ -55,6 +62,7 @@ export class ActivityFormValues implements IActivityFormValues {
     id?: string = undefined;
     title: string = '';
     subCategories: ISubCategory[] = [];
+    categories: ICategory[] = [];
     description:string = '';
     date?: Date = undefined;
     time?: Date = undefined;

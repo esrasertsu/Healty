@@ -10,7 +10,7 @@ import { colors } from '../../../app/models/category';
 
 export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
     const host = activity.attendees.filter(x => x.isHost === true)[0];
-    const index = activity.categories ? colors.findIndex(x => x.key === activity.categories[0].text): 0;
+    const index = activity.categories && activity.categories.length>0 ? colors.findIndex(x => x.key === activity.categories[0].text): 0;
     const color = colors[index].value;
     return (
        
@@ -21,7 +21,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                
         <Segment.Group>
             {
-                activity.categories && (
+                activity.categories.length>0 && (
                     <Label
                     style={{ position: 'absolute', zIndex:"1", marginLeft:"13px", marginTop:"10px" , background:color}}
                     ribbon
@@ -70,14 +70,14 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                     </Item.Content>
                     <Item.Content className="activity_listItem_extraContent">
                     <Item.Description style={{textAlign:"right", display: "flex", justifyContent: "flex-end"}}>
-                     <StarRating rating={3} editing={false} size={'small'} showCount/>
+                     <StarRating rating={3} editing={false} size={'small'} showCount={false}/>
                     </Item.Description>
                     <Item.Description style={{flex:"end"}}>
                     <div className="baseline-pricing">
-                        {/* <p className="baseline-pricing__from">Kişi başı</p> */}
+                         <p className="baseline-pricing__from">Kişi başı</p> 
                         <div className="baseline-pricing__container">
                         <p className="baseline-pricing__value">
-                            849.21&nbsp;₺
+                           {activity.price}&nbsp;₺
                          </p>
                          </div> 
                          <p className="baseline-pricing__category">

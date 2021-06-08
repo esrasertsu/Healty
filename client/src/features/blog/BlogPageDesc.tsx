@@ -6,12 +6,13 @@ import { Segment, Header, Button, Image, Container, Icon, Label } from 'semantic
 import { IBlog } from '../../app/models/blog';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { history } from '../../index'
-
+import dompurify from 'dompurify';
 
 const BlogPageDesc:React.FC<{blog:IBlog}> = ({blog}) => {
 
   const rootStore = useContext(RootStoreContext);
   const { isCurrentUserAuthor } = rootStore.blogStore;
+  const sanitizer = dompurify.sanitize;
 
     return (
         <div>
@@ -31,7 +32,7 @@ const BlogPageDesc:React.FC<{blog:IBlog}> = ({blog}) => {
                 <Header as='h1'  className="blog_description_header">
                 {blog.title}
                 </Header>
-                <div key={blog.id+"_pagedesc"} className="description" dangerouslySetInnerHTML={{__html:blog.description}} />
+                <div key={blog.id+"_pagedesc"} className="description" dangerouslySetInnerHTML={{__html:sanitizer(blog.description)}} />
                 <br/>
                 <Label className="blog_desc_category_label">{blog.categoryName}</Label>
                 {

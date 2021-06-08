@@ -4,6 +4,8 @@ import { history } from '../../index'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { IBlog } from '../../app/models/blog';
 import { format } from 'date-fns';
+import dompurify from 'dompurify';
+
 interface IProps {
     blog: IBlog
 }
@@ -12,7 +14,8 @@ const BlogListItem: React.FC<IProps> = ({blog}) => {
 
   const rootStore = useContext(RootStoreContext);
   const {setLoadingProfile} = rootStore.profileStore;
-  
+  const sanitizer = dompurify.sanitize;
+
   return (
     <Card onClick={() => {
       history.push(`/blog/${blog.id}`)
@@ -26,7 +29,7 @@ const BlogListItem: React.FC<IProps> = ({blog}) => {
         <br></br>
         <Card.Header className="blogListItem_Header">{blog.title}</Card.Header>
         <Card.Description>
-          <div key={blog.id+"_desc"} className="homepage_subheader" dangerouslySetInnerHTML={{__html:blog.summary}} />
+          <div key={blog.id+"_desc"} className="homepage_subheader" dangerouslySetInnerHTML={{__html:sanitizer(blog.summary)}} />
         </Card.Description>
       </Card.Content>
       <Card.Content extra>

@@ -240,6 +240,7 @@ h1, h2, h3, h4, h5 {
   display: flex !important;
   justify-content: space-between;
   flex-direction: column;
+  margin: 10px !important;
 }
 p.baseline-pricing__value{
   font-size: 18px !important;

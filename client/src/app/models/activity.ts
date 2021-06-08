@@ -27,7 +27,7 @@ export interface IActivity {
     online: boolean,
     photos: IPhoto[],
     videos: IPhoto[],
-    image: string
+    mainImage: IPhoto
 }
 export interface ILevel {
     key: string;
@@ -55,7 +55,9 @@ export interface IActivityFormValues extends Partial<IActivity>{
     subCategoryIds: string[],
     categoryIds: string[],
     cityId:string,
-    levelIds: string[]
+    levelIds: string[],
+    photo?: Blob;
+
 }
 
 export class ActivityFormValues implements IActivityFormValues {
@@ -76,7 +78,7 @@ export class ActivityFormValues implements IActivityFormValues {
     levelIds: string[] =[];
     price: number = 0;
     attendancyLimit: number =0;
-
+    photo?: Blob=undefined;
     constructor(init?: IActivityFormValues){
         if(init && init.date)
         {
@@ -86,31 +88,34 @@ export class ActivityFormValues implements IActivityFormValues {
 
         if(init)
         {   
+            debugger;
         init.categoryIds = [];
         init.subCategoryIds=[];
         init.levelIds =[];
         init.cityId = init.city ? init.city.value : "";
-                init.subCategories!.forEach(s=>
-                    {
-                        init.subCategoryIds.push(s.value.toString())
-    
-                    }
-                    );
-                    init.categories!.forEach(s=>
+                            init.categories!.forEach(s=>
                         {
                             init.categoryIds.push(s.value.toString())
         
                         }
                         );
+                        init.subCategories!.forEach(s=>
+                            {
+                                init.subCategoryIds.push(s.value.toString())
+            
+                            }
+                            );
+        
                     init.levels!.forEach(s=>
                         {
                             init.levelIds.push(s.value.toString())
         
                         }
                         );
+                        Object.assign(this, init);
+
                     }
   
-        Object.assign(this, init);
     }
 }
 

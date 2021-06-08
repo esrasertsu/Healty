@@ -1,7 +1,7 @@
 ﻿import React, { useContext, useEffect, useState } from "react";
 import { Segment, Form, Button, Grid, Label, Header, Image } from "semantic-ui-react";
 import {
-  ActivityFormValues
+  ActivityFormValues, IActivityFormValues
 } from "../../../app/models/activity";
 import { v4 as uuid } from "uuid";
 import { observer } from "mobx-react-lite";
@@ -9,8 +9,6 @@ import { RouteComponentProps } from "react-router-dom";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../../app/common/form/TextInput";
 import TextAreaInput from "../../../app/common/form/TextAreaInput";
-import SelectInput from "../../../app/common/form/SelectInput";
-import { category } from "../../../app/common/options/categoryOptions";
 import DateInput from "../../../app/common/form/DateInput";
 import { combineDateAndTime } from "../../../app/common/util/util";
 import {combineValidators, composeValidators, hasLengthGreaterThan, isRequired} from 'revalidate';
@@ -24,6 +22,7 @@ import { OnChange } from "react-final-form-listeners";
 import WYSIWYGEditor from "../../../app/common/form/WYSIWYGEditor";
 import PhotoWidgetDropzone from "../../../app/common/photoUpload/PhotoWidgetDropzone";
 import PhotoWidgetCropper from "../../../app/common/photoUpload/PhotoWidgetCropper";
+import { action } from "mobx";
 
 const validate = combineValidators({
   title: isRequired({message: 'The event title is required'}),
@@ -47,6 +46,9 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
 }) => {
   const rootStore = useContext(RootStoreContext);
   const {
+    activity,
+    activityForm,
+    setActivityForm,
     createActivity,
     editActivity,
     submitting,
@@ -60,12 +62,11 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
   } = rootStore.commonStore;
 
   const {allCategoriesOptionList} = rootStore.categoryStore;
-  const categoryOptions: ICategory[] = [];
-  const subCategoryOptionFilteredList: ICategory[] = [];
+  let categoryOptions: ICategory[] = [];
+  let subCategoryOptionFilteredList: ICategory[] = [];
 
   const [updateEnabled, setUpdateEnabled] = useState<boolean>(false);
 
-  const [activity, setActivity] = useState(new ActivityFormValues());
   const [loading, setLoading] = useState(false);
 
    const [category, setCategory] = useState<string[]>([]);
@@ -74,68 +75,81 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
    const [files, setFiles] = useState<any[]>([]);
    const [image, setImage] = useState<Blob | null>(null);
    const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
+   const [emptyAtivityForm, setEmptyActivityForm] = useState(new ActivityFormValues());
+   const [activityDesc, setActivityDesc] = useState<string>("");
+
+
   useEffect(() => {
     if (match.params.id) {
       setLoading(true);
       loadActivity(match.params.id)
-        .then((activity) => setActivity(new ActivityFormValues(activity)))
+        .then(action((activity) => {
+          setActivityForm(new ActivityFormValues(activity!));
+          setActivityDesc(activity!.description);
+        }))
         .finally(() => setLoading(false));
     }
-  }, [loadActivity, match.params.id]);
-
+    return () => {
+      setActivityForm(new ActivityFormValues());
+    }
+  }, [loadActivity,match.params.id]);
 
   const handleCategoryChanged = (e: any, data: string[]) => {
-    if((activity.categories.filter(x => data.findIndex(y => y !== x.key) === -1).length > 0) ||
-    (data.filter(x => activity.categories.findIndex(y => y.key !== x) === -1).length > 0))
-       setUpdateEnabled(true);
 
-    setActivity({...activity,categoryIds: [...data]});
+    setActivityForm({...activityForm,categoryIds: [...data]});
     setCategory(data);  
   
  }
 
  const handleSubCategoryChanged = (e: any, data: string[]) => {  
-   
-  if((activity.subCategories.filter(x => data.findIndex(y => y !== x.key) === -1).length > 0) ||
-  (data.filter(x => activity.subCategories.findIndex(y => y.key !== x) === -1).length > 0))
-  setUpdateEnabled(true);
 
-      setActivity({...activity,subCategoryIds: [...data]});
+  setActivityForm({...activityForm,subCategoryIds: [...data]});
 
    }
 
    const handleCityChanged = (e: any, data: string) => {  
-    if(activity.cityId===null || (activity.cityId !== data))
+    if(activityForm.cityId===null || (activityForm.cityId !== data))
     setUpdateEnabled(true);
-    setActivity({...activity,cityId: data});
+    setActivityForm({...activityForm,cityId: data});
     
  }
  const handleLevelChanged = (e: any, data: any) => {  
-  setActivity({...activity,levelIds: [...data]});
+  setActivityForm({...activityForm,levelIds: [...data]});
   setUpdateEnabled(true);
  }
- allCategoriesOptionList.filter(x=>x.parentId===null).map(option => (
-          categoryOptions.push(new Category({key: option.key, value: option.value, text: option.text}))
-     ));
-        useEffect(() => {
-            loadSubCatOptions();
-        }, [category])
+      allCategoriesOptionList.filter(x=>x.parentId===null).map(option => (
+        categoryOptions.push(new Category({key: option.key, value: option.value, text: option.text}))
+      ));
 
      const loadSubCatOptions = () =>{
-        allCategoriesOptionList.filter(x=> activity.categoryIds.findIndex(y=> y === x.parentId!) > -1).map(option => (
-            subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
-        ))
-        setSubCategoryOptions(subCategoryOptionFilteredList);
-        debugger;
-        const renewedSubIds = activity.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
-        setActivity({...activity,subCategoryIds: [...renewedSubIds]});
+       debugger;
+      allCategoriesOptionList.filter(x=> activityForm.categoryIds.findIndex(y=> y === x.parentId!) > -1).map(option => (
+          subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
+      ))
+      setSubCategoryOptions(subCategoryOptionFilteredList);
+      debugger;
+      const renewedSubIds = activityForm.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
+      setActivityForm({...activityForm,subCategoryIds: [...renewedSubIds]});
 
-     }
+   }
+        useEffect(() => {
+          debugger;
+            loadSubCatOptions();
+        }, [category,allCategoriesOptionList]);
+        useEffect(() => {
+          loadLevels();
+      }, []);
+   
+const handleDateChange = (date:any) =>{
 
-  //    const formatPrice = (value:number) =>
-  // value === undefined
-  //   ? '' // make controlled
-  //   : numeral(value).format('0,0.00₺')
+  const dateAndTime = activityForm.time ? combineDateAndTime(date, activityForm.time): combineDateAndTime(date, new Date());
+  setActivityForm({...activityForm, date: dateAndTime});
+}
+
+const handleTimeChange = (time:any) =>{
+  const dateAndTime = activityForm.date ? combineDateAndTime(activityForm.date!, time) : combineDateAndTime(new Date(), time);
+  setActivityForm({...activityForm, time: dateAndTime});
+}
 
   const handleFinalFormSubmit = (values: any) => {
     const dateAndTime = combineDateAndTime(values.date, values.time);
@@ -145,11 +159,16 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
     if (!activity.id) {
           let newActivity = {
             ...activity,
+            photo: image,
             id: uuid(),
           };
           createActivity(newActivity);
         } else {
-          editActivity(activity);
+          let editedActivity = {
+            ...activity,
+            photo: image
+          }
+          editActivity(editedActivity);
         }
   };
 
@@ -160,7 +179,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
         <Segment clearing>
           <FinalForm
             validate = {validate}
-            initialValues={activity}
+            initialValues={activityForm}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid }) => (
               <Form onSubmit={handleSubmit} loading={loading}>
@@ -168,9 +187,14 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                 <Field
                   name="title"
                   placeholder="Title"
-                  value={activity.title}
+                  value={activityForm.title}
                   component={TextInput}
                 />
+                  <OnChange name="title">
+                {(value, previous) => {
+                      setActivityForm({...activityForm,title: value});
+                }}
+                 </OnChange>
                  <label>Aktivite Liste Fotoğrafı*</label>
                   {
                 files.length === 0 ? 
@@ -199,13 +223,18 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   <Field
                   name="description"
                   component={WYSIWYGEditor}
-                  value={activity.description}
+                  value={activityDesc}
                 />
+                  <OnChange name="description">
+                {(value, previous) => {
+                      setActivityDesc(value);
+                }}
+                 </OnChange>
                 <label>Kategori*</label>
                  <Field
                   name="categoryIds"
                   placeholder="Kategori"
-                  value={activity.categoryIds}
+                  value={activityForm.categoryIds}
                   component={DropdownMultiple}
                   options = {categoryOptions}
                   onChange={(e: any,data:[])=>
@@ -217,7 +246,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                  <Field
                   name="subCategoryIds"
                   placeholder="Alt Kategori"
-                  value={activity.subCategoryIds}
+                  value={activityForm.subCategoryIds}
                   component={DropdownMultiple}
                   options={subCategoryOptions}
                   onChange={(e: any,data:[])=>
@@ -230,7 +259,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                 clearable
                   name="levelIds"
                   placeholder="Seviye"
-                  value={activity.levelIds}
+                  value={activityForm.levelIds}
                   component={DropdownMultiple}
                   options={levelList}
                   onChange={(e: any,data:any)=>
@@ -243,15 +272,15 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   type="number"
                   placeholder=""
                   component={NumberInput}
-                  value={activity.attendancyLimit}
+                  value={activityForm.attendancyLimit}
                   width={4}
                 />
                  <OnChange name="attendancyLimit">
                 {(value, previous) => {
-                    if(value !== activity.attendancyLimit)
+                    if(value !== activityForm.attendancyLimit)
                     {
                         setUpdateEnabled(true);
-                        setActivity({...activity,attendancyLimit: value});
+                        setActivityForm({...activityForm,attendancyLimit: value});
                     }
                 }}
                 </OnChange>
@@ -265,13 +294,22 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                       parse={v => (v ? true : false) }
                     />&nbsp;&nbsp;
                    <span>Online katılma açık</span> 
+                   <OnChange name="online">
+                {(value, previous) => {
+                    if(value !== activityForm.online)
+                    {
+                        setUpdateEnabled(true);
+                        setActivityForm({...activityForm,online: value});
+                    }
+                }}
+                </OnChange>
                 </div>
                 <OnChange name="online">
                 {(value, previous) => {
-                    if(value !== activity.online)
+                    if(value !== activityForm.online)
                     {
                         setUpdateEnabled(true);
-                        setActivity({...activity,online: value});
+                        setActivityForm({...activityForm,online: value});
                     }
                 }}
                 </OnChange>
@@ -280,23 +318,26 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                     name="date"
                     date={true}
                     placeholder="Date"
-                    value={activity.date}
+                    value={activityForm.date}
                     component={DateInput}
                     messages={{
                       dateButton: "",
                       timeButton: "",
                     }}
+                    onChange={handleDateChange}
                   />
                   <Field
                     name="time"
                     time={true}
                     placeholder="Time"
-                    value={activity.time}
+                    value={activityForm.time}
                     component={DateInput}
                     messages={{
                       dateButton: "",
                       timeButton: "",
                     }}
+                    onChange={handleTimeChange}
+
                   />
                 </Form.Group>
                 <label>Fiyat(TL)*</label>
@@ -304,16 +345,16 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   name="price"
                   component="input"
                   type="number"
-                  value={activity.price}
+                  value={activityForm.price}
                   placeholder="0.00₺"
                   style={{marginBottom:15}}
                 />
                  <OnChange name="price">
                 {(value, previous) => {
-                    if(value !== activity.price)
+                    if(value !== activityForm.price)
                     {
                         setUpdateEnabled(true);
-                        setActivity({...activity,price: value});
+                        setActivityForm({...activityForm,price: value});
                     }
                 }}
                 </OnChange>
@@ -323,7 +364,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   placeholder="City"
                   component={DropdownInput}
                   options={cities}
-                  value={activity.cityId}
+                  value={activityForm.cityId}
                   onChange={(e: any,data: any)=>handleCityChanged(e,data)}
                   style={{marginBottom:15}}
                 />
@@ -331,18 +372,30 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                 <Field
                   name="venue"
                   placeholder="Örn: Mac Fit Balçova"
-                  value={activity.venue}
+                  value={activityForm.venue}
                   component={TextInput}
                   style={{marginBottom:15}}
                 />
+                    <OnChange name="venue">
+                {(value, previous) => {
+                        setUpdateEnabled(true);
+                        setActivityForm({...activityForm,venue: value});
+                }}
+                </OnChange>
                 <label>Adres</label>
                  <Field
-                  name="Adres"
+                  name="address"
                   placeholder="Açık adres"
-                  value={activity.address}
+                  value={activityForm.address}
                   component={TextAreaInput}
                   rows={2}
                 />
+                       <OnChange name="address">
+                {(value, previous) => {
+                        setUpdateEnabled(true);
+                        setActivityForm({...activityForm,address: value});
+                }}
+                </OnChange>
                 <Button
                   loading={submitting}
                   disabled={loading || invalid || !updateEnabled}
@@ -357,8 +410,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   type="cancel"
                   content="Cancel"
                   onClick={
-                    activity.id
-                      ? () => history.push(`/activities/${activity.id}`)
+                    activityForm.id
+                      ? () => history.push(`/activities/${activityForm.id}`)
                       : () => history.push("/activities")
                   }
                 />

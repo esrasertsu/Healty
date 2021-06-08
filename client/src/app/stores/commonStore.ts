@@ -119,10 +119,11 @@ function success(pos:any,setUserCity:any,cityRegistery:Map<any,any>) {
       {'location': latlng}, 
     function(results, status) {
         if (status == "OK") {
-            var cityName = results.filter(x => x.types.includes("locality"))[0].address_components[0].long_name;
+            var addressComponentLength =results.filter(x => x.types.includes("locality"))[0].address_components.length;
+            var cityName = results.filter(x => x.types.includes("locality"))[0].address_components[addressComponentLength-2].long_name;
             //setUserCity(cityName);
 
-           // alert("city name is: " + cityName);
+           // alert("city name is: " + cityName); 
                  var userCity = Array.from(cityRegistery.values()).filter(x => x.text === cityName);
                 if (cityName && userCity.length > 0) {
                     setUserCity(userCity[0].key);

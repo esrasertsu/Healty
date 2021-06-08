@@ -12,6 +12,7 @@ import PhotoWidgetDropzone from "../../app/common/photoUpload/PhotoWidgetDropzon
 import PhotoWidgetCropper from "../../app/common/photoUpload/PhotoWidgetCropper";
 import DropdownInput from "../../app/common/form/DropdownInput";
 import DropdownMultiple from "../../app/common/form/DropdownMultiple";
+import { OnChange } from "react-final-form-listeners";
 
 // const validate = combineValidators({
 //   title: isRequired({message: 'The event title is required'}),
@@ -72,16 +73,17 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
 
   const handleCategoryChanged = (e: any, data: string) => {
     setPost({...post,categoryId: data});
-    setCategory(data);
+   // setCategory(data);
     loadSubCategories(data);
  }
 
    const handleSubCategoryChanged = (e: any, data: string[]) => {  
-     setSubCategory(data)  
+    // setSubCategory(data)  
        setPost({...post,subCategoryIds: [...data]});
     }
 
   const handleFinalFormSubmit = (values: any) => {
+    debugger;
     const { ...post } = values;
 
     if (!post.id) {
@@ -89,8 +91,8 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
             ...post,
             id: uuid(),
             file:image,
-            categoryId:category,
-            subCategoryIds:subCategory
+            // categoryId:category,
+            // subCategoryIds:subCategory
           };
           createPost(newPost);
         } else {
@@ -115,6 +117,11 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   value={post.title}
                   component={TextInput}
                 />
+                 <OnChange name="title">
+                {(value, previous) => {
+                      setPost({...post,title: value});                    
+                }}
+            </OnChange>
                 <Header className="postFormHeader" color='teal' sub content='Adım 2 - Metnin temel görselini yükleyin' />
               {
                 files.length === 0 ? 
@@ -143,6 +150,11 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   component={WYSIWYGEditor}
                   value={post.description}
                 />
+                 <OnChange name="description">
+                {(value, previous) => {
+                      setPost({...post,description: value});                    
+                }}
+            </OnChange>
                 <Header className="postFormHeader" color='teal' sub content='Adım 4 - Kategori seçin' />
                 <Field 
                   name="categoryId"

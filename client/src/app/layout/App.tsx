@@ -30,9 +30,9 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
 
   const rootStore = useContext(RootStoreContext);
   const {setAppLoaded, token, appLoaded,loadCities,getUserLocation , userCity} = rootStore.commonStore;
-  const {setProfileFilterForm,profileFilterForm} = rootStore.profileStore;
   const { getUser,user,createHubConnection,hubConnection } = rootStore.userStore;
-  
+  const { loadAllCategoryList} = rootStore.categoryStore;
+
   const { isLoaded, loadError } = useLoadScript({
       googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
       //libraries:["places"] düzgün çalışıyor ama console a hata veriyor 
@@ -55,7 +55,6 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
         loadCities().finally(()=>setAppLoaded());
       })
     }else {
-      debugger;
       loadCities().finally(()=>setAppLoaded());
     }
   },[getUser, setAppLoaded, token])

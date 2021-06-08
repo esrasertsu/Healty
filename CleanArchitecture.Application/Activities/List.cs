@@ -44,12 +44,14 @@ namespace CleanArchitecture.Application.Activities
             private readonly DataContext _context;
             private readonly IMapper _mapper;
             private readonly IUserAccessor _userAccessor;
+            private readonly IActivityReader _activityReader;
 
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IActivityReader activityReader)
             {
                 _context = context;
                 _mapper = mapper;
                 _userAccessor = userAccessor;
+                _activityReader = activityReader;
             }
             public async Task<ActivitiesEnvelope> Handle(Query request, CancellationToken cancellationToken)
             {
@@ -76,9 +78,17 @@ namespace CleanArchitecture.Application.Activities
                     .Skip(request.Offset ?? 0)
                     .Take(request.Limit ?? 10).ToListAsync();
 
+
+                var acts = new List<ActivityDto>();
+                foreach (var act in activities)
+                {
+                    acts.Add(await _activityReader.ReadActivity(act.Id));
+                }
+
+
                 return new ActivitiesEnvelope
                 {
-                    Activities = _mapper.Map<List<Activity>, List<ActivityDto>>(activities),
+                    Activities = acts,
                     ActivityCount = queryable.Count()
                 };
 

@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { IActivitiesEnvelope, IActivity, ILevel } from '../models/activity';
+import { IActivitiesEnvelope, IActivity, IActivityFormValues, ILevel } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
@@ -96,19 +96,81 @@ const requests = {
         return axios.put(url, formData, {
             headers: {'Content-type': 'application/json'}
         }).then(responseBody)
-    }
+    },
+    editActivity: async (url:string,title: string, description:string, categoryIds: string[]| null,subCategoryIds: string[]| null, levelIds: string[]| null,
+        date:Date, cityId:string,venue:string,online:boolean, attendanceCount: number, attendancyLimit:number,price:number,photo:Blob,address:string ) =>{
+        let formData = new FormData();
+        formData.append('photo',photo);
+        formData.append('Title', title);
+        formData.append('Date', date.toISOString());
+        formData.append('description', description);
+        formData.append('cityId', cityId);
+        formData.append('venue', venue);
+        formData.append('address', address);
+        formData.append('online', String(online));
+        formData.append('attendanceCount', attendanceCount ? attendanceCount.toString(): "0");
+        formData.append('attendancyLimit', attendancyLimit ? attendancyLimit.toString(): "0");
+        formData.append('price', price ? price.toString(): "0");
+
+
+        categoryIds && categoryIds.map((categoryId:string)=>(
+            formData.append('categoryIds', categoryId)
+        ));
+        subCategoryIds && subCategoryIds.map((subCategoryId:string)=>(
+            formData.append('SubCategoryIds', subCategoryId)
+        ));
+        levelIds && levelIds.map((levelId:string)=>(
+            formData.append('LevelIds', levelId)
+        ));
+        return axios.put(url, formData, {
+            headers: {'Content-type': 'application/json'}
+        }).then(responseBody)
+    },
+    createActivity: async (url:string,title: string, description:string, categoryIds: string[]| null,subCategoryIds: string[]| null, levelIds: string[]| null,
+        date:Date, cityId:string,venue:string,online:boolean, attendanceCount: number, attendancyLimit:number,price:number,photo:Blob, address:string ) =>{
+        let formData = new FormData();
+        formData.append('photo',photo);
+        formData.append('Title', title);
+        formData.append('Date', date.toISOString());
+        formData.append('description', description);
+        formData.append('cityId', cityId);
+        formData.append('venue', venue);
+        formData.append('address', address);
+        formData.append('online', String(online));
+        formData.append('attendanceCount', attendanceCount ? attendanceCount.toString(): "0");
+        formData.append('attendancyLimit', attendancyLimit ? attendancyLimit.toString(): "0");
+        formData.append('price', price ? price.toString(): "0");
+
+
+        categoryIds && categoryIds.map((categoryId:string)=>(
+            formData.append('categoryIds', categoryId)
+        ));
+        subCategoryIds && subCategoryIds.map((subCategoryId:string)=>(
+            formData.append('SubCategoryIds', subCategoryId)
+        ));
+        levelIds && levelIds.map((levelId:string)=>(
+            formData.append('LevelIds', levelId)
+        ));
+        return axios.post(url, formData, {
+            headers: {'Content-type': 'application/json'}
+        }).then(responseBody)
+    },
 }
 
 const Activities = {
     list: (params: URLSearchParams): Promise<IActivitiesEnvelope> => 
             axios.get(`/activities`, {params:params}).then(sleep(1000)).then(responseBody),
     details: (id:string) => requests.get(`/activities/${id}`),
-    create: (activity: IActivity) => requests.post('/activities', activity),
-    update: (activity: IActivity) => requests.put(`/activities/${activity.id}`, activity),
     delete: (id: string) => requests.del(`/activities/${id}`),
     attend: (id: string) => requests.post(`/activities/${id}/attend`,{}),
     unattend: (id: string) => requests.del(`/activities/${id}/attend`),
     listLevels: (): Promise<ILevel[]> => requests.get('/activities/levels'),
+    update: (activity: IActivityFormValues): Promise<IActivity> => requests.editActivity(`/activities/${activity.id}`,activity.title!, activity.description!,
+    activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,
+    activity.cityId!,activity.venue!, activity.online!,activity.attendanceCount!, activity.attendancyLimit!,activity.price!,activity.photo!, activity.address!),
+    create: (activity: IActivityFormValues): Promise<IActivity> => requests.createActivity(`/activities/`,activity.title!, activity.description!,
+    activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,
+    activity.cityId!,activity.venue!, activity.online!,activity.attendanceCount!, activity.attendancyLimit!,activity.price!,activity.photo!,activity.address!),
 
 }
 

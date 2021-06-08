@@ -68,20 +68,22 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
     allCategoriesOptionList.filter(x=>x.parentId===null).map(option => (
           categoryOptions.push(new Category({key: option.key, value: option.value, text: option.text}))
      ));
+
+     const loadSubCatOptions = () =>{
+      allCategoriesOptionList.filter(x=> profileForm!.categoryIds.findIndex(y=> y === x.parentId!) > -1).map(option => (
+          subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
+      ))
+      setSubCategoryOptions(subCategoryOptionFilteredList);
+      debugger;
+      const renewedSubIds = profileForm!.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
+      setProfileForm({...profileForm,subCategoryIds: [...renewedSubIds]});
+
+   }
         useEffect(() => {
             loadSubCatOptions();
         }, [category])
 
-     const loadSubCatOptions = () =>{
-        allCategoriesOptionList.filter(x=> profileForm!.categoryIds.findIndex(y=> y === x.parentId!) > -1).map(option => (
-            subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
-        ))
-        setSubCategoryOptions(subCategoryOptionFilteredList);
-        debugger;
-        const renewedSubIds = profileForm!.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
-        setProfileForm({...profileForm,subCategoryIds: [...renewedSubIds]});
-
-     }
+   
 
   return (
     <FinalForm

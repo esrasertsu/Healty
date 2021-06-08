@@ -21,24 +21,21 @@ namespace CleanArchitecture.Application.Activities
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
+            private readonly IActivityReader _activityReader;
 
-            public Handler(DataContext context, IMapper mapper)
+
+            public Handler(DataContext context, IMapper mapper, IActivityReader activityReader)
             {
                 _context = context;
                 _mapper = mapper;
+                _activityReader = activityReader;
+
+
             }
 
             public async Task<ActivityDto> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities
-                                               .FindAsync(request.Id);
-
-                if (activity == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { activity = "Not Found" });
-
-                var activityReturn = _mapper.Map<Activity, ActivityDto>(activity);
-
-                return activityReturn;
+                return await _activityReader.ReadActivity(request.Id);
             }
         }
     }

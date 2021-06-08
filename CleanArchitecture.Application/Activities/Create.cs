@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Application.Errors;
+﻿using AutoMapper;
+using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -17,7 +19,7 @@ namespace CleanArchitecture.Application.Activities
 {
     public class Create
     {
-        public class Command : IRequest
+        public class Command : IRequest<ActivityDto>
         {
             public Guid Id { get; set; }
             public string Title { get; set; }
@@ -25,13 +27,14 @@ namespace CleanArchitecture.Application.Activities
             public List<Guid> CategoryIds { get; set; }
             public List<Guid> SubCategoryIds { get; set; }
             public List<Guid> LevelIds { get; set; }
-            public DateTime Date { get; set; }
+            public string Date { get; set; }
             public Guid CityId { get; set; }
             public string Venue { get; set; }
             public bool Online { get; set; }
             public string AttendanceCount { get; set; }
             public string AttendancyLimit { get; set; }
             public string Price { get; set; }
+            public string Address { get; set; }
             public virtual IFormFile Photo { get; set; }
         }
 
@@ -47,40 +50,36 @@ namespace CleanArchitecture.Application.Activities
             }
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, ActivityDto>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
             private readonly IPhotoAccessor _photoAccessor;
+            private readonly IMapper _mapper;
+            private readonly IActivityReader _activityReader;
 
-            public Handler(DataContext context, IUserAccessor userAccessor, IPhotoAccessor photoAccessor)
+
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPhotoAccessor photoAccessor, IActivityReader activityReader)
             {
                 _context = context;
+                _mapper = mapper;
                 _userAccessor = userAccessor;
                 _photoAccessor = photoAccessor;
+                _activityReader = activityReader;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<ActivityDto> Handle(Command request, CancellationToken cancellationToken)
             {
-
-                var photoUploadResults = _photoAccessor.AddBlogPhoto(request.Photo);
-
-                var image = new Photo
-                {
-                    Url = photoUploadResults.Url,
-                    Id = photoUploadResults.PublicId,
-                    IsMain = true
-                };
-
+                var image = new Photo();
                 var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == request.CityId);
-
 
                 var activity = new Activity
                 {
                     Id = request.Id,
                     Title = request.Title,
                     Description = request.Description,
-                    Date = request.Date,
+                    Address = request.Address,
+                    Date = DateTime.Parse(request.Date),
                     City = city,
                     Venue = request.Venue,
                     AttendancyLimit = String.IsNullOrEmpty(request.AttendancyLimit) ? 0 : Convert.ToInt32(request.AttendancyLimit),
@@ -91,9 +90,22 @@ namespace CleanArchitecture.Application.Activities
                 };
                 _context.Activities.Add(activity); //addsync is just for special creators
 
-                activity.Photos.Add(image);
+                if(request.Photo != null)
+                {
+                    var photoUploadResults = _photoAccessor.AddBlogPhoto(request.Photo);
 
+                    activity.Photos = new List<Photo>
+                    {
+                        new Photo
+                        {
+                            Url = photoUploadResults.Url,
+                            Id = photoUploadResults.PublicId,
+                            IsMain = true
+                        }
+                    };
 
+                }
+                
                 if (request.CategoryIds != null)
                 {
                     foreach (var catId in request.CategoryIds)
@@ -169,7 +181,16 @@ namespace CleanArchitecture.Application.Activities
                 
                 var success = await _context.SaveChangesAsync() > 0;
 
-                if (success) return Unit.Value;
+                if (success)
+                    return await _activityReader.ReadActivity(activity.Id);
+
+                if(request.Photo != null)
+                {
+                    var photoDeleteResults = _photoAccessor.DeletePhoto(image.Id);
+                    activity.Photos.Remove(image);
+                }
+                await _context.SaveChangesAsync();
+
                 throw new Exception("Problem saving changes");
             }
         }

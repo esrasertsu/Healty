@@ -1,17 +1,25 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Item, Button, Segment, Icon, Label, Image, Card, Grid } from 'semantic-ui-react'
+import { Item, Button, Segment, Icon, Label, Image, Card, Grid, Popup } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity';
 import { format } from 'date-fns';
 import {ActivityListItemAttendees } from './ActivityListItemAttendees';
 import { history } from '../../../index'
 import { StarRating } from '../../../app/common/form/StarRating';
 import { colors } from '../../../app/models/category';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWalking, faUserEdit } from '@fortawesome/free-solid-svg-icons'
 
 export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
     const host = activity.attendees.filter(x => x.isHost === true)[0];
     const index = activity.categories && activity.categories.length>0 ? colors.findIndex(x => x.key === activity.categories[0].text): 0;
     const color = colors[index].value;
+
+
+    useEffect(() => {
+        debugger;
+       
+    }, [activity])
     return (
        
         <Card className="activityListItem" onClick={() => {
@@ -31,16 +39,32 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                 )
             }
        
-            <Segment>
+            <div>
             
                 <Item.Group>
                 <Item style={{ zIndex: '1' }}>
-                    <Item.Image size='big' style={{height:"100%", width:"25%"}} src={activity.image || '/assets/placeholder.png'} ></Item.Image>
-                    <Item.Content style={{width:"60%"}}>
-                        <Item.Header as={Link} to={`/activities/${activity.id}`}>{activity.title}</Item.Header>
+                    <div style={{height:"100%", width:"30%",position:"relative"}}>
+                        <Item.Image size="medium" style={{ display: "block"}} src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} >
+                        </Item.Image>
                         {activity.isGoing && !activity.isHost &&
-                        <Label size="small" basic color="green" content="Bu aktiviteye gidiyorsun!"></Label>
+                         <Popup
+                         header={"Bu etkinliğe gidiyorsun"}
+                         trigger={
+                            <FontAwesomeIcon icon={faWalking} size="2x" style={{position:"absolute", top:10, right:10, color:"#00b5ad"}}/>
+                         }
+                       />
+                        }
+                         {activity.isHost && 
+                            <Popup
+                            header={"Bu etkinliğin düzenleyeni sensin."}
+                            trigger={
+                                <FontAwesomeIcon icon={faUserEdit} size="2x" style={{position:"absolute", top:10, right:10, color:"#00b5ad"}}/>
+                            }
+                          />
                     }
+                    </div>
+                    <Item.Content style={{width:"60%", margin:"10px"}}>
+                        <Item.Header as={Link} to={`/activities/${activity.id}`}>{activity.title}</Item.Header>
                         {/* <Item.Description>
                             <div>{activity.description}</div>
                             <div>
@@ -51,9 +75,6 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                             <Item.Image size="mini" circular src={host.image || '/assets/user.png'}
                              style={{}}/>
                              &nbsp; Hosted by <Link to={`/profile/${host.userName}`} >{host.displayName + "  "}</Link>
-                             {activity.isHost && 
-                       <Label size="small" basic color="orange" content="Bu aktivitenin düzenleyeni sensin!"></Label>
-                        }
                             </Item.Description>
                         <Item.Meta></Item.Meta>
                     <Item.Description>
@@ -88,11 +109,11 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                    
             </Item>
             </Item.Group>
-            </Segment>
+            </div>
             <Segment clearing secondary>
                 <Icon name='clock' /> {format(activity.date, 'h:mm a')}
                 &nbsp;
-                <Icon name='marker' /> {activity.venue}, {activity.city}
+                <Icon name='marker' /> {activity.venue}, {activity.city && activity.city.text}
                 <ActivityListItemAttendees attendees={activity.attendees}/>
             </Segment>
            {/*  <Segment secondary>

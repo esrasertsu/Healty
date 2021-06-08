@@ -24,6 +24,7 @@ namespace CleanArchitecture.Application.Activities
         public CityDto City { get; set; }
         public string Venue { get; set; }
         public string Address { get; set; }
+        public Photo MainImage { get; set; }
 
         [JsonPropertyName("attendees")]
         public ICollection<AttendeeDto> UserActivities { get; set; }

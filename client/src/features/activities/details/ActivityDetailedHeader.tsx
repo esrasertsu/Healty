@@ -19,7 +19,7 @@ const activityImageTextStyle = {
   color: 'white'
 };
 const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
-  const host = activity.attendees.filter(x => x.isHost === true)[0];
+  const host = activity.attendees && activity.attendees.filter(x => x.isHost === true)[0];
 
   const rootStore = useContext(RootStoreContext);
   const { attendActivity, cancelAttendance, loading} = rootStore.activityStore;
@@ -28,7 +28,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
         <div>
                 <Segment.Group>
                   <Segment basic attached='top' style={{ padding: '0' }}>
-                    <Image src={activity.image || '/assets/placeholder.png'} fluid style={activityImageStyle}/>
+                    <Image src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} fluid style={activityImageStyle}/>
                     <Segment basic style={activityImageTextStyle}>
                       <Item.Group>
                         <Item>
@@ -38,9 +38,9 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                               content={activity.title}
                               style={{ color: 'white' }}
                             />
-                            <p>{format(activity.date,'eeee do MMMM')}</p>
+                            <p>{activity.date && format(activity.date,'eeee do MMMM')}</p>
                             <p>
-                              Hosted by <Link to={`/profile/${host.userName}`} ><strong>{host.displayName}</strong></Link> 
+                              Hosted by <Link to={`/profile/${host && host.userName}`} ><strong>{host && host.displayName}</strong></Link> 
                             </p>
                           </Item.Content>
                         </Item>
@@ -48,7 +48,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                     </Segment>
                   </Segment>
                 <Segment clearing attached='bottom'>
-                    {activity.isHost && host.userRole!=="User" ? (
+                    {activity.isHost && host && host.userRole!=="User" ? (
                       <Button as={Link} to={`/manage/${activity.id}`} color='orange' floated='right'>
                          Manage Event
                       </Button>

@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { history } from '../..';
 import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
-import { IActivity, IActivityMapItem, ILevel } from '../models/activity';
+import { ActivityFormValues, IActivity, IActivityFormValues, IActivityMapItem, ILevel } from '../models/activity';
 import { RootStore } from './rootStore';
 
 const LIMIT = 10;
@@ -43,6 +43,7 @@ export default class ActivityStore {
     @observable activityCount = 0;
     @observable page = 0;
     @observable predicate = new Map();
+    @observable activityForm: IActivityFormValues = new ActivityFormValues();
 
     @computed get totalPages(){
         return Math.ceil(this.activityCount / LIMIT);
@@ -51,6 +52,9 @@ export default class ActivityStore {
     @action setPage = (page:number) =>{
         this.page = page;
     }
+    @action setActivityForm = (activity: IActivityFormValues) => {
+        this.activityForm = activity;
+    }
 
     @action setPredicate = (predicate:string, value:string | Date) => {
         this.predicate.clear();
@@ -58,6 +62,10 @@ export default class ActivityStore {
         {
             this.predicate.set(predicate,value);
         }
+    }
+
+    @action deleteActivityRegisteryItem = (id:string) => {
+        this.activityRegistery.delete(id);
     }
 
     
@@ -168,6 +176,7 @@ export default class ActivityStore {
             const activitiesEnvelope = await agent.Activities.list(this.axiosParams);
             const {activities, activityCount } = activitiesEnvelope;
             runInAction('Loading activities',() => {
+                debugger;
                 activities.forEach((activity) =>{
                     setActivityProps(activity,this.rootStore.userStore.user!)
                     this.activityRegistery.set(activity.id, activity);
@@ -184,23 +193,25 @@ export default class ActivityStore {
     };
 
     @action loadActivity = async (id:string) => {
+        debugger;
         let activity = this.getActivity(id);
 
         if(activity){
             this.activity = activity;
+            this.rootStore.categoryStore.loadAllCategoryList();
             return activity;
         } 
         else{
             this.loadingActivity = true;
             try {
-                activity = await agent.Activities.details(id);
+                let activity = await agent.Activities.details(id);
                 runInAction('Getting activity',() => {
                     setActivityProps(activity,this.rootStore.userStore.user!)
+                    this.rootStore.categoryStore.loadAllCategoryList();
                     this.activity = activity;
+                    this.activityRegistery.delete(activity.id);
                     this.activityRegistery.set(activity.id, activity);
                     this.loadingActivity = false;
-                    this.loadLevels();
-                    this.rootStore.categoryStore.loadCategories();
                 })
                 return activity;
                 } catch (error) {
@@ -209,10 +220,7 @@ export default class ActivityStore {
                     });
                     console.log(error);
                 }
-
-
-        }
-      
+            }
     };
 
     @action clearActivity = () => {
@@ -223,22 +231,22 @@ export default class ActivityStore {
         return this.activityRegistery.get(id);
     }
 
-    @action createActivity = async (activity: IActivity) =>{
+    @action createActivity = async (activity: IActivityFormValues) =>{
         this.submitting = true;
         try {
-            await agent.Activities.create(activity);
-            const attendee = createAttendee(this.rootStore.userStore.user!);
-            attendee.isHost = true;
-            let attendees = [];
-            attendees.push(attendee);
-            activity.attendees = attendees;
-            activity.comments = [];
-            activity.isHost = true;            
+            var newAct = await agent.Activities.create(activity);
+            //const attendee = createAttendee(this.rootStore.userStore.user!);
+            // attendee.isHost = true;
+            // let attendees = [];
+            // attendees.push(attendee);
+            // activity.attendees = attendees;
+            // activity.comments = [];
+            // activity.isHost = true;            
             runInAction('Creating activity', () => {
-                this.activityRegistery.set(activity.id, activity);
+                this.activityRegistery.set(newAct.id, newAct);
                 this.submitting = false;
+                history.push(`/activities/${newAct.id}`);
             });
-            history.push(`/activities/${activity.id}`);
         } catch (error) {
             runInAction('Creating activity error', () => {
                 this.submitting = false;
@@ -248,21 +256,28 @@ export default class ActivityStore {
         }
     };
 
-    @action editActivity = async (activity: IActivity) =>{
+    @action editActivity = async (activity: IActivityFormValues) =>{
+        debugger;
         this.submitting = true;
         try {
-            await agent.Activities.update(activity);
+            var activityReturned = await agent.Activities.update(activity);
             runInAction('Editing activity', () => {
-            this.activityRegistery.set(activity.id, activity);
-            this.activity = activity;
+            setActivityProps(activityReturned,this.rootStore.userStore.user!)
+            this.activityRegistery.delete(activity.id);
+            this.activityRegistery.set(activity.id, activityReturned);
+            this.activity = activityReturned;
             this.submitting = false;
-            });
             history.push(`/activities/${activity.id}`);
+
+            });
         } catch (error) {
             runInAction('Editing activity error', () => {
                 this.submitting = false;
+
+                if(error.status === 400)
+                    toast.warning('Activity has been already updated');
+
             });
-            toast.error('Problem submitting data');
             console.log(error);
         }
     }

@@ -26,13 +26,14 @@ namespace CleanArchitecture.API.Controllers
         }
         [HttpPost]
         [Authorize(Policy = "CanCreateActivity")]
-        public async Task<ActionResult<Unit>> Create(Create.Command command)
+        public async Task<ActionResult<ActivityDto>> Create([FromForm] Create.Command command)
         {
             return await Mediator.Send(command);
         }
+
         [HttpPut("{id}")]
         [Authorize(Policy = "IsActivityHost")]
-        public async Task<ActionResult<Unit>> Update(Guid Id,Update.Command command)
+        public async Task<ActionResult<ActivityDto>> Update(Guid Id, [FromForm] Update.Command command)
         {
             command.Id = Id;
             return await Mediator.Send(command);

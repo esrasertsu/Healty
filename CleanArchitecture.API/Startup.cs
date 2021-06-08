@@ -127,6 +127,7 @@ namespace CleanArchitecture.API
             services.AddScoped<IProfileReader, ProfileReader>();
             services.AddScoped<IChatRoomReader, ChatRoomReader>();
             services.AddScoped<IVideoAccessor, VideoAccessor>();
+            services.AddScoped<IActivityReader, ActivityReader>();
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
         }

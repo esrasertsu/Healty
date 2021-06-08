@@ -20,7 +20,7 @@ interface IProps{
               className="segmentHeader"
 
             >
-              {attendees.length} {attendees.length === 1 ? 'Person' : 'People'} going
+              {attendees && attendees.length} {attendees && attendees.length === 1 ? 'Person' : 'People'} going
             </Segment>
             <Segment secondary attached style={{ border: 'none'}}>
             <Scrollbars

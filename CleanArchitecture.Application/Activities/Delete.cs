@@ -2,6 +2,7 @@
 using CleanArchitecture.Persistence;
 using MediatR;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,7 +32,8 @@ namespace CleanArchitecture.Application.Activities
                     if (activity == null)
                         throw new RestException(HttpStatusCode.NotFound, new { activity ="Not Found"});
 
-                    _context.Remove(activity);
+                    _context.UserActivities.RemoveRange(_context.UserActivities.Where(x => x.ActivityId == activity.Id));
+                    _context.Activities.Remove(activity);
 
                     var success = await _context.SaveChangesAsync() > 0;
 

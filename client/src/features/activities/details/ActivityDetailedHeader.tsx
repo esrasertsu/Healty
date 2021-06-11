@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
-import { Segment, Item, Header, Button, Image } from 'semantic-ui-react'
+import { Segment, Item, Header, Button, Image, Modal, Icon } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 
@@ -22,9 +22,16 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
   const host = activity.attendees && activity.attendees.filter(x => x.isHost === true)[0];
 
   const rootStore = useContext(RootStoreContext);
-  const { attendActivity, cancelAttendance, loading} = rootStore.activityStore;
+  const { attendActivity, cancelAttendance, loading, deleteActivity} = rootStore.activityStore;
+  const [open, setOpen] = React.useState(false);
+
+  const handleDeleteActivity = (e:any) => {
+    debugger;
+    deleteActivity(e,activity.id);
+  }
 
     return (
+      <>
         <div>
                 <Segment.Group>
                   <Segment basic attached='top' style={{ padding: '0' }}>
@@ -40,7 +47,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                             />
                             <p>{activity.date && format(activity.date,'eeee do MMMM')}</p>
                             <p>
-                              Hosted by <Link to={`/profile/${host && host.userName}`} ><strong>{host && host.displayName}</strong></Link> 
+                              Düzenleyen: <Link to={`/profile/${host && host.userName}`} ><strong>{host && host.displayName}</strong></Link> 
                             </p>
                           </Item.Content>
                         </Item>
@@ -49,9 +56,41 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                   </Segment>
                 <Segment clearing attached='bottom'>
                     {activity.isHost && host && host.userRole!=="User" ? (
-                      <Button as={Link} to={`/manage/${activity.id}`} color='orange' floated='right'>
-                         Manage Event
+                      <>
+                      <Button as={Link} to={`/manage/${activity.id}`} color='orange' floated='right'
+                      content='Düzenle'
+                      labelPosition='right'
+                      icon='edit'>
                       </Button>
+                      <Modal
+                        basic
+                        onClose={() => setOpen(false)}
+                        onOpen={() => setOpen(true)}
+                        open={open}
+                        size='small'
+                        trigger={<Button color='red' floated='right' content='Sil'
+                        labelPosition='right'
+                        icon='trash'></Button>}
+                      >
+                        <Header icon>
+                          <Icon name='archive' />
+                          Aktivite Silme Onayı
+                        </Header>
+                        <Modal.Content>
+                          <p>
+                            Oluşturmuş olduğun bu aktiviteyi silmek istediğine emin misin?
+                          </p>
+                        </Modal.Content>
+                        <Modal.Actions>
+                          <Button color='grey' onClick={() => setOpen(false)}>
+                            <Icon name='backward' /> İptal
+                          </Button>
+                          <Button basic color='red' onClick={(e:any) => {handleDeleteActivity(e);setOpen(false)}}>
+                            <Icon name='trash' /> Sil
+                          </Button>
+                        </Modal.Actions>
+                      </Modal>
+                    </>                   
                     ): activity.isGoing ? (
                       <Button loading={loading} onClick={cancelAttendance}>Cancel attendance</Button>
                     ): (
@@ -61,6 +100,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                   </Segment>
                 </Segment.Group>
         </div>
+    </>
     )
 }
 

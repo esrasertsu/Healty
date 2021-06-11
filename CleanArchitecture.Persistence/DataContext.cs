@@ -55,7 +55,8 @@ namespace CleanArchitecture.Persistence
             builder.Entity<UserActivity>()
                 .HasOne(a => a.Activity)
                 .WithMany(u => u.UserActivities)
-                .HasForeignKey(a => a.ActivityId);
+                .HasForeignKey(a => a.ActivityId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<UserFollowing>(b =>
             {

@@ -285,6 +285,7 @@ export default class ActivityStore {
     }
 
     @action deleteActivity = async (event: SyntheticEvent<HTMLButtonElement>, id: string) => {
+        debugger;
         this.submitting = true;
         this.target = event.currentTarget.name;
         try {
@@ -293,6 +294,7 @@ export default class ActivityStore {
                 this.activityRegistery.delete(id);
                 this.submitting = false;
                 this.target = '';
+                history.push(`/activities`);
             });
         } catch (error) {
             runInAction('Deleting activitiy error', () => {

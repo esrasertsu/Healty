@@ -1,5 +1,5 @@
 ﻿import React, { useContext, useEffect, useState } from "react";
-import { Segment, Form, Button, Grid, Label, Header, Image } from "semantic-ui-react";
+import { Segment, Form, Button, Grid, Label, Header, Image, Icon } from "semantic-ui-react";
 import {
   ActivityFormValues, IActivityFormValues
 } from "../../../app/models/activity";
@@ -23,6 +23,7 @@ import WYSIWYGEditor from "../../../app/common/form/WYSIWYGEditor";
 import PhotoWidgetDropzone from "../../../app/common/photoUpload/PhotoWidgetDropzone";
 import PhotoWidgetCropper from "../../../app/common/photoUpload/PhotoWidgetCropper";
 import { action } from "mobx";
+import { toast } from "react-toastify";
 
 const validate = combineValidators({
   title: isRequired({message: 'The event title is required'}),
@@ -77,7 +78,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
    const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
    const [emptyAtivityForm, setEmptyActivityForm] = useState(new ActivityFormValues());
    const [activityDesc, setActivityDesc] = useState<string>("");
-
+   const [imageChange, setImageChange] = useState(false);
+   const [imageDeleted, setImageDeleted] = useState(false);
 
   useEffect(() => {
     if (match.params.id) {
@@ -164,11 +166,27 @@ const handleTimeChange = (time:any) =>{
           };
           createActivity(newActivity);
         } else {
-          let editedActivity = {
-            ...activity,
-            photo: image
+          debugger;
+          if(!imageDeleted)
+          {
+            if(!imageChange)
+            {
+              let editedActivity = {
+                ...activity
+              }
+              editActivity(editedActivity);
+            }else {
+              let editedActivity = {
+                ...activity,
+                photo: image
+              }
+              editActivity(editedActivity);
+            }
+          
+          }else 
+          {
+              toast.warning("Resim silinemez")
           }
-          editActivity(editedActivity);
         }
   };
 
@@ -196,17 +214,24 @@ const handleTimeChange = (time:any) =>{
                 }}
                  </OnChange>
                  <label>Aktivite Liste Fotoğrafı*</label>
-                  {
+                 {
+                   activityForm.mainImage && !imageChange ?
+                   <Segment>
+                    <Image src={activityForm.mainImage.url} style={{width:'50%', height:"auto", marginBottom:"20px", overflow:'hidden'}}/>
+                    <Label color="red" style={{marginBottom:"20px", marginRight:"20px", cursor:"pointer"}} 
+                 onClick={()=>{setImageDeleted(true); setImageChange(true)}}>Değiştir/Sil <Icon name="trash"></Icon></Label>
+                  </Segment>
+                :
                 files.length === 0 ? 
                 <div style={{marginBottom:15}}>
                 <PhotoWidgetDropzone setFiles={setFiles} />
                 </div>
                 :
                (
-                <Grid>
+                <Grid style={{marginTop:"10px"}}>
                   <Grid.Column width="eight">
                   <Header sub content='*Boyutlandır' />
-                  <PhotoWidgetCropper setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={225/112}/>
+                  <PhotoWidgetCropper setImageDeleted={setImageDeleted} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={225/112}/>
                   </Grid.Column>
                   <Grid.Column width="eight">
                     <Header sub content='*Önizleme' />
@@ -214,7 +239,12 @@ const handleTimeChange = (time:any) =>{
                   </Grid.Column>
 
                   <Grid.Column width="eight">
-                  <Button type="danger" icon='close' disabled={loading} onClick={()=> setFiles([])}>Değiştir/Sil</Button>
+                  <div style={{display:"flex"}}>
+                  <Label style={{marginBottom:"20px", marginRight:"20px", cursor:"pointer"}} 
+                  onClick={()=> {setFiles([]);setImageDeleted(true);}}>Değiştir/Sil <Icon name="trash"></Icon></Label>
+                  <Label style={{marginBottom:"20px", cursor:"pointer"}} onClick={()=> {
+                  setImageChange(false); setImageDeleted(false); setFiles([])}}>Değişiklikleri geri al <Icon name="backward"></Icon> </Label>   
+                  </div>             
                   </Grid.Column>
                </Grid>
                )
@@ -402,13 +432,13 @@ const handleTimeChange = (time:any) =>{
                   floated="right"
                   positive
                   type="submit"
-                  content="Submit"
+                  content="Kaydet"
                 />
                 <Button
                   floated="left"
                   disabled={loading}
                   type="cancel"
-                  content="Cancel"
+                  content="İptal"
                   onClick={
                     activityForm.id
                       ? () => history.push(`/activities/${activityForm.id}`)
@@ -429,14 +459,14 @@ const handleTimeChange = (time:any) =>{
         </Segment>
       </Grid.Column> */}
        </Grid.Row>
-      <Grid.Row>
+       {/*<Grid.Row>
       <Grid.Column width={16}>
         <Segment>
-          <ActivityFormMap />
-          {/* <ActivitySearchPage /> */}
+          <ActivityFormMap /> 
+        <ActivitySearchPage />
         </Segment>
         </Grid.Column>
-      </Grid.Row>
+      </Grid.Row> */}
     </Grid>
   );
 };

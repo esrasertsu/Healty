@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import { observer } from 'mobx-react-lite'
-import React from 'react'
+import React, { useState } from 'react'
 import { Segment, Grid, Icon } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity'
 import dompurify from 'dompurify';
@@ -8,6 +8,7 @@ import dompurify from 'dompurify';
 const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
 
   const sanitizer = dompurify.sanitize;
+  const [showMore, setShowMore] = useState(false);
 
     return (
        <Segment.Group>
@@ -17,7 +18,15 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    <Icon size='large' color='teal' name='info' />
                  </Grid.Column>
                  <Grid.Column width={15}>
-                 <div key={activity.id+"_desc"} className="homepage_subheader" dangerouslySetInnerHTML={{__html:sanitizer(activity.description)}} />
+                {
+                  !showMore ?
+                  <>
+                  <div key={activity.id+"_desc"} className="homepage_subheader" dangerouslySetInnerHTML={{__html:sanitizer(activity.description.slice(0, 2000))}} />
+                  {activity.description.length > 2000 && <div className="readMore" onClick={() => setShowMore(true)}>Read more</div>} 
+                  </> :
+                <div key={activity.id+"_desc"} className="homepage_subheader" dangerouslySetInnerHTML={{__html:sanitizer(activity.description)}} />
+
+                }
                  </Grid.Column>
                </Grid>
              </Segment>

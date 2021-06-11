@@ -5,12 +5,13 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 interface IProps{
     setImage: (file: Blob) => void;
+    setImageDeleted:(change: boolean) => void;
     imagePreview: string;
     setCroppedImageUrl: (url: string) => void;
     aspect:number;
 }
 
- const PhotoWidgetCropper:React.FC<IProps> = ({setImage, imagePreview, setCroppedImageUrl, aspect}) =>  {
+ const PhotoWidgetCropper:React.FC<IProps> = ({setImage,setImageDeleted, imagePreview, setCroppedImageUrl, aspect}) =>  {
 
     const [crop, setCrop] = useState<Crop>({
         unit: "%",
@@ -53,7 +54,8 @@ interface IProps{
                   console.error('Canvas is empty');
                   return;
                 }
-                setImage(blob)
+                setImage(blob);
+                setImageDeleted(false);
               }, 'image/jpeg');
         } 
     }

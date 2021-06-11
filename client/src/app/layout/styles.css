@@ -988,3 +988,10 @@ i.search.inverted.icon {
 .profile_desc_grid_rows{
   margin-bottom: 15px;
 }
+
+.readMore{
+  margin-top: 10px;
+  cursor: pointer;
+  text-decoration:underline ;
+  color:teal;
+}

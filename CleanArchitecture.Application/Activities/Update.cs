@@ -153,16 +153,17 @@ namespace CleanArchitecture.Application.Activities
                     var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == request.CityId);
                     activity.City = city ?? activity.City;
                 }
-                var mainPhoto = activity.Photos.Where(x => x.IsMain).FirstOrDefault();
-                if (mainPhoto != null)
-                {
-                    var result = _photoAccessor.DeletePhoto(mainPhoto.Id);
-                    if (result != null)
-                          activity.Photos.Remove(mainPhoto);
-                }
 
                 if(request.Photo!=null)
                 {
+                    var mainPhoto = activity.Photos.Where(x => x.IsMain).FirstOrDefault();
+                    if (mainPhoto != null)
+                    {
+                        var result = _photoAccessor.DeletePhoto(mainPhoto.Id);
+                        if (result != null)
+                            activity.Photos.Remove(mainPhoto);
+                    }
+
                     var photoUploadResults = _photoAccessor.AddBlogPhoto(request.Photo);
 
                     var image = new Photo

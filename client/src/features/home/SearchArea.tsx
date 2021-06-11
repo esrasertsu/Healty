@@ -23,6 +23,8 @@ import { history } from '../..';
 
     const [results, setResults] = useState<IAllCategoryList[]>([]);
     const [value, setValue] = useState('');
+    const [result, setResult] = useState<IAllCategoryList>();
+
 
     const [isSearchLoading, setSearchLoading] = useState(false);
     
@@ -33,19 +35,8 @@ import { history } from '../..';
 
 
     const handleResultSelect = (e:any, { result}:any) => {
-      debugger;
         setValue(result.text);
-        if(result.parentId === null)
-        {
-          loadCategories();
-          setProfileFilterForm({...profileFilterForm, categoryId:result.key, cityId: userCity});
-        }
-        else 
-        { 
-          loadSubCategories(result.parentId);
-          setProfileFilterForm({...profileFilterForm,cityId: userCity, categoryId:result.parentId, subCategoryIds:[result.key]});
-        }
-
+        setResult(result);
     }
     const handleSearchChange = (e:any, { value }: any) => {
       setSearchLoading(true);
@@ -79,6 +70,16 @@ import { history } from '../..';
                 />
                       <Button size='big' primary circular onClick={() => {
                            setPage(0);
+                           if(result && result.parentId === null)
+                              {
+                                loadCategories();
+                                setProfileFilterForm({...profileFilterForm, categoryId:result.key, cityId: userCity});
+                              }
+                              else 
+                              { 
+                                result && loadSubCategories(result.parentId!);
+                                result && setProfileFilterForm({...profileFilterForm,cityId: userCity, categoryId:result.parentId!, subCategoryIds:[result.key]});
+                              }
                           clearProfileRegistery();
                           history.push("/profiles");
                         }}>

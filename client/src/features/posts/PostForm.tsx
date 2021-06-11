@@ -58,6 +58,8 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
 
     const [category, setCategory] = useState<string>("");
     const [subCategory, setSubCategory] =useState<string[]>([]);
+    const [imageDeleted, setImageDeleted] = useState<boolean>(false);
+
     useEffect(() => {
       loadCategories();
   }, [loadCategories])
@@ -131,7 +133,7 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
                 <Grid>
                   <Grid.Column width="eight">
                   <Header sub content='*Boyutlandır' />
-                  <PhotoWidgetCropper setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1500/650}/>
+                  <PhotoWidgetCropper setImageDeleted={setImageDeleted} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1500/650}/>
                   </Grid.Column>
                   <Grid.Column width="eight">
                     <Header sub content='*Önizleme' />

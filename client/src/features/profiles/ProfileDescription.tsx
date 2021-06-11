@@ -43,7 +43,7 @@ const ProfileDescription = () => {
               <Grid stackable={true} style={{fontSize:"1.1rem"}}>
                 <Grid.Row columns={3} className="profile_desc_grid_rows">
                   <Grid.Column className="profile_desc_iconandtext">
-                    <Icon size="big" name="bookmark"></Icon> 
+                    <Icon color="teal" size="big" name="bookmark"></Icon> 
                     <List as='ul' className="profile_desc_list_item" >
                     {
                      
@@ -54,7 +54,7 @@ const ProfileDescription = () => {
                     </List>
                   </Grid.Column>
                   <Grid.Column className="profile_desc_iconandtext">
-                  <Icon size="big" name="bolt"></Icon> 
+                  <Icon color="teal" size="big" name="bolt"></Icon> 
                   <List as='ul' className="profile_desc_list_item">
                     {
                      profile!.accessibilities.length >0 ? profile!.accessibilities.map((acc) =>(
@@ -64,7 +64,7 @@ const ProfileDescription = () => {
                     </List>
                   </Grid.Column>
                   <Grid.Column className="profile_desc_iconandtext">
-                  <Icon size="big" name="building outline"></Icon> 
+                  <Icon color="teal" size="big" name="building outline"></Icon> 
                   <div>{profile!.dependency || "Bilgi yok"}</div>
                   </Grid.Column>
                 </Grid.Row>
@@ -74,6 +74,7 @@ const ProfileDescription = () => {
                     as='h3'
                     icon='id card outline'
                     content={`Uzman Hakkında`}
+                    color="teal"
                   />
                 <p>{profile!.bio || "Bilgi yok"}</p>
                   </Grid.Column>
@@ -85,6 +86,7 @@ const ProfileDescription = () => {
                     as='h3'
                     icon='spinner'
                     content={`Tecrübe`}
+                    color="teal"
                   />
                     <div>{profile!.experienceYear>0 ? "("+profile!.experienceYear +" yıl)":""}</div>
                   </div>
@@ -98,6 +100,7 @@ const ProfileDescription = () => {
                     as='h3'
                     icon='graduation cap'
                     content={`Eğitim`}
+                    color="teal"
                   />
                   <p>{profile!.certificates || "Bilgi yok"}</p>
                   </Grid.Column>

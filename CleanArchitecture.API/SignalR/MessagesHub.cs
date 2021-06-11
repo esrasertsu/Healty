@@ -30,6 +30,14 @@ namespace CleanArchitecture.API.SignalR
 
         }
 
+        public async Task SeenMessage(UpdateMessage.Command command)
+        {
+            var result = await _mediator.Send(command);
+
+            await Clients.Group(command.ChatRoomId.ToString()).SendAsync("MessageSeen", command);
+
+        }
+
         private string GetUserName()
         {
             return Context.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;

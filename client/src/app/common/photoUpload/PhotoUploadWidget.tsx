@@ -15,6 +15,7 @@ const PhotoUploadWidget:React.FC<IProps> = ({loading,uploadPhoto, aspect}) => {
     const [files, setFiles] = useState<any[]>([]);
     const [image, setImage] = useState<Blob | null>(null);
     const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
+    const [imageDeleted, setImageDeleted] = useState<boolean>(false);
 
     useEffect(() => {
         return () => {
@@ -39,7 +40,7 @@ const PhotoUploadWidget:React.FC<IProps> = ({loading,uploadPhoto, aspect}) => {
             <Grid.Column width={4}>
                 <Header sub color='teal' content='Step 2 - Resize image' />
                 {files.length > 0 && 
-                <PhotoWidgetCropper aspect={aspect} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} />}
+                <PhotoWidgetCropper setImageDeleted={setImageDeleted} aspect={aspect} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} />}
             </Grid.Column>
             <Grid.Column width={1} />
             <Grid.Column width={4}>

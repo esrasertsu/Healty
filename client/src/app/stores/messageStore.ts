@@ -63,6 +63,9 @@ export default class MessageStore {
     @action addComment = async (values: any) => {
         values.chatRoomId = this.chatRoomId;
         try {
+            if(this.rootStore.userStore.hubConnection!.state === "Disconnected")
+            toast.error("Please refresh the page!");
+            
             await this.rootStore.userStore.hubConnection!.invoke("SendMessage", values);
         } catch (error) {
             console.log(error);
@@ -86,7 +89,8 @@ export default class MessageStore {
                 this.chatRooms = chatRooms;
                 this.loadingChatRooms = false;
                 chatRooms.forEach((chatRoom) =>{
-                    chatRoom.userStatus && this.rootStore.userStore.onlineUsers.push(chatRoom.userName);
+                    chatRoom.userStatus && 
+                    this.rootStore.userStore.setUserOnline(chatRoom.userName);
                     this.messageRegistery.set(chatRoom.id, null);
                 });
             })
@@ -110,6 +114,10 @@ export default class MessageStore {
             });
             console.log(error);
         }
+    }
+    @action setMessageSeen =  (message:IMessage) =>{
+       var listMessages: IMessage[] = this.messageRegistery.get(message.chatRoomId);
+       listMessages.filter(x => x.id == message.id)[0].seen = true;
     }
 
 

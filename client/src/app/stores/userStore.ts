@@ -39,9 +39,13 @@ export default class UserStore {
     }
 
     @action setUserOnline = (username:string) =>{
-        this.onlineUsers.push(username);
+        var index = this.onlineUsers.indexOf(username);
+                if (index === -1) {
+                    this.onlineUsers.push(username);
+                }
     }
     @action login = async (values : IUserFormValues) =>{
+        debugger;
         try {
             const user = await agent.User.login(values);
             runInAction(()=>{
@@ -117,8 +121,17 @@ export default class UserStore {
                     else if(message.username !== this.user!.userName &&  
                             message.chatRoomId === this.rootStore.messageStore.chatRoomId)
                             {
-                               message.seen = true;
-                               this.rootStore.messageStore.seenMessageUpdate(message);
+                                var values = {
+                                    id:message.id,
+                                    chatRoomId: message.chatRoomId,
+                                    seen: true
+                                }
+                                
+                                try {
+                                    this.hubConnection!.invoke('SeenMessage',values  );
+                                } catch (error) {
+                                    console.log(error);
+                                }
                             }
                 })
             })
@@ -132,6 +145,12 @@ export default class UserStore {
             this.hubConnection.on('Offline', user => {
                 runInAction(async() => {
                     this.setUserOffline(user);
+                })
+            })
+
+            this.hubConnection.on('MessageSeen', message => {
+                runInAction(async() => {
+                    this.rootStore.messageStore.setMessageSeen(message);
                 })
             })
     }

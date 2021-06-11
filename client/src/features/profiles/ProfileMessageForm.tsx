@@ -51,6 +51,7 @@ import { IMessageForm } from '../../app/models/message';
             content='Gönder'
             labelPosition='right'
             icon="send"
+            disabled={profile!.hasConversation}
             loading={submitting}
           />
         </Form>

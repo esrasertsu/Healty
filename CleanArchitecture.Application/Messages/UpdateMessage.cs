@@ -16,6 +16,8 @@ namespace CleanArchitecture.Application.Messages
         {
             public Guid Id { get; set; }
             public bool Seen { get; set; }
+            public Guid ChatRoomId { get; set; }
+
         }
 
 

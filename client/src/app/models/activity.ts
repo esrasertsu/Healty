@@ -79,6 +79,7 @@ export class ActivityFormValues implements IActivityFormValues {
     price: number = 0;
     attendancyLimit: number =0;
     photo?: Blob=undefined;
+    mainImage?: IPhoto = undefined;
     constructor(init?: IActivityFormValues){
         if(init && init.date)
         {

@@ -99,7 +99,7 @@ namespace CleanArchitecture.Application.Activities
                 SubCategories = subcatsToReturn,
                 UserActivities = _mapper.Map<ICollection<UserActivity>, ICollection<AttendeeDto>>(activity.UserActivities),
                 Address= activity.Address,
-                City = _mapper.Map<City, CityDto>(activity.City),
+                City = _mapper.Map<City, CityDto>(activity.GetCity()),
                 Venue = activity.Venue,
                 Comments = _mapper.Map<ICollection<ActivityComment>, ICollection<ActivityCommentDto>>(activity.Comments),
                 Videos = activity.Videos

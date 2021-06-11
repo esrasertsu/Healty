@@ -28,7 +28,7 @@ namespace CleanArchitecture.Application.Activities
             public List<Guid> SubCategoryIds { get; set; }
             public List<Guid> LevelIds { get; set; }
             public string Date { get; set; }
-            public Guid CityId { get; set; }
+            public string CityId { get; set; }
             public string Venue { get; set; }
             public bool Online { get; set; }
             public string AttendanceCount { get; set; }
@@ -71,8 +71,7 @@ namespace CleanArchitecture.Application.Activities
             public async Task<ActivityDto> Handle(Command request, CancellationToken cancellationToken)
             {
                 var image = new Photo();
-                var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == request.CityId);
-
+               
                 var activity = new Activity
                 {
                     Id = request.Id,
@@ -80,7 +79,6 @@ namespace CleanArchitecture.Application.Activities
                     Description = request.Description,
                     Address = request.Address,
                     Date = DateTime.Parse(request.Date),
-                    City = city,
                     Venue = request.Venue,
                     AttendancyLimit = String.IsNullOrEmpty(request.AttendancyLimit) ? 0 : Convert.ToInt32(request.AttendancyLimit),
                     AttendanceCount = 0,
@@ -88,6 +86,12 @@ namespace CleanArchitecture.Application.Activities
                     Online = request.Online,
                      
                 };
+                if (!string.IsNullOrEmpty(request.CityId))
+                {
+                    var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == new Guid(request.CityId));
+                    activity.SetCity(city);
+                }
+                else activity.SetCity(null);
                 _context.Activities.Add(activity); //addsync is just for special creators
 
                 if(request.Photo != null)
@@ -183,13 +187,6 @@ namespace CleanArchitecture.Application.Activities
 
                 if (success)
                     return await _activityReader.ReadActivity(activity.Id);
-
-                if(request.Photo != null)
-                {
-                    var photoDeleteResults = _photoAccessor.DeletePhoto(image.Id);
-                    activity.Photos.Remove(image);
-                }
-                await _context.SaveChangesAsync();
 
                 throw new Exception("Problem saving changes");
             }

@@ -32,8 +32,7 @@ const validate = combineValidators({
     isRequired('Description'),
     hasLengthGreaterThan(4)({message: 'Description needs to be at least 5 characters'})
   )(),
-  cityId: isRequired('City'),
-  venue: isRequired('Venue'),
+  price: isRequired('Price'),
   date: isRequired('Date'),
   time: isRequired('Time')
 })
@@ -110,8 +109,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
    }
 
    const handleCityChanged = (e: any, data: string) => {  
-    if(activityForm.cityId===null || (activityForm.cityId !== data))
-    setUpdateEnabled(true);
+    if((activityForm.cityId !== data))
     setActivityForm({...activityForm,cityId: data});
     
  }
@@ -231,7 +229,7 @@ const handleTimeChange = (time:any) =>{
                 <Grid style={{marginTop:"10px"}}>
                   <Grid.Column width="eight">
                   <Header sub content='*Boyutlandır' />
-                  <PhotoWidgetCropper setImageDeleted={setImageDeleted} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={225/112}/>
+                  <PhotoWidgetCropper setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={225/112}/>
                   </Grid.Column>
                   <Grid.Column width="eight">
                     <Header sub content='*Önizleme' />
@@ -395,6 +393,7 @@ const handleTimeChange = (time:any) =>{
                   component={DropdownInput}
                   options={cities}
                   value={activityForm.cityId}
+                  clearable={true}
                   onChange={(e: any,data: any)=>handleCityChanged(e,data)}
                   style={{marginBottom:15}}
                 />
@@ -428,7 +427,7 @@ const handleTimeChange = (time:any) =>{
                 </OnChange>
                 <Button
                   loading={submitting}
-                  disabled={loading || invalid || !updateEnabled}
+                  disabled={loading || invalid }
                   floated="right"
                   positive
                   type="submit"

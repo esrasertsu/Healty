@@ -243,7 +243,9 @@ export default class ActivityStore {
             // activity.comments = [];
             // activity.isHost = true;            
             runInAction('Creating activity', () => {
+                setActivityProps(newAct,this.rootStore.userStore.user!)
                 this.activityRegistery.set(newAct.id, newAct);
+                this.activity = newAct;
                 this.submitting = false;
                 history.push(`/activities/${newAct.id}`);
             });

@@ -27,7 +27,7 @@ namespace CleanArchitecture.Application.Activities
             public List<Guid> SubCategoryIds { get; set; }
             public List<Guid> LevelIds { get; set; }
             public string Date { get; set; }
-            public Guid CityId { get; set; }
+            public string CityId { get; set; }
             public string Venue { get; set; }
             public bool Online { get; set; }
             public string AttendanceCount { get; set; }
@@ -148,13 +148,14 @@ namespace CleanArchitecture.Application.Activities
                         }
                     }
                 }
-                if (request.CityId != null)
+                if (!String.IsNullOrEmpty(request.CityId))
                 {
-                    var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == request.CityId);
-                    activity.City = city ?? activity.City;
+                    var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == new Guid(request.CityId));
+                    activity.SetCity(city ?? activity.GetCity());
                 }
+                else activity.SetCity(null);
 
-                if(request.Photo!=null)
+                if (request.Photo!=null)
                 {
                     var mainPhoto = activity.Photos.Where(x => x.IsMain).FirstOrDefault();
                     if (mainPhoto != null)

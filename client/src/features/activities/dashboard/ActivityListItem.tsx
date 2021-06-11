@@ -74,7 +74,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                         <Item.Description>
                             <Item.Image size="mini" circular src={host.image || '/assets/user.png'}
                              style={{}}/>
-                             &nbsp; Hosted by <Link to={`/profile/${host.userName}`} >{host.displayName + "  "}</Link>
+                             &nbsp;<Link to={`/profile/${host.userName}`} >{host.displayName + "  "}</Link>
                             </Item.Description>
                         <Item.Meta></Item.Meta>
                     <Item.Description>

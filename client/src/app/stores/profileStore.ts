@@ -17,6 +17,7 @@ export default class ProfileStore{
         reaction(
             () => this.activeTab,
             activeIndex => {
+                this.updatedProfile= false;
                 if(activeIndex ===3 || activeIndex===4)
                 {
                     const predicate = activeIndex ===4 ? 'followers' : 'following';

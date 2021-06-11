@@ -6,12 +6,13 @@ import 'react-image-crop/dist/ReactCrop.css';
 interface IProps{
     setImage: (file: Blob) => void;
     setImageDeleted:(change: boolean) => void;
+    setImageChanged:(change: boolean) => void;
     imagePreview: string;
     setCroppedImageUrl: (url: string) => void;
     aspect:number;
 }
 
- const PhotoWidgetCropper:React.FC<IProps> = ({setImage,setImageDeleted, imagePreview, setCroppedImageUrl, aspect}) =>  {
+ const PhotoWidgetCropper:React.FC<IProps> = ({setImage,setImageDeleted,setImageChanged, imagePreview, setCroppedImageUrl, aspect}) =>  {
 
     const [crop, setCrop] = useState<Crop>({
         unit: "%",
@@ -56,6 +57,7 @@ interface IProps{
                 }
                 setImage(blob);
                 setImageDeleted(false);
+                setImageChanged(true);
               }, 'image/jpeg');
         } 
     }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitecture.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210602230406_InitialCommits")]
+    [Migration("20210611201700_InitialCommits")]
     partial class InitialCommits
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,9 +47,6 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<int?>("AttendancyLimit")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("CityId")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
@@ -69,8 +66,6 @@ namespace CleanArchitecture.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
 
                     b.ToTable("Activities");
                 });
@@ -722,13 +717,6 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Domain.Activity", b =>
-                {
-                    b.HasOne("CleanArchitecture.Domain.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.ActivityCategories", b =>

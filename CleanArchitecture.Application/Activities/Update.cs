@@ -165,7 +165,7 @@ namespace CleanArchitecture.Application.Activities
                             activity.Photos.Remove(mainPhoto);
                     }
 
-                    var photoUploadResults = _photoAccessor.AddBlogPhoto(request.Photo);
+                    var photoUploadResults = _photoAccessor.AddActivityImage(request.Photo);
 
                     var image = new Photo
                     {

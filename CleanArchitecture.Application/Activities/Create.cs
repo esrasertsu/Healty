@@ -96,7 +96,7 @@ namespace CleanArchitecture.Application.Activities
 
                 if(request.Photo != null)
                 {
-                    var photoUploadResults = _photoAccessor.AddBlogPhoto(request.Photo);
+                    var photoUploadResults = _photoAccessor.AddActivityImage(request.Photo);
 
                     activity.Photos = new List<Photo>
                     {

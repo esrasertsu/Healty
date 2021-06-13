@@ -35,7 +35,7 @@ const ProfileMessage: React.FC<IProps> = ({profile}) => {
                             className="showNumberButton"
                             content='Telefonunu Göster'
                             labelPosition='right'
-                            icon="cell phone"
+                            icon="phone"
                         />
                         </Grid.Column>
                     </Grid.Row>

@@ -63,7 +63,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                           />
                     }
                     </div>
-                    <Item.Content style={{width:"60%", margin:"10px"}}>
+                    <Item.Content style={{width:"60%", margin:"10px 10px 6px 15px"}}>
                         <Item.Header as={Link} to={`/activities/${activity.id}`}>{activity.title}</Item.Header>
                         {/* <Item.Description>
                             <div>{activity.description}</div>
@@ -71,12 +71,6 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                             {activity.city},{activity.venue}
                             </div> 
                         </Item.Description>*/}
-                        <Item.Description>
-                            <Item.Image size="mini" circular src={host.image || '/assets/user.png'}
-                             style={{}}/>
-                             &nbsp;<Link to={`/profile/${host.userName}`} >{host.displayName + "  "}</Link>
-                            </Item.Description>
-                        <Item.Meta></Item.Meta>
                     <Item.Description>
                     {/* <Button
                             as={Link} to={`/activities/${activity.id}`}
@@ -87,7 +81,21 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                               {activity.subCategories.map((sub)=>(
                                     <Label basic size="small">{sub.text}</Label>
                               ))}
+                              <div style={{marginTop:".6em"}}>
+                                <Icon name='heartbeat' /><span> Seviye: </span>
+                                {
+                                    activity.levels && activity.levels.length> 0 ? 
+                                    activity.levels.map<React.ReactNode>(s => <span>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
+                                    : " Bilgi yok"
+                                }
+                               {activity.online ?  <div style={{marginTop:".6em"}}> <Icon name='wifi' />  Online katılıma açık <Icon name='check' size='small' color='green' /> </div>: <div style={{marginTop:".6em"}}><Icon name='wifi' />Online katılıma kapalı</div>}
+                                </div>
                         </Item.Description> 
+                        <Item.Description>
+                            <Item.Image size="mini" circular src={host.image || '/assets/user.png'}
+                             style={{}}/>
+                             &nbsp;<Link to={`/profile/${host.userName}`} >{host.displayName + "  "}</Link>
+                            </Item.Description>
                     </Item.Content>
                     <Item.Content className="activity_listItem_extraContent">
                     <Item.Description style={{textAlign:"right", display: "flex", justifyContent: "flex-end"}}>
@@ -110,7 +118,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
             </Item>
             </Item.Group>
             </div>
-            <Segment clearing secondary>
+            <Segment clearing secondary className="activityListItem_footer">
                 <Icon name='clock' /> {format(activity.date, 'h:mm a')}
                 &nbsp;
                 <Icon name='marker' /> {activity.venue}, {activity.city && activity.city.text}

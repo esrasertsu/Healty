@@ -10,16 +10,12 @@ import { history } from '../..';
 
 interface IProps 
 {
-  handleGetNext: () => void;
-  totalBlogPages: number;
-  loadingNext: boolean;
-  blogPage:number;
-  getBlogsByDate: any[];
+  profileBlogs: IProfileBlog[];
   profileUserName:string;
   displayName:string;
 }
 
-const ProfileBlogList: React.FC<IProps> = ({handleGetNext,totalBlogPages,loadingNext,blogPage,getBlogsByDate,profileUserName,displayName}) => {
+const ProfileBlogList: React.FC<IProps> = ({profileBlogs,profileUserName,displayName}) => {
 
   const rootStore = useContext(RootStoreContext);
    const { setPredicate,clearPredicates ,setPredicateDisplayName,setClearedBeforeNewPredicateComing} = rootStore.blogStore;
@@ -29,7 +25,7 @@ const ProfileBlogList: React.FC<IProps> = ({handleGetNext,totalBlogPages,loading
 <Grid>
         <Grid.Column width={16}>
           <Card.Group itemsPerRow={4}>
-              {getBlogsByDate.map((blog: IProfileBlog) => (
+              {profileBlogs.map((blog: IProfileBlog) => (
                       <Card
                       as={Link}
                       to={`/blog/${blog.id}`}
@@ -60,8 +56,8 @@ const ProfileBlogList: React.FC<IProps> = ({handleGetNext,totalBlogPages,loading
                 setClearedBeforeNewPredicateComing(false);
                 setPredicate('username', profileUserName);
                 history.push('/blog')}}
-            style={totalBlogPages === 0 ? {display:"none"}: {display:"inline", marginTop: "20px"}}
-            loading={loadingNext}/>
+            style={profileBlogs.length === 0 ? {display:"none"}: {display:"inline", marginTop: "20px"}}
+          />
         </Grid.Column>
       </Grid>
       </Fragment>

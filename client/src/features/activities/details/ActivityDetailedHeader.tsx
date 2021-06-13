@@ -7,7 +7,8 @@ import { IActivity } from '../../../app/models/activity';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 
 const activityImageStyle = {
-  filter: 'brightness(50%)'
+  filter: 'brightness(50%)',
+  height:'350px'
 };
 
 const activityImageTextStyle = {
@@ -82,7 +83,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                           </p>
                         </Modal.Content>
                         <Modal.Actions>
-                          <Button color='grey' onClick={() => setOpen(false)}>
+                          <Button basic color='grey' onClick={() => setOpen(false)}>
                             <Icon name='backward' /> İptal
                           </Button>
                           <Button basic color='red' onClick={(e:any) => {handleDeleteActivity(e);setOpen(false)}}>
@@ -92,11 +93,18 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                       </Modal>
                     </>                   
                     ): activity.isGoing ? (
-                      <Button loading={loading} onClick={cancelAttendance}>Cancel attendance</Button>
+                      <Button loading={loading} onClick={cancelAttendance}>Katılımı iptal et</Button>
                     ): (
-                      <Button loading={loading} onClick={attendActivity} color='teal'>Join Activity</Button>
+                      <>
+                      { 
+                      activity.attendancyLimit && activity.attendancyLimit>0 && activity.attendancyLimit - activity.attendees.length <4 &&
+                      <span style={{color:"red"}}>Son {activity.attendancyLimit - activity.attendees.length} katılımcı!</span>
+                      }{
+                      (activity.attendancyLimit ===null || (activity.attendancyLimit && activity.attendancyLimit > activity.attendees.length)) &&
+                      <Button  floated='right' loading={loading} onClick={attendActivity} color='teal'>Aktiviteye Katıl</Button>
+                      }   
+                      </>
                     )}
-                    
                   </Segment>
                 </Segment.Group>
         </div>

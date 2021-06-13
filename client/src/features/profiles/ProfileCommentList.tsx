@@ -36,7 +36,9 @@ Eğitmen hakkında henüz yorum yapılmamış
                       <Comment key={comment.id}>
                       <Comment.Avatar circular="true" src={comment.image || '/assets/user.png'} />
                       <Comment.Content>
-                        <Comment.Author as={Link} to={`/profile/${comment.authorName}`} replace>{comment.displayName}</Comment.Author>
+                        <Comment.Author as={Link} to={`/profile/${comment.authorName}`} 
+                         style={!comment.allowDisplayName ? {pointerEvents: "none", color:"black"} : {color:"#263a5e"}}
+                        replace>{!comment.allowDisplayName ? comment.displayName.charAt(0) + comment.displayName.split('').map((char: any) => "*" ).join("") : comment.displayName}</Comment.Author>
                         <Comment.Metadata>
                           <div>{formatDistance(new Date(comment.createdAt), new Date())}</div>
                         </Comment.Metadata>
@@ -52,7 +54,8 @@ Eğitmen hakkında henüz yorum yapılmamış
                  ))}
                </Comment.Group>
 }
-                <Button
+<div>
+<Button
                  floated="right"
                  content="More..." 
                  positive
@@ -71,6 +74,8 @@ Eğitmen hakkında henüz yorum yapılmamış
                       onClick={()=>openModal("Leave a comment",<ProfileCommentForm closeModal={closeModal} />)}
                     />)
                 }
+</div>
+             
       </Fragment>
     
   );

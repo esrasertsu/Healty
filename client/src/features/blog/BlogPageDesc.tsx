@@ -2,32 +2,102 @@ import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
-import { Segment, Header, Button, Image, Container, Icon, Label } from 'semantic-ui-react'
+import { Segment, Header, Button, Image, Container, Icon, Label, Modal } from 'semantic-ui-react'
 import { IBlog } from '../../app/models/blog';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { history } from '../../index'
 import dompurify from 'dompurify';
+import PostUpdateForm from '../posts/PostUpdateForm';
 
-const BlogPageDesc:React.FC<{blog:IBlog}> = ({blog}) => {
+
+interface IProps{
+  editMode:boolean;
+  setEditMode: (mode:boolean) => void;
+  setUpdatedBlog: (mode:boolean) => void;
+  updatedBlog:boolean;
+  blog:IBlog
+
+}
+
+const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog,updatedBlog}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const { isCurrentUserAuthor } = rootStore.blogStore;
+  const { isCurrentUserAuthor, deletePost ,editPost} = rootStore.blogStore;
   const sanitizer = dompurify.sanitize;
+  const [open, setOpen] = React.useState(false);
+
+
+  const handleDeleteBlog = (e:any) => {
+    debugger;
+    deletePost(e,blog.id);
+  }
 
     return (
-        <div>
                 <Segment className="blog_desctiption_segment">
                     {isCurrentUserAuthor  ? (
-                      <Button as={Link} to={`/manage/${blog.id}`} color='orange' floated='right'>
-                         Düzenle
+                      <div>
+                      {
+                        !editMode ? 
+                        <Button color='orange' floated='right'
+                        content={'Düzenle' }
+                        labelPosition='right'
+                       icon='edit'
+                      onClick={() => 
+                        { setEditMode(true);
+                          setUpdatedBlog(false);
+                        }}
+                        >
+                      </Button> :
+                        <Button color='grey' floated='right'
+                        content={'İptal' }
+                        labelPosition='right'
+                      icon='cancel'
+                      onClick={() => 
+                        { 
+                          debugger;
+                          setEditMode(false);
+                          setUpdatedBlog(false);
+                        }}
+                        >
                       </Button>
-                    ): ""
-                    // activity.isGoing ? (
-                    //   <Button loading={loading} onClick={cancelAttendance}>Cancel attendance</Button>
-                    // ): (
-                    //   <Button loading={loading} onClick={attendActivity} color='teal'>Join Activity</Button>
-                    // )
+                      }
+                    
+                      <Modal
+                        basic
+                        onClose={() => setOpen(false)}
+                        onOpen={() => setOpen(true)}
+                        open={open}
+                        size='small'
+                        trigger={<Button color='red' floated='right' content='Sil'
+                        labelPosition='right'
+                        icon='trash'></Button>}
+                      >
+                        <Header icon>
+                          <Icon name='archive' />
+                          Blog Silme Onayı
+                        </Header>
+                        <Modal.Content>
+                          <p>
+                            Oluşturmuş olduğun bu bloğu silmek istediğine emin misin?
+                          </p>
+                        </Modal.Content>
+                        <Modal.Actions>
+                          <Button basic color='grey' onClick={() => setOpen(false)}>
+                            <Icon name='backward' /> İptal
+                          </Button>
+                          <Button basic color='red' onClick={(e:any) => {handleDeleteBlog(e);setOpen(false)}}>
+                            <Icon name='trash' /> Sil
+                          </Button>
+                        </Modal.Actions>
+                      </Modal>
+                    </div>)
+                    : ""
                     }
+               {
+               editMode && !updatedBlog ? (
+                <PostUpdateForm updatePost={editPost} blog={blog} />
+                ) : 
+               <Container>
                 <p className="blog_description_date">{format(new Date(blog.date), 'eeee do MMMM')}</p>
                 <Header as='h1'  className="blog_description_header">
                 {blog.title}
@@ -40,9 +110,11 @@ const BlogPageDesc:React.FC<{blog:IBlog}> = ({blog}) => {
                     <Label key={subCatName} className="blog_desc_category_label">{subCatName}</Label>
                   ))
                 }
+              </Container>
+              }
                 <Container className="blog_userdetail">
                     <div className="blog_user">
-                    <Image circular size="tiny" src={blog.userImage} onClick={()=>history.push(`/profile/${blog.username}`)}></Image>
+                    <Image circular size="tiny" src={blog.userImage || '/assets/user.png'} onClick={()=>history.push(`/profile/${blog.username}`)}></Image>
                      <div style={{marginLeft:"10px"}}>
                        <Link to={`/profile/${blog.username}`} >
                       <strong>{blog.displayName}</strong></Link> 
@@ -54,7 +126,6 @@ const BlogPageDesc:React.FC<{blog:IBlog}> = ({blog}) => {
 
                 </Container>
                 </Segment>
-        </div>
     )
 }
 

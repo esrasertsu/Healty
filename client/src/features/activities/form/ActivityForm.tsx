@@ -96,8 +96,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
   }, [loadActivity,match.params.id]);
 
   const handleCategoryChanged = (e: any, data: string[]) => {
-
-    setActivityForm({...activityForm,categoryIds: [...data]});
+    
+    setActivityForm({...activityForm, categoryIds: [...data]});
     setCategory(data);  
   
  }
@@ -229,7 +229,7 @@ const handleTimeChange = (time:any) =>{
                 <Grid style={{marginTop:"10px"}}>
                   <Grid.Column width="eight">
                   <Header sub content='*Boyutlandır' />
-                  <PhotoWidgetCropper setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={225/112}/>
+                  <PhotoWidgetCropper setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={278/174}/>
                   </Grid.Column>
                   <Grid.Column width="eight">
                     <Header sub content='*Önizleme' />
@@ -251,11 +251,11 @@ const handleTimeChange = (time:any) =>{
                   <Field
                   name="description"
                   component={WYSIWYGEditor}
-                  value={activityDesc}
+                  value={activityForm.description}
                 />
                   <OnChange name="description">
                 {(value, previous) => {
-                      setActivityDesc(value);
+                  setActivityForm({...activityForm,description: value});
                 }}
                  </OnChange>
                 <label>Kategori*</label>

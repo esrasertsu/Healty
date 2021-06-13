@@ -23,6 +23,7 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
 
     const rootStore = useContext(RootStoreContext);
     const { activity, loadActivity, loadingActivity } = rootStore.activityStore;
+    const { user } = rootStore.userStore;
 
     useEffect(() => {
         loadActivity(match.params.id);
@@ -38,7 +39,12 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
           <Grid.Column width={10}>
             <ActivityDetailedHeader activity={activity}/>
             <ActivityDetailedInfo activity={activity} />
-            <ActivityDetailedChat />
+{
+  user &&
+  activity.attendees.filter(x => x.userName === user.userName).length>0 &&
+  <ActivityDetailedChat />
+
+}
           </Grid.Column>
 
           <Grid.Column width={6}>

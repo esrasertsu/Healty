@@ -49,7 +49,7 @@ const BlogFilters: React.FC = () => {
       {/* <Calendar
       onChange={(date)=> {setPredicate('startDate', date!)}}
       value={predicate.get('startDate') || new Date()} /> */}
-     <BlogSearchArea className="BlogUserSearchArea" placeholder="Uzman" />
+     {/* <BlogSearchArea className="BlogUserSearchArea" placeholder="Uzman" /> */}
      <br></br>
      <Segment className="blogFilter_Category_Filter">
       <h2>Kategoriler</h2>

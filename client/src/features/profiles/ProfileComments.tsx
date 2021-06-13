@@ -46,7 +46,7 @@ import { IProfile } from '../../app/models/profile';
                    {/* <Icon name="comment outline"></Icon> */}
                </Header>
              </Segment>
-             <Segment>
+             <Segment clearing>
                
                <ProfileCommentList handleGetNext={handleGetNext} commentPage={commentPage}
                totalPages={totalPages} loadingNext={loadingNext} getCommentsByDate={getCommentsByDate}/>

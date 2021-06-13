@@ -1,4 +1,4 @@
-import { ISubCategory } from "./category";
+import { ICategory, ISubCategory } from "./category";
 
 export interface IBlogsEnvelope {
     blogs: IBlog[];
@@ -17,7 +17,7 @@ export interface IBlog {
     username: string;
     displayName: string;
     userImage: string;
-    photo : Blob;
+    photo : string;
 }
 
 export interface IPostFormValues extends Partial<IBlog>{
@@ -33,5 +33,25 @@ export class PostFormValues {
     photo: string ="";
 
 }
+
+
+
+export interface IBlogUpdateFormValues extends Partial<IBlog>{
+}
+
+export class BlogUpdateFormValues implements IBlogUpdateFormValues{
+    id?: string = undefined;
+    categories: ICategory[] = [];
+    subCategories: ISubCategory[] = [];
+    subCategoryIds: string[] =[];
+    categoryId: string  ="";
+    description: string = "";
+    
+
+    constructor(init?: IBlogUpdateFormValues){
+        Object.assign(this, init);
+    }
+}
+
 
 

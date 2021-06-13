@@ -6,6 +6,7 @@ export interface IMessageForm{
 export interface IChatRoom{
     id : string,
     userName: string,
+    displayName: string,
     userImage: string,
     lastMessageDate: Date,
     lastMessage: string,

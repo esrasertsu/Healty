@@ -14,7 +14,6 @@ interface IProps{
     const rootStore = useContext(RootStoreContext);
 
     const {
-      loadProfiles,
       profileList,
     } = rootStore.profileStore;
 
@@ -27,10 +26,7 @@ interface IProps{
 
     const [isSearchLoading, setSearchLoading] = useState(false);
     const [value, setvalue] = useState("")
-    
-    useEffect(() => {
-        loadProfiles();
-    },[loadProfiles]); 
+  
 
 
     const handleResultSelect = (e:any, { result}:any) => {

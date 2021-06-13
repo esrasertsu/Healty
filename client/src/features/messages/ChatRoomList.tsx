@@ -70,7 +70,7 @@ const ChatRoomList: React.FC = () => {
               }
             />
               <List.Content>
-                <List.Header>{room.userName}</List.Header>
+                <List.Header>{room.displayName}</List.Header>
                 <span>{room.lastMessage && room.lastMessage.length > 50 ? room.lastMessage.substring(0, 50) + "..." : room.lastMessage}</span>
                 </List.Content>
               </List.Content>

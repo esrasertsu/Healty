@@ -14,16 +14,16 @@ import ProfileBlogList from './ProfileBlogList';
       blogPage,
       setBlogPagination,
       totalBlogPages,
-      getBlogsByDate
+      profileBlogs
     } = rootStore.profileStore;
   
     const [loadingNext, setLoadingNext] = useState(false);
     
-    const handleGetNext = () => {
-      setLoadingNext(true);
-      setBlogPagination(blogPage +1);
-      loadBlogs(profile!.userName).then(() => setLoadingNext(false))
-    }
+    // const handleGetNext = () => {
+    //   setLoadingNext(true);
+    //   setBlogPagination(blogPage +1);
+    //   loadBlogs(profile!.userName).then(() => setLoadingNext(false))
+    // }
    
     return (
         <Fragment>
@@ -32,13 +32,12 @@ import ProfileBlogList from './ProfileBlogList';
           attached='top'
           className="profile_segmentHeaders"
         >
-          <Header>Blog Yazılar &nbsp; ({getBlogsByDate.length})
+          <Header>Blog Yazılar &nbsp; ({profileBlogs.length})
               {/* <Icon name="comment outline"></Icon> */}
           </Header>
         </Segment>
-        {getBlogsByDate.length === 0 && "Henüz paylaştığı bir blog bulunmamaktadır."}
-        <ProfileBlogList handleGetNext={handleGetNext} totalBlogPages={totalBlogPages} loadingNext={loadingNext}
-         blogPage={blogPage} getBlogsByDate={getBlogsByDate} profileUserName={profile!.userName} displayName={profile!.displayName}/>
+        {profileBlogs.length === 0 && "Henüz paylaştığı bir blog bulunmamaktadır."}
+        <ProfileBlogList profileBlogs={profileBlogs} profileUserName={profile!.userName} displayName={profile!.displayName}/>
       </Fragment>
     );
 }

@@ -23,13 +23,14 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
 
     const rootStore = useContext(RootStoreContext);
     const {loadingProfile, loadProfile, loadingBlogs, loadingComments, profile, follow,
-         unfollow, isCurrentUser, loading,setActiveTab, profileForm, setProfileForm} = rootStore.profileStore;
+         unfollow, isCurrentUser, loading,setActiveTab, profileForm, setProfileForm, setUpdatedProfile} = rootStore.profileStore;
 
     useEffect(() => {
         loadProfile(match.params.username)
         .then((profile) => 
-        {debugger;
-            setProfileForm(new ProfileFormValues(profile!))})
+        {   
+            setProfileForm(new ProfileFormValues(profile!))}
+            )
         setActiveTab(0);
     }, [loadProfile,match,setActiveTab])
 

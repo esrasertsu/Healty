@@ -4,7 +4,7 @@ import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
 import { IAccessibility, IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope, IProfileEnvelope, IProfileFormValues, ProfileFormValues } from '../models/profile';
-import { IBlogsEnvelope, IBlog, IPostFormValues } from '../models/blog';
+import { IBlogsEnvelope, IBlog, IPostFormValues, IBlogUpdateFormValues } from '../models/blog';
 import { IAllCategoryList, ICategory, ISubCategory } from '../models/category';
 import { IChatRoom, IMessage, IMessageEnvelope, IMessageForm } from '../models/message';
 import { ICity } from '../models/location';
@@ -155,6 +155,30 @@ const requests = {
             headers: {'Content-type': 'application/json'}
         }).then(responseBody)
     },
+
+    updateBlogDesc: async (url: string, blog: Partial<IBlogUpdateFormValues>) =>{
+        let formData = new FormData();
+       debugger;
+        blog.title && blog.title != "" && formData.append('Title', blog.title);
+        blog.description && blog.description != "" && formData.append('Description', blog.description);
+        blog.categoryId && blog.categoryId != "" && formData.append('CategoryId', blog.categoryId);
+
+        blog.subCategoryIds!.length>0 && blog.subCategoryIds!.map((subCategoryId:string)=>(
+            formData.append('SubCategoryIds', subCategoryId)
+        ));
+       
+        return axios.put(url, formData, {
+            headers: {'Content-type': 'application/json'}
+        }).then(responseBody)
+    },
+    updateBlogPhoto: async (url: string, photo:Blob) =>{
+        let formData = new FormData();
+        formData.append('photo',photo);
+
+        return axios.put(url, formData, {
+            headers: {'Content-type': 'application/json'}
+        }).then(responseBody)
+    },
 }
 
 const Activities = {
@@ -208,9 +232,10 @@ const Blogs = {
     list: (params: URLSearchParams): Promise<IBlogsEnvelope> => 
             axios.get(`/blog`, {params:params}).then(sleep(1000)).then(responseBody),
     details: (id:string) => requests.get(`/blog/${id}`),
-    update: (post: IBlog) => requests.put(`/blog/${post.id}`, post),
+    update: (post: Partial<IBlogUpdateFormValues>):Promise<IBlog> => requests.updateBlogDesc(`/blog/${post.id}`, post),
     delete: (id: string) => requests.del(`/blog/${id}`),
     create: (post: IPostFormValues): Promise<IBlog> => requests.postBlogForm(`/blog`,post.file!, post.title!,post.description!,post.categoryId!,post.subCategoryIds || null),
+    updateImage: (id:string, photo:Blob): Promise<string> => requests.updateBlogPhoto(`/blog/${id}/photo`, photo)
 }
 
 const Categories = {

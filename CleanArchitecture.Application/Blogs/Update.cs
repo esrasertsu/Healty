@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -60,17 +61,37 @@ namespace CleanArchitecture.Application.Blogs
                           throw new RestException(HttpStatusCode.NotFound, new { Category = "NotFound" });
 
 
-                if(request.File != null)
-                {
-                    var photoUploadResults = _photoAccessor.AddBlogPhoto(request.File);
+                //if(request.File != null)
+                //{
+                //    var photoUploadResults = _photoAccessor.AddBlogPhoto(request.File);
 
-                    var image = new BlogImage
-                    {
-                        Url = photoUploadResults.Url,
-                        Id = photoUploadResults.PublicId
-                    };
-                     blog.BlogImage = image;
-                }
+                //    var image = new BlogImage
+                //    {
+                //        Url = photoUploadResults.Url,
+                //        Id = photoUploadResults.PublicId
+                //    };
+                //     blog.BlogImage = image;
+                //}
+
+                //if (request.File != null)
+                //{
+                //    if (blog.BlogImage != null)
+                //    {
+                //        var result = _photoAccessor.DeletePhoto(blog.BlogImage.Id);
+                //        if (result != null)
+                //        {
+                //            var photoUploadResults = _photoAccessor.AddBlogPhoto(request.File);
+
+                //            var image = new BlogImage
+                //            {
+                //                Url = photoUploadResults.Url,
+                //                Id = photoUploadResults.PublicId
+                //            };
+                //            blog.BlogImage = image;
+
+                //        }  
+                //    }
+                //}
 
 
                 blog.Title = request.Title ?? blog.Title;
@@ -80,29 +101,36 @@ namespace CleanArchitecture.Application.Blogs
                 _context.Blogs.Update(blog);
 
                 if(request.SubCategoryIds != null)
-                foreach (var subCatId in request.SubCategoryIds)
                 {
-                    var subCat = await _context.SubCategories.SingleOrDefaultAsync(x => x.Id == subCatId);
-                    
-                    if (subCat == null)
-                        throw new RestException(HttpStatusCode.NotFound, new { Category = "NotFound" });
-                    else
+                    var subCatBlogs = await _context.SubCatBlogs.Where(x => x.BlogId == blog.Id).ToArrayAsync();
+                    _context.SubCatBlogs.RemoveRange(subCatBlogs);
+
+                    foreach (var subCatId in request.SubCategoryIds)
                     {
-                        var subCatBlog = new SubCatBlogs
+                        var subCat = await _context.SubCategories.SingleOrDefaultAsync(x => x.Id == subCatId);
+
+                        if (subCat == null)
+                            throw new RestException(HttpStatusCode.NotFound, new { SubCat = "NotFound" });
+                        else
                         {
-                            SubCategory = subCat,
-                            Blog = blog,
-                            DateCreated = DateTime.Now
-                        };
-                        _context.SubCatBlogs.Add(subCatBlog);
+                            var subCatBlog = new SubCatBlogs
+                            {
+                                SubCategory = subCat,
+                                Blog = blog,
+                                DateCreated = DateTime.Now
+                            };
+                            _context.SubCatBlogs.Add(subCatBlog);
+                        }
                     }
                 }
+                
 
                 var success = await _context.SaveChangesAsync() > 0;
 
 
                 if (success)
                     return _mapper.Map<BlogDto>(blog);
+                else throw new RestException(HttpStatusCode.BadRequest, new { blog = "Blog's already been updated" });
 
                 throw new Exception("Problem saving changes");
             }

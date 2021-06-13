@@ -1,7 +1,7 @@
 import { action, computed, observable, reaction, runInAction } from "mobx";
 import { toast } from "react-toastify";
 import agent from "../api/agent";
-import { IBlog, IPostFormValues } from "../models/blog";
+import { BlogUpdateFormValues, IBlog, IBlogUpdateFormValues, IPostFormValues, PostFormValues } from "../models/blog";
 import { RootStore } from "./rootStore";
 import { history } from '../..';
 import { SyntheticEvent } from 'react';
@@ -34,8 +34,10 @@ export default class BlogStore{
     @observable loadingPosts = true;
     @observable clearedBeforeNewPredicateComing = false;
     @observable loadingPost = true;
+    @observable updatedBlog = false;
     @observable loadingForDelete = true;
     @observable submitting = false;
+    @observable submittingPhoto = false;
     @observable postList: IBlog[] = [];
     @observable sameCategoryBlogs: IBlog[] = [];
     @observable postRegistery = new Map();
@@ -45,6 +47,7 @@ export default class BlogStore{
     @observable predicate = new Map();
     @observable page = 0;
     @observable predicateDisplayName:string ="";
+    @observable blogForm: IBlogUpdateFormValues = new BlogUpdateFormValues();
 
     @observable userBlogs: IProfileBlog[] = [];
     @observable loadingUserBlogs = true;
@@ -57,6 +60,10 @@ export default class BlogStore{
     }
     @computed get totalPages(){
         return Math.ceil(this.blogCount / LIMIT);
+    }
+
+    @action setUpdatedBlog = (up: boolean) =>{
+        this.updatedBlog = up;
     }
     @computed get isCurrentUserAuthor(){
         if (this.rootStore.userStore.user && this.post){
@@ -80,6 +87,10 @@ export default class BlogStore{
               params.append(key, value);
         })
         return params;
+    }
+
+    @action setBlogForm = (blog: IBlogUpdateFormValues) => {
+        this.blogForm = blog;
     }
 
     @action setClearedBeforeNewPredicateComing = (value: boolean) => {
@@ -132,6 +143,7 @@ export default class BlogStore{
        
     }
     @action loadBlogs = async () =>{
+        debugger;
         this.loadingPosts = true;
 
         try {
@@ -142,6 +154,7 @@ export default class BlogStore{
                   //  setActivityProps(activity,this.rootStore.userStore.user!)
                     this.blogRegistery.set(blog.id, blog);
                 });
+                this.updatedBlog= false;
                 this.blogCount = blogCount;
                 this.loadingPosts = false;
             })
@@ -182,6 +195,7 @@ export default class BlogStore{
                     this.post = post;
                     this.loadUserBlogs(post.username);
                     this.loadSameCategoryBlogs(post.subCategoryIds);
+                    this.updatedBlog = false;
                     this.loadingPost = false;
                 })
                 return post;
@@ -227,6 +241,7 @@ export default class BlogStore{
             const blog = await agent.Blogs.create(post);
             runInAction('Creating post', () => {
                 this.submitting = false;
+                this.updatedBlog = false;
                 this.blogRegistery.set(blog.id, blog);
                 history.push(`/blog/${blog.id}`);
 
@@ -241,21 +256,54 @@ export default class BlogStore{
         }
     };
 
-    @action editPost = async (post: IBlog) =>{
+    @action editPost = async (post: Partial<IBlogUpdateFormValues>) =>{
+        debugger;
+        if(post.categoryId && post.categoryId.length === 0)
+        {
+          toast.warning("Kategori boş seçilemez!")
+          return;
+        }  
         this.submitting = true;
         try {
-            await agent.Blogs.update(post);
+            var blogReturned = await agent.Blogs.update(post);
             runInAction('Editing post', () => {
-            this.postRegistery.set(post.id, post);
-            this.post = post;
-            this.submitting = false;
-            });
-            history.push(`/posts/${post.id}`);
-        } catch (error) {
-            runInAction('Editing post error', () => {
+                this.blogRegistery.delete(post.id);
+                this.blogRegistery.set(post.id, blogReturned);
+                this.post = blogReturned;
                 this.submitting = false;
+                this.updatedBlog = true;  
+                history.push(`/blog/${post.id}`);
             });
-            toast.error('Problem submitting data');
+        } catch (error) {
+            runInAction('Editing blog error', () => {
+                this.submitting = false;
+
+                if(error.status === 400)
+                    toast.warning('Blog has been already updated');
+
+            });
+            console.log(error);
+        }
+    }
+
+    @action editBlogImage = async (id:string,image:Blob, setImageChange: React.Dispatch<React.SetStateAction<boolean>>) => {
+        this.submittingPhoto = true;
+
+        try {
+            var imageUrl = await agent.Blogs.updateImage(id,image);
+            runInAction('Editing post', () => {
+                this.post!.photo = imageUrl;
+                setImageChange(false);
+                this.submittingPhoto = false;
+            });
+        } catch (error) {
+            runInAction('Editing blog error', () => {
+                this.submittingPhoto = false;
+
+                if(error.status === 400)
+                    toast.warning('Blog has been already updated');
+
+            });
             console.log(error);
         }
     }
@@ -264,11 +312,12 @@ export default class BlogStore{
         this.submitting = true;
         this.target = event.currentTarget.name;
         try {
-            await agent.Activities.delete(id);
+            await agent.Blogs.delete(id);
             runInAction('Deleting post', () => {
-                this.postRegistery.delete(id);
+                this.blogRegistery.delete(id);
                 this.submitting = false;
                 this.target = '';
+                history.push(`/blog`);
             });
         } catch (error) {
             runInAction('Deleting post error', () => {

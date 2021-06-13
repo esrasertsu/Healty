@@ -16,7 +16,7 @@ import { IMessageForm } from '../../app/models/message';
   const rootStore = useContext(RootStoreContext);
 
   const {
-    sendTrainerComment,profile,sendMessageFromProfile
+    profile,sendMessageFromProfile, submittingMessage
   } = rootStore.profileStore;
 
     
@@ -47,12 +47,12 @@ import { IMessageForm } from '../../app/models/message';
                 />  
           <br/>
           <Button
-          className="sendMessageButton"
+           className="sendMessageButton"
             content='Gönder'
             labelPosition='right'
             icon="send"
             disabled={profile!.hasConversation}
-            loading={submitting}
+            loading={submitting || submittingMessage}
           />
         </Form>
         

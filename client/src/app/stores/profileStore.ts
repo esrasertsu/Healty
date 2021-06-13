@@ -101,11 +101,11 @@ export default class ProfileStore{
           return Array.from(this.commentRegistery.values());
      }
  
-     @computed get getBlogsByDate(){
+    // @computed get getBlogsByDate(){
         // return this.activities.sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
       //  return Array.from(this.activityRegistery.values()).sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
-          return Array.from(this.blogRegistery.values());
-     }
+       //   return Array.from(this.blogRegistery.values());
+   //  }
 
     @action setActiveTab = (activeIndex: number) => {
         this.activeTab = activeIndex;
@@ -157,6 +157,7 @@ export default class ProfileStore{
             const {profileComments, profileCommentCount } = commentListEnvelope;
 
             runInAction(()=>{
+                debugger;
                 profileComments.forEach((comment) =>{
                     //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
                     this.commentRegistery.set(comment.id, comment);
@@ -181,10 +182,10 @@ export default class ProfileStore{
             const {profileBlogs, profileBlogsCount } = profileBlogListEnvelope;
 
             runInAction(()=>{
-                profileBlogs.forEach((blog) =>{
-                    //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
-                    this.blogRegistery.set(blog.id, blog);
-                });
+                // profileBlogs.forEach((blog) =>{
+                //     //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
+                //     this.blogRegistery.set(blog.id, blog);
+                // });
                 this.profileBlogs = profileBlogs;
                 this.blogCount = profileBlogsCount;
                 this.loadingBlogs = false;
@@ -198,6 +199,7 @@ export default class ProfileStore{
     }
 
     getProfile = (username:string) => {
+        this.updatedProfile = false;             
         return this.profileRegistery.get(username);
     }
     @action loadProfile = async (username: string) =>{
@@ -492,6 +494,8 @@ export default class ProfileStore{
             await agent.Profiles.sendMessage(message);
             runInAction('Sending message', () => {
                 this.submittingMessage = false;
+                this.profile!.hasConversation = true;
+                toast.success("Mesajın iletidi. Konuşmaya devam etmek için mesaj kutunu kontrol et.")
             });
         } catch (error) {
             runInAction('Sending message error', () => {

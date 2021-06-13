@@ -27,7 +27,7 @@ const ProfileDescription = () => {
             <Button
               floated='right'
               basic
-              content={editMode ? 'Cancel' : 'Edit Profile' }
+              content={editMode ? 'İptal' : 'Düzenle' }
               onClick={() => 
                 { setEditMode(!editMode);
                  setUpdatedProfile(false);

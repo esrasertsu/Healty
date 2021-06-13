@@ -8,10 +8,11 @@ import { Form as FinalForm, Field} from 'react-final-form';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
 import InfiniteScroll from 'react-infinite-scroller';
 import Scrollbars from 'react-custom-scrollbars';
+import { history } from '../..';
 
 const MessageChat: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
-    const { messagesByDate, message,messageCount,setPage,loadMessages ,page, totalPages ,chatRoomId,addComment} = rootStore.messageStore;
+    const { messagesByDate, message,messageCount,setPage,loadMessages ,page, totalPages ,chatRoomId,addComment, chatRooms} = rootStore.messageStore;
     const [loadingNext, setLoadingNext] = useState(false);
     const { user } = rootStore.userStore;
     const scrollRef = React.createRef<any>();
@@ -54,8 +55,22 @@ const MessageChat: React.FC = () => {
 
 
     return (
+        <>
         <Fragment>
             <Segment className="chat_segment">
+            <div className="chat_profile_details">{
+          chatRooms &&
+          <Item.Group key={"seeUserProfile_itemGroup"}>
+            <Item style={{alignItems:"center"}} key="seeUserProfile" onClick={() => history.push(`/profile/${chatRooms.filter(x => x.id === chatRoomId)[0].userName}`)}>
+                <Item.Image size="mini" circular src={chatRooms.filter(x => x.id === chatRoomId)[0].userImage || '/assets/user.png'} />
+          
+                <Item.Content>
+                  <Item.Header>{chatRooms.filter(x => x.id === chatRoomId)[0].displayName} profilini görmek için tıkla</Item.Header>
+             </Item.Content>
+             </Item>
+             </Item.Group>
+            }</div>
+
                 <div className="chat_reading_box">
                 <Scrollbars
              frameBorder="2px" 
@@ -159,6 +174,7 @@ const MessageChat: React.FC = () => {
             </div>
            
         </Fragment>
+        </>
     )
 }
 

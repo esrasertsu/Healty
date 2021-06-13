@@ -32,7 +32,14 @@ namespace CleanArchitecture.API.Controllers
         }
         [HttpPut("{id}")]
      //   [Authorize(Policy = "IsActivityHost")]
-        public async Task<ActionResult<BlogDto>> Update(Guid Id,Update.Command command)
+        public async Task<ActionResult<BlogDto>> Update(Guid Id, [FromForm] Update.Command command)
+        {
+            command.Id = Id;
+            return await Mediator.Send(command);
+        }
+        [HttpPut("{id}/photo")]
+        //   [Authorize(Policy = "IsActivityHost")]
+        public async Task<ActionResult<string>> UpdatePhoto(Guid Id, [FromForm] UpdatePhoto.Command command)
         {
             command.Id = Id;
             return await Mediator.Send(command);

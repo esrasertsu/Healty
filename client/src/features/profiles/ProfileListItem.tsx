@@ -48,7 +48,7 @@ interface IProps {
           }
             </div>
             <div className="profileListItem_subCats"> <Icon name="bolt" /> {profile.accessibilities && profile.accessibilities.length > 0 ? 
-          profile.accessibilities.map<React.ReactNode>(s => <span>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
+          profile.accessibilities.map<React.ReactNode>(s => <span id={profile.userName +"_accessibility"}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
             : "Bilgi yok"}  </div>
             <div className="profileListItem_subCats"> <Icon name="spinner" /> {profile.experienceYear > 0 ? profile.experienceYear +"yıl tecrübe" : "" } </div> 
 

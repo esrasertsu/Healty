@@ -53,11 +53,11 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
         <Statistic.Group widths={2} size='small'>
           <Statistic>
             <Statistic.Value>{profile.followerCount}</Statistic.Value>
-            <Statistic.Label>Followers</Statistic.Label>
+            <Statistic.Label>Takip Edenler</Statistic.Label>
           </Statistic>
           <Statistic>
             <Statistic.Value>{profile.followingCount}</Statistic.Value>
-            <Statistic.Label>Following</Statistic.Label>
+            <Statistic.Label>Takip Ettikleri</Statistic.Label>
           </Statistic>
           </Statistic.Group>
           <Divider/>
@@ -83,7 +83,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
               <Button
                 fluid
                 className="followingButtonOut"
-                content={profile.isFollowing ? 'Following' : 'Not Following'}
+                content={profile.isFollowing ? 'Takip Ediliyor' : 'Takip Edilmiyor'}
               />
             </Reveal.Content>
             <Reveal.Content hidden>
@@ -91,7 +91,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                 loading={loading}
                 fluid
                 className={profile.isFollowing ? 'followingButtonOut_redClassName' : 'followingButtonOut_greenClassName'}
-                content={profile.isFollowing ? 'Unfollow' : 'Follow'}
+                content={profile.isFollowing ? 'Takipten Çık' : 'Takip Et'}
                 onClick={profile.isFollowing ? () => unfollow(profile.userName): () => follow(profile.userName)}
               />
             </Reveal.Content>

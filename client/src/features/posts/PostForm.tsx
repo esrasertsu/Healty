@@ -116,7 +116,7 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
                 <Header className="postFormHeader" color='teal' sub content='Adım 1 - Metin başlığınızı girin ' />
                 <Field
                   name="title"
-                  placeholder="Title"
+                  placeholder="Başlık"
                   value={post.title}
                   component={TextInput}
                 />

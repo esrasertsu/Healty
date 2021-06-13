@@ -1,8 +1,9 @@
-import React, { Fragment, useContext, useState } from 'react';
-import { Menu, Header, Segment, Accordion, Form } from 'semantic-ui-react';
+import React, { FormEvent, Fragment, useContext, useState } from 'react';
+import { Menu, Header, Segment, Accordion, Form, CheckboxProps } from 'semantic-ui-react';
 import { Calendar, DateTimePicker} from 'react-widgets';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import { observer } from 'mobx-react-lite';
+import { ICategory } from '../../../app/models/category';
 
 
 const ColorForm = (
@@ -32,15 +33,37 @@ const ActivityFilters = () => {
 
   const rootStore = useContext(RootStoreContext);
   const { predicate, setPredicate } = rootStore.activityStore; 
+  const {
+     categoryList,
+     subcategoryList,
+     loadingCategories,
+     loadingSubCategories,
+     loadSubCategories
+  } = rootStore.categoryStore;
 
   const [activeIndex, setActiveIndex] = useState(-1)
 
   const handleClick = (e:any, titleProps:any) => {
     const { index } = titleProps
     const newIndex = activeIndex === index ? -1 : index
-
     setActiveIndex(newIndex);
   }
+
+  const handleCatagorySelection = (event: FormEvent<HTMLInputElement>, data: CheckboxProps) => {
+   console.log(data);//data.value
+  }
+
+  const CategoryOptions = (
+    <Form>
+      <Form.Group grouped>
+        {
+          categoryList.map((category:ICategory) => 
+          <Form.Checkbox label={category.text} name="category" value={category.value} onChange={handleCatagorySelection}/>
+          )
+        }
+      </Form.Group>
+    </Form>
+  )
 
   return (
     <Fragment>
@@ -60,8 +83,8 @@ const ActivityFilters = () => {
       />
       <br/>
       <DateTimePicker
-        value={predicate.get('startDate') || null}
-        onChange={(date)=> {setPredicate('startDate', date!)}}
+        value={predicate.get('endDate') || null}
+        onChange={(date)=> {setPredicate('endDate', date!)}}
         onKeyDown={(e) => e.preventDefault()}
         date = {true}
         time = {true}
@@ -96,7 +119,7 @@ const ActivityFilters = () => {
             index={0}
             onClick={handleClick}
           />
-          <Accordion.Content active={activeIndex === 0} content={SizeForm} />
+          <Accordion.Content active={activeIndex === 0} content={CategoryOptions} />
         </Menu.Item>
 
         <Menu.Item className="filterMenuItem_Style">

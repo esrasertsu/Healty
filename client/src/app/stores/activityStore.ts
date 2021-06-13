@@ -182,7 +182,8 @@ export default class ActivityStore {
                     this.activityRegistery.set(activity.id, activity);
                 });
                 this.activityCount = activityCount;
-                this.loadingInitial = false
+                this.rootStore.categoryStore.loadCategories();
+                this.loadingInitial = false;
             })
             } catch (error) {
                 console.log(error);

@@ -183,7 +183,7 @@ const requests = {
 
 const Activities = {
     list: (params: URLSearchParams): Promise<IActivitiesEnvelope> => 
-            axios.get(`/activities`, {params:params}).then(sleep(1000)).then(responseBody),
+            axios.get(`/activities`, {params:params}).then(sleep(1000)).then(responseBody),//formdata ya çevrilcek
     details: (id:string) => requests.get(`/activities/${id}`),
     delete: (id: string) => requests.del(`/activities/${id}`),
     attend: (id: string) => requests.post(`/activities/${id}/attend`,{}),

@@ -1,47 +1,23 @@
-import React, { FormEvent, Fragment, useContext, useState } from 'react';
-import { Menu, Header, Segment, Accordion, Form, CheckboxProps } from 'semantic-ui-react';
+import React, { FormEvent, Fragment, useContext, useEffect, useState } from 'react';
+import { Menu, Header, Segment, Accordion, Form, CheckboxProps, Button, Loader, Label, Icon, Radio } from 'semantic-ui-react';
 import { Calendar, DateTimePicker} from 'react-widgets';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import { observer } from 'mobx-react-lite';
-import { ICategory } from '../../../app/models/category';
-
-
-const ColorForm = (
-  <Form>
-    <Form.Group grouped>
-      <Form.Checkbox label='Red' name='color' value='red' />
-      <Form.Checkbox label='Orange' name='color' value='orange' />
-      <Form.Checkbox label='Green' name='color' value='green' />
-      <Form.Checkbox label='Blue' name='color' value='blue' />
-    </Form.Group>
-  </Form>
-)
-
-const SizeForm = (
-  <Form>
-    <Form.Group grouped>
-      <Form.Radio label='Small' name='size' type='radio' value='small' />
-      <Form.Radio label='Medium' name='size' type='radio' value='medium' />
-      <Form.Radio label='Large' name='size' type='radio' value='large' />
-      <Form.Radio label='X-Large' name='size' type='radio' value='x-large' />
-    </Form.Group>
-  </Form>
-)
-
+import { ICategory, ISubCategory } from '../../../app/models/category';
 
 const ActivityFilters = () => {
 
   const rootStore = useContext(RootStoreContext);
-  const { predicate, setPredicate } = rootStore.activityStore; 
+  const { predicate, setPredicate,setClearPredicateBeforeSearch,clearUserPredicates,
+    clearKeyPredicate, setPage, clearActivityRegistery,loadActivities,
+    activeIndex, setActiveIndex,categoryIds, setCategoryIds,subCategoryIds, setSubCategoryIds,
+    activeUserPreIndex, setActiveUserPreIndex} = rootStore.activityStore; 
   const {
      categoryList,
-     subcategoryList,
      loadingCategories,
-     loadingSubCategories,
-     loadSubCategories
-  } = rootStore.categoryStore;
-
-  const [activeIndex, setActiveIndex] = useState(-1)
+     allCategoriesOptionList
+      } = rootStore.categoryStore;
+  
 
   const handleClick = (e:any, titleProps:any) => {
     const { index } = titleProps
@@ -49,21 +25,89 @@ const ActivityFilters = () => {
     setActiveIndex(newIndex);
   }
 
-  const handleCatagorySelection = (event: FormEvent<HTMLInputElement>, data: CheckboxProps) => {
-   console.log(data);//data.value
+  const handleOnlineChange = (e:any, data:any) => {
+    setClearPredicateBeforeSearch(true); 
+    clearKeyPredicate("isOnline");
+    setClearPredicateBeforeSearch(false);
+
+    if(data.checked)
+      setPredicate("isOnline","true");
+    else 
+      setPredicate("isOnline","false");
+
+    
   }
 
-  const CategoryOptions = (
-    <Form>
-      <Form.Group grouped>
-        {
-          categoryList.map((category:ICategory) => 
-          <Form.Checkbox label={category.text} name="category" value={category.value} onChange={handleCatagorySelection}/>
-          )
-        }
-      </Form.Group>
-    </Form>
-  )
+
+  const handleCatagorySelection = (event: FormEvent<HTMLInputElement>, data: CheckboxProps) => {
+    debugger;
+   if(data.checked)
+   {
+    setCategoryIds([...categoryIds, data.value as string]);
+   }
+    else
+    {
+     const index =  categoryIds.findIndex(x => x === data.value as string)
+     setCategoryIds([...categoryIds.slice(0,index), ...categoryIds.slice(index+1)]);
+
+     const deletedCategorySubs = allCategoriesOptionList.filter(x => x.parentId === data.value && subCategoryIds.includes(x.key));
+     
+     const updatedSubIds = subCategoryIds.filter(x => deletedCategorySubs.findIndex(y => y.key === x) < 0)
+    
+debugger;
+     setSubCategoryIds(updatedSubIds);
+    }
+  }
+
+  
+  const handleSubCatagorySelection = (event: FormEvent<HTMLInputElement>, data: CheckboxProps) => {
+
+   if(data.checked)
+   {
+    setSubCategoryIds([...subCategoryIds, data.value as string])
+   }
+    else
+    {
+     const index =  subCategoryIds.findIndex(x => x === data.value as string)
+     setSubCategoryIds([...subCategoryIds.slice(0,index), ...subCategoryIds.slice(index+1)]);
+    }
+  }
+  const handleCategorySubmit = () =>{
+    debugger;
+
+    setClearPredicateBeforeSearch(true); 
+    clearKeyPredicate("categoryIds");
+    clearKeyPredicate("subCategoryIds");
+    
+    if(subCategoryIds.length===0 && categoryIds.length==0)
+    {
+      setClearPredicateBeforeSearch(false); 
+      setPage(0);
+      clearActivityRegistery();
+      loadActivities();
+    } else if(categoryIds.length>0 && subCategoryIds.length===0)
+    {
+      setClearPredicateBeforeSearch(false); 
+      setPredicate("categoryIds",categoryIds);
+    }
+    else if(categoryIds.length>0 && subCategoryIds.length>0)
+    {
+      setPredicate("categoryIds",categoryIds);
+      setClearPredicateBeforeSearch(false);
+      setPredicate("subCategoryIds",subCategoryIds);
+    }
+
+    scrollToTop();
+
+  }
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
+
 
   return (
     <Fragment>
@@ -75,7 +119,12 @@ const ActivityFilters = () => {
       <p>Aktivite aradığınız tarih/saat aralığını giriniz.</p>
      <DateTimePicker
         value={predicate.get('startDate') || new Date()}
-        onChange={(date)=> {setPredicate('startDate', date!)}}
+        onChange={(date)=> {
+          setClearPredicateBeforeSearch(true); 
+          clearKeyPredicate("startDate");
+          setClearPredicateBeforeSearch(false); 
+          setPredicate('startDate', date!)
+        }}
         onKeyDown={(e) => e.preventDefault()}
         date = {true}
         time = {true}
@@ -84,7 +133,11 @@ const ActivityFilters = () => {
       <br/>
       <DateTimePicker
         value={predicate.get('endDate') || null}
-        onChange={(date)=> {setPredicate('endDate', date!)}}
+        onChange={(date)=> {
+          setClearPredicateBeforeSearch(true); 
+          clearKeyPredicate("endDate");
+          setClearPredicateBeforeSearch(false); 
+          setPredicate('endDate', date!)}}
         onKeyDown={(e) => e.preventDefault()}
         date = {true}
         time = {true}
@@ -94,53 +147,190 @@ const ActivityFilters = () => {
      <Menu vertical style={{ width: '100%'}}>
         {/* <Header icon={'filter'} attached color={'teal'} content={'Filters'} />  size={'small'}*/}
         <Menu.Item
-         active={predicate.size === 0}
-         onClick= {() => {setPredicate('all', 'true')}}
+        className="activity_userPredicate_MenuItem"
+        key={"all"}
+         active={activeUserPreIndex === 0}
+         onClick= {() => { 
+           setActiveUserPreIndex(0); 
+           setClearPredicateBeforeSearch(true); 
+           clearUserPredicates();
+           setClearPredicateBeforeSearch(false); 
+           setPredicate('all', 'true')}}
           name={'all'} content={'Hepsi'} />
         <Menu.Item
-        active = { predicate.has('isGoing')}
-        onClick= {() => { setPredicate('isGoing', 'true')}}
+        className="activity_userPredicate_MenuItem"
+        key={"isGoing"}
+        active = {activeUserPreIndex === 1}
+        onClick= {() => {  
+          setActiveUserPreIndex(1);
+          setClearPredicateBeforeSearch(true); 
+          clearUserPredicates();
+          setClearPredicateBeforeSearch(false);  
+          setPredicate('isGoing', 'true')}}
          name={'username'} content={"Gidiyorum"} />
         <Menu.Item
-        active = { predicate.has('isHost')}
-        onClick= {() => { setPredicate('isHost', 'true')}}
+        className="activity_userPredicate_MenuItem"
+        key={"isHost"}
+        active = {activeUserPreIndex === 2}
+        onClick= {() => {  
+          setActiveUserPreIndex(2); 
+          setClearPredicateBeforeSearch(true); 
+          clearUserPredicates();
+          setClearPredicateBeforeSearch(false); 
+          setPredicate('isHost', 'true')}}//clear etmek gerekiyor
          name={'host'} content={"Düzenlediklerim"} />
          <Menu.Item
-        active = { predicate.has('isFollowed')}
-        onClick= {() => { setPredicate('isFollowed', 'true')}}
+         key={"isFollowed"}
+        active = {activeUserPreIndex === 3}
+        className="activity_userPredicate_MenuItem"
+        onClick= {() => { 
+          setActiveUserPreIndex(3);
+          setClearPredicateBeforeSearch(true); 
+          clearUserPredicates();
+          setClearPredicateBeforeSearch(false);  
+          setPredicate('isFollowed', 'true')}}
          name={'follow'} content={"Takip Ettiğim Eğitmenlerin"} />
       </Menu>
 
-      <Accordion as={Menu} vertical style={{ width: '100%', boxShadow:'none', border:'none'}}>
-        <Menu.Item className="filterMenuItem_Style">
+      <Accordion key={"Category_acc"} as={Menu} vertical style={{ width: '100%', boxShadow:'none', border:'none'}}>
+        <Menu.Item  key={"Category"} className="filterMenuItem_Style">
           <Accordion.Title
             active={activeIndex === 0}
-            content='Kategori'
+            content={(categoryIds.length + subCategoryIds.length > 0) ? 'Kategori (' + (subCategoryIds.length + categoryIds.length) +" kriter seçili)": "Kategori" }
             index={0}
             onClick={handleClick}
           />
-          <Accordion.Content active={activeIndex === 0} content={CategoryOptions} />
+          <Accordion.Content active={activeIndex === 0}>
+                <Form onSubmit={handleCategorySubmit}>
+                <Form.Group grouped>
+                  {
+                    loadingCategories ? <Label color="blue" basic><Icon name='circle notched' loading />Yükleniyor..</Label>:
+                    categoryList.map((category:ICategory) => 
+                    <Accordion key={category.key} vertical="true" style={{ width: '100%', boxShadow:'none', border:'none', margin:"0"}}>
+                      <Accordion.Title
+                        className="accordion_category_title"
+                        active={categoryIds.findIndex(x => x === category.key)>-1}
+                        content={
+                          <Form.Checkbox key={category.text}
+                          checked={categoryIds.findIndex(x => x === category.key)>-1}
+                          label={category.text} name={category.value} value={category.value} onChange={handleCatagorySelection}/>
+                        }
+                        index={category.key}
+                      />
+                      <Accordion.Content active={categoryIds.findIndex(x => x === category.key)>-1}>
+                        <Segment>
+                        {
+                           allCategoriesOptionList.filter(x => x.parentId ===category.key).map((subCategory:ISubCategory) => 
+                           <Form.Checkbox
+                           className="accordion_subcategory_title" 
+                           key={subCategory.value}
+                           checked={categoryIds.findIndex(x => x === category.key)>-1 && 
+                            subCategoryIds.findIndex(x => x === subCategory.key)>-1} label={subCategory.text} name={subCategory.value} value={subCategory.value} onChange={handleSubCatagorySelection}/>
+                           )
+                        }
+
+                        </Segment>
+                      </Accordion.Content>
+                    </Accordion>
+                    )
+                  }
+                   
+                </Form.Group>
+                <Button
+                          // loading={submitting}
+                          // disabled={loading || buttonDisabled}
+                          //  floated="right"
+                            positive
+                            type="submit"
+                            content="Ara"
+                            style={{marginRight:"10px"}}
+                          />
+               <Button
+                          // loading={submitting}
+                          // disabled={loading || buttonDisabled}
+                          //  floated="right"
+                            negative
+                            content="Temizle"
+                            style={{marginRight:"10px"}}
+                            onClick={() =>{
+                              setCategoryIds([]);
+                              setSubCategoryIds([]);
+                            }
+                            }
+                          />
+              </Form>
+          </Accordion.Content> 
         </Menu.Item>
 
-        <Menu.Item className="filterMenuItem_Style">
+        <Menu.Item key={"Level"} className="filterMenuItem_Style">
           <Accordion.Title
             active={activeIndex === 1}
             content='Seviye'
             index={1}
             onClick={handleClick}
           />
-          <Accordion.Content active={activeIndex === 1} content={ColorForm} />
+          <Accordion.Content active={activeIndex === 1}>
+                <Form onSubmit={handleCategorySubmit}>
+                <Form.Group grouped>
+                  {
+                    allCategoriesOptionList.filter(x => categoryIds.findIndex(y => y === x.parentId) >-1 ).map((category:ICategory) => 
+                    <Form.Checkbox key={category.value} label={category.text} name={category.value} value={category.value} onChange={handleSubCatagorySelection}/>
+                    )
+                  }
+                </Form.Group>
+                <Button
+                          // loading={submitting}
+                          // disabled={loading || buttonDisabled}
+                          //  floated="right"
+                            positive
+                            type="submit"
+                            content="Ara"
+                            style={{marginRight:"10px"}}
+                            onClick={() => {
+                            
+                            }}
+                          />
+              </Form>
+          </Accordion.Content> 
         </Menu.Item>
-
-        <Menu.Item className="filterMenuItem_Style">
+        <Menu.Item>
+         <div className="toggleMenuItem"><div>Online katılım</div> <Radio checked={predicate.get("isOnline")|| false} toggle={true} onChange={handleOnlineChange} /> </div>
+        </Menu.Item>
+        <Menu.Item>
+        <Button
+                          // loading={submitting}
+                          // disabled={loading || buttonDisabled}
+                          //  floated="right"
+                            negative
+                            content="Temizle"
+                            style={{marginRight:"10px"}}
+                            onClick={() =>{
+                              setCategoryIds([]);
+                              setSubCategoryIds([]);
+                              clearUserPredicates();
+                              clearKeyPredicate("subCategoryIds");
+                              clearKeyPredicate("categoryIds");
+                              clearKeyPredicate("isOnline");
+                              clearKeyPredicate("startDate");
+                              clearKeyPredicate("endDate");
+                              setActiveUserPreIndex(0);
+                              setPage(0);
+                              clearActivityRegistery();
+                              loadActivities();
+                            }
+                            }
+                          />
+        </Menu.Item>
+       
+        {/* <Menu.Item className="filterMenuItem_Style">
           <Accordion.Title
             active={activeIndex === 2}
             content='Online'
-            index={1}
+            index={2}
             onClick={handleClick}
           />
           <Accordion.Content active={activeIndex === 2} content={ColorForm} />
-        </Menu.Item>
+        </Menu.Item> */}
       </Accordion>
        
     </Fragment>
@@ -148,20 +338,3 @@ const ActivityFilters = () => {
 }
 
 export default observer(ActivityFilters);
-
-
-// JSX ORNEK
-// const ActivityFilters = () => (
-//   <Fragment>
-//     <Menu vertical size={'large'} style={{ width: '100%', marginTop: 30 }}>
-//       <Header icon={'filter'} attached color={'teal'} content={'Filters'} />
-//       <Menu.Item color={'blue'} name={'all'} content={'All Activities'} />
-//       <Menu.Item color={'blue'} name={'username'} content={"I'm Going"} />
-//       <Menu.Item color={'blue'} name={'host'} content={"I'm hosting"} />
-//     </Menu>
-//     <Header icon={'calendar'} attached color={'teal'} content={'Select Date'} />
-//     <Calendar />
-//   </Fragment>
-// );
-
-// export default ActivityFilters;

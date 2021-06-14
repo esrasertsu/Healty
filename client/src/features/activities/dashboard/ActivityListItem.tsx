@@ -64,7 +64,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                     }
                     </div>
                     <Item.Content style={{width:"60%", margin:"10px 10px 6px 15px"}}>
-                        <Item.Header as={Link} to={`/activities/${activity.id}`}>{activity.title}</Item.Header>
+                        <Item.Header>{activity.title}</Item.Header>
                         {/* <Item.Description>
                             <div>{activity.description}</div>
                             <div>
@@ -79,22 +79,22 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                             color="blue"
                             /> */}
                               {activity.subCategories.map((sub)=>(
-                                    <Label basic size="small">{sub.text}</Label>
+                                    <Label key={sub.value} basic size="small">{sub.text}</Label>
                               ))}
                               <div style={{marginTop:".6em"}}>
                                 <Icon name='heartbeat' /><span> Seviye: </span>
                                 {
                                     activity.levels && activity.levels.length> 0 ? 
-                                    activity.levels.map<React.ReactNode>(s => <span>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
+                                    activity.levels.map<React.ReactNode>(s => <span key={s.value}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
                                     : " Bilgi yok"
                                 }
                                {activity.online ?  <div style={{marginTop:".6em"}}> <Icon name='wifi' />  Online katılıma açık <Icon name='check' size='small' color='green' /> </div>: <div style={{marginTop:".6em"}}><Icon name='wifi' />Online katılıma kapalı</div>}
                                 </div>
                         </Item.Description> 
                         <Item.Description>
-                            <Item.Image size="mini" circular src={host.image || '/assets/user.png'}
+                            <Item.Image key={host.image} size="mini" circular src={host.image || '/assets/user.png'}
                              style={{}}/>
-                             &nbsp;<Link to={`/profile/${host.userName}`} >{host.displayName + "  "}</Link>
+                             &nbsp;<span className="activityHostName">{host.displayName + "  "}</span>
                             </Item.Description>
                     </Item.Content>
                     <Item.Content className="activity_listItem_extraContent">

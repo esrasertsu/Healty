@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,19 +26,33 @@ namespace CleanArchitecture.Application.Activities
         }
         public class Query : IRequest<ActivitiesEnvelope> {
 
-            public Query(int? limit, int? offset, bool isGoing, bool isHost, DateTime? startDate)
+            public Query(int? limit, int? offset, bool isGoing, bool isHost, bool isFollowed,bool isOnline, DateTime? startDate, DateTime? endDate,  List<Guid> categoryIds, List<Guid> subCategoryIds, Guid? cityId)
             {
                 Limit = limit;
                 Offset = offset;
                 IsGoing = isGoing;
                 IsHost = isHost;
+                IsFollowed = isFollowed;
+                IsOnline = isOnline;
                 StartDate = startDate ?? DateTime.Now;
+                EndDate = endDate;
+                CategoryIds = categoryIds;
+                SubCategoryIds = subCategoryIds;
+                CityId = cityId;
             }
             public int? Limit { get; set; }
             public int? Offset { get; set; }
             public bool IsGoing { get; set; }
             public bool IsHost { get; set; }
+            public bool IsFollowed { get; set; }
+            public bool IsOnline { get; set; }
             public DateTime? StartDate { get; set; }
+            public DateTime? EndDate { get; set; }
+            public List<Guid> SubCategoryIds { get; set; }
+            public List<Guid> CategoryIds { get; set; }
+            public Guid? CityId { get; set; }
+
+
         }
 
         public class Handler : IRequestHandler<Query, ActivitiesEnvelope>
@@ -60,6 +76,11 @@ namespace CleanArchitecture.Application.Activities
                     .OrderBy(x => x.Date)
                     .AsQueryable();
 
+                if(request.EndDate!=null)
+                {
+                    queryable = queryable.Where(x => x.Date <= request.EndDate);
+                }
+
                 if(request.IsGoing && !request.IsHost)
                 {
                     queryable = queryable.Where(x => x.UserActivities.Any(
@@ -71,6 +92,47 @@ namespace CleanArchitecture.Application.Activities
                     queryable = queryable.Where(x => x.UserActivities.Any(
                         a => a.AppUser.UserName == _userAccessor.GetCurrentUsername() && a.IsHost
                     ));
+                }
+                if (request.IsFollowed)
+                {
+                    var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
+
+                    if (user == null)
+                        throw new RestException(HttpStatusCode.NotFound, new { User = "Not Found" });
+
+                    var userFollowings = user.Followings.Where(x => x.Observer.UserName == user.UserName).ToList();
+
+                    var followingTrainers = userFollowings.Select(x => x.Target).ToList();
+
+                    queryable = queryable.Where(x => x.UserActivities.Any(
+                        a => a.IsHost && followingTrainers.Contains(a.AppUser)
+                    ));
+                }
+
+                if (request.CategoryIds != null && request.CategoryIds.Count > 0)
+                {
+                    // List<Guid> subIds = JsonConvert.DeserializeObject<List<Guid>>(request.SubCategoryIds);
+
+                    queryable = queryable.Where(x => x.Categories.Any(
+                        a => request.CategoryIds.Contains(a.CategoryId))); //tostring çevirisi sakın qureylerde yapma client side olarak algılıyor
+                }
+
+                if (request.SubCategoryIds != null && request.SubCategoryIds.Count > 0)
+                {
+                    // List<Guid> subIds = JsonConvert.DeserializeObject<List<Guid>>(request.SubCategoryIds);
+
+                    queryable = queryable.Where(x => x.SubCategories.Any(
+                        a => request.SubCategoryIds.Contains(a.SubCategoryId))); //tostring çevirisi sakın qureylerde yapma client side olarak algılıyor
+                }
+
+                if (request.CityId != null)
+                {
+                    queryable = queryable.Where(x => x.GetCity()!=null && x.GetCity().Id == request.CityId);
+                }
+
+                if (request.IsOnline == true)
+                {
+                    queryable = queryable.Where(x => x.Online == true);
                 }
 
 

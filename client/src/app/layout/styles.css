@@ -728,6 +728,10 @@ i.search.inverted.icon {
     box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }
 
+.activityHostName {
+  color: #4183c4;
+    text-decoration: none;
+}
 
 .profieHeader_segment{
   -webkit-box-shadow: none !important;
@@ -1004,4 +1008,33 @@ i.search.inverted.icon {
   cursor: pointer;
   text-decoration:underline ;
   color:teal;
+}
+
+.accordion_category_title i{
+  display: none !important
+}
+
+.accordion_category_title .ui.checkbox label,.accordion_category_title .ui.checkbox+label,
+.accordion_subcategory_title .ui.checkbox label,.accordion_subcategory_title .ui.checkbox+label{
+  color:rgb(38, 58, 94)  !important
+}
+
+.scroll-to-top {
+  position: fixed;
+  bottom: 3rem;
+  right: 3rem;
+  animation: fadeIn 700ms ease-in-out 1s both;
+  cursor: pointer;
+}
+
+.activity_userPredicate_MenuItem{
+  color:#345289 !important;
+}
+
+.toggleMenuItem{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  color:#345289 !important;
 }

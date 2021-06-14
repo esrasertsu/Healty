@@ -1,6 +1,4 @@
-import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import {observable, action, computed, runInAction, reaction} from 'mobx';
-import { SyntheticEvent } from 'react';
 import { toast } from 'react-toastify';
 import agent from '../api/agent';
 import { setMessageProps } from '../common/util/util';
@@ -117,7 +115,7 @@ export default class MessageStore {
     }
     @action setMessageSeen =  (message:IMessage) =>{
        var listMessages: IMessage[] = this.messageRegistery.get(message.chatRoomId);
-       listMessages.filter(x => x.id == message.id)[0].seen = true;
+       listMessages.filter(x => x.id === message.id)[0].seen = true;
     }
 
 

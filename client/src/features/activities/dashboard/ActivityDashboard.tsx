@@ -1,5 +1,5 @@
 import React,  { useEffect, useContext, useState}  from 'react';
-import { Button, Grid, Icon, Loader } from 'semantic-ui-react';
+import { Button, Grid, Icon, Label, Loader } from 'semantic-ui-react';
 import ActivityList from './ActivityList';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../../app/stores/rootStore';
@@ -12,6 +12,7 @@ const ActivityDashboard: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
   const {loadActivities, loadingInitial, setPage, page, totalPages} = rootStore.activityStore;
   const [loadingNext, setLoadingNext] = useState(false);
+  const [isToggleVisible, setIsToggleVisible] = useState(false);
 
   const handleGetNext = () => {
     setLoadingNext(true);
@@ -19,9 +20,30 @@ const ActivityDashboard: React.FC = () => {
     loadActivities().then(() => setLoadingNext(false))
   }
   useEffect(() => {
-    loadActivities();
+    loadActivities()
   },[loadActivities]); //[] provides the same functionality with componentDidMounth..   dependency array
 
+  useEffect(() => {
+    window.addEventListener("scroll", toggleVisibility);
+  }, []);
+
+  // Show button when page is scorlled upto given distance
+  const toggleVisibility = () => {
+    if (window.pageYOffset > 300) {
+      setIsToggleVisible(true);
+    } else {
+      setIsToggleVisible(false);
+    }
+  };
+
+  // Set the top cordinate to 0
+  // make scrolling smooth
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
   return (
     <>
     <Grid>
@@ -47,7 +69,13 @@ const ActivityDashboard: React.FC = () => {
            <ActivityList />
         </InfiniteScroll>
       )}
-        
+        <div className="scroll-to-top">
+        {isToggleVisible && 
+          <Label style={{display:"flex", alignItems:"center"}} onClick={scrollToTop}>
+            <Icon size="large" name="arrow up"/> 
+            <span>Başa dön</span>
+          </Label>}
+      </div>
       </Grid.Column>
       <Grid.Column width={4}>
       </Grid.Column>

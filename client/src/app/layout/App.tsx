@@ -23,7 +23,6 @@ import BlogPage from '../../features/blog/BlogPage';
 import MessagesPage from '../../features/messages/MessagesPage';
 import { useLoadScript } from "@react-google-maps/api";
 import { LoadScriptUrlOptions } from "@react-google-maps/api/dist/utils/make-load-script-url";
-import { ProfileFilterFormValues } from '../models/profile';
 const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
 const App: React.FC<RouteComponentProps> = ({location}) => {
@@ -31,7 +30,6 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   const rootStore = useContext(RootStoreContext);
   const {setAppLoaded, token, appLoaded,loadCities,getUserLocation , userCity} = rootStore.commonStore;
   const { getUser,user,createHubConnection,hubConnection } = rootStore.userStore;
-  const { loadAllCategoryList} = rootStore.categoryStore;
 
   const { isLoaded, loadError } = useLoadScript({
       googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,

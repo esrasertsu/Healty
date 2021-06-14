@@ -18,9 +18,12 @@ export default class ActivityStore {
         reaction(
             () => this.predicate.keys(),
             () => {
-                this.page=0;
-                this.activityRegistery.clear();
-                this.loadActivities();
+                if(!this.clearPredicateBeforeSearch)
+                {
+                    this.page=0;
+                    this.activityRegistery.clear();
+                    this.loadActivities();
+                }
             }
         )
     }
@@ -31,7 +34,7 @@ export default class ActivityStore {
     @observable loadingActivity = false;
     @observable levelList: ILevel[] = [];
     @observable loadingLevels = false;
-
+    @observable clearPredicateBeforeSearch= false;
     @observable submitting = false;
     @observable target = '';
     @observable loading = false;
@@ -45,6 +48,30 @@ export default class ActivityStore {
     @observable predicate = new Map();
     @observable activityForm: IActivityFormValues = new ActivityFormValues();
 
+
+    /* Aktivite Filtre observeleri */
+    @observable activeIndex = -1;
+    @observable categoryIds:string[] = []
+    @observable subCategoryIds:string[] = []
+    @observable activeUserPreIndex = 0;
+
+
+    @action setActiveIndex = (index:number) =>{
+        this.activeIndex = index;
+    }
+    @action setActiveUserPreIndex = (index:number) =>{
+        this.activeUserPreIndex = index;
+    }
+
+    @action setCategoryIds = (Ids : string[]) =>{
+        this.categoryIds = Ids;
+    }
+    @action setSubCategoryIds = (Ids : string[]) =>{
+        this.subCategoryIds = Ids;
+    }
+    /* ---- */
+
+    
     @computed get totalPages(){
         return Math.ceil(this.activityCount / LIMIT);
     }
@@ -56,16 +83,29 @@ export default class ActivityStore {
         this.activityForm = activity;
     }
 
-    @action setPredicate = (predicate:string, value:string | Date) => {
-        this.predicate.clear();
-        if(predicate !== 'all')
-        {
-            this.predicate.set(predicate,value);
-        }
+    @action setPredicate = (predicate:string, value:string | Date| string[]) => {
+        debugger;
+        this.predicate.set(predicate,value);
+    }
+    @action setClearPredicateBeforeSearch = (clear:boolean) => {
+        this.clearPredicateBeforeSearch = clear;
     }
 
+    @action clearUserPredicates = () => {
+        this.predicate.delete("isGoing");
+        this.predicate.delete("isHost");
+        this.predicate.delete("isFollowed");
+        this.predicate.delete("all");
+    }
+    @action clearKeyPredicate = (key:string) => {
+        this.predicate.delete(key);
+    }
     @action deleteActivityRegisteryItem = (id:string) => {
         this.activityRegistery.delete(id);
+    }
+
+    @action clearActivityRegistery = () => {
+        this.activityRegistery.clear();
     }
 
     
@@ -91,6 +131,22 @@ export default class ActivityStore {
         this.predicate.forEach((value,key) => {
             if(key === 'startDate'){
                 params.append(key, value.toISOString());
+            }else if(key === 'endDate'){
+                params.append(key, value.toISOString());
+            }else if(key === 'categoryIds'){
+                value.map((id:string) => (
+                    params.append("categoryIds", id)
+                )); 
+            }
+            else if(key === 'subCategoryIds'){
+                value.map((id:string) => (
+                    params.append("subCategoryIds", id)
+                )); 
+            }
+            else if(key === 'all'){
+                params.append("isFollowed", "false")
+                params.append("isGoing", "false")
+                params.append("isHost", "false")
             }else {
                 params.append(key, value);
             }

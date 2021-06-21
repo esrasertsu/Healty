@@ -139,7 +139,7 @@ const PostUpdateForm: React.FC<IProps> = ({ updatePost, blog }) => {
             floated='right'
             disabled={!updateEnabled}
             positive
-            content='Update profile'
+            content='Güncelle'
           />
         </Form>
       )}

@@ -21,6 +21,8 @@ const HomePage = () => {
   
     const [open, setOpen] = React.useState(false)
     const [title, setTitle] = React.useState("")
+    const {setProfileFilterForm,profileFilterForm,clearProfileRegistery, setPage} = rootStore.profileStore;
+    const {userCity} = rootStore.commonStore;
 
     const handleFinalFormSubmit = (values: any) => {
     }
@@ -43,7 +45,13 @@ const HomePage = () => {
           <p>
             <span style={{fontSize:"15px"}}>{title}</span> alanında dilediğin kategoride uzman eğitmenler keşfet
           </p>
-          <p><Button color='blue' style={{display:'flex',  alignItems:"flex-end"}} onClick={() => {setOpen(false);history.push('/profiles');}}>
+          <p><Button color='blue' style={{display:'flex',  alignItems:"flex-end"}} onClick={() => {
+            setOpen(false);
+            setPage(0);
+            setProfileFilterForm({...profileFilterForm, categoryId:"64ff6473-363c-45a9-9f54-63bb7272d85d", cityId: userCity});
+           clearProfileRegistery();
+            history.push('/profiles');
+            }}>
           <Icon style={{opacity:"1"}} name='users' size="large"/> Ara
         </Button></p>
           </Segment>
@@ -100,7 +108,7 @@ const HomePage = () => {
                    </Fragment>
                    ): (
                        <Fragment>
-                            <Header as='h2' inverted content='Welcome to Reactivities' />
+                            <Header as='h2' inverted content='Welcome to Afitapp' />
                             <Button onClick={()=>openModal("Login",<LoginForm />)} size='huge' inverted>
                                 Login
                              </Button>

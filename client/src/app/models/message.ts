@@ -15,6 +15,30 @@ export interface IChatRoom{
     userStatus: boolean
 }
 
+
+export class ChatRoom implements IChatRoom {
+    id: string = "";
+    userName: string = '';
+    lastMessageDate: Date = new Date();
+    lastMessage:string = "";
+    displayName: string= '';
+    userImage: string = '';
+    messages: IMessage[] = [];
+    unReadMessageCount: number= 0;
+    userStatus: boolean = false;
+
+    constructor(newId:string){
+  
+        if(newId)
+        {   
+            this.id = newId;
+
+        }
+  
+    }
+}
+
+
 export interface IMessage{
     id: string,
     body :string,

@@ -12,6 +12,7 @@ namespace CleanArchitecture.API.SignalR
 {
     public class MessagesHub : Hub
     {
+       
         private readonly IMediator _mediator;
 
         public MessagesHub(IMediator mediator)
@@ -38,6 +39,13 @@ namespace CleanArchitecture.API.SignalR
 
         }
 
+        public async Task SetMessageSeenJustAfterLooked(UpdateMessage.Command command)
+        {
+
+            await Clients.Group(command.ChatRoomId.ToString()).SendAsync("MessageSeen", command);
+
+        }
+
         private string GetUserName()
         {
             return Context.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -48,16 +56,38 @@ namespace CleanArchitecture.API.SignalR
 
             var username = GetUserName();
 
-            await Clients.Group(groupName).SendAsync("Online", username);
+           // await Clients.Group(groupName).SendAsync("Online", username);
+        }
+
+        public async Task SetUserOnline()
+        {
+            var username = GetUserName();
+            await Clients.All.SendAsync("Online", username);
+        }
+
+        public async Task AddToNewChat(string groupName, string receiver, string senderName)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+
+            var username = GetUserName();
+
+            await Clients.User(receiver).SendAsync("NewChatRoomAdded", groupName, username, senderName);
+
+           // await Clients.Group(groupName).SendAsync("Online", username);
         }
 
         public async Task RemoveFromChat(string groupName)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
 
+        }
+
+
+        public async Task SetUserOffline()
+        {
             var username = GetUserName();
 
-            await Clients.Group(groupName).SendAsync("Offline", username);
+            await Clients.All.SendAsync("Offline", username);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Application.Profiles;
+﻿using CleanArchitecture.Application.Messages;
+using CleanArchitecture.Application.Profiles;
 using CleanArchitecture.Application.UserProfileComments;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -49,13 +50,13 @@ namespace CleanArchitecture.API.Controllers
 
         [HttpPost]
         //     [Authorize(Policy = "CanCommentTrainer")]
-        public async Task<ActionResult<UserProfileCommentDto>> CreateComment(Create.Command command)
+        public async Task<ActionResult<UserProfileCommentDto>> CreateComment(Application.UserProfileComments.Create.Command command)
         {
             return await Mediator.Send(command);
         }
 
         [HttpPost("message")]
-        public async Task<ActionResult<Unit>> SendMessage(SendMessage.Command command)
+        public async Task<ActionResult<ChatMessageDto>> SendMessage(SendMessage.Command command)
         {
             return await Mediator.Send(command);
         }

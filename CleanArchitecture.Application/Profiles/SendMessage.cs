@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Application.Messages;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using MediatR;
@@ -17,14 +18,14 @@ namespace CleanArchitecture.Application.Profiles
 {
     public class SendMessage
     {
-        public class Command : IRequest
+        public class Command : IRequest<ChatMessageDto>
         {
             public string Body { get; set; }
             public string Receiver { get; set; }
 
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, ChatMessageDto>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
@@ -38,7 +39,7 @@ namespace CleanArchitecture.Application.Profiles
                 _userAccessor = userAccessor;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<ChatMessageDto> Handle(Command request, CancellationToken cancellationToken)
             {
 
                 var receiver = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.Receiver);
@@ -61,6 +62,17 @@ namespace CleanArchitecture.Application.Profiles
                 if (existingChatRoomWithReceiver.Count() == 0)
                 {
 
+                    var messages = new List<Message>();
+
+                    ChatRoom newchatRoom = new ChatRoom
+                    {
+                        Id = new Guid(),
+                        CreatedAt = DateTime.Now,
+                        Messages = messages,
+                        LastMessageAt = DateTime.Now,
+                        StarterId = author.Id
+                    };
+
                     Message message = new Message
                     {
                         Id = new Guid(),
@@ -70,20 +82,8 @@ namespace CleanArchitecture.Application.Profiles
                         SenderId = author.Id,
                         Seen = false
                     };
-                    _context.Messages.Add(message);
-
-                    var messages = new List<Message>() { message };
-
-                    ChatRoom newchatRoom = new ChatRoom
-                    {
-                        Id = new Guid(),
-                        CreatedAt = DateTime.Now,
-                        Messages = messages,
-                        LastMessageAt = DateTime.Now,
-                        StarterId = message.SenderId,
-                    };
+                    newchatRoom.Messages.Add(message);
                     _context.ChatRooms.Add(newchatRoom);
-
 
                     UserChatRooms userChatRoom = new UserChatRooms
                     {
@@ -102,7 +102,7 @@ namespace CleanArchitecture.Application.Profiles
                     _context.UserChatRooms.Add(receiverChatRoom);
 
                     var success = await _context.SaveChangesAsync() > 0;
-                    if (success) return Unit.Value;
+                    if (success) return _mapper.Map<ChatMessageDto>(message);
                     throw new Exception("Problem saving changes");
 
 

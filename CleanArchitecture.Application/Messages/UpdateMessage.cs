@@ -41,7 +41,7 @@ namespace CleanArchitecture.Application.Messages
                 // _context.Activities.Update(activity);
                 var success = await _context.SaveChangesAsync() > 0;
 
-                if (success) return Unit.Value;
+                return Unit.Value;
                 throw new Exception("Problem saving changes");
             }
         }

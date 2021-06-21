@@ -109,8 +109,6 @@ function success(pos:any,setUserCity:any,cityRegistery:Map<any,any>) {
     const geocoder = new google.maps.Geocoder();
 
     var crd = pos.coords;
-    debugger;
-
 
     var latlng = new window.google.maps.LatLng(crd.latitude, crd.longitude);
     
@@ -119,7 +117,6 @@ function success(pos:any,setUserCity:any,cityRegistery:Map<any,any>) {
       {'location': latlng}, 
     function(results, status) {
         if (status == "OK") {
-            debugger;
             var addressComponentLength =results.filter(x => x.types.includes("postal_code"))[0].address_components.length;
             var cityName = results.filter(x => x.types.includes("postal_code"))[0].address_components[addressComponentLength-2].long_name;
             //setUserCity(cityName);

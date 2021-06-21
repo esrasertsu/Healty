@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import agent from "../api/agent";
 import { IAccessibility, IPhoto, IProfile, IProfileBlog, IProfileComment, IProfileFilterFormValues, IProfileFormValues, IUserActivity, ProfileFilterFormValues, ProfileFormValues } from "../models/profile";
 import { RootStore } from "./rootStore";
-import { IMessageForm } from "../models/message";
+import { ChatRoom, IMessageForm } from "../models/message";
 import { setProfileProps } from "../common/util/util";
 
 const LIMIT = 5;
@@ -63,7 +63,6 @@ export default class ProfileStore{
     @observable profileForm: IProfileFormValues = new ProfileFormValues();
     @observable profileFilterForm: IProfileFilterFormValues = new ProfileFilterFormValues();
     @observable page = 0;
-    @observable.ref hubConnection : HubConnection | null = null;
     @computed get isCurrentUser(){
         if (this.rootStore.userStore.user && this.profile){
             return this.rootStore.userStore.user.userName === this.profile.userName;
@@ -491,11 +490,21 @@ export default class ProfileStore{
         message.receiver= this.profile!.userName;
         this.submittingMessage = true;
         try {
-            await agent.Profiles.sendMessage(message);
+            const newMessage = await agent.Profiles.sendMessage(message);
             runInAction('Sending message', () => {
                 this.submittingMessage = false;
                 this.profile!.hasConversation = true;
+
+                // if(this.rootStore.messageStore.chatRooms!==null)
+                // this.rootStore.messageStore.chatRooms.push(new ChatRoom(newMessage.chatRoomId))
+                // else {
+                //     this.rootStore.messageStore.chatRooms = [];
+                //     this.rootStore.messageStore.chatRooms.push(new ChatRoom(newMessage.chatRoomId));
+                // }
+                debugger;
+                const senderName = this.rootStore.userStore.user!.displayName;
                 toast.success("Mesajın iletidi. Konuşmaya devam etmek için mesaj kutunu kontrol et.")
+                this.rootStore.userStore.hubConnection!.invoke('AddToNewChat', newMessage.chatRoomId, this.profile!.userName,senderName);
             });
         } catch (error) {
             runInAction('Sending message error', () => {

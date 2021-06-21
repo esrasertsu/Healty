@@ -222,7 +222,7 @@ const Profiles = {
     listBlogs: (username: string, limit?:number, page?:number): Promise<IProfileBlogsEnvelope> => 
                 requests.get(`/profiles/${username}/blogs?username=${username}&limit=${limit}&offset=${page ? page*limit! :0}`),
 
-    sendMessage:(message:IMessageForm) => requests.post(`/profiles/message`, message),
+    sendMessage:(message:IMessageForm):Promise<IMessage> => requests.post(`/profiles/message`, message),
     updateProfile: (profile: Partial<IProfile>):Promise<IProfile> => requests.editProfile(`/profiles`,profile),
     getAccessibilities : (): Promise<IAccessibility[]>  => requests.get(`/profiles/accessibilities`)
 

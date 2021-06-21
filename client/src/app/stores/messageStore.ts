@@ -40,7 +40,7 @@ export default class MessageStore {
     @observable chatRooms : IChatRoom[] | null = null;
     @observable chatRoomId : string | null = null;
     @observable prevChatRoomId : string | null = null;
-    @observable messageRegistery = new Map();
+    @observable messageRegistery = new Map<any, IMessage[]| null>();
 
     @observable messageCount = 0;
     @observable page = 0;
@@ -114,23 +114,24 @@ export default class MessageStore {
         }
     }
     @action setMessageSeen =  (message:IMessage) =>{
-       var listMessages: IMessage[] = this.messageRegistery.get(message.chatRoomId);
-       listMessages.filter(x => x.id === message.id)[0].seen = true;
+        debugger;
+       var listMessages: IMessage[]|null = this.messageRegistery.get(message.chatRoomId)!;
+       if(listMessages !==null)
+        listMessages.filter(x => x.id === message.id)[0].seen = true;
     }
 
 
     @computed get messagesByDate(){
+
         // return this.activities.sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
       //  return Array.from(this.activityRegistery.values()).sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
           return this.groupMessagesByDate(
-              Array.from(
-                  this.messageRegistery.get(this.chatRoomId) !== null && 
-                  this.messageRegistery.get(this.chatRoomId)!
-                  ));
+            this.messageRegistery.get(this.chatRoomId)! !== null ? this.messageRegistery.get(this.chatRoomId)! : []
+             );
      }
  
      groupMessagesByDate(messages: IMessage[]){
-         const sortedMessages = messages.sort(
+         const sortedMessages = messages.slice().sort(
              (a,b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
          )
  
@@ -150,13 +151,25 @@ export default class MessageStore {
                 const messagesEnvelope = await agent.Messages.listMessages(id,LIMIT,this.page);
                 const {messages, messageCount } = messagesEnvelope;
                 runInAction('Loading messages',() => {
-                    messages.forEach((message) =>{
+                    messages.forEach(async(message) =>{
                         setMessageProps(message,this.rootStore.userStore.user!);
                         messageList.push(message);
+                        debugger;
+                        if(message.username !== this.rootStore.userStore.user!.userName)
+                        {
+                            debugger;
+                            var values = {
+                                id:message.id,
+                                chatRoomId: message.chatRoomId,
+                                seen: true
+                            }
+    
+                            await this.rootStore.userStore.hubConnection!.invoke('SetMessageSeenJustAfterLooked',values  );
+                        }
                     });
                     this.messageRegistery.get(id) !== null 
                     ?
-                    this.messageRegistery.get(id).push(...messageList)
+                    this.messageRegistery.get(id)!.push(...messageList)
                     :  
                     this.messageRegistery.set(id,messageList)
                     this.messageCount = messageCount;

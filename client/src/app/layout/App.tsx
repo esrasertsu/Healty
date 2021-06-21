@@ -23,13 +23,14 @@ import BlogPage from '../../features/blog/BlogPage';
 import MessagesPage from '../../features/messages/MessagesPage';
 import { useLoadScript } from "@react-google-maps/api";
 import { LoadScriptUrlOptions } from "@react-google-maps/api/dist/utils/make-load-script-url";
+import { runInAction } from 'mobx';
 const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
 const App: React.FC<RouteComponentProps> = ({location}) => {
 
   const rootStore = useContext(RootStoreContext);
   const {setAppLoaded, token, appLoaded,loadCities,getUserLocation , userCity} = rootStore.commonStore;
-  const { getUser,user,createHubConnection,hubConnection } = rootStore.userStore;
+  const { getUser,user,createHubConnection,hubConnection,stopHubConnection } = rootStore.userStore;
 
   const { isLoaded, loadError } = useLoadScript({
       googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
@@ -50,12 +51,35 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
 
     if(token) {
       getUser().finally(() => {
-        loadCities().finally(()=>setAppLoaded());
+        loadCities().finally(()=>
+        {
+          window.addEventListener('beforeunload', alertUser);
+          runInAction(() => {
+            setAppLoaded()
+          });
+        }
+        );
       })
     }else {
       loadCities().finally(()=>setAppLoaded());
     }
+    return () => {
+      debugger;
+      window.removeEventListener('beforeunload', alertUser)
+    }
   },[getUser, setAppLoaded, token])
+
+  const alertUser = async (event:any) => {
+debugger;
+   await stopHubConnection();
+    runInAction(() => {
+        event.preventDefault()
+        event.returnValue = ''
+      
+   }
+    )
+    
+}
 
   if(!appLoaded) return <LoadingComponent content='Loading app...' />
 

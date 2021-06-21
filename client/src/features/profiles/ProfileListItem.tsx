@@ -43,12 +43,12 @@ interface IProps {
           <div key={profile.userName+Math.random()+"sub"} className="profileListItem_subCats">
           <Icon name="bookmark"></Icon>   
             {profile.subCategories && profile.subCategories.length> 0 ?
-            profile.subCategories.map<React.ReactNode>(s => <span>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
+            profile.subCategories.map<React.ReactNode>(s => <span key={profile.userName+Math.random()+"subspan"}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
             : "Bilgi yok"
           }
             </div>
-            <div className="profileListItem_subCats"> <Icon name="bolt" /> {profile.accessibilities && profile.accessibilities.length > 0 ? 
-          profile.accessibilities.map<React.ReactNode>(s => <span id={profile.userName +"_accessibility"}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
+            <div key={profile.userName+Math.random()+"acc"} className="profileListItem_subCats"> <Icon key={profile.userName+Math.random()+"accIcon"} name="bolt" /> {profile.accessibilities && profile.accessibilities.length > 0 ? 
+          profile.accessibilities.map<React.ReactNode>(s => <span key={profile.userName+Math.random() +"_accessibility"} id={profile.userName+Math.random() +"_accessibility"}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
             : "Bilgi yok"}  </div>
             <div className="profileListItem_subCats"> <Icon name="spinner" /> {profile.experienceYear > 0 ? profile.experienceYear +"yıl tecrübe" : "" } </div> 
 

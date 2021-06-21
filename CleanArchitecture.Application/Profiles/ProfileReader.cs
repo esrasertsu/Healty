@@ -84,6 +84,7 @@ namespace CleanArchitecture.Application.Profiles
 
             var profile = new Profile
             {
+                Id = user.Id,
                 DisplayName = user.DisplayName,
                 UserName = user.UserName,
                 Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,

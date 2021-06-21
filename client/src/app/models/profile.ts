@@ -7,6 +7,7 @@ export interface IProfileEnvelope {
     popularProfiles :IProfile[];
 }
 export interface IProfile {
+    id:string,
     displayName: string,
     mainCategory: string,
     userName: string,

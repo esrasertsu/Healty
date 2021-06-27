@@ -13,13 +13,14 @@ namespace CleanArchitecture.API.Controllers
     public class BlogController : BaseController
     {
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<List.BlogsEnvelope>> List(int? limit, int? offset, string userName, Guid? categoryId, [FromQuery(Name = "subCategoryIds")] List<Guid> subCategoryIds)
         {
             return await Mediator.Send(new List.Query(limit, offset, userName, categoryId, subCategoryIds));
         }
 
         [HttpGet("{id}")]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<ActionResult<BlogDto>> Details(Guid id)
         {
             return await Mediator.Send(new Details.Query { Id = id});

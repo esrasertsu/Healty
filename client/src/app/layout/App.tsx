@@ -24,6 +24,8 @@ import MessagesPage from '../../features/messages/MessagesPage';
 import { useLoadScript } from "@react-google-maps/api";
 import { LoadScriptUrlOptions } from "@react-google-maps/api/dist/utils/make-load-script-url";
 import { runInAction } from 'mobx';
+import PrivateRoute from './PrivateRoute';
+import { LoginRequiredPage } from './LoginRequiredPage';
 const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
 const App: React.FC<RouteComponentProps> = ({location}) => {
@@ -97,15 +99,16 @@ debugger;
               <Container className="pageContainer">
                 <Switch>
                   <Route exact path="/activities" component={ActivityDashboard} />
-                  <Route path="/activities/:id" component={ActivityDetails} />
+                  <PrivateRoute path="/activities/:id" component={ActivityDetails} />
                   <Route exact path="/blog" component={BlogList} />
                   <Route exact path="/blog/:id" component={BlogPage} />
                   <Route key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
                   <Route key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
-                  <Route path="/profile/:username" component={ProfilePage}/>
+                  <PrivateRoute path="/profile/:username" component={ProfilePage}/>
                   <Route path="/profiles" component={ProfileDashboard}/>
                   <Route path="/messages" component={MessagesPage}/>
                   <Route path="/login" component={LoginForm}/>
+                  <Route path="/login-required" component={LoginRequiredPage}/>
                   <Route exact path="/activitysearch" component={ActivitySearchPage}/>
                   <Route component={NotFound}/>
                 </Switch>

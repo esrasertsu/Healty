@@ -2,6 +2,7 @@
 using CleanArchitecture.Application.Profiles;
 using CleanArchitecture.Application.UserProfileComments;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<ProfileList.ProfilesEnvelope>> List(int? limit, int? offset, Guid? categoryId, [FromQuery(Name = "subCategoryIds")] List<Guid> subCategoryIds, Guid? accessibilityId, Guid? cityId)
         {
             return await Mediator.Send(new ProfileList.Query(limit, offset, categoryId, subCategoryIds,accessibilityId,cityId));
@@ -31,12 +33,14 @@ namespace CleanArchitecture.API.Controllers
         //}
 
         [HttpGet("{username}/activities")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<UserActivityDto>>> GetUserActivities(string username, string predicate)
         {
             return await Mediator.Send(new ListActivities.Query { Username = username, Predicate = predicate });
         }
 
         [HttpGet("{username}/blogs")]
+        [AllowAnonymous]
         public async Task<ActionResult<ListBlogs.UserProfileBlogsEnvelope>> GetUserBlogs(string username, int? limit, int? offset)
         {
             return await Mediator.Send(new ListBlogs.Query { Username = username, Limit = limit, Offset = offset });
@@ -62,6 +66,7 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet("accessibilities")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<AccessibilityDto>>> GetAccessibilities()
         {
             return await Mediator.Send(new ListAccessibilities.Query());

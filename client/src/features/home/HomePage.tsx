@@ -27,10 +27,32 @@ const HomePage = () => {
     const handleFinalFormSubmit = (values: any) => {
     }
 
+    const handleLoginClick = (e:any) => {
+      e.stopPropagation();
+          openModal("Giriş Yap", <>
+          <Image size='large' src='/assets/placeholder.png' wrapped />
+          <Modal.Description>
+          <LoginForm location={"/"} />
+          </Modal.Description>
+          </>,true) 
+      }
+
+      const handleRegisterClick = (e:any) => {
     
+        e.stopPropagation();
+            openModal("Üye Kaydı", <>
+            <Image size='large' src='/assets/placeholder.png' wrapped />
+            <Modal.Description>
+            <RegisterForm location={"/"} />
+            </Modal.Description>
+            </>,true) 
+        }
+  
     return (
       <>
       <Modal
+      dimmer="blurring"
+      closeIcon
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       open={open}
@@ -108,12 +130,12 @@ const HomePage = () => {
                    </Fragment>
                    ): (
                        <Fragment>
-                            <Header as='h2' inverted content='Welcome to Afitapp' />
-                            <Button onClick={()=>openModal("Login",<LoginForm />)} size='huge' inverted>
-                                Login
+                            <Header as='h2' inverted content={`Afitapp'a Hoşgeldin!`} />
+                            <Button onClick={handleLoginClick} size='huge' inverted>
+                                Üye Girişi
                              </Button>
-                             <Button onClick={()=>openModal("Register",<RegisterForm />)}  size='huge' inverted>
-                                Register
+                             <Button onClick={handleRegisterClick}  size='huge' inverted>
+                                Yeni Kullanıcı
                              </Button>
                        </Fragment>
                    )}

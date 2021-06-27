@@ -8,7 +8,6 @@ import  ActivityDetailedChat  from './ActivityDetailedChat';
 import ActivityDetailedSideBar  from './ActivityDetailedSideBar';
 import ActivityDetailedInfo from './ActivityDetailedInfo';
 import { RootStoreContext } from '../../../app/stores/rootStore';
-import ActivitySearchPage from '../search/ActivitySearchPage';
 import ActivityDetailsMap from './ActivityDetailsMap';
 
 const center = {

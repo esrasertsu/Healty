@@ -13,6 +13,7 @@ namespace CleanArchitecture.API.Controllers
     public class ActivitiesController : BaseController
     {
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<List.ActivitiesEnvelope>> List(int? limit, int? offset,bool isGoing,bool isHost, bool isFollowed, bool isOnline, DateTime? startDate, DateTime? endDate,
                                                                      [FromQuery(Name = "categoryIds")] List<Guid> categoryIds, [FromQuery(Name = "subCategoryIds")] List<Guid> subCategoryIds, Guid? cityId)
         {
@@ -61,6 +62,7 @@ namespace CleanArchitecture.API.Controllers
 
 
         [HttpGet("levels")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<LevelDto>>> List()
         {
             return await Mediator.Send(new ListLevels.Query());

@@ -1,12 +1,12 @@
-import React, { useContext, useEffect } from 'react';
-import { Card, Image, Icon, Grid, Label} from 'semantic-ui-react';
+import React, { useContext, useState } from 'react';
+import { Card, Image, Icon, Grid, Label, Modal} from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { history } from '../../index'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { StarRating } from '../../app/common/form/StarRating';
-import { Link } from 'react-router-dom';
 import { colors } from '../../app/models/category';
 import { observer } from 'mobx-react-lite';
+import { LoginForm } from '../user/LoginForm';
 
 interface IProps {
     profile: IProfile
@@ -15,21 +15,38 @@ interface IProps {
  const ProfileListItem: React.FC<IProps> = ({profile}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const {setLoadingProfile, profileFilterForm} = rootStore.profileStore;
-  const {allDetailedList} = rootStore.categoryStore;
+  const {setLoadingProfile} = rootStore.profileStore;
+  const {isLoggedIn, user} = rootStore.userStore;
+  const {openModal} = rootStore.modalStore;
+
 
   const getColor = (catName:string) =>{
     let index = colors.findIndex(x => x.key === catName);
     return colors[index].value;
   }
- 
-  return (
-    <Card onClick={() => {
+  const handleCardClick = (e:any) => {
+    debugger;
+    e.stopPropagation() ;
+        if(!isLoggedIn)
+    {    var str = `/profile/${profile.userName}`;
+        openModal("Giriş Yap", <>
+        <Image size='large' src='/assets/placeholder.png' wrapped />
+        <Modal.Description>
+        <LoginForm location={String(str)} />
+        </Modal.Description>
+        </>,true) 
+    }
+    else
+    {
       setLoadingProfile(true);
       history.push(`/profile/${profile.userName}`)
-      }}
+    }
+      
+}
+  return (
+    <Card onClick={handleCardClick}
       style={{height:"100%"}}
-    key={profile.userName+Math.random()} >
+      key={profile.userName+Math.random()} >
       <Image circular src={profile.image || '/assets/user.png'} />
       <div className="profileListItem_badges">   
       {(profile.categories && profile.categories.map((cat) => (

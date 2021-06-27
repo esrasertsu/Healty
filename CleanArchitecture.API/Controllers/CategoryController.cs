@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using CleanArchitecture.Application.Categories;
 using CleanArchitecture.Domain;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.API.Controllers
 {
+    [AllowAnonymous]
     public class CategoryController : BaseController
     {
         [HttpGet]

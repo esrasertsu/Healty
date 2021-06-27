@@ -8,6 +8,7 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { history } from '../../index'
 import dompurify from 'dompurify';
 import PostUpdateForm from '../posts/PostUpdateForm';
+import { LoginForm } from '../user/LoginForm';
 
 
 interface IProps{
@@ -26,6 +27,17 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
   const sanitizer = dompurify.sanitize;
   const [open, setOpen] = React.useState(false);
 
+  const {openModal} = rootStore.modalStore;
+
+ const handleLoginClick = (e:any) => {
+  e.stopPropagation();
+      openModal("Giriş Yap", <>
+      <Image size='large' src='/assets/placeholder.png' wrapped />
+      <Modal.Description>
+      <LoginForm location={`/profile/${blog.username}`} />
+      </Modal.Description>
+      </>,true) 
+  }
 
   const handleDeleteBlog = (e:any) => {
     debugger;
@@ -114,14 +126,14 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
               }
                 <Container className="blog_userdetail">
                     <div className="blog_user">
-                    <Image circular size="tiny" src={blog.userImage || '/assets/user.png'} onClick={()=>history.push(`/profile/${blog.username}`)}></Image>
-                     <div style={{marginLeft:"10px"}}>
-                       <Link to={`/profile/${blog.username}`} >
-                      <strong>{blog.displayName}</strong></Link> 
+                    <Image style={{cursor:"pointer"}} circular size="tiny" src={blog.userImage || '/assets/user.png'} onClick={handleLoginClick}></Image>
+                     <div style={{marginLeft:"10px", cursor:"pointer"}}>
+                       <div onClick={handleLoginClick} >
+                      <strong>{blog.displayName}</strong></div> 
                     </div>
                     </div>
                     <div>
-                      <div onClick={()=>history.push(`/profile/${blog.username}`)} className="blogListItem_Readmore"> Uzman profilini gör <Icon name='arrow right' /> </div>
+                      <div onClick={handleLoginClick} className="blogListItem_Readmore"> Uzman profilini gör <Icon name='arrow right' /> </div>
                     </div>
 
                 </Container>

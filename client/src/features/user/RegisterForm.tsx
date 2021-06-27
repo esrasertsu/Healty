@@ -3,6 +3,7 @@ import React, { useContext } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
 import { combineValidators, isRequired } from 'revalidate';
 import { Button, Form, Header } from 'semantic-ui-react';
+import { history } from '../..';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
 import { IUserFormValues } from '../../app/models/user';
@@ -15,8 +16,10 @@ const validate = combineValidators({
     email: isRequired('email'),
     password: isRequired('password')
 })
-
-export const RegisterForm = () => {
+interface IProps {
+  location: string;
+}
+export const RegisterForm:React.FC<IProps> = ({location}) =>{
     const rootStore = useContext(RootStoreContext);
     const { register } = rootStore.userStore;
 
@@ -24,7 +27,9 @@ export const RegisterForm = () => {
     return (
       <FinalForm
         onSubmit={(values: IUserFormValues) =>
-            register(values).catch((error) => ({
+            register(values)
+            .finally(()=> history.push(location))
+            .catch((error) => ({
             [FORM_ERROR]: error,
           }))
         }
@@ -40,7 +45,7 @@ export const RegisterForm = () => {
           <Form onSubmit={handleSubmit} error>
             <Header
               as="h2"
-              content="Sign up to Reactivities"
+              content="Kayıt Formu"
               color="teal"
               textAlign="center"
             />

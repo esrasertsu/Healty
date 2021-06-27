@@ -27,7 +27,7 @@ body {
 }
 
 .pageContainer.ui.container{
-  padding-top: 75px;
+  padding-top: 10px;
 }
 
 .ui.vertical.menu,.ui.accordion.menu .item .title {
@@ -255,6 +255,7 @@ p.baseline-pricing__value{
     background-color: #fff !important;
     height: 66px;
     border-bottom: 1px solid rgba(34,36,38,.15);
+    position: inherit;
   }
 /* .ui.vertical.menu{
   background-color: #fff !important;
@@ -457,7 +458,6 @@ a.ui.card:hover {
   background-size: cover !important;
   background-position-y: -260px !important;
   border-radius: .28571429rem !important;
-  margin-top:65px !important;
 
 }
 
@@ -1037,4 +1037,11 @@ i.search.inverted.icon {
   flex-direction: row;
   align-items: center;
   color:#345289 !important;
+}
+
+
+.ui.modal>.content>.icon+.description, .ui.modal>.content>.image+.description {
+  -webkit-box-flex: 0;
+  -ms-flex: 1 0 auto !important;
+  flex: 1 0 auto !important;
 }

@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from "react";
+import React, {  useContext, useEffect, useState } from "react";
 import { Segment, Form, Button, Grid, Header, Image } from "semantic-ui-react";
 import { v4 as uuid } from "uuid";
 import { observer } from "mobx-react-lite";
@@ -42,8 +42,6 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
   const {
     categoryList,
     subcategoryList,
-    loadingCategories,
-    loadingSubCategories,
     loadCategories,
     loadSubCategories
  } = rootStore.categoryStore;
@@ -56,8 +54,6 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
     const [image, setImage] = useState<Blob | null>(null);
     const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
 
-    const [category, setCategory] = useState<string>("");
-    const [subCategory, setSubCategory] =useState<string[]>([]);
     const [imageDeleted, setImageDeleted] = useState<boolean>(false);
     const [imageChanged, setImageChanged] = useState<boolean>(false);
 

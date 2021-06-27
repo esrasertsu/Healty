@@ -1,6 +1,5 @@
-import React, { Fragment, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Item, Button, Segment, Icon, Label, Image, Card, Grid, Popup } from 'semantic-ui-react'
+import React, { useContext, useEffect } from 'react'
+import { Item, Segment, Icon, Label, Card, Popup, Image, Modal } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity';
 import { format } from 'date-fns';
 import {ActivityListItemAttendees } from './ActivityListItemAttendees';
@@ -9,23 +8,43 @@ import { StarRating } from '../../../app/common/form/StarRating';
 import { colors } from '../../../app/models/category';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWalking, faUserEdit } from '@fortawesome/free-solid-svg-icons'
+import { LoginForm } from '../../user/LoginForm';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
+    const rootStore = useContext(RootStoreContext);
+    const {isLoggedIn, user} = rootStore.userStore;
+    const {openModal} = rootStore.modalStore;
+
     const host = activity.attendees.filter(x => x.isHost === true)[0];
     const index = activity.categories && activity.categories.length>0 ? colors.findIndex(x => x.key === activity.categories[0].text): 0;
     const color = colors[index].value;
 
 
-    useEffect(() => {
+    const handleCardClick = () => {
         debugger;
-       
-    }, [activity])
+        if(!isLoggedIn)
+        {    var str = `/activities/${activity.id}`;
+            openModal("Giriş Yap",
+            <>
+            <Image size='large' src='/assets/placeholder.png' wrapped />
+            <Modal.Description>
+            <LoginForm location={String(str)} />
+            </Modal.Description>
+            </>,
+            true
+            ) 
+        }
+        else
+        {
+            history.push(`/activities/${activity.id}`);
+        }
+          
+    }
+
     return (
        
-        <Card className="activityListItem" onClick={() => {
-            history.push(`/activities/${activity.id}`)
-            
-            }} >
+        <Card className="activityListItem" onClick={() => handleCardClick()} >
                
         <Segment.Group>
             {

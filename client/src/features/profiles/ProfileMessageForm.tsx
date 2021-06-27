@@ -1,11 +1,8 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
-import { Button, Form, Grid, Header, Icon, Label } from 'semantic-ui-react';
-import { StarRating } from '../../app/common/form/StarRating';
+import { Button, Form, Grid, } from 'semantic-ui-react';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import { IProfileComment } from '../../app/models/profile';
-import { v4 as uuid } from "uuid";
 import { IMessageForm } from '../../app/models/message';
 
 // interface IProps{

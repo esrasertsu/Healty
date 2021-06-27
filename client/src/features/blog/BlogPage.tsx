@@ -8,15 +8,10 @@ import BlogPageHeader from './BlogPageHeader';
 import BlogPageDesc from './BlogPageDesc';
 import BlogMoreFromUser from './BlogMoreFromUser';
 import BlogMoreFromThisCategory from './BlogMoreFromThisCategory';
-import Footer from '../home/Footer';
 import { toast } from 'react-toastify';
 import { BlogUpdateFormValues } from '../../app/models/blog';
 
 
-const center = {
-    lat: 38.4237,
-    lng: 27.1428,
-  };
 interface DetailParams{
     id:string
 }
@@ -33,7 +28,7 @@ const BlogPage: React.FC<RouteComponentProps<DetailParams>> = ({match, history})
         {
             setBlogForm(new BlogUpdateFormValues(blog!))}
         )
-    }, [loadBlog, match.params.id, history]) // sadece 1 kere çalışcak, koymazsak her component render olduğunda
+    }, [loadBlog, match.params.id, history,setBlogForm]) // sadece 1 kere çalışcak, koymazsak her component render olduğunda
 
     useEffect(() => {
         if(updatedBlog)
@@ -56,7 +51,7 @@ const BlogPage: React.FC<RouteComponentProps<DetailParams>> = ({match, history})
             <BlogMoreFromThisCategory blog={post!} />
           </Grid.Column>
       </Grid>
-                       </>
+     </>
     )
 }
 

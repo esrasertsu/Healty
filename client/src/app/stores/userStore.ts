@@ -54,7 +54,6 @@ export default class UserStore {
             this.rootStore.commonStore.setToken(user.token);
             this.rootStore.modalStore.closeModal();
             this.createHubConnection();
-            history.push('/');
         } catch (error) {
             throw error;
         }

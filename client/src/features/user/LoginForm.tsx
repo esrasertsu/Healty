@@ -7,6 +7,7 @@ import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
 import { IUserFormValues } from '../../app/models/user';
 import { RootStoreContext } from '../../app/stores/rootStore';
+import { history } from '../../index'
 
 
 const validate = combineValidators({
@@ -14,7 +15,11 @@ const validate = combineValidators({
     password: isRequired('password')
 })
 
-export const LoginForm = () => {
+interface IProps {
+  location: string;
+}
+
+export const LoginForm:React.FC<IProps> = ({location}) => {
     const rootStore = useContext(RootStoreContext);
     const { login } = rootStore.userStore;
 
@@ -22,7 +27,9 @@ export const LoginForm = () => {
     return (
       <FinalForm
         onSubmit={(values: IUserFormValues) =>
-          login(values).catch((error) => ({
+          login(values)
+          .finally(()=> history.push(location))
+          .catch((error) => ({
             [FORM_ERROR]: error,
           }))
         }
@@ -38,7 +45,7 @@ export const LoginForm = () => {
           <Form onSubmit={handleSubmit} error>
             <Header
               as="h2"
-              content="Login to Afitapp"
+              content="Afitapp'a Giriş Yap"
               color="teal"
               textAlign="center"
             />

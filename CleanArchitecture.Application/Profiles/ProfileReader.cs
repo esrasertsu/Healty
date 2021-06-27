@@ -197,10 +197,12 @@ namespace CleanArchitecture.Application.Profiles
                 Categories = catsToReturn,
                 SubCategories = subcatsToReturn,
             };
-
-            if (currentUser.Followings.Any(x => x.TargetId == user.Id))
+            if (currentUser != null)
             {
-                profile.IsFollowed = true;
+                if (currentUser.Followings.Any(x => x.TargetId == user.Id))
+                {
+                    profile.IsFollowed = true;
+                }
             }
 
             return profile;
@@ -217,7 +219,7 @@ namespace CleanArchitecture.Application.Profiles
         private int CalculateResponseRate(AppUser user)
         {
            var receivedFirstMessagesCount = user.ChatRooms.Where(x => x.ChatRoom.StarterId != user.Id).Count();
-           var respondedMessagesCount = user.ChatRooms.Where(x => x.ChatRoom.Messages.Any(x => x.SenderId == user.Id)).Count();
+           var respondedMessagesCount = user.ChatRooms.Where(x => x.ChatRoom.StarterId != user.Id & x.ChatRoom.Messages.Any(x => x.SenderId == user.Id) == true).Count();
 
             var rate = 0;
             if (receivedFirstMessagesCount > 0)

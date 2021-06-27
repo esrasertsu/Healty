@@ -105,8 +105,6 @@ namespace CleanArchitecture.Application.Activities
                 Videos = activity.Videos
             };
 
-               
-
                 return activityDto;
             }
 

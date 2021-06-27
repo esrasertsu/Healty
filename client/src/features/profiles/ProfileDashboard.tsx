@@ -40,11 +40,10 @@ const sixItem:SemanticWIDTHS = 6;
 
     const rootStore = useContext(RootStoreContext);
     const {loadingProfiles, loadProfiles, profileList, profileRegistery,setPage,page,totalProfileListPages,
-      popularProfileList,profilePageCount, clearProfileRegistery} = rootStore.profileStore;
+      popularProfileList,profilePageCount, clearProfileRegistery,sortProfiles,loadingOnlyProfiles,sortingInput, setSortingInput} = rootStore.profileStore;
     const {appLoaded, userCity} = rootStore.commonStore;
-    const [sortingInput, setSortingInput] = useState("drinks");
     useEffect(() => {
-      if(appLoaded && userCity!=="")
+      if(appLoaded)
         loadProfiles();
         return () => {
           setPage(0);
@@ -54,6 +53,10 @@ const sixItem:SemanticWIDTHS = 6;
 
     const handleSortingChange = (e:any,data:any) => {
       setSortingInput(data.value);
+      setLoadingNext(true);
+      setPage(0);
+      clearProfileRegistery();
+      sortProfiles();
     }
     const [loadingNext, setLoadingNext] = useState(false);
 
@@ -84,7 +87,7 @@ const sixItem:SemanticWIDTHS = 6;
         <Grid stackable>
           <Grid.Column width={16}>
              {/* <Card.Group itemsPerRow={5} stackable>  */}
-          {loadingProfiles && page === 0 ?  <ProfileListItemsPlaceholder itemPerRow={fiveItem}/> :
+          {loadingProfiles && page === 0  ?  <ProfileListItemsPlaceholder itemPerRow={fiveItem}/> :
             <Carousel
             // arrows={false} 
             renderButtonGroupOutside={true}
@@ -132,7 +135,7 @@ const sixItem:SemanticWIDTHS = 6;
          />  </div>
           </Grid.Column>
          <Grid.Column width={16}>
-         {loadingProfiles && page === 0 ? <ProfileListItemsPlaceholder itemPerRow={sixItem} /> :
+         {(loadingProfiles && page === 0) || loadingOnlyProfiles ? <ProfileListItemsPlaceholder itemPerRow={sixItem} /> :
           <InfiniteScroll
           pageStart={0}
           loadMore={handleGetNext}

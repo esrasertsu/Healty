@@ -17,6 +17,8 @@ const ActivityFilters = () => {
      loadingCategories,
      allCategoriesOptionList
       } = rootStore.categoryStore;
+
+      const {isLoggedIn} = rootStore.userStore;
   
 
   const handleClick = (e:any, titleProps:any) => {
@@ -144,6 +146,7 @@ debugger;
         containerClassName="dtPicker_Style"
       />
      </Segment>
+   {  isLoggedIn &&
      <Menu vertical style={{ width: '100%'}}>
         {/* <Header icon={'filter'} attached color={'teal'} content={'Filters'} />  size={'small'}*/}
         <Menu.Item
@@ -190,7 +193,7 @@ debugger;
           setClearPredicateBeforeSearch(false);  
           setPredicate('isFollowed', 'true')}}
          name={'follow'} content={"Takip Ettiğim Eğitmenlerin"} />
-      </Menu>
+      </Menu>}
 
       <Accordion key={"Category_acc"} as={Menu} vertical style={{ width: '100%', boxShadow:'none', border:'none'}}>
         <Menu.Item  key={"Category"} className="filterMenuItem_Style">

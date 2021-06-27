@@ -36,6 +36,8 @@ export default class ProfileStore{
     @observable blogRegistery = new Map();
     @observable loadingProfile = true;
     @observable loadingProfiles = true;
+    @observable loadingOnlyProfiles = false;
+    
     @observable loadingAccessibilities = false;
     @observable uploadingPhoto = false;
     @observable submittingComment = false;
@@ -62,6 +64,9 @@ export default class ProfileStore{
     @observable updatedProfile = false;
     @observable profileForm: IProfileFormValues = new ProfileFormValues();
     @observable profileFilterForm: IProfileFilterFormValues = new ProfileFilterFormValues();
+
+    @observable sortingInput ="";
+
     @observable page = 0;
     @computed get isCurrentUser(){
         if (this.rootStore.userStore.user && this.profile){
@@ -85,6 +90,10 @@ export default class ProfileStore{
     }
     @action setPage = (page:number) =>{
         this.page = page;
+    }
+
+    @action setSortingInput= (sort:string) =>{
+        this.sortingInput = sort;
     }
     @computed get totalBlogPages(){
         return Math.ceil(this.blogCount / LIMIT);
@@ -261,6 +270,7 @@ export default class ProfileStore{
 
     @action loadProfiles = async () =>{
         this.loadingProfiles = true;
+        debugger;
         try {
             debugger;
             const profilesEnvelope= await agent.Profiles.list(this.axiosParams);
@@ -282,6 +292,31 @@ export default class ProfileStore{
         } catch (error) {
             runInAction(()=>{
                 this.loadingProfiles = false;
+            })
+            console.log(error);
+        }
+    }
+
+    @action sortProfiles = async () =>{
+        this.loadingOnlyProfiles = true;
+        debugger;
+        try {
+            debugger;
+            const profilesEnvelope= await agent.Profiles.list(this.axiosParams);
+            const {profileList, profileCount } = profilesEnvelope;
+
+            runInAction('Loading profiles',()=>{
+                profileList.forEach((profile) =>{
+                    debugger;
+                    this.profileRegistery.set(profile.userName, profile);
+                });
+                this.profileList = profileList;
+                this.profilePageCount = profileCount;
+                this.loadingOnlyProfiles = false;
+            })
+        } catch (error) {
+            runInAction(()=>{
+                this.loadingOnlyProfiles = false;
             })
             console.log(error);
         }

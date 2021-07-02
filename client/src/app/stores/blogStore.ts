@@ -1,7 +1,7 @@
 import { action, computed, observable, reaction, runInAction } from "mobx";
 import { toast } from "react-toastify";
 import agent from "../api/agent";
-import { BlogUpdateFormValues, IBlog, IBlogUpdateFormValues, IPostFormValues, PostFormValues } from "../models/blog";
+import { BlogUpdateFormValues, IBlog, IBlogUpdateFormValues, IPostFormValues } from "../models/blog";
 import { RootStore } from "./rootStore";
 import { history } from '../..';
 import { SyntheticEvent } from 'react';
@@ -126,7 +126,7 @@ export default class BlogStore{
     }
     @action removeSubCatPredicate = (deleteValue:string) => {
        let values:string[] = this.predicate.get("subCategoryIds");
-       values = values.filter(x=> x != deleteValue);
+       values = values.filter(x=> x !== deleteValue);
        this.setPredicate("subCategoryIds",values);
     }
     @action setLoadingPosts = (lp : boolean) =>{

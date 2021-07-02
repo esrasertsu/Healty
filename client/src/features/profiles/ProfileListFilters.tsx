@@ -1,14 +1,13 @@
 import { observer } from 'mobx-react-lite';
-import React, { useContext,useEffect,useState } from 'react'
-import {  Button,Dimmer,Form } from 'semantic-ui-react'
+import React, { useContext,useState } from 'react'
+import {  Button,Form } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { Form as FinalForm, Field } from "react-final-form";
 import SelectInput from "../../app/common/form/SelectInput";
 import DropdownInput from '../../app/common/form/DropdownInput';
 import DropdownMultiple from '../../app/common/form/DropdownMultiple';
-import { IProfileFilterFormValues, ProfileFilterFormValues } from '../../app/models/profile';
+import {  ProfileFilterFormValues } from '../../app/models/profile';
 import { OnChange } from 'react-final-form-listeners';
-import { ICity } from '../../app/models/location';
 
 
 const ProfileListFilters: React.FC = () => {
@@ -27,7 +26,6 @@ const ProfileListFilters: React.FC = () => {
   const {accessibilities, profileFilterForm, setProfileFilterForm, loadProfiles, clearProfileRegistery,setPage} = rootStore.profileStore;
 
   //const [filters, setFilters] = useState(new ProfilesFilterFormValues());
-  const [loading, setLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const handleFinalFormSubmit = (values: any) => {
     
@@ -60,7 +58,7 @@ const ProfileListFilters: React.FC = () => {
             initialValues={profileFilterForm}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid, pristine }) => (
-              <Form onSubmit={handleSubmit} loading={loading} >
+              <Form onSubmit={handleSubmit} >
                 <Form.Group style={{alignItems:"center", margin:"0px"}} stackable ="true">
                 <Field 
                   name="categoryId"
@@ -113,7 +111,7 @@ const ProfileListFilters: React.FC = () => {
                <div>
                <Button
                  // loading={submitting}
-                  disabled={loading || buttonDisabled}
+                  disabled={buttonDisabled}
                   floated="right"
                   positive
                   type="submit"
@@ -127,7 +125,6 @@ const ProfileListFilters: React.FC = () => {
                 />
                 <Button
                   floated="left"
-                  disabled={loading}
                   type="cancel"
                   content="Temizle"
 

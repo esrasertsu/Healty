@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Placeholder, SemanticWIDTHS } from 'semantic-ui-react'
+import { Card, Placeholder } from 'semantic-ui-react'
 import _ from "lodash";
 import { SemanticWIDTHSNUMBER } from 'semantic-ui-react/dist/commonjs/generic';
 

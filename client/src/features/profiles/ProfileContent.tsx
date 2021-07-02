@@ -1,6 +1,5 @@
 import React from 'react'
 import {Tab} from 'semantic-ui-react';
-import { IProfileFormValues } from '../../app/models/profile';
 import ProfileActivities from './ProfileActivities';
 import ProfileDescription from './ProfileDescription';
 import ProfileFollowings from './ProfileFollowings';

@@ -1,24 +1,40 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Header, Icon, Image, Modal, Segment } from 'semantic-ui-react'
-import { history } from '../..';
 import { LoginForm } from '../../features/user/LoginForm';
+import { RegisterForm } from '../../features/user/RegisterForm';
 import { RootStoreContext } from '../stores/rootStore';
 
 export const LoginRequiredPage = () => {
 
     const rootStore = useContext(RootStoreContext);
-    const {openModal} = rootStore.modalStore;
+    const {openModal,closeModal,modal} = rootStore.modalStore;
 
    const handleLoginClick = (e:any) => {
     e.stopPropagation();
-        openModal("Giriş Yap", <>
+    if(modal.open) closeModal();
+    openModal("Giriş Yap", <>
         <Image size='large' src='/assets/placeholder.png' wrapped />
         <Modal.Description>
         <LoginForm location={"/"} />
         </Modal.Description>
-        </>,true) 
+        </>,true,
+        <p>Üye olmak için <span className="registerLoginAnchor" onClick={openRegisterModal}>tıklayınız</span></p>) 
     }
+
+    const openRegisterModal = (e:any) => {
+        e.stopPropagation();
+        if(modal.open) closeModal();
+        openModal("Üye Kaydı", <>
+        <Image size='large' src='/assets/placeholder.png' wrapped />
+        <Modal.Description>
+        <RegisterForm location={"/"} />
+        </Modal.Description>
+        </>,true,
+        <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
+    }
+
+    
     return (
         <Segment placeholder>
         <Header icon>

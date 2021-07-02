@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FieldRenderProps } from 'react-final-form'
-import { Form, FormFieldProps, Label } from 'semantic-ui-react'
-import { EditorState, convertToRaw,EditorChangeType ,CompositeDecorator,ContentState, convertFromRaw, DefaultDraftBlockRenderMap, RawDraftContentState} from 'draft-js';
+import { Form, FormFieldProps } from 'semantic-ui-react'
+import { EditorState, convertToRaw,ContentState} from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import draftToHtml from 'draftjs-to-html';
@@ -114,52 +114,52 @@ const WYSIWYGEditor:React.FC<IProps> = ({ input,  meta:{ touched, error} }) => {
 
 
 
-function findLinkEntities(contentBlock:any, callback:any, contentState:any) {
-    contentBlock.findEntityRanges(
-      (character:any) => {
-        const entityKey = character.getEntity();
-        return (
-          entityKey !== null &&
-          contentState.getEntity(entityKey).getType() === 'LINK'
-        );
-      },
-      callback
-    );
-  }
+// function findLinkEntities(contentBlock:any, callback:any, contentState:any) {
+//     contentBlock.findEntityRanges(
+//       (character:any) => {
+//         const entityKey = character.getEntity();
+//         return (
+//           entityKey !== null &&
+//           contentState.getEntity(entityKey).getType() === 'LINK'
+//         );
+//       },
+//       callback
+//     );
+//   }
 
-  const Link = (props:any) => {
-    const {url} = props.contentState.getEntity(props.entityKey).getData();
-    return (
-      <a href={url}>
-        {props.children}
-      </a>
-    );
-  };
+  // const Link = (props:any) => {
+  //   const {url} = props.contentState.getEntity(props.entityKey).getData();
+  //   return (
+  //     <a href={url}>
+  //       {props.children}
+  //     </a>
+  //   );
+  // };
 
-  function findImageEntities(contentBlock:any, callback:any, contentState:any) {
-    contentBlock.findEntityRanges(
-      (character:any) => {
-        const entityKey = character.getEntity();
-        return (
-          entityKey !== null &&
-          contentState.getEntity(entityKey).getType() === 'IMAGE'
-        );
-      },
-      callback
-    );
-  }
+  // function findImageEntities(contentBlock:any, callback:any, contentState:any) {
+  //   contentBlock.findEntityRanges(
+  //     (character:any) => {
+  //       const entityKey = character.getEntity();
+  //       return (
+  //         entityKey !== null &&
+  //         contentState.getEntity(entityKey).getType() === 'IMAGE'
+  //       );
+  //     },
+  //     callback
+  //   );
+  // }
 
-  const Image = (props:any) => {
-    const {
-      height,
-      src,
-      width,
-    } = props.contentState.getEntity(props.entityKey).getData();
+  // const Image = (props:any) => {
+  //   const {
+  //     height,
+  //     src,
+  //     width,
+  //   } = props.contentState.getEntity(props.entityKey).getData();
 
-    return (
-      <img src={src} height={height} width={width} />
-    );
-  };
+  //   return (
+  //     <img src={src} height={height} width={width} />
+  //   );
+  // };
 
  
 

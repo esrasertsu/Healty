@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { Item, Segment, Icon, Label, Card, Popup, Image, Modal } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity';
 import { format } from 'date-fns';
@@ -10,30 +10,47 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWalking, faUserEdit } from '@fortawesome/free-solid-svg-icons'
 import { LoginForm } from '../../user/LoginForm';
 import { RootStoreContext } from '../../../app/stores/rootStore';
+import { RegisterForm } from '../../user/RegisterForm';
 
 export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
     const rootStore = useContext(RootStoreContext);
-    const {isLoggedIn, user} = rootStore.userStore;
-    const {openModal} = rootStore.modalStore;
+    const {isLoggedIn} = rootStore.userStore;
+    const {openModal,closeModal,modal} = rootStore.modalStore;
 
     const host = activity.attendees.filter(x => x.isHost === true)[0];
     const index = activity.categories && activity.categories.length>0 ? colors.findIndex(x => x.key === activity.categories[0].text): 0;
     const color = colors[index].value;
 
+    const handleLoginClick = (e:any,str:string) => {
+        e.stopPropagation();
+        if(modal.open) closeModal();
 
-    const handleCardClick = () => {
+            openModal("Giriş Yap", <>
+            <Image size='large' src='/assets/placeholder.png' wrapped />
+            <Modal.Description>
+            <LoginForm location={str} />
+            </Modal.Description>
+            </>,true,
+            <p>Üye olmak için <span className="registerLoginAnchor" onClick={() => openRegisterModal(e,str)}>tıklayınız</span></p>) 
+        }
+    
+        const openRegisterModal = (e:any,str:string) => {
+            e.stopPropagation();
+            if(modal.open) closeModal();
+            openModal("Üye Kaydı", <>
+            <Image size='large' src='/assets/placeholder.png' wrapped />
+            <Modal.Description>
+            <RegisterForm location={str} />
+            </Modal.Description>
+            </>,true,
+            <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={() => handleLoginClick(e,str)}>Giriş</span></p>) 
+        }
+
+    const handleCardClick = (e:any) => {
         debugger;
         if(!isLoggedIn)
         {    var str = `/activities/${activity.id}`;
-            openModal("Giriş Yap",
-            <>
-            <Image size='large' src='/assets/placeholder.png' wrapped />
-            <Modal.Description>
-            <LoginForm location={String(str)} />
-            </Modal.Description>
-            </>,
-            true
-            ) 
+            handleLoginClick(e,str); 
         }
         else
         {
@@ -44,7 +61,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
 
     return (
        
-        <Card className="activityListItem" onClick={() => handleCardClick()} >
+        <Card className="activityListItem" onClick={(e:any) => handleCardClick(e)} >
                
         <Segment.Group>
             {

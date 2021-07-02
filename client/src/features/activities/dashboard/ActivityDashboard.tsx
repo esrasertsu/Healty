@@ -1,9 +1,8 @@
 import React,  { useEffect, useContext, useState}  from 'react';
-import { Button, Grid, Icon, Label, Loader } from 'semantic-ui-react';
+import { Grid, Icon, Label, Loader } from 'semantic-ui-react';
 import ActivityList from './ActivityList';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../../app/stores/rootStore';
-import {history} from '../../../index';
 import InfiniteScroll from 'react-infinite-scroller';
 import ActivityFilters from './ActivityFilters';
 import ActivityListItemPlaceholder from './ActivityListItemPlaceHolder';

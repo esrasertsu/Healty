@@ -11,14 +11,16 @@ export default class ModalStore {
         open: false,
         body: null,
         header: null,
-        image:false
+        image:false,
+        footer:null
     }
 
-    @action openModal = (header:any, content: any, image:any) =>{
+    @action openModal = (header:any, content: any, image:any, footer:any) =>{
         this.modal.open = true;
         this.modal.body = content;
         this.modal.header = header;
         this.modal.image = image;
+        this.modal.footer = footer;
     }
 
     @action closeModal = () => {
@@ -26,5 +28,6 @@ export default class ModalStore {
         this.modal.body = null;
         this.modal.header = null;
         this.modal.image = false;
+        this.modal.footer = null;
     }
 }

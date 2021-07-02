@@ -1,11 +1,10 @@
 import { observer } from 'mobx-react-lite';
 import React, { Fragment, useContext, useEffect,useState } from 'react'
-import { Card, Container, Grid, Header, Label, Segment, Select } from 'semantic-ui-react'
-import { LoadingComponent } from '../../app/layout/LoadingComponent';
+import {Container, Grid, Label, Message, Segment, Select } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileListItem from './ProfileListItem'
 import ProfileListFilters from './ProfileListFilters';
-import { category } from "../../app/common/options/categoryOptions";
+import { profileSortingOptions } from "../../app/common/options/profileSortingOptions";
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import ProfileListItemsPlaceholder from './ProfileListItemsPlaceholder';
@@ -39,17 +38,25 @@ const sixItem:SemanticWIDTHS = 6;
  const ProfileDashboard: React.FC = () => {
 
     const rootStore = useContext(RootStoreContext);
-    const {loadingProfiles, loadProfiles, profileList, profileRegistery,setPage,page,totalProfileListPages,
-      popularProfileList,profilePageCount, clearProfileRegistery,sortProfiles,loadingOnlyProfiles,sortingInput, setSortingInput} = rootStore.profileStore;
-    const {appLoaded, userCity} = rootStore.commonStore;
+    const {loadingProfiles, loadProfiles,setPage,page,totalProfileListPages,profileRegistery,
+      popularProfileList,profilePageCount, clearProfileRegistery,sortProfiles,loadingOnlyProfiles,sortingInput,setSortingInput} = rootStore.profileStore;
+    const {appLoaded, userCityPlaced} = rootStore.commonStore;
+
+
+    const list = [
+      'Hata olduğunu düşünüyorsanız site yöneticisiyle iletişime geçebilir,',
+      'Talepte bulunmak için bize mail atabilir,',
+      'Ya da bir eğitmen olarak başvurabilirsiniz'
+    ]
     useEffect(() => {
-      if(appLoaded)
+      if(appLoaded && userCityPlaced)
         loadProfiles();
+
         return () => {
           setPage(0);
-          clearProfileRegistery();
+         clearProfileRegistery();
         }
-    }, [loadProfiles,userCity])
+    }, [loadProfiles,userCityPlaced])
 
     const handleSortingChange = (e:any,data:any) => {
       setSortingInput(data.value);
@@ -63,33 +70,36 @@ const sixItem:SemanticWIDTHS = 6;
     const handleGetNext = () => {
       setLoadingNext(true);
       setPage(page +1);
-      loadProfiles().then(() => setLoadingNext(false))
+      if(sortingInput==="")
+      {
+        loadProfiles().finally(() => setLoadingNext(false))
+      }
+      else {
+        sortProfiles().finally(() => setLoadingNext(false))
+      }
     }
-    // if(loadingProfiles) 
-    // return <LoadingComponent content='Loading profiles...' />
 
     return (
       <Fragment>
       <Segment inverted textAlign='center' vertical className='masthead_page'>
-               {/* <Header as='h2' inverted content={`Welcome back ${user.displayName}`} /> */}
-               {/* <Container className='masthead-button_Container'> */}
                <Container>
                <ProfileListFilters />
                </Container>
       </Segment>
-               {/* <Header as='h2' inverted content={`Welcome back ${user.displayName}`} /> */}
-               <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff", fontSize: '16px', marginBottom:"10px", marginTop:"30px"}}>
+      {Array.from(profileRegistery.values()).length === 0 && !loadingProfiles?
+       <>
+       <br></br>
+        <Message style={{marginTop:"30px"}} header='Aradığınız kriterlere uygun bir aktivite bulunamadı :(' list={list} />
+      </> :
+      <>
+           <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff", fontSize: '16px', marginBottom:"10px", marginTop:"30px"}}>
                En popüler 10
                </Label>
-       {/* <Header style={{ fontSize: '18px', marginTop:"30px" }}>
-        En popüler 10
-        </Header> */}
         <Grid stackable>
           <Grid.Column width={16}>
-             {/* <Card.Group itemsPerRow={5} stackable>  */}
-          {loadingProfiles && page === 0  ?  <ProfileListItemsPlaceholder itemPerRow={fiveItem}/> :
+            {
+            loadingProfiles && page === 0  ?  <ProfileListItemsPlaceholder itemPerRow={fiveItem}/> :
             <Carousel
-            // arrows={false} 
             renderButtonGroupOutside={true}
             partialVisible={true}
             swipeable={true}
@@ -101,19 +111,16 @@ const sixItem:SemanticWIDTHS = 6;
             autoPlay={false}
             autoPlaySpeed={5000}
             keyBoardControl={true}
-         //   customTransition="all .4"
             transitionDuration={400}
             focusOnSelect={true}
             containerClass="profileList_carousel-container"
-           // removeArrowOnDeviceType={["tablet", "mobile"]}
-          //  deviceType={this.props.deviceType}
-           // dotListClass="custom-dot-list-style"
-             itemClass="carousel-item-padding-10-px"
+            itemClass="carousel-item-padding-10-px"
            >
                 {
                 popularProfileList.map((pro) => (
                     <ProfileListItem key={pro.userName+"_popularListItems"} profile={pro} />
-                ))}
+                ))
+                }
             </Carousel> 
             }
           </Grid.Column>
@@ -122,33 +129,34 @@ const sixItem:SemanticWIDTHS = 6;
           <Grid.Column width={16} className="profileList_headerAndSorting">
           <div>
           <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff",marginTop:"30px",fontSize: '16px'}}> Tümü ({profilePageCount}) </Label>
-          {/* <Header style={{ fontSize: '18px', marginTop:"30px" }}>
-          Tümü ({profileList.length})
-          </Header> */}
           </div>
           <div>
           <Select 
             value={sortingInput}
             onChange={handleSortingChange}
-            placeholder={"Önerilen sıralama"}
-            options={category}
+            placeholder={"Önerilen Sıralama (En Yeniler)"}
+            options={profileSortingOptions}
          />  </div>
           </Grid.Column>
          <Grid.Column width={16}>
-         {(loadingProfiles && page === 0) || loadingOnlyProfiles ? <ProfileListItemsPlaceholder itemPerRow={sixItem} /> :
+         {
+         (loadingProfiles && page === 0) || loadingOnlyProfiles ? 
+         <ProfileListItemsPlaceholder itemPerRow={sixItem} /> :
           <InfiniteScroll
           pageStart={0}
           loadMore={handleGetNext}
           hasMore={!loadingNext && page +1 < totalProfileListPages}
           initialLoad={false}>
            <ProfileList />
-              </InfiniteScroll>         
+           </InfiniteScroll> 
           }
           {(loadingNext && page+1 < totalProfileListPages) ? <ProfileListItemsPlaceholder itemPerRow={sixItem}/> :""}
           </Grid.Column>
       </Grid>
       <br></br>
       <br></br>
+      </>
+      }
       </Fragment>
     )
 }

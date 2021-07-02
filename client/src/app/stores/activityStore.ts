@@ -83,7 +83,7 @@ export default class ActivityStore {
         this.activityForm = activity;
     }
 
-    @action setPredicate = (predicate:string, value:string | Date| string[]) => {
+    @action setPredicate = (predicate:string, value:string | Date| string[]| boolean) => {
         debugger;
         this.predicate.set(predicate,value);
     }
@@ -147,6 +147,8 @@ export default class ActivityStore {
                 params.append("isFollowed", "false")
                 params.append("isGoing", "false")
                 params.append("isHost", "false")
+            } else if(key === 'isOnline'){
+                params.append("isOnline", String(value))
             }else {
                 params.append(key, value);
             }

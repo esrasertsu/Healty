@@ -1,9 +1,7 @@
 import { observer } from 'mobx-react-lite'
-import React, { useContext } from 'react'
-import { RouteComponentProps } from 'react-router-dom'
-import { Button, Grid, Header, Icon, Image, Item, Label, Segment } from 'semantic-ui-react'
+import React from 'react'
+import { Button, Grid, Header, Image, Label, Segment } from 'semantic-ui-react'
 import { IProfile } from '../../app/models/profile'
-import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileMessageForm from './ProfileMessageForm'
 
 interface IProps {
@@ -11,8 +9,6 @@ interface IProps {
 }
 
 const ProfileMessage: React.FC<IProps> = ({profile}) => {
-
-  const rootStore = useContext(RootStoreContext);
 
     return (
         <Segment className="profileMessageSegment">

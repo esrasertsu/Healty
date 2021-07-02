@@ -1,5 +1,5 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react';
-import { Grid, Icon, Image, List, Popup, Segment } from 'semantic-ui-react';
+import { Icon, Image, List, Popup, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
@@ -20,7 +20,7 @@ const ChatRoomList: React.FC = () => {
       return () => {
        setActiveChatRoomIndex(null);
       }
-    })
+    },[chatRoomId])
 
     const handleChatRoomClick = (e:any, id:any) => {
           setChatRoomId(id);

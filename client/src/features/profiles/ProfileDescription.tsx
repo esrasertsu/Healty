@@ -48,7 +48,7 @@ const ProfileDescription = () => {
                     {
                      
                      profile!.subCategories.length>0 ? profile!.subCategories.map((subCat) =>(
-                      <List.Item as='li'>{subCat.text}</List.Item>                   
+                      <List.Item key={"desc" + subCat.key} as='li'>{subCat.text}</List.Item>                   
                     )) : "Bilgi yok"
                     } 
                     </List>
@@ -58,7 +58,7 @@ const ProfileDescription = () => {
                   <List as='ul' className="profile_desc_list_item">
                     {
                      profile!.accessibilities.length >0 ? profile!.accessibilities.map((acc) =>(
-                      <List.Item as='li'>{acc.text}</List.Item>                   
+                      <List.Item key={"desc" + acc.key} as='li'>{acc.text}</List.Item>                   
                     )) : "Bilgi yok"
                     } 
                     </List>

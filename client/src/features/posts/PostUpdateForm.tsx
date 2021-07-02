@@ -1,13 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { IProfile } from '../../app/models/profile';
 import { Category, ICategory } from '../../app/models/category';
 import { Form as FinalForm, Field } from 'react-final-form';
 import { observer } from 'mobx-react-lite';
 import { combineValidators, isRequired } from 'revalidate';
-import { Form, Button, Container, Segment } from 'semantic-ui-react';
+import { Form, Button, Segment } from 'semantic-ui-react';
 import TextInput from '../../app/common/form/TextInput';
-import TextAreaInput from '../../app/common/form/TextAreaInput';
-import NumberInput from '../../app/common/form/NumberInput';
 import DropdownMultiple from '../../app/common/form/DropdownMultiple';
 import { RootStoreContext } from '../../app/stores/rootStore'
 import DropdownInput from '../../app/common/form/DropdownInput';
@@ -59,7 +56,7 @@ const PostUpdateForm: React.FC<IProps> = ({ updatePost, blog }) => {
      ));
 
      const loadSubCatOptions = () =>{
-      allCategoriesOptionList.filter(x=> blogForm!.categoryId == x.parentId).map(option => (
+      allCategoriesOptionList.filter(x=> blogForm!.categoryId === x.parentId).map(option => (
           subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
       ))
       setSubCategoryOptions(subCategoryOptionFilteredList);

@@ -1,7 +1,6 @@
 import React from 'react'
 import { FieldRenderProps } from 'react-final-form'
 import { Form, FormFieldProps, Label, Dropdown } from 'semantic-ui-react'
-import { ISubCategory } from '../../models/category'
 
 interface IProps extends FieldRenderProps<string[], HTMLElement>, FormFieldProps {}
 
@@ -19,6 +18,9 @@ interface IProps extends FieldRenderProps<string[], HTMLElement>, FormFieldProps
             loading={loading}
             placeholder={placeholder}
             options={options}
+            className={input.value.length >0 ? "selected" :""}
+            wrapSelection={false}
+            clearable={true}
          />
         {touched && error && (
             <Label basic color='red'>{error}</Label>

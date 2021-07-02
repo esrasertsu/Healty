@@ -1,13 +1,9 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { Segment, Header, Button, Icon } from 'semantic-ui-react'
+import React, { Fragment, useContext, useState } from 'react'
+import { Segment, Header } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
-import ProfileCommentForm from './ProfileCommentForm';
 import ProfileCommentList from './ProfileCommentList';
-import { IProfile } from '../../app/models/profile';
-// interface IProps{
-//   profile: IProfile;
-// }
+
  const ProfileComments:React.FC = () => {
 
   const rootStore = useContext(RootStoreContext);

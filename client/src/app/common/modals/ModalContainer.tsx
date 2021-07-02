@@ -5,7 +5,7 @@ import { RootStoreContext } from "../../stores/rootStore";
 
 const ModalContainer = () => {
   const rootStore = useContext(RootStoreContext);
-  const { modal: {open, body, image}, closeModal } = rootStore.modalStore;
+  const { modal: {open, body, image,footer}, closeModal } = rootStore.modalStore;
 
   return (
     <Modal
@@ -19,7 +19,7 @@ const ModalContainer = () => {
         {body}
       </Modal.Content>
       <Modal.Actions>
-    
+      {footer}
       </Modal.Actions>
     </Modal>
   );

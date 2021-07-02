@@ -1,7 +1,7 @@
 ﻿import React, { useContext, useEffect, useState } from "react";
 import { Segment, Form, Button, Grid, Label, Header, Image, Icon } from "semantic-ui-react";
 import {
-  ActivityFormValues, IActivityFormValues
+  ActivityFormValues
 } from "../../../app/models/activity";
 import { v4 as uuid } from "uuid";
 import { observer } from "mobx-react-lite";
@@ -13,7 +13,6 @@ import DateInput from "../../../app/common/form/DateInput";
 import { combineDateAndTime } from "../../../app/common/util/util";
 import {combineValidators, composeValidators, hasLengthGreaterThan, isRequired} from 'revalidate';
 import { RootStoreContext } from "../../../app/stores/rootStore";
-import ActivityFormMap from "./ActivityFormMap";
 import DropdownMultiple from "../../../app/common/form/DropdownMultiple";
 import { Category, ICategory } from "../../../app/models/category";
 import DropdownInput from "../../../app/common/form/DropdownInput";
@@ -46,7 +45,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
 }) => {
   const rootStore = useContext(RootStoreContext);
   const {
-    activity,
     activityForm,
     setActivityForm,
     createActivity,
@@ -75,8 +73,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
    const [files, setFiles] = useState<any[]>([]);
    const [image, setImage] = useState<Blob | null>(null);
    const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
-   const [emptyAtivityForm, setEmptyActivityForm] = useState(new ActivityFormValues());
-   const [activityDesc, setActivityDesc] = useState<string>("");
    const [imageChange, setImageChange] = useState(false);
    const [imageDeleted, setImageDeleted] = useState(false);
 
@@ -86,26 +82,24 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
       loadActivity(match.params.id)
         .then(action((activity) => {
           setActivityForm(new ActivityFormValues(activity!));
-          setActivityDesc(activity!.description);
         }))
         .finally(() => setLoading(false));
     }
+    loadLevels();
+
     return () => {
       setActivityForm(new ActivityFormValues());
     }
   }, [loadActivity,match.params.id]);
 
   const handleCategoryChanged = (e: any, data: string[]) => {
-    
     setActivityForm({...activityForm, categoryIds: [...data]});
     setCategory(data);  
   
  }
 
  const handleSubCategoryChanged = (e: any, data: string[]) => {  
-
-  setActivityForm({...activityForm,subCategoryIds: [...data]});
-
+     setActivityForm({...activityForm,subCategoryIds: [...data]});
    }
 
    const handleCityChanged = (e: any, data: string) => {  
@@ -122,23 +116,18 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
       ));
 
      const loadSubCatOptions = () =>{
-       debugger;
       allCategoriesOptionList.filter(x=> activityForm.categoryIds.findIndex(y=> y === x.parentId!) > -1).map(option => (
           subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
       ))
       setSubCategoryOptions(subCategoryOptionFilteredList);
-      debugger;
       const renewedSubIds = activityForm.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
       setActivityForm({...activityForm,subCategoryIds: [...renewedSubIds]});
 
    }
         useEffect(() => {
-          debugger;
             loadSubCatOptions();
         }, [category,allCategoriesOptionList]);
-        useEffect(() => {
-          loadLevels();
-      }, []);
+      
    
 const handleDateChange = (date:any) =>{
 

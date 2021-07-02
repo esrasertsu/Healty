@@ -48,7 +48,6 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
 
   const [post, setPost] = useState(new PostFormValues());
   const [loading, setLoading] = useState(false);
-  const [photo, setPhoto] = useState<Blob>();
 
   const [files, setFiles] = useState<any[]>([]);
     const [image, setImage] = useState<Blob | null>(null);

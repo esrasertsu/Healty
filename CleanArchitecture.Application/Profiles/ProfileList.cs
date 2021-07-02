@@ -24,7 +24,7 @@ namespace CleanArchitecture.Application.Profiles
 
         public class Query : IRequest<ProfilesEnvelope>
         {
-            public Query(int? limit, int? offset, Guid? categoryId, List<Guid> subCategoryIds, Guid? accessibilityId, Guid? cityId)
+            public Query(int? limit, int? offset, Guid? categoryId, List<Guid> subCategoryIds, Guid? accessibilityId, Guid? cityId, string sort)
             {
                 Limit = limit;
                 Offset = offset;
@@ -32,6 +32,8 @@ namespace CleanArchitecture.Application.Profiles
                 CategoryId = categoryId;
                 SubCategoryIds = subCategoryIds;
                 CityId = cityId;
+                Sort = sort;
+
             }
             public int? Limit { get; set; }
             public int? Offset { get; set; }
@@ -39,7 +41,7 @@ namespace CleanArchitecture.Application.Profiles
             public List<Guid> SubCategoryIds { get; set; }
             public Guid? AccessibilityId { get; set; }
             public Guid? CityId { get; set; }
-
+            public string Sort { get; set; }
         }
 
 
@@ -59,6 +61,8 @@ namespace CleanArchitecture.Application.Profiles
                 var queryableUsers = _context.Users
                     .AsQueryable();
 
+                if (request.Sort == "date")
+                    queryableUsers = queryableUsers.Reverse();
 
                 queryableUsers = queryableUsers.Where(x => x.Role == Role.Trainer);
 
@@ -82,8 +86,8 @@ namespace CleanArchitecture.Application.Profiles
                         a => request.SubCategoryIds.Contains(a.SubCategoryId))); //tostring çevirisi sakın qureylerde yapma client side olarak algılıyor
                 }
 
-
-                var popularUsers = await queryableUsers.OrderByDescending(x => x.ReceivedComments.Count).ToListAsync();
+                var queryableUsersCopy = await queryableUsers.ToListAsync();
+                var popularUsers = queryableUsersCopy.OrderByDescending(x => x.ReceivedComments.Count).ToList();
                 var popularProfiles = new List<Profile>();
                 foreach (var user in popularUsers)
                 {
@@ -95,6 +99,9 @@ namespace CleanArchitecture.Application.Profiles
                 if (queryableUsers.ToList().Count < request.Limit)
                     request.Limit = queryableUsers.ToList().Count;
 
+                if (request.Sort == "mostComment")
+                    queryableUsers =  queryableUsers.OrderByDescending(x => x.ReceivedComments.Count);
+
                 var users = await queryableUsers
                    .Skip(request.Offset ?? 0)
                    .Take(request.Limit ?? 6).ToListAsync();
@@ -105,6 +112,9 @@ namespace CleanArchitecture.Application.Profiles
                 {
                     profiles.Add(await _profileReader.ReadProfileCard(user.UserName));
                 }
+
+                if (request.Sort == "popular")
+                    profiles = popularProfiles.OrderByDescending(x => x.Star).Skip(request.Offset ?? 0).Take(request.Limit ?? 6).ToList();
 
                 return new ProfilesEnvelope
                 {

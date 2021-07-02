@@ -71,7 +71,7 @@ Eğitmen hakkında henüz yorum yapılmamış
                       labelPosition='left'
                       icon='edit'
                       primary
-                      onClick={()=>openModal("Leave a comment",<ProfileCommentForm closeModal={closeModal} />,false)}
+                      onClick={()=>openModal("Leave a comment",<ProfileCommentForm closeModal={closeModal} />,false,null)}
                     />)
                 }
 </div>

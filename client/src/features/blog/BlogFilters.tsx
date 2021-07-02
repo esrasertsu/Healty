@@ -1,15 +1,13 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
-import { Menu, Header, Segment, Accordion, List, Placeholder, Label } from 'semantic-ui-react';
+import { Menu, Segment, Accordion, List, Placeholder, Label } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import BlogSearchArea from './BlogSearchArea';
-import { IAllCategoryList } from '../../app/models/category';
 
 
 const BlogFilters: React.FC = () => {
 
   const rootStore = useContext(RootStoreContext);
-  const { setPredicate,predicate,clearPredicates, setClearedBeforeNewPredicateComing,clearedBeforeNewPredicateComing } = rootStore.blogStore; 
+  const { setPredicate,predicate,clearPredicates, setClearedBeforeNewPredicateComing } = rootStore.blogStore; 
   const {
     allDetailedList,
     loadAllCategoryList,
@@ -83,7 +81,7 @@ const BlogFilters: React.FC = () => {
                         //         <Placeholder.Line length='full' />
                         //     </Placeholder>
                         // ):
-                         (allDetailedList.some(x => x.parentId == item.value) ?
+                         (allDetailedList.some(x => x.parentId === item.value) ?
                         <Menu vertical style={{ width: '100%'}}>
                         {/* <Header icon={'filter'} attached color={'teal'} content={'Filters'} />  size={'small'}*/}
                        {

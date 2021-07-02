@@ -3,7 +3,6 @@ import {  Button, Container, Icon, Search } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
-import { Link } from 'react-router-dom';
 import { IAllCategoryList } from '../../app/models/category';
 import { history } from '../..';
 

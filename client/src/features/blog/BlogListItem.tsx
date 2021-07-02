@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
-import { Card, Image, Icon, Grid, Label} from 'semantic-ui-react';
+import React from 'react';
+import { Card, Image, Icon} from 'semantic-ui-react';
 import { history } from '../../index'
-import { RootStoreContext } from '../../app/stores/rootStore';
 import { IBlog } from '../../app/models/blog';
 import { format } from 'date-fns';
 import dompurify from 'dompurify';
@@ -12,8 +11,6 @@ interface IProps {
 
 const BlogListItem: React.FC<IProps> = ({blog}) => {
 
-  const rootStore = useContext(RootStoreContext);
-  const {setLoadingProfile} = rootStore.profileStore;
   const sanitizer = dompurify.sanitize;
 
   return (

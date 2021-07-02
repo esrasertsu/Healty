@@ -25,9 +25,7 @@ interface IProps{
     const [imageRef, setImageRef] = useState<any>();
 
 
-    useEffect(() => {
-        makeClientCrop(crop);
-    }, [imageRef]);
+
 
     const handleImageLoaded = (image:any) => {
         setImageRef(image);
@@ -89,6 +87,11 @@ interface IProps{
         setCrop(crop);
     
     };
+
+    useEffect(() => {
+        debugger;
+        makeClientCrop(crop);
+    }, [imageRef]);
 
     return (
         <ReactCrop

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Card, Image, Icon, Grid} from 'semantic-ui-react';
+import { Card, Image, Grid} from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { history } from '../../index'
 import { RootStoreContext } from '../../app/stores/rootStore';

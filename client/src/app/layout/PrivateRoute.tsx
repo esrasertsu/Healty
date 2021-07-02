@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
-import React, { useContext, useEffect, useState } from 'react'
-import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router-dom'
+import React, { useContext, useState } from 'react'
+import { Route, RouteComponentProps, RouteProps } from 'react-router-dom'
 import { Image, Modal } from 'semantic-ui-react';
 import { history } from '../../index';
 import { LoginForm } from '../../features/user/LoginForm';

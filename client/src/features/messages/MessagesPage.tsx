@@ -15,6 +15,7 @@ const MessagesPage: React.FC = () => {
     const { hubConnection,createHubConnection} = rootStore.userStore;
 
     useEffect(() => {
+        debugger;
         hubConnection === null ? 
         createHubConnection().then(()=>{
         loadChatRooms()
@@ -23,7 +24,7 @@ const MessagesPage: React.FC = () => {
          return () => {
             setChatRoomId(null);
         }
-    }, [loadChatRooms]) // sadece 1 kere çalışcak, koymazsak her component render olduğunda
+    }, [createHubConnection,hubConnection,loadChatRooms,setChatRoomId]) // sadece 1 kere çalışcak, koymazsak her component render olduğunda
 
     if(loadingChatRooms) return <LoadingComponent content='Loading messages...'/>  
 

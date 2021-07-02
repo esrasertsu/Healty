@@ -1,15 +1,15 @@
 import React, { useEffect, useContext } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Tab, Grid, Header, Card, Image, TabProps } from 'semantic-ui-react';
+import { Tab, Grid, Card, Image, TabProps } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { IUserActivity } from '../../app/models/profile';
 import { format } from 'date-fns';
 import { RootStoreContext } from '../../app/stores/rootStore';
 
 const panes = [
-  { menuItem: 'Future Events', pane: { key: 'futureEvents' } },
-  { menuItem: 'Past Events', pane: { key: 'pastEvents' } },
-  { menuItem: 'Hosting', pane: { key: 'hosted' } }
+  { menuItem: 'Gelecek', pane: { key: 'futureEvents' } },
+  { menuItem: 'Geçmiş', pane: { key: 'pastEvents' } },
+  { menuItem: 'Düzenledikleri', pane: { key: 'hosted' } }
 ];
 
 const ProfileEvents = () => {
@@ -65,7 +65,7 @@ const ProfileEvents = () => {
                 key={activity.id}
               >
                 <Image
-                  src={`/assets/categoryImages/${activity.category}.jpg`}
+                  src={activity.photo}
                   style={{ minHeight: 100, objectFit: 'cover' }}
                 />
                 <Card.Content>

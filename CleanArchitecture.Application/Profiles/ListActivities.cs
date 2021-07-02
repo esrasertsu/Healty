@@ -61,8 +61,9 @@ namespace CleanArchitecture.Application.Profiles
                     {
                         Id = activity.Activity.Id,
                         Title = activity.Activity.Title,
-                       // Category = activity.Activity.Category.Name,
-                        Date = activity.Activity.Date
+                        // Category = activity.Activity.Category.Name,
+                        Date = activity.Activity.Date,
+                        Photo = activity.Activity.Photos.FirstOrDefault(x => x.IsMain).Url
                     };
 
                     activitiesToReturn.Add(userActivity);

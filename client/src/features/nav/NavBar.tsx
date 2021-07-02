@@ -1,10 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Menu, Container, Image, Dropdown, Label, Icon } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import {history} from '../../index';
-import SearchArea from '../home/SearchArea';
 import NavSearchArea from './NavSearchArea';
 
 const NavBar: React.FC = () => {
@@ -33,7 +32,7 @@ const NavBar: React.FC = () => {
                   <img
                       src="/assets/logo.png"
                       alt="logo"
-                      style={{ height:"30px"}}
+                      style={{ height:"40px"}}
                     />
                 </div>
                   

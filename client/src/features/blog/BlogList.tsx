@@ -1,9 +1,7 @@
 import React,  { useEffect, useContext, useState, Fragment}  from 'react';
-import { Button, Card, Grid, Icon, Label } from 'semantic-ui-react';
+import { Button, Card, Grid} from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
-import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import {history} from '../../index';
 import InfiniteScroll from 'react-infinite-scroller';
 import BlogFilters from './BlogFilters';
 import BlogMainPageItemsPlaceholder from './BlogMainPageItemsPlaceholder';
@@ -15,8 +13,8 @@ import { IPredicate } from '../../app/models/category';
 const BlogList: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
   const {getBlogsByDate,loadBlogs, loadingPosts, setPage, page, totalPages,predicate,removeOnePredicate,removeSubCatPredicate
-  ,predicateDisplayName,setPredicateDisplayName} = rootStore.blogStore;
-  const {getPredicateTexts, predicateTexts} = rootStore.categoryStore;
+  ,predicateDisplayName} = rootStore.blogStore;
+  const { predicateTexts} = rootStore.categoryStore;
 
   const [loadingNext, setLoadingNext] = useState(false);
 

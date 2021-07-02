@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { Segment, Item, Header, Button, Grid, Statistic, Divider, Reveal, ButtonGroup, Icon, Label } from 'semantic-ui-react';
+import { Segment, Item, Header, Button, Grid, Statistic, Divider, Reveal, ButtonGroup, Label } from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { history } from '../../';
 import { StarRating } from '../../app/common/form/StarRating';
@@ -41,7 +41,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                   <StarRating rating={profileRating} editing={false} key={"header"} count={profile.starCount} showCount={true}/>
                   <br/>
                   {(profile.categories.map((cat) => (
-                    <Label className="profileCard_Label" style={{background:getColor(cat.text)}} horizontal>{cat.text}</Label>
+                    <Label key={cat.key} className="profileCard_Label" style={{background:getColor(cat.text)}} horizontal>{cat.text}</Label>
                   )))}
               
                 </Grid.Row>
@@ -66,13 +66,13 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
             <Button
               basic
               color={'green'}
-              content={'Write Blog'}
+              content={'Blog Yaz'}
               onClick={()=> history.push('/createPost')}
             />
             <Button
             basic
             color={'blue'}
-            content={'Create Activity'}
+            content={'Aktivite Oluştur'}
             onClick={()=> history.push('/createActivity')}
           />
           </ButtonGroup>

@@ -44,8 +44,7 @@ export default class UserStore {
                     this.onlineUsers.push(username);
                 }
     }
-    @action login = async (values : IUserFormValues) =>{
-        debugger;
+    @action login = async (values : IUserFormValues,location:string) =>{
         try {
             const user = await agent.User.login(values);
             runInAction(()=>{
@@ -53,18 +52,25 @@ export default class UserStore {
             })
             this.rootStore.commonStore.setToken(user.token);
             this.rootStore.modalStore.closeModal();
-            this.createHubConnection();
+            history.push(location);
+            this.hubConnection === null && this.createHubConnection();
         } catch (error) {
             throw error;
         }
     }
 
-    @action register = async (values: IUserFormValues) =>{
+    @action register = async (values: IUserFormValues,location:string) =>{
         try {
             const user = await agent.User.register(values);
+            runInAction(()=>{
+                this.user = user;
+            })
+            debugger;
             this.rootStore.commonStore.setToken(user.token);
             this.rootStore.modalStore.closeModal();
-            history.push('activities');
+            history.push(location);
+            this.hubConnection === null && this.createHubConnection();
+
         } catch (error) {
             throw error;
         }
@@ -124,6 +130,7 @@ export default class UserStore {
                     //mesajın göndericisi şuanki user değilse ve şuanki user'ın baktığı chatroom mesajın chatroom'u ise seen true'ya çek
                     const crIndex = this.rootStore.messageStore.chatRooms!.findIndex(x => x.id === message.chatRoomId);
                     this.rootStore.messageStore.chatRooms![crIndex].lastMessage = message.body;
+                    debugger;
                     if(message.username !== this.user!.userName && 
                         message.chatRoomId !== this.rootStore.messageStore.chatRoomId)
                         {
@@ -175,10 +182,16 @@ export default class UserStore {
                 debugger;
                 runInAction(async() => {
                    await this.hubConnection!.invoke('AddToChat',chatRoomId).then(()=>
-                        toast.info(senderName +" kişisinden mesajınız var")
+                     this.handleNewlyAddedChatRoom(senderName)
                     );
                 })
             })
+    }
+
+    @action handleNewlyAddedChatRoom = async (senderName:string,) => {
+        this.notificationCount = this.notificationCount + 1;
+        //ilk mesajdan sonraki her mesajı haber vermek istiyorsan buraya b chatroom yarat
+        toast.info(senderName +" kişisinden mesajınız var")
     }
 
     @action  stopHubConnection = async () => {

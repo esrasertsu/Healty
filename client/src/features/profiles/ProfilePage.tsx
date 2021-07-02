@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import { Grid } from 'semantic-ui-react'
 import { LoadingComponent } from '../../app/layout/LoadingComponent'
@@ -23,16 +23,17 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
 
     const rootStore = useContext(RootStoreContext);
     const {loadingProfile, loadProfile, loadingBlogs, loadingComments, profile, follow,
-         unfollow, isCurrentUser, loading,setActiveTab, profileForm, setProfileForm, setUpdatedProfile} = rootStore.profileStore;
+         unfollow, isCurrentUser, loading,setActiveTab, setProfileForm} = rootStore.profileStore;
 
     useEffect(() => {
+        debugger;
         loadProfile(match.params.username)
         .then((profile) => 
         {   
             setProfileForm(new ProfileFormValues(profile!))}
             )
         setActiveTab(0);
-    }, [loadProfile,match,setActiveTab])
+    }, [loadProfile,match,setActiveTab,setProfileForm])
 
     if(loadingProfile) 
     return <LoadingComponent content='Loading profile...' />

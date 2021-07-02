@@ -21,9 +21,9 @@ namespace CleanArchitecture.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<ProfileList.ProfilesEnvelope>> List(int? limit, int? offset, Guid? categoryId, [FromQuery(Name = "subCategoryIds")] List<Guid> subCategoryIds, Guid? accessibilityId, Guid? cityId)
+        public async Task<ActionResult<ProfileList.ProfilesEnvelope>> List(int? limit, int? offset, Guid? categoryId, [FromQuery(Name = "subCategoryIds")] List<Guid> subCategoryIds, Guid? accessibilityId, Guid? cityId, string sort)
         {
-            return await Mediator.Send(new ProfileList.Query(limit, offset, categoryId, subCategoryIds,accessibilityId,cityId));
+            return await Mediator.Send(new ProfileList.Query(limit, offset, categoryId, subCategoryIds,accessibilityId,cityId, sort));
         }
 
         //[HttpGet]

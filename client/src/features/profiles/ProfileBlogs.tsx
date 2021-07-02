@@ -1,5 +1,5 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { Segment, Header, Button, Icon } from 'semantic-ui-react'
+import React, { Fragment, useContext } from 'react'
+import { Segment, Header } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
 import ProfileBlogList from './ProfileBlogList';
@@ -10,21 +10,9 @@ import ProfileBlogList from './ProfileBlogList';
 
     const {
       profile,
-      loadBlogs,
-      blogPage,
-      setBlogPagination,
-      totalBlogPages,
       profileBlogs
     } = rootStore.profileStore;
-  
-    const [loadingNext, setLoadingNext] = useState(false);
-    
-    // const handleGetNext = () => {
-    //   setLoadingNext(true);
-    //   setBlogPagination(blogPage +1);
-    //   loadBlogs(profile!.userName).then(() => setLoadingNext(false))
-    // }
-   
+ 
     return (
         <Fragment>
         <Segment

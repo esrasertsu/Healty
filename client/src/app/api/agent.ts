@@ -77,12 +77,12 @@ const requests = {
         let formData = new FormData();
        debugger;
         profile.displayName && formData.append('DisplayName', profile.displayName);
-        profile.experience && profile.experience!="" && formData.append('Experience', profile.experience);
-        profile.bio && profile.bio != undefined && formData.append('Bio', profile.bio);
+        profile.experience && profile.experience!=="" && formData.append('Experience', profile.experience);
+        profile.bio && profile.bio !== undefined && formData.append('Bio', profile.bio);
         formData.append('ExperienceYear', profile.experienceYear ? profile.experienceYear.toString(): "0");
-        profile.certificates && profile.certificates!="" && formData.append('Certificates', profile.certificates);
-        profile.dependency && profile.dependency != "" && formData.append('Dependency', profile.dependency);
-        profile.cityId && profile.cityId != "" && formData.append('CityId', profile.cityId);
+        profile.certificates && profile.certificates!=="" && formData.append('Certificates', profile.certificates);
+        profile.dependency && profile.dependency !== "" && formData.append('Dependency', profile.dependency);
+        profile.cityId && profile.cityId !== "" && formData.append('CityId', profile.cityId);
 
         profile.subCategoryIds!.length>0 && profile.subCategoryIds!.map((subCategoryId:string)=>(
             formData.append('SubCategoryIds', subCategoryId)
@@ -159,9 +159,9 @@ const requests = {
     updateBlogDesc: async (url: string, blog: Partial<IBlogUpdateFormValues>) =>{
         let formData = new FormData();
        debugger;
-        blog.title && blog.title != "" && formData.append('Title', blog.title);
-        blog.description && blog.description != "" && formData.append('Description', blog.description);
-        blog.categoryId && blog.categoryId != "" && formData.append('CategoryId', blog.categoryId);
+        blog.title && blog.title !== "" && formData.append('Title', blog.title);
+        blog.description && blog.description !== "" && formData.append('Description', blog.description);
+        blog.categoryId && blog.categoryId !== "" && formData.append('CategoryId', blog.categoryId);
 
         blog.subCategoryIds!.length>0 && blog.subCategoryIds!.map((subCategoryId:string)=>(
             formData.append('SubCategoryIds', subCategoryId)

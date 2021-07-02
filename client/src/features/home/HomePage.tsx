@@ -1,6 +1,5 @@
 import React, { Fragment, useContext, useState } from 'react'
-import { Link } from 'react-router-dom';
-import { Button, Container, Header, Segment, Image, Grid, Card, Icon, Form, GridColumn, List, Search, Label, Modal } from 'semantic-ui-react'
+import { Button, Container, Header, Segment, Image, Grid, Card, Icon, Form, GridColumn, Label, Modal } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { LoginForm } from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
@@ -16,7 +15,7 @@ const HomePage = () => {
 
     const rootStore = useContext(RootStoreContext);
     const {isLoggedIn, user} = rootStore.userStore;
-    const {openModal} = rootStore.modalStore;
+    const {openModal,closeModal,modal} = rootStore.modalStore;
     const [loading, setLoading] = useState(false);
   
     const [open, setOpen] = React.useState(false)
@@ -29,23 +28,29 @@ const HomePage = () => {
 
     const handleLoginClick = (e:any) => {
       e.stopPropagation();
+      if(modal.open) closeModal();
+
           openModal("Giriş Yap", <>
           <Image size='large' src='/assets/placeholder.png' wrapped />
           <Modal.Description>
           <LoginForm location={"/"} />
           </Modal.Description>
-          </>,true) 
+          </>,true,
+           <p>Üye olmak için <span className="registerLoginAnchor" onClick={handleRegisterClick}>tıklayınız</span></p>) 
       }
 
       const handleRegisterClick = (e:any) => {
     
         e.stopPropagation();
+        if(modal.open) closeModal();
+
             openModal("Üye Kaydı", <>
             <Image size='large' src='/assets/placeholder.png' wrapped />
             <Modal.Description>
             <RegisterForm location={"/"} />
             </Modal.Description>
-            </>,true) 
+            </>,true,
+            <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
         }
   
     return (
@@ -299,7 +304,6 @@ const HomePage = () => {
                             circular
                             disabled={loading}
                             floated="left"
-                            content="Gönder"
                             type="submit">
                            <Icon name='send' inverted></Icon> Gönder
                         </Button>

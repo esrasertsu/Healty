@@ -1,9 +1,8 @@
 import React, {  useContext, useEffect, useState } from 'react'
-import {  Button, Container, Icon, Search } from 'semantic-ui-react'
+import {  Search } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
-import { Link } from 'react-router-dom';
 
 
  const NavSearchArea:React.FC = () => {
@@ -15,7 +14,6 @@ import { Link } from 'react-router-dom';
       allDetailedList
     } = rootStore.categoryStore;
   
-    const [loadingNext, setLoadingNext] = useState(false);
     const [results, setResults] = useState([] as any);
     const [value, setValue] = useState('');
 

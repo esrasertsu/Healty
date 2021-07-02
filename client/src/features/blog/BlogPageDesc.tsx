@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom';
 import { Segment, Header, Button, Image, Container, Icon, Label, Modal } from 'semantic-ui-react'
 import { IBlog } from '../../app/models/blog';
 import { RootStoreContext } from '../../app/stores/rootStore';
@@ -9,6 +8,7 @@ import { history } from '../../index'
 import dompurify from 'dompurify';
 import PostUpdateForm from '../posts/PostUpdateForm';
 import { LoginForm } from '../user/LoginForm';
+import { RegisterForm } from '../user/RegisterForm';
 
 
 interface IProps{
@@ -24,19 +24,46 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
 
   const rootStore = useContext(RootStoreContext);
   const { isCurrentUserAuthor, deletePost ,editPost} = rootStore.blogStore;
+  const {isLoggedIn} = rootStore.userStore;
   const sanitizer = dompurify.sanitize;
   const [open, setOpen] = React.useState(false);
 
-  const {openModal} = rootStore.modalStore;
+  const {openModal,closeModal,modal} = rootStore.modalStore;
 
- const handleLoginClick = (e:any) => {
-  e.stopPropagation();
-      openModal("Giriş Yap", <>
-      <Image size='large' src='/assets/placeholder.png' wrapped />
-      <Modal.Description>
-      <LoginForm location={`/profile/${blog.username}`} />
-      </Modal.Description>
-      </>,true) 
+  const handleLoginClick = (e:any,str:string) => {
+    e.stopPropagation();
+    if(modal.open) closeModal();
+
+        openModal("Giriş Yap", <>
+        <Image size='large' src='/assets/placeholder.png' wrapped />
+        <Modal.Description>
+        <LoginForm location={str} />
+        </Modal.Description>
+        </>,true,
+        <p>Üye olmak için <span className="registerLoginAnchor" onClick={() => openRegisterModal(e,str)}>tıklayınız</span></p>) 
+    }
+
+    const openRegisterModal = (e:any,str:string) => {
+        e.stopPropagation();
+        if(modal.open) closeModal();
+
+        openModal("Üye Kaydı", <>
+        <Image size='large' src='/assets/placeholder.png' wrapped />
+        <Modal.Description>
+        <RegisterForm location={str} />
+        </Modal.Description>
+        </>,true,
+        <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={() => handleLoginClick(e,str)}>Giriş</span></p>) 
+    }
+
+ const handleShowProfileClick = (e:any) => {
+  if(isLoggedIn){
+      history.push(`/profile/${blog.username}`);
+  }else{ 
+    var str = `/profile/${blog.username}`;
+     handleLoginClick(e,str)
+  }
+ 
   }
 
   const handleDeleteBlog = (e:any) => {
@@ -128,12 +155,12 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
                     <div className="blog_user">
                     <Image style={{cursor:"pointer"}} circular size="tiny" src={blog.userImage || '/assets/user.png'} onClick={handleLoginClick}></Image>
                      <div style={{marginLeft:"10px", cursor:"pointer"}}>
-                       <div onClick={handleLoginClick} >
+                       <div onClick={handleShowProfileClick} >
                       <strong>{blog.displayName}</strong></div> 
                     </div>
                     </div>
                     <div>
-                      <div onClick={handleLoginClick} className="blogListItem_Readmore"> Uzman profilini gör <Icon name='arrow right' /> </div>
+                      <div onClick={handleShowProfileClick} className="blogListItem_Readmore"> Uzman profilini gör <Icon name='arrow right' /> </div>
                     </div>
 
                 </Container>

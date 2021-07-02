@@ -1,8 +1,7 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react';
-import { Button, Container, Form, Grid, Icon, Item, Label, Loader, Popup, Segment } from 'semantic-ui-react';
+import { Button, Form, Icon, Item, Label, Loader, Popup, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import { format } from 'date-fns';
 import { Form as FinalForm, Field} from 'react-final-form';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
@@ -12,7 +11,7 @@ import { history } from '../..';
 
 const MessageChat: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
-    const { messagesByDate, message,messageCount,setPage,loadMessages ,page, totalPages ,chatRoomId,addComment, chatRooms} = rootStore.messageStore;
+    const { messagesByDate, setPage,loadMessages ,page, totalPages ,chatRoomId,addComment, chatRooms} = rootStore.messageStore;
     const [loadingNext, setLoadingNext] = useState(false);
     const { user } = rootStore.userStore;
     const scrollRef = React.createRef<any>();
@@ -27,18 +26,7 @@ const MessageChat: React.FC = () => {
             sethandledGetNext(true)
         })
       }
-      useEffect(() => {
-        if (handledGetNext) {
-          scrollToTop();
-        }
-        else{
-            setTop(50);
-        }
-      
-        return () => {
-            sethandledGetNext(false);
-        }
-        }, [messagesByDate]);
+    
 
 
         const scrollToTop = () => {
@@ -52,6 +40,19 @@ const MessageChat: React.FC = () => {
             }
        
         };
+
+        useEffect(() => {
+            if (handledGetNext) {
+              scrollToTop();
+            }
+            else{
+                setTop(50);
+            }
+          
+            return () => {
+                sethandledGetNext(false);
+            }
+            }, [messagesByDate]);
 
 
     return (

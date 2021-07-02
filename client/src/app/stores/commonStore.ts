@@ -1,5 +1,4 @@
 import { action, observable, reaction, runInAction } from "mobx";
-import React from "react";
 import agent from "../api/agent";
 import { ICity } from "../models/location";
 import { RootStore } from "./rootStore";
@@ -25,6 +24,7 @@ export default class CommonStore {
     @observable token: string | null = window.localStorage.getItem('jwt');
     @observable appLoaded  = false;
     @observable userCity  = "";
+    @observable userCityPlaced  = false;
 
     @observable activeMenu  = -1;
     @observable loadingCities = false;
@@ -36,7 +36,11 @@ export default class CommonStore {
     }
     @action setUserCity = (city: string) => {
         this.userCity = city;
-        this.rootStore.profileStore.setProfileFilterForm({...this.rootStore.profileStore.profileFilterForm, cityId:city})
+        this.rootStore.profileStore.setProfileFilterForm({...this.rootStore.profileStore.profileFilterForm, cityId:city});
+        this.userCityPlaced = true;
+    }
+    @action setUserCityPlaced = (bool: boolean) => {
+        this.userCityPlaced = true;
     }
     @action setAppLoaded = () => {
         this.appLoaded = true;
@@ -72,6 +76,7 @@ export default class CommonStore {
 
         var setUserCity = this.setUserCity;
         var cityRegistery = this.cityRegistery;
+        var setUserCityPlaced = this.setUserCityPlaced;
 
         var options = {
             enableHighAccuracy: true,
@@ -85,13 +90,14 @@ export default class CommonStore {
               .then(function (result) {
                 if (result.state === "granted") {
                   console.log(result.state);
-                  navigator.geolocation.getCurrentPosition((pos:any) => success(pos,setUserCity,cityRegistery));
+                  navigator.geolocation.getCurrentPosition((pos:any) => success(pos,setUserCity,cityRegistery,setUserCityPlaced));
                   //If granted then you can directly call your function here
                 } else if (result.state === "prompt") {
                   console.log(result.state);
-                  navigator.geolocation.getCurrentPosition((pos:any) => success(pos,setUserCity,cityRegistery), errors, options);
+                  navigator.geolocation.getCurrentPosition((pos:any) => success(pos,setUserCity,cityRegistery,setUserCityPlaced), errors, options);
                 } else if (result.state === "denied") {
                     debugger;
+                    setUserCityPlaced(true);
                   //If denied then you have to show instructions to enable location
                 }
                 result.onchange = function () {
@@ -105,7 +111,7 @@ export default class CommonStore {
     
 }
 
-function success(pos:any,setUserCity:any,cityRegistery:Map<any,any>) {
+function success(pos:any,setUserCity:any,cityRegistery:Map<any,any>,setUserCityPlaced:any) {
     const geocoder = new google.maps.Geocoder();
 
     var crd = pos.coords;
@@ -116,7 +122,7 @@ function success(pos:any,setUserCity:any,cityRegistery:Map<any,any>) {
     geocoder!.geocode(
       {'location': latlng}, 
     function(results, status) {
-        if (status == "OK") {
+        if (status === "OK") {
             var addressComponentLength =results.filter(x => x.types.includes("postal_code"))[0].address_components.length;
             var cityName = results.filter(x => x.types.includes("postal_code"))[0].address_components[addressComponentLength-2].long_name;
             //setUserCity(cityName);
@@ -137,6 +143,7 @@ function success(pos:any,setUserCity:any,cityRegistery:Map<any,any>) {
                 else  {
                     alert("address not found");
                 }
+                setUserCityPlaced(true);
         }
          else {
             alert("Geocoder failed due to: " + status);

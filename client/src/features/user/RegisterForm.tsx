@@ -3,7 +3,6 @@ import React, { useContext } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
 import { combineValidators, isRequired } from 'revalidate';
 import { Button, Form, Header } from 'semantic-ui-react';
-import { history } from '../..';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
 import { IUserFormValues } from '../../app/models/user';
@@ -27,8 +26,7 @@ export const RegisterForm:React.FC<IProps> = ({location}) =>{
     return (
       <FinalForm
         onSubmit={(values: IUserFormValues) =>
-            register(values)
-            .finally(()=> history.push(location))
+            register(values,location)
             .catch((error) => ({
             [FORM_ERROR]: error,
           }))
@@ -45,16 +43,16 @@ export const RegisterForm:React.FC<IProps> = ({location}) =>{
           <Form onSubmit={handleSubmit} error>
             <Header
               as="h2"
-              content="Kayıt Formu"
+              content="Yeni Üye"
               color="teal"
               textAlign="center"
             />
-            <Field name="username" placeholder="Username" component={TextInput}/>
-            <Field name="displayname" placeholder="Display Name" component={TextInput} />
+            <Field name="username" placeholder="Kullanıcı Adı" component={TextInput}/>
+            <Field name="displayname" placeholder="Ad Soyad" component={TextInput} />
             <Field name="email" placeholder="Email" component={TextInput} />
             <Field
               name="password"
-              placeholder="Password"
+              placeholder="Şifre"
               type="password"
               component={TextInput}
             />
@@ -66,7 +64,7 @@ export const RegisterForm:React.FC<IProps> = ({location}) =>{
               disabled={(invalid && !dirtySinceLastSubmit) || pristine}
               loading={submitting}
               color='teal'
-              content="Register"
+              content="Kayıt Ol"
               fluid
             />
           </Form>

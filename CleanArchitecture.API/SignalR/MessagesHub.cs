@@ -41,9 +41,7 @@ namespace CleanArchitecture.API.SignalR
 
         public async Task SetMessageSeenJustAfterLooked(UpdateMessage.Command command)
         {
-
             await Clients.Group(command.ChatRoomId.ToString()).SendAsync("MessageSeen", command);
-
         }
 
         private string GetUserName()

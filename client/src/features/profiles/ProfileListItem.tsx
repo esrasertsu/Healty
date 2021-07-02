@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Card, Image, Icon, Grid, Label, Modal} from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { history } from '../../index'
@@ -7,6 +7,7 @@ import { StarRating } from '../../app/common/form/StarRating';
 import { colors } from '../../app/models/category';
 import { observer } from 'mobx-react-lite';
 import { LoginForm } from '../user/LoginForm';
+import { RegisterForm } from '../user/RegisterForm';
 
 interface IProps {
     profile: IProfile
@@ -16,25 +17,49 @@ interface IProps {
 
   const rootStore = useContext(RootStoreContext);
   const {setLoadingProfile} = rootStore.profileStore;
-  const {isLoggedIn, user} = rootStore.userStore;
-  const {openModal} = rootStore.modalStore;
+  const {isLoggedIn} = rootStore.userStore;
+  const {openModal,closeModal,modal} = rootStore.modalStore;
 
 
   const getColor = (catName:string) =>{
     let index = colors.findIndex(x => x.key === catName);
     return colors[index].value;
   }
+
+  const handleRegisterClick = (e:any,str:string) => {
+    
+    e.stopPropagation();
+    if(modal.open) closeModal();
+
+        openModal("Üye Kaydı", <>
+        <Image size='large' src='/assets/placeholder.png' wrapped />
+        <Modal.Description>
+        <RegisterForm location={str} />
+        </Modal.Description>
+        </>,true,
+        <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={() => handleLoginClick(e,str)}>Giriş</span></p>) 
+    }
+
+    const handleLoginClick = (e:any,str:string) => {
+      e.stopPropagation();
+      if(modal.open) closeModal();
+
+          openModal("Giriş Yap", <>
+          <Image size='large' src='/assets/placeholder.png' wrapped />
+          <Modal.Description>
+          <LoginForm location={str} />
+          </Modal.Description>
+          </>,true,
+           <p>Üye olmak için <span className="registerLoginAnchor" onClick={() => handleRegisterClick(e,str)}>tıklayınız</span></p>) 
+      }
+
+
   const handleCardClick = (e:any) => {
     debugger;
     e.stopPropagation() ;
         if(!isLoggedIn)
     {    var str = `/profile/${profile.userName}`;
-        openModal("Giriş Yap", <>
-        <Image size='large' src='/assets/placeholder.png' wrapped />
-        <Modal.Description>
-        <LoginForm location={String(str)} />
-        </Modal.Description>
-        </>,true) 
+         handleLoginClick(e,str);
     }
     else
     {

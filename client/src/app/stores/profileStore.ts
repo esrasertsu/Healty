@@ -1,11 +1,9 @@
 import { action, observable, runInAction, computed, reaction } from "mobx";
-import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { toast } from "react-toastify";
 import agent from "../api/agent";
 import { IAccessibility, IPhoto, IProfile, IProfileBlog, IProfileComment, IProfileFilterFormValues, IProfileFormValues, IUserActivity, ProfileFilterFormValues, ProfileFormValues } from "../models/profile";
 import { RootStore } from "./rootStore";
-import { ChatRoom, IMessageForm } from "../models/message";
-import { setProfileProps } from "../common/util/util";
+import { IMessageForm } from "../models/message";
 
 const LIMIT = 5;
 
@@ -126,6 +124,9 @@ export default class ProfileStore{
         this.profileFilterForm = profile;
     }
     
+    @action clearProfileFilterForm = () => {
+        this.profileFilterForm = new ProfileFilterFormValues();
+    }
     @action setLoadingProfile = (lp : boolean) =>{
         this.loadingProfile = lp;
     }
@@ -211,6 +212,7 @@ export default class ProfileStore{
         return this.profileRegistery.get(username);
     }
     @action loadProfile = async (username: string) =>{
+        debugger;
             this.loadingProfile = true;
             this.updatedProfile = false;             
             this.setCommentPage(0);
@@ -264,6 +266,11 @@ export default class ProfileStore{
         {   
           params.append("accessibilityId", this.profileFilterForm.accessibilityId);
         }
+
+        if(this.sortingInput !== "")
+        {   
+          params.append("sort", this.sortingInput);
+        }
       
         return params;
     }
@@ -306,6 +313,7 @@ export default class ProfileStore{
             const {profileList, profileCount } = profilesEnvelope;
 
             runInAction('Loading profiles',()=>{
+                debugger;
                 profileList.forEach((profile) =>{
                     debugger;
                     this.profileRegistery.set(profile.userName, profile);

@@ -126,6 +126,10 @@ body {
   opacity: 1.45;
 }
 
+.ui.selection.dropdown.selected{
+  border: 1px solid rgb(26, 206, 26);
+}
+
 h1, h2, h3, h4, h5 {
   font-family:  AssistantRegular, Arial, Helvetica, sans-serif !important;
 }
@@ -1044,4 +1048,11 @@ i.search.inverted.icon {
   -webkit-box-flex: 0;
   -ms-flex: 1 0 auto !important;
   flex: 1 0 auto !important;
+}
+
+.registerLoginAnchor{
+   color:#345289 !important;
+   cursor: pointer;
+   font-size: 15px;
+   margin-right: 10px;
 }

@@ -17,6 +17,7 @@ interface IProps extends FieldRenderProps<string, HTMLElement>, FormFieldProps {
             clearable={clearable}
             loading={loading}
             fluid
+            className={input.value !== "" ? "selected" :""}
          />
         {touched && error && (
             <Label basic color='red'>{error}</Label>

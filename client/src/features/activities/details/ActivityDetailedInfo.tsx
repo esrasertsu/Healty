@@ -23,7 +23,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    }
                    {
                      activity.subCategories && activity.subCategories.length> 0 ?
-                     activity.subCategories.map<React.ReactNode>(s => <span>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
+                     activity.subCategories.map<React.ReactNode>(s => <span key={activity.id + "_cat_"+s.key}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
                      : "Bilgi yok"
                    }
                  </Grid.Column>
@@ -61,7 +61,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    }
                    {
                      activity.levels && activity.levels.length> 0 ?
-                     activity.levels.map<React.ReactNode>(s => <span>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
+                     activity.levels.map<React.ReactNode>(s => <span key={activity.id + "_level_"+s.key}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
                      : "Bilgi yok"
                    }
                  </Grid.Column>

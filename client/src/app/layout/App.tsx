@@ -18,7 +18,6 @@ import ProfileDashboard  from '../../features/profiles/ProfileDashboard';
 import ActivitySearchPage from '../../features/activities/search/ActivitySearchPage';
 import PostForm from '../../features/posts/PostForm';
 import BlogList from '../../features/blog/BlogList';
-import Footer from '../../features/home/Footer';
 import BlogPage from '../../features/blog/BlogPage';
 import MessagesPage from '../../features/messages/MessagesPage';
 import { useLoadScript } from "@react-google-maps/api";
@@ -31,12 +30,11 @@ const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 const App: React.FC<RouteComponentProps> = ({location}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const {setAppLoaded, token, appLoaded,loadCities,getUserLocation , userCity} = rootStore.commonStore;
+  const {setAppLoaded, token, appLoaded,loadCities} = rootStore.commonStore;
   const { getUser,user,createHubConnection,hubConnection,stopHubConnection } = rootStore.userStore;
 
-  const { isLoaded, loadError } = useLoadScript({
+  useLoadScript({
       googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
-      //libraries:["places"] düzgün çalışıyor ama console a hata veriyor 
       libraries
   });
 
@@ -48,12 +46,22 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   //      console.log(`You changed the page to: ${location.pathname}`) 
   //   }) 
   // },[history]) 
+  const alertUser = async (event:any) => {
 
+    await stopHubConnection();
+     runInAction(() => {
+         event.preventDefault()
+         event.returnValue = ''
+       
+    }
+     )
+     
+ }
   useEffect(() => {
 
     if(token) {
-      getUser().finally(() => {
-        loadCities().finally(()=>
+      getUser().then(() => {
+        loadCities().then(()=>
         {
           window.addEventListener('beforeunload', alertUser);
           runInAction(() => {
@@ -63,30 +71,23 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
         );
       })
     }else {
-      loadCities().finally(()=>setAppLoaded());
+      loadCities().then(()=>setAppLoaded());
     }
     return () => {
-      debugger;
+      
       window.removeEventListener('beforeunload', alertUser)
     }
-  },[getUser, setAppLoaded, token])
+  },[token])
 
-  const alertUser = async (event:any) => {
-debugger;
-   await stopHubConnection();
-    runInAction(() => {
-        event.preventDefault()
-        event.returnValue = ''
-      
-   }
-    )
-    
-}
 
   if(!appLoaded) return <LoadingComponent content='Loading app...' />
 
   if(appLoaded && user!==null && hubConnection === null)
+  {
+    debugger;
     createHubConnection();
+
+  }
 
     return (
        <Fragment>

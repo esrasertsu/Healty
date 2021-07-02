@@ -1,6 +1,6 @@
-import React, { FormEvent, Fragment, useContext, useEffect, useState } from 'react';
-import { Menu, Header, Segment, Accordion, Form, CheckboxProps, Button, Loader, Label, Icon, Radio } from 'semantic-ui-react';
-import { Calendar, DateTimePicker} from 'react-widgets';
+import React, { FormEvent, Fragment, useContext } from 'react';
+import { Menu, Segment, Accordion, Form, CheckboxProps, Button, Label, Icon, Radio } from 'semantic-ui-react';
+import { DateTimePicker} from 'react-widgets';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import { observer } from 'mobx-react-lite';
 import { ICategory, ISubCategory } from '../../../app/models/category';
@@ -33,16 +33,16 @@ const ActivityFilters = () => {
     setClearPredicateBeforeSearch(false);
 
     if(data.checked)
-      setPredicate("isOnline","true");
+      setPredicate("isOnline",true);
     else 
-      setPredicate("isOnline","false");
+      setPredicate("isOnline",false);
 
+      scrollToTop();
     
   }
 
 
   const handleCatagorySelection = (event: FormEvent<HTMLInputElement>, data: CheckboxProps) => {
-    debugger;
    if(data.checked)
    {
     setCategoryIds([...categoryIds, data.value as string]);
@@ -55,8 +55,6 @@ const ActivityFilters = () => {
      const deletedCategorySubs = allCategoriesOptionList.filter(x => x.parentId === data.value && subCategoryIds.includes(x.key));
      
      const updatedSubIds = subCategoryIds.filter(x => deletedCategorySubs.findIndex(y => y.key === x) < 0)
-    
-debugger;
      setSubCategoryIds(updatedSubIds);
     }
   }
@@ -75,13 +73,12 @@ debugger;
     }
   }
   const handleCategorySubmit = () =>{
-    debugger;
 
     setClearPredicateBeforeSearch(true); 
     clearKeyPredicate("categoryIds");
     clearKeyPredicate("subCategoryIds");
     
-    if(subCategoryIds.length===0 && categoryIds.length==0)
+    if(subCategoryIds.length===0 && categoryIds.length===0)
     {
       setClearPredicateBeforeSearch(false); 
       setPage(0);
@@ -297,7 +294,8 @@ debugger;
           </Accordion.Content> 
         </Menu.Item>
         <Menu.Item>
-         <div className="toggleMenuItem"><div>Online katılım</div> <Radio checked={predicate.get("isOnline")|| false} toggle={true} onChange={handleOnlineChange} /> </div>
+         <div className="toggleMenuItem"><div>Online katılım</div> 
+         <Radio checked={predicate.get("isOnline")} toggle={true} onChange={handleOnlineChange} /> </div>
         </Menu.Item>
         <Menu.Item>
         <Button
@@ -320,6 +318,7 @@ debugger;
                               setPage(0);
                               clearActivityRegistery();
                               loadActivities();
+                              scrollToTop();
                             }
                             }
                           />

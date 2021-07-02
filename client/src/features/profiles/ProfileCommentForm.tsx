@@ -5,7 +5,6 @@ import { StarRating } from '../../app/common/form/StarRating';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { IProfileComment } from '../../app/models/profile';
-import { v4 as uuid } from "uuid";
 
 interface IProps{
     closeModal:() => void;

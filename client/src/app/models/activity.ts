@@ -1,4 +1,4 @@
-import { ICategory, ISubCategory, Category } from "./category";
+import { ICategory, ISubCategory } from "./category";
 import { ICity } from "./location";
 import { IPhoto } from "./profile";
 

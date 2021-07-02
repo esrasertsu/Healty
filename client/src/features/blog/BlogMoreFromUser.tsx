@@ -1,8 +1,8 @@
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
-import { Segment, Header, Button, Image, Container, Icon, Card } from 'semantic-ui-react'
+import { Segment, Header, Image, Container, Icon, Card } from 'semantic-ui-react'
 import { IBlog } from '../../app/models/blog';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { history } from '../../index'

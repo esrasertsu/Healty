@@ -7,8 +7,6 @@ import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
 import { IUserFormValues } from '../../app/models/user';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import { history } from '../../index'
-
 
 const validate = combineValidators({
     email: isRequired('email'),
@@ -27,8 +25,7 @@ export const LoginForm:React.FC<IProps> = ({location}) => {
     return (
       <FinalForm
         onSubmit={(values: IUserFormValues) =>
-          login(values)
-          .finally(()=> history.push(location))
+          login(values,location)
           .catch((error) => ({
             [FORM_ERROR]: error,
           }))
@@ -52,7 +49,7 @@ export const LoginForm:React.FC<IProps> = ({location}) => {
             <Field name="email" placeholder="Email" component={TextInput}/>
             <Field
               name="password"
-              placeholder="Password"
+              placeholder="Şifre"
               type="password"
               component={TextInput}
             />
@@ -63,7 +60,7 @@ export const LoginForm:React.FC<IProps> = ({location}) => {
               disabled={(invalid && !dirtySinceLastSubmit) || pristine}
               loading={submitting}
               color='teal'
-              content="Login"
+              content="Giriş"
               fluid
             />
           </Form>

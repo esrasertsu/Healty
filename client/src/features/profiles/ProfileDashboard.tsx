@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { Fragment, useContext, useEffect,useState } from 'react'
-import {Container, Grid, Label, Message, Segment, Select } from 'semantic-ui-react'
+import {Container, Grid, Icon, Label, Message, Segment, Select } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileListItem from './ProfileListItem'
 import ProfileListFilters from './ProfileListFilters';
@@ -41,6 +41,7 @@ const sixItem:SemanticWIDTHS = 6;
     const {loadingProfiles, loadProfiles,setPage,page,totalProfileListPages,profileRegistery,
       popularProfileList,profilePageCount, clearProfileRegistery,sortProfiles,loadingOnlyProfiles,sortingInput,setSortingInput} = rootStore.profileStore;
     const {appLoaded, userCityPlaced} = rootStore.commonStore;
+    const [isToggleVisible, setIsToggleVisible] = useState(false);
 
 
     const list = [
@@ -52,11 +53,32 @@ const sixItem:SemanticWIDTHS = 6;
       if(appLoaded && userCityPlaced)
         loadProfiles();
 
+        window.addEventListener("scroll", toggleVisibility);
+
         return () => {
           setPage(0);
          clearProfileRegistery();
+         window.removeEventListener("scroll", toggleVisibility);
         }
     }, [loadProfiles,userCityPlaced])
+  
+    // Show button when page is scorlled upto given distance
+    const toggleVisibility = () => {
+      if (window.pageYOffset > 300) {
+        setIsToggleVisible(true);
+      } else {
+        setIsToggleVisible(false);
+      }
+    };
+  
+    // Set the top cordinate to 0
+    // make scrolling smooth
+    const scrollToTop = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    };
 
     const handleSortingChange = (e:any,data:any) => {
       setSortingInput(data.value);
@@ -151,6 +173,13 @@ const sixItem:SemanticWIDTHS = 6;
            </InfiniteScroll> 
           }
           {(loadingNext && page+1 < totalProfileListPages) ? <ProfileListItemsPlaceholder itemPerRow={sixItem}/> :""}
+          <div className="scroll-to-top">
+          {isToggleVisible && 
+            <Label style={{display:"flex", alignItems:"center"}} onClick={scrollToTop}>
+              <Icon size="large" name="arrow up"/> 
+              <span>Başa dön</span>
+            </Label>}
+        </div>
           </Grid.Column>
       </Grid>
       <br></br>

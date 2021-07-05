@@ -1,26 +1,28 @@
-import React, { FormEvent, Fragment, useContext } from 'react';
+import React, { FormEvent, Fragment, useContext, useState } from 'react';
 import { Menu, Segment, Accordion, Form, CheckboxProps, Button, Label, Icon, Radio } from 'semantic-ui-react';
 import { DateTimePicker} from 'react-widgets';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import { observer } from 'mobx-react-lite';
 import { ICategory, ISubCategory } from '../../../app/models/category';
+import { ILevel } from '../../../app/models/activity';
 
 const ActivityFilters = () => {
 
   const rootStore = useContext(RootStoreContext);
   const { predicate, setPredicate,setClearPredicateBeforeSearch,clearUserPredicates,
-    clearKeyPredicate, setPage, clearActivityRegistery,loadActivities,
+    clearKeyPredicate, setPage, clearActivityRegistery,loadActivities,loadingInitial,
     activeIndex, setActiveIndex,categoryIds, setCategoryIds,subCategoryIds, setSubCategoryIds,
-    activeUserPreIndex, setActiveUserPreIndex} = rootStore.activityStore; 
+    activeUserPreIndex, setActiveUserPreIndex, levelList, setLevelIds,
+    levelIds, cityId, setCityId, isOnline, setIsOnline} = rootStore.activityStore; 
   const {
      categoryList,
      loadingCategories,
      allCategoriesOptionList
       } = rootStore.categoryStore;
 
+      const { cities } = rootStore.commonStore;
       const {isLoggedIn} = rootStore.userStore;
   
-
   const handleClick = (e:any, titleProps:any) => {
     const { index } = titleProps
     const newIndex = activeIndex === index ? -1 : index
@@ -33,12 +35,28 @@ const ActivityFilters = () => {
     setClearPredicateBeforeSearch(false);
 
     if(data.checked)
+    {
+      setIsOnline(true);
       setPredicate("isOnline",true);
+    }
     else 
+    {
+      setIsOnline(false);
       setPredicate("isOnline",false);
+    }
 
       scrollToTop();
     
+  }
+
+  const handleLevelChange = (event: FormEvent<HTMLInputElement>, data: CheckboxProps) => {
+    if(data.checked)
+    {
+     setLevelIds([...levelIds, data.value as string]);
+    }else {
+      const index =  levelIds.findIndex(x => x === data.value as string)
+      setLevelIds([...levelIds.slice(0,index), ...levelIds.slice(index+1)]);
+    }
   }
 
 
@@ -72,12 +90,80 @@ const ActivityFilters = () => {
      setSubCategoryIds([...subCategoryIds.slice(0,index), ...subCategoryIds.slice(index+1)]);
     }
   }
-  const handleCategorySubmit = () =>{
+  // const handleCategorySubmit = () =>{
 
-    setClearPredicateBeforeSearch(true); 
-    clearKeyPredicate("categoryIds");
-    clearKeyPredicate("subCategoryIds");
+  //   setClearPredicateBeforeSearch(true); 
+  //   clearKeyPredicate("categoryIds");
+  //   clearKeyPredicate("subCategoryIds");
     
+  //   if(subCategoryIds.length===0 && categoryIds.length===0)
+  //   {
+  //     setClearPredicateBeforeSearch(false); 
+  //     setPage(0);
+  //     clearActivityRegistery();
+  //     loadActivities();
+  //   } else if(categoryIds.length>0 && subCategoryIds.length===0)
+  //   {
+  //     setClearPredicateBeforeSearch(false); 
+  //     setPredicate("categoryIds",categoryIds);
+  //   }
+  //   else if(categoryIds.length>0 && subCategoryIds.length>0)
+  //   {
+  //     setPredicate("categoryIds",categoryIds);
+  //     setClearPredicateBeforeSearch(false);
+  //     setPredicate("subCategoryIds",subCategoryIds);
+  //   }
+
+  //   scrollToTop();
+
+  // }
+
+
+  const handleLevelSubmit = () => {
+    setClearPredicateBeforeSearch(true); 
+    clearKeyPredicate("levelIds");
+    setClearPredicateBeforeSearch(false);
+    setPredicate("levelIds",levelIds);
+   
+
+    scrollToTop();
+
+  }
+
+  const handleCitySubmit = (e:any, data:any) => {
+    setClearPredicateBeforeSearch(true); 
+    clearKeyPredicate("cityId");
+    setClearPredicateBeforeSearch(false);
+    setPredicate("cityId",cityId);
+   
+    scrollToTop();
+  }
+
+  const handleCityChange =  (e:any, data:any) => {
+    setCityId(data.value);
+
+    if(data.value==="")
+    clearKeyPredicate("cityId");
+     
+  }
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
+
+  const handleSearch = (e:any, data:any) => {
+    setClearPredicateBeforeSearch(true); 
+    clearKeyPredicate("subCategoryIds");
+    clearKeyPredicate("categoryIds");
+    clearKeyPredicate("levelIds");
+    clearKeyPredicate("cityId");
+
+    setPredicate("cityId",cityId);
+    setPredicate("levelIds",levelIds);
+
     if(subCategoryIds.length===0 && categoryIds.length===0)
     {
       setClearPredicateBeforeSearch(false); 
@@ -99,13 +185,6 @@ const ActivityFilters = () => {
     scrollToTop();
 
   }
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  };
 
 
   return (
@@ -193,7 +272,12 @@ const ActivityFilters = () => {
       </Menu>}
 
       <Accordion key={"Category_acc"} as={Menu} vertical style={{ width: '100%', boxShadow:'none', border:'none'}}>
-        <Menu.Item  key={"Category"} className="filterMenuItem_Style">
+     
+        <Menu.Item>
+         <div className="toggleMenuItem"><div>Online katılım</div> 
+         <Radio checked={isOnline} toggle={true} onChange={handleOnlineChange} disabled={loadingInitial} /> </div>
+        </Menu.Item>
+       <Menu.Item  key={"Category"} className="filterMenuItem_Style">
           <Accordion.Title
             active={activeIndex === 0}
             content={(categoryIds.length + subCategoryIds.length > 0) ? 'Kategori (' + (subCategoryIds.length + categoryIds.length) +" kriter seçili)": "Kategori" }
@@ -201,7 +285,7 @@ const ActivityFilters = () => {
             onClick={handleClick}
           />
           <Accordion.Content active={activeIndex === 0}>
-                <Form onSubmit={handleCategorySubmit}>
+                <Form>
                 <Form.Group grouped>
                   {
                     loadingCategories ? <Label color="blue" basic><Icon name='circle notched' loading />Yükleniyor..</Label>:
@@ -236,15 +320,7 @@ const ActivityFilters = () => {
                   }
                    
                 </Form.Group>
-                <Button
-                          // loading={submitting}
-                          // disabled={loading || buttonDisabled}
-                          //  floated="right"
-                            positive
-                            type="submit"
-                            content="Ara"
-                            style={{marginRight:"10px"}}
-                          />
+              
                <Button
                           // loading={submitting}
                           // disabled={loading || buttonDisabled}
@@ -255,6 +331,12 @@ const ActivityFilters = () => {
                             onClick={() =>{
                               setCategoryIds([]);
                               setSubCategoryIds([]);
+                              setClearPredicateBeforeSearch(true); 
+                              clearKeyPredicate("subCategoryIds");
+                              setClearPredicateBeforeSearch(false); 
+                              clearKeyPredicate("categoryIds");
+                              scrollToTop();                            
+                              
                             }
                             }
                           />
@@ -265,20 +347,45 @@ const ActivityFilters = () => {
         <Menu.Item key={"Level"} className="filterMenuItem_Style">
           <Accordion.Title
             active={activeIndex === 1}
-            content='Seviye'
+            content={(levelIds.length > 0) ? 'Seviye (' + (levelIds.length) +" seviye seçili)": "Seviye" }
             index={1}
             onClick={handleClick}
           />
           <Accordion.Content active={activeIndex === 1}>
-                <Form onSubmit={handleCategorySubmit}>
+                <Form onSubmit={handleLevelSubmit}>
                 <Form.Group grouped>
                   {
-                    allCategoriesOptionList.filter(x => categoryIds.findIndex(y => y === x.parentId) >-1 ).map((category:ICategory) => 
-                    <Form.Checkbox key={category.value} label={category.text} name={category.value} value={category.value} onChange={handleSubCatagorySelection}/>
+                    levelList.map((level:ILevel) => 
+                    <Form.Checkbox className="accordion_subcategory_title" key={level.value} label={level.text} name={level.value} value={level.value} onChange={handleLevelChange}/>
                     )
                   }
                 </Form.Group>
-                <Button
+               
+              </Form>
+          </Accordion.Content> 
+        </Menu.Item>
+        <Menu.Item key={"City"} className="filterMenuItem_Style">
+          <Accordion.Title
+            active={activeIndex === 2}
+            content={cityId !=="" ? "Şehir (1 adet seçili)": "Şehir" }
+            index={2}
+            onClick={handleClick}
+          />
+          <Accordion.Content active={activeIndex === 2}>
+                <Form onSubmit={handleCitySubmit}>
+                    <Form.Select 
+                    value={cityId}
+                    fluid
+                    options={cities}
+                    placeholder='Türkiye'
+                    clearable={true}
+                    onChange={handleCityChange}
+                    />
+               
+              </Form>
+          </Accordion.Content> 
+        </Menu.Item>
+        <Button
                           // loading={submitting}
                           // disabled={loading || buttonDisabled}
                           //  floated="right"
@@ -286,18 +393,9 @@ const ActivityFilters = () => {
                             type="submit"
                             content="Ara"
                             style={{marginRight:"10px"}}
-                            onClick={() => {
-                            
-                            }}
+                            onClick={handleSearch}
+                            disabled={loadingInitial}
                           />
-              </Form>
-          </Accordion.Content> 
-        </Menu.Item>
-        <Menu.Item>
-         <div className="toggleMenuItem"><div>Online katılım</div> 
-         <Radio checked={predicate.get("isOnline")} toggle={true} onChange={handleOnlineChange} /> </div>
-        </Menu.Item>
-        <Menu.Item>
         <Button
                           // loading={submitting}
                           // disabled={loading || buttonDisabled}
@@ -305,15 +403,20 @@ const ActivityFilters = () => {
                             negative
                             content="Temizle"
                             style={{marginRight:"10px"}}
+                            disabled={loadingInitial}
                             onClick={() =>{
                               setCategoryIds([]);
                               setSubCategoryIds([]);
+                              setIsOnline(false);
+                              setCityId("");
                               clearUserPredicates();
                               clearKeyPredicate("subCategoryIds");
                               clearKeyPredicate("categoryIds");
                               clearKeyPredicate("isOnline");
                               clearKeyPredicate("startDate");
                               clearKeyPredicate("endDate");
+                              clearKeyPredicate("levelIds");
+                              clearKeyPredicate("cityId");
                               setActiveUserPreIndex(0);
                               setPage(0);
                               clearActivityRegistery();
@@ -322,7 +425,6 @@ const ActivityFilters = () => {
                             }
                             }
                           />
-        </Menu.Item>
        
         {/* <Menu.Item className="filterMenuItem_Style">
           <Accordion.Title

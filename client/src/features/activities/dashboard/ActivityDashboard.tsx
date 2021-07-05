@@ -9,7 +9,8 @@ import ActivityListItemPlaceholder from './ActivityListItemPlaceHolder';
 
 const ActivityDashboard: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
-  const {loadActivities, loadingInitial, setPage, page, totalPages} = rootStore.activityStore;
+  const {loadActivities, loadingInitial, setPage, page, totalPages,loadLevels} = rootStore.activityStore;
+  const { loadCategories } = rootStore.categoryStore;
   const [loadingNext, setLoadingNext] = useState(false);
   const [isToggleVisible, setIsToggleVisible] = useState(false);
 
@@ -19,11 +20,17 @@ const ActivityDashboard: React.FC = () => {
     loadActivities().then(() => setLoadingNext(false))
   }
   useEffect(() => {
-    loadActivities()
-  },[loadActivities]); //[] provides the same functionality with componentDidMounth..   dependency array
+    loadActivities();
+    loadCategories();
+    loadLevels();
+  },[loadActivities,loadCategories,loadLevels]); //[] provides the same functionality with componentDidMounth..   dependency array
 
   useEffect(() => {
     window.addEventListener("scroll", toggleVisibility);
+    
+    return () => {
+      window.removeEventListener("scroll", toggleVisibility);
+    }
   }, []);
 
   // Show button when page is scorlled upto given distance
@@ -55,6 +62,7 @@ const ActivityDashboard: React.FC = () => {
                         >Map View&nbsp;&nbsp;<Icon name="map marker alternate"/> </Button>
                         <br></br>                   */}
                         <br></br> 
+
       <ActivityFilters />
       </Grid.Column>
       <Grid.Column width={12}>

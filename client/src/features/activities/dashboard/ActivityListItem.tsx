@@ -14,7 +14,7 @@ import { RegisterForm } from '../../user/RegisterForm';
 
 export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
     const rootStore = useContext(RootStoreContext);
-    const {isLoggedIn} = rootStore.userStore;
+    const {isLoggedIn,user} = rootStore.userStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;
 
     const host = activity.attendees.filter(x => x.isHost === true)[0];
@@ -26,7 +26,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
         if(modal.open) closeModal();
 
             openModal("Giriş Yap", <>
-            <Image size='large' src='/assets/placeholder.png' wrapped />
+            <Image size='large' src='/assets/Login1.png' wrapped />
             <Modal.Description>
             <LoginForm location={str} />
             </Modal.Description>
@@ -38,7 +38,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
             e.stopPropagation();
             if(modal.open) closeModal();
             openModal("Üye Kaydı", <>
-            <Image size='large' src='/assets/placeholder.png' wrapped />
+            <Image size='large' src='/assets/Login1.png' wrapped />
             <Modal.Description>
             <RegisterForm location={str} />
             </Modal.Description>
@@ -118,13 +118,13 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                                     <Label key={sub.value} basic size="small">{sub.text}</Label>
                               ))}
                               <div style={{marginTop:".6em"}}>
-                                <Icon name='heartbeat' /><span> Seviye: </span>
+                                <Icon color="red" name='heartbeat' /><span> Seviye: </span>
                                 {
                                     activity.levels && activity.levels.length> 0 ? 
                                     activity.levels.map<React.ReactNode>(s => <span key={s.value}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
                                     : " Bilgi yok"
                                 }
-                               {activity.online ?  <div style={{marginTop:".6em"}}> <Icon name='wifi' />  Online katılıma açık <Icon name='check' size='small' color='green' /> </div>: <div style={{marginTop:".6em"}}><Icon name='wifi' />Online katılıma kapalı</div>}
+                               {activity.online ?  <div style={{marginTop:".6em"}}> <Icon name='wifi' color="green" />  Online katılıma açık <Icon name='check' size='small' color='green' /> </div>: <div style={{marginTop:".6em"}}><Icon name='wifi' color="grey"/>Online katılıma kapalı</div>}
                                 </div>
                         </Item.Description> 
                         <Item.Description>
@@ -158,7 +158,10 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                 <Icon name='clock' /> {format(activity.date, 'h:mm a')}
                 &nbsp;
                 <Icon name='marker' /> {activity.venue}, {activity.city && activity.city.text}
-                <ActivityListItemAttendees attendees={activity.attendees}/>
+               {
+                   isLoggedIn && user &&  <ActivityListItemAttendees attendees={activity.attendees}/>
+               }
+
             </Segment>
            {/*  <Segment secondary>
                <ActivityListItemAttendees attendees={activity.attendees}/>

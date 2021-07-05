@@ -71,6 +71,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
    const [subCategoryOptions, setSubCategoryOptions] = useState<ICategory[]>([]);
 
    const [files, setFiles] = useState<any[]>([]);
+   const [originalImage, setOriginalImage] = useState<Blob | null>(null);
+
    const [image, setImage] = useState<Blob | null>(null);
    const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
    const [imageChange, setImageChange] = useState(false);
@@ -218,7 +220,7 @@ const handleTimeChange = (time:any) =>{
                 <Grid style={{marginTop:"10px"}}>
                   <Grid.Column width="eight">
                   <Header sub content='*Boyutlandır' />
-                  <PhotoWidgetCropper setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={278/174}/>
+                  <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={278/174}/>
                   </Grid.Column>
                   <Grid.Column width="eight">
                     <Header sub content='*Önizleme' />

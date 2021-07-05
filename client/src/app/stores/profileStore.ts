@@ -1,7 +1,7 @@
 import { action, observable, runInAction, computed, reaction } from "mobx";
 import { toast } from "react-toastify";
 import agent from "../api/agent";
-import { IAccessibility, IPhoto, IProfile, IProfileBlog, IProfileComment, IProfileFilterFormValues, IProfileFormValues, IUserActivity, ProfileFilterFormValues, ProfileFormValues } from "../models/profile";
+import { IAccessibility, IPhoto, IProfile, IProfileBlog, IProfileComment, IProfileFilterFormValues, IProfileFormValues, IRefencePic, IUserActivity, ProfileFilterFormValues, ProfileFormValues } from "../models/profile";
 import { RootStore } from "./rootStore";
 import { IMessageForm } from "../models/message";
 
@@ -16,9 +16,13 @@ export default class ProfileStore{
             () => this.activeTab,
             activeIndex => {
                 this.updatedProfile= false;
-                if(activeIndex ===3 || activeIndex===4)
+                if(this.profile!.role=== "Trainer" && (activeIndex ===3 || activeIndex===4))
                 {
                     const predicate = activeIndex ===4 ? 'followers' : 'following';
+                    this.loadFollowings(predicate);
+                }if(this.profile!.role!== "Trainer" && (activeIndex ===2 || activeIndex===3))
+                {
+                    const predicate = activeIndex ===3 ? 'followers' : 'following';
                     this.loadFollowings(predicate);
                 }else{
                     this.followings = [];
@@ -65,6 +69,12 @@ export default class ProfileStore{
 
     @observable sortingInput ="";
 
+    @observable loadingReferencePics = false;
+    @observable uploadingReferencePics = false;
+    @observable referencePics: IRefencePic[] = [];
+    @observable deletingReferencePic = false;
+    
+
     @observable page = 0;
     @computed get isCurrentUser(){
         if (this.rootStore.userStore.user && this.profile){
@@ -90,6 +100,9 @@ export default class ProfileStore{
         this.page = page;
     }
 
+    @action setProfileNull = () =>{
+        this.profile = null;
+    }
     @action setSortingInput= (sort:string) =>{
         this.sortingInput = sort;
     }
@@ -227,6 +240,7 @@ export default class ProfileStore{
                     this.loadingComments = true;
                     this.loadBlogs(profile.userName);
                     this.loadComments(profile.userName);
+                    this.loadUserReferencePics(profile.userName);
                     this.loadingProfile = false;
                     this.loadAccessibilities();
                     this.rootStore.categoryStore.loadCategories();
@@ -576,5 +590,68 @@ export default class ProfileStore{
          
          
      }
+
+
+     @action uploadReferencePic = async (original: Blob, thumbnail: Blob, title: string) => {
+        this.uploadingReferencePics = true;
+
+        try {
+            const pic = await agent.Profiles.addReferencePics(original, thumbnail,title);
+            runInAction(() => {
+                if(this.profile)
+                {
+                    this.referencePics.push(pic);
+                }
+
+                this.uploadingReferencePics = false;
+            })
+        } catch (error) {
+            console.log(error);
+            toast.error('Problem uploading pic');
+            runInAction(() => {
+                this.uploadingReferencePics = false;
+            })
+            
+        }
+    }
+
+     @action loadUserReferencePics = async (username:string) =>{
+        this.loadingReferencePics = true;
+        try {
+            const refPics = await agent.Profiles.getReferencePics(username);
+            runInAction(()=>{
+                this.referencePics = refPics;
+                this.loadingReferencePics = false;
+            })
+        } catch (error) {
+            runInAction(()=>{
+                this.loadingReferencePics = false;
+            })
+            console.log(error);
+        }
+    
+    
+}
+
+@action deleteReferencePic = async (id: string) => {
+    this.deletingReferencePic = true;
+
+    try {
+        await agent.Profiles.deleteReferencePic(id);
+        runInAction(() => {
+            
+                this.referencePics = this.referencePics.filter(e => e.originalPublicId !== id);
+               this.deletingReferencePic = false;
+
+        })
+    } catch (error) {
+        console.log(error);
+        toast.error('Problem deleting pic');
+        runInAction(() => {
+           this.deletingReferencePic = false;
+        })
+        
+    }
+}
 
 }

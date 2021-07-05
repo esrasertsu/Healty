@@ -9,6 +9,8 @@ import TextInput from '../../app/common/form/TextInput';
 import { Form as FinalForm, Field } from "react-final-form";
 import SearchArea from './SearchArea';
 import { history } from '../../index'
+import { TrainerForm } from '../user/TrainerForm';
+import Statistics from './Statistics';
 
 
 const HomePage = () => {
@@ -31,7 +33,7 @@ const HomePage = () => {
       if(modal.open) closeModal();
 
           openModal("Giriş Yap", <>
-          <Image size='large' src='/assets/placeholder.png' wrapped />
+          <Image size='large' src='/assets/Login1.png' wrapped />
           <Modal.Description>
           <LoginForm location={"/"} />
           </Modal.Description>
@@ -45,13 +47,26 @@ const HomePage = () => {
         if(modal.open) closeModal();
 
             openModal("Üye Kaydı", <>
-            <Image size='large' src='/assets/placeholder.png' wrapped />
+            <Image size='large' src='/assets/Login1.png' wrapped />
             <Modal.Description>
             <RegisterForm location={"/"} />
             </Modal.Description>
             </>,true,
             <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
         }
+
+        const handleTrainerFormClick= (e:any) => {
+    
+          e.stopPropagation();
+          if(modal.open) closeModal();
+  
+              openModal("Uzman Başvuru Formu", <>
+              <Modal.Description>
+              <TrainerForm location={"/"} />
+              </Modal.Description>
+              </>,false,
+              <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
+          }
   
     return (
       <>
@@ -280,7 +295,11 @@ const HomePage = () => {
                     <Header.Content>Desteğine herkesin ihtiyacı var</Header.Content>
                 </Header>
                 <Header.Subheader style={{fontSize:"1.2rem",marginBottom:"20px"}}>
-                        Uzman olduğun alanda deneyimlerini paylaşmak ve hizmet vermek için bize doğrudan ulaşabilirsin, dilersen mail adresine de bilgilendirme gönderebiliriz.
+                        Uzman olduğun alanda deneyimlerini paylaşmak ve hizmet vermek için bize doğrudan başvurabilirsin, dilersen mail adresine de bilgilendirme gönderebiliriz.
+                       <p> <b><span style={{cursor:"pointer", marginTop:"10px"}} onClick={handleTrainerFormClick}>
+                                Uzman Başvuru Formu için tıklayın..
+                             </span></b>
+                       </p>
                 </Header.Subheader>
                 <FinalForm
                // validate = {validate}
@@ -315,12 +334,19 @@ const HomePage = () => {
                     </Form>
             )}
             />
+             
         </Grid.Column>
 
         </Grid.Row>
         </Grid>
         </Segment>
     <div style={{display:"flex"}}>
+        <div className="spacingContainer__small" />
+    </div>
+<br/>
+
+     <Statistics />
+     <div style={{display:"flex"}}>
         <div className="spacingContainer__small" />
     </div>
 <br/>

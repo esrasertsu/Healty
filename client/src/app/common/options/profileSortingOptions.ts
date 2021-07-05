@@ -1,5 +1,5 @@
 export const profileSortingOptions = [
-  { key: 'date', text: 'En Yeniler', value: 'date' },
-  { key: 'popular', text: 'Beğeni Sayısına Göre', value: 'popular' },
-  { key: 'mostComment', text: 'Yorum Sayısına Göre', value: 'mostComment' }
+  { key: 'popular', text: 'En çok yorum ve beğeni alan', value: 'popular' },
+  { key: 'date', text: 'En son katılanlar', value: 'date' },
+
 ];

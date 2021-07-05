@@ -55,6 +55,7 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
 
     const [imageDeleted, setImageDeleted] = useState<boolean>(false);
     const [imageChanged, setImageChanged] = useState<boolean>(false);
+    const [originalImage, setOriginalImage] = useState<Blob | null>(null);
 
     useEffect(() => {
       loadCategories();
@@ -123,13 +124,13 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
                 <Header className="postFormHeader" color='teal' sub content='Adım 2 - Metnin temel görselini yükleyin' />
               {
                 files.length === 0 ? 
-                <PhotoWidgetDropzone setFiles={setFiles} />
+                <PhotoWidgetDropzone setFiles={setFiles}/>
                 :
                (
                 <Grid>
                   <Grid.Column width="eight">
                   <Header sub content='*Boyutlandır' />
-                  <PhotoWidgetCropper setImageDeleted={setImageDeleted} setImageChanged={setImageChanged} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1500/650}/>
+                  <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChanged} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1500/650}/>
                   </Grid.Column>
                   <Grid.Column width="eight">
                     <Header sub content='*Önizleme' />

@@ -32,7 +32,7 @@ interface IProps {
     if(modal.open) closeModal();
 
         openModal("Üye Kaydı", <>
-        <Image size='large' src='/assets/placeholder.png' wrapped />
+        <Image size='large' src='/assets/Login1.png' wrapped />
         <Modal.Description>
         <RegisterForm location={str} />
         </Modal.Description>
@@ -45,7 +45,7 @@ interface IProps {
       if(modal.open) closeModal();
 
           openModal("Giriş Yap", <>
-          <Image size='large' src='/assets/placeholder.png' wrapped />
+          <Image size='large' src='/assets/Login1.png' wrapped />
           <Modal.Description>
           <LoginForm location={str} />
           </Modal.Description>

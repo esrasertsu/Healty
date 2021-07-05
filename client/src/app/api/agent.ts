@@ -3,7 +3,7 @@ import { IActivitiesEnvelope, IActivity, IActivityFormValues, ILevel } from '../
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
-import { IAccessibility, IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope, IProfileEnvelope, IProfileFormValues, ProfileFormValues } from '../models/profile';
+import { IAccessibility, IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope, IProfileEnvelope, IProfileFormValues, IRefencePic } from '../models/profile';
 import { IBlogsEnvelope, IBlog, IPostFormValues, IBlogUpdateFormValues } from '../models/blog';
 import { IAllCategoryList, ICategory, ISubCategory } from '../models/category';
 import { IChatRoom, IMessage, IMessageEnvelope, IMessageForm } from '../models/message';
@@ -179,6 +179,16 @@ const requests = {
             headers: {'Content-type': 'application/json'}
         }).then(responseBody)
     },
+    postReferencePic: async (url: string, original: Blob, thumbnail: Blob, title: string) =>{
+        let formData = new FormData();
+        formData.append('Original',original);
+        formData.append('Thumbnail',thumbnail);
+        formData.append('Title',title);
+
+        return axios.post(url, formData, {
+            headers: {'Content-type': 'multipart/form-data'}
+        }).then(responseBody)
+    },
 }
 
 const Activities = {
@@ -224,7 +234,10 @@ const Profiles = {
 
     sendMessage:(message:IMessageForm):Promise<IMessage> => requests.post(`/profiles/message`, message),
     updateProfile: (profile: Partial<IProfile>):Promise<IProfile> => requests.editProfile(`/profiles`,profile),
-    getAccessibilities : (): Promise<IAccessibility[]>  => requests.get(`/profiles/accessibilities`)
+    getAccessibilities : (): Promise<IAccessibility[]>  => requests.get(`/profiles/accessibilities`),
+    getReferencePics : (username:string): Promise<IRefencePic[]>  => requests.get(`/profiles/${username}/referencepics`),
+    addReferencePics: ( original: Blob, thumbnail: Blob, title:string): Promise<IRefencePic> => requests.postReferencePic(`/profiles/referencepic`, original,thumbnail, title),
+    deleteReferencePic: ( id1:string): Promise<IRefencePic> => requests.del(`/profiles/referencepic/${id1}`),
 
     }
 

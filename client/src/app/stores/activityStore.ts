@@ -53,8 +53,12 @@ export default class ActivityStore {
     @observable activeIndex = -1;
     @observable categoryIds:string[] = []
     @observable subCategoryIds:string[] = []
+    @observable levelIds:string[] = []
+    @observable cityId:string = ""
+
     @observable activeUserPreIndex = 0;
 
+    @observable isOnline = false;
 
     @action setActiveIndex = (index:number) =>{
         this.activeIndex = index;
@@ -68,6 +72,16 @@ export default class ActivityStore {
     }
     @action setSubCategoryIds = (Ids : string[]) =>{
         this.subCategoryIds = Ids;
+    }
+
+    @action setLevelIds = (Ids : string[]) =>{
+        this.levelIds = Ids;
+    }
+    @action setCityId = (Id : string) =>{
+        this.cityId = Id;
+    }
+    @action setIsOnline = (bool : boolean) =>{
+        this.isOnline = bool;
     }
     /* ---- */
 
@@ -141,6 +155,11 @@ export default class ActivityStore {
             else if(key === 'subCategoryIds'){
                 value.map((id:string) => (
                     params.append("subCategoryIds", id)
+                )); 
+            }
+            else if(key === 'levelIds'){
+                value.map((id:string) => (
+                    params.append("levelIds", id)
                 )); 
             }
             else if(key === 'all'){
@@ -240,7 +259,6 @@ export default class ActivityStore {
                     this.activityRegistery.set(activity.id, activity);
                 });
                 this.activityCount = activityCount;
-                this.rootStore.categoryStore.loadCategories();
                 this.loadingInitial = false;
             })
             } catch (error) {
@@ -417,9 +435,7 @@ export default class ActivityStore {
         try {
             const levelList = await agent.Activities.listLevels();
             runInAction(()=>{
-                debugger;
                 this.levelList = levelList;
-              
                 this.loadingLevels = false;
             })
         } catch (error) {

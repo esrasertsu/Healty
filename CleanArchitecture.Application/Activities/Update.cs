@@ -151,9 +151,8 @@ namespace CleanArchitecture.Application.Activities
                 if (!String.IsNullOrEmpty(request.CityId))
                 {
                     var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == new Guid(request.CityId));
-                    activity.SetCity(city ?? activity.GetCity());
+                    activity.City = city ?? activity.City;
                 }
-                else activity.SetCity(null);
 
                 if (request.Photo!=null)
                 {

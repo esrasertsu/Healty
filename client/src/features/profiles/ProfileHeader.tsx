@@ -38,11 +38,11 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
               <Item.Content verticalAlign='middle' className="profileHeader_content">
                 <Grid.Row>
                   <Header as='h1'>{profile.displayName}</Header>
-                  <StarRating rating={profileRating} editing={false} key={"header"} count={profile.starCount} showCount={true}/>
+                  {profile!.role === "Trainer" && <StarRating rating={profileRating} editing={false} key={"header"} count={profile.starCount} showCount={true}/>} 
                   <br/>
-                  {(profile.categories.map((cat) => (
+                  {profile!.role === "Trainer" && profile.categories.map((cat) => (
                     <Label key={cat.key} className="profileCard_Label" style={{background:getColor(cat.text)}} horizontal>{cat.text}</Label>
-                  )))}
+                  ))}
               
                 </Grid.Row>
               </Item.Content>
@@ -61,7 +61,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
           </Statistic>
           </Statistic.Group>
           <Divider/>
-          {isCurrentUser && 
+          {isCurrentUser && profile.role === "Trainer" &&
           <ButtonGroup widths={2}>
             <Button
               basic
@@ -77,7 +77,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
           />
           </ButtonGroup>
           }
-          {!isCurrentUser &&
+          {!isCurrentUser && 
           <Reveal animated='move'>
             <Reveal.Content visible style={{ width: '100%' }}>
               <Button

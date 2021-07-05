@@ -13,7 +13,9 @@ const styles = {
 export const ActivityListItemAttendees: React.FC<IProps> = ({attendees}) => {
     return (
       <List horizontal style={{float:'right'}}>
-        {attendees.map((attendee) => (
+        {
+        attendees.map((attendee,index) => (
+         index<4 &&
           <List.Item key={attendee.userName}>
             <Popup
               header={attendee.displayName}
@@ -28,7 +30,8 @@ export const ActivityListItemAttendees: React.FC<IProps> = ({attendees}) => {
               }
             />
           </List.Item>
-        ))}
+        ))
+      }
       </List>
     );
 };

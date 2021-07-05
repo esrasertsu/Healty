@@ -1035,6 +1035,10 @@ i.search.inverted.icon {
   color:#345289 !important;
 }
 
+.profileFilterRail{
+  right: auto !important;
+}
+
 .toggleMenuItem{
   display: flex;
   justify-content: space-between;

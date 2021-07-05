@@ -89,9 +89,8 @@ namespace CleanArchitecture.Application.Activities
                 if (!string.IsNullOrEmpty(request.CityId))
                 {
                     var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == new Guid(request.CityId));
-                    activity.SetCity(city);
+                    activity.City = city;
                 }
-                else activity.SetCity(null);
                 _context.Activities.Add(activity); //addsync is just for special creators
 
                 if(request.Photo != null)

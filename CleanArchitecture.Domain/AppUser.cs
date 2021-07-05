@@ -25,6 +25,7 @@ namespace CleanArchitecture.Domain
         public virtual ICollection<UserAccessibility> UserAccessibilities { get; set; }
         public virtual ICollection<UserSubCategories> UserSubCategories { get; set; }
         public virtual ICollection<UserCategories> UserCategories { get; set; }
+        public virtual ICollection<ReferencePic> ReferencePics { get; set; }
     }
 
     public enum Role

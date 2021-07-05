@@ -3,14 +3,16 @@ using System;
 using CleanArchitecture.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CleanArchitecture.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210703145803_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -402,39 +404,6 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("Photos");
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Domain.ReferencePic", b =>
-                {
-                    b.Property<string>("OriginalPublicId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ThumbnailPublicId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Height")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("OriginalUrl")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ThumbnailUrl")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Width")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("OriginalPublicId", "ThumbnailPublicId");
-
-                    b.HasIndex("AppUserId");
-
-                    b.ToTable("ReferencePics");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.SubCatBlogs", b =>
@@ -861,13 +830,6 @@ namespace CleanArchitecture.Persistence.Migrations
 
                     b.HasOne("CleanArchitecture.Domain.AppUser", null)
                         .WithMany("Photos")
-                        .HasForeignKey("AppUserId");
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Domain.ReferencePic", b =>
-                {
-                    b.HasOne("CleanArchitecture.Domain.AppUser", null)
-                        .WithMany("ReferencePics")
                         .HasForeignKey("AppUserId");
                 });
 

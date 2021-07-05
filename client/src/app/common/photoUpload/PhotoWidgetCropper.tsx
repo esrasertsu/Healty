@@ -9,25 +9,24 @@ interface IProps{
     setImageChanged:(change: boolean) => void;
     imagePreview: string;
     setCroppedImageUrl: (url: string) => void;
+    setOriginalImage:(file: Blob) => void;
     aspect:number;
 }
 
- const PhotoWidgetCropper:React.FC<IProps> = ({setImage,setImageDeleted,setImageChanged, imagePreview, setCroppedImageUrl, aspect}) =>  {
+ const PhotoWidgetCropper:React.FC<IProps> = ({setImage,setImageDeleted,setImageChanged, imagePreview, setCroppedImageUrl, aspect,setOriginalImage}) =>  {
 
     const [crop, setCrop] = useState<Crop>({
-        unit: "%",
+        unit: '%',
         aspect:aspect,
-        width:100
+        width:100,
+        height:100
     });
 
-
-
     const [imageRef, setImageRef] = useState<any>();
-
-
-
+    const [newImage, setNewImage] = useState<boolean>(false);
 
     const handleImageLoaded = (image:any) => {
+        setNewImage(true);
         setImageRef(image);
         setCroppedImageUrl(imagePreview);
     };
@@ -53,14 +52,17 @@ interface IProps{
                   console.error('Canvas is empty');
                   return;
                 }
+                if(newImage) setOriginalImage(blob);
                 setImage(blob);
                 setImageDeleted(false);
                 setImageChanged(true);
+                setNewImage(false);
               }, 'image/jpeg');
         } 
     }
 
     const getCroppedImg = (image:any, crop:any, fileName:string) =>{
+
         const canvas = document.createElement('canvas');
         const scaleX = image.naturalWidth / image.width;
         const scaleY = image.naturalHeight / image.height;
@@ -89,14 +91,13 @@ interface IProps{
     };
 
     useEffect(() => {
-        debugger;
         makeClientCrop(crop);
     }, [imageRef]);
 
     return (
         <ReactCrop
             src={imagePreview}
-            style={{  maxWidth: "100%", maxHeight:"300"}}
+            style={{ maxHeight:"100%"}}
             crop={crop}
             ruleOfThirds
             onImageLoaded={handleImageLoaded}

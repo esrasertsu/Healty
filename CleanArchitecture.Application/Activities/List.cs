@@ -26,7 +26,7 @@ namespace CleanArchitecture.Application.Activities
         }
         public class Query : IRequest<ActivitiesEnvelope> {
 
-            public Query(int? limit, int? offset, bool isGoing, bool isHost, bool isFollowed,bool isOnline, DateTime? startDate, DateTime? endDate,  List<Guid> categoryIds, List<Guid> subCategoryIds, Guid? cityId)
+            public Query(int? limit, int? offset, bool isGoing, bool isHost, bool isFollowed,bool isOnline, DateTime? startDate, DateTime? endDate,  List<Guid> categoryIds, List<Guid> subCategoryIds, List<Guid> levelIds ,Guid? cityId)
             {
                 Limit = limit;
                 Offset = offset;
@@ -38,6 +38,7 @@ namespace CleanArchitecture.Application.Activities
                 EndDate = endDate;
                 CategoryIds = categoryIds;
                 SubCategoryIds = subCategoryIds;
+                LevelIds = levelIds;
                 CityId = cityId;
             }
             public int? Limit { get; set; }
@@ -50,6 +51,7 @@ namespace CleanArchitecture.Application.Activities
             public DateTime? EndDate { get; set; }
             public List<Guid> SubCategoryIds { get; set; }
             public List<Guid> CategoryIds { get; set; }
+            public List<Guid> LevelIds { get; set; }
             public Guid? CityId { get; set; }
 
 
@@ -117,6 +119,14 @@ namespace CleanArchitecture.Application.Activities
                         a => request.CategoryIds.Contains(a.CategoryId))); //tostring çevirisi sakın qureylerde yapma client side olarak algılıyor
                 }
 
+                if (request.LevelIds != null && request.LevelIds.Count > 0)
+                {
+                    // List<Guid> subIds = JsonConvert.DeserializeObject<List<Guid>>(request.SubCategoryIds);
+
+                    queryable = queryable.Where(x => x.Levels.Any(
+                        a => request.LevelIds.Contains(a.LevelId))); //tostring çevirisi sakın qureylerde yapma client side olarak algılıyor
+                }
+
                 if (request.SubCategoryIds != null && request.SubCategoryIds.Count > 0)
                 {
                     // List<Guid> subIds = JsonConvert.DeserializeObject<List<Guid>>(request.SubCategoryIds);
@@ -127,7 +137,7 @@ namespace CleanArchitecture.Application.Activities
 
                 if (request.CityId != null)
                 {
-                    queryable = queryable.Where(x => x.GetCity()!=null && x.GetCity().Id == request.CityId);
+                    queryable = queryable.Where(x => x.City.Id == request.CityId);
                 }
 
                 if (request.IsOnline == true)

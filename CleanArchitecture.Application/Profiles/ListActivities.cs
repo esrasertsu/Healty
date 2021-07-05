@@ -63,7 +63,7 @@ namespace CleanArchitecture.Application.Profiles
                         Title = activity.Activity.Title,
                         // Category = activity.Activity.Category.Name,
                         Date = activity.Activity.Date,
-                        Photo = activity.Activity.Photos.FirstOrDefault(x => x.IsMain).Url
+                        Photo = activity.Activity.Photos.Count>0 ? activity.Activity.Photos.FirstOrDefault(x => x.IsMain).Url : ""
                     };
 
                     activitiesToReturn.Add(userActivity);

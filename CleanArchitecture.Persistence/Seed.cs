@@ -32,11 +32,6 @@ namespace Persistence
                     {
                         Name = "İleri",
 
-                    },
-                    new Level
-                    {
-                        Name = "Tüm Seviyeler",
-
                     }
                 };
 

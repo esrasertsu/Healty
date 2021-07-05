@@ -35,7 +35,7 @@ namespace CleanArchitecture.Persistence
         public DbSet<ActivityLevels> ActivityLevels { get; set; }
         public DbSet<ActivityCategories> ActivityCategories { get; set; }
         public DbSet<ActivitySubCategories> ActivitySubCategories { get; set; }
-
+        public DbSet<ReferencePic> ReferencePics { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Level> Levels { get; set; }
 
@@ -204,6 +204,8 @@ namespace CleanArchitecture.Persistence
                 .WithMany(a => a.Activities)
                 .HasForeignKey(u => u.LevelId);
 
+            builder.Entity<ReferencePic>(x => x.HasKey(ua =>
+             new { ua.OriginalPublicId, ua.ThumbnailPublicId }));
         }
     }
 }

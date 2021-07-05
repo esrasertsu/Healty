@@ -15,9 +15,10 @@ namespace CleanArchitecture.API.Controllers
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<List.ActivitiesEnvelope>> List(int? limit, int? offset,bool isGoing,bool isHost, bool isFollowed, bool isOnline, DateTime? startDate, DateTime? endDate,
-                                                                     [FromQuery(Name = "categoryIds")] List<Guid> categoryIds, [FromQuery(Name = "subCategoryIds")] List<Guid> subCategoryIds, Guid? cityId)
+                                                                     [FromQuery(Name = "categoryIds")] List<Guid> categoryIds, [FromQuery(Name = "subCategoryIds")] List<Guid> subCategoryIds,
+                                                                      [FromQuery(Name = "levelIds")] List<Guid> levelIds, Guid? cityId)
         {
-            return await Mediator.Send(new List.Query(limit, offset, isGoing,isHost,isFollowed, isOnline,startDate, endDate,categoryIds, subCategoryIds, cityId));
+            return await Mediator.Send(new List.Query(limit, offset, isGoing,isHost,isFollowed, isOnline,startDate, endDate,categoryIds, subCategoryIds, levelIds, cityId));
         }
 
         [HttpGet("{id}")]

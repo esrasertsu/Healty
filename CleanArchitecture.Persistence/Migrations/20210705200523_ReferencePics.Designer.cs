@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitecture.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210611215323_InitialCommits")]
-    partial class InitialCommits
+    [Migration("20210705200523_ReferencePics")]
+    partial class ReferencePics
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -47,6 +47,9 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<int?>("AttendancyLimit")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid?>("CityId")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
@@ -66,6 +69,8 @@ namespace CleanArchitecture.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.ToTable("Activities");
                 });
@@ -401,6 +406,39 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.ToTable("Photos");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Domain.ReferencePic", b =>
+                {
+                    b.Property<string>("OriginalPublicId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ThumbnailPublicId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Height")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("OriginalUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ThumbnailUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("OriginalPublicId", "ThumbnailPublicId");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("ReferencePics");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Domain.SubCatBlogs", b =>
                 {
                     b.Property<Guid>("SubCategoryId")
@@ -719,6 +757,13 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Domain.Activity", b =>
+                {
+                    b.HasOne("CleanArchitecture.Domain.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Domain.ActivityCategories", b =>
                 {
                     b.HasOne("CleanArchitecture.Domain.Activity", "Activity")
@@ -818,6 +863,13 @@ namespace CleanArchitecture.Persistence.Migrations
 
                     b.HasOne("CleanArchitecture.Domain.AppUser", null)
                         .WithMany("Photos")
+                        .HasForeignKey("AppUserId");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Domain.ReferencePic", b =>
+                {
+                    b.HasOne("CleanArchitecture.Domain.AppUser", null)
+                        .WithMany("ReferencePics")
                         .HasForeignKey("AppUserId");
                 });
 

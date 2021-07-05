@@ -16,19 +16,7 @@ namespace CleanArchitecture.Domain
         public int AttendanceCount { get; set; }
         public decimal? Price { get; set; }
         public DateTime Date { get; set; }
-
-        private City city;
-
-        public virtual City GetCity()
-        {
-            return city;
-        }
-
-        public virtual void SetCity(City value)
-        {
-            city = value;
-        }
-
+        public virtual City City { get; set; }
         public string Venue { get; set; }
         public string Address { get; set; }
         public virtual ICollection<ActivityLevels> Levels { get; set; }

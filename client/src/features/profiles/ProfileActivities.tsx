@@ -2,15 +2,29 @@ import React, { useEffect, useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Tab, Grid, Card, Image, TabProps } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { IUserActivity } from '../../app/models/profile';
+import { IProfile, IUserActivity } from '../../app/models/profile';
 import { format } from 'date-fns';
 import { RootStoreContext } from '../../app/stores/rootStore';
 
-const panes = [
-  { menuItem: 'Gelecek', pane: { key: 'futureEvents' } },
-  { menuItem: 'Geçmiş', pane: { key: 'pastEvents' } },
-  { menuItem: 'Düzenledikleri', pane: { key: 'hosted' } }
-];
+
+const getPanes = (profile:IProfile) => {
+
+  let panes = [];
+
+  if(profile.role === "Trainer")
+  {
+    return panes = [
+      { menuItem: 'Gelecek', pane: { key: 'futureEvents' } },
+      { menuItem: 'Geçmiş', pane: { key: 'pastEvents' } },
+      { menuItem: 'Düzenledikleri', pane: { key: 'hosted' } }
+    ];
+  }else 
+      return panes = [
+        { menuItem: 'Gelecek', pane: { key: 'futureEvents' } },
+        { menuItem: 'Geçmiş', pane: { key: 'pastEvents' } }
+      ];
+
+}
 
 const ProfileEvents = () => {
   const rootStore = useContext(RootStoreContext);
@@ -52,7 +66,7 @@ const ProfileEvents = () => {
         </Grid.Column> */}
         <Grid.Column width={16}>
           <Tab
-            panes={panes}
+            panes={getPanes(profile!)}
             menu={{ secondary: true, pointing: true }}
             onTabChange={(e, data) => handleTabChange(e, data)}
           />

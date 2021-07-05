@@ -31,6 +31,7 @@ export interface IProfile {
     city: ICity,
     isOnline: boolean,
     responseRate: number,
+    role: string
 
 }
 
@@ -44,6 +45,16 @@ export interface IPhoto {
     id: string,
     url: string,
     isMain: boolean
+}
+
+export interface IRefencePic {
+    originalPublicId: string,
+    originalUrl: string,
+    thumbnailPublicId: string,
+    thumbnailUrl: string,
+    width: number,
+    height: number,
+    title: string
 }
 
 export interface IUserActivity {

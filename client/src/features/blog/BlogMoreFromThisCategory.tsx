@@ -11,7 +11,7 @@ import { history } from '../../index'
 const BlogMoreFromThisCategory:React.FC<{blog:IBlog}> = ({blog}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const { sameCategoryBlogs,setPredicateDisplayName ,setClearedBeforeNewPredicateComing,clearPredicates,setPredicate} = rootStore.blogStore;
+  const { sameCategoryBlogs ,setClearedBeforeNewPredicateComing,clearPredicates,setPredicate} = rootStore.blogStore;
 
   
     return (

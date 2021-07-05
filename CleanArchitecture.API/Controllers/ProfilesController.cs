@@ -1,6 +1,7 @@
 ﻿using CleanArchitecture.Application.Messages;
 using CleanArchitecture.Application.Profiles;
 using CleanArchitecture.Application.UserProfileComments;
+using CleanArchitecture.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -77,6 +78,25 @@ namespace CleanArchitecture.API.Controllers
         {
             return await Mediator.Send(command);
         }
+
+        [HttpGet("{username}/referencepics")]
+        public async Task<ActionResult<List<ReferencePic>>> GetUserReferencePics(string username)
+        {
+            return await Mediator.Send(new ListReferencePics.Query { Username = username });
+        }
+
+        [HttpPost("referencepic")]
+        public async Task<ActionResult<ReferencePic>> AddReferencePic([FromForm] AddReferencePic.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpDelete("referencepic/{id}")]
+        public async Task<ActionResult<Unit>> DeleteReferencePic(string id)
+        {
+            return await Mediator.Send(new DeleteReferencePic.Command { OriginalId = id });
+        }
+
 
     }
 }

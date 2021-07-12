@@ -1,4 +1,4 @@
-import { action, observable, reaction, runInAction } from "mobx";
+import { action, computed, observable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
 import { ICity } from "../models/location";
 import { RootStore } from "./rootStore";
@@ -30,6 +30,7 @@ export default class CommonStore {
     @observable loadingCities = false;
     @observable cities: ICity[] = [];
     @observable cityRegistery = new Map();
+    @observable loadingDocs = false;
 
     @action setToken = (token: string | null) => {
         this.token = token;
@@ -67,6 +68,53 @@ export default class CommonStore {
         } catch (error) {
             runInAction(()=>{
                 this.loadingCities = false;
+            })
+            console.log(error);
+        }
+    }
+
+    @action loadTrainerDocuments = async (username:string) =>{
+        this.loadingDocs = true;
+
+        try {
+            const list = await agent.Documents.list(username);
+            runInAction(()=>{
+              //  this.cities = list;
+                list.forEach((city) =>{
+                    //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
+                  //  this.cityRegistery.set(city.key, city);
+                });
+                this.loadingDocs = false;
+                return list;
+            })
+        } catch (error) {
+            runInAction(()=>{
+                this.loadingDocs = false;
+                return null;
+            })
+            console.log(error);
+        }
+    }
+
+
+    @action uploadFile  = async (username:string,file:any, onUploadProgress:any) =>{
+        this.loadingDocs = true;
+
+        try {
+            const list = await agent.Documents.upload(file,onUploadProgress,username);
+            runInAction(()=>{
+              //  this.cities = list;
+                // list.forEach((city) =>{
+                //     //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
+                //   //  this.cityRegistery.set(city.key, city);
+                // });
+                this.loadingDocs = false;
+                return list;
+            })
+        } catch (error) {
+            runInAction(()=>{
+                this.loadingDocs = false;
+                return null;
             })
             console.log(error);
         }
@@ -130,15 +178,7 @@ function success(pos:any,setUserCity:any,cityRegistery:Map<any,any>,setUserCityP
            // alert("city name is: " + cityName); 
                  var userCity = Array.from(cityRegistery.values()).filter(x => x.text === cityName);
                 if (cityName && userCity.length > 0) {
-                    setUserCity(userCity[0].key);
-                   // alert("city name is: " + userCity[0].key);
-                    // debugger;
-                    // var add= results[6].formatted_address ;
-                    // var  value=add.split(",");
-    
-                    // var count=value.length;
-                    // var country=value[count-1];
-                    // var city=value[count-2];
+                    //setUserCity(userCity[0].key); BURAYI AÇARSAN ŞEHİR OTO SEÇİLİ GELİR
                 }
                 else  {
                     alert("address not found");

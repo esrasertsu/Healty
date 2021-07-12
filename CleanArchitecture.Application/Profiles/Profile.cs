@@ -18,7 +18,6 @@ namespace CleanArchitecture.Application.Profiles
         public string Role { get; set; }
         public decimal ExperienceYear { get; set; }
         public string Experience { get; set; }
-        public string Certificates { get; set; }
         public string Dependency { get; set; }//şirket , freelance vs
         public CityDto City { get; set; }
         public ICollection<AccessibilityDto> Accessibilities { get; set; }
@@ -35,6 +34,8 @@ namespace CleanArchitecture.Application.Profiles
         public bool HasConversation { get; set; }
         public bool IsOnline { get; set; }
         public int ResponseRate { get; set; }
+        public ICollection<Certificate> Certificates { get; set; }
+
 
     }
 }

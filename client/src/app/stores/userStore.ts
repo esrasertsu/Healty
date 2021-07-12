@@ -2,7 +2,7 @@ import { action, computed, observable, runInAction } from "mobx";
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { history } from "../..";
 import agent from "../api/agent";
-import { IUser, IUserFormValues } from "../models/user";
+import { ITrainerFormValues, IUser, IUserFormValues, TrainerFormValues } from "../models/user";
 import { RootStore } from "./rootStore";
 import { toast } from 'react-toastify';
 import { IMessage } from "../models/message";
@@ -21,11 +21,22 @@ export default class UserStore {
 
     @observable notificationCount: number = 0;
     @computed get isLoggedIn() {return !!this.user}
+    @observable trainerForm: ITrainerFormValues = new TrainerFormValues();
+    @observable trainerRegistering = false;
+
+    @observable trainerRegisteredSuccess = false;
+
+
+    @action setTrainerForm = (form: ITrainerFormValues) => {
+        this.trainerForm = form;
+    }
 
     @action setHubConnectionNull = () =>{
         this.hubConnection = null;
     }
-
+    @action settrainerRegisteringFalse = () =>{
+        this.trainerRegistering = false;
+    }
     
     @action setNotificationCount = (count:number) =>{
         this.notificationCount = count;
@@ -73,6 +84,29 @@ export default class UserStore {
 
         } catch (error) {
             throw error;
+        }
+    }
+
+    @action registerTrainer = async (values: ITrainerFormValues,location:string) =>{
+        try {
+            this.trainerRegistering = true;
+            
+            const user = await agent.User.registerTrainer(values);
+            runInAction(()=>{
+                this.trainerRegistering = false;
+                this.trainerRegisteredSuccess = true;
+               // this.rootStore.modalStore.closeModal();
+               // history.push(location);
+               //  toast.info("Başvurunuz değerlendirmeye alındı.");
+
+            })
+           
+           
+
+        } catch (error) {
+            this.trainerRegistering = false;
+            throw error;
+
         }
     }
 

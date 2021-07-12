@@ -4,7 +4,8 @@ import { Crop } from 'react-image-crop'
 import { Header, Icon } from 'semantic-ui-react'
 
 interface IProps{
-    setFiles: (files: File[]) => void;
+    setFiles: (files: object[]) => void;
+    setDocuments: (files: object[]) => void;
 }
 
 const dropzoneStyles ={
@@ -20,27 +21,28 @@ const dropzoneActive = {
     borderColor: 'green'
 }
 
-const PhotoWidgetDropzone: React.FC<IProps> = ({setFiles}) => {
+const FileUploadDropzone: React.FC<IProps> = ({setFiles,setDocuments}) => {
 
   const onDrop = useCallback(acceptedFiles => {
+    setDocuments(acceptedFiles);
     setFiles(acceptedFiles.map((file:object) => Object.assign(file, 
         {
             preview : URL.createObjectURL(file)
         })
         ));
 
-  }, [setFiles])
+  }, [setFiles,setDocuments])
 
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, multiple: false})
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, multiple: true})
 
   return (
     
     <div {...getRootProps()} style={isDragActive ? {...dropzoneStyles, ...dropzoneActive}: dropzoneStyles}>
       <input {...getInputProps()} />
       <Icon name='upload' size='huge'/>
-      <Header content='Resmi buraya sürükleyin ya da tıklayın.' />
+      <Header content='Dosyaları buraya sürükleyin ya da tıklayın.' />
     </div>
   )
 }
 
-export default PhotoWidgetDropzone;
+export default FileUploadDropzone;

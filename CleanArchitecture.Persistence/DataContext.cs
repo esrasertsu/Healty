@@ -38,6 +38,8 @@ namespace CleanArchitecture.Persistence
         public DbSet<ReferencePic> ReferencePics { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Level> Levels { get; set; }
+        public DbSet<Certificate> Certificates { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

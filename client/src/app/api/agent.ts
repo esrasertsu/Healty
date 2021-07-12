@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { IActivitiesEnvelope, IActivity, IActivityFormValues, ILevel } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
-import { IUser, IUserFormValues } from '../models/user';
+import { ITrainerFormValues, IUser, IUserFormValues } from '../models/user';
 import { IAccessibility, IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope, IProfileEnvelope, IProfileFormValues, IRefencePic } from '../models/profile';
 import { IBlogsEnvelope, IBlog, IPostFormValues, IBlogUpdateFormValues } from '../models/blog';
 import { IAllCategoryList, ICategory, ISubCategory } from '../models/category';
@@ -24,8 +24,13 @@ axios.interceptors.response.use(undefined, error => {
     {
         toast.error('Network error - make sure API is running!');
     }
-    const {status, data, config} = error.response;
-
+    const {status, data, config, headers} = error.response;
+    if(status === 401 && headers['www-authenticate'] === 'Bearer error="invalid_token", error_description="The token is expired"')
+    {
+       window.localStorage.removeItem('jwt');
+       history.push('/');
+       toast.info("Oturumunuzun süresi dolmuştur.")
+    }   
     if(status === 404)
     {
         history.push('/notFound');
@@ -189,6 +194,43 @@ const requests = {
             headers: {'Content-type': 'multipart/form-data'}
         }).then(responseBody)
     },
+    uploadFile: async (url: string, file: any, onUploadProgress: any, username:string) =>{
+        let formData = new FormData();
+        formData.append('file',file);
+        formData.append('onUploadProgress',onUploadProgress);
+        formData.append('username',username);
+
+        return axios.post(url, formData, {
+            headers: {'Content-type': 'multipart/form-data'},
+            onUploadProgress
+        }).then(responseBody)
+    },
+    registerTrainer: async (url: string, trainer: ITrainerFormValues) =>{
+        let formData = new FormData();
+        debugger;
+         formData.append('displayname', trainer.displayname!);
+         formData.append('username', trainer.username!);
+         formData.append('email', trainer.email);
+         formData.append('password', trainer.password);
+         formData.append('photo',trainer.photo!);
+         formData.append('description',trainer.description!);
+
+         trainer.dependency && trainer.dependency !== "" && formData.append('Dependency', trainer.dependency);
+         trainer.cityId && trainer.cityId !== "" && formData.append('CityId', trainer.cityId);
+ 
+         trainer.subCategoryIds!.length>0 && trainer.subCategoryIds!.map((subCategoryId:string)=>(
+             formData.append('SubCategoryIds', subCategoryId)
+         ));
+         trainer.categoryIds!.length>0 && trainer.categoryIds!.map((category:string)=>(
+             formData.append('CategoryIds', category)
+         ));
+         trainer.certificates!.length>0 && trainer.certificates!.map((acc:File)=>(
+             formData.append('certificates', acc)
+         ));
+         return axios.post(url, formData, {
+            headers: {'Content-type': 'application/json'}
+         }).then(responseBody)
+    },
 }
 
 const Activities = {
@@ -213,6 +255,7 @@ const User ={
     login: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/login', user),
     register: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/register', user),
     update: (status:boolean) => requests.put(`/user?status=${status}`,{}),
+    registerTrainer: ( trainer : ITrainerFormValues) => requests.registerTrainer('/user/registertrainer', trainer),
 
 }
 
@@ -270,6 +313,12 @@ const Cities = {
     list: (): Promise<ICity[]> => requests.get('/city'),
 
 }
+
+const Documents = {
+    list: (username:string): Promise<File[]> => requests.get(`/document/${username}`),
+    upload: (file:any, onUploadProgress:any, username:string):Promise<any> => requests.uploadFile(`/document/${username}`, file, onUploadProgress, username)
+
+}
 export default {
     Activities,
     User,
@@ -277,5 +326,6 @@ export default {
     Blogs,
     Categories,
     Messages,
-    Cities
+    Cities,
+    Documents
 }

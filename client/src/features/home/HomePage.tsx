@@ -9,12 +9,13 @@ import TextInput from '../../app/common/form/TextInput';
 import { Form as FinalForm, Field } from "react-final-form";
 import SearchArea from './SearchArea';
 import { history } from '../../index'
-import { TrainerForm } from '../user/TrainerForm';
+import TrainerForm from '../user/TrainerForm';
 import Statistics from './Statistics';
 
 
 const HomePage = () => {
-
+ 
+  const token = window.localStorage.getItem('jwt');
     const rootStore = useContext(RootStoreContext);
     const {isLoggedIn, user} = rootStore.userStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;
@@ -65,7 +66,7 @@ const HomePage = () => {
               <TrainerForm location={"/"} />
               </Modal.Description>
               </>,false,
-              <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
+             "") 
           }
   
     return (
@@ -144,7 +145,7 @@ const HomePage = () => {
                        {/* <Image size='massive' src='/assets/logo.png' alt='logo' style={{marginBottom: 12}}/> */}
                        Dilediğin kategoride sağlıklı yaşam uzmanını ara
                    </Header>
-                   {isLoggedIn && user ? ( 
+                   {isLoggedIn && user && token ? ( 
                    <Fragment>
                         <SearchArea/>
                    </Fragment>

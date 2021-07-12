@@ -22,14 +22,74 @@ export interface IUserFormValues {
 export interface ITrainerFormValues {
     email: string;
     password: string;
-    displayName?: string;
-    userName?: string;
+    displayname?: string;
+    username?: string;
     experienceYear:number;
     accessibilities: IAccessibility[];
-    city: ICity;
+    city?: ICity|null;
     dependency:string;
     categories: ICategory[];
     subCategories: ISubCategory[];
-    photo: Blob;
+    photo?: Blob|null;
+    subCategoryIds: string[],
+    categoryIds: string[],
+    accessibilityIds: string[],
+    cityId:string,
+    description: string,
+    certificates:File[]
 
+
+}
+
+export class TrainerFormValues implements ITrainerFormValues{
+    email: string = "";
+    password:string = "";
+    displayname:string = "";
+    username:string = "";
+    experienceYear: number = 0;
+    experience:string = '';
+    certificates:File[] =[];
+    dependency:string = '';
+    subCategoryIds: string[] =[];
+    categoryIds: string[]  =[];
+    accessibilityIds: string[] =[];
+    categories: ICategory[] = [];
+    subCategories: ISubCategory[] = [];
+    cityId: string = "";
+    photo?: Blob|null  = null;
+    city?: ICity| null = null;
+    accessibilities: IAccessibility[] = [];
+    description: string ="";
+
+    constructor(init?: ITrainerFormValues){
+        if(init)
+        {    
+            
+            init.accessibilityIds = [];
+            init.subCategoryIds=[];
+            init.categoryIds=[];
+            init.cityId = init.city ? init.city.value : "";
+              init.accessibilities!.forEach(s=>
+                {
+                    init.accessibilityIds.push(s.value.toString())
+
+                }
+                );
+
+                init.categories!.forEach(s=>
+                    {
+                        init.categoryIds.push(s.value.toString())
+    
+                    }
+                    );
+                    init.subCategories!.forEach(s=>
+                        {
+                            init.subCategoryIds.push(s.value.toString())
+        
+                        }
+                        );
+
+         }
+        Object.assign(this, init);
+    }
 }

@@ -64,7 +64,6 @@ namespace CleanArchitecture.Application.Profiles
 
                     user.DisplayName = request.DisplayName ?? user.DisplayName;
                     user.Dependency = request.Dependency ?? String.Empty;
-                    user.Certificates = request.Certificates ?? String.Empty;
                     user.Bio = request.Bio ?? String.Empty;
                     user.Experience = request.Experience ?? String.Empty;
                     user.ExperienceYear = Convert.ToDecimal(request.ExperienceYear) > 0 ? Convert.ToDecimal(request.ExperienceYear) : user.ExperienceYear;

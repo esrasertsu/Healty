@@ -184,7 +184,6 @@ namespace CleanArchitecture.Persistence.Migrations
                     DisplayName = table.Column<string>(nullable: true),
                     ExperienceYear = table.Column<decimal>(nullable: false),
                     Experience = table.Column<string>(nullable: true),
-                    Certificates = table.Column<string>(nullable: true),
                     Dependency = table.Column<string>(nullable: true),
                     Role = table.Column<int>(nullable: false),
                     CityId = table.Column<Guid>(nullable: true),
@@ -415,6 +414,25 @@ namespace CleanArchitecture.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Certificates",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Url = table.Column<string>(nullable: true),
+                    AppUserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Certificates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Certificates_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
@@ -514,6 +532,30 @@ namespace CleanArchitecture.Persistence.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Photos_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReferencePics",
+                columns: table => new
+                {
+                    OriginalPublicId = table.Column<string>(nullable: false),
+                    ThumbnailPublicId = table.Column<string>(nullable: false),
+                    OriginalUrl = table.Column<string>(nullable: true),
+                    ThumbnailUrl = table.Column<string>(nullable: true),
+                    Width = table.Column<int>(nullable: false),
+                    Height = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(nullable: true),
+                    AppUserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReferencePics", x => new { x.OriginalPublicId, x.ThumbnailPublicId });
+                    table.ForeignKey(
+                        name: "FK_ReferencePics_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -775,6 +817,11 @@ namespace CleanArchitecture.Persistence.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Certificates_AppUserId",
+                table: "Certificates",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Comments_ActivityId",
                 table: "Comments",
                 column: "ActivityId");
@@ -807,6 +854,11 @@ namespace CleanArchitecture.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Photos_AppUserId",
                 table: "Photos",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReferencePics_AppUserId",
+                table: "ReferencePics",
                 column: "AppUserId");
 
             migrationBuilder.CreateIndex(
@@ -887,6 +939,9 @@ namespace CleanArchitecture.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Certificates");
+
+            migrationBuilder.DropTable(
                 name: "Comments");
 
             migrationBuilder.DropTable(
@@ -897,6 +952,9 @@ namespace CleanArchitecture.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Photos");
+
+            migrationBuilder.DropTable(
+                name: "ReferencePics");
 
             migrationBuilder.DropTable(
                 name: "SubCatBlogs");

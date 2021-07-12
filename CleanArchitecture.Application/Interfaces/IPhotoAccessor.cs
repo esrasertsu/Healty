@@ -14,5 +14,6 @@ namespace CleanArchitecture.Application.Interfaces
         ReferencePicUploadResult AddReferencePic(IFormFile file, IFormFile file2, bool isFirst);
         string DeletePhoto(string publicId);
         string DeleteReferencePic(string publicId1, string publicId2);
+
     }
 }

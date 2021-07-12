@@ -8,7 +8,6 @@ namespace CleanArchitecture.Domain
         public string DisplayName { get; set; }
         public decimal ExperienceYear { get; set; }
         public string Experience { get; set; }
-        public string Certificates { get; set; }
         public string Dependency { get; set; }//þirket , freelance vs
         public Role Role { get; set; }
         public virtual City City { get; set; }
@@ -26,13 +25,16 @@ namespace CleanArchitecture.Domain
         public virtual ICollection<UserSubCategories> UserSubCategories { get; set; }
         public virtual ICollection<UserCategories> UserCategories { get; set; }
         public virtual ICollection<ReferencePic> ReferencePics { get; set; }
+        public virtual ICollection<Certificate> Certificates { get; set; }
+
     }
 
     public enum Role
     {
         Admin = 100,
         User = 110,
-        Trainer = 120
+        Trainer = 120,
+        WaitingTrainer = 130
     }
 
 }

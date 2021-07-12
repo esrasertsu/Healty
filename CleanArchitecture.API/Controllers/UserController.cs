@@ -39,5 +39,12 @@ namespace CleanArchitecture.API.Controllers
             UpdateStatus.Command command = new UpdateStatus.Command{ Status = status };
             return await Mediator.Send(command);
         }
+
+        [AllowAnonymous]
+        [HttpPost("registertrainer")]
+        public async Task<ActionResult<Unit>> RegisterTrainer([FromForm] RegisterTrainer.Command command)
+        {
+            return await Mediator.Send(command);
+        }
     }
 }

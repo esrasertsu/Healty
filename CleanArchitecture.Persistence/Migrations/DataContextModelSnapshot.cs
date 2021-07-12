@@ -156,9 +156,6 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("Bio")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Certificates")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid?>("CityId")
                         .HasColumnType("TEXT");
 
@@ -298,6 +295,24 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Domain.Certificate", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("Certificates");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.ChatRoom", b =>
@@ -838,6 +853,13 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.HasOne("CleanArchitecture.Domain.Category", "Category")
                         .WithMany("Blogs")
                         .HasForeignKey("CategoryId");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Domain.Certificate", b =>
+                {
+                    b.HasOne("CleanArchitecture.Domain.AppUser", null)
+                        .WithMany("Certificates")
+                        .HasForeignKey("AppUserId");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.Message", b =>

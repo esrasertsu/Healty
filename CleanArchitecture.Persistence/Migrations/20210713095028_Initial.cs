@@ -186,6 +186,9 @@ namespace CleanArchitecture.Persistence.Migrations
                     Experience = table.Column<string>(nullable: true),
                     Dependency = table.Column<string>(nullable: true),
                     Role = table.Column<int>(nullable: false),
+                    RegistrationDate = table.Column<DateTime>(nullable: false),
+                    LastLoginDate = table.Column<DateTime>(nullable: false),
+                    ApplicationDate = table.Column<DateTime>(nullable: true),
                     CityId = table.Column<Guid>(nullable: true),
                     Bio = table.Column<string>(nullable: true),
                     IsOnline = table.Column<bool>(nullable: false)

@@ -105,6 +105,7 @@ namespace CleanArchitecture.Application.Profiles
                 Accessibilities = accessDtoToReturn,
                 Categories = catsToReturn,
                 SubCategories = subcatsToReturn,
+                RegDate = user.RegistrationDate
             };
 
             if (currentUser.Followings.Any(x => x.TargetId == user.Id))
@@ -196,6 +197,7 @@ namespace CleanArchitecture.Application.Profiles
                 Accessibilities = accessDtoToReturn,
                 Categories = catsToReturn,
                 SubCategories = subcatsToReturn,
+                RegDate = user.RegistrationDate
             };
             if (currentUser != null)
             {

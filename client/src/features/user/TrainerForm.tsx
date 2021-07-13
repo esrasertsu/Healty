@@ -106,7 +106,8 @@ useEffect(() => {
       registerTrainer(edittedValues,location)
       .catch((error:any) => (
         settrainerRegisteringFalse(),
-        setShowM(true)
+        setShowM(true),
+        console.log(error)
       ))
    }
     return (
@@ -153,7 +154,7 @@ useEffect(() => {
               color="teal"
               textAlign="center"
             />
-           <label>Kullanıcı Adı</label>
+           <label>Kullanıcı Adı*</label>
             <Field name="username" placeholder="Kullanıcı Adı" component={TextInput} value={trainerForm.username}/>
             <OnChange name="username">
                 {(value, previous) => {
@@ -164,7 +165,7 @@ useEffect(() => {
                     }
                 }}
             </OnChange>
-            <label>Ad Soyad</label>
+            <label>Ad Soyad*</label>
             <Field name="displayname" placeholder="Ad Soyad" component={TextInput} value={trainerForm.displayname}/>
             <OnChange name="displayname">
                 {(value, previous) => {
@@ -174,7 +175,7 @@ useEffect(() => {
                     }
                 }}
             </OnChange>
-            <label>Email</label>
+            <label>Email*</label>
             <Field name="email" placeholder="Email" component={TextInput} value={trainerForm.email}/>
             <OnChange name="email">
                 {(value, previous) => {
@@ -184,7 +185,7 @@ useEffect(() => {
                     }
                 }}
             </OnChange>
-            <label>Şifre</label>
+            <label>Şifre*</label>
             <Field
               name="password"
               placeholder="Şifre"
@@ -201,7 +202,7 @@ useEffect(() => {
                 }}
             </OnChange>
             <br></br>
-            <label>Profil Fotoğrafı</label>
+            <label>Profil Fotoğrafı*</label>
            { files.length === 0 ? 
                 <div style={{marginBottom:15}}>
                 <PhotoWidgetDropzone setFiles={setFiles} />
@@ -229,7 +230,7 @@ useEffect(() => {
                </Grid>
                )
                   }
-             <label>Uzman Kategorisi</label>
+             <label>Uzman Kategorisi*</label>
             <Field
                   name="categoryIds"
                   placeholder="Kategori"
@@ -240,7 +241,7 @@ useEffect(() => {
                     {
                       handleCategoryChanged(e,data)}}
                 /> 
-                  <label>Uzman Alt Kategorisi</label>
+                  <label>Uzman Alt Kategorisi*</label>
                  <Field
                   name="subCategoryIds"
                   placeholder="Alt Kategori"
@@ -251,7 +252,7 @@ useEffect(() => {
                     {
                       handleSubCategoryChanged(e,data)}}
                 />  
-                 <label>Yeterlilik Belgesi (Diploma/Sertifika)</label>
+                 <label>Yeterlilik Belgesi (Diploma/Sertifika)*</label>
                  {docs.length === 0 && <FileUploadDropzone setDocuments={setDocs} setFiles={setFileDocs} /> }
                  {docs.length !== 0 &&
                  <Segment>
@@ -271,7 +272,7 @@ useEffect(() => {
                  <Button color="red" content="Dosyaları sil X" onClick={() => setDocs([])}></Button>
                  </Segment>
                   }
-               <label>Şehir</label>
+               <label>Şehir*</label>
                 <Field 
                   name="cityId"
                   placeholder="Şehir"
@@ -281,7 +282,7 @@ useEffect(() => {
                   onChange={(e: any,data: any)=>handleCityChanged(e,data)}
                   style={{marginBottom:15}}
                 />
-                <label>Çalıştığınız/Bağlı Olduğunuz Kurum</label>
+                <label>Çalıştığınız/Bağlı Olduğunuz Kurum*</label>
                 <Field name="dependency" placeholder="Şirket Adı / Freelance" component={TextInput} value={trainerForm.dependency}/>
                 <OnChange name="dependency">
                     {(value, previous) => {
@@ -292,7 +293,7 @@ useEffect(() => {
                         }
                     }}
                 </OnChange>
-                 <label>Açıklama</label>
+                 <label>Açıklama*</label>
                  <Field
                   name="description"
                   placeholder="Açıklama"

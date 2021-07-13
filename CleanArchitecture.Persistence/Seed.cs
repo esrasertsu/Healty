@@ -805,6 +805,8 @@ namespace Persistence
                         Experience="çok tecrübeliyim yıllarıdr bu işi yapıyorum",
                         ExperienceYear=5,
                         Dependency="MacFit",
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
                         UserAccessibilities = new List<UserAccessibility>
                         {
                             new UserAccessibility
@@ -817,6 +819,19 @@ namespace Persistence
                                 AppUserId = "a",
                                 AccessibilityId = OwnPlace.Id
                             }
+                        },
+                         UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "a",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "a",
+                                Category = Spor
+                            },
                         }
 
                     },
@@ -829,6 +844,8 @@ namespace Persistence
                         Role=Role.Trainer,
                          ExperienceYear=5,
                         Dependency="MacFit",
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
                         UserAccessibilities = new List<UserAccessibility>
                         {
                             new UserAccessibility
@@ -865,6 +882,8 @@ namespace Persistence
                         Role=Role.Trainer,
                          ExperienceYear=3,
                         Dependency="Tom'un Yeri",
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
                           UserAccessibilities = new List<UserAccessibility>
                         {
                             new UserAccessibility
@@ -902,7 +921,21 @@ namespace Persistence
                         Role=Role.Trainer,
                         ExperienceYear=2,
                         Dependency="Esra'un Yeri",
-                     
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                      UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "d",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "d",
+                                Category = Spor
+                            },
+                        }
 
                     },
                     new AppUser
@@ -913,7 +946,21 @@ namespace Persistence
                         Email = "steve@test.com",
                         Role=Role.Trainer,
                         ExperienceYear=1,
-                       
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                        UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "e",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "e",
+                                Category = Spor
+                            },
+                        }
 
                     },
                     new AppUser
@@ -924,8 +971,21 @@ namespace Persistence
                         Email = "ahmet@test.com",
                         Role=Role.Trainer,
                         ExperienceYear=3,
-                       
-
+                       ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                          UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "f",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "f",
+                                Category = Spor
+                            },
+                        }
                     },
                     new AppUser
                     {
@@ -934,8 +994,34 @@ namespace Persistence
                         UserName = "semih",
                         Email = "semih@test.com",
                         Role=Role.Trainer,
-                       
-
+                       ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                        UserAccessibilities = new List<UserAccessibility>
+                        {
+                            new UserAccessibility
+                            {
+                                AppUserId = "g",
+                                AccessibilityId = online.Id
+                            },
+                            new UserAccessibility
+                            {
+                                AppUserId = "g",
+                                Accessibility = OwnPlace
+                            }
+                        } ,
+                         UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "g",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "g",
+                                Category = Spor
+                            },
+                        }
                     },
                      new AppUser
                     {
@@ -944,7 +1030,21 @@ namespace Persistence
                         UserName = "jack",
                         Email = "jack@test.com",
                         Role=Role.Trainer,
-                     
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                      UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "h",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "h",
+                                Category = Spor
+                            },
+                        }
 
                     },
                      new AppUser
@@ -954,7 +1054,21 @@ namespace Persistence
                         UserName = "johny",
                         Email = "johny@test.com",
                         Role=Role.Trainer,
-                         
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                          UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "j",
+                                Category = Psikoloji
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "j",
+                                Category = Spor
+                            },
+                        }
                     },
                 new AppUser
                 {
@@ -966,7 +1080,16 @@ namespace Persistence
                     Experience = "çok tecrübeliyim yıllarıdr bu işi yapıyorum",
                     ExperienceYear = 5,
                     Dependency = "MacFit",
-                      
+                    ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                       UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "k",
+                                Category = Meditasyon
+                            }
+                        }
                 },
                     new AppUser
                     {
@@ -977,7 +1100,21 @@ namespace Persistence
                         Role = Role.Trainer,
                         ExperienceYear = 5,
                         Dependency = "MacFit",
-                      
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                       UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "l",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "l",
+                                Category = Spor
+                            },
+                        }
                     },
                     new AppUser
                     {
@@ -988,8 +1125,18 @@ namespace Persistence
                         Role = Role.Trainer,
                         ExperienceYear = 3,
                         Dependency = "Tom'un Yeri",
-                       
-
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                        UserCategories = new List<UserCategories>
+                        {
+                           
+                             new UserCategories
+                            {
+                                AppUserId = "m",
+                                Category = Spor
+                            },
+                        },
+                        
                     },
                     new AppUser
                     {
@@ -1000,7 +1147,21 @@ namespace Persistence
                         Role = Role.Trainer,
                         ExperienceYear = 2,
                         Dependency = "Esra'un Yeri",
-                         
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                          UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "n",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "n",
+                                Category = Diyet
+                            },
+                        }
 
                     },
                     new AppUser
@@ -1011,7 +1172,17 @@ namespace Persistence
                         Email = "begum@test.com",
                         Role = Role.Trainer,
                         ExperienceYear = 1,
-                     
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                      UserCategories = new List<UserCategories>
+                        {
+                            
+                             new UserCategories
+                            {
+                                AppUserId = "o",
+                                Category = Spor
+                            },
+                        }
 
                     },
                     new AppUser
@@ -1022,7 +1193,21 @@ namespace Persistence
                         Email = "pinar@test.com",
                         Role = Role.Trainer,
                         ExperienceYear = 3,
-                       
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                        UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "p",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "p",
+                                Category = Spor
+                            },
+                        }
 
                     },
                     new AppUser
@@ -1031,8 +1216,22 @@ namespace Persistence
                         DisplayName = "Rasim Ok",
                         UserName = "rasim",
                         Email = "rasim@test.com",
-                        Role = Role.Trainer
-                       
+                        Role = Role.Trainer,
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                        UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "r",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "r",
+                                Category = Spor
+                            },
+                        }
 
                     },
                      new AppUser
@@ -1042,7 +1241,21 @@ namespace Persistence
                          UserName = "sulu",
                          Email = "sulu@test.com",
                          Role = Role.User,
-                      
+                         ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                       UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "s",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "s",
+                                Category = Spor
+                            },
+                        }
 
                      },
                      new AppUser
@@ -1052,7 +1265,17 @@ namespace Persistence
                          UserName = "tayfun",
                          Email = "tayfun@test.com",
                          Role = Role.Trainer,
-                         
+                         ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                          UserCategories = new List<UserCategories>
+                        {
+                            
+                             new UserCategories
+                            {
+                                AppUserId = "t",
+                                Category = Spor
+                            },
+                        }
                      },
             new AppUser
             {
@@ -1064,6 +1287,16 @@ namespace Persistence
                 Experience = "çok tecrübeliyim yıllarıdr bu işi yapıyorum",
                 ExperienceYear = 5,
                 Dependency = "MacFit",
+                ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                 UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "u",
+                                Category = Meditasyon
+                            }
+                        }
 
             },
                     new AppUser
@@ -1075,7 +1308,21 @@ namespace Persistence
                         Role = Role.Trainer,
                         ExperienceYear = 5,
                         Dependency = "MacFit",
-                       
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                        UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "v",
+                                Category = Diyet
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "v",
+                                Category = Spor
+                            },
+                        }
                     },
                     new AppUser
                     {
@@ -1086,7 +1333,16 @@ namespace Persistence
                         Role = Role.Trainer,
                         ExperienceYear = 3,
                         Dependency = "Tom'un Yeri",
-                        
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                         UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "y",
+                                Category = Diyet
+                            }
+                        }
 
                     },
                     new AppUser
@@ -1097,8 +1353,17 @@ namespace Persistence
                         Email = "zehra@test.com",
                         Role = Role.Trainer,
                         ExperienceYear = 2,
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
                         Dependency = "Esra'un Yeri",
-                     
+                      UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "z",
+                                Category = Psikoloji
+                            }
+                        }
 
                     },
                     new AppUser
@@ -1109,7 +1374,16 @@ namespace Persistence
                         Email = "inan@test.com",
                         Role = Role.Trainer,
                         ExperienceYear = 1,
-                       
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                        UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "i",
+                                Category = Psikoloji
+                            }
+                        }
 
                     },
                     new AppUser
@@ -1119,8 +1393,22 @@ namespace Persistence
                         UserName = "ahmeto",
                         Email = "ahmeto@test.com",
                         Role = Role.Trainer,
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
                         ExperienceYear = 3,
-                       
+                        UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "ab",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "ab",
+                                Category = Psikoloji
+                            },
+                        }
 
                     },
                     new AppUser
@@ -1130,7 +1418,21 @@ namespace Persistence
                         UserName = "semiht",
                         Email = "semiht@test.com",
                         Role = Role.Trainer,
-                      
+                        ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                       UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "st",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "st",
+                                Category = Diyet
+                            },
+                        }
 
                     },
                      new AppUser
@@ -1140,7 +1442,21 @@ namespace Persistence
                          UserName = "ibo",
                          Email = "ibo@test.com",
                          Role = Role.Trainer,
-                      
+                         ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                       UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "iuc",
+                                Category = Meditasyon
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "iuc",
+                                Category = Diyet
+                            },
+                        }
 
                      },
                      new AppUser
@@ -1150,7 +1466,21 @@ namespace Persistence
                          UserName = "kerimcan",
                          Email = "kerimcan@test.com",
                          Role = Role.Trainer,
-                      
+                         ApplicationDate = DateTime.Now,
+                        RegistrationDate = DateTime.Now,
+                       UserCategories = new List<UserCategories>
+                        {
+                            new UserCategories
+                            {
+                                AppUserId = "kd",
+                                Category = Diyet
+                            },
+                             new UserCategories
+                            {
+                                AppUserId = "kd",
+                                Category = Spor
+                            },
+                        }
                      },
                 };
 

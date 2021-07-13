@@ -153,6 +153,9 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime?>("ApplicationDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Bio")
                         .HasColumnType("TEXT");
 
@@ -185,6 +188,9 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<bool>("IsOnline")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("LastLoginDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
 
@@ -207,6 +213,9 @@ namespace CleanArchitecture.Persistence.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Role")
                         .HasColumnType("INTEGER");

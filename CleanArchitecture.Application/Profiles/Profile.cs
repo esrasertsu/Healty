@@ -35,6 +35,7 @@ namespace CleanArchitecture.Application.Profiles
         public bool IsOnline { get; set; }
         public int ResponseRate { get; set; }
         public ICollection<Certificate> Certificates { get; set; }
+        public DateTime RegDate { get; set; }
 
 
     }

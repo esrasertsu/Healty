@@ -95,10 +95,6 @@ export default class UserStore {
             runInAction(()=>{
                 this.trainerRegistering = false;
                 this.trainerRegisteredSuccess = true;
-               // this.rootStore.modalStore.closeModal();
-               // history.push(location);
-               //  toast.info("Başvurunuz değerlendirmeye alındı.");
-
             })
            
            

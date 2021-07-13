@@ -5,6 +5,7 @@ using CleanArchitecture.Persistence;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,12 +37,14 @@ namespace CleanArchitecture.Application.User
             private readonly UserManager<AppUser> _userManager;
             private readonly SignInManager<AppUser> _signInManager;
             private readonly IJwtGenerator _jwtGenerator;
+            private readonly DataContext _context;
 
-            public Handler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IJwtGenerator jwtGenerator)
+            public Handler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IJwtGenerator jwtGenerator, DataContext context)
             {
                 _signInManager = signInManager;
                 _userManager = userManager;
                 _jwtGenerator = jwtGenerator;
+                _context = context;
             }
             public async Task<User> Handle(Query request, CancellationToken cancellationToken)
             {
@@ -54,6 +57,10 @@ namespace CleanArchitecture.Application.User
 
                 if(result.Succeeded)
                 {
+                    var current = await _context.Users.SingleOrDefaultAsync(x => x.UserName == user.UserName);
+                    current.LastLoginDate = DateTime.Now;
+                    var success = await _context.SaveChangesAsync() > 0;
+
                     //TODO generate token
                     return new User
                     {

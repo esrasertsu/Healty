@@ -11,6 +11,9 @@ import ProfileListItemsPlaceholder from './ProfileListItemsPlaceholder';
 import InfiniteScroll from 'react-infinite-scroller';
 import ProfileList from './ProfileList';
 import { SemanticWIDTHS } from 'semantic-ui-react/dist/commonjs/generic';
+import ReactDOMServer from 'react-dom/server'
+import { faSort } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
@@ -31,6 +34,7 @@ const responsive = {
     partialVisibilityGutter: 30 
   }
 };
+
 
 const fiveItem:SemanticWIDTHS = 5;
 const sixItem:SemanticWIDTHS = 6;
@@ -85,7 +89,7 @@ const sixItem:SemanticWIDTHS = 6;
       setLoadingNext(true);
       setPage(0);
       clearProfileRegistery();
-      sortProfiles();
+      sortProfiles().then(() => setLoadingNext(false))
     }
     const [loadingNext, setLoadingNext] = useState(false);
 
@@ -101,6 +105,7 @@ const sixItem:SemanticWIDTHS = 6;
       }
     }
 
+
     return (
       <Fragment>
       <Segment inverted textAlign='center' vertical className='masthead_page'>
@@ -108,7 +113,7 @@ const sixItem:SemanticWIDTHS = 6;
                <ProfileListFilters />
                </Container>
       </Segment>
-      {Array.from(profileRegistery.values()).length === 0 && !loadingProfiles?
+      {Array.from(profileRegistery.values()).length === 0 && !loadingProfiles && !loadingNext?
        <>
        <br></br>
         <Message style={{marginTop:"30px"}} header='Aradığınız kriterlere uygun bir aktivite bulunamadı :(' list={list} />
@@ -156,13 +161,13 @@ const sixItem:SemanticWIDTHS = 6;
           <Select 
             value={sortingInput}
             onChange={handleSortingChange}
-            placeholder={"Önerilen Sıralama (En Yeniler)"}
+            placeholder= {"Sırala"}
             options={profileSortingOptions}
          />  </div>
           </Grid.Column>
          <Grid.Column width={16}>
          {
-         (loadingProfiles && page === 0) || loadingOnlyProfiles ? 
+         (loadingProfiles && page === 0) && loadingOnlyProfiles ? 
          <ProfileListItemsPlaceholder itemPerRow={sixItem} /> :
           <InfiniteScroll
           pageStart={0}

@@ -112,12 +112,15 @@ namespace CleanArchitecture.Application.Profiles
 
                 if (request.Sort == "popular")
                     profiles = popularProfiles.OrderByDescending(x => x.Star).Skip(request.Offset ?? 0).Take(request.Limit ?? 6).ToList();
-                else 
+                else
+                {
                     foreach (var user in users)
                     {
                         profiles.Add(await _profileReader.ReadProfileCard(user.UserName));
                     }
-
+                    profiles = profiles.OrderByDescending(x => x.RegDate).ToList();
+                }
+                    
                 return new ProfilesEnvelope
                 {
                     ProfileList = profiles,

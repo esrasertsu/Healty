@@ -90,102 +90,130 @@ namespace CleanArchitecture.Application.User
                         UserName = request.UserName,
                         Role = Role.WaitingTrainer,
                         Bio = request.Description,
-                        Dependency = request.Dependency
+                        Dependency = request.Dependency,
+                        ApplicationDate = DateTime.Now
                     };
-
-                    var photoUploadResults = _photoAccessor.AddPhoto(request.Photo);
-
-                    var photo = new Photo
-                    {
-                        Url = photoUploadResults.Url,
-                        Id = photoUploadResults.PublicId,
-                        IsMain = true
-                    };
-                    user.Photos = new List<Photo>();
-                    user.Photos.Add(photo);
-
-
-                    foreach (var item in request.Certificates)
-                    {
-                        var documentUploadResult = _documentAccessor.AddDocument(item);
-
-                        var doc = new Certificate
-                        {
-                            Url = documentUploadResult.Url,
-                            Id = documentUploadResult.PublicId,
-                        };
-                        user.Certificates = new List<Certificate>();
-                        user.Certificates.Add(doc);
-                    }
-
-
-                    if (request.CityId != null && request.CityId != Guid.Empty)
-                    {
-                        var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == request.CityId);
-                        if (city == null)
-                            throw new RestException(HttpStatusCode.NotFound, new { City = "NotFound" });
-                        else
-                        {
-                            user.City = city;
-                        }
-                    }
-
-                    if (request.CategoryIds != null)
-                    {
-                        var userCats = await _context.UserCategories.Where(x => x.AppUserId == user.Id).ToArrayAsync();
-                        _context.UserCategories.RemoveRange(userCats);
-
-                        foreach (var catId in request.CategoryIds)
-                        {
-                            var cat = await _context.Categories.SingleOrDefaultAsync(x => x.Id == catId);
-
-                            if (cat == null)
-                                throw new RestException(HttpStatusCode.NotFound, new { Category = "NotFound" });
-                            else
-                            {
-                                var userCategory = new UserCategories()
-                                {
-                                    Category = cat,
-                                    AppUser = user
-                                };
-                                _context.UserCategories.Add(userCategory);
-                            }
-                        }
-                    }
-
-
-                    if (request.SubCategoryIds != null)
-                    {
-                        var userSubCats = await _context.UserSubCategories.Where(x => x.AppUserId == user.Id).ToArrayAsync();
-                        _context.UserSubCategories.RemoveRange(userSubCats);
-
-                        foreach (var catId in request.SubCategoryIds)
-                        {
-                            var cat = await _context.SubCategories.SingleOrDefaultAsync(x => x.Id == catId);
-
-                            if (cat == null)
-                                throw new RestException(HttpStatusCode.NotFound, new { SubCategory = "NotFound" });
-                            else
-                            {
-                                var userCategory = new UserSubCategories()
-                                {
-                                    SubCategory = cat,
-                                    AppUser = user
-                                };
-                                _context.UserSubCategories.Add(userCategory);
-                            }
-                        }
-                    }
-
 
                     var result = await _userManager.CreateAsync(user, request.Password);
+                    
 
                     if (result.Succeeded)
                     {
-                      return Unit.Value;
+                        var photoUploaded = false;
+                        var docsUploaded = false;
+
+                        var photoUploadResults = _photoAccessor.AddPhoto(request.Photo);
+
+                        var photo = new Photo
+                        {
+                            Url = photoUploadResults.Url,
+                            Id = photoUploadResults.PublicId,
+                            IsMain = true
+                        };
+                        user.Photos = new List<Photo>();
+                        user.Photos.Add(photo);
+                        photoUploaded = true;
+
+                        foreach (var item in request.Certificates)
+                        {
+                            var documentUploadResult = _documentAccessor.AddDocument(item);
+
+                            var doc = new Certificate
+                            {
+                                Url = documentUploadResult.Url,
+                                Id = documentUploadResult.PublicId,
+                            };
+                            user.Certificates = new List<Certificate>();
+                            user.Certificates.Add(doc);
+                        }
+                        docsUploaded = true;
+
+                        if (request.CityId != null && request.CityId != Guid.Empty)
+                        {
+                            var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == request.CityId);
+                            if (city == null)
+                                throw new RestException(HttpStatusCode.NotFound, new { City = "NotFound" });
+                            else
+                            {
+                                user.City = city;
+                            }
+                        }
+
+                        if (request.CategoryIds != null)
+                        {
+                            var userCats = await _context.UserCategories.Where(x => x.AppUserId == user.Id).ToArrayAsync();
+                            _context.UserCategories.RemoveRange(userCats);
+
+                            foreach (var catId in request.CategoryIds)
+                            {
+                                var cat = await _context.Categories.SingleOrDefaultAsync(x => x.Id == catId);
+
+                                if (cat == null)
+                                    throw new RestException(HttpStatusCode.NotFound, new { Category = "NotFound" });
+                                else
+                                {
+                                    var userCategory = new UserCategories()
+                                    {
+                                        Category = cat,
+                                        AppUser = user
+                                    };
+                                    _context.UserCategories.Add(userCategory);
+                                }
+                            }
+                        }
+
+
+                        if (request.SubCategoryIds != null)
+                        {
+                            var userSubCats = await _context.UserSubCategories.Where(x => x.AppUserId == user.Id).ToArrayAsync();
+                            _context.UserSubCategories.RemoveRange(userSubCats);
+
+                            foreach (var catId in request.SubCategoryIds)
+                            {
+                                var cat = await _context.SubCategories.SingleOrDefaultAsync(x => x.Id == catId);
+
+                                if (cat == null)
+                                    throw new RestException(HttpStatusCode.NotFound, new { SubCategory = "NotFound" });
+                                else
+                                {
+                                    var userCategory = new UserSubCategories()
+                                    {
+                                        SubCategory = cat,
+                                        AppUser = user
+                                    };
+                                    _context.UserSubCategories.Add(userCategory);
+                                }
+                            }
+                        }
+
+                        var success2 = await _context.SaveChangesAsync() > 0;
+
+                        if (success2) return Unit.Value;
+                        else
+                        {
+                            if (photoUploaded)
+                                _photoAccessor.DeletePhoto(photoUploadResults.PublicId);
+                            if (docsUploaded)
+                                _documentAccessor.DeleteDocument(photoUploadResults.PublicId);
+
+
+                            _context.Users.Remove(user);
+                            var deletedNewUser = await _context.SaveChangesAsync() > 0;
+
+
+                            if (deletedNewUser)
+                            {
+                                throw new Exception("Problem saving user data");
+
+                            }else
+                                throw new Exception("Problem deleting user data");
+
+
+                        }
+
                     }
 
-                  
+                    throw new Exception("Problem saving user main data");
 
                 }
                 catch (Exception)

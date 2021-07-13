@@ -66,7 +66,9 @@ namespace CleanArchitecture.Application.User
                         DisplayName = request.DisplayName,
                         Email = request.Email,
                         UserName = request.UserName,
-                        Role = Role.User
+                        Role = Role.User,
+                        RegistrationDate = DateTime.Now,
+                        LastLoginDate = DateTime.Now
                     };
 
                     var result = await _userManager.CreateAsync(user, request.Password);

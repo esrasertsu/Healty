@@ -25,6 +25,7 @@ import { LoadScriptUrlOptions } from "@react-google-maps/api/dist/utils/make-loa
 import { runInAction } from 'mobx';
 import PrivateRoute from './PrivateRoute';
 import { LoginRequiredPage } from './LoginRequiredPage';
+import  Admin  from '../../features/admin/Admin';
 const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
 const App: React.FC<RouteComponentProps> = ({location}) => {
@@ -111,6 +112,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                   <Route path="/login" component={LoginForm}/>
                   <Route path="/login-required" component={LoginRequiredPage}/>
                   <Route exact path="/activitysearch" component={ActivitySearchPage}/>
+                  <Route exact path="/admin" component={Admin}/>
                   <Route component={NotFound}/>
                 </Switch>
               </Container>

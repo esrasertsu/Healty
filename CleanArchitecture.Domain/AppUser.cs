@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace CleanArchitecture.Domain
@@ -10,6 +11,9 @@ namespace CleanArchitecture.Domain
         public string Experience { get; set; }
         public string Dependency { get; set; }//þirket , freelance vs
         public Role Role { get; set; }
+        public DateTime RegistrationDate { get; set; }
+        public DateTime LastLoginDate { get; set; }
+        public DateTime? ApplicationDate { get; set; }
         public virtual City City { get; set; }
         public string Bio { get; set; }
         public bool IsOnline { get; set; }

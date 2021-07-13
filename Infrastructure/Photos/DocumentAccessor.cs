@@ -50,5 +50,14 @@ namespace Infrastructure.Photos
                 Url = uploadResult.SecureUrl.AbsoluteUri
             };
         }
+
+        public string DeleteDocument(string publicId)
+        {
+            var deleteParams = new DeletionParams(publicId);
+
+            var result = _cloudinary.Destroy(deleteParams);
+
+            return result.Result == "ok" ? result.Result : null;
+        }
     }
 }

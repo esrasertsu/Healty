@@ -3,15 +3,18 @@ import {  Search } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
+import { history } from '../../index'
 
 
- const NavSearchArea:React.FC = () => {
+ const NavSearchArea = () => {
 
     const rootStore = useContext(RootStoreContext);
+    const {setProfileFilterForm,profileFilterForm,clearProfileRegistery, setPage,loadProfiles} = rootStore.profileStore;
 
     const {
       loadAllCategoryList,
-      allDetailedList
+      allDetailedList,
+      loadSubCategories
     } = rootStore.categoryStore;
   
     const [results, setResults] = useState([] as any);
@@ -27,7 +30,22 @@ import _ from 'lodash';
 
     const handleResultSelect = (e:any, { result}:any) => {
         setValue(result.text);
+        setPage(0);
+        if(result && result.parentId === null)
+        {
+          setProfileFilterForm({...profileFilterForm, categoryId:result.key,subCategoryIds:[]});
+        }
+        else 
+        { 
+          result && loadSubCategories(result.parentId!);
+          result && setProfileFilterForm({...profileFilterForm, categoryId:result.parentId!, subCategoryIds:[result.key]});
+        }
+    
+            if(history.location.pathname !== "/profiles")
+               history.push('/profiles');
+            else loadProfiles();
     }
+
     const handleSearchChange = (e:any, { value }: any) => {
       setSearchLoading(true);
       setValue(value);
@@ -56,6 +74,7 @@ import _ from 'lodash';
                         resultRenderer={resultRenderer}
                         className="nav_SearchArea"
                         placeholder="Kategori ara" 
+                        noResultsMessage="Aradığınız kategori bulunamadı"
                 />
                      
     );

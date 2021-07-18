@@ -57,6 +57,13 @@ export default class MessageStore {
     @action setChatRoomId = (id:string|null) =>{
         this.chatRoomId = id;
     }
+
+    @action setChatRoomsEmpty = () =>{
+        this.chatRooms = null;
+    }
+    @action clearMessageRegistery = () =>{
+        this.messageRegistery.clear();
+    }
     
     @action addComment = async (values: any) => {
         values.chatRoomId = this.chatRoomId;

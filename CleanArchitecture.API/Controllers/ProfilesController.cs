@@ -98,5 +98,11 @@ namespace CleanArchitecture.API.Controllers
         }
 
 
+        [HttpDelete("documents/{id}")]
+        public async Task<ActionResult<Unit>> DeleteDocument(string id)
+        {
+            return await Mediator.Send(new DeleteDocument.Command { Id = id });
+        }
+
     }
 }

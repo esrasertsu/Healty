@@ -23,7 +23,7 @@ export interface IProfile {
     hasConversation: boolean,
     experienceYear: number,
     experience:string,
-    certificates:string,
+    certificates:IDocument[],
     dependency:string,
     accessibilities: IAccessibility[],
     categories: ICategory[],
@@ -45,6 +45,12 @@ export interface IPhoto {
     id: string,
     url: string,
     isMain: boolean
+}
+
+export interface IDocument {
+    id: string,
+    url: string,
+    name: string
 }
 
 export interface IRefencePic {
@@ -157,7 +163,9 @@ export interface IProfileFormValues extends Partial<IProfile>{
     subCategoryIds: string[],
     categoryIds: string[],
     accessibilityIds: string[],
-    cityId:string
+    cityId:string,
+    documents:File[]
+
 }
 
 export class ProfileFormValues implements IProfileFormValues{
@@ -169,14 +177,13 @@ export class ProfileFormValues implements IProfileFormValues{
     bio: string= '';
     experienceYear: number = 0;
     experience:string = '';
-    certificates:string = '';
     dependency:string = '';
     accessibilities: IAccessibility[] = [];
     subCategoryIds: string[] =[];
     categoryIds: string[]  =[];
     accessibilityIds: string[] =[];
-    
-
+    documents:File[] = [];
+    certificates: IDocument[] = [];
 
     constructor(init?: IProfileFormValues){
          if(init)

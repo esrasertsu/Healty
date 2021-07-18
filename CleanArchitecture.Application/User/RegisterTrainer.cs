@@ -114,6 +114,8 @@ namespace CleanArchitecture.Application.User
                         user.Photos.Add(photo);
                         photoUploaded = true;
 
+                        user.Certificates = new List<Certificate>();
+
                         foreach (var item in request.Certificates)
                         {
                             var documentUploadResult = _documentAccessor.AddDocument(item);
@@ -122,8 +124,9 @@ namespace CleanArchitecture.Application.User
                             {
                                 Url = documentUploadResult.Url,
                                 Id = documentUploadResult.PublicId,
+                                Name = item.FileName,
+                                ResourceType = documentUploadResult.ResourceType
                             };
-                            user.Certificates = new List<Certificate>();
                             user.Certificates.Add(doc);
                         }
                         docsUploaded = true;
@@ -194,8 +197,13 @@ namespace CleanArchitecture.Application.User
                             if (photoUploaded)
                                 _photoAccessor.DeletePhoto(photoUploadResults.PublicId);
                             if (docsUploaded)
-                                _documentAccessor.DeleteDocument(photoUploadResults.PublicId);
+                            {
+                                foreach (var item in user.Certificates)
+                                {
+                                    _documentAccessor.DeleteDocument(item.Id,item.ResourceType);
+                                }
 
+                            }
 
                             _context.Users.Remove(user);
                             var deletedNewUser = await _context.SaveChangesAsync() > 0;

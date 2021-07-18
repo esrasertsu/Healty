@@ -84,7 +84,6 @@ namespace CleanArchitecture.API.SignalR
         public async Task SetUserOffline()
         {
             var username = GetUserName();
-
             await Clients.All.SendAsync("Offline", username);
         }
     }

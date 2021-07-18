@@ -64,6 +64,7 @@ export default class ProfileStore{
     @observable loadingActivities = false;
     @observable submittingMessage = false;
     @observable updatedProfile = false;
+    @observable deletingDocument = false;
     @observable profileForm: IProfileFormValues = new ProfileFormValues();
     @observable profileFilterForm: IProfileFilterFormValues = new ProfileFilterFormValues();
 
@@ -358,23 +359,6 @@ export default class ProfileStore{
                 return;
             }  
 
-
-            // if(
-            //     this.profile!.displayName === profileDto.displayName &&
-            //     this.profile!.bio === profileDto.bio &&
-            //     this.profile!.certificates === profileDto.certificates && 
-            //     this.profile!.city.key === profileDto.cityId  &&
-            //     (this.profile!.accessibilities.filter(x => profileDto.accessibilityIds!.findIndex(y => y !== x.key) > -1).length > 0 &&
-            //     profileDto.accessibilityIds!.filter(x => this.profile!.accessibilities.findIndex(y => y.key !== x) > -1).length > 0) &&
-            //     (this.profile!.categories.filter(x => profileDto.categoryIds!.findIndex(y => y !== x.key) > -1).length > 0 &&
-            //     (profileDto.categoryIds!.filter(x => this.profile!.categories.findIndex(y => y.key !== x) > -1).length > 0)) &&
-            //     (this.profile!.subCategories.filter(x => profileDto.subCategoryIds!.findIndex(y => y !== x.key) > -1).length > 0 &&
-            //     (profileDto.subCategoryIds!.filter(x => this.profile!.subCategories.findIndex(y => y.key !== x) > -1).length > 0)) &&
-               
-            //     this.profile!.experienceYear === profileDto.experienceYear  &&
-            //     this.profile!.experience === profileDto.experience )
-            //     toast.warning("Profil güncel")
-            //     else {
                     try {
                         debugger;
                     const pro = await agent.Profiles.updateProfile(profileDto);
@@ -384,6 +368,7 @@ export default class ProfileStore{
                             this.rootStore.userStore.user!.displayName = pro.displayName!;
                         }
                         this.profile = pro;  
+                        this.profileForm.certificates!.push(...pro.certificates);
                         this.updatedProfile = true;  
                     })
                 } catch (error) {
@@ -391,6 +376,30 @@ export default class ProfileStore{
                 }
                // }
  
+    }
+
+    @action deleteDocument = async (id:string) =>{
+        this.deletingDocument = true;
+        try {
+            await agent.Profiles.deleteDocument(id);
+            runInAction(() => {
+                if(this.profile)
+                {
+                    this.profile.certificates = this.profile.certificates.filter(e => e.id !== id);
+                    this.profileForm.certificates = this.profileForm.certificates!.filter(e => e.id !== id);
+                    this.deletingDocument = false;
+                    toast.success('Dokuman silme işleminiz başarılı.');
+
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            toast.error('Problem deleting document');
+            runInAction(() => {
+                this.deletingDocument = false;
+            })
+            
+        }
     }
 
     @action uploadPhoto = async (file: Blob) => {

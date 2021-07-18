@@ -9,7 +9,7 @@ namespace CleanArchitecture.Application.Interfaces
     public interface IDocumentAccessor
     {
         DocumentUploadResult AddDocument(IFormFile file);
-        string DeleteDocument(string publicId);
+        string DeleteDocument(string publicId, string resourceType);
 
     }
 }

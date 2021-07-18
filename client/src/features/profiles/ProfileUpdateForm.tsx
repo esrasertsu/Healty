@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { IProfile } from '../../app/models/profile';
+import { IProfile, IProfileFormValues } from '../../app/models/profile';
 import { Category, ICategory } from '../../app/models/category';
 import { Form as FinalForm, Field } from 'react-final-form';
 import { observer } from 'mobx-react-lite';
 import { combineValidators, isRequired } from 'revalidate';
-import { Form, Button } from 'semantic-ui-react';
+import { Form, Button, List, Segment, Icon } from 'semantic-ui-react';
 import TextInput from '../../app/common/form/TextInput';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
 import NumberInput from '../../app/common/form/NumberInput';
@@ -12,6 +12,7 @@ import DropdownMultiple from '../../app/common/form/DropdownMultiple';
 import { RootStoreContext } from '../../app/stores/rootStore'
 import DropdownInput from '../../app/common/form/DropdownInput';
 import { OnChange } from 'react-final-form-listeners';
+import FileUploadDropzone from '../../app/common/util/FileUploadDropzone';
 
 const validate = combineValidators({
   displayName: isRequired('displayName')
@@ -20,19 +21,24 @@ const validate = combineValidators({
 interface IProps {
   updateProfile: (profile: Partial<IProfile>) => void;
   profile: IProfile;
+  deleteDocument:(id:string) => void;
 }
 
 
-const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
+const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocument }) => {
    
     const rootStore = useContext(RootStoreContext);
-    const {accessibilities, profileForm, setProfileForm} = rootStore.profileStore;
+    const {accessibilities, profileForm, setProfileForm, deletingDocument} = rootStore.profileStore;
     const {allCategoriesOptionList} = rootStore.categoryStore;
     const {cities} = rootStore.commonStore;
     const categoryOptions: ICategory[] = [];
     const subCategoryOptionFilteredList: ICategory[] = [];
 
     const [updateEnabled, setUpdateEnabled] = useState<boolean>(false);
+
+    
+   const [docs, setDocs] = useState<any[]>([]);
+   const [filedocs, setFileDocs] = useState<any[]>([]);
 
 
      const [category, setCategory] = useState<string[]>([]);
@@ -77,17 +83,27 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
       debugger;
       const renewedSubIds = profileForm!.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
       setProfileForm({...profileForm,subCategoryIds: [...renewedSubIds]});
+   }
 
+   const handleDeleteDoc = (id:string) => {
+       deleteDocument(id);
    }
         useEffect(() => {
             loadSubCatOptions();
         }, [category])
 
-   
+        const handleSubmitTrainerForm = (values:IProfileFormValues) =>{
+          let edittedValues = {
+            ...values,
+            documents: docs
+          }
+            updateProfile(edittedValues);
+            
+         }
 
   return (
     <FinalForm
-      onSubmit={updateProfile}
+      onSubmit={handleSubmitTrainerForm}
       validate={validate}
       initialValues={profileForm!}
       render={({ handleSubmit, invalid, submitting }) => (
@@ -206,24 +222,42 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
                       debugger;
                       handleSubCategoryChanged(e,data)}}
                 />  
-            <label>Sertifikalar</label>          
-           <Field
-            name='certificates'
-            component={TextAreaInput}
-            rows={1}
-            allowNull
-            placeholder='Sertifikalar'
-            value={profileForm!.certificates}
-          />
-          <OnChange name="certificates">
-            {(value, previous) => {
-                if(value !== profile.certificates)
-                {
-                    setUpdateEnabled(true);
-                    setProfileForm({...profileForm,certificates: value});
-                }
-            }}
-            </OnChange>
+            <label>Eğitim Bilgileri (Diploma/Sertifika)</label>    
+            {profileForm.certificates && profileForm.certificates.length !== 0 &&
+                 <Segment>
+                 <List>
+                  {profileForm.certificates.map((f, index)=> 
+                    <List.Item style={{display:"flex"}}>
+                    <List.Icon name='file' />
+                    <List.Content style={{display:"flex"}}>
+                      <List.Header as='a'>{f.name}</List.Header> 
+                      <Button color="red" size="mini" disabled={deletingDocument} onClick={() => handleDeleteDoc(f.id)} style={{marginLeft:"10px", cursor:"pointer"}} content={"Sil"} icon="trash"></Button>
+                    </List.Content>
+                  </List.Item>
+                  )}
+                 </List>
+                 </Segment>
+                 }      
+            {profileForm.documents.length === 0 && <FileUploadDropzone setDocuments={setDocs} setFiles={setFileDocs} setUpdateEnabled={setUpdateEnabled} /> }
+                 {docs.length !== 0 &&
+                 <Segment>
+                 <List>
+                  {docs.map((f, index)=> 
+                    <List.Item>
+                    <List.Icon name='file' />
+                    <List.Content>
+                      <List.Header as='a'>{f.name}</List.Header>
+                      <List.Description>
+                        {f.size}
+                      </List.Description>
+                    </List.Content>
+                  </List.Item>
+                  )}
+                 </List>
+                 <Button color="red" content="Dosyaları sil X" onClick={() => setDocs([])}></Button>
+                 </Segment>
+                 }
+          
            <label>Çalıştığınız Kurum/Freelance</label>        
           <Field
             name='dependency'
@@ -247,7 +281,7 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
             floated='right'
             disabled={!updateEnabled}
             positive
-            content='Update profile'
+            content='Güncelle'
           />
         </Form>
       )}

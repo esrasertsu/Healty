@@ -47,17 +47,38 @@ namespace Infrastructure.Photos
             return new DocumentUploadResult
             {
                 PublicId = uploadResult.PublicId,
-                Url = uploadResult.SecureUrl.AbsoluteUri
+                Url = uploadResult.SecureUrl.AbsoluteUri,
+                ResourceType = uploadResult.ResourceType
             };
         }
 
-        public string DeleteDocument(string publicId)
+        public string DeleteDocument(string publicId, string resourceType)
         {
-            var deleteParams = new DeletionParams(publicId);
+            var deleteParams = new DeletionParams(publicId)
+            {
+                ResourceType = GetResourceEnum(resourceType),
+                PublicId = publicId
+            };
+
 
             var result = _cloudinary.Destroy(deleteParams);
 
             return result.Result == "ok" ? result.Result : null;
+        }
+
+        private ResourceType GetResourceEnum(string resourceType)
+        {
+            switch (resourceType)
+            {
+                case "image":
+                    return ResourceType.Image;
+                case "raw":
+                    return ResourceType.Raw;
+                case "video":
+                    return ResourceType.Video;
+                default:
+                    return ResourceType.Image;
+            }
         }
     }
 }

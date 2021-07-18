@@ -91,7 +91,7 @@ const HomePage = () => {
           <p><Button color='blue' style={{display:'flex',  alignItems:"flex-end"}} onClick={() => {
             setOpen(false);
             setPage(0);
-            setProfileFilterForm({...profileFilterForm, categoryId:"64ff6473-363c-45a9-9f54-63bb7272d85d", cityId: userCity});
+            setProfileFilterForm({...profileFilterForm, categoryId:"64ff6473-363c-45a9-9f54-63bb7272d85d"});
            clearProfileRegistery();
             history.push('/profiles');
             }}>

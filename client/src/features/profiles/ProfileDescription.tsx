@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 const ProfileDescription = () => {
   const rootStore = useContext(RootStoreContext);
-  const { updateProfile, profile, isCurrentUser ,setUpdatedProfile, updatedProfile} = rootStore.profileStore;
+  const { updateProfile, profile, isCurrentUser ,setUpdatedProfile, updatedProfile,deleteDocument} = rootStore.profileStore;
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const ProfileDescription = () => {
         </Grid.Column>
         <Grid.Column width={16}>
           {editMode && !updatedProfile ? (
-            <ProfileEditForm updateProfile={updateProfile} profile={profile!} />
+            <ProfileEditForm updateProfile={updateProfile} profile={profile!} deleteDocument={deleteDocument} />
           ) : 
             (
               <Grid stackable={true} style={{fontSize:"1.1rem"}}>
@@ -102,7 +102,13 @@ const ProfileDescription = () => {
                     content={`Eğitim`}
                     color="teal"
                   />
-                  <p>{profile!.certificates || "Bilgi yok"}</p>
+                  <List as='ul' className="profile_desc_list_item">
+                    {
+                     profile!.certificates.length >0 ? profile!.certificates.map((acc) =>(
+                      <List.Item key={"desc" + acc.id} as='li'>{acc.name}</List.Item>                   
+                    )) : "Bilgi yok"
+                    } 
+                    </List>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>

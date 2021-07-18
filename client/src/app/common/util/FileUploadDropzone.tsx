@@ -1,11 +1,11 @@
 import React, {useCallback, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
-import { Crop } from 'react-image-crop'
 import { Header, Icon } from 'semantic-ui-react'
 
 interface IProps{
     setFiles: (files: object[]) => void;
     setDocuments: (files: object[]) => void;
+    setUpdateEnabled: (enable: boolean) => void;
 }
 
 const dropzoneStyles ={
@@ -21,10 +21,11 @@ const dropzoneActive = {
     borderColor: 'green'
 }
 
-const FileUploadDropzone: React.FC<IProps> = ({setFiles,setDocuments}) => {
+const FileUploadDropzone: React.FC<IProps> = ({setFiles,setDocuments, setUpdateEnabled}) => {
 
   const onDrop = useCallback(acceptedFiles => {
     setDocuments(acceptedFiles);
+    setUpdateEnabled(true);
     setFiles(acceptedFiles.map((file:object) => Object.assign(file, 
         {
             preview : URL.createObjectURL(file)

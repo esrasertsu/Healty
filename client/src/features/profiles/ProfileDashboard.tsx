@@ -11,9 +11,7 @@ import ProfileListItemsPlaceholder from './ProfileListItemsPlaceholder';
 import InfiniteScroll from 'react-infinite-scroller';
 import ProfileList from './ProfileList';
 import { SemanticWIDTHS } from 'semantic-ui-react/dist/commonjs/generic';
-import ReactDOMServer from 'react-dom/server'
-import { faSort } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.

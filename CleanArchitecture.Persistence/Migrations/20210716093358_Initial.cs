@@ -422,6 +422,7 @@ namespace CleanArchitecture.Persistence.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     Url = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
                     AppUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

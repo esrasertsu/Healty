@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitecture.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210713095028_Initial")]
-    partial class Initial
+    [Migration("20210718092800_ResourceType")]
+    partial class ResourceType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -314,6 +314,12 @@ namespace CleanArchitecture.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("AppUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResourceType")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Url")

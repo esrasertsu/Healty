@@ -4,6 +4,7 @@ using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace CleanArchitecture.Application.Profiles
             public string Bio { get; set; }
             public string Experience { get; set; }
             public string ExperienceYear { get; set; }
-            public string Certificates { get; set; }
+            public List<IFormFile> Certificates { get; set; }
             public string Dependency { get; set; }
             public Guid CityId { get; set; }
             public List<Guid> CategoryIds { get; set; }
@@ -46,13 +47,15 @@ namespace CleanArchitecture.Application.Profiles
                 private readonly DataContext _context;
                 private readonly IUserAccessor _userAccessor;
                 private readonly IProfileReader _profileReader;
+                private readonly IDocumentAccessor _documentAccessor;
 
 
-                public Handler(DataContext context, IUserAccessor userAccessor, IProfileReader profileReader)
+                public Handler(DataContext context, IUserAccessor userAccessor, IProfileReader profileReader, IDocumentAccessor documentAccessor)
                 {
                     _context = context;
                     _userAccessor = userAccessor;
                     _profileReader = profileReader;
+                    _documentAccessor = documentAccessor;
             }
 
             public async Task<Profile> Handle(Command request, CancellationToken cancellationToken)
@@ -147,6 +150,24 @@ namespace CleanArchitecture.Application.Profiles
                                 };
                                 _context.UserAccessibilities.Add(userCategory);
                             }
+                        }
+                    }
+                    if (request.Certificates != null)
+                    {
+                        user.Certificates = new List<Certificate>();
+
+                        foreach (var item in request.Certificates)
+                        {
+                            var documentUploadResult = _documentAccessor.AddDocument(item);
+
+                            var doc = new Certificate
+                            {
+                                Url = documentUploadResult.Url,
+                                Id = documentUploadResult.PublicId,
+                                Name = item.FileName,
+                                ResourceType = documentUploadResult.ResourceType
+                            };
+                            user.Certificates.Add(doc);
                         }
                     }
 

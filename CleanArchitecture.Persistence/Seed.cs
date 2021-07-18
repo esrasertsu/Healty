@@ -466,12 +466,12 @@ namespace Persistence
                 {
                     new Accessibility
                     {
-                        Name = "OwnPlace",
+                        Name = "Eğitmenin Yeri",
                        
                     },
                     new Accessibility
                     {
-                        Name = "CustomerPlace",
+                        Name = "Danışanın Yeri",
 
                     },
                     new Accessibility
@@ -481,7 +481,7 @@ namespace Persistence
                     },
                     new Accessibility
                     {
-                        Name = "Other",
+                        Name = "Diğer",
 
                     }
                 };
@@ -784,7 +784,7 @@ namespace Persistence
 
 
             var online =  await context.Accessibilities.SingleOrDefaultAsync(x => x.Name == "Online");
-            var OwnPlace = await context.Accessibilities.SingleOrDefaultAsync(x => x.Name == "OwnPlace");
+            var OwnPlace = await context.Accessibilities.SingleOrDefaultAsync(x => x.Name == "Eğitmenin Yeri");
 
             var Swim = await context.SubCategories.SingleOrDefaultAsync(x => x.Name == "Yüzme");
             var Diyabet = await context.SubCategories.SingleOrDefaultAsync(x => x.Name == "Diyabet");
@@ -833,7 +833,15 @@ namespace Persistence
                                 Category = Spor
                             },
                         }
-
+                         ,Photos = new List<Photo>
+                         {
+                             new Photo
+                             {
+                                 Url= "https://res.cloudinary.com/esrasertsu/image/upload/v1626098298/vybxc2tlp4natc4dnimp.jpg",
+                                 Id = "photo1",
+                                 IsMain = true
+                             }
+                         }
                     },
                     new AppUser
                     {

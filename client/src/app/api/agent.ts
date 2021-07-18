@@ -3,7 +3,7 @@ import { IActivitiesEnvelope, IActivity, IActivityFormValues, ILevel } from '../
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { ITrainerFormValues, IUser, IUserFormValues } from '../models/user';
-import { IAccessibility, IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope, IProfileEnvelope, IProfileFormValues, IRefencePic } from '../models/profile';
+import { IAccessibility, IDocument, IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope, IProfileEnvelope, IProfileFormValues, IRefencePic } from '../models/profile';
 import { IBlogsEnvelope, IBlog, IPostFormValues, IBlogUpdateFormValues } from '../models/blog';
 import { IAllCategoryList, ICategory, ISubCategory } from '../models/category';
 import { IChatRoom, IMessage, IMessageEnvelope, IMessageForm } from '../models/message';
@@ -85,10 +85,12 @@ const requests = {
         profile.experience && profile.experience!=="" && formData.append('Experience', profile.experience);
         profile.bio && profile.bio !== undefined && formData.append('Bio', profile.bio);
         formData.append('ExperienceYear', profile.experienceYear ? profile.experienceYear.toString(): "0");
-        profile.certificates && profile.certificates!=="" && formData.append('Certificates', profile.certificates);
         profile.dependency && profile.dependency !== "" && formData.append('Dependency', profile.dependency);
         profile.cityId && profile.cityId !== "" && formData.append('CityId', profile.cityId);
 
+        profile.documents!.length>0 && profile.documents!.map((acc:File)=>(
+            formData.append('certificates', acc)
+        ));
         profile.subCategoryIds!.length>0 && profile.subCategoryIds!.map((subCategoryId:string)=>(
             formData.append('SubCategoryIds', subCategoryId)
         ));
@@ -281,7 +283,7 @@ const Profiles = {
     getReferencePics : (username:string): Promise<IRefencePic[]>  => requests.get(`/profiles/${username}/referencepics`),
     addReferencePics: ( original: Blob, thumbnail: Blob, title:string): Promise<IRefencePic> => requests.postReferencePic(`/profiles/referencepic`, original,thumbnail, title),
     deleteReferencePic: ( id1:string): Promise<IRefencePic> => requests.del(`/profiles/referencepic/${id1}`),
-
+    deleteDocument: ( id:string) => requests.del(`/profiles/documents/${id}`),
     }
 
 const Blogs = {

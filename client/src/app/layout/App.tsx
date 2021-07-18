@@ -70,6 +70,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
           });
         }
         );
+        
       })
     }else {
       loadCities().then(()=>setAppLoaded());
@@ -80,15 +81,19 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
     }
   },[token])
 
+  useEffect(() => {
+    if(appLoaded && user!==null && hubConnection === null)
+    {
+      debugger;
+      createHubConnection();
+
+    }
+
+  }, [appLoaded,user])
+
 
   if(!appLoaded) return <LoadingComponent content='Loading app...' />
 
-  if(appLoaded && user!==null && hubConnection === null)
-  {
-    debugger;
-    createHubConnection();
-
-  }
 
     return (
        <Fragment>

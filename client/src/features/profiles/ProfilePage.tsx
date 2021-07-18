@@ -30,15 +30,15 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
     useEffect(() => {
         if(profile)
        { 
-        if(match.params.username !== profile!.userName)
-        { 
+        
            loadProfile(match.params.username)
         .then((profile) => 
         {   
             setProfileForm(new ProfileFormValues(profile!))}
             )
         setActiveTab(0);
-    }}else {
+    }else {
+        debugger;
         loadProfile(match.params.username)
         .then((profile) => 
         {   
@@ -59,7 +59,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
 
     return (
         <>
-        {profile!.userName !== match.params.username ? (<LoadingComponent content='Loading profile...' />) :
+        {profile===null || profile!.userName !== match.params.username ? (<LoadingComponent content='Loading profile...' />) :
        (
         <Grid stackable>
             <Grid.Column width={16}>

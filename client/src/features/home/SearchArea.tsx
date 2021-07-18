@@ -66,6 +66,7 @@ import { history } from '../..';
                         resultRenderer={resultRenderer}
                         className="SearchArea"
                         placeholder="Arama yapmak istediğin kategori.." 
+                        noResultsMessage="Aradığınız kategori bulunamadı"
                 />
                       <Button size='big' primary circular onClick={() => {
                            setPage(0);

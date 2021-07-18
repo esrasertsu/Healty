@@ -31,6 +31,14 @@ export default class UserStore {
         this.trainerForm = form;
     }
 
+    @action setInitialMessageNull = () => {
+        this.initialMessages = [];
+    }
+
+    @action clearCurrentUser = () => {
+        this.user = null;
+    }
+
     @action setHubConnectionNull = () =>{
         this.hubConnection = null;
     }
@@ -60,11 +68,11 @@ export default class UserStore {
             const user = await agent.User.login(values);
             runInAction(()=>{
                 this.user = user;
+                this.hubConnection === null && this.createHubConnection();
             })
             this.rootStore.commonStore.setToken(user.token);
             this.rootStore.modalStore.closeModal();
             history.push(location);
-            this.hubConnection === null && this.createHubConnection();
         } catch (error) {
             throw error;
         }
@@ -236,14 +244,6 @@ export default class UserStore {
             )
 
         })
-        .then(() => {
-            debugger;
-                runInAction(async() => {
-                    this.hubConnection &&
-                     await this.hubConnection!.stop()
-                })
-                console.log('Connection stopped');
-        })
         
         .catch(err =>{ console.log(err);
           })
@@ -265,16 +265,19 @@ export default class UserStore {
     @action logout = async () => {
        
             await this.stopHubConnection();
-            runInAction(()=>{
+            runInAction(async()=>{
+                this.hubConnection &&
+                     await this.hubConnection!.stop();
+                console.log('Connection stopped');
                 this.setHubConnectionNull();
                 this.rootStore.messageStore.setPage(0);
-                this.rootStore.messageStore.messageRegistery.clear();
-                this.initialMessages = [];
+                this.rootStore.messageStore.clearMessageRegistery();
+                this.setInitialMessageNull();
                 this.rootStore.messageStore.setChatRoomId(null);
-            
-            this.rootStore.commonStore.setToken(null);
-            this.user = null;
-            history.push('/');
+                this.rootStore.messageStore.setChatRoomsEmpty();
+                this.clearCurrentUser();
+                this.rootStore.commonStore.setToken(null);
+                history.push('/');
             })
           
     }

@@ -44,7 +44,9 @@ const TrainerForm:React.FC<IProps> = ({location}) =>{
 
    const [docs, setDocs] = useState<any[]>([]);
    const [filedocs, setFileDocs] = useState<any[]>([]);
+   const [updateEnabled, setUpdateEnabled] = useState(false);
 
+   
     
   const {allCategoriesOptionList} = rootStore.categoryStore;
   const {trainerForm, setTrainerForm} = rootStore.userStore;
@@ -253,7 +255,7 @@ useEffect(() => {
                       handleSubCategoryChanged(e,data)}}
                 />  
                  <label>Yeterlilik Belgesi (Diploma/Sertifika)*</label>
-                 {docs.length === 0 && <FileUploadDropzone setDocuments={setDocs} setFiles={setFileDocs} /> }
+                 {docs.length === 0 && <FileUploadDropzone setDocuments={setDocs} setFiles={setFileDocs} setUpdateEnabled={setUpdateEnabled} /> }
                  {docs.length !== 0 &&
                  <Segment>
                  <List>

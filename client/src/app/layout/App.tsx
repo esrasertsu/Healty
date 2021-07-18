@@ -1,5 +1,5 @@
-import React, { Fragment, useContext, useEffect } from 'react';
-import { Container } from 'semantic-ui-react';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
+import { Container, Icon, Menu, Segment, Sidebar } from 'semantic-ui-react';
 import NavBar from '../../features/nav/NavBar';
 import { observer } from 'mobx-react-lite';
 import { Route , RouteComponentProps, Switch, withRouter} from 'react-router-dom';
@@ -26,6 +26,9 @@ import { runInAction } from 'mobx';
 import PrivateRoute from './PrivateRoute';
 import { LoginRequiredPage } from './LoginRequiredPage';
 import  Admin  from '../../features/admin/Admin';
+import { useMediaQuery } from 'react-responsive'
+import MobileNavBar from '../../features/nav/MobileNavBar';
+
 const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
 const App: React.FC<RouteComponentProps> = ({location}) => {
@@ -33,12 +36,15 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   const rootStore = useContext(RootStoreContext);
   const {setAppLoaded, token, appLoaded,loadCities} = rootStore.commonStore;
   const { getUser,user,createHubConnection,hubConnection,stopHubConnection } = rootStore.userStore;
+  const { loadCategories} = rootStore.categoryStore;
 
   useLoadScript({
       googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
       libraries
   });
 
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const [visible, setVisible] = useState(false);
   // useEffect(() => {
   //   return history.listen((location) => { 
   //     if(location.pathname === "/profiles")
@@ -66,14 +72,20 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
         {
           window.addEventListener('beforeunload', alertUser);
           runInAction(() => {
-            setAppLoaded()
+            setAppLoaded();
+            loadCategories();
           });
         }
         );
         
       })
     }else {
-      loadCities().then(()=>setAppLoaded());
+      loadCities().then(()=>
+      runInAction(() => {
+        setAppLoaded();
+        loadCategories();
+      })
+      );
     }
     return () => {
       
@@ -99,8 +111,64 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
        <Fragment>
          <ModalContainer />
          <ToastContainer position= 'bottom-right' />
-         <NavBar/>
-         <Route exact path="/" component={HomePage} />
+         {!isTabletOrMobile ? 
+          <>
+          <NavBar/>
+        <Route exact path="/" component={HomePage} />
+        <Route path={'/(.+)'} render={()=>(
+          <Fragment>
+             <Container className="pageContainer">
+               <Switch>
+                 <Route exact path="/activities" component={ActivityDashboard} />
+                 <PrivateRoute path="/activities/:id" component={ActivityDetails} />
+                 <Route exact path="/blog" component={BlogList} />
+                 <Route exact path="/blog/:id" component={BlogPage} />
+                 <Route key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
+                 <Route key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
+                 <PrivateRoute path="/profile/:username" component={ProfilePage}/>
+                 <Route path="/profiles" component={ProfileDashboard}/>
+                 <Route path="/messages" component={MessagesPage}/>
+                 <Route path="/login" component={LoginForm}/>
+                 <Route path="/login-required" component={LoginRequiredPage}/>
+                 <Route exact path="/activitysearch" component={ActivitySearchPage}/>
+                 <Route exact path="/admin" component={Admin}/>
+                 <Route component={NotFound}/>
+               </Switch>
+             </Container>
+          </Fragment>
+        )} />
+        </>
+           :
+
+        <>
+         <MobileNavBar setVisibleMobileNav={setVisible} visible={visible}/>
+          <Sidebar.Pushable style={{ overflow: 'hidden' }}>
+          <Sidebar
+                as={Menu}
+                animation={"push"}
+                direction={"right"}
+                icon='labeled'
+                inverted
+                vertical
+                visible={visible}
+                width='wide'
+              >
+                <Menu.Item as='a'>
+                  <Icon name='home' />
+                  Profilim
+                </Menu.Item>
+                <Menu.Item as='a'>
+                  <Icon name='gamepad' />
+                  Games
+                </Menu.Item>
+                <Menu.Item as='a'>
+                  <Icon name='camera' />
+                  Channels
+                </Menu.Item>
+              </Sidebar>
+
+        <Sidebar.Pusher>
+        <Route exact path="/" component={HomePage} />
          <Route path={'/(.+)'} render={()=>(
            <Fragment>
               <Container className="pageContainer">
@@ -123,6 +191,13 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
               </Container>
            </Fragment>
          )} />
+        </Sidebar.Pusher>
+      </Sidebar.Pushable>
+
+
+        
+         </>
+}
                 
 {/*   <Footer /> */}
         </Fragment>    

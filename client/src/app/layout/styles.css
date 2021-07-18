@@ -255,7 +255,6 @@ p.baseline-pricing__value{
   font-weight: 600 !important;
 }
 .ui.top.fixed.menu {
-    padding: 0 96px;
     background-color: #fff !important;
     height: 66px;
     border-bottom: 1px solid rgba(34,36,38,.15);
@@ -362,12 +361,7 @@ a.ui.card:hover {
   text-align: center;
 }
 
-.ui.text.container{
-  margin-left: 150px !important;
-  text-align: left;
-  font-family: AssistantRegular, Arial, Helvetica, sans-serif;
-  max-width: 500px !important;
-}
+
 
 @media only screen and (min-width: 1200px){
 .pageContainer.ui.container {
@@ -383,10 +377,7 @@ a.ui.card:hover {
     max-width: 1400px;
   }
 
-  .ui.text.container{
-    margin-left: 150px !important;
-    text-align: left;
-  }
+ 
   .ui.container {
     width: 1250px !important;
     margin-left: auto!important;
@@ -431,15 +422,68 @@ a.ui.card:hover {
 }
 }
 
-@media (min-width: 768px){
+@media (min-width: 769px){
 .page-header__content[data-v-0ca1fdc0] {
     margin-left: auto;
     margin-right: auto;
     padding-left: 32px;
     padding-right: 32px;
-}}
+}
+.ui.text.container{
+  margin-left: 150px !important;
+  text-align: left;
+  font-family: AssistantRegular, Arial, Helvetica, sans-serif;
+  max-width: 500px !important;
+}
+.ui.top.fixed.menu{
+  padding: 0 96px;
 
+}
 
+}
+
+@media (max-width: 768px){
+  .ui.text.container{
+    text-align: center;
+    font-family: AssistantRegular, Arial, Helvetica, sans-serif;
+  }
+  .masthead {
+   
+    background-image: url("../layout/img/banner-2.jpg") !important; 
+    background-size: cover !important;
+    border-radius: .28571429rem !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px){
+  .masthead {
+    display: flex;
+    align-items: center;
+    height: 33vw;
+    width: 100%;
+    background: #84c68f !important;
+    background-image: url("../layout/img/banner-2.jpg") !important; 
+    background-size: cover !important;
+    background-position-y: -160px !important;
+    border-radius: .28571429rem !important;
+  }
+
+}
+  
+@media (min-width: 1024px){
+  .masthead {
+    display: flex;
+    align-items: center;
+    height: 25vw;
+    width: 100%;
+    background: #84c68f !important;
+    background-image: url("../layout/img/banner-2.jpg") !important; 
+    background-size: cover !important;
+    background-position-y: -260px !important;
+    border-radius: .28571429rem !important;
+  }
+
+}
 
 /*home page styles*/
 
@@ -455,19 +499,10 @@ a.ui.card:hover {
   margin-top:10px !important;
 }
 
-
-.masthead {
-  display: flex;
-  align-items: center;
-  height: 25vw;
-  width: 100%;
-  background: #84c68f !important;
-   background-image: url("../layout/img/banner-2.jpg") !important; 
-  background-size: cover !important;
-  background-position-y: -260px !important;
-  border-radius: .28571429rem !important;
-
+.mobileNavMenuButton i.icon, .mobileNavMenuButton i.icons{
+  font-size: 2rem;
 }
+
 
 .masthead .ui.menu .ui.button,
 .ui.menu a.ui.inverted.button {
@@ -500,6 +535,21 @@ i.search.inverted.icon {
   display: flex !important;
   justify-content: space-around;
   align-items: center;
+}
+
+@media (max-width: 500px){
+  .homePage-button_Container {
+    height: 50px;
+}
+.SearchArea {
+  width: 63%;
+}
+button, input, optgroup, select, textarea {
+  font-family: sans-serif;
+  font-size: 12px;
+  line-height: 1.15;
+  margin: 0;
+}
 }
 
 .masthead-button_Container{

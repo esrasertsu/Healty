@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
 import { IAllCategoryList } from '../../app/models/category';
 import { history } from '../..';
+import { useMediaQuery } from 'react-responsive'
 
 
  const SearchArea:React.FC = () => {
@@ -27,7 +28,8 @@ import { history } from '../..';
 
     const [isSearchLoading, setSearchLoading] = useState(false);
     
-    
+    const isMobile = useMediaQuery({ query: '(max-width: 425px)' })
+
     useEffect(() => {
       loadAllCategoryList();
     },[loadAllCategoryList]); 
@@ -65,10 +67,10 @@ import { history } from '../..';
                         value={value}
                         resultRenderer={resultRenderer}
                         className="SearchArea"
-                        placeholder="Arama yapmak istediğin kategori.." 
+                        placeholder={isMobile ? "Kategori ismi girin" :"Arama yapmak istediğin kategori.." }
                         noResultsMessage="Aradığınız kategori bulunamadı"
                 />
-                      <Button size='big' primary circular onClick={() => {
+                      <Button size={isMobile ? 'tiny': 'big'} primary circular onClick={() => {
                            setPage(0);
                            if(result && result.parentId === null)
                               {

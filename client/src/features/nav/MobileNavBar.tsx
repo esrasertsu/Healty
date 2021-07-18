@@ -6,12 +6,18 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import {history} from '../../index';
 import NavSearchArea from './NavSearchArea';
 
-const NavBar: React.FC = () => {
+
+interface IProps{
+    setVisibleMobileNav:(visible:boolean) => void;
+    visible:boolean;
+}
+
+const MobileNavBar: React.FC<IProps> = ({setVisibleMobileNav,visible}) => {
     const rootStore = useContext(RootStoreContext);
     const { user, logout} = rootStore.userStore;
     const { activeMenu,setActiveMenu } = rootStore.commonStore;
     const { notificationCount } = rootStore.userStore;
-
+   
 
     const fixed = "top";
     return (
@@ -42,57 +48,15 @@ const NavBar: React.FC = () => {
                   <Menu.Item>
                     <NavSearchArea />
                   </Menu.Item>
-                  <Menu.Item position="right" as={Link} to="/profiles"  name="Eğitmenler" 
+                  <Menu.Item position="right" 
+                  icon={"align justify"}
+                  className="mobileNavMenuButton"
                   active={activeMenu === 0}
                 onClick={() => {
-                   //setLoadingProfiles(true);
                    setActiveMenu(0);
-                  //  history.push(`/profiles`);
+                   setVisibleMobileNav(!visible);
                     }} /> 
-               <Menu.Item as={Link} to="/activities" name="Aktiviteler"
-                active={activeMenu === 1}
-                  onClick={() => {
-                 //   setLoadingInitial(true);
-                    setActiveMenu(1)
-                   // history.push(`/activities`);
-                    }} />
-
-                
-          <Menu.Item as={Link} to="/blog" name="Blog" 
-           active={activeMenu === 2}
-             onClick={() => {
-                 //  setLoadingPosts(true);
-                   // history.push(`/blog`);
-                    setActiveMenu(2)
-                    }} />
-
-          {user && (
-            <Menu.Item>
-              <Image avatar spaced="right" src={user.image || "/assets/user.png"} />
-              <Dropdown pointing="top left" text={user.displayName}>
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    key="profil"
-                    as={Link}
-                    to={`/profile/${user.userName}`}
-                    text="Profil"
-                    icon="user"
-                  ></Dropdown.Item>
-                  <Dropdown.Item
-                    key="mesaj"
-                    as={Link}
-                    to={`/messages`}
-                  >  <Icon name='mail' />
-                       Mesajlar
-                    <Label style={{margin:"0 0 0 10px"}} color='teal'>
-                    {notificationCount}
-                    </Label>
-                  </Dropdown.Item>
-                  <Dropdown.Item text="Logout" onClick={logout} icon="power" />
-                </Dropdown.Menu>
-              </Dropdown>
-            </Menu.Item>
-          )}
+              
          </Container>         
        
       </Menu>
@@ -204,4 +168,4 @@ const NavBar: React.FC = () => {
     );
 }
 
-export default observer(NavBar);
+export default observer(MobileNavBar);

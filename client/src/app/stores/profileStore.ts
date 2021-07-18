@@ -180,7 +180,6 @@ export default class ProfileStore{
             const {profileComments, profileCommentCount } = commentListEnvelope;
 
             runInAction(()=>{
-                debugger;
                 profileComments.forEach((comment) =>{
                     //set props, Activity store'a bakıp kullanıcı commentini belirleme işlemi yapabilirsin..
                     this.commentRegistery.set(comment.id, comment);
@@ -226,7 +225,6 @@ export default class ProfileStore{
         return this.profileRegistery.get(username);
     }
     @action loadProfile = async (username: string) =>{
-        debugger;
             this.loadingProfile = true;
             this.updatedProfile = false;             
             this.setCommentPage(0);
@@ -260,8 +258,8 @@ export default class ProfileStore{
 
     @computed get axiosParams(){
         const params = new URLSearchParams();
-        params.append('limit', String(12));
-        params.append('offset', `${this.page ? this.page * 12 : 0}`);
+        params.append('limit', String(10));
+        params.append('offset', `${this.page ? this.page * 10 : 0}`);
             
         if(this.profileFilterForm.categoryId !== "")
         {   
@@ -292,16 +290,13 @@ export default class ProfileStore{
 
     @action loadProfiles = async () =>{
         this.loadingProfiles = true;
-        debugger;
         try {
-            debugger;
             const profilesEnvelope= await agent.Profiles.list(this.axiosParams);
             const {profileList, profileCount,popularProfiles } = profilesEnvelope;
 
             runInAction('Loading profiles',()=>{
                 this.popularProfileList=popularProfiles;
                 profileList.forEach((profile) =>{
-                    debugger;
                     this.profileRegistery.set(profile.userName, profile);
                 });
                 this.loadAccessibilities();
@@ -321,16 +316,12 @@ export default class ProfileStore{
 
     @action sortProfiles = async () =>{
         this.loadingOnlyProfiles = true;
-        debugger;
         try {
-            debugger;
             const profilesEnvelope= await agent.Profiles.list(this.axiosParams);
             const {profileList, profileCount } = profilesEnvelope;
 
             runInAction('Loading profiles',()=>{
-                debugger;
                 profileList.forEach((profile) =>{
-                    debugger;
                     this.profileRegistery.set(profile.userName, profile);
                 });
                 this.profileList = profileList;
@@ -360,7 +351,6 @@ export default class ProfileStore{
             }  
 
                     try {
-                        debugger;
                     const pro = await agent.Profiles.updateProfile(profileDto);
                     runInAction(()=>{
 
@@ -567,7 +557,6 @@ export default class ProfileStore{
                 //     this.rootStore.messageStore.chatRooms = [];
                 //     this.rootStore.messageStore.chatRooms.push(new ChatRoom(newMessage.chatRoomId));
                 // }
-                debugger;
                 const senderName = this.rootStore.userStore.user!.displayName;
                 toast.success("Mesajın iletidi. Konuşmaya devam etmek için mesaj kutunu kontrol et.")
                 this.rootStore.userStore.hubConnection!.invoke('AddToNewChat', newMessage.chatRoomId, this.profile!.userName,senderName);

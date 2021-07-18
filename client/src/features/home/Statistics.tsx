@@ -1,8 +1,15 @@
 import React from 'react'
 import { Icon, Image, Statistic } from 'semantic-ui-react'
+import { useMediaQuery } from 'react-responsive'
 
-const Statistics = () => (
-  <Statistic.Group widths='four'>
+const Statistics = () => {
+
+        
+  const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
+
+    
+    return(
+  <Statistic.Group widths={ isMobile ? 1 : 4}>
     <Statistic>
       <Statistic.Value>22.562</Statistic.Value>
       <Statistic.Label>Yorum</Statistic.Label>
@@ -32,6 +39,7 @@ const Statistics = () => (
       <Statistic.Label>Eğitmen</Statistic.Label>
     </Statistic>
   </Statistic.Group>
-)
+    );
+ }
 
 export default Statistics

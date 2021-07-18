@@ -11,6 +11,7 @@ import SearchArea from './SearchArea';
 import { history } from '../../index'
 import TrainerForm from '../user/TrainerForm';
 import Statistics from './Statistics';
+import { useMediaQuery } from 'react-responsive'
 
 
 const HomePage = () => {
@@ -26,6 +27,11 @@ const HomePage = () => {
     const {setProfileFilterForm,profileFilterForm,clearProfileRegistery, setPage} = rootStore.profileStore;
     const {userCity} = rootStore.commonStore;
 
+    
+
+    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
+
     const handleFinalFormSubmit = (values: any) => {
     }
 
@@ -35,7 +41,7 @@ const HomePage = () => {
 
           openModal("Giriş Yap", <>
           <Image size='large' src='/assets/Login1.png' wrapped />
-          <Modal.Description>
+          <Modal.Description className="loginreg">
           <LoginForm location={"/"} />
           </Modal.Description>
           </>,true,
@@ -49,24 +55,29 @@ const HomePage = () => {
 
             openModal("Üye Kaydı", <>
             <Image size='large' src='/assets/Login1.png' wrapped />
-            <Modal.Description>
+            <Modal.Description className="loginreg">
             <RegisterForm location={"/"} />
             </Modal.Description>
             </>,true,
-            <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
+            <>
+            <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>
+            <p>Uzman başvuru için <span className="registerLoginAnchor" onClick={handleTrainerFormClick}>tıkla!</span></p>
+            </>) 
         }
 
         const handleTrainerFormClick= (e:any) => {
     
           e.stopPropagation();
           if(modal.open) closeModal();
-  
+
               openModal("Uzman Başvuru Formu", <>
+              <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/welcome1.png' wrapped />
               <Modal.Description>
-              <TrainerForm location={"/"} />
+              <TrainerForm />
               </Modal.Description>
-              </>,false,
-             "") 
+              </>,true,
+              <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
+             
           }
   
     return (
@@ -167,14 +178,14 @@ const HomePage = () => {
            <div className="spacingContainer__small" />
            
            <Container className="homepageContainer">
-           <Grid container stackable >
-              <Header as='h1'  style={{  textAlign:'center', width:"100%" }}>
+           <Header as='h1'  style={{  textAlign:'center', width:"100%" }}>
                 Doğru uzmanı tam yerinde keşfet
                 </Header>
                 <p style={{ fontSize: '1.25em', color: "#1a2b49" }}>
                 Spor koçundan diyetisyene, meditasyon eğitmeninden psikoloğa ihtiyacın olan en doğru uzmanı en kolay şekilde bulabileceğin yerdesin. 
                 Üstelik istediğin lokasyonda ya da online olarak aktivitelere katılabilir, eğitmenlerin paylaştıkları blogları okuyarak ilgilendiğin alanda bilgi sahibi olabilirsin. 
                 </p>
+           <Grid stackable >
         <Grid.Column width={16}>
           <Header
             floated='left'
@@ -183,7 +194,7 @@ const HomePage = () => {
           />
         </Grid.Column>
         <Grid.Column width={16}>
-          <Card.Group itemsPerRow={4}>
+          <Card.Group itemsPerRow={ isMobile ? 1 : isTablet ? 2: 4}>
           <Card className="sporCard homepageCatCard" onClick={() => {setOpen(true);
                         setTitle("Spor");
 
@@ -238,10 +249,10 @@ const HomePage = () => {
       </Grid>
       <div className="spacingContainer__small" />
 
-      <Grid columns={3} stackable textAlign='center'>
+      <Grid columns={3} textAlign='center'>
 
-<Grid.Row verticalAlign='middle'>
-  <Grid.Column>
+<Grid.Row >
+  <Grid.Column width={isMobile ? "16": "5"}>
     <Header as='h3' icon>
         <Icon style={{fontSize:"1.5rem",marginBottom:"15px"}} size="small" circular inverted color='teal' name='calendar check outline' />     
         <Header.Content>
@@ -253,7 +264,7 @@ const HomePage = () => {
     </Header>
    
   </Grid.Column>
-  <Grid.Column>
+  <Grid.Column width={isMobile ? "16": "5"} >
     <Header as='h3' icon>
         <Icon style={{fontSize:"1.5rem",marginBottom:"15px"}} circular inverted color='teal' flipped='horizontally' name='history' />
         <Header.Content>
@@ -266,7 +277,7 @@ const HomePage = () => {
    
   </Grid.Column>
   
-  <Grid.Column>
+  <Grid.Column width={isMobile ? "16": "5"}>
     <Header as='h3' icon>
         <Icon style={{fontSize:"1.5rem", marginBottom:"15px"}} size="small" circular inverted color='teal' name='heart' />
         <Header.Content>

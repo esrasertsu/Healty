@@ -10,7 +10,7 @@ interface IProps{
 const ProfileListItemsPlaceholder:React.FC<IProps> = ({itemPerRow}) => {
   return (
    
-    <Card.Group doubling itemsPerRow={itemPerRow} stackable>
+    <Card.Group itemsPerRow={itemPerRow}>
     {_.times(itemPerRow, (i) => (
       <Card key={i}>
           <Placeholder>

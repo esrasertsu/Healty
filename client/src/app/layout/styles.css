@@ -144,7 +144,7 @@ h1, h2, h3, h4, h5 {
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
-  width: 290px;
+  width: 100%;
   min-height: 0;
   background: #fff;
   padding: 0;
@@ -297,12 +297,6 @@ a.ui.card:hover {
   font-weight: 600;
 }
 
-@media only screen and (max-width: 425px){
-.ui.card{
-  width: 100% !important;
-}
-}
-
 @media only screen and (max-width: 767px){
 .ui.stackable.allProfileCards.cards>.card {
    display: inline-grid !important;
@@ -312,6 +306,15 @@ a.ui.card:hover {
     width: calc(50% - 2em)!important;
 }
 }
+
+@media only screen and (min-width: 430px){
+  .carousel-item-padding-10-px{
+    width: 222px !important;
+    margin:0 20px 0 0;
+  }
+  }
+
+
 .profileCard_footer{
   display: flex !important;
   justify-content: space-between !important;
@@ -399,6 +402,7 @@ a.ui.card:hover {
   background-color:mintcream;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
+  min-height: 300px;
 }
 
 
@@ -590,10 +594,7 @@ i.search.inverted.icon {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.carousel-item-padding-10-px{
-  width: 230px !important;
-  margin:0 20px 0 0;
-}
+
 .starRating{
   display: flex;
   align-items: center;
@@ -1048,10 +1049,16 @@ i.search.inverted.icon {
 }
 
 
-.ui.modal>.content>.icon+.description, .ui.modal>.content>.image+.description {
+.ui.modal>.content>.icon+.description.loginreg, .ui.modal>.content>.image+.description.loginreg {
   -webkit-box-flex: 0;
   -ms-flex: 1 0 auto !important;
   flex: 1 0 auto !important;
+}
+
+.ui.modal>.content>.icon+.description, .ui.modal>.content>.image+.description {
+  -webkit-box-flex: 1;
+  -ms-flex: 1 !important;
+  flex: 1 0 !important;
 }
 
 .registerLoginAnchor{
@@ -1059,4 +1066,13 @@ i.search.inverted.icon {
    cursor: pointer;
    font-size: 15px;
    margin-right: 10px;
+}
+
+.applicationConditions{
+  font-size: 1.14rem !important
+}
+
+.applyButton{
+  color:#1a2b49;
+  cursor: pointer;
 }

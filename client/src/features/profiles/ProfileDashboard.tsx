@@ -11,6 +11,11 @@ import ProfileListItemsPlaceholder from './ProfileListItemsPlaceholder';
 import InfiniteScroll from 'react-infinite-scroller';
 import ProfileList from './ProfileList';
 import { SemanticWIDTHS } from 'semantic-ui-react/dist/commonjs/generic';
+import { useMediaQuery } from 'react-responsive'
+
+
+const threeItem:SemanticWIDTHS = 3;
+const twoItems:SemanticWIDTHS = 2;
 
 const responsive = {
   superLargeDesktop: {
@@ -20,16 +25,16 @@ const responsive = {
   },
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
-    items: 3
+    items: 5
   },
   tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2
+    breakpoint: { max: 1024, min: 430 },
+    items: 3
   },
   mobile: {
-    breakpoint: { max: 464, min: 0 },
+    breakpoint: { max: 430, min: 0 },
     items: 1,
-    partialVisibilityGutter: 30 
+    //partialVisibilityGutter: 50 
   }
 };
 
@@ -44,7 +49,11 @@ const sixItem:SemanticWIDTHS = 6;
       popularProfileList,profilePageCount, clearProfileRegistery,sortProfiles,loadingOnlyProfiles,sortingInput,setSortingInput} = rootStore.profileStore;
     const {appLoaded, userCityPlaced} = rootStore.commonStore;
     const [isToggleVisible, setIsToggleVisible] = useState(false);
+    const [additionalTransfrom,setAdditionalTransfrom] = useState(0);
 
+      
+  const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+  const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     const list = [
       'Hata olduğunu düşünüyorsanız site yöneticisiyle iletişime geçebilir,',
@@ -106,11 +115,15 @@ const sixItem:SemanticWIDTHS = 6;
 
     return (
       <Fragment>
-      <Segment inverted textAlign='center' vertical className='masthead_page'>
+        {
+          !isTablet &&
+          <Segment inverted textAlign='center' vertical className='masthead_page'>
                <Container>
                <ProfileListFilters />
                </Container>
       </Segment>
+        }
+      
       {Array.from(profileRegistery.values()).length === 0 && !loadingProfiles && !loadingNext?
        <>
        <br></br>
@@ -120,13 +133,13 @@ const sixItem:SemanticWIDTHS = 6;
            <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff", fontSize: '16px', marginBottom:"10px", marginTop:"30px"}}>
                En popüler 10
                </Label>
-        <Grid stackable>
-          <Grid.Column width={16}>
+        <Grid>
+          <Grid.Column width={16} className="carousel-padding">
             {
-            loadingProfiles && page === 0  ?  <ProfileListItemsPlaceholder itemPerRow={fiveItem}/> :
+            loadingProfiles && page === 0  ?  <ProfileListItemsPlaceholder itemPerRow={isMobile ? twoItems : isTablet ? threeItem :5}/> :
             <Carousel
             renderButtonGroupOutside={true}
-            partialVisible={true}
+            partialVisible={false}
             swipeable={true}
             draggable={true}
             renderDotsOutside={true}
@@ -140,6 +153,15 @@ const sixItem:SemanticWIDTHS = 6;
             focusOnSelect={true}
             containerClass="profileList_carousel-container"
             itemClass="carousel-item-padding-10-px"
+          //  additionalTransfrom={additionalTransfrom}
+          //   beforeChange={nextSlide => {
+          //     if (nextSlide !== 0 && additionalTransfrom !== 72) {
+          //       setAdditionalTransfrom(-100)
+          //     }
+          //     if (nextSlide === 0 && additionalTransfrom === 72) {
+          //       setAdditionalTransfrom(0)
+          //     }
+          //   }}
            >
                 {
                 popularProfileList.map((pro) => (
@@ -166,7 +188,7 @@ const sixItem:SemanticWIDTHS = 6;
          <Grid.Column width={16}>
          {
          (loadingProfiles && page === 0) && loadingOnlyProfiles ? 
-         <ProfileListItemsPlaceholder itemPerRow={sixItem} /> :
+         <ProfileListItemsPlaceholder itemPerRow={isMobile ? twoItems : isTablet ? threeItem :5} /> :
           <InfiniteScroll
           pageStart={0}
           loadMore={handleGetNext}
@@ -175,7 +197,7 @@ const sixItem:SemanticWIDTHS = 6;
            <ProfileList />
            </InfiniteScroll> 
           }
-          {(loadingNext && page+1 < totalProfileListPages) ? <ProfileListItemsPlaceholder itemPerRow={sixItem}/> :""}
+          {(loadingNext && page+1 < totalProfileListPages) ? <ProfileListItemsPlaceholder itemPerRow={isMobile ? twoItems : isTablet ? threeItem: 5}/> :""}
           <div className="scroll-to-top">
           {isToggleVisible && 
             <Label style={{display:"flex", alignItems:"center"}} onClick={scrollToTop}>

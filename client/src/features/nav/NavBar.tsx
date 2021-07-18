@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import {history} from '../../index';
 import NavSearchArea from './NavSearchArea';
+import { useMediaQuery } from 'react-responsive'
 
 const NavBar: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
@@ -12,9 +13,14 @@ const NavBar: React.FC = () => {
     const { activeMenu,setActiveMenu } = rootStore.commonStore;
     const { notificationCount } = rootStore.userStore;
 
+    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+
     const fixed = "top";
     return (
       <>
+      {
+        isTabletOrMobile ? <div></div> :
+
       <Menu 
       fixed={fixed ? 'top' : undefined}
       pointing
@@ -94,6 +100,7 @@ const NavBar: React.FC = () => {
          </Container>         
        
       </Menu>
+}
 {/* 
 <Menu fixed="left" vertical>
 

@@ -115,13 +115,17 @@ const sixItem:SemanticWIDTHS = 6;
 
     return (
       <Fragment>
+         <Container className="profileList_WelcomeMessage" style={{textAlign:"center"}}>
+             <h2 style={{fontWeight:400, color:"#263a5e"}}>Kullanıcıların En Beğendikleri ve Çok Daha Fazlası</h2>
+          </Container>
         {
-          !isTablet &&
+          //  !isTablet &&
           <Segment inverted textAlign='center' vertical className='masthead_page'>
                <Container>
                <ProfileListFilters />
                </Container>
       </Segment>
+
         }
       
       {Array.from(profileRegistery.values()).length === 0 && !loadingProfiles && !loadingNext?
@@ -130,6 +134,7 @@ const sixItem:SemanticWIDTHS = 6;
         <Message style={{marginTop:"30px"}} header='Aradığınız kriterlere uygun bir aktivite bulunamadı :(' list={list} />
       </> :
       <>
+          
            <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff", fontSize: '16px', marginBottom:"10px", marginTop:"30px"}}>
                En popüler 10
                </Label>

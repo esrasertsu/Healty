@@ -108,7 +108,7 @@ const BlogList: React.FC = () => {
         loadMore={handleGetNext}
         hasMore={!loadingNext && page +1 < totalPages}
         initialLoad={false}>
-          <Card.Group stackable>
+          <Card.Group itemsPerRow={3} stackable>
               {
                 getBlogsByDate.map((blog) => (
                   <BlogListItem key={blog!.id} blog={blog} />

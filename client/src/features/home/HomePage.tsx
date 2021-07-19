@@ -235,7 +235,7 @@ const HomePage = () => {
                 }} >
                 <Card.Content>
                     <Card.Header>Spor</Card.Header>
-                    <Label content="10 Uzman & Aktivite"/>
+                    {/* <Label content="10 Uzman & Aktivite"/> */}
                 </Card.Content>
             </Card>
             <Card className="diyetCard homepageCatCard" onClick={() => {
@@ -255,7 +255,7 @@ const HomePage = () => {
                 }} >
                 <Card.Content>
                     <Card.Header>Meditasyon</Card.Header>
-                    <Label content="85 Uzman & Aktivite"/>
+                    {/* <Label content="Uzman & Aktivite"/> */}
                 </Card.Content>
             </Card>
             
@@ -266,7 +266,7 @@ const HomePage = () => {
                 }} >
                 <Card.Content>
                     <Card.Header>Psikoloji</Card.Header>
-                    <Label content="110 Uzman & Aktivite"/>
+                    {/* <Label content="110 Uzman & Aktivite"/> */}
                 </Card.Content>
             </Card>
           </Card.Group>

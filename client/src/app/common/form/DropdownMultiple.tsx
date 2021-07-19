@@ -18,7 +18,7 @@ interface IProps extends FieldRenderProps<string[], HTMLElement>, FormFieldProps
             loading={loading}
             placeholder={placeholder}
             options={options}
-            className={input.value.length >0 ? "selected" :""}
+            className={input.value.length >0 ? "selected scrollHeight" :""}
             wrapSelection={false}
             clearable={true}
          />

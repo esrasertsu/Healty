@@ -58,8 +58,8 @@ const ProfileListFilters: React.FC = () => {
             initialValues={profileFilterForm}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid, pristine }) => (
-              <Form onSubmit={handleSubmit} >
-                <Form.Group style={{alignItems:"center", margin:"0px"}} stackable ="true">
+              <Form className="profileFilterForm" onSubmit={handleSubmit} >
+                <Form.Group style={{alignItems:"center"}}>
                 <Field 
                   name="categoryId"
                   width={3}
@@ -108,7 +108,7 @@ const ProfileListFilters: React.FC = () => {
                     }
                 }}
             </OnChange>
-               <div>
+               <div className="profileFilterButtons" >
                <Button
                  // loading={submitting}
                   disabled={buttonDisabled}

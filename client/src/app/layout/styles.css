@@ -440,6 +440,10 @@ a.ui.card:hover {
 
 }
 
+.profileList_WelcomeMessage{
+  margin-top: 30px;
+}
+
 }
 
 @media (max-width: 768px){
@@ -452,6 +456,10 @@ a.ui.card:hover {
     background-image: url("../layout/img/banner-2.jpg") !important; 
     background-size: cover !important;
     border-radius: .28571429rem !important;
+  }
+
+  .profileList_WelcomeMessage{
+    margin-top: 20px;
   }
 }
 
@@ -487,16 +495,64 @@ a.ui.card:hover {
 
 /*home page styles*/
 
-.masthead_page {
+@media (min-width: 769px){
+  .masthead_page {
+    display: flex;
+    align-items: center;
+    height: 4vw;
+    width: 100%;
+    background: #fff!important;
+    background-size: cover !important;
+    background-position-y: -260px !important;
+    border-radius: .28571429rem !important;
+    margin-top:10px !important;
+  }
+  .ui.form.profileFilterForm .fields{
+    flex-direction: row !important;
+  }
+}
+
+
+@media (max-width: 768px){
+  .masthead_page {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background: #fff!important;
+    background-size: cover !important;
+    background-position-y: -260px !important;
+    border-radius: .28571429rem !important;
+    margin-top:10px !important;
+  }
+  .ui.form.profileFilterForm .fields .field
+  {
+    margin: 5px 0;
+    width: 100%!important;
+  }
+  .ui.form.profileFilterForm .fields{
+    flex-direction: column !important;
+  }
+  .profileFilterButtons{
+    justify-content: center;
+    width: 100%;
+    flex-direction: column;
+  }
+  .profileFilterButtons .ui.button{
+    margin:6px 0 !important
+  }
+}
+
+@media (min-width:768px){
+
+  .scrollHeight:not(.active){
+    overflow-y: scroll;
+    max-height: 2.71428571em; 
+
+  }
+}
+
+.profileFilterButtons{
   display: flex;
-  align-items: center;
-  height: 4vw;
-  width: 100%;
-  background: #fff!important;
-  background-size: cover !important;
-  background-position-y: -260px !important;
-  border-radius: .28571429rem !important;
-  margin-top:10px !important;
 }
 
 .mobileNavMenuButton i.icon, .mobileNavMenuButton i.icons{
@@ -578,6 +634,7 @@ i.search.inverted.icon {
   color:black;
   opacity: 1;
 }
+
 }
 @media (min-width: 769px){
   .ui.modal>.close{

@@ -100,7 +100,7 @@ const [title, setTitle] = useState("");
     </Modal>
         <Header>Referans İşler
     </Header>
-    {referencePics.length === 0 ? "Henüz paylaştığı bir referans görsel bulunmamaktadır." :
+    {!isCurrentUser && referencePics.length === 0 ? "Henüz paylaştığı bir referans görsel bulunmamaktadır." :
 
     <Grid>
       <Grid.Column width="16">

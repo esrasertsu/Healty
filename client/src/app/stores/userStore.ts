@@ -84,7 +84,6 @@ export default class UserStore {
             runInAction(()=>{
                 this.user = user;
             })
-            debugger;
             this.rootStore.commonStore.setToken(user.token);
             this.rootStore.modalStore.closeModal();
             history.push(location);
@@ -129,11 +128,11 @@ export default class UserStore {
         .then(async() => {
             if(this.hubConnection!.state === 'Connected')
             {
-                debugger;
+
                 await this.hubConnection!.invoke('SetUserOnline');
                 const b = await agent.User.update(true);
                 runInAction(() => {
-                    debugger;
+
                     this.rootStore.messageStore.loadChatRooms().then(() => {
                         let count = 0; 
                         this.rootStore.messageStore.chatRooms &&  
@@ -155,7 +154,6 @@ export default class UserStore {
                 runInAction(() => {
                     message.createdAt= new Date();
                     this.initialMessages.push(message);
-                    debugger;
                     if(this.rootStore.messageStore.messageRegistery.get(message.chatRoomId) !==null &&
                     this.rootStore.messageStore.messageRegistery.get(message.chatRoomId) !==undefined)
                      {
@@ -168,7 +166,6 @@ export default class UserStore {
                     //mesajın göndericisi şuanki user değilse ve şuanki user'ın baktığı chatroom mesajın chatroom'u ise seen true'ya çek
                     const crIndex = this.rootStore.messageStore.chatRooms!.findIndex(x => x.id === message.chatRoomId);
                     this.rootStore.messageStore.chatRooms![crIndex].lastMessage = message.body;
-                    debugger;
                     if(message.username !== this.user!.userName && 
                         message.chatRoomId !== this.rootStore.messageStore.chatRoomId)
                         {
@@ -196,7 +193,6 @@ export default class UserStore {
     
             this.hubConnection!.on('Online', user => {
                 runInAction(() => {
-                    debugger;
                     this.setUserOnline(user);
                     toast.info(user +" online")
                 })
@@ -204,7 +200,6 @@ export default class UserStore {
 
             this.hubConnection!.on('Offline', user => {
                 runInAction(() => {
-                    debugger;
                     this.setUserOffline(user);
                     toast.info(user +" offline")
                 }
@@ -212,12 +207,10 @@ export default class UserStore {
             })
 
             this.hubConnection!.on('MessageSeen', message => {
-                debugger;
                     this.rootStore.messageStore.setMessageSeen(message);
             })
 
             this.hubConnection!.on('NewChatRoomAdded', (chatRoomId,userName,senderName) => {
-                debugger;
                 runInAction(async() => {
                    await this.hubConnection!.invoke('AddToChat',chatRoomId).then(()=>
                      this.handleNewlyAddedChatRoom(senderName)
@@ -233,7 +226,6 @@ export default class UserStore {
     }
 
     @action  stopHubConnection = async () => {
-        debugger;
         await this.hubConnection!.invoke('SetUserOffline');
         const b = await agent.User.update(false);
         runInAction(async() => {

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import {history} from '../../index';
 import NavSearchArea from './NavSearchArea';
+import { useMediaQuery } from 'react-responsive'
 
 
 interface IProps{
@@ -17,7 +18,7 @@ const MobileNavBar: React.FC<IProps> = ({setVisibleMobileNav,visible}) => {
     const { user, logout} = rootStore.userStore;
     const { activeMenu,setActiveMenu } = rootStore.commonStore;
     const { notificationCount } = rootStore.userStore;
-   
+    const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     const fixed = "top";
     return (
@@ -45,15 +46,18 @@ const MobileNavBar: React.FC<IProps> = ({setVisibleMobileNav,visible}) => {
                 </div>
                   
                   </Menu.Item>
-                  <Menu.Item>
-                    <NavSearchArea />
-                  </Menu.Item>
+                 {!isMobile && 
+                 <Menu.Item>
+                   <NavSearchArea />
+                 </Menu.Item>
+                 } 
                   <Menu.Item position="right" 
-                  icon={"align justify"}
+                  icon={"bars"}
                   className="mobileNavMenuButton"
-                  active={activeMenu === 0}
+                  active={activeMenu === -2}
                 onClick={() => {
-                   setActiveMenu(0);
+                activeMenu !== -2 ? setActiveMenu(-2) :
+                   setActiveMenu(-2);
                    setVisibleMobileNav(!visible);
                     }} /> 
               

@@ -28,6 +28,7 @@ import { LoginRequiredPage } from './LoginRequiredPage';
 import  Admin  from '../../features/admin/Admin';
 import { useMediaQuery } from 'react-responsive'
 import MobileNavBar from '../../features/nav/MobileNavBar';
+import MobileNavMenu from '../../features/nav/MobileNavMenu';
 
 const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
@@ -96,7 +97,6 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   useEffect(() => {
     if(appLoaded && user!==null && hubConnection === null)
     {
-      debugger;
       createHubConnection();
 
     }
@@ -148,23 +148,12 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                 animation={"push"}
                 direction={"right"}
                 icon='labeled'
-                inverted
                 vertical
                 visible={visible}
                 width='wide'
+                className="sidebar_menu"
               >
-                <Menu.Item as='a'>
-                  <Icon name='home' />
-                  Profilim
-                </Menu.Item>
-                <Menu.Item as='a'>
-                  <Icon name='gamepad' />
-                  Games
-                </Menu.Item>
-                <Menu.Item as='a'>
-                  <Icon name='camera' />
-                  Channels
-                </Menu.Item>
+               <MobileNavMenu setVisibleMobileNav={setVisible} visible={visible} />
               </Sidebar>
 
         <Sidebar.Pusher>

@@ -503,6 +503,13 @@ a.ui.card:hover {
   font-size: 2rem;
 }
 
+.mobileNavMenuButton{
+  color: #263a5e !important
+}
+.mobileNavMenuButton.active{
+  border-color: #263a5e !important;
+  color: #263a5e !important
+}
 
 .masthead .ui.menu .ui.button,
 .ui.menu a.ui.inverted.button {
@@ -537,6 +544,37 @@ i.search.inverted.icon {
   align-items: center;
 }
 
+.loginRegMobileButton{
+  width: 100% !important;
+  background: #f2711c !important
+}
+.mobileNavMenu_container .ui.inverted.icon.menu .item{
+  color: "#1a2b49"
+}
+
+.mobileNavMenu_container_item{
+  text-align: left !important;
+  font-size: 1.1em;
+  color: rgb(26, 43, 73) !important;
+  font-weight: 500 !important;
+}
+
+.sidebar_menu{
+  max-width: 100% !important;
+}
+
+@media (max-width: 768px){
+.ui.modal>.close{
+  color:black;
+  opacity: 1;
+}
+}
+@media (min-width: 769px){
+  .ui.modal>.close{
+    color: #fff;
+    opacity: 1;
+  }
+  }
 @media (max-width: 500px){
   .homePage-button_Container {
     height: 50px;
@@ -629,6 +667,7 @@ button, input, optgroup, select, textarea {
   display: flex !important;
   justify-content: space-between;
   flex-direction: row;
+  align-items: flex-end;
 }
 .profileList_carousel-container{
   padding: 10px 1px;

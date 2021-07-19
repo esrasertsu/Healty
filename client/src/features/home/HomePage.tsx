@@ -40,7 +40,7 @@ const HomePage = () => {
       if(modal.open) closeModal();
 
           openModal("Giriş Yap", <>
-          <Image size='large' src='/assets/Login1.png' wrapped />
+          <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.png' wrapped />
           <Modal.Description className="loginreg">
           <LoginForm location={"/"} />
           </Modal.Description>
@@ -54,7 +54,7 @@ const HomePage = () => {
         if(modal.open) closeModal();
 
             openModal("Üye Kaydı", <>
-            <Image size='large' src='/assets/Login1.png' wrapped />
+            <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.png' wrapped />
             <Modal.Description className="loginreg">
             <RegisterForm location={"/"} />
             </Modal.Description>

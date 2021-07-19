@@ -175,7 +175,7 @@ const sixItem:SemanticWIDTHS = 6;
           <Grid>
           <Grid.Column width={16} className="profileList_headerAndSorting">
           <div>
-          <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff",marginTop:"30px",fontSize: '16px'}}> Tümü ({profilePageCount}) </Label>
+          <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff",fontSize: '16px'}}> Tümü ({profilePageCount}) </Label>
           </div>
           <div>
           <Select 

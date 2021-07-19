@@ -524,6 +524,9 @@ a.ui.card:hover {
     border-radius: .28571429rem !important;
     margin-top:10px !important;
   }
+  .masthead_page .ui.container{
+    width: 100% !important;
+  }
   .ui.form.profileFilterForm .fields .field
   {
     margin: 5px 0;

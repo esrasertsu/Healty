@@ -139,6 +139,7 @@ export default class ActivityStore {
     }
 
     @computed get axiosParams(){
+        debugger;
         const params = new URLSearchParams();
         params.append('limit', String(LIMIT));
         params.append('offset', `${this.page ? this.page * LIMIT : 0}`);

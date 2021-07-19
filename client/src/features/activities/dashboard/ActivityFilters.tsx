@@ -356,7 +356,13 @@ const ActivityFilters = () => {
                 <Form.Group grouped>
                   {
                     levelList.map((level:ILevel) => 
-                    <Form.Checkbox className="accordion_subcategory_title" key={level.value} label={level.text} name={level.value} value={level.value} onChange={handleLevelChange}/>
+                    <Form.Checkbox className="accordion_subcategory_title"
+                     key={level.value} 
+                     label={level.text} 
+                     name={level.value} 
+                     value={level.value} 
+                     checked={levelIds.findIndex(x => x === level.key)>-1}
+                     onChange={handleLevelChange}/>
                     )
                   }
                 </Form.Group>
@@ -409,6 +415,7 @@ const ActivityFilters = () => {
                               setSubCategoryIds([]);
                               setIsOnline(false);
                               setCityId("");
+                              setLevelIds([]);
                               clearUserPredicates();
                               clearKeyPredicate("subCategoryIds");
                               clearKeyPredicate("categoryIds");

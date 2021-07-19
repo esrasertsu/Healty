@@ -8,7 +8,7 @@ interface IProps {
 const BlogMainPageItemsPlaceholder:React.FC<IProps> = ({count}) => {
   return (
    
-    <Card.Group doubling stackable>
+    <Card.Group itemsPerRow={3}>
     {_.times(count, (i) => (
       <Card key={i}>
           <Placeholder>

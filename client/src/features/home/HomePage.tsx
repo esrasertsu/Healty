@@ -24,8 +24,14 @@ const HomePage = () => {
   
     const [open, setOpen] = React.useState(false)
     const [title, setTitle] = React.useState("")
+    const [allCatId, setAllCatId] = React.useState("")
+
     const {setProfileFilterForm,profileFilterForm,clearProfileRegistery, setPage} = rootStore.profileStore;
     const {userCity} = rootStore.commonStore;
+    const {setClearPredicateBeforeSearch,clearUserPredicates,clearKeyPredicate,setActiveUserPreIndex,
+      clearActivityRegistery, setCategoryIds,categoryIds,setPredicate,setActiveIndex} = rootStore.activityStore;
+
+      const {setClearedBeforeNewPredicateComing,clearPredicates} = rootStore.blogStore;
 
     
 
@@ -97,13 +103,13 @@ const HomePage = () => {
           <Image size="large" src={'/assets/redirectModal/trainer.jfif'}></Image>
          <Header>Uzman Eğitmen</Header>
           <p>
-            <span style={{fontSize:"15px"}}>{title}</span> alanında dilediğin kategoride uzman eğitmenler keşfet
+            <span style={{fontSize:"15px"}}>{title}</span> alanında dilediğin kategoride uzman eğitmenler keşfetmek için
           </p>
           <p><Button color='blue' style={{display:'flex',  alignItems:"flex-end"}} onClick={() => {
             setOpen(false);
             setPage(0);
-            setProfileFilterForm({...profileFilterForm, categoryId:"64ff6473-363c-45a9-9f54-63bb7272d85d"});
-           clearProfileRegistery();
+            setProfileFilterForm({...profileFilterForm, categoryId:allCatId});
+            clearProfileRegistery();
             history.push('/profiles');
             }}>
           <Icon style={{opacity:"1"}} name='users' size="large"/> Ara
@@ -113,22 +119,48 @@ const HomePage = () => {
           <Image size="large" src={'/assets/redirectModal/activity.jfif'}></Image>
           <Header>Aktivite</Header>
           <p>
-            {title} alanında eğitmenler tarafından düzenlenen aktivitelere katıl
+            {title} alanında uzman eğitmenler tarafından düzenlenen aktivitelere katılmak için
           </p>
-          <p><Button color='blue' style={{display:'flex',  alignItems:"flex-end"}} onClick={() => {setOpen(false); history.push('/activities')}}>
+          <p><Button color='blue' style={{display:'flex',  alignItems:"flex-end"}} onClick={() => {
+              setClearPredicateBeforeSearch(true); 
+              clearUserPredicates();
+              clearKeyPredicate("subCategoryIds");
+              clearKeyPredicate("categoryIds");
+              clearKeyPredicate("isOnline");
+              clearKeyPredicate("startDate");
+              clearKeyPredicate("endDate");
+              clearKeyPredicate("levelIds");
+              clearKeyPredicate("cityId");
+              setActiveUserPreIndex(0);
+              setPage(0);
+              clearActivityRegistery();
+              setOpen(false);
+              setCategoryIds([allCatId]);
+              setPredicate("categoryIds",allCatId);
+              setClearPredicateBeforeSearch(false);
+              setActiveIndex(0);
+              history.push('/activities');
+            }}>
           <Icon style={{opacity:"1"}} name='calendar alternate outline' size="large"/>
-          Katıl
+          Keşfet
         </Button></p>
           </Segment>
           <Segment className="box">
           <Image size="large" src={'/assets/redirectModal/blog.jfif'}></Image>
           <Header>Blog</Header>
           <p>
-             {title} alanında eğitmenlerin yazdığı blogları okuyarak bilgi sahibi ol
+             {title} alanında uzman eğitmenlerin yazdığı blogları okuyarak bilgi sahibi ol
            </p>
-          <p> <Button style={{display:'flex',  alignItems:"flex-end"}} color='blue' onClick={() => {setOpen(false);history.push('/blog');}}>
+          <p> <Button style={{display:'flex',  alignItems:"flex-end"}} color='blue'  onClick={() => {
+            setOpen(false);
+            setClearedBeforeNewPredicateComing(true);
+            clearPredicates(null);
+            rootStore.blogStore.setPredicate('categoryId', allCatId);
+            setClearedBeforeNewPredicateComing(false);
+            history.push('/blog')
+            }}>
           <Icon style={{opacity:"1"}} name='file alternate outline' size="large"/>
-          Keşfet
+          İncele
         </Button> </p>
           </Segment>
          
@@ -156,11 +188,11 @@ const HomePage = () => {
                        {/* <Image size='massive' src='/assets/logo.png' alt='logo' style={{marginBottom: 12}}/> */}
                        Dilediğin kategoride sağlıklı yaşam uzmanını ara
                    </Header>
-                   {isLoggedIn && user && token ? ( 
+                   {/* {isLoggedIn && user && token ? (  */}
                    <Fragment>
                         <SearchArea/>
                    </Fragment>
-                   ): (
+                   {/* ): (
                        <Fragment>
                             <Header as='h2' inverted content={`Afitapp'a Hoşgeldin!`} />
                             <Button onClick={handleLoginClick} size='huge' inverted>
@@ -170,7 +202,8 @@ const HomePage = () => {
                                 Yeni Kullanıcı
                              </Button>
                        </Fragment>
-                   )}
+                   ) } */}
+                  
                   
                </Container>
            </Segment>
@@ -195,37 +228,31 @@ const HomePage = () => {
         </Grid.Column>
         <Grid.Column width={16}>
           <Card.Group itemsPerRow={ isMobile ? 1 : isTablet ? 2: 4}>
-          <Card className="sporCard homepageCatCard" onClick={() => {setOpen(true);
-                        setTitle("Spor");
-
-               // history.push(`/profile/${profile.userName}`)
-              //  setLoadingProfile(true);
+          <Card className="sporCard homepageCatCard" onClick={() => {
+                  setAllCatId("d1245fcb-12b0-4b8b-8047-6a86b371b80b");
+                  setOpen(true);
+                  setTitle("Spor");
                 }} >
-                {/* <Image src={'/assets/categoryImages/spor.jpg'} /> */}
                 <Card.Content>
                     <Card.Header>Spor</Card.Header>
                     <Label content="10 Uzman & Aktivite"/>
                 </Card.Content>
             </Card>
-            <Card className="diyetCard homepageCatCard" onClick={() => {setOpen(true);
-                        setTitle("Diyet");
-
-               // history.push(`/profile/${profile.userName}`)
-              //  setLoadingProfile(true);
+            <Card className="diyetCard homepageCatCard" onClick={() => {
+                setAllCatId("baed526c-a3cb-4d60-8ac7-98030112613a");
+                setOpen(true);
+                setTitle("Diyet");
                 }} >
-                {/* <Image src={'/assets/categoryImages/diyetisyenn.jpg'} /> */}
                 <Card.Content>
                     <Card.Header>Diyet</Card.Header>
-                    <Label content="110 Uzman & Aktivite"/>
+                    {/* <Label content="110 Uzman & Aktivite"/> */}
                 </Card.Content>
             </Card>
-            <Card className="meditasyonCard homepageCatCard" onClick={() => {setOpen(true);
-                        setTitle("Meditasyon");
-
-               // history.push(`/profile/${profile.userName}`)
-              //  setLoadingProfile(true);
+            <Card className="meditasyonCard homepageCatCard" onClick={() => {
+                setAllCatId("a5ffd0ff-c1f5-4979-84eb-3688daaca8a3");
+                setOpen(true);
+                setTitle("Meditasyon");
                 }} >
-                {/* <Image src={'/assets/categoryImages/meditasyon.jpg'} /> */}
                 <Card.Content>
                     <Card.Header>Meditasyon</Card.Header>
                     <Label content="85 Uzman & Aktivite"/>
@@ -233,12 +260,10 @@ const HomePage = () => {
             </Card>
             
             <Card className="psikologCard homepageCatCard" onClick={() => {
-            setOpen(true);
-            setTitle("Psikoloji");
-               // history.push(`/profile/${profile.userName}`)
-              //  setLoadingProfile(true);
+                setAllCatId("cc6989f7-fa27-4aad-b4b7-fc1bbaf0a7b4");
+                setOpen(true);
+                setTitle("Psikoloji");
                 }} >
-                {/* <Image src={'/assets/categoryImages/psikolog.jpg'} /> */}
                 <Card.Content>
                     <Card.Header>Psikoloji</Card.Header>
                     <Label content="110 Uzman & Aktivite"/>

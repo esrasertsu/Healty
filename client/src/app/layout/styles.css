@@ -548,8 +548,18 @@ i.search.inverted.icon {
   width: 100% !important;
   background: #f2711c !important
 }
+
+.logoutMobileButton{
+  width: 100% !important;
+  background: #d02121 !important
+}
 .mobileNavMenu_container .ui.inverted.icon.menu .item{
   color: "#1a2b49"
+}
+
+.messageNotificationCount{
+  background-color: #03b500!important;
+    border-color: #03b500!important;
 }
 
 .mobileNavMenu_container_item{
@@ -587,6 +597,37 @@ button, input, optgroup, select, textarea {
   font-size: 12px;
   line-height: 1.15;
   margin: 0;
+}
+
+.homepageCatCardModal_segmentContainer{
+  display: flex !important;
+  flex-direction: column;
+}
+.homepageCatCardModal_segmentContainer .box{
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+}
+@media (min-width: 501px){
+
+.homepageCatCardModal_segmentContainer{
+  display: flex !important;
+  flex-direction: row;
+}
+.homepageCatCardModal_segmentContainer .box{
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  width: 33% !important;
+  height: 345px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
 }
 }
 
@@ -639,20 +680,7 @@ button, input, optgroup, select, textarea {
   line-height: 1.5rem;
     padding: 4px 16px;
 }
-.homepageCatCardModal_segmentContainer{
-  display: flex !important;
-  flex-direction: row;
-}
-.homepageCatCardModal_segmentContainer .box{
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  width: 33% !important;
-  height: 335px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
 
-}
 /* .ui.search .prompt {
   border-radius: 0 !important; 
 } */

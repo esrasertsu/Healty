@@ -13,7 +13,9 @@ import { IActivitySelectedFilter } from '../../../app/models/activity';
 const ActivityDashboard: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
   const {loadActivities, loadingInitial, setPage, page, totalPages,loadLevels,predicate,setPredicate
-  ,setClearPredicateBeforeSearch,clearKeyPredicate,isOnline, setIsOnline} = rootStore.activityStore;
+  ,setClearPredicateBeforeSearch,clearKeyPredicate,subCategoryIds,setSubCategoryIds,
+  categoryIds, setCategoryIds, setLevelIds,
+  levelIds, cityId, setCityId, isOnline, setIsOnline} = rootStore.activityStore;
 
 
   const { loadCategories } = rootStore.categoryStore;
@@ -79,11 +81,46 @@ const ActivityDashboard: React.FC = () => {
     
   }
 
-  const handleDeleteFilterSelection = (e:any,key:string) =>{
+  const handleDeleteFilterSelection = (e:any,key:string, value:string) =>{
       e.preventDefault();
       const deletedUserPreds = activitySelectedFilters.filter(x => x.key !== key);
       setActivitySelectedFilters([...deletedUserPreds]);
 
+      if(value === "categoryId")
+      {
+        setCategoryIds(categoryIds.filter(x => x !== key));
+        setPredicate("categoryIds", categoryIds);
+      }else if(value === "subCatId" && key==="subCatId")
+      {
+        setSubCategoryIds([]);
+        setPredicate("subCategoryIds",[]);
+      }else if(value === "subCatId")
+      {
+        setSubCategoryIds(subCategoryIds.filter(x => x !== key));
+        setPredicate("subCategoryIds", subCategoryIds);
+      }else if(value === "cityId")
+      {
+         setCityId("");
+         clearKeyPredicate("cityId");
+      }else if(value === "level")
+      {
+        setLevelIds([]);
+        clearKeyPredicate("levelIds");
+      }else if(value === "isHost")
+      {
+        setLevelIds([]);
+        clearKeyPredicate("isHost");
+      }else if(value === "isGoing")
+      {
+        setLevelIds([]);
+        clearKeyPredicate("isGoing");
+      }else if(value === "isFollowed")
+      {
+        setLevelIds([]);
+        clearKeyPredicate("isFollowed");
+      }
+
+      
       //gerçek predicate'ların temizlenmesi if else ile 5 tane key'i kontrol edip gereken predicate'ı kaldır
   }
   return (
@@ -176,7 +213,7 @@ const ActivityDashboard: React.FC = () => {
        
           { activitySelectedFilters.map((value:IActivitySelectedFilter) =>(
             <Label className="selectedFilterLabel" key={value.key}>{value.text} 
-            <Icon style={{opacity:1}} name="delete" onClick={(e:any) => handleDeleteFilterSelection(e,value.key)}></Icon>
+            <Icon style={{opacity:1}} name="delete" onClick={(e:any) => handleDeleteFilterSelection(e,value.key, value.value)}></Icon>
             </Label>
 
           ))}

@@ -78,6 +78,14 @@ const ActivityDashboard: React.FC = () => {
       setVisible(false);
     
   }
+
+  const handleDeleteFilterSelection = (e:any,key:string) =>{
+      e.preventDefault();
+      const deletedUserPreds = activitySelectedFilters.filter(x => x.key !== key);
+      setActivitySelectedFilters([...deletedUserPreds]);
+
+      //gerçek predicate'ların temizlenmesi if else ile 5 tane key'i kontrol edip gereken predicate'ı kaldır
+  }
   return (
     <>
    
@@ -167,7 +175,9 @@ const ActivityDashboard: React.FC = () => {
           </div>
        
           { activitySelectedFilters.map((value:IActivitySelectedFilter) =>(
-            <Label className="selectedFilterLabel" key={value.key}>{value.text}</Label>
+            <Label className="selectedFilterLabel" key={value.key}>{value.text} 
+            <Icon style={{opacity:1}} name="delete" onClick={(e:any) => handleDeleteFilterSelection(e,value.key)}></Icon>
+            </Label>
 
           ))}
         

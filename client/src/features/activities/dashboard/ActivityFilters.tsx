@@ -278,7 +278,9 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
           setClearPredicateBeforeSearch(true); 
           clearUserPredicates();
           setClearPredicateBeforeSearch(false);  
-          setActivitySelectedFilters([...activitySelectedFilters, {key:"isGoing",value:"isGoing", text:"Gidiyorum"}])
+          const deletedUserPreds = activitySelectedFilters.filter(x => x.value !== "isGoing" && x.value !== "isHost" && x.value !== "isFollowed");
+          deletedUserPreds.push({key:"isGoing",value:"isGoing", text:"Gidiyorum"});
+          setActivitySelectedFilters([...deletedUserPreds]);
           setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
           setPredicate('isGoing', 'true')}}
          name={'username'} content={"Gidiyorum"} />
@@ -291,7 +293,10 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
           setClearPredicateBeforeSearch(true); 
           clearUserPredicates();
           setClearPredicateBeforeSearch(false); 
-          setActivitySelectedFilters([...activitySelectedFilters, {key:"isHost",value:"isHost", text:"Düzenlediklerim"}])
+          const deletedUserPreds = activitySelectedFilters.filter(x => x.value !== "isGoing" && x.value !== "isHost" && x.value !== "isFollowed");
+          deletedUserPreds.push({key:"isHost",value:"isHost", text:"Düzenlediklerim"});
+          setActivitySelectedFilters([...deletedUserPreds]);
+
           setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
           setPredicate('isHost', 'true')}}//clear etmek gerekiyor
          name={'host'} content={"Düzenlediklerim"} />
@@ -304,7 +309,10 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
           setClearPredicateBeforeSearch(true); 
           clearUserPredicates();
           setClearPredicateBeforeSearch(false);
-          setActivitySelectedFilters([...activitySelectedFilters, {key:"isFollowed",value:"isFollowed", text:"Takip ettiğim eğitmenlerin"}])  
+          const deletedUserPreds = activitySelectedFilters.filter(x => x.value !== "isGoing" && x.value !== "isHost" && x.value !== "isFollowed");
+          deletedUserPreds.push({key:"isFollowed",value:"isFollowed", text:"Takip ettiğim eğitmenlerin"});
+          setActivitySelectedFilters([...deletedUserPreds]);
+
           setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
           setPredicate('isFollowed', 'true')}}
          name={'follow'} content={"Takip Ettiğim Eğitmenlerin"} />

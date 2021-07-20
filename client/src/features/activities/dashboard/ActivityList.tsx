@@ -33,7 +33,7 @@ const ActivityList: React.FC = () => {
      </Fragment>
       )) :
       <>
-      <br></br>
+      {!isTabletOrMobile && <br></br> }
        <Message className="activityNotFoundMessage"  header='Aradığınız kriterlere uygun bir aktivite bulunamadı :(' list={list} />
      </>
     }

@@ -241,6 +241,12 @@ h1, h2, h3, h4, h5 {
   line-height: .75rem;
   color: #6d7688;
 }
+
+.activityDateLabels{
+  background-color: "#263a5e";
+  color:"#fff"
+}
+
 .content.activity_listItem_extraContent{
   display: flex !important;
   justify-content: space-between;
@@ -443,7 +449,9 @@ a.ui.card:hover {
 .profileList_WelcomeMessage{
   margin-top: 30px;
 }
-
+.activityNotFoundMessage{
+  margin-top: 30px;
+}
 }
 
 @media (max-width: 768px){
@@ -461,6 +469,36 @@ a.ui.card:hover {
   .profileList_WelcomeMessage{
     margin-top: 20px;
   }
+  .dtPicker_Container_Style{
+    margin-top:0 !important
+  }
+  .mobileRadioToggle{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color:#345289 !important;
+  }
+  
+.activityDashboard_mobile_filterdiv{
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0 10px 0 !important;
+}
+
+.selectedFilterLabel{
+  background-color: #f86b41 !important;
+    border-radius: 1.28571429rem !important;
+    margin: 0 5px 5px 0 !important;
+
+}
+.activityNotFoundMessage{
+  margin-top: 10px;
+}
+.activityListGrid{
+  margin-top: 5px !important;
+}
 }
 
 @media (min-width: 768px) and (max-width: 1024px){
@@ -510,6 +548,7 @@ a.ui.card:hover {
   .ui.form.profileFilterForm .fields{
     flex-direction: row !important;
   }
+  
 }
 
 
@@ -1224,7 +1263,6 @@ button, input, optgroup, select, textarea {
   align-items: center;
   color:#345289 !important;
 }
-
 
 .ui.modal>.content>.icon+.description.loginreg, .ui.modal>.content>.image+.description.loginreg {
   -webkit-box-flex: 0;

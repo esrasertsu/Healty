@@ -98,7 +98,6 @@ export default class ActivityStore {
     }
 
     @action setPredicate = (predicate:string, value:string | Date| string[]| boolean) => {
-        debugger;
         this.predicate.set(predicate,value);
     }
     @action setClearPredicateBeforeSearch = (clear:boolean) => {
@@ -139,7 +138,6 @@ export default class ActivityStore {
     }
 
     @computed get axiosParams(){
-        debugger;
         const params = new URLSearchParams();
         params.append('limit', String(LIMIT));
         params.append('offset', `${this.page ? this.page * LIMIT : 0}`);
@@ -254,13 +252,13 @@ export default class ActivityStore {
             const activitiesEnvelope = await agent.Activities.list(this.axiosParams);
             const {activities, activityCount } = activitiesEnvelope;
             runInAction('Loading activities',() => {
-                debugger;
                 activities.forEach((activity) =>{
                     setActivityProps(activity,this.rootStore.userStore.user!)
                     this.activityRegistery.set(activity.id, activity);
                 });
                 this.activityCount = activityCount;
                 this.loadingInitial = false;
+                this.rootStore.categoryStore.allCategoriesOptionList.length === 0 && this.rootStore.categoryStore.loadAllCategoryList();
             })
             } catch (error) {
                 console.log(error);
@@ -271,7 +269,6 @@ export default class ActivityStore {
     };
 
     @action loadActivity = async (id:string) => {
-        debugger;
         let activity = this.getActivity(id);
 
         if(activity){

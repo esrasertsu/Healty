@@ -142,6 +142,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
 
         <>
          <MobileNavBar setVisibleMobileNav={setVisible} visible={visible}/>
+          
           <Sidebar.Pushable style={{ overflow: 'hidden' }}>
           <Sidebar
                 as={Menu}

@@ -50,6 +50,12 @@ export interface ILevel {
     value: string;
 }
 
+export interface IActivitySelectedFilter {
+    key: string;
+    text: string;
+    value: string;
+}
+
 export interface IActivityFormValues extends Partial<IActivity>{
     time?: Date,
     subCategoryIds: string[],

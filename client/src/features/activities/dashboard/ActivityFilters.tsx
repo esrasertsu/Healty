@@ -1,12 +1,19 @@
 import React, { FormEvent, Fragment, useContext, useState } from 'react';
-import { Menu, Segment, Accordion, Form, CheckboxProps, Button, Label, Icon, Radio } from 'semantic-ui-react';
+import { Menu, Segment, Accordion, Form, CheckboxProps, Button, Label, Icon, Radio, Dropdown } from 'semantic-ui-react';
 import { DateTimePicker} from 'react-widgets';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import { observer } from 'mobx-react-lite';
 import { ICategory, ISubCategory } from '../../../app/models/category';
-import { ILevel } from '../../../app/models/activity';
+import { ILevel,IActivitySelectedFilter } from '../../../app/models/activity';
+import { useMediaQuery } from 'react-responsive';
 
-const ActivityFilters = () => {
+interface IProps{
+  setVisibleMobileFilterBar?:(visible:boolean) => void ;
+  setActivitySelectedFilters:(selectedFilters:IActivitySelectedFilter[]) => void ;
+  activitySelectedFilters: IActivitySelectedFilter[];
+}
+
+const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivitySelectedFilters,activitySelectedFilters}) => {
 
   const rootStore = useContext(RootStoreContext);
   const { predicate, setPredicate,setClearPredicateBeforeSearch,clearUserPredicates,
@@ -22,7 +29,10 @@ const ActivityFilters = () => {
 
       const { cities } = rootStore.commonStore;
       const {isLoggedIn} = rootStore.userStore;
-  
+      const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+     const [cityName, setcityName] = useState("")
+
+
   const handleClick = (e:any, titleProps:any) => {
     const { index } = titleProps
     const newIndex = activeIndex === index ? -1 : index
@@ -44,7 +54,7 @@ const ActivityFilters = () => {
       setIsOnline(false);
       setPredicate("isOnline",false);
     }
-
+    setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
       scrollToTop();
     
   }
@@ -90,33 +100,7 @@ const ActivityFilters = () => {
      setSubCategoryIds([...subCategoryIds.slice(0,index), ...subCategoryIds.slice(index+1)]);
     }
   }
-  // const handleCategorySubmit = () =>{
-
-  //   setClearPredicateBeforeSearch(true); 
-  //   clearKeyPredicate("categoryIds");
-  //   clearKeyPredicate("subCategoryIds");
-    
-  //   if(subCategoryIds.length===0 && categoryIds.length===0)
-  //   {
-  //     setClearPredicateBeforeSearch(false); 
-  //     setPage(0);
-  //     clearActivityRegistery();
-  //     loadActivities();
-  //   } else if(categoryIds.length>0 && subCategoryIds.length===0)
-  //   {
-  //     setClearPredicateBeforeSearch(false); 
-  //     setPredicate("categoryIds",categoryIds);
-  //   }
-  //   else if(categoryIds.length>0 && subCategoryIds.length>0)
-  //   {
-  //     setPredicate("categoryIds",categoryIds);
-  //     setClearPredicateBeforeSearch(false);
-  //     setPredicate("subCategoryIds",subCategoryIds);
-  //   }
-
-  //   scrollToTop();
-
-  // }
+  
 
 
   const handleLevelSubmit = () => {
@@ -125,6 +109,7 @@ const ActivityFilters = () => {
     setClearPredicateBeforeSearch(false);
     setPredicate("levelIds",levelIds);
    
+    setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
 
     scrollToTop();
 
@@ -135,15 +120,23 @@ const ActivityFilters = () => {
     clearKeyPredicate("cityId");
     setClearPredicateBeforeSearch(false);
     setPredicate("cityId",cityId);
-   
+    setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
+
     scrollToTop();
   }
 
   const handleCityChange =  (e:any, data:any) => {
-    setCityId(data.value);
+    debugger;
 
     if(data.value==="")
-    clearKeyPredicate("cityId");
+    {
+      setcityName("");
+      clearKeyPredicate("cityId");
+    }else {
+      const name = cities.filter(x => x.key === data.value)[0].text;
+      setCityId(data.value);
+      setcityName(name);
+    }
      
   }
 
@@ -155,6 +148,7 @@ const ActivityFilters = () => {
   };
 
   const handleSearch = (e:any, data:any) => {
+    setActivitySelectedFilters([]);
     setClearPredicateBeforeSearch(true); 
     clearKeyPredicate("subCategoryIds");
     clearKeyPredicate("categoryIds");
@@ -163,6 +157,36 @@ const ActivityFilters = () => {
 
     setPredicate("cityId",cityId);
     setPredicate("levelIds",levelIds);
+
+    const activitySelectedFilterList: IActivitySelectedFilter[] = [];
+
+    cityId !== "" &&  activitySelectedFilterList.push({key:cityId,value:"cityId", text:cityName});
+    levelIds.length > 0 &&   activitySelectedFilterList.push({key:"level",value:"level", text:levelIds.length + " seviye seçili"}) 
+
+    categoryIds.forEach(categoryId => {
+      const catName= categoryList.filter(x => x.value === categoryId)[0].text;
+      activitySelectedFilterList.push({key:categoryId,value:"categoryId", text:catName}) 
+    });
+
+    subCategoryIds.length > 2 &&  activitySelectedFilterList.push({key:"subCatId",value:"subCatId", text:subCategoryIds.length + " branş seçili"}) 
+
+    if(subCategoryIds.length >0 && subCategoryIds.length <3)
+    {
+    subCategoryIds.forEach(subId => {
+      const catName= allCategoriesOptionList.filter(x => x.value === subId)[0].text;
+      activitySelectedFilterList.push({key:subId, value:"subCatId", text:catName}) 
+     });
+    }
+
+    if(predicate.get("isHost") === "true")
+    activitySelectedFilterList.push({key:"isHost",value:"isHost", text:"Düzenlediklerim"}) 
+    else if(predicate.get("isGoing") === "true")
+    activitySelectedFilterList.push({key:"isGoing",value:"isGoing", text:"Gidiyorum"}) 
+    else if(predicate.get("isGoing") === "true")
+    activitySelectedFilterList.push({key:"isFollowed",value:"isFollowed", text:"Takip ettiğim eğitmenlerin"}) 
+
+    setActivitySelectedFilters([...activitySelectedFilterList])
+
 
     if(subCategoryIds.length===0 && categoryIds.length===0)
     {
@@ -182,6 +206,9 @@ const ActivityFilters = () => {
       setPredicate("subCategoryIds",subCategoryIds);
     }
 
+
+    setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
+
     scrollToTop();
 
   }
@@ -193,35 +220,38 @@ const ActivityFilters = () => {
       {/* <Calendar
       onChange={(date)=> {setPredicate('startDate', date!)}}
       value={predicate.get('startDate') || new Date()} /> */}
-     <Segment className="dtPicker_Container_Style">
-      <p>Aktivite aradığınız tarih/saat aralığını giriniz.</p>
-     <DateTimePicker
-        value={predicate.get('startDate') || new Date()}
-        onChange={(date)=> {
-          setClearPredicateBeforeSearch(true); 
-          clearKeyPredicate("startDate");
-          setClearPredicateBeforeSearch(false); 
-          setPredicate('startDate', date!)
-        }}
-        onKeyDown={(e) => e.preventDefault()}
-        date = {true}
-        time = {true}
-        containerClassName="dtPicker_Style"
-      />
-      <br/>
+      {!isTabletOrMobile && 
+       <Segment className="dtPicker_Container_Style">
+       <p>Aktivite aradığınız tarih/saat aralığını giriniz.</p>
       <DateTimePicker
-        value={predicate.get('endDate') || null}
-        onChange={(date)=> {
-          setClearPredicateBeforeSearch(true); 
-          clearKeyPredicate("endDate");
-          setClearPredicateBeforeSearch(false); 
-          setPredicate('endDate', date!)}}
-        onKeyDown={(e) => e.preventDefault()}
-        date = {true}
-        time = {true}
-        containerClassName="dtPicker_Style"
-      />
-     </Segment>
+         value={predicate.get('startDate') || new Date()}
+         onChange={(date)=> {
+           setClearPredicateBeforeSearch(true); 
+           clearKeyPredicate("startDate");
+           setClearPredicateBeforeSearch(false); 
+           setPredicate('startDate', date!)
+         }}
+         onKeyDown={(e) => e.preventDefault()}
+         date = {true}
+         time = {true}
+         containerClassName="dtPicker_Style"
+       />
+       <br/>
+       <DateTimePicker
+         value={predicate.get('endDate') || null}
+         onChange={(date)=> {
+           setClearPredicateBeforeSearch(true); 
+           clearKeyPredicate("endDate");
+           setClearPredicateBeforeSearch(false); 
+           setPredicate('endDate', date!)}}
+         onKeyDown={(e) => e.preventDefault()}
+         date = {true}
+         time = {true}
+         containerClassName="dtPicker_Style"
+       />
+      </Segment>
+      }
+    
    {  isLoggedIn &&
      <Menu vertical style={{ width: '100%'}}>
         {/* <Header icon={'filter'} attached color={'teal'} content={'Filters'} />  size={'small'}*/}
@@ -234,6 +264,9 @@ const ActivityFilters = () => {
            setClearPredicateBeforeSearch(true); 
            clearUserPredicates();
            setClearPredicateBeforeSearch(false); 
+           const deletedUserPreds = activitySelectedFilters.filter(x => x.value !== "isGoing" && x.value !== "isHost" && x.value !== "isFollowed");
+           setActivitySelectedFilters([...deletedUserPreds]);
+           setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
            setPredicate('all', 'true')}}
           name={'all'} content={'Hepsi'} />
         <Menu.Item
@@ -245,6 +278,8 @@ const ActivityFilters = () => {
           setClearPredicateBeforeSearch(true); 
           clearUserPredicates();
           setClearPredicateBeforeSearch(false);  
+          setActivitySelectedFilters([...activitySelectedFilters, {key:"isGoing",value:"isGoing", text:"Gidiyorum"}])
+          setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
           setPredicate('isGoing', 'true')}}
          name={'username'} content={"Gidiyorum"} />
         <Menu.Item
@@ -256,6 +291,8 @@ const ActivityFilters = () => {
           setClearPredicateBeforeSearch(true); 
           clearUserPredicates();
           setClearPredicateBeforeSearch(false); 
+          setActivitySelectedFilters([...activitySelectedFilters, {key:"isHost",value:"isHost", text:"Düzenlediklerim"}])
+          setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
           setPredicate('isHost', 'true')}}//clear etmek gerekiyor
          name={'host'} content={"Düzenlediklerim"} />
          <Menu.Item
@@ -266,17 +303,20 @@ const ActivityFilters = () => {
           setActiveUserPreIndex(3);
           setClearPredicateBeforeSearch(true); 
           clearUserPredicates();
-          setClearPredicateBeforeSearch(false);  
+          setClearPredicateBeforeSearch(false);
+          setActivitySelectedFilters([...activitySelectedFilters, {key:"isFollowed",value:"isFollowed", text:"Takip ettiğim eğitmenlerin"}])  
+          setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
           setPredicate('isFollowed', 'true')}}
          name={'follow'} content={"Takip Ettiğim Eğitmenlerin"} />
       </Menu>}
 
       <Accordion key={"Category_acc"} as={Menu} vertical style={{ width: '100%', boxShadow:'none', border:'none'}}>
-     
-        <Menu.Item>
-         <div className="toggleMenuItem"><div>Online katılım</div> 
-         <Radio checked={isOnline} toggle={true} onChange={handleOnlineChange} disabled={loadingInitial} /> </div>
-        </Menu.Item>
+     {!isTabletOrMobile && 
+      <Menu.Item>
+      <div className="toggleMenuItem"><div>Online katılım</div> 
+      <Radio checked={isOnline} toggle={true} onChange={handleOnlineChange} disabled={loadingInitial} /> </div>
+     </Menu.Item>
+     }
        <Menu.Item  key={"Category"} className="filterMenuItem_Style">
           <Accordion.Title
             active={activeIndex === 0}
@@ -335,6 +375,11 @@ const ActivityFilters = () => {
                               clearKeyPredicate("subCategoryIds");
                               setClearPredicateBeforeSearch(false); 
                               clearKeyPredicate("categoryIds");
+                              const deletedCatAndSubCats = activitySelectedFilters.filter(x => x.value !== "categoryId" && x.value !== "subCatId");
+                              setActivitySelectedFilters([...deletedCatAndSubCats]);
+                   
+                              setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
+
                               scrollToTop();                            
                               
                             }
@@ -379,15 +424,18 @@ const ActivityFilters = () => {
           />
           <Accordion.Content active={activeIndex === 2}>
                 <Form onSubmit={handleCitySubmit}>
-                    <Form.Select 
-                    value={cityId}
-                    fluid
-                    options={cities}
-                    placeholder='Türkiye'
-                    clearable={true}
-                    onChange={handleCityChange}
-                    />
-               
+                 <Form.Field>
+                  <Dropdown 
+                      deburr
+                      value={cityId}
+                      onChange={handleCityChange}
+                      placeholder='Şehir'
+                      options={cities}
+                      search selection
+                      clearable={true}
+                      fluid
+                  />
+                  </Form.Field>
               </Form>
           </Accordion.Content> 
         </Menu.Item>
@@ -424,10 +472,12 @@ const ActivityFilters = () => {
                               clearKeyPredicate("endDate");
                               clearKeyPredicate("levelIds");
                               clearKeyPredicate("cityId");
+                              setActivitySelectedFilters([]);
                               setActiveUserPreIndex(0);
                               setPage(0);
                               clearActivityRegistery();
                               loadActivities();
+                              setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
                               scrollToTop();
                             }
                             }

@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { ActivityListItem } from './ActivityListItem';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import { format } from 'date-fns';
+import { useMediaQuery } from 'react-responsive'
 
 const ActivityList: React.FC = () => {
 
@@ -14,13 +15,14 @@ const ActivityList: React.FC = () => {
     'Talepte bulunmak için bize mail atabilir,',
     'Ya da bir eğitmen olarak kriterlere uygun bir aktivite açabilirsiniz :)'
   ]
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
 
   return (
     <Fragment>
       {activitiesByDate.length > 0 ?
       activitiesByDate.map(([group, activities]) =>(
         <Fragment key={group}>
-           <Label size='large' style={{backgroundColor: "#263a5e", color:"#fff"}}>
+           <Label size='large' className={"activityDateLabels "} >
               {format(new Date(group), 'eeee do MMMM')}
            </Label>
         <Item.Group divided>
@@ -32,7 +34,7 @@ const ActivityList: React.FC = () => {
       )) :
       <>
       <br></br>
-       <Message style={{marginTop:"30px"}} header='Aradığınız kriterlere uygun bir aktivite bulunamadı :(' list={list} />
+       <Message className="activityNotFoundMessage"  header='Aradığınız kriterlere uygun bir aktivite bulunamadı :(' list={list} />
      </>
     }
     </Fragment>

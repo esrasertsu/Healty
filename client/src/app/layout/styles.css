@@ -134,6 +134,21 @@ h1, h2, h3, h4, h5 {
   font-family:  AssistantRegular, Arial, Helvetica, sans-serif !important;
 }
 
+.defaultButtonColor{
+  background-color:#335084 !important;
+}
+.blueButtonColor{
+  background-color:rgb(33, 133, 208) !important;
+}
+.pinkButtonColor{
+  background-color:rgb(195, 138, 138) !important;
+}
+.yellowButtonColor{
+  background-color:rgb(224, 192, 34) !important;
+}
+.greenButtonColor{
+  background-color:rgb(58, 121, 73) !important;
+}
 .ui.card, .ui.cards>.card {
   max-width: 100%;
   position: relative;
@@ -198,10 +213,7 @@ h1, h2, h3, h4, h5 {
   margin-top: 1rem !important;
 }
 
-.blogFilter_ListItem {
-    padding-top: 0.8285em !important;
-    font-size: 1.1em;
-}
+
 .blogFilter_menuItem {
   font-size: 1.05em !important;
   color: #345289 !important;
@@ -247,12 +259,6 @@ h1, h2, h3, h4, h5 {
   color:"#fff"
 }
 
-.content.activity_listItem_extraContent{
-  display: flex !important;
-  justify-content: space-between;
-  flex-direction: column;
-  margin: 10px !important;
-}
 .activityListItem_footer{
   color:rgb(38, 58, 94) !important
 }
@@ -266,10 +272,9 @@ p.baseline-pricing__value{
     border-bottom: 1px solid rgba(34,36,38,.15);
     position: inherit;
   }
-/* .ui.vertical.menu{
-  background-color: #fff !important;
-  border-radius: 1.28571429rem !important;
-} */
+  .ui.toggle.checkbox input:checked~.box:before, .ui.toggle.checkbox input:checked~label:before {
+    background-color: #1bbe3e!important;
+}
 .activityListItem{
     width: 100% !important;
 }
@@ -309,6 +314,33 @@ a.ui.card:hover {
     margin: 1em 1em;
     padding: 0!important;
     width: calc(50% - 2em)!important;
+}
+.activityListItem_mobile{
+  margin: 0 !important;
+}
+.activityListItemDiv_mobile{
+  height: 100%;
+  width: 100%;
+}
+.activityListItem_Image_mobile img{
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+.activity_listItem_mobile{
+  width: 60%;
+}
+.activity_listItem_extraContent_mobile{
+  width: 40%;
+  display: flex !important;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.activityListItem_content_div{
+  width: 100%;
+  display: flex;
+  padding: 15px;
+  color: rgb(38, 58, 94) !important;
 }
 }
 
@@ -452,6 +484,10 @@ a.ui.card:hover {
 .activityNotFoundMessage{
   margin-top: 30px;
 }
+.blogFilter_ListItem {
+  padding-top: 0.8285em !important;
+  font-size: 1.1em;
+}
 }
 
 @media (max-width: 768px){
@@ -498,6 +534,11 @@ a.ui.card:hover {
 }
 .activityListGrid{
   margin-top: 5px !important;
+}
+.blogFilter_accordion_title{
+  padding:0 !important;
+  font-weight: 600;
+  font-size: 1em !important
 }
 }
 
@@ -582,6 +623,28 @@ a.ui.card:hover {
   .profileFilterButtons .ui.button{
     margin:6px 0 !important
   }
+  .dtPicker_Container_Style_mobile {
+    box-shadow: 0 1px 2px 0 rgb(34 36 38 / 15%) !important;
+    border-radius: -13.714286rem !important;
+    padding: 8px !important;
+    -webkit-font-smoothing: antialiased;
+    background-color: rgb(38, 58, 94) !important;
+    color: rgb(255, 255, 255) !important;
+    font-weight: 500 !important;
+    font-size: 1rem !important;
+    line-height: 1rem !important;
+}
+.dtPicker_accordion{
+  background:rgb(38, 58, 94) !important;
+  box-shadow: none !important;
+  -webkit-box-shadow:none !important;
+}
+.pageContainer.ui.container{
+  padding-top: 0 !important;
+}
+.blogPageGrid{
+  margin-top: 0 !important;
+}
 }
 
 @media (min-width:768px){
@@ -591,7 +654,36 @@ a.ui.card:hover {
     max-height: 2.71428571em; 
 
   }
+  .activityListItemDiv{
+     position:relative;
+  }
+  .activityListItemDiv .medium img{
+    height: 100%;
+    width: 100%;
+  }
+  .activityListItemDiv .medium {
+    height: 100% !important;
+  }
+  .activity_listItem{
+    width:60%;
+    margin:10px 10px 6px 15px !important
+  }
+  .content.activity_listItem_extraContent{
+    display: flex !important;
+    justify-content: space-between;
+    flex-direction: column;
+    margin: 10px !important;
+    width: 50%;
+  }
+  .activityListItem_content_div{
+    width: 100%;
+    display: flex;
+    color: rgb(38, 58, 94) !important;
+
+  }
 }
+
+
 
 .profileFilterButtons{
   display: flex;
@@ -950,7 +1042,6 @@ button, input, optgroup, select, textarea {
 }
 
 .activityHostName {
-  color: #4183c4;
     text-decoration: none;
 }
 

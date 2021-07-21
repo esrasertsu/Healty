@@ -11,11 +11,14 @@ import { faWalking, faUserEdit } from '@fortawesome/free-solid-svg-icons'
 import { LoginForm } from '../../user/LoginForm';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import { RegisterForm } from '../../user/RegisterForm';
+import { useMediaQuery } from 'react-responsive'
 
 export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
     const rootStore = useContext(RootStoreContext);
     const {isLoggedIn,user} = rootStore.userStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;
+
+    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 767px)' })
 
     const host = activity.attendees.filter(x => x.isHost === true)[0];
     const index = activity.categories && activity.categories.length>0 ? colors.findIndex(x => x.key === activity.categories[0].text): 0;
@@ -78,9 +81,11 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
             <div>
             
                 <Item.Group>
-                <Item style={{ zIndex: '1' }}>
-                    <div style={{height:"100%", width:"30%",position:"relative"}}>
-                        <Item.Image size="medium" style={{ display: "block"}} src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} >
+                <Item style={{ zIndex: '1' }} className={isTabletOrMobile? "activityListItem_mobile":""} >
+                    <div className={isTabletOrMobile? "activityListItemDiv_mobile":"activityListItemDiv"} >
+                        <Item.Image size={!isTabletOrMobile ? "medium":undefined} style={{ display: "block"}} 
+                            src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'}
+                            className={isTabletOrMobile ? "activityListItem_Image_mobile":""} >
                         </Item.Image>
                         {activity.isGoing && !activity.isHost &&
                          <Popup
@@ -99,7 +104,10 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                           />
                     }
                     </div>
-                    <Item.Content style={{width:"60%", margin:"10px 10px 6px 15px"}}>
+                  <div className="activityListItem_content_div">
+
+                
+                    <Item.Content className={isTabletOrMobile ? "activity_listItem_mobile":"activity_listItem"} >
                         <Item.Header>{activity.title}</Item.Header>
                         {/* <Item.Description>
                             <div>{activity.description}</div>
@@ -107,18 +115,27 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                             {activity.city},{activity.venue}
                             </div> 
                         </Item.Description>*/}
-                    <Item.Description>
+                    <Item.Description style={{marginTop: "15px"}}>
                     {/* <Button
                             as={Link} to={`/activities/${activity.id}`}
                             floated="right"
                             content="İncele"
                             color="blue"
                             /> */}
-                              {activity.subCategories.map((sub)=>(
+                              <> 
+                              {
+                              activity.subCategories.map((sub, index)=>(
+                                  index<3 &&
                                     <Label key={sub.value} basic size="small">{sub.text}</Label>
-                              ))}
+                              )) 
+                            }
+                            {
+                                 activity.subCategories.length>3 &&
+                                 <span>+{activity.subCategories.length-3} </span>
+                            }
+                            </>
                               <div style={{marginTop:".6em"}}>
-                                <Icon color="red" name='heartbeat' /><span> Seviye: </span>
+                                <Icon style={{color:"#263a5e"}} name='heartbeat' /><span> Seviye: </span>
                                 {
                                     activity.levels && activity.levels.length> 0 ? 
                                     activity.levels.map<React.ReactNode>(s => <span key={s.value}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
@@ -127,13 +144,13 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                                {activity.online ?  <div style={{marginTop:".6em"}}> <Icon name='wifi' color="green" />  Online katılıma açık <Icon name='check' size='small' color='green' /> </div>: <div style={{marginTop:".6em"}}><Icon name='wifi' color="grey"/>Online katılıma kapalı</div>}
                                 </div>
                         </Item.Description> 
-                        <Item.Description>
+                        <Item.Description style={{marginTop: "15px"}}>
                             <Item.Image key={host.image} size="mini" circular src={host.image || '/assets/user.png'}
                              style={{}}/>
-                             &nbsp;<span className="activityHostName">{host.displayName + "  "}</span>
+                             &nbsp;<span className="activityHostName">{"Eğitmen:" +" " +host.displayName}</span>
                             </Item.Description>
                     </Item.Content>
-                    <Item.Content className="activity_listItem_extraContent">
+                    <Item.Content className={isTabletOrMobile ? "activity_listItem_extraContent_mobile":"activity_listItem_extraContent"} >
                     <Item.Description style={{textAlign:"right", display: "flex", justifyContent: "flex-end"}}>
                      <StarRating rating={3} editing={false} size={'small'} showCount={false}/>
                     </Item.Description>
@@ -150,6 +167,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                     </p></div>
                     </Item.Description>
                     </Item.Content>
+                    </div>
                    
             </Item>
             </Item.Group>

@@ -143,7 +143,6 @@ export default class BlogStore{
        
     }
     @action loadBlogs = async () =>{
-        debugger;
         this.loadingPosts = true;
 
         try {

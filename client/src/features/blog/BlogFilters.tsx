@@ -2,9 +2,14 @@ import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { Menu, Segment, Accordion, List, Placeholder, Label } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
+import { useMediaQuery } from 'react-responsive'
 
+interface IProps{
+  setisAccOpen?: (mode:boolean) => void;
 
-const BlogFilters: React.FC = () => {
+}
+
+const BlogFilters: React.FC<IProps> = ({setisAccOpen}) => {
 
   const rootStore = useContext(RootStoreContext);
   const { setPredicate,predicate,clearPredicates, setClearedBeforeNewPredicateComing } = rootStore.blogStore; 
@@ -17,6 +22,7 @@ const BlogFilters: React.FC = () => {
 
   const [activeIndex, setActiveIndex] = useState("")
   const [subActiveIndex, setSubActiveIndex] = useState("")
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
 
   const handleClick = (e:any, titleProps:any) => {
       
@@ -34,7 +40,6 @@ const BlogFilters: React.FC = () => {
         setSubActiveIndex("");
     }
     setActiveIndex(newIndex);
-
   }
 
   useEffect(() => {
@@ -50,7 +55,7 @@ const BlogFilters: React.FC = () => {
      {/* <BlogSearchArea className="BlogUserSearchArea" placeholder="Uzman" /> */}
      <br></br>
      <Segment className="blogFilter_Category_Filter">
-      <h2>Kategoriler</h2>
+    {!isTabletOrMobile &&  <h2>Kategoriler</h2>} 
     { loadingAllDetailedList ?  (
          <Placeholder className="blogFilterPlaceholder">
          <Placeholder.Line length='full' />
@@ -72,6 +77,7 @@ const BlogFilters: React.FC = () => {
                         content={item.text + " (" + item.blogCount +")"}
                         index={item.value}
                         onClick= {handleClick}
+                        className="blogFilter_accordion_title"
                     />
                     <Accordion.Content active={activeIndex === item.value} content={
                         // loadingAllDetailedList ? (
@@ -102,6 +108,8 @@ const BlogFilters: React.FC = () => {
                                    setPredicate('subCategoryIds',array);
                                    getPredicateTexts(predicate);
                                    setSubActiveIndex(subItem.value);
+                                   setisAccOpen && setisAccOpen(false);
+
                             }
                             }}
                             name={subItem.value} content={subItem.text+ " (" + subItem.blogCount +")"} />

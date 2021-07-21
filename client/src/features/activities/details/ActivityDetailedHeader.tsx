@@ -8,16 +8,18 @@ import { RootStoreContext } from '../../../app/stores/rootStore';
 
 const activityImageStyle = {
   filter: 'brightness(50%)',
-  height:'350px'
+  height:'350px',
+  objectFit: 'cover'
 };
 
 const activityImageTextStyle = {
   position: 'absolute',
   bottom: '5%',
-  left: '5%',
+  paddingLeft: '5%',
   width: '100%',
   height: 'auto',
-  color: 'white'
+  color: 'white',
+  paddingRight: '5%',
 };
 const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
   const host = activity.attendees && activity.attendees.filter(x => x.isHost === true)[0];
@@ -97,12 +99,13 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                     ): (
                       <>
                       { 
-                      activity.attendancyLimit && activity.attendancyLimit>0 && activity.attendancyLimit - activity.attendees.length <4 &&
-                      <span style={{color:"red"}}>Son {activity.attendancyLimit - activity.attendees.length} katılımcı!</span>
+                      activity.attendancyLimit && (activity.attendancyLimit !==0 && (activity.attendancyLimit>0) && (activity.attendancyLimit - activity.attendees.length) <4) ?
+                      <span style={{color:"red"}}>Son {activity.attendancyLimit - activity.attendees.length} katılımcı!</span> : ""
                       }{
-                      (activity.attendancyLimit ===null || (activity.attendancyLimit && activity.attendancyLimit > activity.attendees.length)) &&
+                      (activity.attendancyLimit ===null ||activity.attendancyLimit ===0 || (activity.attendancyLimit && (activity.attendancyLimit > activity.attendees.length))) &&
                       <Button  floated='right' loading={loading} onClick={attendActivity} color='teal'>Aktiviteye Katıl</Button>
                       }   
+                      
                       </>
                     )}
                   </Segment>

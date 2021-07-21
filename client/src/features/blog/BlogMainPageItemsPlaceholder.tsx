@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Placeholder } from 'semantic-ui-react'
 import _ from "lodash";
+import { SemanticWIDTHS } from 'semantic-ui-react/dist/commonjs/generic';
 
 interface IProps {
   count : number;
@@ -8,8 +9,8 @@ interface IProps {
 const BlogMainPageItemsPlaceholder:React.FC<IProps> = ({count}) => {
   return (
    
-    <Card.Group itemsPerRow={3}>
-    {_.times(count, (i) => (
+    <Card.Group itemsPerRow={count as SemanticWIDTHS}>
+    {_.times(count*2, (i) => (
       <Card key={i}>
           <Placeholder>
             <Placeholder.Image square />

@@ -1,5 +1,5 @@
 import React,  { useEffect, useContext, useState}  from 'react';
-import { Button, Container, Grid, Icon, Label, Loader, Menu, Radio, Segment, Sidebar } from 'semantic-ui-react';
+import { Accordion, Button, Grid, Icon, Label, Loader, Radio, Segment, Sidebar } from 'semantic-ui-react';
 import ActivityList from './ActivityList';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../../app/stores/rootStore';
@@ -15,7 +15,7 @@ const ActivityDashboard: React.FC = () => {
   const {loadActivities, loadingInitial, setPage, page, totalPages,loadLevels,predicate,setPredicate
   ,setClearPredicateBeforeSearch,clearKeyPredicate,subCategoryIds,setSubCategoryIds,
   categoryIds, setCategoryIds, setLevelIds,
-  levelIds, cityId, setCityId, isOnline, setIsOnline} = rootStore.activityStore;
+   setCityId, isOnline, setIsOnline} = rootStore.activityStore;
 
 
   const { loadCategories } = rootStore.categoryStore;
@@ -24,6 +24,7 @@ const ActivityDashboard: React.FC = () => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
   const [visible, setVisible] = useState(false);
   const [activitySelectedFilters, setActivitySelectedFilters] = useState<IActivitySelectedFilter[]>([]);
+  const [isAccOpen, setisAccOpen] = useState(false);
 
   const handleGetNext = () => {
     setLoadingNext(true);
@@ -123,6 +124,10 @@ const ActivityDashboard: React.FC = () => {
       
       //gerçek predicate'ların temizlenmesi if else ile 5 tane key'i kontrol edip gereken predicate'ı kaldır
   }
+
+  const handleAccClick = () =>{
+      setisAccOpen(!isAccOpen);
+  }
   return (
     <>
    
@@ -172,8 +177,17 @@ const ActivityDashboard: React.FC = () => {
            </>
          :
          <>
-          <Segment className="dtPicker_Container_Style">
-          <p>Aktivite aradığınız tarih/saat aralığını giriniz.</p>
+          <Segment className="dtPicker_Container_Style_mobile">
+          <Accordion styled className="dtPicker_accordion">
+          <Accordion.Title
+            active={isAccOpen}
+            index={0}
+            onClick={handleAccClick}
+            style={{color:"#fff", fontWeight:500}}
+          >
+           <Icon name='calendar alternate outline' /> Tarih/saat aralığı  <Icon name='dropdown' />
+          </Accordion.Title>
+          <Accordion.Content active={isAccOpen}>
           <DateTimePicker
             value={predicate.get('startDate') || new Date()}
             onChange={(date)=> {
@@ -200,6 +214,9 @@ const ActivityDashboard: React.FC = () => {
             time = {true}
             containerClassName="dtPicker_Style"
           />
+          </Accordion.Content>
+        </Accordion>
+         
           </Segment>
           
           <div className="activityDashboard_mobile_filterdiv">

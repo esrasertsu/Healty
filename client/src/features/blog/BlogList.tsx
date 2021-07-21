@@ -1,5 +1,5 @@
 import React,  { useEffect, useContext, useState, Fragment}  from 'react';
-import { Button, Card, Grid, Icon, Label} from 'semantic-ui-react';
+import { Accordion, Button, Card, Grid, Icon, Label} from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -7,6 +7,7 @@ import BlogFilters from './BlogFilters';
 import BlogMainPageItemsPlaceholder from './BlogMainPageItemsPlaceholder';
 import BlogListItem from './BlogListItem';
 import { IPredicate } from '../../app/models/category';
+import { useMediaQuery } from 'react-responsive'
 
 
 
@@ -16,8 +17,10 @@ const BlogList: React.FC = () => {
   ,predicateDisplayName} = rootStore.blogStore;
   const { predicateTexts} = rootStore.categoryStore;
   const [isToggleVisible, setIsToggleVisible] = useState(false);
+  const [isAccOpen, setisAccOpen] = useState(false);
 
   const [loadingNext, setLoadingNext] = useState(false);
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
 
   const handleGetNext = () => {
     setLoadingNext(true);
@@ -54,22 +57,47 @@ const BlogList: React.FC = () => {
     });
   };
 
+  const handleAccClick = () =>{
+    setisAccOpen(!isAccOpen);
+}
+
   return (
     <>
     <Grid className="blogPageGrid">
       <Grid.Row>
-      <Grid.Column width={4}>   
-      <BlogFilters />
-      </Grid.Column>
-      <Grid.Column width={12}>
+       
+       {
+         !isTabletOrMobile &&
+         <Grid.Column width={4}>   
+         <BlogFilters />
+         </Grid.Column>
+       }
+     
+      <Grid.Column width={isTabletOrMobile ? 16 : 12}>
+      {isTabletOrMobile && 
+         <Accordion styled className="dtPicker_accordion" style={{marginBottom:"15px"}}>
+         <Accordion.Title
+           active={isAccOpen}
+           index={0}
+           onClick={handleAccClick}
+           style={{color:"#fff", fontWeight:500, padding:"10px 0"}}
+         >
+          <Icon /> Kategori  <Icon name='dropdown' />
+         </Accordion.Title>
+         <Accordion.Content style={{paddingTop:" 0"}} active={isAccOpen}>
+         <BlogFilters setisAccOpen={setisAccOpen} />
+         </Accordion.Content>
+       </Accordion>
+       }
       {
       loadingPosts && page === 0?
-       <BlogMainPageItemsPlaceholder count={6} /> :
+       <BlogMainPageItemsPlaceholder count={isTabletOrMobile? 1 :3} /> :
        <Fragment>
          { 
               <>
               {predicateTexts.map((predi:IPredicate)=>(
-                <Button key={predi.key} labelPosition="right" icon='cancel' content={predi.value} style={{backgroundColor:"#335084", color:"#fff", marginBottom:"20px"}}
+                <Button key={predi.key} labelPosition="right" icon='cancel' content={predi.value} style={{color:"#fff", marginBottom:"20px",borderRadius: "1.28571429rem"}}
+                className={predi.parent==="Spor"? "blueButtonColor" :predi.parent==="Diyet"? "greenButtonColor": predi.parent==="Meditasyon"? "yellowButtonColor":predi.parent==="Psikoloji"? "pinkButtonColor": "defaultButtonColor"}
                 onClick={()=>
                   {
                     if(predi.predicateName === "subCategoryIds") 
@@ -108,7 +136,7 @@ const BlogList: React.FC = () => {
         loadMore={handleGetNext}
         hasMore={!loadingNext && page +1 < totalPages}
         initialLoad={false}>
-          <Card.Group itemsPerRow={3} stackable>
+          <Card.Group itemsPerRow={isTabletOrMobile ?1:3}>
               {
                 getBlogsByDate.map((blog) => (
                   <BlogListItem key={blog!.id} blog={blog} />
@@ -123,7 +151,7 @@ const BlogList: React.FC = () => {
             <span>Başa dön</span>
           </Label>}
       </div>
-          {loadingNext && <BlogMainPageItemsPlaceholder count={3} />}
+          {loadingNext && <BlogMainPageItemsPlaceholder count={isTabletOrMobile?1 :3} />}
 
        </Fragment>
        

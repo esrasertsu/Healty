@@ -35,7 +35,7 @@ export default class CategoryStore{
                         var cat =   this.allCategoriesRegistery.get(subCat);
                         if(cat)
                         {
-                                const newPre:IPredicate = { key: cat!.key, value: cat!.text, predicateName: item};
+                                const newPre:IPredicate = { key: cat!.key, value: cat!.text, predicateName: item, parent: cat.parentName};
                                 this.predicateTexts.push(newPre);
                             }
                     })
@@ -44,7 +44,7 @@ export default class CategoryStore{
                     var cat =   this.allCategoriesRegistery.get(predicate.get(item));
                     if(cat)
                    {
-                        const newPre:IPredicate = { key: cat!.key, value: cat!.text, predicateName: item};
+                        const newPre:IPredicate = { key: cat!.key, value: cat!.text, predicateName: item,parent:cat!.text};
                         this.predicateTexts.push(newPre);
                     }
 

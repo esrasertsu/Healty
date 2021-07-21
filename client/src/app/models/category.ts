@@ -27,6 +27,7 @@ export interface IPredicate {
     key: string; //id
     value: string; //text
     predicateName: string; //prediName
+    parent:string | null;
 }
 
 export interface IAllCategoryList {

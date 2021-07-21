@@ -7,6 +7,7 @@ import { IBlog } from '../../app/models/blog';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { history } from '../../index'
 import { useMediaQuery } from 'react-responsive'
+import tr  from 'date-fns/locale/tr'
 
 
 const BlogMoreFromThisCategory:React.FC<{blog:IBlog}> = ({blog}) => {
@@ -37,7 +38,7 @@ const BlogMoreFromThisCategory:React.FC<{blog:IBlog}> = ({blog}) => {
                         <Card.Content>
                           <Card.Header className="profileBlogCard_header" textAlign="left">{blog.title}</Card.Header>
                           <Card.Meta textAlign="left">
-                            <div><span>{format(new Date(blog.date), 'do LLL')} - {format(new Date(blog.date), 'h:mm a')}</span></div>
+                            <div><span>{format(new Date(blog.date), 'dd LLL yyyy',{locale: tr})}</span></div>
                           </Card.Meta>
                         </Card.Content>
                       </Card>

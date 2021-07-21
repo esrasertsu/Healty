@@ -10,7 +10,7 @@ import PostUpdateForm from '../posts/PostUpdateForm';
 import { LoginForm } from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
 import { useMediaQuery } from 'react-responsive'
-
+import tr  from 'date-fns/locale/tr'
 
 interface IProps{
   editMode:boolean;
@@ -142,7 +142,7 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
                 <PostUpdateForm updatePost={editPost} blog={blog} />
                 ) : 
                <Container>
-                <p className="blog_description_date">{format(new Date(blog.date), 'eeee do MMMM')}</p>
+                <p className="blog_description_date">{format(new Date(blog.date), 'dd MMMM yyyy, eeee',{locale: tr})}</p>
                 <Header as='h1'  className="blog_description_header">
                 {blog.title}
                 </Header>

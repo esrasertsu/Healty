@@ -27,6 +27,7 @@ const DateInput: React.FC<IProps> = ({
         messages={input.messages}
         id={input.id}
         {...rest}
+        culture="tr"
       />
       {touched && error && (
         <Label basic color="red">

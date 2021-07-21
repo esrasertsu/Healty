@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { Segment, Grid, Icon } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity'
 import dompurify from 'dompurify';
+import tr  from 'date-fns/locale/tr'
 
 const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
 
@@ -74,7 +75,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                  </Grid.Column>
                  <Grid.Column width={7}>
                    <span>
-                     { activity.date && "Tarih: "+ format(activity.date, 'eeee do MMMM')} 
+                     { activity.date && "Tarih: "+ format(activity.date, 'dd MMMM, eeee',{locale: tr})} 
                    </span>
                  </Grid.Column>
                  <Grid.Column width={1}>
@@ -82,7 +83,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                  </Grid.Column>
                  <Grid.Column width={7}>
                    <span>
-                   { activity.date && " Saat: " +format(activity.date, 'h:mm a')}
+                   { activity.date && " Saat: " +format(activity.date, 'H:mm',{locale: tr})}
                    </span>
                  </Grid.Column>
                </Grid>

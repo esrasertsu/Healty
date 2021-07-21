@@ -8,7 +8,7 @@ import TextAreaInput from '../../app/common/form/TextAreaInput';
 import InfiniteScroll from 'react-infinite-scroller';
 import Scrollbars from 'react-custom-scrollbars';
 import { history } from '../..';
-
+import tr  from 'date-fns/locale/tr'
 const MessageChat: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
     const { messagesByDate, setPage,loadMessages ,page, totalPages ,chatRoomId,addComment, chatRooms} = rootStore.messageStore;
@@ -104,8 +104,8 @@ const MessageChat: React.FC = () => {
                    messagesByDate.map(([group, messages]) =>(
                    <div key={group}>
                        <div className="chatLabels">
-                           <Label size='tiny' style={{marginTop:"10px"}}>
-                           {format(new Date(group), 'eeee do MMMM')}
+                           <Label size='small' style={{marginTop:"10px"}}>
+                           {format(new Date(group), 'dd MMMM, eeee',{locale: tr})}
                            </Label>
                        </div>
                        <Item.Group key={group + "_message"}>
@@ -115,7 +115,7 @@ const MessageChat: React.FC = () => {
                                <Item.Content className={message.username === user!.userName ? "currentUserMessage_content": "otherUserMessage_content" } verticalAlign='middle'>
                                    {message.body}
                                    <Item.Extra>
-                              <div>{format(message.createdAt, 'h:mm a') + " "}
+                              <div>{format(message.createdAt, 'HH:mm') + " "}
                               {
                                   message.username === user!.userName &&
                                   message.seen && 

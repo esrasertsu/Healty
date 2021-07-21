@@ -6,7 +6,6 @@ import { observer } from 'mobx-react-lite';
 import { ICategory, ISubCategory } from '../../../app/models/category';
 import { ILevel,IActivitySelectedFilter } from '../../../app/models/activity';
 import { useMediaQuery } from 'react-responsive';
-
 interface IProps{
   setVisibleMobileFilterBar?:(visible:boolean) => void ;
   setActivitySelectedFilters:(selectedFilters:IActivitySelectedFilter[]) => void ;
@@ -14,7 +13,7 @@ interface IProps{
 }
 
 const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivitySelectedFilters,activitySelectedFilters}) => {
-
+  
   const rootStore = useContext(RootStoreContext);
   const { predicate, setPredicate,setClearPredicateBeforeSearch,clearUserPredicates,
     clearKeyPredicate, setPage, clearActivityRegistery,loadActivities,loadingInitial,
@@ -33,6 +32,9 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
      const [cityName, setcityName] = useState("")
 
 
+    
+   
+     
   const handleClick = (e:any, titleProps:any) => {
     const { index } = titleProps
     const newIndex = activeIndex === index ? -1 : index
@@ -100,7 +102,8 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
      setSubCategoryIds([...subCategoryIds.slice(0,index), ...subCategoryIds.slice(index+1)]);
     }
   }
-  
+ 
+
 
 
   const handleLevelSubmit = () => {
@@ -235,6 +238,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
          date = {true}
          time = {true}
          containerClassName="dtPicker_Style"
+         culture="tr"
        />
        <br/>
        <DateTimePicker
@@ -248,6 +252,8 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
          date = {true}
          time = {true}
          containerClassName="dtPicker_Style"
+         culture="tr"
+     
        />
       </Segment>
       }

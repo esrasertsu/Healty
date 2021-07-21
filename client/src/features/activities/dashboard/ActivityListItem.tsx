@@ -12,6 +12,7 @@ import { LoginForm } from '../../user/LoginForm';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import { RegisterForm } from '../../user/RegisterForm';
 import { useMediaQuery } from 'react-responsive'
+import tr  from 'date-fns/locale/tr'
 
 export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
     const rootStore = useContext(RootStoreContext);
@@ -173,7 +174,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
             </Item.Group>
             </div>
             <Segment clearing secondary className="activityListItem_footer">
-                <Icon name='clock' /> {format(activity.date, 'h:mm a')}
+                <Icon name='clock' /> Saat: {format(activity.date, 'HH:mm',{locale: tr})}
                 &nbsp;
                 <Icon name='marker' /> {activity.venue}, {activity.city && activity.city.text}
                {

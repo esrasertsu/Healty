@@ -4,6 +4,7 @@ import { history } from '../../index'
 import { IBlog } from '../../app/models/blog';
 import { format } from 'date-fns';
 import dompurify from 'dompurify';
+import tr  from 'date-fns/locale/tr'
 
 interface IProps {
     blog: IBlog
@@ -21,7 +22,7 @@ const BlogListItem: React.FC<IProps> = ({blog}) => {
       <Image src={blog.photo || '/assets/placeholder.png'} />
       <Card.Content className="profileCard_Content">
         <Card.Description>
-          <div className="homepage_subheader">{format(new Date(blog.date), 'eeee do MMMM')} - {format(new Date(blog.date), 'h:mm a')}</div>
+          <div className="homepage_subheader">{format(new Date(blog.date), 'dd MMMM yyyy, eeee',{locale: tr})}</div>
         </Card.Description>
         <br></br>
         <Card.Header className="blogListItem_Header">{blog.title}</Card.Header>

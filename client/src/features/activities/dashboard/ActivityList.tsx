@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { ActivityListItem } from './ActivityListItem';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import { format } from 'date-fns';
+import tr  from 'date-fns/locale/tr'
 import { useMediaQuery } from 'react-responsive'
 
 const ActivityList: React.FC = () => {
@@ -23,7 +24,7 @@ const ActivityList: React.FC = () => {
       activitiesByDate.map(([group, activities]) =>(
         <Fragment key={group}>
            <Label size='large' className={"activityDateLabels "} >
-              {format(new Date(group), 'eeee do MMMM')}
+              {format(new Date(group), 'dd MMMM, eeee',{locale: tr})}
            </Label>
         <Item.Group divided>
           {activities.map((activity) => (

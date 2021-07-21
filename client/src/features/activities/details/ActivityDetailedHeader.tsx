@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Segment, Item, Header, Button, Image, Modal, Icon } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity';
 import { RootStoreContext } from '../../../app/stores/rootStore';
+import tr  from 'date-fns/locale/tr'
 
 const activityImageStyle = {
   filter: 'brightness(50%)',
@@ -48,7 +49,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                               content={activity.title}
                               style={{ color: 'white' }}
                             />
-                            <p>{activity.date && format(activity.date,'eeee do MMMM')}</p>
+                            <p>{activity.date && format(activity.date,'dd MMMM, eeee',{locale: tr})}</p>
                             <p>
                               Düzenleyen: <Link to={`/profile/${host && host.userName}`} ><strong>{host && host.displayName}</strong></Link> 
                             </p>

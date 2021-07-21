@@ -10,6 +10,7 @@ import { useMediaQuery } from 'react-responsive'
 import { DateTimePicker } from 'react-widgets';
 import { IActivitySelectedFilter } from '../../../app/models/activity';
 
+
 const ActivityDashboard: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
   const {loadActivities, loadingInitial, setPage, page, totalPages,loadLevels,predicate,setPredicate
@@ -25,6 +26,7 @@ const ActivityDashboard: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [activitySelectedFilters, setActivitySelectedFilters] = useState<IActivitySelectedFilter[]>([]);
   const [isAccOpen, setisAccOpen] = useState(false);
+  const [selectedStartDate, setSelectedStartDate] = useState("");
 
   const handleGetNext = () => {
     setLoadingNext(true);
@@ -185,12 +187,13 @@ const ActivityDashboard: React.FC = () => {
             onClick={handleAccClick}
             style={{color:"#fff", fontWeight:500}}
           >
-           <Icon name='calendar alternate outline' /> Tarih/saat aralığı  <Icon name='dropdown' />
+           <Icon name='calendar alternate outline' /> Tarih/saat aralığı {selectedStartDate}  <Icon name='dropdown' />
           </Accordion.Title>
           <Accordion.Content active={isAccOpen}>
           <DateTimePicker
             value={predicate.get('startDate') || new Date()}
             onChange={(date)=> {
+              setSelectedStartDate(date!.toLocaleString())
               setClearPredicateBeforeSearch(true); 
               clearKeyPredicate("startDate");
               setClearPredicateBeforeSearch(false); 

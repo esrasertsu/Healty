@@ -5,7 +5,7 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import { format } from 'date-fns';
 import Scrollbars from 'react-custom-scrollbars';
-
+import tr  from 'date-fns/locale/tr'
 const styles = {
   color:"#000"
 }
@@ -47,7 +47,7 @@ const ChatRoomList: React.FC = () => {
               onClick={(e) => handleChatRoomClick(e,room.id)}
               >
               <List.Content floated='right'>
-                <span>{format(new Date(room.lastMessageDate), 'eeee do MMMM')}</span>
+                <span>{format(new Date(room.lastMessageDate), 'dd LLL, eeee',{locale: tr})}</span>
               </List.Content>
               <List.Content floated='left' className="messagePage_listItem_Content">
               <Popup

@@ -488,6 +488,19 @@ a.ui.card:hover {
   padding-top: 0.8285em !important;
   font-size: 1.1em;
 }
+.blog_desctiption_segment{
+  padding: 80px 80px 60px 80px !important;
+  margin: -150px 100px 50px 100px !important;
+}
+
+.blog_morefromuser{
+  padding: 40px 80px 40px 80px !important;
+  margin: 50px 100px 50px 100px !important;
+}
+.blog_morefromcat{
+  padding: 40px 80px 40px 80px !important;
+  margin: 0px 100px 100px 100px !important;
+}
 }
 
 @media (max-width: 768px){
@@ -537,8 +550,17 @@ a.ui.card:hover {
 }
 .blogFilter_accordion_title{
   padding:0 !important;
-  font-weight: 600;
-  font-size: 1em !important
+  font-weight: 600 !important;
+  font-size: 1em !important;
+  color: rgb(38 58 94) !important;
+    font-weight: 500 !important;
+}
+.blog_description_header{
+  font-size: 1.5rem !important;
+}
+.blog_userdetail{
+  font-size: 1em !important;
+  margin:0 !important
 }
 }
 
@@ -638,12 +660,21 @@ a.ui.card:hover {
   background:rgb(38, 58, 94) !important;
   box-shadow: none !important;
   -webkit-box-shadow:none !important;
+  width: 100% !important;
 }
 .pageContainer.ui.container{
   padding-top: 0 !important;
 }
 .blogPageGrid{
   margin-top: 0 !important;
+}
+.blog_desctiption_segment .description p,.blog_desctiption_segment .description p * {
+  font-size: 18px !important;
+  line-height: 1.5em;
+}
+.ui.grid.blogPageGrid h2{
+  font-size: 1.2rem;
+  margin-top: 0;
 }
 }
 
@@ -1073,10 +1104,7 @@ button, input, optgroup, select, textarea {
 /*end map page styles*/
 
 
-.blog_desctiption_segment{
-  padding: 80px 80px 60px 80px !important;
-  margin: -150px 100px 50px 100px !important;
-}
+
 
 .blog_description_header{
   text-align: left;
@@ -1092,8 +1120,7 @@ button, input, optgroup, select, textarea {
 }
 
 .blog_desctiption_segment .description{
-  font-size: 1.25em;
-  color: #1a2b49c2 !important;
+
   line-height: 2.1rem;
   font-weight: 300 !important;
 }
@@ -1127,14 +1154,6 @@ button, input, optgroup, select, textarea {
   font-size: 1.2em;
 }
 
-.blog_morefromuser{
-  padding: 40px 80px 40px 80px !important;
-  margin: 50px 100px 50px 100px !important;
-}
-.blog_morefromcat{
-  padding: 40px 80px 40px 80px !important;
-  margin: 0px 100px 100px 100px !important;
-}
 
 .blog_morefromuser_header{
   font-size: 1.5rem !important;

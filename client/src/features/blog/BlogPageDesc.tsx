@@ -9,6 +9,7 @@ import dompurify from 'dompurify';
 import PostUpdateForm from '../posts/PostUpdateForm';
 import { LoginForm } from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
+import { useMediaQuery } from 'react-responsive'
 
 
 interface IProps{
@@ -29,6 +30,7 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
   const [open, setOpen] = React.useState(false);
 
   const {openModal,closeModal,modal} = rootStore.modalStore;
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
 
   const handleLoginClick = (e:any,str:string) => {
     e.stopPropagation();
@@ -78,6 +80,7 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
                       {
                         !editMode ? 
                         <Button color='orange' floated='right'
+                        size={isTabletOrMobile ? "small" :"medium"}
                         content={'Düzenle' }
                         labelPosition='right'
                        icon='edit'
@@ -88,6 +91,7 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
                         >
                       </Button> :
                         <Button color='grey' floated='right'
+                        size={isTabletOrMobile ? "small" :"medium"}
                         content={'İptal' }
                         labelPosition='right'
                       icon='cancel'
@@ -107,7 +111,8 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
                         onOpen={() => setOpen(true)}
                         open={open}
                         size='small'
-                        trigger={<Button color='red' floated='right' content='Sil'
+                        trigger={<Button color='red' floated='right' content='Sil' 
+                        size={isTabletOrMobile ? "small" :"medium"}
                         labelPosition='right'
                         icon='trash'></Button>}
                       >

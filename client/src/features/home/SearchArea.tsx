@@ -28,7 +28,7 @@ import { useMediaQuery } from 'react-responsive'
 
     const [isSearchLoading, setSearchLoading] = useState(false);
     
-    const isMobile = useMediaQuery({ query: '(max-width: 425px)' })
+    const isMobile = useMediaQuery({ query: '(max-width: 500px)' })
 
     useEffect(() => {
       loadAllCategoryList();

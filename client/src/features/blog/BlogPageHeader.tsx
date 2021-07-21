@@ -5,6 +5,7 @@ import PhotoWidgetCropper from '../../app/common/photoUpload/PhotoWidgetCropper'
 import PhotoWidgetDropzone from '../../app/common/photoUpload/PhotoWidgetDropzone';
 import { IBlog } from '../../app/models/blog';
 import { RootStoreContext } from '../../app/stores/rootStore';
+import { useMediaQuery } from 'react-responsive'
 
 const activityImageStyle = {
     width:"100%"
@@ -24,6 +25,7 @@ const BlogPageHeader:React.FC<{blog:IBlog}> = ({blog}) => {
   const [imageChange, setImageChange] = useState(false);
   const [imageDeleted, setImageDeleted] = useState(false);
   const [originalImage, setOriginalImage] = useState<Blob | null>(null);
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
 
   const [files, setFiles] = useState<any[]>([]);
   const [image, setImage] = useState<Blob | null>(null);
@@ -50,16 +52,19 @@ const BlogPageHeader:React.FC<{blog:IBlog}> = ({blog}) => {
                 :
                (
                 <Grid style={{marginTop:"10px"}}>
-                  <Grid.Column width="eight">
+                  <Grid.Column width={!isTabletOrMobile ? "eight": "sixteen"}>
                   <Header sub content='*Boyutlandır' />
                   <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1500/650}/>
                   </Grid.Column>
+                
+                {!isTabletOrMobile &&
                   <Grid.Column width="eight">
                     <Header sub content='*Önizleme' />
                     <Image src={croppedImageUrl} style={{minHeight:'200px', overflow:'hidden'}}/>
-                  </Grid.Column>
+                 </Grid.Column>
+                }  
 
-                  <Grid.Column width="eight">
+                  <Grid.Column width={!isTabletOrMobile ? "eight": "sixteen"}>
                   <div style={{display:"flex"}}>
                   <Label color="red" style={{marginBottom:"20px", cursor:"pointer"}} 
                   onClick={()=> {setFiles([]);setImageDeleted(true);}}>Değiştir/Sil <Icon name="trash"></Icon></Label>
@@ -81,6 +86,7 @@ const BlogPageHeader:React.FC<{blog:IBlog}> = ({blog}) => {
           !imageChange && isCurrentUserAuthor &&
           <Segment basic style={activityImageTextStyle}>
           <Label floating color="blue" style={{cursor:"pointer", left:"80%"}} 
+           size={isTabletOrMobile ? "small" :"medium"}
           onClick={()=>{setImageDeleted(true); setImageChange(true)}}>Blog Resmini Değiştir <Icon name="edit"></Icon></Label>
           </Segment>
         } 

@@ -6,22 +6,25 @@ import { Segment, Header, Image, Container, Icon, Card } from 'semantic-ui-react
 import { IBlog } from '../../app/models/blog';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { history } from '../../index'
+import { useMediaQuery } from 'react-responsive'
 
 
 const BlogMoreFromUser:React.FC<{blog:IBlog}> = ({blog}) => {
 
   const rootStore = useContext(RootStoreContext);
   const { userBlogs,setPredicateDisplayName ,setClearedBeforeNewPredicateComing,clearPredicates,setPredicate} = rootStore.blogStore;
-  
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+
   
     return (
            <Segment className="blog_morefromuser">
             <Header as='h1'  className="blog_morefromuser_header">
                 Bu danışmanın diğer paylaşımları
                 </Header>
-             <Card.Group itemsPerRow="5" stackable>
+             <Card.Group itemsPerRow={isTabletOrMobile?"3":"5"} stackable>
                 {
-                    userBlogs.map((blog) => (
+                    userBlogs.map((blog,index) => (
+                       index< (isTabletOrMobile? 3 : 5) &&
                         <Card
                         as={Link}
                         to={`/blog/${blog.id}`}
@@ -29,7 +32,7 @@ const BlogMoreFromUser:React.FC<{blog:IBlog}> = ({blog}) => {
                       >
                         <Image
                           src={blog.photo}
-                          style={{ height: 100, objectFit: 'cover' }}
+                          style={{ height: 100, objectFit: 'cover',width:"100%" }}
                         />
                         <Card.Content>
                           <Card.Header className="profileBlogCard_header" textAlign="left">{blog.title}</Card.Header>

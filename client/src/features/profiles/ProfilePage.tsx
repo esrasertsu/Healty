@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import React, { useContext, useEffect } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
-import { Grid } from 'semantic-ui-react'
+import { Grid, Label, Statistic } from 'semantic-ui-react'
 import { LoadingComponent } from '../../app/layout/LoadingComponent'
 import { ProfileFormValues } from '../../app/models/profile'
 import { RootStoreContext } from '../../app/stores/rootStore'
@@ -14,6 +14,8 @@ import ProfileHeader from './ProfileHeader'
 import ProfileMessage from './ProfileMessage'
 import  ProfileReferances  from './ProfileReferances'
 import { ProfileRefPlaceholder } from './ProfileRefPlaceholder'
+import { history } from '../../';
+import {Button, ButtonGroup, Reveal} from 'semantic-ui-react';
 
 interface RouteParams {
     username: string
@@ -38,7 +40,6 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
             )
         setActiveTab(0);
     }else {
-        debugger;
         loadProfile(match.params.username)
         .then((profile) => 
         {   
@@ -65,17 +66,60 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
             <Grid.Column width={16}>
                 <ProfileHeader profile={profile!} isCurrentUser={isCurrentUser} follow={follow} unfollow={unfollow} loading={loading} />
             </Grid.Column>
-            <Grid.Column width={11}>
-                <ProfileContent profile={profile!} setActiveTab={setActiveTab}/>
-                {(loadingComments || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileRefPlaceholder />: ( profile!.role === "Trainer" && <ProfileReferances /> )}
-                {(loadingBlogs || profile!.userName !== match.params.username) && profile!.role === "Trainer"  ?   <ProfileBlogPlaceHolder />: ( profile!.role === "Trainer" && <ProfileBlogs />)}
-                {(loadingComments || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileCommentPlaceHolder />: ( profile!.role === "Trainer" && <ProfileComments /> )}
-            </Grid.Column>
-            <Grid.Column width={5} >
+            <Grid.Column width={11} style={{marginTop:"40px"}}>
+                  <ProfileContent profile={profile!} setActiveTab={setActiveTab}/>          
+           </Grid.Column>
+           <Grid.Column width={5} style={{marginTop:"40px"}}>
+            {isCurrentUser && profile.role === "Trainer" &&
+          <ButtonGroup widths={2}>
+            <Button
+              basic
+              color={'green'}
+              content={'Blog Yaz'}
+              onClick={()=> history.push('/createPost')}
+            />
+            <Button
+            basic
+            color={'blue'}
+            content={'Aktivite Oluştur'}
+            onClick={()=> history.push('/createActivity')}
+          />
+          </ButtonGroup>
+          }
+          {!isCurrentUser && 
+          <div className="ui pointing secondary menu" style={{height:"75px", alignItems:"center"}}>
+          <Reveal animated='move' style={{width:"100%"}}>
+            <Reveal.Content visible style={{ width: '100%' }}>
+              <Button
+                fluid
+                className="followingButtonOut"
+                content={profile.isFollowing ? 'Takip Ediliyor' : 'Takip Edilmiyor'}
+                icon="hand pointer"
+              />
+            </Reveal.Content>
+            <Reveal.Content hidden>
+              <Button
+                loading={loading}
+                fluid
+                className={profile.isFollowing ? 'followingButtonOut_redClassName' : 'followingButtonOut_greenClassName'}
+                content={profile.isFollowing ? 'Takipten Çık' : 'Takip Et'}
+                onClick={profile.isFollowing ? () => unfollow(profile.userName): () => follow(profile.userName)}
+              />
+            </Reveal.Content>
+          </Reveal>
+          </div> }
             {!isCurrentUser && profile!.role === "Trainer" &&
                 <ProfileMessage profile={profile!}/> 
             }
             </Grid.Column>
+            
+            <Grid.Column width={11}>
+                {(loadingComments || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileRefPlaceholder />: ( profile!.role === "Trainer" && <ProfileReferances /> )}
+                {(loadingBlogs || profile!.userName !== match.params.username) && profile!.role === "Trainer"  ?   <ProfileBlogPlaceHolder />: ( profile!.role === "Trainer" && <ProfileBlogs />)}
+                {(loadingComments || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileCommentPlaceHolder />: ( profile!.role === "Trainer" && <ProfileComments /> )}
+            </Grid.Column>
+           
+          
             {/* <Grid.Row>
                 <Grid.Column width={11} >
                 <ProfileComments />

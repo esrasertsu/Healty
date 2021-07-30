@@ -135,8 +135,8 @@ const ActivityDashboard: React.FC = () => {
    
         {!isTabletOrMobile ?
 <>
-         <Grid>
-         <Grid.Row>
+         <Grid style={{paddingTop:"10px"}}>
+         <Grid.Row >
          <Grid.Column width={4}>
          {/* <Button
                            onClick={() => history.push('/activitysearch')}

@@ -1,17 +1,72 @@
 import React, { useContext } from 'react';
-import { Menu, Container, Image, Dropdown, Label, Icon } from 'semantic-ui-react';
+import { Menu, Container, Image, Dropdown, Label, Icon, Button, Modal } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import {history} from '../../index';
 import NavSearchArea from './NavSearchArea';
+import { LoginForm } from '../user/LoginForm';
+import { RegisterForm } from '../user/RegisterForm';
+import TrainerForm from '../user/TrainerForm';
+import { useMediaQuery } from 'react-responsive'
 
 const NavBar: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
-    const { user, logout} = rootStore.userStore;
+    const { user, logout,isLoggedIn} = rootStore.userStore;
     const { activeMenu,setActiveMenu } = rootStore.commonStore;
     const { notificationCount } = rootStore.userStore;
 
+    const {openModal,closeModal,modal} = rootStore.modalStore;
+
+
+    
+    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
+
+    const handleLoginClick = (e:any) => {
+        e.stopPropagation();
+        if(modal.open) closeModal();
+  
+            openModal("Giriş Yap", <>
+            <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.png' wrapped />
+            <Modal.Description className="loginreg">
+            <LoginForm location={"/"} />
+            </Modal.Description>
+            </>,true,
+             <p>Üye olmak için <span className="registerLoginAnchor" onClick={handleRegisterClick}>tıklayınız</span></p>) 
+        }
+  
+        const handleRegisterClick = (e:any) => {
+      
+          e.stopPropagation();
+          if(modal.open) closeModal();
+  
+              openModal("Üye Kaydı", <>
+              <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.png' wrapped />
+              <Modal.Description className="loginreg">
+              <RegisterForm location={"/"} />
+              </Modal.Description>
+              </>,true,
+              <>
+              <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>
+              <p>Uzman başvuru için <span className="registerLoginAnchor" onClick={handleTrainerFormClick}>tıkla!</span></p>
+              </>) 
+          }
+  
+          const handleTrainerFormClick= (e:any) => {
+      
+            e.stopPropagation();
+            if(modal.open) closeModal();
+  
+                openModal("Uzman Başvuru Formu", <>
+                <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/welcome1.png' wrapped />
+                <Modal.Description>
+                <TrainerForm />
+                </Modal.Description>
+                </>,true,
+                <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
+               
+            }
 
     const fixed = "top";
     return (
@@ -93,6 +148,34 @@ const NavBar: React.FC = () => {
               </Dropdown>
             </Menu.Item>
           )}
+
+          {
+            !isLoggedIn && 
+            <>
+            <Menu.Item>
+              <Button.Group>
+              <Button key={"login-nav"} color="blue" content={"Giriş Yap"} style={{color:"#fff",borderRadius: ".28571429rem", marginRight:"10px"}}
+               
+               onClick={(e:any)=>
+                 {
+                   handleLoginClick(e);
+                 }
+                 
+                 }></Button>
+                  <Button key={"reg-nav"} basic color="blue" content={"Kaydol"} style={{borderRadius: ".28571429rem"}}
+          
+          onClick={(e:any)=>
+            {
+              handleRegisterClick(e);
+            }
+            
+            }></Button>
+              </Button.Group>
+                  
+            </Menu.Item>
+            
+       </>
+          }
          </Container>         
        
       </Menu>

@@ -324,7 +324,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
          name={'follow'} content={"Takip Ettiğim Eğitmenlerin"} />
       </Menu>}
 
-      <Accordion key={"Category_acc"} as={Menu} vertical style={{ width: '100%', boxShadow:'none', border:'none'}}>
+      <Accordion className="activityAccMenu" key={"Category_acc"} as={Menu} vertical style={{ width: '100%'}}>
      {!isTabletOrMobile && 
       <Menu.Item>
       <div className="toggleMenuItem"><div>Online katılım</div> 
@@ -453,6 +453,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
               </Form>
           </Accordion.Content> 
         </Menu.Item>
+        <Menu.Item>
         <Button
                           // loading={submitting}
                           // disabled={loading || buttonDisabled}
@@ -496,6 +497,8 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
                             }
                             }
                           />
+        </Menu.Item>
+       
        
         {/* <Menu.Item className="filterMenuItem_Style">
           <Accordion.Title

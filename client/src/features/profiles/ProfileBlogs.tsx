@@ -15,15 +15,15 @@ import ProfileBlogList from './ProfileBlogList';
  
     return (
         <Fragment>
-        <Segment
+        {/* <Segment
           textAlign='left'
           attached='top'
           className="profile_segmentHeaders"
-        >
+        > */}
           <Header>Blog Yazılar &nbsp; ({profileBlogs.length})
               {/* <Icon name="comment outline"></Icon> */}
           </Header>
-        </Segment>
+        {/* </Segment> */}
         {profileBlogs.length === 0 && "Henüz paylaştığı bir blog bulunmamaktadır."}
         <ProfileBlogList profileBlogs={profileBlogs} profileUserName={profile!.userName} displayName={profile!.displayName}/>
       </Fragment>

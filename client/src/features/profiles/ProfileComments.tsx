@@ -33,15 +33,15 @@ import ProfileCommentList from './ProfileCommentList';
 
     return (
            <Fragment>
-             <Segment
+             {/* <Segment
                textAlign='left'
                attached='top'
                className="profile_segmentHeaders"
-             >
+             > */}
                <Header>Yorumlar &nbsp;&nbsp;({getCommentsByDate.length}/{commentCount})
                    {/* <Icon name="comment outline"></Icon> */}
                </Header>
-             </Segment>
+             {/* </Segment> */}
              <Segment clearing>
                
                <ProfileCommentList handleGetNext={handleGetNext} commentPage={commentPage}

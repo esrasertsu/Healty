@@ -67,7 +67,7 @@ Eğitmen hakkında henüz yorum yapılmamış
                {user && profile!.userName !== user.userName &&
                (
                   <Button
-                      content='Comment'
+                      content='Yorum yaz'
                       labelPosition='left'
                       icon='edit'
                       primary

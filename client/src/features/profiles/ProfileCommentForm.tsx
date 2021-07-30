@@ -36,12 +36,12 @@ interface IProps{
             <Grid.Row>
             <Grid.Column>
              <div style={{textAlign:"right"}}>
-            <Icon style={{cursor:"pointer"}} onClick={closeModal} name="times" size="large" color="teal"/>
+            {/* <Icon style={{cursor:"pointer"}} onClick={closeModal} name="times" size="large" color="orange"/> */}
             </div>
             <Header
               as="h4"
-              content="Leave your comment"
-              color="teal"
+              content="Eğitmen hakkında yorumunuzu yazın, değerlendirelim.."
+              color="orange"
               textAlign="left"
               style={{marginTop:"0"}}
             />
@@ -58,7 +58,7 @@ interface IProps{
           >
            <Field
                   name="body"
-                  placeholder="Add your comment"
+                  placeholder="Eğitmen hakkındaki düşünceleriniz, tecrübeleriniz..."
                   component={TextAreaInput}
                   rows={6}
                 />  
@@ -80,7 +80,7 @@ interface IProps{
           <Button
           style={{marginTop: 12}}
           floated="right"
-            content='Send'
+            content='Gönder'
             labelPosition='right'
             icon="send"
             positive

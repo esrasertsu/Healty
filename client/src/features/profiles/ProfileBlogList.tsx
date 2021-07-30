@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Button, Card, Grid,Image } from 'semantic-ui-react';
 import { IProfileBlog } from '../../app/models/profile';
 import { history } from '../..';
-
+import tr  from 'date-fns/locale/tr'
 
 interface IProps 
 {
@@ -38,7 +38,7 @@ const ProfileBlogList: React.FC<IProps> = ({profileBlogs,profileUserName,display
                       <Card.Content>
                         <Card.Header className="profileBlogCard_header" textAlign="left">{blog.title}</Card.Header>
                         <Card.Meta textAlign="left">
-                          <div><span>{format(new Date(blog.date), 'do LLL')} - {format(new Date(blog.date), 'h:mm a')}</span></div>
+                          <div><span>{format(new Date(blog.date), 'do LLL',{locale: tr})} - {format(new Date(blog.date), 'h:mm a')}</span></div>
                         </Card.Meta>
                       </Card.Content>
                     </Card>

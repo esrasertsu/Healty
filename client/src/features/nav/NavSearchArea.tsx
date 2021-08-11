@@ -40,7 +40,8 @@ import { history } from '../../index'
           result && loadSubCategories(result.parentId!);
           result && setProfileFilterForm({...profileFilterForm, categoryId:result.parentId!, subCategoryIds:[result.key]});
         }
-    
+        clearProfileRegistery();
+
             if(history.location.pathname !== "/profiles")
                history.push('/profiles');
             else loadProfiles();

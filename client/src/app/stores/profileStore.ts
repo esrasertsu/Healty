@@ -42,6 +42,7 @@ export default class ProfileStore{
     
     @observable loadingAccessibilities = false;
     @observable uploadingPhoto = false;
+    @observable uploadingCoverImage = false;
     @observable submittingComment = false;
     @observable loadingForPhotoDeleteMain = false;
     @observable loading = false;
@@ -415,6 +416,41 @@ export default class ProfileStore{
             toast.error('Problem uploading photo');
             runInAction(() => {
                 this.uploadingPhoto = false;
+            })
+            
+        }
+    }
+
+    @action uploadCoverPic = async (file: Blob,setImageChange: React.Dispatch<React.SetStateAction<boolean>>) => {
+        this.uploadingCoverImage = true;
+
+        try {
+            const photo = await agent.Profiles.uploadCoverPic(file);
+            runInAction(() => {
+                if(this.profile)
+                {
+                    this.profile.photos.push(photo);
+                    if(photo.isCoverPic && this.rootStore.userStore.user)
+                    {
+                        setImageChange(false);
+                        this.profile.coverImage = photo.url;
+                        this.profile!.photos = this.profile!.photos.filter(e => e.isCoverPic !== true);
+                        this.profile!.photos.find(e => e.id === photo.id)!.isCoverPic = true;
+                    }
+                }
+
+                this.uploadingCoverImage = false;
+            })
+        } catch (error) {
+            console.log(error);
+
+            if(error.status === 400)
+            toast.warning('Cover photo has been already updated');
+            else 
+            toast.error('Problem uploading cover photo');
+
+            runInAction(() => {
+                this.uploadingCoverImage = false;
             })
             
         }

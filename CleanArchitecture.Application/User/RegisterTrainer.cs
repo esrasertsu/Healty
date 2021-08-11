@@ -108,7 +108,8 @@ namespace CleanArchitecture.Application.User
                         {
                             Url = photoUploadResults.Url,
                             Id = photoUploadResults.PublicId,
-                            IsMain = true
+                            IsMain = true,
+                            IsCoverPic = false
                         };
                         user.Photos = new List<Photo>();
                         user.Photos.Add(photo);

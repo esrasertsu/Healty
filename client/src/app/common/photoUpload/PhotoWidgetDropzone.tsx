@@ -11,9 +11,12 @@ const dropzoneStyles ={
     border: 'dashed 3px',
     borderColor: '#eee',
     borderRadius: '5px',
-    paddingTop: '30px',
     textAlign: 'center' as 'center',
-    height: '200px'
+    height: '300px',
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center",
+    cursor:"pointer"
 }
 
 const dropzoneActive = {

@@ -1,9 +1,14 @@
 import { observer } from 'mobx-react-lite';
-import React from 'react';
-import { Segment, Item, Header, Button, Grid, Statistic, Divider, Reveal, ButtonGroup, Label, Icon } from 'semantic-ui-react';
+import React, { useContext, useState } from 'react';
+import { Segment, Item, Header, Button, Grid, Statistic, Divider, Reveal, ButtonGroup, Label, Icon, Dimmer, Loader, Image } from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { StarRating } from '../../app/common/form/StarRating';
 import { colors } from '../../app/models/category';
+import PhotoWidgetDropzone from '../../app/common/photoUpload/PhotoWidgetDropzone';
+import PhotoWidgetCropper from '../../app/common/photoUpload/PhotoWidgetCropper';
+import { RootStoreContext } from '../../app/stores/rootStore';
+import { useMediaQuery } from 'react-responsive'
+
 
 interface IProps{
     profile: IProfile,
@@ -12,6 +17,19 @@ interface IProps{
     unfollow:(username: string) => void,
     loading:boolean
 }
+
+const activityImageStyle = {
+  width:"100%",
+  height:"300px"
+};
+
+const activityImageTextStyle = {
+position: 'absolute',
+top: '10%',
+width: '100%',
+height: 'auto',
+color: 'white',
+};
 
 const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCurrentUser}) => {
   
@@ -23,9 +41,78 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
   }
 
 
+
+  const rootStore = useContext(RootStoreContext);
+  const { uploadCoverPic,uploadingCoverImage } = rootStore.profileStore;
+  const [imageChange, setImageChange] = useState(false);
+  const [imageDeleted, setImageDeleted] = useState(false);
+  const [originalImage, setOriginalImage] = useState<Blob | null>(null);
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+
+  const [files, setFiles] = useState<any[]>([]);
+  const [image, setImage] = useState<Blob | null>(null);
+  const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
+
+
   return (
     <>
-    <div className="coverImage"></div>
+    <Segment.Group style={{border:"none"}}>
+         <Dimmer.Dimmable as={Segment} dimmed={uploadingCoverImage} basic attached='top' style={{ padding: '0' ,border:"none"}}>
+          <Dimmer active={uploadingCoverImage} inverted>
+            <Loader>Loading</Loader>
+          </Dimmer>
+                  {
+                   profile.coverImage && !imageChange ?
+                   <Segment style={{padding:'0', margin:'0'}}  className="coverImage">
+                    <Image src={profile.coverImage} fluid style={activityImageStyle} />
+                  </Segment>
+                :
+               
+                  files.length === 0 ? 
+                  (
+                    isCurrentUser ? 
+                    <PhotoWidgetDropzone setFiles={setFiles} /> 
+                    :
+                    <Segment style={{padding:'0', margin:'0'}}  className="coverImage">
+                      <Image src={'/assets/trainerback.png'} fluid style={activityImageStyle} />
+                    </Segment> 
+                  )
+                  :
+                 (
+                  <Grid style={{marginTop:"10px"}}>
+                    <Grid.Column width="sixteen" style={{background:"#f1f1f1"}}>
+                    <div style={{display:"flex", justifyContent:"flex-end"}}>
+                    <Label color="red" style={{cursor:"pointer"}} 
+                    onClick={()=> {setFiles([]);setImageDeleted(true);}}>Değiştir/Sil <Icon name="trash"></Icon></Label>
+                    <Label style={{cursor:"pointer"}} onClick={()=> {
+                    setImageChange(false); setImageDeleted(false); setFiles([])}}>Değişiklikleri geri al <Icon name="backward"></Icon> </Label>   
+                     {image && <Label color="green" style={{ cursor:"pointer"}} onClick={()=> {
+                     
+                      uploadCoverPic(image!,setImageChange).then(() => {
+                      setImageDeleted(false); setFiles([])
+                    }) 
+                    }}>Kaydet <Icon name="save"></Icon> </Label>  } 
+                   
+                    </div>             
+                    </Grid.Column>
+                    <Grid.Column width="sixteen" className="profileHeaderImageCrop">
+                      <Header sub content='*Kırpma/Önizleme' />
+                      <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1350/300}/>
+                    </Grid.Column>
+                 </Grid>
+                 )
+               
+         }  
+        {
+          !imageChange && isCurrentUser && profile.coverImage !== null &&
+          <Segment basic style={activityImageTextStyle}>
+          <Label floating color="blue" style={{cursor:"pointer", left:"80%"}} 
+           size={isTabletOrMobile ? "small" :"medium"}
+          onClick={()=>{setImageDeleted(true); setImageChange(true)}}>Kapak Resmini Değiştir <Icon name="edit"></Icon></Label>
+          </Segment>
+        } 
+        </Dimmer.Dimmable>
+      </Segment.Group>
     <Segment className="profieHeader_segment" style={{marginTop:0}}>
       <Grid stackable>
         <Grid.Column width={12}>
@@ -35,6 +122,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                 avatar
                 size='small'
                 src={profile.image || '/assets/user.png'}
+                style={{border: "4px solid #fff"}}
               />
               <Item.Content verticalAlign='middle' className="profileHeader_content">
                 <Grid.Row>

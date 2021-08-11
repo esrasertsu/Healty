@@ -839,7 +839,8 @@ namespace Persistence
                              {
                                  Url= "https://res.cloudinary.com/esrasertsu/image/upload/v1626098298/vybxc2tlp4natc4dnimp.jpg",
                                  Id = "photo1",
-                                 IsMain = true
+                                 IsMain = true,
+                                 IsCoverPic = false
                              }
                          }
                     },

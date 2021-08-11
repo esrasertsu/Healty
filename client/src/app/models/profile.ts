@@ -13,6 +13,7 @@ export interface IProfile {
     userName: string,
     bio: string,
     image: string,
+    coverImage: string,
     isFollowing: boolean,
     followingCount: number,
     followerCount: number,
@@ -44,7 +45,8 @@ export interface IAccessibility{
 export interface IPhoto {
     id: string,
     url: string,
-    isMain: boolean
+    isMain: boolean,
+    isCoverPic: boolean
 }
 
 export interface IDocument {

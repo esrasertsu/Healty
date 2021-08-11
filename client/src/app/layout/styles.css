@@ -581,16 +581,27 @@ a.ui.card:hover {
   }
 
 }
+.profileHeaderImageCrop{
+  padding-bottom: 0 !important;
+}
+.profileHeaderImageCrop .ReactCrop__image
+{
+  width: 100%;
+  height: 300px !important;
+}
+
+.profileHeaderImageCrop .ReactCrop{
+  width: 100%;
+  height: 300px !important;
+
+}
+
 
 .coverImage {
-  height: 270px;
-  background-position: 50%;
-  background-repeat: no-repeat;
-  background-size: cover !important;
-  background-image: url("../layout/img/banner-2.jpg") !important; 
-  background-size: cover !important;
-  margin-left: calc(625px - 50vw);
-  width: 100vw;
+  height: 300px !important;
+  /* margin-left: calc(625px - 50vw) !important; */
+  width: 100%;
+  border: 6px solid #fff !important
 }
 *, :after, :before {
   -webkit-box-sizing: inherit;

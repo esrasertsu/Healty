@@ -45,7 +45,7 @@ const ProfileDescription = () => {
                   <Grid.Column className="profile_desc_iconandtext">
                     <Icon className="profileContent_icons" size="big" name="bookmark"></Icon> 
                     <List as='ul' className="profile_desc_list_item" >
-                    <label style={{textDecoration:"underline"}}>Uzmanlık Alanı</label>
+                    <label style={{textDecoration:"underline", fontWeight:600}}>Uzmanlık Alanı</label>
                     {
                      profile!.subCategories.length>0 ? profile!.subCategories.map((subCat) =>(
                       <List.Item key={"desc" + subCat.key} as='li'>{subCat.text}</List.Item>                   
@@ -56,7 +56,7 @@ const ProfileDescription = () => {
                   <Grid.Column className="profile_desc_iconandtext">
                   <Icon className="profileContent_icons" size="big" name="bolt"></Icon> 
                   <List as='ul' className="profile_desc_list_item">
-                  <label style={{textDecoration:"underline"}}>Erişilebilirlik</label>
+                  <label style={{textDecoration:"underline",fontWeight:600}}>Erişilebilirlik</label>
                     {
                      profile!.accessibilities.length >0 ? profile!.accessibilities.map((acc) =>(
                       <List.Item key={"desc" + acc.key} as='li'>{acc.text}</List.Item>                   
@@ -67,7 +67,7 @@ const ProfileDescription = () => {
                   <Grid.Column className="profile_desc_iconandtext">
                   <Icon className="profileContent_icons" size="big" name="building outline"></Icon> 
                   <List as='ul' className="profile_desc_list_item">
-                  <label style={{textDecoration:"underline"}}>Çalıştığı kurum</label>
+                  <label style={{textDecoration:"underline",fontWeight:600}}>Çalıştığı kurum</label>
                   {(profile!.dependency !=="" && profile!.dependency !==null) ? <List.Item key={"desc" + profile!.dependency} as='li'>{profile!.dependency}</List.Item>  : <p>Bilgi yok</p>}
                   </List>
                   </Grid.Column>

@@ -91,6 +91,12 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(command);
         }
 
+        [HttpPost("coverpic")]
+        public async Task<ActionResult<Photo>> AddCoverImage([FromForm] AddCoverImage.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
         [HttpDelete("referencepic/{id}")]
         public async Task<ActionResult<Unit>> DeleteReferencePic(string id)
         {

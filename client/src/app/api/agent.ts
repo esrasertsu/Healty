@@ -284,7 +284,8 @@ const Profiles = {
     addReferencePics: ( original: Blob, thumbnail: Blob, title:string): Promise<IRefencePic> => requests.postReferencePic(`/profiles/referencepic`, original,thumbnail, title),
     deleteReferencePic: ( id1:string): Promise<IRefencePic> => requests.del(`/profiles/referencepic/${id1}`),
     deleteDocument: ( id:string) => requests.del(`/profiles/documents/${id}`),
-    }
+    uploadCoverPic: ( photo: Blob): Promise<IPhoto> => requests.postForm(`/profiles/coverpic`, photo),
+}
 
 const Blogs = {
     list: (params: URLSearchParams): Promise<IBlogsEnvelope> => 

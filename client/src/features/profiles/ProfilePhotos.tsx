@@ -143,7 +143,7 @@ const [open, setOpen] = React.useState(false)
             <>
             <Card.Group itemsPerRow={5}>
               {profile &&
-                profile.photos.map((photo) => (
+                profile.photos.filter(x => x.isCoverPic === false).map((photo) => (
                   <Card key={photo.id}>
                     <Image onClick={() => handlePhotoClick(photo.url)} src={photo.url} />
                     {isCurrentUser && (

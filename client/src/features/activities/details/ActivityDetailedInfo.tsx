@@ -18,15 +18,38 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                  <Grid.Column width={1}>
                    <Icon name='bookmark' size='large' color='teal' />
                  </Grid.Column>
-                 <Grid.Column width={11}>
+                 <Grid.Column width={15}>
+                   
+                    <span className="activityDetailLabel">Kategori </span> 
+                    <div className="homepage_subheader">
+
+                   <p>
                    {
-                      "Kategori: "
-                   }
-                   {
-                     activity.subCategories && activity.subCategories.length> 0 ?
-                     activity.subCategories.map<React.ReactNode>(s => <span key={activity.id + "_cat_"+s.key}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
+                     activity.categories && activity.categories.length> 0 ?
+                     activity.categories.map<React.ReactNode>(s => <span key={activity.id + "_cat_"+s.key}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
                      : "Bilgi yok"
                    }
+                   </p>
+                   </div>
+                 </Grid.Column>
+               </Grid>
+             </Segment>
+             <Segment attached>
+               <Grid verticalAlign='middle'>
+                 <Grid.Column width={1}>
+                   <Icon name='tags' size='large' color='teal' />
+                 </Grid.Column>
+                 <Grid.Column width={15}>
+                 <span className="activityDetailLabel">Branş </span> 
+                 <div className="homepage_subheader">
+                <p>
+                   {
+                     activity.subCategories && activity.subCategories.length> 0 ?
+                     activity.subCategories.map<React.ReactNode>(s => <span key={activity.id + "_subcat_"+s.key}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
+                     : "Bilgi yok"
+                   }
+                   </p>
+                   </div>
                  </Grid.Column>
                </Grid>
              </Segment>
@@ -39,12 +62,12 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                 {
                   !showMore ?
                   <>
-                  <span>Açıklama:</span>
+                 <span className="activityDetailLabel">Açıklama </span> 
                   <div key={activity.id+"_desc"} className="homepage_subheader" dangerouslySetInnerHTML={{__html:sanitizer(activity.description.slice(0, 2000))}} />
                   {activity.description.length > 2000 && <div className="readMore" onClick={() => setShowMore(true)}>Read more</div>} 
                   </> :
                   <>
-                <span>Açıklama:</span>
+                 <span className="activityDetailLabel">Açıklama </span> 
                 <div key={activity.id+"_desc"} className="homepage_subheader" dangerouslySetInnerHTML={{__html:sanitizer(activity.description)}} />
                 </>
                 }
@@ -57,9 +80,8 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    <Icon name='heartbeat' size='large' color='teal' />
                  </Grid.Column>
                  <Grid.Column width={11}>
-                   {
-                      "Seviye: "
-                   }
+                 <span className="activityDetailLabel">Seviye </span> 
+
                    {
                      activity.levels && activity.levels.length> 0 ?
                      activity.levels.map<React.ReactNode>(s => <span key={activity.id + "_level_"+s.key}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
@@ -71,19 +93,21 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              <Segment attached>
                <Grid verticalAlign='middle'>
                  <Grid.Column width={1}>
-                   <Icon name='calendar' size='large' color='teal' />
+                   <Icon name='calendar alternate outline' size='large' color='teal' />
                  </Grid.Column>
                  <Grid.Column width={7}>
+                 <span className="activityDetailLabel">Tarih </span> 
                    <span>
-                     { activity.date && "Tarih: "+ format(activity.date, 'dd MMMM, eeee',{locale: tr})} 
+                     { activity.date &&  format(activity.date, 'dd MMMM, eeee',{locale: tr})} 
                    </span>
                  </Grid.Column>
                  <Grid.Column width={1}>
-                   <Icon name='time' size='large' color='teal' />
+                   <Icon name='clock outline' size='large' color='teal' />
                  </Grid.Column>
                  <Grid.Column width={7}>
+                 <span className="activityDetailLabel">Saat </span> 
                    <span>
-                   { activity.date && " Saat: " +format(activity.date, 'H:mm',{locale: tr})}
+                   { activity.date && format(activity.date, 'H:mm',{locale: tr})}
                    </span>
                  </Grid.Column>
                </Grid>
@@ -91,10 +115,23 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              <Segment attached>
                <Grid verticalAlign='middle'>
                  <Grid.Column width={1}>
-                   <Icon name='marker' size='large' color='teal' />
+                   <Icon name='map outline' size='large' color='teal' />
                  </Grid.Column>
                  <Grid.Column width={11}>
-                   <span>{"Lokasyon: " + activity.venue} {activity.city && ", Şehir: " + activity.city.text}</span>
+                 <span className="activityDetailLabel">Şehir </span> 
+
+                   <span>{activity.city ? activity.city.text : "Belirtilmemiş"}</span>
+                 </Grid.Column>
+               </Grid>
+             </Segment>
+             <Segment attached>
+               <Grid verticalAlign='middle'>
+                 <Grid.Column width={1}>
+                   <Icon name='map pin' size='large' color='teal' />
+                 </Grid.Column>
+                 <Grid.Column width={11}>
+                 <span className="activityDetailLabel">Lokasyon </span> 
+                   <span>{activity.venue ? activity.venue : "Belirtilmemiş"}</span>
                  </Grid.Column>
                </Grid>
              </Segment>
@@ -114,7 +151,8 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    <Icon name='users' size='large' color='teal' />
                  </Grid.Column>
                  <Grid.Column width={11}>
-                   <span>{activity.attendancyLimit===0 || activity.attendancyLimit === null? "Sınırsız katılımcı" : "Katılımcı sınırı: " +activity.attendancyLimit +" kişi"}</span>
+                 <span className="activityDetailLabel">Katılımcı sınırı </span> 
+                   <span>{activity.attendancyLimit===0 || activity.attendancyLimit === null? "Sınırsız katılımcı" : activity.attendancyLimit +" kişi"}</span>
                  </Grid.Column>
                </Grid>
              </Segment>
@@ -124,7 +162,8 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    <Icon name='money' size='large' color='teal' />
                  </Grid.Column>
                  <Grid.Column width={11}>
-                   <span>{activity.price===0 ? "Ücretsiz" : "Ücret: " +activity.price +" TL"}</span>
+                 <span className="activityDetailLabel">Fiyat </span> 
+                   <span>{activity.price===0 ? "Ücretsiz" : activity.price +" TL"}</span>
                  </Grid.Column>
                </Grid>
              </Segment>

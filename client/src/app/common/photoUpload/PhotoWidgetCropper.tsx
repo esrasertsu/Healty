@@ -43,7 +43,24 @@ interface IProps{
            crop.width = originalWidth;   
 
         if(crop.width && crop.height && crop.aspect)
-           crop.height = crop.width! / crop.aspect!;
+        {
+            if(crop.width > crop.height)
+            {
+                if(crop.height * crop.aspect > crop.width)
+                  crop.height = crop.width / crop.aspect;
+                else 
+                  crop.width = crop.height * crop.aspect;
+            }
+            else 
+            {
+                if(crop.width / crop.aspect > crop.height)
+                   crop.width = crop.height * crop.aspect;
+                else
+                   crop.height = crop.width / crop.aspect;
+
+            }
+
+        }
 
            
         makeClientCrop(crop);

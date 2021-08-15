@@ -31,7 +31,6 @@ const validate = combineValidators({
     isRequired('Description'),
     hasLengthGreaterThan(4)({message: 'Description needs to be at least 5 characters'})
   )(),
-  price: isRequired('Price'),
   date: isRequired('Date'),
   time: isRequired('Time')
 })

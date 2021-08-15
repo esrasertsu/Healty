@@ -284,6 +284,9 @@ p.baseline-pricing__value{
     width: 100% !important;
 }
 
+.activityDetailLabel{
+  color:"#1a2b49";
+}
 .ui.items>.item>.content:after {
   display: none !important;
 }

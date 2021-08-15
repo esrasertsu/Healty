@@ -17,9 +17,9 @@ export interface IActivity {
     venue: string;
     address:string;
     attendees: IAttendee[];
-    attendancyLimit: number;
+    attendancyLimit?: number;
     attendanceCount:number;
-    price:number;
+    price?:number;
     levels: ILevel[];
     isGoing:boolean;
     isHost: boolean;
@@ -82,8 +82,8 @@ export class ActivityFormValues implements IActivityFormValues {
     subCategoryIds: string[] =[];
     categoryIds: string[] =[];
     levelIds: string[] =[];
-    price: number = 0;
-    attendancyLimit: number =0;
+    price?: number;
+    attendancyLimit?: number;
     photo?: Blob=undefined;
     mainImage?: IPhoto = undefined;
     constructor(init?: IActivityFormValues){

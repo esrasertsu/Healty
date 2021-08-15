@@ -91,26 +91,12 @@ namespace CleanArchitecture.Application.Activities
                     var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == new Guid(request.CityId));
                     activity.City = city;
                 }
-                _context.Activities.Add(activity); //addsync is just for special creators
 
-                if(request.Photo != null)
-                {
-                    var photoUploadResults = _photoAccessor.AddActivityImage(request.Photo);
 
-                    activity.Photos = new List<Photo>
-                    {
-                        new Photo
-                        {
-                            Url = photoUploadResults.Url,
-                            Id = photoUploadResults.PublicId,
-                            IsMain = true
-                        }
-                    };
-
-                }
-                
                 if (request.CategoryIds != null)
                 {
+                    activity.Categories = new List<ActivityCategories>();
+
                     foreach (var catId in request.CategoryIds)
                     {
                         var cat = await _context.Categories.SingleOrDefaultAsync(x => x.Id == catId);
@@ -121,10 +107,9 @@ namespace CleanArchitecture.Application.Activities
                         {
                             var userCategory = new ActivityCategories()
                             {
-                                Category = cat,
-                                Activity = activity
+                                Category = cat
                             };
-                            _context.ActivityCategories.Add(userCategory);
+                            activity.Categories.Add(userCategory);
                         }
                     }
                 }
@@ -132,7 +117,9 @@ namespace CleanArchitecture.Application.Activities
 
                 if (request.SubCategoryIds != null)
                 {
-                  foreach (var catId in request.SubCategoryIds)
+                    activity.SubCategories = new List<ActivitySubCategories>();
+
+                    foreach (var catId in request.SubCategoryIds)
                     {
                         var cat = await _context.SubCategories.SingleOrDefaultAsync(x => x.Id == catId);
 
@@ -142,10 +129,9 @@ namespace CleanArchitecture.Application.Activities
                         {
                             var userCategory = new ActivitySubCategories()
                             {
-                                SubCategory = cat,
-                                Activity = activity
+                                SubCategory = cat
                             };
-                            _context.ActivitySubCategories.Add(userCategory);
+                            activity.SubCategories.Add(userCategory);
                         }
                     }
                 }
@@ -153,7 +139,8 @@ namespace CleanArchitecture.Application.Activities
 
                 if (request.LevelIds != null)
                 {
-                  foreach (var level in request.LevelIds)
+                    activity.Levels = new List<ActivityLevels>();
+                    foreach (var level in request.LevelIds)
                     {
                         var lvl = await _context.Levels.SingleOrDefaultAsync(x => x.Id == level);
 
@@ -163,25 +150,44 @@ namespace CleanArchitecture.Application.Activities
                         {
                             var aclev = new ActivityLevels()
                             {
-                                Level = lvl,
-                                Activity = activity
+                                Level = lvl
                             };
-                            _context.ActivityLevels.Add(aclev);
+                            activity.Levels.Add(aclev);
                         }
                     }
                 }
 
                 var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
 
-                var attendee = new UserActivity{
+                var attendee = new UserActivity
+                {
                     AppUser = user,
-                    Activity = activity,
                     IsHost = true,
                     DateJoined = DateTime.Now
                 };
 
-                _context.UserActivities.Add(attendee);
-                
+                activity.UserActivities = new List<UserActivity>();
+                activity.UserActivities.Add(attendee);
+
+                activity.Photos = new List<Photo>();
+
+                if (request.Photo != null)
+                {
+                    var photoUploadResults = _photoAccessor.AddActivityImage(request.Photo);
+
+                    activity.Photos.Add(
+                         new Photo
+                         {
+                             Url = photoUploadResults.Url,
+                             Id = photoUploadResults.PublicId,
+                             IsMain = true
+                         }
+                        );
+                    
+                }
+
+                await _context.Activities.AddAsync(activity); //addsync is just for special creators
+
                 var success = await _context.SaveChangesAsync() > 0;
 
                 if (success)

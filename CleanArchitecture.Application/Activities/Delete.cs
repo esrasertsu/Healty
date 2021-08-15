@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Application.Errors;
+using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Persistence;
 using MediatR;
 using System;
@@ -20,9 +21,12 @@ namespace CleanArchitecture.Application.Activities
             public class Handler : IRequestHandler<Command>
             {
                 private readonly DataContext _context;
-                public Handler(DataContext context)
+               private readonly IPhotoAccessor _photoAccessor;
+
+            public Handler(DataContext context, IPhotoAccessor photoAccessor)
                 {
                     _context = context;
+                    _photoAccessor = photoAccessor;
                 }
 
                 public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -32,23 +36,26 @@ namespace CleanArchitecture.Application.Activities
                     if (activity == null)
                         throw new RestException(HttpStatusCode.NotFound, new { activity ="Not Found"});
 
-                ////var comments =  _context.Comments.Where(x => x.ActivityId == activity.Id).ToList();
-                //_context.Comments.RemoveRange(comments);
+                var photo = activity.Photos.SingleOrDefault(x => x.IsMain == true);
+                if(photo!=null)
+                {
+                    var result = _photoAccessor.DeletePhoto(photo.Id);
+
+                    if (result == null)
+                        throw new Exception("Problem deleting photo");
+
+                    activity.Photos.Remove(activity.Photos.SingleOrDefault(x => x.IsMain == true));
+
+
+                }
 
                 _context.Remove(activity);
-              //  _context.UserActivities.RemoveRange(attendances);
                
                 var success = _context.SaveChanges() > 0;
 
                 if (success)
                 {
-                  //  _context.Activities.Remove(activity);
-
-                  //  var success2 = await _context.SaveChangesAsync() > 0;
-
-                 //   if (success)
                         return Unit.Value;
-                 //   throw new Exception("Problem saving changes");
                 }
                 else
                 {

@@ -791,6 +791,9 @@ namespace Persistence
             var Yoga = await context.SubCategories.SingleOrDefaultAsync(x => x.Name == "Yoga");
             var Pedagoji = await context.SubCategories.SingleOrDefaultAsync(x => x.Name == "Pedagoji");
 
+            var ortaLevel = await context.Levels.SingleOrDefaultAsync(x => x.Name == "Orta");
+
+
             if (!userManager.Users.Any())
             {
                 var users = new List<AppUser>
@@ -1528,6 +1531,27 @@ namespace Persistence
                                 IsHost = true,
                                 DateJoined = DateTime.Now.AddMonths(-2)
                             }
+                        },
+                         Categories  = new List<ActivityCategories>
+                        {
+                            new ActivityCategories
+                            {
+                                Category = Spor
+                            }
+                        },
+                        SubCategories =  new List<ActivitySubCategories>
+                        {
+                            new ActivitySubCategories
+                            {
+                                SubCategoryId = Swim.Id
+                            }
+                        },
+                          Levels= new List<ActivityLevels>
+                        {
+                            new ActivityLevels
+                            {
+                                 Level = ortaLevel
+                            }
                         }
                     },
                     new Activity
@@ -1567,8 +1591,15 @@ namespace Persistence
                                 IsHost = false,
                                 DateJoined = DateTime.Now.AddMonths(-1)
                             },
+                        },
+                          Levels= new List<ActivityLevels>
+                        {
+                            new ActivityLevels
+                            {
+                                 Level = ortaLevel
+                            }
                         }
-                        
+
                     },
                     new Activity
                     {
@@ -1592,6 +1623,27 @@ namespace Persistence
                                 IsHost = false,
                                 DateJoined = DateTime.Now.AddMonths(1)
                             },
+                        },
+                         Categories  = new List<ActivityCategories>
+                        {
+                            new ActivityCategories
+                            {
+                                Category = Spor
+                            }
+                        },
+                        SubCategories =  new List<ActivitySubCategories>
+                        {
+                            new ActivitySubCategories
+                            {
+                                SubCategoryId = Swim.Id
+                            }
+                        },
+                          Levels= new List<ActivityLevels>
+                        {
+                            new ActivityLevels
+                            {
+                                 Level = ortaLevel
+                            }
                         }
                     },
                     new Activity
@@ -1617,6 +1669,27 @@ namespace Persistence
                                 IsHost = false,
                                 DateJoined = DateTime.Now.AddMonths(3)
                             },
+                        },
+                         Categories  = new List<ActivityCategories>
+                        {
+                            new ActivityCategories
+                            {
+                                Category = Psikoloji
+                            }
+                        },
+                        SubCategories =  new List<ActivitySubCategories>
+                        {
+                            new ActivitySubCategories
+                            {
+                                SubCategoryId = Pedagoji.Id
+                            }
+                        },
+                          Levels= new List<ActivityLevels>
+                        {
+                            new ActivityLevels
+                            {
+                                 Level = ortaLevel
+                            }
                         }
                     },
                     new Activity
@@ -1635,6 +1708,27 @@ namespace Persistence
                                 AppUserId = "a",
                                 IsHost = true,
                                 DateJoined = DateTime.Now.AddMonths(4)
+                            }
+                        },
+                        Categories  = new List<ActivityCategories>
+                        {
+                            new ActivityCategories
+                            {
+                                Category = Psikoloji
+                            }
+                        },
+                        SubCategories =  new List<ActivitySubCategories>
+                        {
+                            new ActivitySubCategories
+                            {
+                                SubCategoryId = Pedagoji.Id
+                            }
+                        },
+                          Levels= new List<ActivityLevels>
+                        {
+                            new ActivityLevels
+                            {
+                                 Level = ortaLevel
                             }
                         }
                     },
@@ -1661,6 +1755,27 @@ namespace Persistence
                                 IsHost = false,
                                 DateJoined = DateTime.Now.AddMonths(5)
                             },
+                        },
+                        Categories  = new List<ActivityCategories>
+                        {
+                            new ActivityCategories
+                            {
+                                Category = Psikoloji
+                            }
+                        },
+                        SubCategories =  new List<ActivitySubCategories>
+                        {
+                            new ActivitySubCategories
+                            {
+                                SubCategoryId = Pedagoji.Id
+                            }
+                        },
+                        Levels= new List<ActivityLevels>
+                        {
+                            new ActivityLevels
+                            {
+                                 Level = ortaLevel
+                            }
                         }
                     },
                     new Activity
@@ -1685,6 +1800,27 @@ namespace Persistence
                                 IsHost = false,
                                 DateJoined = DateTime.Now.AddMonths(6)
                             },
+                        },
+                        Categories  = new List<ActivityCategories>
+                        {
+                            new ActivityCategories
+                            {
+                                Category = Psikoloji
+                            }
+                        },
+                        SubCategories =  new List<ActivitySubCategories>
+                        {
+                            new ActivitySubCategories
+                            {
+                                SubCategoryId = Pedagoji.Id
+                            }
+                        },
+                          Levels= new List<ActivityLevels>
+                        {
+                            new ActivityLevels
+                            {
+                                 Level = ortaLevel
+                            }
                         }
                     },
                     new Activity
@@ -1710,6 +1846,27 @@ namespace Persistence
                                 IsHost = false,
                                 DateJoined = DateTime.Now.AddMonths(7)
                             },
+                        },
+                        Categories  = new List<ActivityCategories>
+                        {
+                            new ActivityCategories
+                            {
+                                Category = Psikoloji
+                            }
+                        },
+                        SubCategories =  new List<ActivitySubCategories>
+                        {
+                            new ActivitySubCategories
+                            {
+                                SubCategoryId = Pedagoji.Id
+                            }
+                        },
+                          Levels= new List<ActivityLevels>
+                        {
+                            new ActivityLevels
+                            {
+                                 Level = ortaLevel
+                            }
                         }
                     },
                     new Activity
@@ -1735,6 +1892,27 @@ namespace Persistence
                                 IsHost = false,
                                 DateJoined = DateTime.Now.AddMonths(8)
                             },
+                        },
+                        Categories  = new List<ActivityCategories>
+                        {
+                            new ActivityCategories
+                            {
+                                Category = Psikoloji
+                            }
+                        },
+                        SubCategories =  new List<ActivitySubCategories>
+                        {
+                            new ActivitySubCategories
+                            {
+                                SubCategoryId = Pedagoji.Id
+                            }
+                        },
+                          Levels= new List<ActivityLevels>
+                        {
+                            new ActivityLevels
+                            {
+                                 Level = ortaLevel
+                            }
                         }
                     }
                 };

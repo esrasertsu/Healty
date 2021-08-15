@@ -11,7 +11,6 @@ import cx from 'classnames';
 interface IProps extends FieldRenderProps<string, HTMLElement>, FormFieldProps {}
 
 const WYSIWYGEditor:React.FC<IProps> = ({ input,  meta:{ touched, error} }) => {
-    debugger;
     const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
     useEffect(() => {

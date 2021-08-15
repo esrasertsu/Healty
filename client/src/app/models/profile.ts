@@ -32,7 +32,12 @@ export interface IProfile {
     city: ICity,
     isOnline: boolean,
     responseRate: number,
-    role: string
+    role: string,
+    activityCount: number,
+    blogCount: number,
+    interactionCount: number,
+    videoUrl: string,
+    regDate: Date
 
 }
 

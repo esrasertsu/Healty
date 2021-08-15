@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import React, { useContext, useEffect } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
-import { Grid, Label, Statistic } from 'semantic-ui-react'
+import { Grid, Header, Icon, Label, Statistic } from 'semantic-ui-react'
 import { LoadingComponent } from '../../app/layout/LoadingComponent'
 import { ProfileFormValues } from '../../app/models/profile'
 import { RootStoreContext } from '../../app/stores/rootStore'
@@ -16,6 +16,7 @@ import  ProfileReferances  from './ProfileReferances'
 import { ProfileRefPlaceholder } from './ProfileRefPlaceholder'
 import { history } from '../../';
 import {Button, ButtonGroup, Reveal} from 'semantic-ui-react';
+import ProfileVideo from './ProfileVideo'
 
 interface RouteParams {
     username: string
@@ -67,7 +68,11 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
                 <ProfileHeader profile={profile!} isCurrentUser={isCurrentUser} follow={follow} unfollow={unfollow} loading={loading} />
             </Grid.Column>
             <Grid.Column width={11} style={{marginTop:"40px"}}>
-                  <ProfileContent profile={profile!} setActiveTab={setActiveTab}/>          
+                  <ProfileContent profile={profile!} setActiveTab={setActiveTab}/>   
+                  {(loadingComments || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileRefPlaceholder />: ( profile!.role === "Trainer" && <ProfileReferances /> )}
+                {(loadingBlogs || profile!.userName !== match.params.username) && profile!.role === "Trainer"  ?   <ProfileBlogPlaceHolder />: ( profile!.role === "Trainer" && <ProfileBlogs />)}
+                {(loadingComments || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileCommentPlaceHolder />: ( profile!.role === "Trainer" && <ProfileComments /> )}
+                 
            </Grid.Column>
            <Grid.Column width={5} style={{marginTop:"40px"}}>
             {isCurrentUser && profile.role === "Trainer" &&
@@ -108,15 +113,23 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
             </Reveal.Content>
           </Reveal>
           </div> }
+          
             {!isCurrentUser && profile!.role === "Trainer" &&
                 <ProfileMessage profile={profile!}/> 
             }
-            </Grid.Column>
+            {
+              profile!.role === "Trainer" &&
+              (
+                <>
+                <Header><Icon name="film"></Icon> Tanıtım Videosu 
+                  
+            </Header>
+                          <ProfileVideo videoUrl={profile!.videoUrl}/> 
+                          </>
+
+              )
+            }
             
-            <Grid.Column width={11}>
-                {(loadingComments || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileRefPlaceholder />: ( profile!.role === "Trainer" && <ProfileReferances /> )}
-                {(loadingBlogs || profile!.userName !== match.params.username) && profile!.role === "Trainer"  ?   <ProfileBlogPlaceHolder />: ( profile!.role === "Trainer" && <ProfileBlogs />)}
-                {(loadingComments || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileCommentPlaceHolder />: ( profile!.role === "Trainer" && <ProfileComments /> )}
             </Grid.Column>
            
           

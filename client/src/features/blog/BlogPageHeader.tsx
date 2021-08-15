@@ -54,7 +54,7 @@ const BlogPageHeader:React.FC<{blog:IBlog}> = ({blog}) => {
                 <Grid style={{marginTop:"10px"}}>
                   <Grid.Column width={!isTabletOrMobile ? "eight": "sixteen"}>
                   <Header sub content='*Boyutlandır' />
-                  <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1500/650}/>
+                  <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1500/650} maxHeight={650}/>
                   </Grid.Column>
                 
                 {!isTabletOrMobile &&

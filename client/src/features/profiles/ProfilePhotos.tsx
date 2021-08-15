@@ -1,7 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext, useState } from "react";
 import { Button, Card, Grid, Header, Icon, Image, Label, Modal, Segment, Tab } from "semantic-ui-react";
-import PhotoUploadWidget  from "../../app/common/photoUpload/PhotoUploadWidget";
 import { RootStoreContext } from "../../app/stores/rootStore";
 import PhotoWidgetCropper from "../../app/common/photoUpload/PhotoWidgetCropper";
 import PhotoWidgetDropzone from "../../app/common/photoUpload/PhotoWidgetDropzone";
@@ -67,7 +66,7 @@ const [open, setOpen] = React.useState(false)
              <Grid style={{marginTop:"10px"}}>
                <Grid.Column width="eight">
                <Header sub content='*Boyutlandır' />
-               <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={700/700}/>
+               <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={700/700} maxHeight={700}/>
                </Grid.Column>
                <Grid.Column width="eight">
                  <Header sub content='*Önizleme' />
@@ -85,11 +84,7 @@ const [open, setOpen] = React.useState(false)
             </Grid>
             </Modal.Description>
             )
-            // <PhotoUploadWidget
-            //   uploadPhoto={handleUploadImage}
-            //   loading={uploadingPhoto}
-            //   aspect={500/500}
-            // />
+           
           }
       </Modal.Content>
     </Modal>
@@ -117,7 +112,7 @@ const [open, setOpen] = React.useState(false)
              <Grid style={{marginTop:"10px"}}>
                <Grid.Column width="eight">
                <Header sub content='*Boyutlandır' />
-               <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={500/500}/>
+               <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={500/500} maxHeight={500}/>
                </Grid.Column>
                <Grid.Column width="eight">
                  <Header sub content='*Önizleme' />
@@ -134,11 +129,7 @@ const [open, setOpen] = React.useState(false)
                </Grid.Column>
             </Grid>
             )
-            // <PhotoUploadWidget
-            //   uploadPhoto={handleUploadImage}
-            //   loading={uploadingPhoto}
-            //   aspect={500/500}
-            // />
+          
           ) : (
             <>
             <Card.Group itemsPerRow={5}>

@@ -110,5 +110,10 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new DeleteDocument.Command { Id = id });
         }
 
+        [HttpPut("videoUrl")]
+        public async Task<ActionResult<Unit>> AddVideoUrl(string url)
+        {
+            return await Mediator.Send(new AddVideoUrl.Command { VideoUrl = url });
+        }
     }
 }

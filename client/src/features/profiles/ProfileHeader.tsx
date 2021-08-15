@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { Segment, Item, Header, Button, Grid, Statistic, Divider, Reveal, ButtonGroup, Label, Icon, Dimmer, Loader, Image } from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { StarRating } from '../../app/common/form/StarRating';
@@ -8,7 +8,7 @@ import PhotoWidgetDropzone from '../../app/common/photoUpload/PhotoWidgetDropzon
 import PhotoWidgetCropper from '../../app/common/photoUpload/PhotoWidgetCropper';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { useMediaQuery } from 'react-responsive'
-
+import * as _screenfull from "screenfull";
 
 interface IProps{
     profile: IProfile,
@@ -53,6 +53,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
   const [image, setImage] = useState<Blob | null>(null);
   const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
 
+ 
 
   return (
     <>
@@ -97,7 +98,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                     </Grid.Column>
                     <Grid.Column width="sixteen" className="profileHeaderImageCrop">
                       <Header sub content='*Kırpma/Önizleme' />
-                      <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1350/300}/>
+                      <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1350/300} maxHeight={300}/>
                     </Grid.Column>
                  </Grid>
                  )
@@ -122,7 +123,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                 avatar
                 size='small'
                 src={profile.image || '/assets/user.png'}
-                style={{border: "4px solid #fff"}}
+                style={{border: "4px solid #fff", width:"150px", height:"150px"}}
               />
               <Item.Content verticalAlign='middle' className="profileHeader_content">
                 <Grid.Row>
@@ -134,8 +135,9 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                     }
                   <br/>
                   {profile!.role === "Trainer" && profile.categories.map((cat) => (
-                    <Label key={cat.key} className="profileCard_Label" style={{background:getColor(cat.text)}} horizontal>{cat.text}</Label>
+                    <Label key={cat.key} style={{background:getColor(cat.text)}} horizontal>{cat.text}</Label>
                   ))}
+                  {/* <div onClick={handleVideoPlay} className="profileHeader_videoPlay">Tanıtım videosunu izlemek için tıkla <Icon name="play circle outline"></Icon></div> */}
               
                 </Grid.Row>
               </Item.Content>
@@ -145,16 +147,16 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
         <Grid.Column width={4}>
         <Statistic.Group widths={3} size='tiny'>
           <Statistic>
-            <Statistic.Value>{profile.followerCount}</Statistic.Value>
+            <Statistic.Value>{profile.activityCount}</Statistic.Value>
             <Statistic.Label className="statisticLabels">Aktivite <Icon size="large" name="calendar check outline"></Icon></Statistic.Label>
           </Statistic>
           <Statistic>
-            <Statistic.Value>{profile.followingCount}</Statistic.Value>
+            <Statistic.Value>{profile.blogCount}</Statistic.Value>
             <Statistic.Label className="statisticLabels">Blog <Icon size="large" name="newspaper outline"></Icon></Statistic.Label>
           </Statistic>
           <Statistic>
-            <Statistic.Value>{profile.followingCount}</Statistic.Value>
-            <Statistic.Label className="statisticLabels">Beğeni <Icon size="large" name="thumbs up outline"></Icon></Statistic.Label>
+            <Statistic.Value>{profile.interactionCount}</Statistic.Value>
+            <Statistic.Label className="statisticLabels">Etkileşim <Icon size="large" name="thumbs up outline"></Icon></Statistic.Label>
           </Statistic>
           </Statistic.Group>
           <Divider/>

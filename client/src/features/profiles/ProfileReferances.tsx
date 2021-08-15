@@ -67,7 +67,7 @@ const [title, setTitle] = useState("");
              <Grid style={{marginTop:"10px"}}>
                <Grid.Column width="16">
                <Header sub content='*Resmin küçük görselini ayarlayın' />
-               <PhotoWidgetCropper setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={referencePics.length=== 0 ? 240/240: 171/114}/>
+               <PhotoWidgetCropper setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={referencePics.length=== 0 ? 240/240: 171/114} maxHeight={referencePics.length=== 0 ? 240: 114}/>
                </Grid.Column>
                <Grid.Column width="16">
                  <Header sub content='*Önizleme' />
@@ -90,11 +90,7 @@ const [title, setTitle] = useState("");
             </Grid>
             </Modal.Description>
             )
-            // <PhotoUploadWidget
-            //   uploadPhoto={handleUploadImage}
-            //   loading={uploadingPhoto}
-            //   aspect={500/500}
-            // />
+          
           }
       </Modal.Content>
     </Modal>

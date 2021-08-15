@@ -106,8 +106,12 @@ namespace CleanArchitecture.Application.Profiles
                 Accessibilities = accessDtoToReturn,
                 Categories = catsToReturn,
                 SubCategories = subcatsToReturn,
-                RegDate = user.RegistrationDate
-            };
+                RegDate = user.RegistrationDate,
+                ActivityCount = user.UserActivities.Where(x=>x.IsHost).Count(),
+                BlogCount = user.Blogs.Count(),
+                InteractionCount = user.ChatRooms.Where(x => x.ChatRoom.StarterId != user.Id).Count(),
+                VideoUrl = user.VideoUrl
+        };
 
             if (currentUser.Followings.Any(x => x.TargetId == user.Id))
             {

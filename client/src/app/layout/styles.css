@@ -587,15 +587,22 @@ a.ui.card:hover {
 .profileHeaderImageCrop .ReactCrop__image
 {
   width: 100%;
-  height: 300px !important;
+  /* height: 300px !important; */
 }
 
 .profileHeaderImageCrop .ReactCrop{
   width: 100%;
-  height: 300px !important;
+  /* height: 300px !important; */
 
 }
 
+.profileHeaderImageCrop .ReactCrop__crop-selection{
+  height: 300px !important;
+}
+.profileHeader_videoPlay{
+  color:#f2711c;
+  margin-top: 15px;
+}
 
 .coverImage {
   height: 300px !important;
@@ -1187,6 +1194,10 @@ button, input, optgroup, select, textarea {
 }
 .blogListItem_Readmore .icon{
   text-decoration:none !important
+}
+.blogListItem_image{
+  height: 130px;
+  object-fit: cover;
 }
 
 .blog_userdetail{

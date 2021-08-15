@@ -75,7 +75,7 @@ interface IProps {
       <Image circular src={profile.image || '/assets/user.png'} />
       <div className="profileListItem_badges">   
       {(profile.categories && profile.categories.map((cat) => (
-          <Label key={profile.userName+Math.random()+cat.text} className="profileCard_Label" style={{background:getColor(cat.text)}} horizontal>{cat.text}</Label>
+          <Label key={profile.userName+Math.random()+cat.text} className="profileCard_Label" style={{background:getColor(cat.text)}} horizontal>{profile.categories.length<3 ? cat.text: cat.text.charAt(0).toUpperCase()}</Label>
         )))}
       </div>
      

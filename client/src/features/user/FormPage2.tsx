@@ -214,7 +214,7 @@ useEffect(() => {
                 <Grid style={{marginTop:"10px"}}>
                   <Grid.Column width="eight">
                   <Header sub content='*Boyutlandır' />
-                  <PhotoWidgetCropper setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1}/>
+                  <PhotoWidgetCropper setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1} maxHeight={500}/>
                   </Grid.Column>
                   <Grid.Column width="eight">
                     <Header sub content='*Önizleme' />

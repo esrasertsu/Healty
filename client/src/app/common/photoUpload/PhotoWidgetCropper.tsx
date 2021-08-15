@@ -11,9 +11,10 @@ interface IProps{
     setCroppedImageUrl: (url: string) => void;
     setOriginalImage:(file: Blob) => void;
     aspect:number;
+    maxHeight:number;
 }
 
- const PhotoWidgetCropper:React.FC<IProps> = ({setImage,setImageDeleted,setImageChanged, imagePreview, setCroppedImageUrl, aspect,setOriginalImage}) =>  {
+ const PhotoWidgetCropper:React.FC<IProps> = ({setImage,setImageDeleted,setImageChanged, imagePreview, setCroppedImageUrl, aspect,setOriginalImage,maxHeight}) =>  {
 
     const [crop, setCrop] = useState<Crop>({
         unit: '%',
@@ -21,6 +22,8 @@ interface IProps{
         width:100,
         height:100
     });
+
+    const [originalWidth, setoriginalWidth] = useState(0);
 
     const [imageRef, setImageRef] = useState<any>();
     const [newImage, setNewImage] = useState<boolean>(false);
@@ -33,6 +36,16 @@ interface IProps{
 
       
     const handleCropComplete = (crop:Crop) => {
+        if(newImage && crop.width && crop.width>0)
+            setoriginalWidth(crop.width);
+        
+         if(crop.width === 0) 
+           crop.width = originalWidth;   
+
+        if(crop.width && crop.height && crop.aspect)
+           crop.height = crop.width! / crop.aspect!;
+
+           
         makeClientCrop(crop);
     };
 
@@ -86,6 +99,7 @@ interface IProps{
     }
 
     const handleCropChange = (crop:Crop) => {
+        if(crop.width && crop.width>0 && crop.height && crop.height>0)
         setCrop(crop);
     
     };

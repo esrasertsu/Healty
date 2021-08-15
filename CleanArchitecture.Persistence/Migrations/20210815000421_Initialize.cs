@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CleanArchitecture.Persistence.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -191,6 +191,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     ApplicationDate = table.Column<DateTime>(nullable: true),
                     CityId = table.Column<Guid>(nullable: true),
                     Bio = table.Column<string>(nullable: true),
+                    VideoUrl = table.Column<string>(nullable: true),
                     IsOnline = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -423,6 +424,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     Id = table.Column<string>(nullable: false),
                     Url = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
+                    ResourceType = table.Column<string>(nullable: true),
                     AppUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -442,8 +444,8 @@ namespace CleanArchitecture.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Body = table.Column<string>(nullable: true),
-                    AuthorId = table.Column<string>(nullable: true),
-                    ActivityId = table.Column<Guid>(nullable: true),
+                    AppUserId = table.Column<string>(nullable: true),
+                    ActivityId = table.Column<Guid>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -454,13 +456,13 @@ namespace CleanArchitecture.Persistence.Migrations
                         column: x => x.ActivityId,
                         principalTable: "Activities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comments_AspNetUsers_AuthorId",
-                        column: x => x.AuthorId,
+                        name: "FK_Comments_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -522,6 +524,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     Id = table.Column<string>(nullable: false),
                     Url = table.Column<string>(nullable: true),
                     IsMain = table.Column<bool>(nullable: false),
+                    IsCoverPic = table.Column<bool>(nullable: false),
                     ActivityId = table.Column<Guid>(nullable: true),
                     AppUserId = table.Column<string>(nullable: true)
                 },
@@ -831,9 +834,9 @@ namespace CleanArchitecture.Persistence.Migrations
                 column: "ActivityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_AuthorId",
+                name: "IX_Comments_AppUserId",
                 table: "Comments",
-                column: "AuthorId");
+                column: "AppUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Followings_TargetId",

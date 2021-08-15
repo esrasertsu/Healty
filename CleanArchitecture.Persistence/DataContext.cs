@@ -57,7 +57,18 @@ namespace CleanArchitecture.Persistence
             builder.Entity<UserActivity>()
                 .HasOne(a => a.Activity)
                 .WithMany(u => u.UserActivities)
-                .HasForeignKey(a => a.ActivityId)
+                .HasForeignKey(a => a.ActivityId);
+
+            builder.Entity<ActivityComment>()
+               .HasOne(comment => comment.Activity)
+               .WithMany(acivity => acivity.Comments)
+               .HasForeignKey(comment => comment.ActivityId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ActivityComment>()
+                .HasOne(comment => comment.Author)
+                .WithMany(appUser => appUser.ActivityComments)
+                .HasForeignKey(comment => comment.AppUserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<UserFollowing>(b =>

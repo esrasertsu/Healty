@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitecture.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210810222739_CoverImage")]
-    partial class CoverImage
+    [Migration("20210815000421_Initialize")]
+    partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -96,10 +96,10 @@ namespace CleanArchitecture.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ActivityId")
+                    b.Property<Guid>("ActivityId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("AuthorId")
+                    b.Property<string>("AppUserId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Body")
@@ -112,7 +112,7 @@ namespace CleanArchitecture.Persistence.Migrations
 
                     b.HasIndex("ActivityId");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("Comments");
                 });
@@ -231,6 +231,9 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("UserName")
                         .HasColumnType("TEXT")
                         .HasMaxLength(256);
+
+                    b.Property<string>("VideoUrl")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -816,11 +819,14 @@ namespace CleanArchitecture.Persistence.Migrations
                 {
                     b.HasOne("CleanArchitecture.Domain.Activity", "Activity")
                         .WithMany("Comments")
-                        .HasForeignKey("ActivityId");
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("CleanArchitecture.Domain.AppUser", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .WithMany("ActivityComments")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.ActivityLevels", b =>

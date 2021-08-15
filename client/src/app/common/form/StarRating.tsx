@@ -34,7 +34,7 @@ export const StarRating:React.FC<IProps> = ({rating,setRating,editing,size,count
          <span className="starRating_Rating">{rating}</span>
        </div>
        {showCount && 
-          <div className="starRating_Count">{count} Değerlendirme</div> 
+          <div className="starRating_Count">{count} Yorum</div> 
         }
        
      </div>

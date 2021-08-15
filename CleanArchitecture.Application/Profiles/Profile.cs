@@ -38,6 +38,10 @@ namespace CleanArchitecture.Application.Profiles
         public DateTime RegDate { get; set; }
         public string CoverImage { get; set; }
 
+        public int ActivityCount { get; set; }
+        public int BlogCount { get; set; }
+        public int InteractionCount { get; set; }
+        public string VideoUrl { get; set; }
 
     }
 }

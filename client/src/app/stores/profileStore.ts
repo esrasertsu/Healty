@@ -43,6 +43,7 @@ export default class ProfileStore{
     @observable loadingAccessibilities = false;
     @observable uploadingPhoto = false;
     @observable uploadingCoverImage = false;
+    @observable submittingVideo = false;
     @observable submittingComment = false;
     @observable loadingForPhotoDeleteMain = false;
     @observable loading = false;
@@ -500,6 +501,24 @@ export default class ProfileStore{
             
         }
     }
+
+    @action uploadProfileVideo = async (url: string) =>{
+        debugger;
+        this.submittingVideo = true;
+        try {
+            var result = await agent.Profiles.uploadProfileVideo(url);
+            runInAction('Uploading video', () => {
+                this.profile!.videoUrl =url;
+                this.submittingVideo = false;
+            });
+        } catch (error) {
+            runInAction('Uploading video error', () => {
+                this.submittingVideo = false;
+            });
+            toast.error('Problem submitting data');
+            console.log(error);
+        }
+    };
 
     @action follow = async (username: string) => {
         this.loading = true;

@@ -285,6 +285,7 @@ const Profiles = {
     deleteReferencePic: ( id1:string): Promise<IRefencePic> => requests.del(`/profiles/referencepic/${id1}`),
     deleteDocument: ( id:string) => requests.del(`/profiles/documents/${id}`),
     uploadCoverPic: ( photo: Blob): Promise<IPhoto> => requests.postForm(`/profiles/coverpic`, photo),
+    uploadProfileVideo: ( url: string)  => requests.put(`/profiles/videoUrl?url=${url}`, {})
 }
 
 const Blogs = {

@@ -43,7 +43,7 @@ const PhotoUploadWidget:React.FC<IProps> = ({loading,uploadPhoto, aspect}) => {
             <Grid.Column width={4}>
                 <Header sub color='teal' content='Step 2 - Resize image' />
                 {files.length > 0 && 
-                <PhotoWidgetCropper setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChanged} aspect={aspect} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} />}
+                <PhotoWidgetCropper maxHeight={300} setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChanged} aspect={aspect} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} />}
             </Grid.Column>
             <Grid.Column width={1} />
             <Grid.Column width={4}>

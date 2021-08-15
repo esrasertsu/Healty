@@ -130,7 +130,7 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
                 <Grid>
                   <Grid.Column width="eight">
                   <Header sub content='*Boyutlandır' />
-                  <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChanged} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1500/650}/>
+                  <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChanged} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl}  maxHeight={650} aspect={1500/650}/>
                   </Grid.Column>
                   <Grid.Column width="eight">
                     <Header sub content='*Önizleme' />

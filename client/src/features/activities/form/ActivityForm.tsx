@@ -220,7 +220,7 @@ const handleTimeChange = (time:any) =>{
                 <Grid style={{marginTop:"10px"}}>
                   <Grid.Column width="eight">
                   <Header sub content='*Boyutlandır' />
-                  <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={278/174}/>
+                  <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={278/174} maxHeight={174}/>
                   </Grid.Column>
                   <Grid.Column width="eight">
                     <Header sub content='*Önizleme' />

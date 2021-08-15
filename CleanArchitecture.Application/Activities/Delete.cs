@@ -32,13 +32,28 @@ namespace CleanArchitecture.Application.Activities
                     if (activity == null)
                         throw new RestException(HttpStatusCode.NotFound, new { activity ="Not Found"});
 
-                    _context.UserActivities.RemoveRange(_context.UserActivities.Where(x => x.ActivityId == activity.Id));
-                    _context.Activities.Remove(activity);
+                ////var comments =  _context.Comments.Where(x => x.ActivityId == activity.Id).ToList();
+                //_context.Comments.RemoveRange(comments);
 
-                    var success = await _context.SaveChangesAsync() > 0;
+                _context.Remove(activity);
+              //  _context.UserActivities.RemoveRange(attendances);
+               
+                var success = _context.SaveChanges() > 0;
 
-                    if (success) return Unit.Value;
+                if (success)
+                {
+                  //  _context.Activities.Remove(activity);
+
+                  //  var success2 = await _context.SaveChangesAsync() > 0;
+
+                 //   if (success)
+                        return Unit.Value;
+                 //   throw new Exception("Problem saving changes");
+                }
+                else
+                {
                     throw new Exception("Problem saving changes");
+                }
                 }
             }
         }

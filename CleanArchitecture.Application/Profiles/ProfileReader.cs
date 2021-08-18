@@ -86,6 +86,8 @@ namespace CleanArchitecture.Application.Profiles
             {
                 Id = user.Id,
                 DisplayName = user.DisplayName,
+                Title= user.Title,
+                PhoneNumber= user.PhoneNumber,
                 UserName = user.UserName,
                 Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
                 CoverImage = user.Photos.FirstOrDefault(x => x.IsCoverPic)?.Url,
@@ -191,6 +193,9 @@ namespace CleanArchitecture.Application.Profiles
             var profile = new Profile
             {
                 DisplayName = user.DisplayName,
+                Title = user.Title,
+                HasPhoneNumber= !string.IsNullOrEmpty(user.PhoneNumber),
+                HasVideo = !string.IsNullOrEmpty(user.VideoUrl),
                 UserName = user.UserName,
                 Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
                 CoverImage = user.Photos.FirstOrDefault(x => x.IsCoverPic)?.Url,
@@ -203,7 +208,8 @@ namespace CleanArchitecture.Application.Profiles
                 Accessibilities = accessDtoToReturn,
                 Categories = catsToReturn,
                 SubCategories = subcatsToReturn,
-                RegDate = user.RegistrationDate
+                RegDate = user.RegistrationDate,
+
             };
             if (currentUser != null)
             {

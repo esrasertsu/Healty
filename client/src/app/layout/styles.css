@@ -44,7 +44,7 @@ body {
 .ui.header, .ui.header .content{
   font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
   font-weight: normal;
-  color: #1a2b49 
+  color: #1a2b49 ;
 }
 .ui.statistic>.value, .ui.statistics .statistic>.value, .segmentHeader {
   font-family: AssistantRegular, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
@@ -85,7 +85,34 @@ body {
   font-size: 1.1rem;
   line-height: 1.25rem;
   font-weight: 500 !important;
-  color: #1a2b49 
+  color: #263a5e 
+}
+
+.ellipsis {
+  overflow: hidden;
+  max-height: 65px;
+  line-height: 20px;
+  margin-bottom: 5px;
+
+}
+
+.ellipsis:before {
+	content:"";
+	float: left;
+	width: 5px; 
+  max-height: 65px; }
+		
+
+.ellipsis:after {
+	content: "\02026";
+    box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    position: relative;
+    width: 2em;
+    background-size: 100% 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+
 }
 
 .ui.secondary.pointing.menu .item{
@@ -285,7 +312,7 @@ p.baseline-pricing__value{
 }
 
 .activityDetailLabel{
-  color:"#1a2b49";
+  color:#36997e
 }
 .ui.items>.item>.content:after {
   display: none !important;
@@ -602,9 +629,32 @@ a.ui.card:hover {
 .profileHeaderImageCrop .ReactCrop__crop-selection{
   height: 300px !important;
 }
+
+.profileHeader_label{
+  box-shadow:2px 8px 14px 0px #bcbdbdcc, 0 0 0 1px #d4d4d557;
+}
 .profileHeader_videoPlay{
-  color:#f2711c;
+  color: #4d4d4d;
   margin-top: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 15px;
+  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  cursor: pointer;
+  z-index: 5;
+  background: #fff;
+  border: none !important;
+  /* box-shadow: 10px 11px 14px 0px #bcbdbdcc, 0 0 0 1px #d4d4d557; */
+}
+
+.profileHeader_videoPlay:hover{
+  cursor: pointer;
+  z-index: 5;
+  background: #fff;
+  border: none !important;
+  box-shadow:12px 14px 5px 0px #bcbdbdcc, 0 0 0 1px #d4d4d557;
+  transform: translateY(-3px);
 }
 
 .coverImage {
@@ -901,7 +951,7 @@ button, input, optgroup, select, textarea {
 .homepage_subheader{
   font-family:  AssistantRegular, Arial, Helvetica, sans-serif;
   margin-top: 10px  !important;
-  font-size: 1.1rem !important;
+  font-size: 1.2rem !important;
 }
 
 .psikologCard{
@@ -966,6 +1016,8 @@ button, input, optgroup, select, textarea {
 .profileListItem_subCats{
   margin-bottom: 5px;
   width: 100%;
+  line-height: 20px;
+  max-height: 50px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -995,6 +1047,7 @@ button, input, optgroup, select, textarea {
 }
 .profileCard_Content{
   border-top: none !important;
+  padding-bottom: 5px !important;
 }
 .profileHeader_content{
   display: flex !important;

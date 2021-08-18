@@ -12,6 +12,10 @@ namespace CleanArchitecture.Application.Profiles
     {
         public string Id { get; set; }
         public string DisplayName { get; set; }
+        public string Title { get; set; }
+        public string PhoneNumber { get; set; }
+        public bool HasVideo { get; set; }
+        public bool HasPhoneNumber { get; set; }
         public string UserName { get; set; }
         public string Image { get; set; }
         public string Bio { get; set; }

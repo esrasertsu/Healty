@@ -211,10 +211,10 @@ const HomePage = () => {
            <div className="spacingContainer__small" />
            
            <Container className="homepageContainer">
-           <Header as='h1'  style={{  textAlign:'center', width:"100%" }}>
+           <Header as='h1'  style={{fontSize: '34px',  textAlign:'center', width:"100%" }}>
                 Doğru uzmanı tam yerinde keşfet
                 </Header>
-                <p style={{ fontSize: '1.25em', color: "#1a2b49" }}>
+                <p style={{ fontSize: '1.5rem', color: "#1a2b49" }}>
                 Spor koçundan diyetisyene, meditasyon eğitmeninden psikoloğa ihtiyacın olan en doğru uzmanı en kolay şekilde bulabileceğin yerdesin. 
                 Üstelik istediğin lokasyonda ya da online olarak aktivitelere katılabilir, eğitmenlerin paylaştıkları blogları okuyarak ilgilendiğin alanda bilgi sahibi olabilirsin. 
                 </p>
@@ -333,9 +333,9 @@ const HomePage = () => {
                 </Header>
                 <Header.Subheader style={{fontSize:"1.2rem",marginBottom:"20px"}}>
                         Uzman olduğun alanda deneyimlerini paylaşmak ve hizmet vermek için bize doğrudan başvurabilirsin, dilersen mail adresine de bilgilendirme gönderebiliriz.
-                       <p> <b><span style={{cursor:"pointer", marginTop:"10px"}} onClick={handleTrainerFormClick}>
+                       <p> <b><div style={{color:"#1a2b49", cursor:"pointer", textDecoration:"underline", marginTop:"10px"}} onClick={handleTrainerFormClick}>
                                 Uzman Başvuru Formu için tıklayın..
-                             </span></b>
+                             </div></b>
                        </p>
                 </Header.Subheader>
                 <FinalForm

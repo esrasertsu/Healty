@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Tab, Grid, Header, Button, Icon, List } from 'semantic-ui-react';
+import { Tab, Grid, Header, Button, Icon, List, Modal } from 'semantic-ui-react';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileEditForm from './ProfileUpdateForm';
 import { observer } from 'mobx-react-lite';
@@ -9,6 +9,7 @@ const ProfileDescription = () => {
   const rootStore = useContext(RootStoreContext);
   const { updateProfile, profile, isCurrentUser ,setUpdatedProfile, updatedProfile,deleteDocument} = rootStore.profileStore;
   const [editMode, setEditMode] = useState(false);
+  const {openModal,closeModal,modal} = rootStore.modalStore;
 
   useEffect(() => {
     if(updatedProfile)
@@ -18,6 +19,38 @@ const ProfileDescription = () => {
      }
    
   }, [updatedProfile])
+
+  const ref = React.useRef<any>();
+  const [height, setHeight] = React.useState("100px");
+  const onLoad = () => {
+    setHeight(ref.current.contentWindow.document.body.scrollHeight + "px");
+  };
+
+  const handleOpenDoc = (url:string) =>{
+    if(modal.open) closeModal();
+    openModal("Giriş Yap", <>
+    <Modal.Description className="loginreg">
+    <iframe
+        ref={ref}
+         onLoad={onLoad}
+        id="myFrame"
+        src={url}
+        width="100%"
+        height={height}
+        scrolling="no"
+        frameBorder="0"
+        style={{
+          maxWidth: 640,
+          width: "100%",
+          overflow: "auto",
+        }}
+      ></iframe>
+    </Modal.Description>
+    </>,false,
+    "",
+    "inverted") 
+
+  }
 
   return (
     <Tab.Pane>
@@ -118,10 +151,12 @@ const ProfileDescription = () => {
                     content={`Eğitim`}
                     className="profileContent_icons"
                   />
-                  <List as='ul' className="profile_desc_list_item">
+                  <List  className="profile_desc_list_item">
                     {
                      profile!.certificates.length >0 ? profile!.certificates.map((acc) =>(
-                      <List.Item key={"desc" + acc.id} as='li'>{acc.name}</List.Item>                   
+                      <List.Item style={{textDecoration:"underline", cursor:"pointer"}} onClick={()=>{handleOpenDoc(acc.url)}} key={"desc" + acc.id}>
+                       {acc.resourceType === "image" && <Icon size="large" name={"file alternate outline"}></Icon> }
+                       {acc.name}</List.Item>                   
                     )) : "Bilgi yok"
                     } 
                     </List>

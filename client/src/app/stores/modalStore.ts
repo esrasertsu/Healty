@@ -12,15 +12,17 @@ export default class ModalStore {
         body: null,
         header: null,
         image:false,
-        footer:null
+        footer:null,
+        dimmer:"blurring"
     }
 
-    @action openModal = (header:any, content: any, image:any, footer:any) =>{
+    @action openModal = (header:any, content: any, image:any, footer:any, dimmer?:string) =>{
         this.modal.open = true;
         this.modal.body = content;
         this.modal.header = header;
         this.modal.image = image;
         this.modal.footer = footer;
+        this.modal.dimmer = dimmer === "inverted" ? "inverted" : "blurring";
     }
 
     @action closeModal = () => {

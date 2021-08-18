@@ -139,7 +139,7 @@ const NavBar: React.FC = () => {
                     to={`/messages`}
                   >  <Icon name='mail' />
                        Mesajlar
-                    <Label style={{margin:"0 0 0 10px"}} color='teal'>
+                    <Label style={{margin:"0 0 0 10px"}} color='green'>
                     {notificationCount}
                     </Label>
                   </Dropdown.Item>

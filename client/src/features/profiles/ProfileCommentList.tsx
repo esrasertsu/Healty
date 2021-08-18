@@ -6,7 +6,7 @@ import { formatDistance } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { StarRating } from '../../app/common/form/StarRating';
 import ProfileCommentForm from './ProfileCommentForm';
-
+import tr  from 'date-fns/locale/tr'
 
 interface IProps {
   handleGetNext: () => void;
@@ -40,7 +40,7 @@ Eğitmen hakkında henüz yorum yapılmamış
                          style={!comment.allowDisplayName ? {pointerEvents: "none", color:"black"} : {color:"#263a5e"}}
                         replace>{!comment.allowDisplayName ? comment.displayName.charAt(0) + comment.displayName.split('').map((char: any) => "*" ).join("") : comment.displayName}</Comment.Author>
                         <Comment.Metadata>
-                          <div>{formatDistance(new Date(comment.createdAt), new Date())}</div>
+                          <div>{formatDistance(new Date(comment.createdAt), new Date(),{locale: tr})}</div>
                         </Comment.Metadata>
                         <Comment.Metadata style={{display:"flex", justifyContent:"flex-end"}}>
                         {
@@ -57,7 +57,7 @@ Eğitmen hakkında henüz yorum yapılmamış
 <div>
 <Button
                  floated="right"
-                 content="More..." 
+                 content="Daha fazla yorum..." 
                  positive
                  onClick={handleGetNext}
                  style={totalPages === 0 ? {display:"none"}: {display:"inline"}}

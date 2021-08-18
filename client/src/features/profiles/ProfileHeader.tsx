@@ -9,6 +9,7 @@ import PhotoWidgetCropper from '../../app/common/photoUpload/PhotoWidgetCropper'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { useMediaQuery } from 'react-responsive'
 import * as _screenfull from "screenfull";
+import ReactPlayer from 'react-player/youtube'
 
 interface IProps{
     profile: IProfile,
@@ -44,6 +45,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
 
   const rootStore = useContext(RootStoreContext);
   const { uploadCoverPic,uploadingCoverImage } = rootStore.profileStore;
+  const {openModal,closeModal,modal} = rootStore.modalStore;
   const [imageChange, setImageChange] = useState(false);
   const [imageDeleted, setImageDeleted] = useState(false);
   const [originalImage, setOriginalImage] = useState<Blob | null>(null);
@@ -54,6 +56,18 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
   const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
 
  
+  const handleVideoPlay = () => {
+    if(modal.open) closeModal();
+
+    openModal("",
+    <ReactPlayer
+    config={{ playerVars:{controls:1}}}
+    width="auto" 
+    height="500px" 
+    controls={true}
+    url={profile.videoUrl} />
+    ,false,null)
+  }
 
   return (
     <>
@@ -118,27 +132,31 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
       <Grid stackable>
         <Grid.Column width={12}>
           <Item.Group>
-            <Item style={{marginTop:"-108px"}}>
+            <Item style={{marginTop:"-105px"}}>
               <Item.Image
                 avatar
                 size='small'
                 src={profile.image || '/assets/user.png'}
-                style={{border: "4px solid #fff", width:"150px", height:"150px"}}
+                style={{border: "4px solid #fff", width:"175px", height:"175px"}}
               />
               <Item.Content verticalAlign='middle' className="profileHeader_content">
                 <Grid.Row>
-                  <Header as='h1' style={{color:"#fff", marginBottom:"5px"}}>{profile.displayName}</Header>
+                  <Header as='h1' style={{color:"#fff", marginBottom:"5px", textShadow: "1.5px 1.5px #263a5e"}}>{profile.displayName}</Header>
                   {profile!.role === "Trainer" && 
-                  <div style={{marginBottom:"10px"}}>
+                  <div style={{marginBottom:"10px", textShadow: "rgb(69 60 38) 1.5px 1.5px"}}>
                     <StarRating rating={profileRating} editing={false} key={"header"} count={profile.starCount} showCount={true}/>
                   </div>
                     }
                   <br/>
                   {profile!.role === "Trainer" && profile.categories.map((cat) => (
-                    <Label key={cat.key} style={{background:getColor(cat.text)}} horizontal>{cat.text}</Label>
+                    <Label className="profileHeader_label" key={cat.key} style={{background:getColor(cat.text)}} horizontal>{cat.text}</Label>
                   ))}
-                  {/* <div onClick={handleVideoPlay} className="profileHeader_videoPlay">Tanıtım videosunu izlemek için tıkla <Icon name="play circle outline"></Icon></div> */}
-              
+                  {
+                     (profile.videoUrl!=="" && profile.videoUrl !== null) &&
+                     <div onClick={handleVideoPlay} className="profileHeader_videoPlay">
+                       <Image style={{width:"35px", marginRight:"10px"}} src={'/assets/videoPlayer.png'} />Tanıtım videosu <Icon name="hand point up"></Icon></div> 
+                
+                  }
                 </Grid.Row>
               </Item.Content>
             </Item>

@@ -57,7 +57,8 @@ export interface IPhoto {
 export interface IDocument {
     id: string,
     url: string,
-    name: string
+    name: string,
+    resourceType:string
 }
 
 export interface IRefencePic {

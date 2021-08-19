@@ -174,7 +174,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
           </Statistic>
           <Statistic>
             <Statistic.Value>{profile.interactionCount}</Statistic.Value>
-            <Statistic.Label className="statisticLabels">Etkileşim <Icon size="large" name="thumbs up outline"></Icon></Statistic.Label>
+            <Statistic.Label className="statisticLabels">Etkileşim <Icon size="large" name="comments outline"></Icon></Statistic.Label>
           </Statistic>
           </Statistic.Group>
           <Divider/>

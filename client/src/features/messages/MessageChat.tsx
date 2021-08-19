@@ -105,7 +105,7 @@ const MessageChat: React.FC = () => {
                    <div key={group}>
                        <div className="chatLabels">
                            <Label size='small' style={{marginTop:"10px"}}>
-                           {format(new Date(group), 'dd MMMM, eeee',{locale: tr})}
+                           {format(new Date(group), 'dd MMMM yyyy, eeee',{locale: tr})}
                            </Label>
                        </div>
                        <Item.Group key={group + "_message"}>

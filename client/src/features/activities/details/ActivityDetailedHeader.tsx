@@ -49,7 +49,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                               content={activity.title}
                               style={{ color: 'white' }}
                             />
-                            <p>{activity.date && format(activity.date,'dd MMMM, eeee',{locale: tr})}</p>
+                            <p>{activity.date && format(activity.date,'dd MMMM yyyy, eeee',{locale: tr})}</p>
                             <p>
                               Düzenleyen: <Link to={`/profile/${host && host.userName}`} ><strong>{host && host.displayName}</strong></Link> 
                             </p>
@@ -102,10 +102,11 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                       { 
                       activity.attendancyLimit && (activity.attendancyLimit !==0 && (activity.attendancyLimit>0) && (activity.attendancyLimit - activity.attendees.length) <4) ?
                       <span style={{color:"red"}}>Son {activity.attendancyLimit - activity.attendees.length} katılımcı!</span> : ""
-                      }{
+                      }
+                      {/* {
                       (activity.attendancyLimit ===null ||activity.attendancyLimit ===0 || (activity.attendancyLimit && (activity.attendancyLimit > activity.attendees.length))) &&
                       <Button  floated='right' loading={loading} onClick={attendActivity} color='teal'>Aktiviteye Katıl</Button>
-                      }   
+                      }    */}
                       
                       </>
                     )}

@@ -112,7 +112,7 @@ const [title, setTitle] = useState("");
           )}
       </Grid.Column>
       <Grid.Column width="16">
-            
+     {referencePics.length !== 0 ?      
       <Gallery id="simple-gallery">
         <div
           style={{
@@ -255,7 +255,9 @@ const [title, setTitle] = useState("");
           </Item> */}
         </div>
       </Gallery>
-      </Grid.Column>
+    :   "Henüz paylaşılan bir referans görsel bulunmamaktadır." 
+    }
+     </Grid.Column>
     </Grid>
 }
       </>

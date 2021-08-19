@@ -170,7 +170,7 @@ const sixItem:SemanticWIDTHS = 6;
            >
                 {
                 popularProfileList.map((pro) => (
-                    <ProfileListItem key={pro.userName+"_popularListItems"} profile={pro} />
+                    <ProfileListItem key={pro.userName+"_popularListItems"} profile={pro} popular={true} />
                 ))
                 }
             </Carousel> 

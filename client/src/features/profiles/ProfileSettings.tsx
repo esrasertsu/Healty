@@ -26,7 +26,7 @@ interface IProps {
 }
 
 
-const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocument }) => {
+const ProfileSettings: React.FC<IProps> = ({ updateProfile, profile,deleteDocument }) => {
    
     const rootStore = useContext(RootStoreContext);
     const {accessibilities, profileForm, setProfileForm, deletingDocument} = rootStore.profileStore;
@@ -306,4 +306,4 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocu
   );
 };
 
-export default observer(ProfileUpdateForm);
+export default observer(ProfileSettings);

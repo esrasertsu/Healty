@@ -9,6 +9,7 @@ import ActivityDetailedSideBar  from './ActivityDetailedSideBar';
 import ActivityDetailedInfo from './ActivityDetailedInfo';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import ActivityDetailsMap from './ActivityDetailsMap';
+import ActivityDetailPaymentSegment from './ActivityDetailPaymentSegment';
 
 const center = {
     lat: 38.4237,
@@ -48,7 +49,12 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
 
           <Grid.Column width={6}>
               <ActivityDetailedSideBar attendees={activity.attendees}/>
-              <ActivityDetailsMap centerLocation={center} />
+              {/* <ActivityDetailsMap centerLocation={center} /> */}
+                {
+                  !activity.isGoing && !activity.isHost &&
+                (activity.attendancyLimit ===null ||activity.attendancyLimit ===0 || (activity.attendancyLimit && (activity.attendancyLimit > activity.attendees.length))) &&
+                 <ActivityDetailPaymentSegment activity={activity} />
+                 }    
           </Grid.Column>
       </Grid>
     )

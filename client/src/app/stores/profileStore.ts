@@ -351,6 +351,7 @@ export default class ProfileStore{
                 toast.warning("Branş boş seçilemez!")
                 return;
             }  
+      
 
                     try {
                     const pro = await agent.Profiles.updateProfile(profileDto);

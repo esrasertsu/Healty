@@ -21,6 +21,7 @@ namespace CleanArchitecture.Application.Profiles
         public class Command: IRequest<Profile>
         {
             public string DisplayName { get; set; }
+            public string Title { get; set; }
             public string Bio { get; set; }
             public string Experience { get; set; }
             public string ExperienceYear { get; set; }
@@ -66,6 +67,7 @@ namespace CleanArchitecture.Application.Profiles
                         throw new RestException(HttpStatusCode.NotFound, new { User = "NotFound" });
 
                     user.DisplayName = request.DisplayName ?? user.DisplayName;
+                    user.Title = request.Title ?? user.Title;
                     user.Dependency = request.Dependency ?? String.Empty;
                     user.Bio = request.Bio ?? String.Empty;
                     user.Experience = request.Experience ?? String.Empty;

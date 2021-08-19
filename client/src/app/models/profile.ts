@@ -37,7 +37,10 @@ export interface IProfile {
     blogCount: number,
     interactionCount: number,
     videoUrl: string,
-    regDate: Date
+    regDate: Date,
+    title: string,
+    hasPhoneNumber:boolean,
+    hasVideo: boolean
 
 }
 
@@ -182,6 +185,7 @@ export class ProfileFormValues implements IProfileFormValues{
     categories: ICategory[] = [];
     subCategories: ISubCategory[] = [];
     displayName: string = '';
+    title: string = '';
     bio: string= '';
     experienceYear: number = 0;
     experience:string = '';

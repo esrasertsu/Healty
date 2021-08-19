@@ -52,6 +52,10 @@ body {
 
 }
 
+.ui.horizontal.label, .ui.horizontal.labels .label{
+  min-width: 2em !important;
+}
+
 .segmentHeader {
   background: rgb(38, 58, 94) !important;
 
@@ -90,17 +94,19 @@ body {
 
 .ellipsis {
   overflow: hidden;
-  max-height: 65px;
+  height: 40px;
   line-height: 20px;
   margin-bottom: 5px;
-
+  text-align: center;
+ 
 }
 
 .ellipsis:before {
 	content:"";
 	float: left;
 	width: 5px; 
-  max-height: 65px; }
+  height: 40px; 
+}
 		
 
 .ellipsis:after {
@@ -109,6 +115,7 @@ body {
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     position: relative;
+    text-align: right;
     width: 2em;
     background-size: 100% 100%;
     background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
@@ -310,9 +317,78 @@ p.baseline-pricing__value{
 .activityListItem{
     width: 100% !important;
 }
-
+.activityDetails_GridSegment .segment.attached{
+  border: none !important;
+}
 .activityDetailLabel{
-  color:#36997e
+  color:rgb(38, 58, 94)
+}
+
+.activityDetail_payment{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+
+.activityDetail_payment_footer,.activityDetail_payment_title,.activityDetail_payment_calculation{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.activityDetail_payment_footer .price,.activityDetail_payment_title{
+  color: #263a5e;
+
+}
+
+.activityDetail_payment_calculation{
+  margin-top: 15px;
+    border-top: 1px solid rgba(34,36,38,.15);
+    border-bottom: 1px solid rgba(34,36,38,.15);
+    padding: 5px 0;
+    font-size: 15px;
+    color: #263a5e;
+}
+
+.activityDetail_payment_calculation .price{
+font-size: 17px;
+}
+
+
+.activityDetail_payment_footer .price{
+  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  font-weight: normal;
+  color: #263a5e;
+  font-size: 22px;
+}
+
+
+.activityDetail_payment_calender{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #263a5e;
+  margin-bottom: 10px;
+
+}
+
+.activityDetail_title{
+  margin: 10px 0 10px 0;
+  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+    font-weight: normal;
+    color: #263a5e;
+    font-size: 17px;
+}
+.activityDetail_payment_calenderIcon{
+  color: #263a5e;
+
+}
+
+.activityDetail_payment .ui.selection.dropdown{
+  min-width: 0 !important;
+  margin-left: 20px;
 }
 .ui.items>.item>.content:after {
   display: none !important;
@@ -633,6 +709,7 @@ a.ui.card:hover {
 .profileHeader_label{
   box-shadow:2px 8px 14px 0px #bcbdbdcc, 0 0 0 1px #d4d4d557;
 }
+
 .profileHeader_videoPlay{
   color: #4d4d4d;
   margin-top: 15px;
@@ -762,6 +839,11 @@ a.ui.card:hover {
 .ui.grid.blogPageGrid h2{
   font-size: 1.2rem;
   margin-top: 0;
+}
+
+.allProfileCards .profileHeader_Name{
+  font-size: 1.11571429em !important
+
 }
 }
 

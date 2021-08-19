@@ -24,7 +24,7 @@ const ActivityList: React.FC = () => {
       activitiesByDate.map(([group, activities]) =>(
         <Fragment key={group}>
            <Label size='large' className={"activityDateLabels "} >
-              {format(new Date(group), 'dd MMMM, eeee',{locale: tr})}
+              {format(new Date(group), 'dd MMMM yyyy, eeee',{locale: tr})}
            </Label>
         <Item.Group divided>
           {activities.map((activity) => (

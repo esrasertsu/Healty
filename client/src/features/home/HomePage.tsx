@@ -214,7 +214,7 @@ const HomePage = () => {
            <Header as='h1'  style={{fontSize: '34px',  textAlign:'center', width:"100%" }}>
                 Doğru uzmanı tam yerinde keşfet
                 </Header>
-                <p style={{ fontSize: '1.5rem', color: "#1a2b49" }}>
+                <p style={{ fontSize: '1.3rem', color: "#1a2b49" }}>
                 Spor koçundan diyetisyene, meditasyon eğitmeninden psikoloğa ihtiyacın olan en doğru uzmanı en kolay şekilde bulabileceğin yerdesin. 
                 Üstelik istediğin lokasyonda ya da online olarak aktivitelere katılabilir, eğitmenlerin paylaştıkları blogları okuyarak ilgilendiğin alanda bilgi sahibi olabilirsin. 
                 </p>

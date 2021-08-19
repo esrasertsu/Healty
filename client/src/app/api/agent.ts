@@ -82,6 +82,7 @@ const requests = {
         let formData = new FormData();
        debugger;
         profile.displayName && formData.append('DisplayName', profile.displayName);
+        profile.title && formData.append('Title', profile.title);
         profile.experience && profile.experience!=="" && formData.append('Experience', profile.experience);
         profile.bio && profile.bio !== undefined && formData.append('Bio', profile.bio);
         formData.append('ExperienceYear', profile.experienceYear ? profile.experienceYear.toString(): "0");

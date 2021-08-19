@@ -27,7 +27,7 @@ interface IProps extends RouteComponentProps<RouteParams> {}
 const ProfilePage: React.FC<IProps> = ({match}) => {
 
     const rootStore = useContext(RootStoreContext);
-    const {setProfileNull,loadingProfile, loadProfile, loadingBlogs, loadingComments, profile, follow,
+    const {setProfileNull,loadingProfile, loadProfile, loadingBlogs, loadingComments, loadingReferencePics, profile, follow,
          unfollow, isCurrentUser, loading,setActiveTab, setProfileForm} = rootStore.profileStore;
 
     useEffect(() => {
@@ -69,7 +69,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
             </Grid.Column>
             <Grid.Column width={11} style={{marginTop:"40px"}}>
                   <ProfileContent profile={profile!} setActiveTab={setActiveTab}/>   
-                  {(loadingComments || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileRefPlaceholder />: ( profile!.role === "Trainer" && <ProfileReferances /> )}
+                  {(loadingReferencePics || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileRefPlaceholder />: ( profile!.role === "Trainer" && <ProfileReferances /> )}
                 {(loadingBlogs || profile!.userName !== match.params.username) && profile!.role === "Trainer"  ?   <ProfileBlogPlaceHolder />: ( profile!.role === "Trainer" && <ProfileBlogs />)}
                 {(loadingComments || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileCommentPlaceHolder />: ( profile!.role === "Trainer" && <ProfileComments /> )}
                  

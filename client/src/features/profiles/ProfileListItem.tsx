@@ -10,10 +10,11 @@ import { LoginForm } from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
 
 interface IProps {
-    profile: IProfile
+    profile: IProfile,
+    popular?: boolean
 }
 
- const ProfileListItem: React.FC<IProps> = ({profile}) => {
+ const ProfileListItem: React.FC<IProps> = ({profile,popular}) => {
 
   const rootStore = useContext(RootStoreContext);
   const {setLoadingProfile} = rootStore.profileStore;
@@ -80,11 +81,11 @@ interface IProps {
       </div>
      
       <Card.Content className="profileCard_Content">
-        <Card.Header style={{textAlign:"center"}}>{profile.displayName}</Card.Header>
-        <div style={{textAlign:"center", marginBottom:"5px"}}>Kişisel Gelişim Uzmanı</div>
+        <Card.Header className="profileHeader_Name" style={{textAlign:"center"}}>{profile.displayName}</Card.Header>
+       {profile.title &&  <div style={{textAlign:"center", marginBottom:"5px"}}>{profile.title}</div>}
         <div style={{textAlign:"center", marginBottom:"15px"}}>
-          <Icon size="large" name="phone" color="green" />
-          <Icon size="large" name="envelope" style={{color:"#263a5e"}} />
+          {profile.hasPhoneNumber && <Icon name="phone" color="green" /> }
+          <Icon name="envelope" style={{color:"#263a5e"}} />
         </div>
         <Card.Description key={profile.userName+Math.random()+"desc"}>
           <div key={profile.userName+Math.random()+"sub"} className=" ellipsis">
@@ -96,9 +97,9 @@ interface IProps {
             </div>
             {/* <div key={profile.userName+Math.random()+"acc"} className="profileListItem_subCats"> <Icon key={profile.userName+Math.random()+"accIcon"} name="bolt" /> {profile.accessibilities && profile.accessibilities.length > 0 ? 
           profile.accessibilities.map<React.ReactNode>(s => <span key={profile.userName+Math.random() +"_accessibility"} id={profile.userName+Math.random() +"_accessibility"}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
-            : "Bilgi yok"}  </div> */}
+            : "Bilgi yok"}  </div> 
             <div className="profileListItem_subCats"> <Icon name="spinner" /> {profile.experienceYear > 0 ? profile.experienceYear +"yıl tecrübe" : "" } </div> 
-
+*/}
         </Card.Description>
       </Card.Content>
       <Card.Content extra>

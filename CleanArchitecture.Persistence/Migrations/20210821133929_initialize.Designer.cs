@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitecture.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210815000421_Initialize")]
-    partial class Initialize
+    [Migration("20210821133929_initialize")]
+    partial class initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,6 +36,9 @@ namespace CleanArchitecture.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ActivityJoinDetailsId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Address")
@@ -69,6 +72,8 @@ namespace CleanArchitecture.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActivityJoinDetailsId");
 
                     b.HasIndex("CityId");
 
@@ -115,6 +120,29 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Domain.ActivityJoinDetails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ActivityUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MeetingId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MeetingPsw")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Zoom")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ActivityJoinDetails");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.ActivityLevels", b =>
@@ -223,6 +251,9 @@ namespace CleanArchitecture.Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -541,6 +572,9 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<bool>("IsHost")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("ShowName")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("AppUserId", "ActivityId");
 
                     b.HasIndex("ActivityId");
@@ -795,6 +829,10 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.Activity", b =>
                 {
+                    b.HasOne("CleanArchitecture.Domain.ActivityJoinDetails", "ActivityJoinDetails")
+                        .WithMany()
+                        .HasForeignKey("ActivityJoinDetailsId");
+
                     b.HasOne("CleanArchitecture.Domain.City", "City")
                         .WithMany()
                         .HasForeignKey("CityId");

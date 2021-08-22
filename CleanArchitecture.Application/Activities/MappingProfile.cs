@@ -18,6 +18,7 @@ namespace CleanArchitecture.Application.Activities
                 .ForMember(dest => dest.DisplayName, o => o.MapFrom(s => s.AppUser.DisplayName))
                 .ForMember(dest => dest.Image, o => o.MapFrom(s => s.AppUser.Photos.FirstOrDefault(x => x.IsMain).Url))
                 .ForMember(dest => dest.UserRole, o => o.MapFrom(s => s.AppUser.Role))
+                .ForMember(dest => dest.ShowName, o => o.MapFrom(s => s.ShowName))
                 .ForMember(dest => dest.IsFollowing, o => o.MapFrom<FollowingResolver>());
 
             CreateMap<ActivityCategories, CategoryDto>()

@@ -10,5 +10,7 @@ namespace CleanArchitecture.Domain
         public virtual Activity Activity { get; set; }
         public DateTime DateJoined  { get; set; }
         public bool IsHost { get; set; }
+        public bool ShowName { get; set; }
+
     }
 }

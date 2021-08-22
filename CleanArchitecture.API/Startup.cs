@@ -10,6 +10,7 @@ using CleanArchitecture.Persistence;
 using FluentValidation.AspNetCore;
 using Infrastructure.Photos;
 using Infrastructure.Security;
+using Infrastructure.Zoom;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -54,7 +55,7 @@ namespace CleanArchitecture.API
                     policy.AllowAnyHeader()
                     .AllowAnyMethod()
                     .WithExposedHeaders("WWW-Authenticate")
-                    .WithOrigins("http://localhost:3000")
+                    .WithOrigins("http://localhost:3000", "http://localhost:9999")
                     .AllowCredentials();
                 });
             });
@@ -135,8 +136,11 @@ namespace CleanArchitecture.API
             services.AddScoped<IVideoAccessor, VideoAccessor>();
             services.AddScoped<IActivityReader, ActivityReader>();
             services.AddScoped<IDocumentAccessor, DocumentAccessor>();
+            services.AddScoped<IZoomAccessor, ZoomAccessor>();
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
+            services.Configure<ZoomSettings>(Configuration.GetSection("Zoom"));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

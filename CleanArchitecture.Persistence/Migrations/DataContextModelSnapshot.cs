@@ -36,6 +36,9 @@ namespace CleanArchitecture.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("ActivityJoinDetailsId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Address")
                         .HasColumnType("TEXT");
 
@@ -67,6 +70,8 @@ namespace CleanArchitecture.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActivityJoinDetailsId");
 
                     b.HasIndex("CityId");
 
@@ -113,6 +118,29 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Domain.ActivityJoinDetails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ActivityUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MeetingId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MeetingPsw")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Zoom")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ActivityJoinDetails");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.ActivityLevels", b =>
@@ -542,6 +570,9 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<bool>("IsHost")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("ShowName")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("AppUserId", "ActivityId");
 
                     b.HasIndex("ActivityId");
@@ -796,6 +827,10 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.Activity", b =>
                 {
+                    b.HasOne("CleanArchitecture.Domain.ActivityJoinDetails", "ActivityJoinDetails")
+                        .WithMany()
+                        .HasForeignKey("ActivityJoinDetailsId");
+
                     b.HasOne("CleanArchitecture.Domain.City", "City")
                         .WithMany()
                         .HasForeignKey("CityId");

@@ -34,6 +34,8 @@ export default class ActivityStore {
     @observable loadingActivity = false;
     @observable levelList: ILevel[] = [];
     @observable loadingLevels = false;
+    @observable generatingToken = false;
+    @observable zoomResponse = "";
     @observable clearPredicateBeforeSearch= false;
     @observable submitting = false;
     @observable target = '';
@@ -440,6 +442,32 @@ export default class ActivityStore {
             runInAction(()=>{
                 this.loadingLevels = false;
             })
+            console.log(error);
+        }
+    }
+
+
+    @action generateZoomToken = async (meetingId:string,role:string) =>{
+
+        const params = new URLSearchParams();
+        params.append('activityId', this.activity!.id);
+        params.append('meetingId', meetingId);
+        params.append('role', role);
+
+        this.generatingToken = true;
+
+        try {
+            const response = await agent.Zoom.generateToken(params);
+            runInAction(()=>{
+                this.zoomResponse = response;
+                this.generatingToken = false;
+            })
+            return response;
+        } catch (error) {
+            runInAction(()=>{
+                this.generatingToken = false;
+            })
+            return "";
             console.log(error);
         }
     }

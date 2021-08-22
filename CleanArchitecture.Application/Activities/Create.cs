@@ -163,7 +163,8 @@ namespace CleanArchitecture.Application.Activities
                 {
                     AppUser = user,
                     IsHost = true,
-                    DateJoined = DateTime.Now
+                    DateJoined = DateTime.Now,
+                    ShowName = true
                 };
 
                 activity.UserActivities = new List<UserActivity>();

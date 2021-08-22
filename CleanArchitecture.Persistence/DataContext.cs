@@ -39,6 +39,8 @@ namespace CleanArchitecture.Persistence
         public DbSet<City> Cities { get; set; }
         public DbSet<Level> Levels { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
+        public DbSet<ActivityJoinDetails> ActivityJoinDetails { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder builder)

@@ -97,7 +97,7 @@ const WYSIWYGEditor:React.FC<IProps> = ({ input,  meta:{ touched, error} }) => {
                                onBlur={onBlur}
                                onFocus={onFocus}
                                 toolbar={{
-                                    options:  ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'image', 'remove', 'history']
+                                    options:  ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'image', 'remove', 'history']
                                 }}
                                 />
                                 {/* {

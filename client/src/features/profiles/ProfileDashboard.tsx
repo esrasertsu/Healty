@@ -116,7 +116,7 @@ const sixItem:SemanticWIDTHS = 6;
     return (
       <Fragment>
          <Container className="profileList_WelcomeMessage" style={{textAlign:"center"}}>
-             <h2 style={{fontWeight:400, color:"#263a5e"}}>Kullanıcıların En Beğendikleri ve Çok Daha Fazlası</h2>
+             <h2 style={{fontWeight:400, color:"#263a5e"}}>Kullanıcıların Tavsiye Ettikleri ve Çok Daha Fazlası</h2>
           </Container>
         {
           //  !isTablet &&

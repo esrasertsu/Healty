@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CleanArchitecture.Persistence.Migrations
 {
-    public partial class Initialize : Migration
+    public partial class initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,6 +17,21 @@ namespace CleanArchitecture.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Accessibilities", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ActivityJoinDetails",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Zoom = table.Column<bool>(nullable: false),
+                    ActivityUrl = table.Column<string>(nullable: true),
+                    MeetingId = table.Column<string>(nullable: true),
+                    MeetingPsw = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActivityJoinDetails", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -149,11 +164,18 @@ namespace CleanArchitecture.Persistence.Migrations
                     Date = table.Column<DateTime>(nullable: false),
                     CityId = table.Column<Guid>(nullable: true),
                     Venue = table.Column<string>(nullable: true),
-                    Address = table.Column<string>(nullable: true)
+                    Address = table.Column<string>(nullable: true),
+                    ActivityJoinDetailsId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Activities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Activities_ActivityJoinDetails_ActivityJoinDetailsId",
+                        column: x => x.ActivityJoinDetailsId,
+                        principalTable: "ActivityJoinDetails",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Activities_Cities_CityId",
                         column: x => x.CityId,
@@ -182,6 +204,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     DisplayName = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(nullable: true),
                     ExperienceYear = table.Column<decimal>(nullable: false),
                     Experience = table.Column<string>(nullable: true),
                     Dependency = table.Column<string>(nullable: true),
@@ -600,7 +623,8 @@ namespace CleanArchitecture.Persistence.Migrations
                     AppUserId = table.Column<string>(nullable: false),
                     ActivityId = table.Column<Guid>(nullable: false),
                     DateJoined = table.Column<DateTime>(nullable: false),
-                    IsHost = table.Column<bool>(nullable: false)
+                    IsHost = table.Column<bool>(nullable: false),
+                    ShowName = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -745,6 +769,11 @@ namespace CleanArchitecture.Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Activities_ActivityJoinDetailsId",
+                table: "Activities",
+                column: "ActivityJoinDetailsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Activities_CityId",
@@ -1016,6 +1045,9 @@ namespace CleanArchitecture.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "ActivityJoinDetails");
 
             migrationBuilder.DropTable(
                 name: "Cities");

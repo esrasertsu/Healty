@@ -8,13 +8,10 @@ import  ActivityDetailedChat  from './ActivityDetailedChat';
 import ActivityDetailedSideBar  from './ActivityDetailedSideBar';
 import ActivityDetailedInfo from './ActivityDetailedInfo';
 import { RootStoreContext } from '../../../app/stores/rootStore';
-import ActivityDetailsMap from './ActivityDetailsMap';
 import ActivityDetailPaymentSegment from './ActivityDetailPaymentSegment';
+import ActivityZoom from './ActivityZoom';
+import ActivityCountDown from './ActivityCountDown';
 
-const center = {
-    lat: 38.4237,
-    lng: 27.1428,
-  };
 interface DetailParams{
     id:string
 }
@@ -36,7 +33,7 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
 
     return (
       <Grid>
-          <Grid.Column width={10}>
+          <Grid.Column width={11}>
             <ActivityDetailedHeader activity={activity}/>
             <ActivityDetailedInfo activity={activity} />
 {
@@ -47,14 +44,23 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
 }
           </Grid.Column>
 
-          <Grid.Column width={6}>
+          <Grid.Column width={5}>
               <ActivityDetailedSideBar attendees={activity.attendees}/>
               {/* <ActivityDetailsMap centerLocation={center} /> */}
                 {
                   !activity.isGoing && !activity.isHost &&
                 (activity.attendancyLimit ===null ||activity.attendancyLimit ===0 || (activity.attendancyLimit && (activity.attendancyLimit > activity.attendees.length))) &&
                  <ActivityDetailPaymentSegment activity={activity} />
-                 }    
+                 }  
+                    
+                  {
+                  (activity.isGoing || activity.isHost) &&
+                 <ActivityZoom activity={activity} />
+                 }  
+                  {
+                  (activity.isGoing || activity.isHost) &&
+                 <ActivityCountDown activity={activity} />
+                 }   
           </Grid.Column>
       </Grid>
     )

@@ -49,7 +49,7 @@ const TrainerForm:React.FC = () =>{
         </List>
         </p>
         <p className="applicationConditions">
-        Dokumanların hazırsa haydi seni bekliyoruz <Icon style={{marginLeft:"5px"}} name="thumbs up outline"></Icon>
+        Dokümanların hazırsa haydi seni bekliyoruz <Icon style={{marginLeft:"5px"}} name="thumbs up outline"></Icon>
         </p> 
         <Header as="h3" className="applyButton" onClick={handleApplyButtonClick}>
         Başvur &gt;&gt;

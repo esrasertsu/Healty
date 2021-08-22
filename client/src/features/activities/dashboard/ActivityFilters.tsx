@@ -216,6 +216,9 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
 
   }
 
+  const handleCloseBanner = () =>{
+    document.getElementById("activityFilter_Banner")!.style.display = "none";
+  }
 
   return (
     <Fragment>
@@ -225,7 +228,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
       value={predicate.get('startDate') || new Date()} /> */}
       {!isTabletOrMobile && 
        <Segment className="dtPicker_Container_Style">
-       <p>Aktivite aradığınız tarih/saat aralığını giriniz.</p>
+       <div style={{marginBottom:"1em", fontSize:"16px",lineHeight:"20px"}}>Aktivite aradığınız tarih/saat aralığını giriniz.</div>
       <DateTimePicker
          value={predicate.get('startDate') || new Date()}
          onChange={(date)=> {
@@ -257,6 +260,19 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
        />
       </Segment>
       }
+
+{!isTabletOrMobile && 
+
+<Segment id="activityFilter_Banner" className="activityFilter_Banner"
+ style={{textAlign:"center"}}>
+   <Icon style={{marginTop:"-15px", position:"absolute", width:"85%"}} name="cancel" onClick={handleCloseBanner} />
+   <p style={{fontSize: "21px"}}>1 gün öncesine kadar yapılan iptal işlemlerinde %100 para iadesi</p>
+   <div style={{fontSize: "25px"}}>
+     <Icon name="thumbs up" />
+   </div>
+
+</Segment>
+}
     
    {  isLoggedIn &&
      <Menu vertical style={{ width: '100%'}}>

@@ -19,6 +19,7 @@ namespace CleanArchitecture.Domain
         public virtual City City { get; set; }
         public string Venue { get; set; }
         public string Address { get; set; }
+        public virtual ActivityJoinDetails ActivityJoinDetails { get; set; }
         public virtual ICollection<ActivityLevels> Levels { get; set; }
         public virtual ICollection<UserActivity> UserActivities { get; set; }
         public virtual ICollection<ActivityComment> Comments { get; set; }

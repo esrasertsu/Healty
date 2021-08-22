@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import { Segment, List, Item, Label,Image } from 'semantic-ui-react'
+import { Segment, List, Item, Label,Image, Header } from 'semantic-ui-react'
 import { IAttendee } from '../../../app/models/activity'
 import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -15,14 +15,14 @@ interface IProps{
               textAlign='center'
               style={{ border: 'none' }}
               attached='top'
-              secondary
               inverted
               className="segmentHeader"
 
             >
-              {attendees && attendees.length} {attendees && attendees.length === 1 ? 'Person' : 'People'} going
+             <Header>{attendees && attendees.length} Kişi Katılıyor </Header>
+
             </Segment>
-            <Segment secondary attached style={{ border: 'none'}}>
+            <Segment attached style={{  padding:"1em 0"}}>
             <Scrollbars
              frameBorder="2px" 
              style={{ 
@@ -35,7 +35,7 @@ interface IProps{
             autoHideTimeout={1000}
             autoHideDuration={200}
              >
-            <List relaxed divided style={{margin: "14px 29px 14px 14px"}}>
+            <List relaxed divided style={{margin: "0px 29px 14px 14px"}}>
                 {attendees.map((attendee) => (
                   <Item key={attendee.userName} style={{ position: 'relative' }}>
                  {attendee.isHost &&
@@ -47,7 +47,7 @@ interface IProps{
                     Host
                   </Label> 
                   }
-                  <Image size='tiny' src={attendee.image  || '/assets/user.png'} />
+                  <Image className="activityAttendees_Image" src={attendee.image  || '/assets/user.png'} />
                   <Item.Content verticalAlign='middle'>
                     <Item.Header as='h3'>
                       <Link to={`/profile/${attendee.userName}`}>{attendee.displayName}</Link>

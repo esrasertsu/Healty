@@ -17,6 +17,10 @@ namespace CleanArchitecture.Application.Activities
         public ICollection<CategoryDto>  Categories { get; set; }
         public ICollection<SubCategoryDto> SubCategories { get; set; }
         public bool Online { get; set; }
+        public bool Zoom { get; set; }
+        public string ActivityUrl { get; set; }
+        public string MeetingId { get; set; }
+        public string MeetingPsw { get; set; }
         public int AttendanceCount { get; set; }
         public int? AttendancyLimit { get; set; }
         public decimal? Price { get; set; }

@@ -16,6 +16,7 @@ namespace CleanArchitecture.Application.Activities
         public class Command : IRequest
         {
             public Guid Id { get; set; }
+            public bool ShowName { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -51,7 +52,8 @@ namespace CleanArchitecture.Application.Activities
                     Activity = activity,
                     AppUser = user,
                     IsHost = false,
-                    DateJoined = DateTime.Now
+                    DateJoined = DateTime.Now,
+                    ShowName = request.ShowName
                 };
 
                 _context.UserActivities.Add(attendance);

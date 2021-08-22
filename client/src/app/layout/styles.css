@@ -14,9 +14,10 @@
 
 body {
   background-color: #f8f7f791  !important;
-  font-family: AssistantRegular, Arial, Helvetica, sans-serif
+  font-family: AssistantRegular, Arial, Helvetica, sans-serif !important
   
 }
+
 .popup{
   font-family: AssistantRegular, Arial, Helvetica, sans-serif  !important;
   color: black !important;
@@ -231,6 +232,19 @@ h1, h2, h3, h4, h5 {
     line-height: 1rem !important;
 }
 
+.activityFilter_Banner{
+  box-shadow: 0 1px 2px 0 rgb(34 36 38 / 15%) !important;
+  border-radius: .28571429rem !important;
+    padding: 24px !important;
+    -webkit-font-smoothing: antialiased;
+    margin-bottom: 30px !important;
+    background-color: #005800 !important;
+    color: rgb(255, 255, 255) !important;
+    font-weight: 500 !important;
+    font-size: 1rem !important;
+    line-height: 1rem !important;
+}
+
 .dtPicker_Style{
   box-shadow: 0 1px 2px 0 rgb(34 36 38 / 15%);
         border-radius: .28571429rem;
@@ -293,6 +307,10 @@ h1, h2, h3, h4, h5 {
   color: #6d7688;
 }
 
+#zmmtg-root{
+  display: none;
+}
+
 .activityDateLabels{
   background-color: "#263a5e";
   color:"#fff"
@@ -319,11 +337,31 @@ p.baseline-pricing__value{
 }
 .activityDetails_GridSegment .segment.attached{
   border: none !important;
+  font-size: 16px;
 }
 .activityDetailLabel{
   color:rgb(38, 58, 94)
 }
 
+.activityDetail_zoom_info{
+  margin-top: 15px;
+    border-top: 1px solid rgba(34,36,38,.15);
+    border-bottom: 1px solid rgba(34,36,38,.15);
+    padding: 5px 0;
+    font-size: 15px;
+    color: #263a5e;
+}
+
+.activityDetail_zoom_title{
+  margin-bottom: 10px;
+}
+.activityDetail_zoom_info_warning{
+  margin-bottom: 10px;
+  color: rgb(211, 88, 32);
+  text-decoration: underline;
+  font-style: italic;
+
+}
 .activityDetail_payment{
   display: flex;
   flex-direction: row;
@@ -351,6 +389,7 @@ p.baseline-pricing__value{
     font-size: 15px;
     color: #263a5e;
 }
+
 
 .activityDetail_payment_calculation .price{
 font-size: 17px;
@@ -390,6 +429,58 @@ font-size: 17px;
   min-width: 0 !important;
   margin-left: 20px;
 }
+
+.activityAttendees_Image{
+  width: 55px;
+  height: auto;
+}
+.activityDetails_Countdown_Segment{
+  background-color: #f64f00  !important;
+  background-image: linear-gradient(#fc6901 ,#d34451,#d5107d)  !important;
+  color:#fff !important;
+  padding:3em !important;
+  border-radius: 1.285714rem !important;
+  border:none !important
+}
+.activityDetail_Countdown{
+   font-size: 15px;
+}
+.activityDetail_Countdown_Header{
+  color: #fff ;
+  font-size: 25px ;
+  text-align: left ;
+  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  line-height: 30px;
+  width: 96% !important;
+  margin: auto;
+}
+.activityDetail_Countdown_Statistic.day{
+  margin:1em !important
+}
+.activityDetail_Countdown_Statistic{
+  margin:1em 0.5em !important
+}
+.ui.statistic.activityDetail_Countdown_Statistic .value{
+  background: #fff !important;
+  border-radius: 1.285714rem !important;
+  color: #e25134 !important;
+  font-size: 27px !important;
+  padding: 15px;
+  margin-bottom: 10px;
+
+
+}
+.ui.statistic.activityDetail_Countdown_Statistic .label{
+  color:#fff !important;
+}
+.activityDetail_Countdown_StatisticsGroup{
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+ 
+}
+
 .ui.items>.item>.content:after {
   display: none !important;
 }
@@ -1114,10 +1205,7 @@ button, input, optgroup, select, textarea {
   font-size: 11px;
 }
 
-.profileHeader_content .starRating_Count,.profileHeader_content .starRating_Rating{
-   font-size: 14px;
-   color: #fff;
-}
+
 .starRating_Rating{
   font-size: 14px;
 }
@@ -1271,14 +1359,7 @@ button, input, optgroup, select, textarea {
     text-decoration: none;
 }
 
-.profieHeader_segment{
-  -webkit-box-shadow: none !important;
-  box-shadow: none !important;
-  border: none !important;
-  margin-left: calc(625px - 50vw) !important;
-    width: 100vw;
-    padding: 0 calc(50vw - 625px) !important;
-}
+
 .profile_segmentHeaders{
   border: none !important;
   border: none !important;
@@ -1297,6 +1378,39 @@ button, input, optgroup, select, textarea {
     margin-left: -0!important; 
      margin-right: -0!important; 
 }
+.profieHeader_segment_item{
+  margin-bottom: 15px;
+}
+.profileHeader_content .starRating_Count,.profileHeader_content .starRating_Rating{
+  font-size: 14px;
+  color: #1a2b49c2 !important;
+}
+}
+
+@media only screen and (min-width: 768px){
+  .profieHeader_segment{
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin-left: calc(625px - 50vw) !important;
+      width: 100vw;
+      padding: 0 calc(50vw - 625px) !important;
+  }
+  .profieHeader_userImage{
+     width: 175px;
+     height: 175px;
+  }
+  .profieHeader_displayName{
+    color:#fff !important;
+    text-shadow: 1.5px 1.5px #263a5e;
+  }
+  .profieHeader_starRating{
+    text-shadow: rgb(69 60 38) 1.5px 1.5px
+  }
+  .profileHeader_content .starRating_Count,.profileHeader_content .starRating_Rating{
+    font-size: 14px;
+    color: #fff;
+ }
 }
 
 /*end map page styles*/

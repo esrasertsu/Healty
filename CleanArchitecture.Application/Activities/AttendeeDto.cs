@@ -12,6 +12,7 @@ namespace CleanArchitecture.Application.Activities
         public bool IsHost { get; set; }
         public string UserRole { get; set; }
         public bool IsFollowing { get; set; }
+        public bool ShowName { get; set; }
 
     }
 }

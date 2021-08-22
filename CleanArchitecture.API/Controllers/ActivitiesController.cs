@@ -50,9 +50,9 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPost("{id}/attend")]
-        public async Task<ActionResult<Unit>> Attend(Guid id)
+        public async Task<ActionResult<Unit>> Attend(Guid id, bool showName)
         {
-            return await Mediator.Send(new Attend.Command {Id = id});
+            return await Mediator.Send(new Attend.Command {Id = id, ShowName = showName});
         }
 
         [HttpDelete("{id}/attend")]
@@ -68,7 +68,14 @@ namespace CleanArchitecture.API.Controllers
         {
             return await Mediator.Send(new ListLevels.Query());
         }
-
+        
+        [HttpPut("{id}/joindetails")]
+        [Authorize(Policy = "IsActivityHost")]
+        public async Task<ActionResult<Unit>> UpdateJoinDetails(Guid Id, [FromForm] UpdateJoinDetails.Command command)
+        {
+            command.Id = Id;
+            return await Mediator.Send(command);
+        }
 
     }
 }

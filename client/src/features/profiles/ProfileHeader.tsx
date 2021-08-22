@@ -132,18 +132,19 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
       <Grid stackable>
         <Grid.Column width={12}>
           <Item.Group>
-            <Item style={{marginTop:"-105px"}}>
+            <Item className="profieHeader_segment_item" style={{marginTop:"-112px"}}>
               <Item.Image
                 avatar
                 size='small'
                 src={profile.image || '/assets/user.png'}
-                style={{border: "4px solid #fff", width:"175px", height:"175px"}}
+                className="profieHeader_userImage"
+                style={{border: "4px solid #fff"}}
               />
               <Item.Content verticalAlign='middle' className="profileHeader_content">
                 <Grid.Row>
-                  <Header as='h1' style={{color:"#fff", marginBottom:"5px", textShadow: "1.5px 1.5px #263a5e"}}>{profile.displayName}</Header>
+                  <Header as='h1' className="profieHeader_displayName" style={{ marginBottom:"5px"}}>{profile.displayName}</Header>
                   {profile!.role === "Trainer" && 
-                  <div style={{marginBottom:"10px", textShadow: "rgb(69 60 38) 1.5px 1.5px"}}>
+                  <div className="profieHeader_starRating" style={{marginBottom:"10px"}}>
                     <StarRating rating={profileRating} editing={false} key={"header"} count={profile.starCount} showCount={true}/>
                   </div>
                     }

@@ -11,6 +11,7 @@ import { ICity } from '../models/location';
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
+
 axios.interceptors.request.use((config) => {
     const token = window.localStorage.getItem('jwt');
     if(token) config.headers.Authorization = `Bearer ${token}`;
@@ -324,6 +325,13 @@ const Documents = {
     upload: (file:any, onUploadProgress:any, username:string):Promise<any> => requests.uploadFile(`/document/${username}`, file, onUploadProgress, username)
 
 }
+
+const Zoom = {
+    generateToken: (params: URLSearchParams): Promise<string> => 
+            axios.get(`/zoom`, {params:params}).then(sleep(1000)).then(responseBody),
+    
+}
+
 export default {
     Activities,
     User,
@@ -332,5 +340,6 @@ export default {
     Categories,
     Messages,
     Cities,
-    Documents
+    Documents,
+    Zoom
 }

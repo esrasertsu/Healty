@@ -52,15 +52,15 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
                 (activity.attendancyLimit ===null ||activity.attendancyLimit ===0 || (activity.attendancyLimit && (activity.attendancyLimit > activity.attendees.length))) &&
                  <ActivityDetailPaymentSegment activity={activity} />
                  }  
-                    
+                   {
+                  (activity.isGoing || activity.isHost) &&
+                 <ActivityCountDown activity={activity} />
+                 }   
                   {
                   (activity.isGoing || activity.isHost) &&
                  <ActivityZoom activity={activity} />
                  }  
-                  {
-                  (activity.isGoing || activity.isHost) &&
-                 <ActivityCountDown activity={activity} />
-                 }   
+                   
           </Grid.Column>
       </Grid>
     )

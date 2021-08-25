@@ -102,7 +102,8 @@ namespace CleanArchitecture.Application.Activities
                 City = _mapper.Map<City, CityDto>(activity.City),
                 Venue = activity.Venue,
                 Comments = _mapper.Map<ICollection<ActivityComment>, ICollection<ActivityCommentDto>>(activity.Comments),
-                Videos = activity.Videos
+                Videos = activity.Videos,
+                ActivityJoinDetails = activity.ActivityJoinDetails
             };
 
                 return activityDto;

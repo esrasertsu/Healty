@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { history } from '../..';
 import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
-import { ActivityFormValues, IActivity, IActivityFormValues, IActivityMapItem, ILevel } from '../models/activity';
+import { ActivityFormValues, ActivityOnlineJoinInfo, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, ILevel } from '../models/activity';
 import { RootStore } from './rootStore';
 
 const LIMIT = 10;
@@ -35,6 +35,7 @@ export default class ActivityStore {
     @observable levelList: ILevel[] = [];
     @observable loadingLevels = false;
     @observable generatingToken = false;
+    @observable submittingJoinInfo = false;
     @observable zoomResponse = "";
     @observable clearPredicateBeforeSearch= false;
     @observable submitting = false;
@@ -49,6 +50,7 @@ export default class ActivityStore {
     @observable page = 0;
     @observable predicate = new Map();
     @observable activityForm: IActivityFormValues = new ActivityFormValues();
+    @observable activityOnlineJoinInfo: IActivityOnlineJoinInfo = new ActivityOnlineJoinInfo();
 
 
     /* Aktivite Filtre observeleri */
@@ -61,6 +63,7 @@ export default class ActivityStore {
     @observable activeUserPreIndex = 0;
 
     @observable isOnline = false;
+
 
     @action setActiveIndex = (index:number) =>{
         this.activeIndex = index;
@@ -85,6 +88,7 @@ export default class ActivityStore {
     @action setIsOnline = (bool : boolean) =>{
         this.isOnline = bool;
     }
+  
     /* ---- */
 
     
@@ -97,6 +101,9 @@ export default class ActivityStore {
     }
     @action setActivityForm = (activity: IActivityFormValues) => {
         this.activityForm = activity;
+    }
+    @action setActivityOnlineJoinInfoForm = (activity: IActivityOnlineJoinInfo) => {
+        this.activityOnlineJoinInfo = activity;
     }
 
     @action setPredicate = (predicate:string, value:string | Date| string[]| boolean) => {
@@ -471,5 +478,30 @@ export default class ActivityStore {
             console.log(error);
         }
     }
+
+    @action updateOnlineJoinInfo = async (form: IActivityOnlineJoinInfo) =>{
+        this.submittingJoinInfo = true;
+        try {
+            form.id = this.activity!.id;
+            const result = await agent.Activities.editOnlineJoinInfo(form);
+            runInAction('Updating join details', () => {
+                this.submittingJoinInfo = false;
+                this.activity!.activityJoinDetails = new ActivityOnlineJoinInfo();
+                this.activity!.activityJoinDetails.activityUrl = form.activityUrl;
+                this.activity!.activityJoinDetails.meetingId = form.meetingId;
+                this.activity!.activityJoinDetails.meetingPsw = form.meetingPsw;
+                this.activity!.activityJoinDetails.zoom = form.zoom;
+
+
+       });
+        } catch (error) {
+            runInAction('Updating join details error', () => {
+                this.submittingJoinInfo = false;
+            });
+            toast.error('Problem updating join details');
+            console.log(error);
+        }
+    };
+
 
 }

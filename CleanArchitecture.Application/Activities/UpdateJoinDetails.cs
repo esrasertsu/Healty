@@ -48,6 +48,7 @@ namespace CleanArchitecture.Application.Activities
                 if (activity == null)
                     throw new RestException(HttpStatusCode.NotFound, new { activity = "Not Found" });
 
+                activity.ActivityJoinDetails = new ActivityJoinDetails();
                 activity.ActivityJoinDetails.ActivityUrl = request.ActivityUrl ?? activity.ActivityJoinDetails.ActivityUrl;
                 activity.ActivityJoinDetails.MeetingId = request.MeetingId ?? activity.ActivityJoinDetails.MeetingId;
                 activity.ActivityJoinDetails.MeetingPsw = request.ActivityUrl ?? activity.ActivityJoinDetails.MeetingPsw;

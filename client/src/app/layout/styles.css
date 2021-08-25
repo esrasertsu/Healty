@@ -410,6 +410,7 @@ font-size: 17px;
   align-items: center;
   color: #263a5e;
   margin-bottom: 10px;
+  justify-content: space-between;
 
 }
 
@@ -434,9 +435,18 @@ font-size: 17px;
   width: 55px;
   height: auto;
 }
+
+.activityJoinInfo_formfields{
+  margin:20px 0;
+}
+
+label{
+  color:#1a2b49
+}
 .activityDetails_Countdown_Segment{
   background-color: #f64f00  !important;
-  background-image: linear-gradient(#fc6901 ,#d34451,#d5107d)  !important;
+  background-image:linear-gradient(#fc6901 ,#b23e49,#272666)  !important;
+   /* linear-gradient(#fc6901 ,#d34451,#d5107d)  !important; */
   color:#fff !important;
   padding:3em !important;
   border-radius: 1.285714rem !important;
@@ -444,6 +454,11 @@ font-size: 17px;
 }
 .activityDetail_Countdown{
    font-size: 15px;
+}
+.editJoinInfoBtn{
+  margin-top: 20px !important;
+    background: rgb(38, 58, 94) !important;
+    color: #fff !important;
 }
 .activityDetail_Countdown_Header{
   color: #fff ;

@@ -7,6 +7,7 @@ import tr  from 'date-fns/locale/tr'
 import { format } from 'date-fns';
 import Countdown from 'react-countdown';
 import { action } from 'mobx';
+import ActivityJoinInfoForm from './ActivityJoinInfoForm';
 
 
 const meetConfig = {
@@ -26,6 +27,7 @@ const Completionist = () => <span>You are good to go!</span>;
     const rootStore = useContext(RootStoreContext);
     const { generateZoomToken } = rootStore.activityStore;
     const { user } = rootStore.userStore;
+    const {openModal, closeModal} = rootStore.modalStore;
 
   //const initiateMeeting = (ZoomMtg: any,signature:string) => {
 
@@ -100,6 +102,12 @@ const Completionist = () => <span>You are good to go!</span>;
 
   }
 
+
+  const handleEditJoinInfo = () => {
+    openModal("Video Yükleme",<ActivityJoinInfoForm closeModal={closeModal} />,false,null)
+
+  }
+
     return (<>
         {
            <>
@@ -119,23 +127,35 @@ const Completionist = () => <span>You are good to go!</span>;
                  <h4 className="activityDetail_title">{activity.title}</h4>
                  </div>
             <div className="activityDetail_payment_calender" style={{marginBottom:"25px"}}>
+                <div>
                 <Icon size="big" name="calendar alternate" className="activityDetail_payment_calenderIcon" />
-            <span style={{fontSize:"15px"}}>{format(new Date(new Date(activity.date).valueOf() - 86400000),'dd MMMM yyyy, eeee',{locale: tr})} -  { activity.date && format(activity.date, 'H:mm',{locale: tr})} </span>
-              </div>   
-                <div className="activityDetail_zoom_info">
-                   
-                    <div className="activityDetail_zoom_info_warning">*Aşağıdaki "Katıl" butonu ile aktiviteye direk katılamıyorsan aktivite katılım detayları:</div>
-                    <div><b>Platform</b>: Zoom</div>
-                    <div>Meeting Id: 11s5512154</div>
-                    <div>Password: 5441</div>
-                    <div>Url: <a href="https://zoomus.com/kjsdasdasdasdasdkg" target="_blank" style={{textDecoration:"underline",color: "#263a5e"}}>https://zoomus.com/kjsdasdasdasdasdkg</a></div>
+            <span style={{fontSize:"15px"}}>Tarih: {format(new Date(new Date(activity.date).valueOf() - 86400000),'dd MMMM yyyy, eeee',{locale: tr})} </span>
+                </div>
+                <div>
+                <Icon size="big" name="clock outline" className="activityDetail_payment_calenderIcon" />
+            <span style={{fontSize:"15px"}}>Saat: { activity.date && format(activity.date, 'H:mm',{locale: tr})} </span>
 
                 </div>
+           
+              </div>   
+                <div className="activityDetail_zoom_info">
+                {activity.activityJoinDetails && activity.activityJoinDetails.zoom &&
+                    <div className="activityDetail_zoom_info_warning">*Aşağıdaki "Katıl" butonu ile aktiviteye direk katılamıyorsan aktivite katılım detayları:</div>
+                 }
+                  <div><b>Platform</b>:{activity.activityJoinDetails && activity.activityJoinDetails.zoom && "Zoom"}</div>
+                    <div>Meeting Id: {activity.activityJoinDetails ? activity.activityJoinDetails.meetingId : "Belirtilmemiş"}</div>
+                    <div>Password: {activity.activityJoinDetails ? activity.activityJoinDetails.meetingPsw: "Belirtilmemiş"}</div>
+                    <div>Url: <a href={activity.activityJoinDetails && activity.activityJoinDetails.activityUrl} target="_blank" style={{textDecoration:"underline",color: "#263a5e"}}>{activity.activityJoinDetails ? activity.activityJoinDetails.activityUrl: "Belirtilmemiş"}</a></div>
+
+                </div>
+               {activity.isHost &&   <Button className="editJoinInfoBtn" content="Katılım Detaylarını Düzenle" onClick={handleEditJoinInfo} />} 
 
             </Segment>
             <Segment clearing attached='bottom' style={{backgroundColor:"#e8e8e8d1", display:"flex", justifyContent:"flex-end"}}>
+            {activity.activityJoinDetails && activity.activityJoinDetails.zoom &&
                <Button color="green" onClick={handleJoinMeeting} content={"Katıl"} icon="video" labelPosition="right"></Button>
-            </Segment>
+            }
+               </Segment>
             </>
           
         }

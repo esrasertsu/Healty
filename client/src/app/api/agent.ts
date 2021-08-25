@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { IActivitiesEnvelope, IActivity, IActivityFormValues, ILevel } from '../models/activity';
+import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, ILevel } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { ITrainerFormValues, IUser, IUserFormValues } from '../models/user';
@@ -251,6 +251,7 @@ const Activities = {
     create: (activity: IActivityFormValues): Promise<IActivity> => requests.createActivity(`/activities/`,activity.title!, activity.description!,
     activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,
     activity.cityId!,activity.venue!, activity.online!,activity.attendanceCount!, activity.attendancyLimit!,activity.price!,activity.photo!,activity.address!),
+    editOnlineJoinInfo: ( form : IActivityOnlineJoinInfo) => requests.put(`/activities/${form.id}/joindetails`, form),
 
 }
 

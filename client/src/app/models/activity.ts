@@ -27,7 +27,9 @@ export interface IActivity {
     online: boolean,
     photos: IPhoto[],
     videos: IPhoto[],
-    mainImage: IPhoto
+    mainImage: IPhoto,
+    activityJoinDetails: IActivityOnlineJoinInfo
+
 }
 export interface ILevel {
     key: string;
@@ -172,3 +174,22 @@ export interface IActivityLocation {
     lng : number
 }
 
+
+export interface IActivityOnlineJoinInfo {
+    id: string;
+    zoom: boolean;
+    activityUrl?: string;
+    meetingId?: string;
+    meetingPsw?: string;
+
+}
+
+export class ActivityOnlineJoinInfo implements IActivityOnlineJoinInfo {
+
+    id: string = "";
+    zoom: boolean = false;
+    activityUrl? : string = undefined;
+    meetingId? :string = undefined;
+    meetingPsw? :string = undefined;
+
+}

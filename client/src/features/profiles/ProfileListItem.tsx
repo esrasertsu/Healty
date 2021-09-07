@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Card, Image, Icon, Grid, Label, Modal} from 'semantic-ui-react';
+import { Card, Image, Icon, Grid, Label, Modal, Popup} from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { history } from '../../index'
 import { RootStoreContext } from '../../app/stores/rootStore';
@@ -83,23 +83,51 @@ interface IProps {
       <Card.Content className="profileCard_Content">
         <Card.Header className="profileHeader_Name" style={{textAlign:"center"}}>{profile.displayName}</Card.Header>
        {profile.title &&  <div style={{textAlign:"center", marginBottom:"5px"}}>{profile.title}</div>}
-        <div style={{textAlign:"center", marginBottom:"15px"}}>
+        {/* <div style={{textAlign:"center", marginBottom:"15px"}}>
           {profile.hasPhoneNumber && <Icon name="phone" color="green" /> }
           <Icon name="envelope" style={{color:"#263a5e"}} />
-        </div>
+        </div> */}
         <Card.Description key={profile.userName+Math.random()+"desc"}>
-          <div key={profile.userName+Math.random()+"sub"} className=" ellipsis">
+        <Popup
+        content={profile.subCategories && profile.subCategories.length> 0 ?
+          profile.subCategories.map<React.ReactNode>(s => <span key={profile.userName+Math.random()+"subspan"}>{s.text}</span>).reduce((prev, cur) => [prev, ', ', cur])
+          : "Bilgi yok"}
+        key={profile.userName+Math.random()+"subPopover"}
+        trigger={ <div key={profile.userName+Math.random()+"sub"} className=" ellipsis">
            
-            {profile.subCategories && profile.subCategories.length> 0 ?
-            profile.subCategories.map<React.ReactNode>(s => <span key={profile.userName+Math.random()+"subspan"}>{s.text}</span>).reduce((prev, cur) => [prev, ', ', cur])
-            : "Bilgi yok"
-          }
-            </div>
-            {/* <div key={profile.userName+Math.random()+"acc"} className="profileListItem_subCats"> <Icon key={profile.userName+Math.random()+"accIcon"} name="bolt" /> {profile.accessibilities && profile.accessibilities.length > 0 ? 
-          profile.accessibilities.map<React.ReactNode>(s => <span key={profile.userName+Math.random() +"_accessibility"} id={profile.userName+Math.random() +"_accessibility"}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
-            : "Bilgi yok"}  </div> 
+        {profile.subCategories && profile.subCategories.length> 0 ?
+        profile.subCategories.map<React.ReactNode>(s => <span key={profile.userName+Math.random()+"subspan"}>{s.text}</span>).reduce((prev, cur) => [prev, ', ', cur])
+        : "Bilgi yok"
+      }
+        </div>}
+      />
+         
+            <Popup
+        content={profile.accessibilities && profile.accessibilities.length > 0 ? 
+     
+          profile.accessibilities.map<React.ReactNode>(s =>
+             <span 
+             key={profile.userName+Math.random() +"_accessibility"} 
+             id={profile.userName+Math.random() +"_accessibility"}>{s.text}
+             </span>).reduce((prev, cur) => [prev, ',', cur])
+              : "Bilgi yok"}
+        key={profile.userName+Math.random() +"_accessibilityPopover"}
+        trigger={
+          <div key={profile.userName+Math.random()+"acc"} className="profileListItem_subCats"> <Icon key={profile.userName+Math.random()+"accIcon"} name="bolt" /> 
+          Erişilebilirlik:
+          {profile.accessibilities && profile.accessibilities.length > 0 ? 
+     
+     profile.accessibilities.map<React.ReactNode>(s =>
+        <span 
+        key={profile.userName+Math.random() +"_accessibility"} 
+        id={profile.userName+Math.random() +"_accessibility"}>{s.text}
+        </span>).reduce((prev, cur) => [prev, ',', cur])
+         : "Bilgi yok"}  </div> 
+        }
+      />
+            
             <div className="profileListItem_subCats"> <Icon name="spinner" /> {profile.experienceYear > 0 ? profile.experienceYear +"yıl tecrübe" : "" } </div> 
-*/}
+
         </Card.Description>
       </Card.Content>
       <Card.Content extra>

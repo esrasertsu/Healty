@@ -266,7 +266,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
 <Segment id="activityFilter_Banner" className="activityFilter_Banner"
  style={{textAlign:"center"}}>
    <Icon style={{marginTop:"-15px", position:"absolute", width:"85%"}} name="cancel" onClick={handleCloseBanner} />
-   <p style={{fontSize: "21px"}}>1 gün öncesine kadar yapılan iptal işlemlerinde %100 para iadesi</p>
+   <p style={{fontSize: "21px"}}>24 saat öncesine kadar yapılan iptal işlemlerinde %100 para iadesi</p>
    <div style={{fontSize: "25px"}}>
      <Icon name="thumbs up" />
    </div>

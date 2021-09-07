@@ -138,11 +138,11 @@ export default class CommonStore {
               .then(function (result) {
                 if (result.state === "granted") {
                   console.log(result.state);
-                  navigator.geolocation.getCurrentPosition((pos:any) => success(pos,setUserCity,cityRegistery,setUserCityPlaced));
+           //       navigator.geolocation.getCurrentPosition((pos:any) => success(pos,setUserCity,cityRegistery,setUserCityPlaced));
                   //If granted then you can directly call your function here
                 } else if (result.state === "prompt") {
                   console.log(result.state);
-                  navigator.geolocation.getCurrentPosition((pos:any) => success(pos,setUserCity,cityRegistery,setUserCityPlaced), errors, options);
+              //    navigator.geolocation.getCurrentPosition((pos:any) => success(pos,setUserCity,cityRegistery,setUserCityPlaced), errors, options);
                 } else if (result.state === "denied") {
                     debugger;
                     setUserCityPlaced(true);
@@ -160,35 +160,38 @@ export default class CommonStore {
 }
 
 function success(pos:any,setUserCity:any,cityRegistery:Map<any,any>,setUserCityPlaced:any) {
-    const geocoder = new google.maps.Geocoder();
+ 
+        const geocoder = new google.maps.Geocoder();
 
-    var crd = pos.coords;
-
-    var latlng = new window.google.maps.LatLng(crd.latitude, crd.longitude);
+        var crd = pos.coords;
     
-
-    geocoder!.geocode(
-      {'location': latlng}, 
-    function(results, status) {
-        if (status === "OK") {
-            var addressComponentLength =results.filter(x => x.types.includes("postal_code"))[0].address_components.length;
-            var cityName = results.filter(x => x.types.includes("postal_code"))[0].address_components[addressComponentLength-2].long_name;
-            //setUserCity(cityName);
-
-           // alert("city name is: " + cityName); 
-                 var userCity = Array.from(cityRegistery.values()).filter(x => x.text === cityName);
-                if (cityName && userCity.length > 0) {
-                    //setUserCity(userCity[0].key); BURAYI AÇARSAN ŞEHİR OTO SEÇİLİ GELİR
-                }
-                else  {
-                    alert("address not found");
-                }
-                setUserCityPlaced(true);
-        }
-         else {
-            alert("Geocoder failed due to: " + status);
-        }
-    })
+        var latlng = new window.google.maps.LatLng(crd.latitude, crd.longitude);
+        
+    
+        geocoder!.geocode(
+          {'location': latlng}, 
+        function(results, status) {
+            if (status === "OK") {
+                var addressComponentLength =results.filter(x => x.types.includes("postal_code"))[0].address_components.length;
+                var cityName = results.filter(x => x.types.includes("postal_code"))[0].address_components[addressComponentLength-2].long_name;
+                //setUserCity(cityName);
+    
+               // alert("city name is: " + cityName); 
+                     var userCity = Array.from(cityRegistery.values()).filter(x => x.text === cityName);
+                    if (cityName && userCity.length > 0) {
+                        //setUserCity(userCity[0].key); BURAYI AÇARSAN ŞEHİR OTO SEÇİLİ GELİR
+                    }
+                    else  {
+                        alert("address not found");
+                    }
+                    setUserCityPlaced(true);
+            }
+             else {
+                alert("Geocoder failed due to: " + status);
+            }
+        })
+    
+   
 
  }
 

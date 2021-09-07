@@ -88,7 +88,7 @@ const [open, setOpen] = React.useState(false)
           }
       </Modal.Content>
     </Modal>
-    <Tab.Pane>
+    <Tab.Pane style={{ borderRadius: "12px"}}>
       <Grid>
         <Grid.Column width={16} style={{ paddingBottom: 0 }}>
           {/* <Header floated="left" icon="image" content="Photos" /> */}

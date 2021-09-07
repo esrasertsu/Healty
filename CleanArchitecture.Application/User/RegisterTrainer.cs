@@ -29,11 +29,15 @@ namespace CleanArchitecture.Application.User
             public string Password { get; set; }
             public string Description { get; set; }
             public string Dependency { get; set; }
+            public string ExperienceYear { get; set; }
+            public string Title { get; set; }
+
+            //public string PhoneNumber { get; set; }
             public Guid CityId { get; set; }
             public List<Guid> CategoryIds { get; set; }
             public List<Guid> SubCategoryIds { get; set; }
+            public List<Guid> AccessibilityIds { get; set; }
             public List<IFormFile> Certificates { get; set; }
-            public IFormFile Photo { get; set; }
 
         }
 
@@ -91,7 +95,10 @@ namespace CleanArchitecture.Application.User
                         Role = Role.WaitingTrainer,
                         Bio = request.Description,
                         Dependency = request.Dependency,
-                        ApplicationDate = DateTime.Now
+                        ApplicationDate = DateTime.Now,
+                        ExperienceYear = Convert.ToInt32(request.ExperienceYear),
+                        Title = request.Title
+                        //PhoneNumber = request.PhoneNumber
                     };
 
                     var result = await _userManager.CreateAsync(user, request.Password);
@@ -99,21 +106,7 @@ namespace CleanArchitecture.Application.User
 
                     if (result.Succeeded)
                     {
-                        var photoUploaded = false;
                         var docsUploaded = false;
-
-                        var photoUploadResults = _photoAccessor.AddPhoto(request.Photo);
-
-                        var photo = new Photo
-                        {
-                            Url = photoUploadResults.Url,
-                            Id = photoUploadResults.PublicId,
-                            IsMain = true,
-                            IsCoverPic = false
-                        };
-                        user.Photos = new List<Photo>();
-                        user.Photos.Add(photo);
-                        photoUploaded = true;
 
                         user.Certificates = new List<Certificate>();
 
@@ -190,13 +183,36 @@ namespace CleanArchitecture.Application.User
                             }
                         }
 
+
+                        if (request.AccessibilityIds != null)
+                        {
+                            var userAccs = await _context.UserAccessibilities.Where(x => x.AppUserId == user.Id).ToArrayAsync();
+                            _context.UserAccessibilities.RemoveRange(userAccs);
+
+                            foreach (var accId in request.AccessibilityIds)
+                            {
+                                var acc = await _context.Accessibilities.SingleOrDefaultAsync(x => x.Id == accId);
+
+                                if (acc == null)
+                                    throw new RestException(HttpStatusCode.NotFound, new { Accessibility = "NotFound" });
+                                else
+                                {
+                                    var userAccessibility = new UserAccessibility()
+                                    {
+                                        Accessibility = acc,
+                                        AppUser = user
+                                    };
+                                    _context.UserAccessibilities.Add(userAccessibility);
+                                }
+                            }
+                        }
+
                         var success2 = await _context.SaveChangesAsync() > 0;
 
                         if (success2) return Unit.Value;
                         else
                         {
-                            if (photoUploaded)
-                                _photoAccessor.DeletePhoto(photoUploadResults.PublicId);
+                      
                             if (docsUploaded)
                             {
                                 foreach (var item in user.Certificates)

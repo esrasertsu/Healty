@@ -27,12 +27,12 @@ const ProfileMessage: React.FC<IProps> = ({profile}) => {
                     <Grid.Row>
                         <Grid.Column width={16} className="MessageForm">
                             <ProfileMessageForm></ProfileMessageForm>
-                            <Button
+                            {/* <Button
                             className="showNumberButton"
                             content='Telefonunu Göster'
                             labelPosition='right'
                             icon="phone"
-                        />
+                        /> */}
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

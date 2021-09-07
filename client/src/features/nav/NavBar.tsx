@@ -54,7 +54,7 @@ const NavBar: React.FC = () => {
           }
   
           const handleTrainerFormClick= (e:any) => {
-      
+    
             e.stopPropagation();
             if(modal.open) closeModal();
   
@@ -64,9 +64,11 @@ const NavBar: React.FC = () => {
                 <TrainerForm />
                 </Modal.Description>
                 </>,true,
-                <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
+                <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>,"", false
+                ) 
                
             }
+    
 
     const fixed = "top";
     return (
@@ -154,7 +156,16 @@ const NavBar: React.FC = () => {
             <>
             <Menu.Item>
               <Button.Group>
-              <Button key={"login-nav"} color="blue" content={"Giriş Yap"} style={{color:"#fff",borderRadius: ".28571429rem", marginRight:"10px"}}
+              <Button icon="hand point up" content="Uzman Başvurusu" labelPosition="right" key={"trainer-nav"} color="orange" style={{borderRadius: ".28571429rem", marginRight:"10px"}}
+          
+          onClick={(e:any)=>
+            {
+              handleTrainerFormClick(e);
+            }
+            
+            }>
+            </Button>
+              <Button key={"login-nav"} color="blue" content={"Giriş Yap"} style={{color:"#fff",borderRadius: ".28571429rem"}}
                
                onClick={(e:any)=>
                  {
@@ -170,6 +181,7 @@ const NavBar: React.FC = () => {
             }
             
             }></Button>
+            
               </Button.Group>
                   
             </Menu.Item>

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
 import { combineValidators, isRequired } from 'revalidate';
-import { Button, Form, Grid, Header, Icon, Image, Label, List, Message, Placeholder, Segment } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Icon, Image, Label, List, Message, Modal, Placeholder, Segment } from 'semantic-ui-react';
 import DropdownInput from '../../app/common/form/DropdownInput';
 import DropdownMultiple from '../../app/common/form/DropdownMultiple';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
@@ -17,30 +17,16 @@ import { ITrainerFormValues, TrainerFormValues } from '../../app/models/user';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { OnChange } from 'react-final-form-listeners';
 import { toast } from 'react-toastify';
+import { useMediaQuery } from 'react-responsive'
+import FormPage1 from './FormPage1';
+import NumberInput from '../../app/common/form/NumberInput';
 
 
-const validate = combineValidators({
-    username: isRequired('username'),
-    displayname: isRequired('display name'),
-    email: isRequired('email'),
-    password: isRequired('password')
-})
-interface IProps {
-  location: string;
-}
-const FormPage2:React.FC<IProps> = ({location}) =>{
+const FormPage2 = () =>{
     const rootStore = useContext(RootStoreContext);
-    const { registerTrainer,trainerRegistering,trainerRegisteredSuccess,settrainerRegisteringFalse } = rootStore.userStore;
+    const { trainerRegistering,trainerRegisteredSuccess, registerTrainer,tranierCreationForm,settrainerRegisteringFalse } = rootStore.userStore;
     const { cities } = rootStore.commonStore;
 
-    
-   const [files, setFiles] = useState<any[]>([]);
-   const [image, setImage] = useState<Blob | null>(null);
-   const [originalImage, setOriginalImage] = useState<Blob | null>(null);
-
-   const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
-   const [imageChange, setImageChange] = useState(false);
-   const [imageDeleted, setImageDeleted] = useState(false);
 
    const [docs, setDocs] = useState<any[]>([]);
    const [filedocs, setFileDocs] = useState<any[]>([]);
@@ -50,6 +36,7 @@ const FormPage2:React.FC<IProps> = ({location}) =>{
     
   const {allCategoriesOptionList} = rootStore.categoryStore;
   const {trainerForm, setTrainerForm} = rootStore.userStore;
+  const {accessibilities, loadAccessibilities} = rootStore.profileStore;
 
   let subCategoryOptionFilteredList: ICategory[] = [];
 
@@ -57,9 +44,15 @@ const FormPage2:React.FC<IProps> = ({location}) =>{
     const [subCat, setSubCats] = useState<string[]>([]);
     const [cityId, setCityId] = useState<string>();
     const [showM, setShowM] = useState(false);
+    const [trainerForm2Message, setTrainerForm2Message] = useState(false);
+    const [error2Message, setError2Message] = useState<string[]>([]);
 
     const [subCategoryOptions, setSubCategoryOptions] = useState<ICategory[]>([]);
     const [categoryOptions, setCategoryOptions] = useState<ICategory[]>([]);
+    const {openModal,closeModal,modal} = rootStore.modalStore;
+
+    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
 useEffect(() => {
   allCategoriesOptionList.filter(x=>x.parentId===null).map(option => (
@@ -69,7 +62,9 @@ useEffect(() => {
   
 useEffect(() => {
    setTrainerForm(new TrainerFormValues());
+   loadAccessibilities();
 }, [])
+
 
     const handleCategoryChanged = (e: any, data: string[]) => {
         setTrainerForm({...trainerForm,categoryIds: [...data]});
@@ -79,6 +74,10 @@ useEffect(() => {
      const handleSubCategoryChanged = (e: any, data: string[]) => {  
          setTrainerForm({...trainerForm,subCategoryIds: [...data]});
         setSubCats(data);
+       }
+
+       const handleAccessChanged = (e: any, data: any) => {  
+        setTrainerForm({...trainerForm,accessibilityIds: [...data]});
        }
     
     const loadSubCatOptions = () =>{
@@ -100,18 +99,77 @@ useEffect(() => {
 
 
    const handleSubmitTrainerForm = (values:ITrainerFormValues) =>{
-    let edittedValues = {
-      ...values,
-      photo: image,
-      certificates: docs
+debugger;
+
+const messages = [];
+    if(values.categoryIds.length === 0)
+    {
+      messages.push("Kategori alanı seçimi zorunludur.");
     }
-      registerTrainer(edittedValues,location)
+     if(values.subCategoryIds.length === 0){
+      messages.push("Alt kategori seçimi zorunludur.");
+    }
+     if(docs.length === 0){
+      messages.push("Belge yüklemek zorunludur.")
+
+    }
+     if(values.cityId === ""){
+      messages.push("Şehir seçimi zorunludur.")
+    }
+     if(values.title === ""){
+      messages.push("Unvan alanı zorunludur.")
+
+    }
+     if(values.accessibilityIds.length === 0){
+      messages.push("Erişilebilirlik seçimi zorunludur.")
+
+    }
+     if(values.experienceYear.toString() === ""){
+       messages.push("Tecrübe yılı zorunludur.")
+
+    }
+    if(messages.length > 0){
+      setError2Message(messages);
+      setTrainerForm2Message(true);
+    }
+    else { 
+      
+      let edittedValues = {
+      ...values,
+      certificates: docs,
+      username:tranierCreationForm.username,
+      displayname: tranierCreationForm.displayname,
+      password: tranierCreationForm.password,
+      email: tranierCreationForm.email
+    }
+      registerTrainer(edittedValues)
       .catch((error:any) => (
         settrainerRegisteringFalse(),
         setShowM(true),
         console.log(error)
       ))
+
+    }
+
+   
    }
+
+
+    
+ const handlePreviousButtonClick = (e:any) =>{
+
+  e.stopPropagation();
+  if(modal.open) closeModal();
+
+      openModal("Uzman Başvuru Formu", <>
+      <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'} src='/assets/welcome.png' wrapped />
+      <Modal.Description>
+      <FormPage1 />
+      </Modal.Description>
+      </>,true,
+     "","", false) 
+     
+ }
     return (
       <>
       {trainerRegistering ? 
@@ -132,22 +190,20 @@ useEffect(() => {
     />
       :
       <>
-     { showM && <Message
+      { trainerForm2Message && <Message
       error
-      header='Başvuru formunuz hatalı!'
-      content='Lütfen formu eksiksiz ve doğru şekilde doldurunuz.'
+      header=''
+      list={error2Message}
     />}
         <FinalForm
         onSubmit={(values: ITrainerFormValues) =>
           handleSubmitTrainerForm(values)
         }
-        validate={validate}
         initialValues={trainerForm!}
         render={({
           handleSubmit,
           submitting,
-          submitError,
-          invalid,
+          submitError
         }) => (
           <Form onSubmit={handleSubmit} error>
             <Header
@@ -156,83 +212,11 @@ useEffect(() => {
               color="teal"
               textAlign="center"
             />
-           <label>Kullanıcı Adı*</label>
-            <Field name="username" placeholder="Kullanıcı Adı" component={TextInput} value={trainerForm.username}/>
-            <OnChange name="username">
-                {(value, previous) => {
-                  debugger;
-                    if(value !== trainerForm.username)
-                    {
-                        setTrainerForm({...trainerForm,username: value});
-                    }
-                }}
-            </OnChange>
-            <label>Ad Soyad*</label>
-            <Field name="displayname" placeholder="Ad Soyad" component={TextInput} value={trainerForm.displayname}/>
-            <OnChange name="displayname">
-                {(value, previous) => {
-                    if(value !== trainerForm.displayname)
-                    {
-                        setTrainerForm({...trainerForm,displayname: value});
-                    }
-                }}
-            </OnChange>
-            <label>Email*</label>
-            <Field name="email" placeholder="Email" component={TextInput} value={trainerForm.email}/>
-            <OnChange name="email">
-                {(value, previous) => {
-                    if(value !== trainerForm.email)
-                    {
-                        setTrainerForm({...trainerForm,email: value});
-                    }
-                }}
-            </OnChange>
-            <label>Şifre*</label>
-            <Field
-              name="password"
-              placeholder="Şifre"
-              type="password"
-              component={TextInput}
-              value={trainerForm.password}
-            />
-            <OnChange name="password">
-                {(value, previous) => {
-                    if(value !== trainerForm.password)
-                    {
-                        setTrainerForm({...trainerForm,password: value});
-                    }
-                }}
-            </OnChange>
-            <br></br>
-            <label>Profil Fotoğrafı*</label>
-           { files.length === 0 ? 
-                <div style={{marginBottom:15}}>
-                <PhotoWidgetDropzone setFiles={setFiles} />
-                </div>
-                :
-               (
-                <Grid style={{marginTop:"10px"}}>
-                  <Grid.Column width="eight">
-                  <Header sub content='*Boyutlandır' />
-                  <PhotoWidgetCropper setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1} maxHeight={500}/>
-                  </Grid.Column>
-                  <Grid.Column width="eight">
-                    <Header sub content='*Önizleme' />
-                    <Image src={croppedImageUrl} style={{minHeight:'200px', overflow:'hidden'}}/>
-                  </Grid.Column>
+           <Label content="<< Geri" color="orange" onClick={handlePreviousButtonClick} style={{cursor:"pointer", marginBottom:"20px"}}/>
+        <div>
+        <label>Uzman Kategorisi*</label>
 
-                  <Grid.Column width="eight">
-                  <div style={{display:"flex"}}>
-                  <Label style={{marginBottom:"20px", marginRight:"20px", cursor:"pointer"}} 
-                  onClick={()=> {setFiles([]);setImageDeleted(true);}}>Değiştir/Sil <Icon name="trash"></Icon></Label>
-                  <Label style={{marginBottom:"20px", cursor:"pointer"}} onClick={()=> {
-                  setImageChange(false); setImageDeleted(false); setFiles([])}}>Değişiklikleri geri al <Icon name="backward"></Icon> </Label>   
-                  </div>             
-                  </Grid.Column>
-               </Grid>
-               )
-                  }
-             <label>Uzman Kategorisi*</label>
+        </div>
             <Field
                   name="categoryIds"
                   placeholder="Kategori"
@@ -254,6 +238,39 @@ useEffect(() => {
                     {
                       handleSubCategoryChanged(e,data)}}
                 />  
+                 <label>Ünvan*</label>
+          <Field
+            name='title'
+            component={TextInput}
+            placeholder='Örn: Kişisel Gelişim Uzmanı / Personal Trainer / Pedagog'
+            value={trainerForm.title}
+          />
+           <OnChange name="title">
+           {(value, previous) => {
+                        if(value !== trainerForm.title)
+                        {
+                            setTrainerForm({...trainerForm,title: value});
+                        }
+                    }}
+            </OnChange>
+            <label>Tecrübe (Yıl)*</label>
+           <Field 
+                  width={2}
+                  name="experienceYear"
+                  type="number"
+                  placeholder="Tecrübe (Yıl)"
+                  component={NumberInput}
+                  value={trainerForm.experienceYear}
+                />
+                 <OnChange name="experienceYear">
+                 {(value, previous) => {
+                    if(value !== trainerForm.experienceYear)
+                    {
+                        setTrainerForm({...trainerForm,experienceYear: value});
+                    }
+                }}
+            </OnChange>
+
                  <label>Yeterlilik Belgesi (Diploma/Sertifika)*</label>
                  {docs.length === 0 && <FileUploadDropzone setDocuments={setDocs} setFiles={setFileDocs} setUpdateEnabled={setUpdateEnabled} /> }
                  {docs.length !== 0 &&
@@ -295,7 +312,19 @@ useEffect(() => {
                         }
                     }}
                 </OnChange>
-                 <label>Açıklama*</label>
+                <label>Erişilebilirlik</label>
+                <Field
+                clearable
+                  name="accessibilityIds"
+                  placeholder="Erişilebilirlik"
+                  value={trainerForm.accessibilityIds}
+                  component={DropdownMultiple}
+                  options={accessibilities}
+                  onChange={(e: any,data:any)=>
+                    {
+                      handleAccessChanged(e,data)}}
+                /> 
+                 <label>Tanıtım yazısı</label>
                  <Field
                   name="description"
                   placeholder="Açıklama"
@@ -310,12 +339,18 @@ useEffect(() => {
                     }
                 }}
             </OnChange>
+
+        
             {submitError && (
              <ErrorMessage error={submitError}
              text={JSON.stringify(submitError.data.errors)} />
             )}
+               { trainerForm2Message && <Message
+      error
+      header=''
+      list={error2Message}
+    />}
             <Button
-              disabled={(invalid)}
               loading={submitting}
               color='teal'
               content="Kayıt Ol"
@@ -324,6 +359,7 @@ useEffect(() => {
           </Form>
         )}
       />
+    
       </>
        }
     

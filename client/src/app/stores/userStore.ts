@@ -2,7 +2,7 @@ import { action, computed, observable, runInAction } from "mobx";
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { history } from "../..";
 import agent from "../api/agent";
-import { ITrainerFormValues, IUser, IUserFormValues, TrainerFormValues } from "../models/user";
+import { ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues, TrainerCreationFormValues, TrainerFormValues } from "../models/user";
 import { RootStore } from "./rootStore";
 import { toast } from 'react-toastify';
 import { IMessage } from "../models/message";
@@ -22,13 +22,28 @@ export default class UserStore {
     @observable notificationCount: number = 0;
     @computed get isLoggedIn() {return !!this.user}
     @observable trainerForm: ITrainerFormValues = new TrainerFormValues();
+    @observable tranierCreationForm : ITrainerCreationFormValues = new TrainerCreationFormValues();
     @observable trainerRegistering = false;
 
     @observable trainerRegisteredSuccess = false;
+    @observable trainerFormMessage = false;
+    @observable errorMessage = "";
 
+    
+    @action setTrainerFormMessage = (value: boolean) => {
+        this.trainerFormMessage = value;
+    }
+
+    
+    @action setErrorMessage = (value: string) => {
+        this.errorMessage = value;
+    }
 
     @action setTrainerForm = (form: ITrainerFormValues) => {
         this.trainerForm = form;
+    }
+    @action setTrainerCreationForm = (form: ITrainerCreationFormValues) => {
+        this.tranierCreationForm = form;
     }
 
     @action setInitialMessageNull = () => {
@@ -94,7 +109,34 @@ export default class UserStore {
         }
     }
 
-    @action registerTrainer = async (values: ITrainerFormValues,location:string) =>{
+    @action isUserNameAvailable = async (username: string, email: string) =>{
+        try {
+            this.trainerRegistering = true;
+            
+            const response = await agent.User.isUserNameAvailable(username,email);
+            runInAction(()=>{
+                this.trainerRegistering = false;
+            })
+            return response;
+
+        } catch (error) {
+            if(error.data.errors.Email!==undefined)
+            {
+                this.setTrainerFormMessage(true);
+                this.setErrorMessage(error.data.errors.Email);
+            }
+            if(error.data.errors.UserName!==undefined)
+              {
+                this.setErrorMessage(error.data.errors.UserName);
+                this.setTrainerFormMessage(true);
+              }  
+            this.settrainerRegisteringFalse();
+            throw error;
+
+        }
+    }
+
+    @action registerTrainer = async (values: ITrainerFormValues) =>{
         try {
             this.trainerRegistering = true;
             

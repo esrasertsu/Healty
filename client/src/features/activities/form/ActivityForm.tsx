@@ -335,7 +335,7 @@ const handleTimeChange = (time:any) =>{
                   <Field
                     name="date"
                     date={true}
-                    placeholder="Date"
+                    placeholder="Tarih"
                     value={activityForm.date}
                     component={DateInput}
                     messages={{
@@ -347,7 +347,7 @@ const handleTimeChange = (time:any) =>{
                   <Field
                     name="time"
                     time={true}
-                    placeholder="Time"
+                    placeholder="Saat"
                     value={activityForm.time}
                     component={DateInput}
                     messages={{

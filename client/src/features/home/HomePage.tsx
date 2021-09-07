@@ -333,10 +333,10 @@ const HomePage = () => {
                 </Header>
                 <Header.Subheader style={{fontSize:"1.2rem",marginBottom:"20px"}}>
                         Uzman olduğun alanda deneyimlerini paylaşmak ve hizmet vermek için bize doğrudan başvurabilirsin, dilersen mail adresine de bilgilendirme gönderebiliriz.
-                       <p> <b><div style={{color:"#1a2b49", cursor:"pointer", textDecoration:"underline", marginTop:"10px"}} onClick={handleTrainerFormClick}>
+                      <b><div style={{color:"#1a2b49", cursor:"pointer", textDecoration:"underline", marginTop:"10px"}} onClick={handleTrainerFormClick}>
                                 Uzman Başvuru Formu için tıklayın..
                              </div></b>
-                       </p>
+                     
                 </Header.Subheader>
                 <FinalForm
                // validate = {validate}

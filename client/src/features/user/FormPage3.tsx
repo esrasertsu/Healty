@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
 import { combineValidators, isRequired } from 'revalidate';
-import { Button, Form, Grid, Header, Icon, Image, Label, List, Message, Placeholder, Segment } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Icon, Image, Label, List, Message, Modal, Placeholder, Segment } from 'semantic-ui-react';
 import DropdownInput from '../../app/common/form/DropdownInput';
 import DropdownMultiple from '../../app/common/form/DropdownMultiple';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
@@ -17,6 +17,8 @@ import { ITrainerFormValues, TrainerFormValues } from '../../app/models/user';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { OnChange } from 'react-final-form-listeners';
 import { toast } from 'react-toastify';
+import { useMediaQuery } from 'react-responsive'
+import FormPage1 from './FormPage1';
 
 
 const validate = combineValidators({
@@ -25,10 +27,8 @@ const validate = combineValidators({
     email: isRequired('email'),
     password: isRequired('password')
 })
-interface IProps {
-  location: string;
-}
-const FormPage3:React.FC<IProps> = ({location}) =>{
+
+const FormPage3 = () =>{
     const rootStore = useContext(RootStoreContext);
     const { registerTrainer,trainerRegistering,trainerRegisteredSuccess,settrainerRegisteringFalse } = rootStore.userStore;
     const { cities } = rootStore.commonStore;
@@ -60,6 +60,10 @@ const FormPage3:React.FC<IProps> = ({location}) =>{
 
     const [subCategoryOptions, setSubCategoryOptions] = useState<ICategory[]>([]);
     const [categoryOptions, setCategoryOptions] = useState<ICategory[]>([]);
+    const {openModal,closeModal,modal} = rootStore.modalStore;
+
+    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
 useEffect(() => {
   allCategoriesOptionList.filter(x=>x.parentId===null).map(option => (
@@ -105,13 +109,30 @@ useEffect(() => {
       photo: image,
       certificates: docs
     }
-      registerTrainer(edittedValues,location)
-      .catch((error:any) => (
-        settrainerRegisteringFalse(),
-        setShowM(true),
-        console.log(error)
-      ))
+      // registerTrainer(edittedValues)
+      // .catch((error:any) => (
+      //   settrainerRegisteringFalse(),
+      //   setShowM(true),
+      //   console.log(error)
+      // ))
    }
+
+
+    
+ const handlePreviousButtonClick = (e:any) =>{
+
+  e.stopPropagation();
+  if(modal.open) closeModal();
+
+      openModal("Uzman Başvuru Formu", <>
+      <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'} src='/assets/welcome.png' wrapped />
+      <Modal.Description>
+      <FormPage1 />
+      </Modal.Description>
+      </>,true,
+     "") 
+     
+ }
     return (
       <>
       {trainerRegistering ? 
@@ -156,6 +177,8 @@ useEffect(() => {
               color="teal"
               textAlign="center"
             />
+           <Label content="<< Geri" onClick={handlePreviousButtonClick} style={{cursor:"pointer"}}/>
+        
            <label>Kullanıcı Adı*</label>
             <Field name="username" placeholder="Kullanıcı Adı" component={TextInput} value={trainerForm.username}/>
             <OnChange name="username">
@@ -214,15 +237,7 @@ useEffect(() => {
                 <Grid style={{marginTop:"10px"}}>
                   <Grid.Column width="eight">
                   <Header sub content='*Boyutlandır' />
-                  <PhotoWidgetCropper 
-                  setOriginalImage={setOriginalImage} 
-                  setImageDeleted={setImageDeleted} 
-                  setImageChanged={setImageChange} 
-                  setImage={setImage} 
-                  imagePreview={files[0].preview} 
-                  setCroppedImageUrl={setCroppedImageUrl} 
-                  aspect={1}
-                  maxHeight={500}/>
+                  <PhotoWidgetCropper setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={1} maxHeight={500}/>
                   </Grid.Column>
                   <Grid.Column width="eight">
                     <Header sub content='*Önizleme' />

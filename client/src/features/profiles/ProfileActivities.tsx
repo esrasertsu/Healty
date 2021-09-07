@@ -59,7 +59,7 @@ const ProfileEvents = () => {
   };
 
   return (
-    <Tab.Pane loading={loadingActivities}>
+    <Tab.Pane style={{ borderRadius: "12px"}} loading={loadingActivities}>
       <Grid>
         {/* <Grid.Column width={16}>
           <Header floated='left' icon='calendar' content={'Activities'} />

@@ -61,7 +61,7 @@ const sixItem:SemanticWIDTHS = 6;
       'Ya da bir eğitmen olarak başvurabilirsiniz'
     ]
     useEffect(() => {
-      if(appLoaded && userCityPlaced)
+      if(appLoaded) // && userCityPlaced
         loadProfiles();
 
         window.addEventListener("scroll", toggleVisibility);
@@ -71,7 +71,7 @@ const sixItem:SemanticWIDTHS = 6;
          clearProfileRegistery();
          window.removeEventListener("scroll", toggleVisibility);
         }
-    }, [loadProfiles,userCityPlaced])
+    }, [loadProfiles])// && userCityPlaced
   
     // Show button when page is scorlled upto given distance
     const toggleVisibility = () => {

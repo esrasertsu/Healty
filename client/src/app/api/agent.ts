@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, ILevel } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
-import { ITrainerFormValues, IUser, IUserFormValues } from '../models/user';
+import { ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues } from '../models/user';
 import { IAccessibility, IDocument, IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope, IProfileEnvelope, IProfileFormValues, IRefencePic } from '../models/profile';
 import { IBlogsEnvelope, IBlog, IPostFormValues, IBlogUpdateFormValues } from '../models/blog';
 import { IAllCategoryList, ICategory, ISubCategory } from '../models/category';
@@ -216,7 +216,10 @@ const requests = {
          formData.append('username', trainer.username!);
          formData.append('email', trainer.email);
          formData.append('password', trainer.password);
-         formData.append('photo',trainer.photo!);
+         formData.append('experienceYear', trainer.experienceYear.toString());
+         formData.append('title', trainer.title);
+
+      //   formData.append('photo',trainer.photo!);
          formData.append('description',trainer.description!);
 
          trainer.dependency && trainer.dependency !== "" && formData.append('Dependency', trainer.dependency);
@@ -228,6 +231,9 @@ const requests = {
          trainer.categoryIds!.length>0 && trainer.categoryIds!.map((category:string)=>(
              formData.append('CategoryIds', category)
          ));
+         trainer.accessibilityIds!.length>0 && trainer.accessibilityIds!.map((acc:string)=>(
+            formData.append('AccessibilityIds', acc)
+        ));
          trainer.certificates!.length>0 && trainer.certificates!.map((acc:File)=>(
              formData.append('certificates', acc)
          ));
@@ -260,6 +266,7 @@ const User ={
     login: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/login', user),
     register: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/register', user),
     update: (status:boolean) => requests.put(`/user?status=${status}`,{}),
+    isUserNameAvailable: ( username : string, email:string) : Promise<Boolean> => requests.post(`/user/isUserNameAvailable?username=${username}&email=${email}`, {}),
     registerTrainer: ( trainer : ITrainerFormValues) => requests.registerTrainer('/user/registertrainer', trainer),
 
 }

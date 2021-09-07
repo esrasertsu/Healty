@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import React, { useContext, useEffect } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
-import { Grid, Header, Icon, Label, Statistic } from 'semantic-ui-react'
+import { Grid, Header, Icon, Image, Label, Segment, Statistic } from 'semantic-ui-react'
 import { LoadingComponent } from '../../app/layout/LoadingComponent'
 import { ProfileFormValues } from '../../app/models/profile'
 import { RootStoreContext } from '../../app/stores/rootStore'
@@ -117,6 +117,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
             {!isCurrentUser && profile!.role === "Trainer" &&
                 <ProfileMessage profile={profile!}/> 
             }
+            
             {
               profile!.role === "Trainer" &&
               (
@@ -128,6 +129,24 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
                           </>
 
               )
+            }
+
+{isCurrentUser && profile!.role === "Trainer" &&
+                <Segment className="profileMessageSegment">
+                <Grid container className="profileMessageGrid" stackable>
+                    <Grid.Row columns={2}>
+                        <Grid.Column width={5}>
+                            <Image circular size={'tiny'} src={profile.image || '/assets/user.png'}></Image>
+                        </Grid.Column>
+                        <Grid.Column width={11}>
+                            <Header>{profile.displayName}</Header>
+                            <Label><Icon name="mail outline"></Icon> Cevap verme oranı: %{profile.responseRate}&nbsp;
+                                {/* <Icon size="large" name="question circle" className="questionmarkicon"></Icon> */}
+                            </Label>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+       </Segment>
             }
             
             </Grid.Column>

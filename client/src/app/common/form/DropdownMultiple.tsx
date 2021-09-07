@@ -21,6 +21,7 @@ interface IProps extends FieldRenderProps<string[], HTMLElement>, FormFieldProps
             className={input.value.length >0 ? "selected scrollHeight" :""}
             wrapSelection={false}
             clearable={true}
+            closeOnChange
          />
         {touched && error && (
             <Label basic color='red'>{error}</Label>

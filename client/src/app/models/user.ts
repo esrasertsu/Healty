@@ -18,6 +18,21 @@ export interface IUserFormValues {
     userName?: string;
 }
 
+export interface ITrainerCreationFormValues {
+    email: string;
+    password: string;
+    displayname: string;
+    username: string;
+    // phone:string;
+}
+
+export class TrainerCreationFormValues implements ITrainerCreationFormValues{
+    email: string = "";
+    password:string = "";
+    displayname:string = "";
+    username:string = "";
+    // phone: string = "";
+}
 
 export interface ITrainerFormValues {
     email: string;
@@ -36,7 +51,8 @@ export interface ITrainerFormValues {
     accessibilityIds: string[],
     cityId:string,
     description: string,
-    certificates:File[]
+    certificates:File[],
+    title: string
 
 
 }
@@ -60,6 +76,7 @@ export class TrainerFormValues implements ITrainerFormValues{
     city?: ICity| null = null;
     accessibilities: IAccessibility[] = [];
     description: string ="";
+    title: string="";
 
     constructor(init?: ITrainerFormValues){
         if(init)

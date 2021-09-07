@@ -10,7 +10,7 @@ const ProfileFollowings = () => {
 
 
   return (
-    <Tab.Pane loading={loading} >
+    <Tab.Pane style={{ borderRadius: "12px"}} loading={loading} >
       <Grid>
         <Grid.Column width={16}>
           {/* <Header

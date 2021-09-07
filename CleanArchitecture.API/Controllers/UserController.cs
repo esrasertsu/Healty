@@ -46,5 +46,12 @@ namespace CleanArchitecture.API.Controllers
         {
             return await Mediator.Send(command);
         }
+
+        [AllowAnonymous]
+        [HttpPost("isUserNameAvailable")]
+        public async Task<ActionResult<bool>> IsUserNameAvailable(string username, string email)
+        {
+            return await Mediator.Send(new IsUserNameAvailable.Query { UserName = username, Email = email });
+        }
     }
 }

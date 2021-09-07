@@ -30,7 +30,7 @@ const TrainerForm:React.FC = () =>{
       <FormPage1 />
       </Modal.Description>
       </>,true,
-     "") 
+     "","", false) 
      
  }
 
@@ -41,15 +41,15 @@ const TrainerForm:React.FC = () =>{
       <Header as="h3">
         Başvuru Şartları
       </Header>  
-        <p>
+       
         <List bulleted className="applicationConditions">
-        <List.Item>18 yaşından büyük olmak</List.Item>
-        <List.Item>Başvurmak istediğiniz alan/alanlarda bir uzmanlık belgeniz olması(diploma, sertifika vs.)</List.Item>
-        <List.Item>Oluşturacağınız aktivite ücretlerini size aktarabilmemiz için bir banka hesabınız olması</List.Item>
+        <List.Item key="applicationConditions_1">18 yaşından büyük olmak</List.Item>
+        <List.Item key="applicationConditions_2">Başvurmak istediğin alan/alanlarda bir uzmanlık belgesine sahip olmak(diploma, sertifika vs.)</List.Item>
+        {/* <List.Item key="applicationConditions_3">Oluşturacağınız aktivite ücretlerini size aktarabilmemiz için bir banka hesabınız olması</List.Item> */}
         </List>
-        </p>
+      
         <p className="applicationConditions">
-        Dokümanların hazırsa haydi seni bekliyoruz <Icon style={{marginLeft:"5px"}} name="thumbs up outline"></Icon>
+        Hazırsan haydi başvur <Icon style={{marginLeft:"5px"}} name="thumbs up outline"></Icon>
         </p> 
         <Header as="h3" className="applyButton" onClick={handleApplyButtonClick}>
         Başvur &gt;&gt;

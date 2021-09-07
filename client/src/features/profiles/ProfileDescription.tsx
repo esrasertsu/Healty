@@ -53,7 +53,7 @@ const ProfileDescription = () => {
   }
 
   return (
-    <Tab.Pane>
+    <Tab.Pane style={{ borderRadius: "12px"}}>
       <Grid>
         <Grid.Column width={16}>
           {isCurrentUser && (

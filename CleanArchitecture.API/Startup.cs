@@ -8,6 +8,7 @@ using CleanArchitecture.Application.Profiles;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using FluentValidation.AspNetCore;
+using Infrastructure.Payment;
 using Infrastructure.Photos;
 using Infrastructure.Security;
 using Infrastructure.Zoom;
@@ -137,9 +138,11 @@ namespace CleanArchitecture.API
             services.AddScoped<IActivityReader, ActivityReader>();
             services.AddScoped<IDocumentAccessor, DocumentAccessor>();
             services.AddScoped<IZoomAccessor, ZoomAccessor>();
+            services.AddScoped<IPaymentAccessor, PaymentAccessor>();
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
             services.Configure<ZoomSettings>(Configuration.GetSection("Zoom"));
+            services.Configure<IyzicoSettings>(Configuration.GetSection("Iyzico"));
 
         }
 

@@ -28,11 +28,12 @@ const numberOptions = [
  const ActivityDetailPaymentSegment:React.FC<{activity:IActivity}> = ({activity}) =>  {
 
   const rootStore = useContext(RootStoreContext);
+  const {getActivityPaymentPage} = rootStore.activityStore;
 
   const [count, setCount] = useState(1);  
 
   const handlePaySubmit = () =>{
-    
+    getActivityPaymentPage(count,activity.id);
   }
 
 

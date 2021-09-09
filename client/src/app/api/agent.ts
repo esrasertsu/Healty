@@ -258,6 +258,8 @@ const Activities = {
     activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,
     activity.cityId!,activity.venue!, activity.online!,activity.attendanceCount!, activity.attendancyLimit!,activity.price!,activity.photo!,activity.address!),
     editOnlineJoinInfo: ( form : IActivityOnlineJoinInfo) => requests.put(`/activities/${form.id}/joindetails`, form),
+    getActivityPaymentPage: (count:number,id: string): Promise<string> => requests.get(`/activities/${id}/paymentpage?activityId=${id}&count=${count}`),
+
 
 }
 

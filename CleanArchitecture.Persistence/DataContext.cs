@@ -40,7 +40,8 @@ namespace CleanArchitecture.Persistence
         public DbSet<Level> Levels { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
         public DbSet<ActivityJoinDetails> ActivityJoinDetails { get; set; }
-
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -221,6 +222,7 @@ namespace CleanArchitecture.Persistence
 
             builder.Entity<ReferencePic>(x => x.HasKey(ua =>
              new { ua.OriginalPublicId, ua.ThumbnailPublicId }));
+
         }
     }
 }

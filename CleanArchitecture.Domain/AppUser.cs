@@ -11,6 +11,7 @@ namespace CleanArchitecture.Domain
         public decimal ExperienceYear { get; set; }
         public string Experience { get; set; }
         public string Dependency { get; set; }//þirket , freelance vs
+        public string Address { get; set; }
         public Role Role { get; set; }
         public DateTime RegistrationDate { get; set; }
         public DateTime LastLoginDate { get; set; }
@@ -19,12 +20,15 @@ namespace CleanArchitecture.Domain
         public string Bio { get; set; }
         public string VideoUrl { get; set; }
         public bool IsOnline { get; set; }
+        public bool HasSignedIyzicoContract { get; set; }
+        public string SubMerchantKey { get; set; }
         public virtual ICollection<ActivityComment> ActivityComments { get; set; }
         public virtual ICollection<UserActivity> UserActivities { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
         public virtual ICollection<UserFollowing> Followings { get; set; }
         public virtual ICollection<UserFollowing> Followers { get; set; }
         public virtual ICollection<Blog> Blogs { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<UserProfileComment> ReceivedComments { get; set; }
         public virtual ICollection<UserProfileComment> SendComments { get; set; }
         public virtual ICollection<UserChatRooms> ChatRooms { get; set; }

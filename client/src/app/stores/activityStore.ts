@@ -63,8 +63,7 @@ export default class ActivityStore {
     @observable activeUserPreIndex = 0;
 
     @observable isOnline = false;
-
-
+    @observable loadingPaymentPage = false;
     @action setActiveIndex = (index:number) =>{
         this.activeIndex = index;
     }
@@ -504,4 +503,22 @@ export default class ActivityStore {
     };
 
 
+    @action getActivityPaymentPage = async (count:number,activityId:string) =>{
+        this.loadingPaymentPage = true;
+        try {
+            const result = await agent.Activities.getActivityPaymentPage(count,activityId);
+            runInAction('Opening payment content', () => {
+                this.loadingPaymentPage = false;
+               console.log(result);
+
+
+       });
+        } catch (error) {
+            runInAction('Updating join details error', () => {
+                this.loadingPaymentPage = false;
+            });
+            toast.error('Problem updating join details');
+            console.log(error);
+        }
+    };
 }

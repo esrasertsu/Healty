@@ -6,6 +6,7 @@ using MediatR;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Application.Activities;
 using Microsoft.AspNetCore.Authorization;
+using CleanArchitecture.Application.User;
 
 namespace CleanArchitecture.API.Controllers
 {
@@ -76,11 +77,6 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(command);
         }
 
-
-        [HttpGet("{id}/paymentpage")]
-        public async Task<ActionResult<string>> GetActivityPaymentPage(Guid activityId, int count)
-        {
-            return await Mediator.Send(new GetActivityPaymentPage.Query { ActivityId = activityId, Count = count});
-        }
+      
     }
 }

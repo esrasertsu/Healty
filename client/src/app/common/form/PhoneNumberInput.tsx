@@ -11,8 +11,6 @@ const PhoneNumberInput:React.FC<IProps> = ({input, width, type, meta:{ touched, 
         <Form.Field error={input.touched && !!input.error} type={type} width={width}>
             <PhoneInput
             name={input.name}
-            onKeyDown={(e) => e.preventDefault()}
-
             initialValueFormat="national"
             defaultCountry="TR"
             placeholder="Telefon numarası"

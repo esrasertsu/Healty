@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Application.Location;
 using CleanArchitecture.Application.UserProfileComments;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
@@ -15,18 +16,18 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Application.Activities
+namespace CleanArchitecture.Application.User
 {
-    public class GetActivityPaymentPage
+    public class GetPaymentUserInfo
     {
-    
-        public class Query : IRequest<string>
+
+        public class Query : IRequest<PaymentUserInfoDto>
         {
             public Guid ActivityId { get; set; }
             public int Count { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, string>
+        public class Handler : IRequestHandler<Query, PaymentUserInfoDto>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -42,7 +43,7 @@ namespace CleanArchitecture.Application.Activities
                 _userAccessor = userAccessor;
                 _httpContextAccessor = httpContextAccessor;
             }
-            public async Task<string> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<PaymentUserInfoDto> Handle(Query request, CancellationToken cancellationToken)
             {
                 var activity = await _context.Activities.FindAsync(request.ActivityId);
 
@@ -56,12 +57,21 @@ namespace CleanArchitecture.Application.Activities
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
 
-                IPAddress userIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
+                PaymentUserInfoDto paymentUserInfo = new PaymentUserInfoDto()
+                {
+                    ActivityId = activity.Id,
+                    UserId = user.Id,
+                    Address = user.Address,
+                    Name = user.Name,
+                    Surname = user.Surname,
+                    GsmNumber = user.PhoneNumber,
+                    City = new CityDto() { Key = user.City.Id.ToString(), Text = user.City.Name, Value = user.City.Id.ToString() },
+                    HasSignedIyzicoContract = user.HasSignedIyzicoContract,
+                    TicketCount = request.Count
+                };
 
 
-                var paymentPageContent = _paymentAccessor.GetActivityPaymentPageFromIyzico(activity, user, request.Count, userIp);
-
-                return paymentPageContent;
+                return paymentUserInfo;
             }
         }
     }

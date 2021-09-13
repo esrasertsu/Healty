@@ -322,15 +322,7 @@ const handleTimeChange = (time:any) =>{
                 }}
                 </OnChange>
                 </div>
-                <OnChange name="online">
-                {(value, previous) => {
-                    if(value !== activityForm.online)
-                    {
-                        setUpdateEnabled(true);
-                        setActivityForm({...activityForm,online: value});
-                    }
-                }}
-                </OnChange>
+              
                 <Form.Group widths="equal">
                   <Field
                     name="date"

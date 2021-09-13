@@ -7,6 +7,8 @@ using IyzipayCore;
 using IyzipayCore.Model;
 using IyzipayCore.Request;
 using CleanArchitecture.Domain;
+using System.Net;
+using System.Linq;
 
 namespace Infrastructure.Payment
 {
@@ -21,7 +23,7 @@ namespace Infrastructure.Payment
             _options.BaseUrl = config.Value.BaseUrl;
         }
 
-        public string GetActivityPaymentPageFromIyzico(Activity activity, AppUser user, int count)
+        public string GetActivityPaymentPageFromIyzico(Activity activity, AppUser user, int count, IPAddress userIp)
         {
             CreateCheckoutFormInitializeRequest request = new CreateCheckoutFormInitializeRequest();
             request.Locale = Locale.TR.ToString();
@@ -41,24 +43,20 @@ namespace Infrastructure.Payment
 
             Buyer buyer = new Buyer();
             buyer.Id = user.Id;
-            buyer.Name = user.DisplayName;
-            buyer.Surname = user.UserName;
-            //buyer.GsmNumber = user.PhoneNumber;
+            buyer.Name = user.Name;
+            buyer.Surname = user.Surname;
+            buyer.GsmNumber = user.PhoneNumber;
             buyer.Email = user.Email;
-            buyer.IdentityNumber = "74300864791";
-            buyer.RegistrationAddress = "Güzelyalı 60 sok. No:41 Daire:11";//user.Address;
-            buyer.Ip = "85.34.78.112";
+            buyer.IdentityNumber = "11111111111";
+            buyer.RegistrationAddress = user.Address;
+            buyer.Ip = userIp.ToString();//"85.34.78.112";
             buyer.City = user.City.Name;
             buyer.Country = "Turkey";
             request.Buyer = buyer;
 
-            //Address shippingAddress = new Address();
-            //request.ShippingAddress = shippingAddress;
-
-
             //BENIM FATURA BILGILERİM
             Address billingAddress = new Address();
-            billingAddress.ContactName = "Jane Doe";
+            billingAddress.ContactName = "Esra Sertsu";
             billingAddress.City = "Istanbul";
             billingAddress.Country = "Turkey";
             billingAddress.Description = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1";
@@ -69,18 +67,19 @@ namespace Infrastructure.Payment
             BasketItem firstBasketItem = new BasketItem();
             firstBasketItem.Id = activity.Id.ToString();
             firstBasketItem.Name = activity.Title;
-            firstBasketItem.Category1 = "Activite";
+            firstBasketItem.Category1 = "Activity";
+            firstBasketItem.Category2 = activity.Categories.Select(x => x.Category.Name).FirstOrDefault();
             firstBasketItem.ItemType = BasketItemType.VIRTUAL.ToString();
             firstBasketItem.Price = (activity.Price * count).ToString().Split(',')[0];
-            firstBasketItem.SubMerchantKey = "G2FCFycIof0paTP6687dOoch9Tc=";
-            firstBasketItem.SubMerchantPrice = (activity.Price * 80 /100 * count).ToString().Split(',')[0];
+            //firstBasketItem.SubMerchantKey = "G2FCFycIof0paTP6687dOoch9Tc=";
+            //firstBasketItem.SubMerchantPrice = (activity.Price * 80 /100 * count).ToString().Split(',')[0];
             basketItems.Add(firstBasketItem);
 
             request.BasketItems = basketItems;
 
             CheckoutFormInitialize checkoutFormInitialize = CheckoutFormInitialize.Create(request, _options);
 
-            return checkoutFormInitialize.CheckoutFormContent;
+            return checkoutFormInitialize.PaymentPageUrl;
         }
     }
 }

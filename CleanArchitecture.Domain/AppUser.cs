@@ -7,6 +7,8 @@ namespace CleanArchitecture.Domain
     public class AppUser : IdentityUser
     {
         public string DisplayName { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
         public string Title { get; set; }
         public decimal ExperienceYear { get; set; }
         public string Experience { get; set; }
@@ -37,7 +39,6 @@ namespace CleanArchitecture.Domain
         public virtual ICollection<UserCategories> UserCategories { get; set; }
         public virtual ICollection<ReferencePic> ReferencePics { get; set; }
         public virtual ICollection<Certificate> Certificates { get; set; }
-
     }
 
     public enum Role

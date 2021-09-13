@@ -128,6 +128,7 @@ namespace CleanArchitecture.API
                     };
                 }
                );
+            services.AddHttpContextAccessor();
 
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();

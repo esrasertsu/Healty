@@ -15,15 +15,22 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Application.Activities
+namespace CleanArchitecture.Application.Payment
 {
-    public class GetActivityPaymentPage
+    public class GetIyzicoPaymentPage
     {
-    
+
         public class Query : IRequest<string>
         {
+            public string UserId { get; set; }
+            public string Name { get; set; }
+            public string Surname { get; set; }
+            public string GsmNumber { get; set; }
+            public bool HasSignedIyzicoContract { get; set; }
+            public string Address { get; set; }
+            public Guid CityId { get; set; }
             public Guid ActivityId { get; set; }
-            public int Count { get; set; }
+            public int TicketCount { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, string>
@@ -56,12 +63,37 @@ namespace CleanArchitecture.Application.Activities
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
 
-                IPAddress userIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
+                var city = await _context.Cities.FindAsync(request.CityId);
+
+                var success = true;
+
+                if (user.Name != request.Name || user.Surname != request.Surname || user.Address != request.Address || user.PhoneNumber != request.GsmNumber ||
+                    user.City.Id != request.CityId)
+                {                
+                    user.Address = request.Address;
+                    user.PhoneNumber = request.GsmNumber;
+                    user.HasSignedIyzicoContract = request.HasSignedIyzicoContract;
+                    user.City = city;
+                    user.Name = request.Name;
+                    user.Surname = request.Surname;
+                  
+                    success = await _context.SaveChangesAsync() > 0;
+
+                }
+
+                if (success)
+                {
+
+                    IPAddress userIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
+
+                    var paymentPageContent = _paymentAccessor.GetActivityPaymentPageFromIyzico(activity, user, request.TicketCount, userIp);
+
+                    return paymentPageContent;
+                }
+                throw new Exception("Problem saving user data");
 
 
-                var paymentPageContent = _paymentAccessor.GetActivityPaymentPageFromIyzico(activity, user, request.Count, userIp);
-
-                return paymentPageContent;
+               
             }
         }
     }

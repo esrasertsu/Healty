@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Segment, Header, Form, Button,Comment, Icon } from 'semantic-ui-react'
 import { RootStoreContext } from '../../../app/stores/rootStore'
 import { Form as FinalForm, Field} from 'react-final-form';
-import { Link } from 'react-router-dom';
+import { history } from '../../../index'
 import { observer } from 'mobx-react-lite';
 import { formatDistance } from 'date-fns';
 import NumberInput from '../../../app/common/form/NumberInput';
@@ -28,14 +28,29 @@ const numberOptions = [
  const ActivityDetailPaymentSegment:React.FC<{activity:IActivity}> = ({activity}) =>  {
 
   const rootStore = useContext(RootStoreContext);
-  const {getActivityPaymentPage} = rootStore.activityStore;
+  const {getActivityPaymentPage,attendActivity} = rootStore.activityStore;
 
   const [count, setCount] = useState(1);  
 
-  const handlePaySubmit = () =>{
-    getActivityPaymentPage(count,activity.id);
-  }
+  // const handlePaySubmit = () =>{
+  //   getActivityPaymentPage(count,activity.id);
+  // }
 
+
+  const handlePaySubmit = (e:any) => {
+debugger;
+    if(activity.price && activity.price > 0 )
+    {    
+        var str = `/payment/activity/${activity.id}/${count.toString()}`; //controlller'ı yok
+        history.push(str);
+
+    }
+    else
+    {
+      attendActivity();
+    }
+      
+}
 
     return (
            <Fragment>
@@ -69,7 +84,7 @@ const numberOptions = [
                     <label style={{fontSize:"15px", color:"#263a5e"}}><Icon name="user" /> Kişi Sayısı</label>
                     <Field
                         name="count"
-                        placeholder="0"
+                        placeholder="1"
                         component={SelectInput}
                         options={numberOptions}
                         />
@@ -106,7 +121,7 @@ const numberOptions = [
                                 <div>Toplam </div> 
                                 <div className="price">{activity.price! * count} ₺</div>
                      </div>
-                      <Button  floated='right' onClick ={handlePaySubmit} color='orange'
+                      <Button  floated='right' onClick ={handlePaySubmit} color='orange' disabled={count === 0}
                        content={activity.price && activity.price > 0 ? 'Ödemeye geç': 'Rezervasyonu Tamamla'}></Button>
 
                     </div>

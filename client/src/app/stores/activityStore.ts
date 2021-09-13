@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { history } from '../..';
 import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
-import { ActivityFormValues, ActivityOnlineJoinInfo, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, ILevel } from '../models/activity';
+import { ActivityFormValues, ActivityOnlineJoinInfo, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, ILevel, IPaymentUserInfoDetails, PaymentUserInfoDetails } from '../models/activity';
 import { RootStore } from './rootStore';
 
 const LIMIT = 10;
@@ -51,6 +51,8 @@ export default class ActivityStore {
     @observable predicate = new Map();
     @observable activityForm: IActivityFormValues = new ActivityFormValues();
     @observable activityOnlineJoinInfo: IActivityOnlineJoinInfo = new ActivityOnlineJoinInfo();
+    @observable activityUserPaymentInfo: IPaymentUserInfoDetails = new PaymentUserInfoDetails();
+
 
 
     /* Aktivite Filtre observeleri */
@@ -104,7 +106,9 @@ export default class ActivityStore {
     @action setActivityOnlineJoinInfoForm = (activity: IActivityOnlineJoinInfo) => {
         this.activityOnlineJoinInfo = activity;
     }
-
+    @action setActivityUserPaymentInfo = (info: IPaymentUserInfoDetails) => {
+        this.activityUserPaymentInfo = info;
+    }
     @action setPredicate = (predicate:string, value:string | Date| string[]| boolean) => {
         this.predicate.set(predicate,value);
     }
@@ -506,18 +510,37 @@ export default class ActivityStore {
     @action getActivityPaymentPage = async (count:number,activityId:string) =>{
         this.loadingPaymentPage = true;
         try {
-            const result = await agent.Activities.getActivityPaymentPage(count,activityId);
+            const result = await agent.Payment.getActivityPaymentPage(count,activityId);
             runInAction('Opening payment content', () => {
                 this.loadingPaymentPage = false;
                console.log(result);
+            });
+            return result;
 
-
-       });
         } catch (error) {
-            runInAction('Updating join details error', () => {
+            runInAction('Opening payment content error', () => {
                 this.loadingPaymentPage = false;
             });
-            toast.error('Problem updating join details');
+            toast.error('Problem opening payment content');
+            console.log(error);
+        }
+    };
+
+    @action getIyzicoPaymentPage = async (details:IPaymentUserInfoDetails) =>{
+        this.loadingPaymentPage = true;
+        try {
+            const result = await agent.Payment.getIyzicoPaymentPage(details);
+            runInAction('Opening payment content', () => {
+                this.loadingPaymentPage = false;
+               console.log(result);
+            });
+            return result;
+
+        } catch (error) {
+            runInAction('Opening payment content error', () => {
+                this.loadingPaymentPage = false;
+            });
+            toast.error('Problem opening payment content');
             console.log(error);
         }
     };

@@ -29,6 +29,7 @@ import  Admin  from '../../features/admin/Admin';
 import { useMediaQuery } from 'react-responsive'
 import MobileNavBar from '../../features/nav/MobileNavBar';
 import MobileNavMenu from '../../features/nav/MobileNavMenu';
+import ActivityPaymentPage from '../../features/activities/payment/ActivityPaymentPage';
 
 const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
@@ -121,6 +122,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                <Switch>
                  <Route exact path="/activities" component={ActivityDashboard} />
                  <PrivateRoute path="/activities/:id" component={ActivityDetails} />
+                 <Route exact path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
                  <Route exact path="/blog" component={BlogList} />
                  <Route exact path="/blog/:id" component={BlogPage} />
                  <Route key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />

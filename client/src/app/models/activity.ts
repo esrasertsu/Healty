@@ -121,11 +121,11 @@ export class ActivityFormValues implements IActivityFormValues {
         
                         }
                         );
-                        Object.assign(this, init);
+     Object.assign(this, init);
 
-                    }
+   }
   
-    }
+ }
 }
 
 export interface IAttendee{
@@ -192,4 +192,45 @@ export class ActivityOnlineJoinInfo implements IActivityOnlineJoinInfo {
     meetingId? :string = undefined;
     meetingPsw? :string = undefined;
 
+}
+
+
+export interface IPaymentUserInfoDetails {
+        userId : string;
+        name : string;
+        surname : string;
+        gsmNumber : string;
+        hasSignedIyzicoContract :boolean;
+        address : string;
+        city?  : ICity;
+        cityId: string;
+        activityId : string;
+        ticketCount : number;
+
+}
+
+
+export class PaymentUserInfoDetails implements IPaymentUserInfoDetails {
+
+    userId : string = "";
+        name : string = "";
+        surname : string = "";
+        gsmNumber : string = "";
+        hasSignedIyzicoContract :boolean = false;
+        address : string = "";
+        city? : ICity|undefined = undefined;
+        cityId : string = "";
+        activityId : string = "";
+        ticketCount : number = 1;
+
+        constructor(init?: IPaymentUserInfoDetails){
+            if(init)
+            {   
+                debugger;
+      
+            init.cityId = init.city ? init.city.value : "";
+            Object.assign(this, init);
+
+            }
+        }
 }

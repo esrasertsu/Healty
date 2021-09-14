@@ -41,13 +41,31 @@ namespace CleanArchitecture.API
 
         // This method gets called by the runtime. Use this method to add services to the container.
         //dependency injection container -- add new serviceses here! AddScoped 
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureDevelopmentServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseLazyLoadingProxies();
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            ConfigureServices(services);
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
+            services.AddDbContext<DataContext>(opt =>
+            {
+                opt.UseLazyLoadingProxies();
+                opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            ConfigureServices(services);
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+          
 
              services.AddCors(opt => 
             {
@@ -150,14 +168,18 @@ namespace CleanArchitecture.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<ErrorHandlingMiddleware>(); // always top 
 
             if (env.IsDevelopment())
             {
                // app.UseDeveloperExceptionPage();
             }
+         //   app.UseRequestResponseLogging();
 
             // app.UseHttpsRedirection();
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             app.UseRouting();
             app.UseCors("CorsPolicy");
@@ -170,7 +192,7 @@ namespace CleanArchitecture.API
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/chat");
                 endpoints.MapHub<MessagesHub>("/message");
-
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }

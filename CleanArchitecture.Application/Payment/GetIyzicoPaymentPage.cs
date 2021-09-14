@@ -20,20 +20,20 @@ namespace CleanArchitecture.Application.Payment
     public class GetIyzicoPaymentPage
     {
 
-        public class Query : IRequest<string>
+        public class Query : IRequest<bool>
         {
             public string UserId { get; set; }
             public string Name { get; set; }
             public string Surname { get; set; }
             public string GsmNumber { get; set; }
-            public bool HasSignedIyzicoContract { get; set; }
+            //public bool HasSignedIyzicoContract { get; set; }
             public string Address { get; set; }
             public Guid CityId { get; set; }
             public Guid ActivityId { get; set; }
             public int TicketCount { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, string>
+        public class Handler : IRequestHandler<Query, bool>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -49,7 +49,7 @@ namespace CleanArchitecture.Application.Payment
                 _userAccessor = userAccessor;
                 _httpContextAccessor = httpContextAccessor;
             }
-            public async Task<string> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(Query request, CancellationToken cancellationToken)
             {
                 var activity = await _context.Activities.FindAsync(request.ActivityId);
 
@@ -72,7 +72,7 @@ namespace CleanArchitecture.Application.Payment
                 {                
                     user.Address = request.Address;
                     user.PhoneNumber = request.GsmNumber;
-                    user.HasSignedIyzicoContract = request.HasSignedIyzicoContract;
+                  //  user.HasSignedIyzicoContract = request.HasSignedIyzicoContract;
                     user.City = city;
                     user.Name = request.Name;
                     user.Surname = request.Surname;
@@ -84,11 +84,11 @@ namespace CleanArchitecture.Application.Payment
                 if (success)
                 {
 
-                    IPAddress userIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
+                   // IPAddress userIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
 
-                    var paymentPageContent = _paymentAccessor.GetActivityPaymentPageFromIyzico(activity, user, request.TicketCount, userIp);
+                   // var paymentPageContent = _paymentAccessor.GetActivityPaymentPageFromIyzico(activity, user, request.TicketCount, userIp);
 
-                    return paymentPageContent;
+                    return true;
                 }
                 throw new Exception("Problem saving user data");
 

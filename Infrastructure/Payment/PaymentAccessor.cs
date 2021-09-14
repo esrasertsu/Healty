@@ -71,15 +71,84 @@ namespace Infrastructure.Payment
             firstBasketItem.Category2 = activity.Categories.Select(x => x.Category.Name).FirstOrDefault();
             firstBasketItem.ItemType = BasketItemType.VIRTUAL.ToString();
             firstBasketItem.Price = (activity.Price * count).ToString().Split(',')[0];
-            //firstBasketItem.SubMerchantKey = "G2FCFycIof0paTP6687dOoch9Tc=";
-            //firstBasketItem.SubMerchantPrice = (activity.Price * 80 /100 * count).ToString().Split(',')[0];
+            firstBasketItem.SubMerchantKey = "G2FCFycIof0paTP6687dOoch9Tc=";
+            firstBasketItem.SubMerchantPrice = (activity.Price * 80 /100 * count).ToString().Split(',')[0];
             basketItems.Add(firstBasketItem);
 
             request.BasketItems = basketItems;
-
+            var a  = request.ToString();
             CheckoutFormInitialize checkoutFormInitialize = CheckoutFormInitialize.Create(request, _options);
-
+            var b = checkoutFormInitialize.ToString();
             return checkoutFormInitialize.PaymentPageUrl;
         }
+    
+        public string PaymentProcessWithIyzico(Activity activity, AppUser user, int count, IPAddress userIp)
+        {
+
+            CreatePaymentRequest request = new CreatePaymentRequest();
+            request.Locale = Locale.TR.ToString();
+            request.ConversationId = "123456789";
+            request.Price = "1";
+            request.PaidPrice = "1.2";
+            request.Currency = Currency.TRY.ToString();
+            request.Installment = 1;
+            request.BasketId = "B67832";
+            request.PaymentChannel = PaymentChannel.WEB.ToString();
+            request.PaymentGroup = PaymentGroup.LISTING.ToString();
+
+            PaymentCard paymentCard = new PaymentCard();
+            paymentCard.CardHolderName = "John Doe";
+            paymentCard.CardNumber = "5528790000000008";
+            paymentCard.ExpireMonth = "12";
+            paymentCard.ExpireYear = "2020";
+            paymentCard.Cvc = "123";
+            paymentCard.RegisterCard = 0;
+            request.PaymentCard = paymentCard;
+
+            Buyer buyer = new Buyer();
+            buyer.Id = "BY789";
+            buyer.Name = "John";
+            buyer.Surname = "Doe";
+            buyer.GsmNumber = "+905350000000";
+            buyer.Email = "email@email.com";
+            buyer.IdentityNumber = "74300864791";
+            buyer.LastLoginDate = "2015-10-05 12:43:35";
+            buyer.RegistrationDate = "2013-04-21 15:12:09";
+            buyer.RegistrationAddress = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1";
+            buyer.Ip = "85.34.78.112";
+            buyer.City = "Istanbul";
+            buyer.Country = "Turkey";
+            buyer.ZipCode = "34732";
+            request.Buyer = buyer;
+
+            Address billingAddress = new Address();
+            billingAddress.ContactName = "Jane Doe";
+            billingAddress.City = "Istanbul";
+            billingAddress.Country = "Turkey";
+            billingAddress.Description = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1";
+            billingAddress.ZipCode = "34742";
+            request.BillingAddress = billingAddress;
+
+            List<BasketItem> basketItems = new List<BasketItem>();
+            BasketItem firstBasketItem = new BasketItem();
+            firstBasketItem.Id = "BI101";
+            firstBasketItem.Name = "Binocular";
+            firstBasketItem.Category1 = "Collectibles";
+            firstBasketItem.Category2 = "Accessories";
+            firstBasketItem.ItemType = BasketItemType.VIRTUAL.ToString();
+            firstBasketItem.Price = "0.3";
+            firstBasketItem.SubMerchantKey = "sub merchant key";
+            firstBasketItem.SubMerchantPrice = "0.27";
+            basketItems.Add(firstBasketItem);
+
+          
+
+            IyzipayCore.Model.Payment payment = IyzipayCore.Model.Payment.Create(request, _options);
+
+
+            return "";
+        }
+
+
     }
 }

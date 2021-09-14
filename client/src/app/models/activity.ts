@@ -200,7 +200,6 @@ export interface IPaymentUserInfoDetails {
         name : string;
         surname : string;
         gsmNumber : string;
-        hasSignedIyzicoContract :boolean;
         address : string;
         city?  : ICity;
         cityId: string;
@@ -216,7 +215,6 @@ export class PaymentUserInfoDetails implements IPaymentUserInfoDetails {
         name : string = "";
         surname : string = "";
         gsmNumber : string = "";
-        hasSignedIyzicoContract :boolean = false;
         address : string = "";
         city? : ICity|undefined = undefined;
         cityId : string = "";
@@ -233,4 +231,40 @@ export class PaymentUserInfoDetails implements IPaymentUserInfoDetails {
 
             }
         }
+}
+
+
+export interface IPaymentCardInfo {
+    cardNumber : string;
+    cardHolderName : string;
+    cvc : string;
+    expireDate : string;
+    hasSignedPaymentContract : boolean;
+    hasSignedIyzicoContract  : boolean;
+    activityId : string;
+    ticketCount : number;
+
+}
+
+
+export class PaymentCardInfo implements IPaymentCardInfo {
+
+    cardNumber : string = "";
+    cardHolderName : string = "";
+    cvc : string = "";
+    expireDate : string = "";
+    address : string = "";
+    hasSignedPaymentContract : boolean = false;
+    hasSignedIyzicoContract : boolean = false;
+    activityId : string = "";
+    ticketCount : number = 1;
+
+    constructor(init?: IPaymentUserInfoDetails){
+        if(init)
+        {   
+  
+        Object.assign(this, init);
+
+        }
+    }
 }

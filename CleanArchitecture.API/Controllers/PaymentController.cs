@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Application.Payment;
 using CleanArchitecture.Application.User;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,7 +22,13 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPost("{id}/paymentpage")]
-        public async Task<ActionResult<string>> GetIyzicoPaymentPage(GetIyzicoPaymentPage.Query query)
+        public async Task<ActionResult<bool>> GetIyzicoPaymentPage(GetIyzicoPaymentPage.Query query)
+        {
+            return await Mediator.Send(query);
+        }
+
+        [HttpPost("{id}/paymentStart")]
+        public async Task<ActionResult<bool>> StartIyzicoPayment(StartPayment.Query query)
         {
             return await Mediator.Send(query);
         }

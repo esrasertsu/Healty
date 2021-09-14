@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, ILevel, IPaymentUserInfoDetails } from '../models/activity';
+import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues } from '../models/user';
@@ -9,7 +9,7 @@ import { IAllCategoryList, ICategory, ISubCategory } from '../models/category';
 import { IChatRoom, IMessage, IMessageEnvelope, IMessageForm } from '../models/message';
 import { ICity } from '../models/location';
 
-axios.defaults.baseURL = 'http://localhost:5000/api';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 
 axios.interceptors.request.use((config) => {
@@ -49,15 +49,15 @@ axios.interceptors.response.use(undefined, error => {
 
 const responseBody = (response: AxiosResponse) => response.data;
 
-const sleep = (ms: number) => (response: AxiosResponse) =>
-        new Promise<AxiosResponse>(resolve => setTimeout(()=> resolve(response), ms));
+// const sleep = (ms: number) => (response: AxiosResponse) =>
+//         new Promise<AxiosResponse>(resolve => setTimeout(()=> resolve(response), ms));
 
 
 const requests = {
-    get: ( url: string ) => axios.get(url).then(sleep(1000)).then(responseBody),
-    post:( url:string, body:{} ) => axios.post(url, body).then(sleep(1000)).then(responseBody),
-    put: (url: string, body:{}) => axios.put(url, body).then(sleep(1000)).then(responseBody),
-    del:(url:string) => axios.delete(url).then(sleep(1000)).then(responseBody),
+    get: ( url: string ) => axios.get(url).then(responseBody),
+    post:( url:string, body:{} ) => axios.post(url, body).then(responseBody),
+    put: (url: string, body:{}) => axios.put(url, body).then(responseBody),
+    del:(url:string) => axios.delete(url).then(responseBody),
     postForm: async (url: string, file: Blob) =>{
         let formData = new FormData();
         formData.append('File',file);
@@ -245,7 +245,7 @@ const requests = {
 
 const Activities = {
     list: (params: URLSearchParams): Promise<IActivitiesEnvelope> => 
-            axios.get(`/activities`, {params:params}).then(sleep(1000)).then(responseBody),//formdata ya çevrilcek
+            axios.get(`/activities`, {params:params}).then(responseBody),//formdata ya çevrilcek
     details: (id:string) => requests.get(`/activities/${id}`),
     delete: (id: string) => requests.del(`/activities/${id}`),
     attend: (id: string) => requests.post(`/activities/${id}/attend`,{}),
@@ -274,7 +274,7 @@ const User ={
 
 const Profiles = {
     get: (userName: string) => requests.get(`/profiles/${userName}/details`),
-    list: (params: URLSearchParams): Promise<IProfileEnvelope> => axios.get(`/profiles`, {params:params}).then(sleep(1000)).then(responseBody),
+    list: (params: URLSearchParams): Promise<IProfileEnvelope> => axios.get(`/profiles`, {params:params}).then(responseBody),
     uploadPhoto: ( photo: Blob): Promise<IPhoto> => requests.postForm(`/photos`, photo),
     setMainPhoto: (id:string) => requests.post(`/photos/${id}/setMain`,{}),
     deletePhoto: (id:string) => requests.del(`/photos/${id}`),
@@ -301,7 +301,7 @@ const Profiles = {
 
 const Blogs = {
     list: (params: URLSearchParams): Promise<IBlogsEnvelope> => 
-            axios.get(`/blog`, {params:params}).then(sleep(1000)).then(responseBody),
+            axios.get(`/blog`, {params:params}).then(responseBody),
     details: (id:string) => requests.get(`/blog/${id}`),
     update: (post: Partial<IBlogUpdateFormValues>):Promise<IBlog> => requests.updateBlogDesc(`/blog/${post.id}`, post),
     delete: (id: string) => requests.del(`/blog/${id}`),
@@ -337,13 +337,14 @@ const Documents = {
 
 const Zoom = {
     generateToken: (params: URLSearchParams): Promise<string> => 
-            axios.get(`/zoom`, {params:params}).then(sleep(1000)).then(responseBody),
+            axios.get(`/zoom`, {params:params}).then(responseBody),
     
 }
 
 const Payment = {
     getActivityPaymentPage: (count:number,id: string): Promise<IPaymentUserInfoDetails> => requests.get(`/payment/activity/${id}/${count}?activityId=${id}&count=${count}`),
-    getIyzicoPaymentPage: (details:IPaymentUserInfoDetails): Promise<string> => requests.post(`/payment/${details.activityId}/paymentpage`,details),
+    getIyzicoPaymentPage: (details:IPaymentUserInfoDetails): Promise<boolean> => requests.post(`/payment/${details.activityId}/paymentpage`,details),
+    processPayment: (details:IPaymentCardInfo): Promise<boolean> => requests.post(`/payment/${details.activityId}/paymentstart`,details),
 
 } 
 export default {

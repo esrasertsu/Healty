@@ -1,9 +1,10 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CleanArchitecture.Persistence.Migrations
 {
-    public partial class initialize : Migration
+    public partial class Initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +12,7 @@ namespace CleanArchitecture.Persistence.Migrations
                 name: "Accessibilities",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(maxLength: 255, nullable: false),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -115,7 +116,7 @@ namespace CleanArchitecture.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -204,10 +205,13 @@ namespace CleanArchitecture.Persistence.Migrations
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     DisplayName = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Surname = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
                     ExperienceYear = table.Column<decimal>(nullable: false),
                     Experience = table.Column<string>(nullable: true),
                     Dependency = table.Column<string>(nullable: true),
+                    Address = table.Column<string>(nullable: true),
                     Role = table.Column<int>(nullable: false),
                     RegistrationDate = table.Column<DateTime>(nullable: false),
                     LastLoginDate = table.Column<DateTime>(nullable: false),
@@ -215,7 +219,9 @@ namespace CleanArchitecture.Persistence.Migrations
                     CityId = table.Column<Guid>(nullable: true),
                     Bio = table.Column<string>(nullable: true),
                     VideoUrl = table.Column<string>(nullable: true),
-                    IsOnline = table.Column<bool>(nullable: false)
+                    IsOnline = table.Column<bool>(nullable: false),
+                    HasSignedIyzicoContract = table.Column<bool>(nullable: false),
+                    SubMerchantKey = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -325,7 +331,7 @@ namespace CleanArchitecture.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -541,6 +547,36 @@ namespace CleanArchitecture.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    OrderNumber = table.Column<string>(nullable: true),
+                    OrderDate = table.Column<DateTime>(nullable: false),
+                    OrderState = table.Column<int>(nullable: false),
+                    PaymentType = table.Column<int>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
+                    UserId1 = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    Phone = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    PaymentId = table.Column<string>(nullable: true),
+                    PaymentToken = table.Column<string>(nullable: true),
+                    ConversationId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_AspNetUsers_UserId1",
+                        column: x => x.UserId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Photos",
                 columns: table => new
                 {
@@ -597,7 +633,7 @@ namespace CleanArchitecture.Persistence.Migrations
                 columns: table => new
                 {
                     AppUserId = table.Column<string>(nullable: false),
-                    AccessibilityId = table.Column<Guid>(nullable: false)
+                    AccessibilityId = table.Column<Guid>(maxLength: 255, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -770,6 +806,33 @@ namespace CleanArchitecture.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    OrderId = table.Column<Guid>(nullable: false),
+                    ActivityId = table.Column<Guid>(nullable: false),
+                    Price = table.Column<decimal>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Activities_ActivityJoinDetailsId",
                 table: "Activities",
@@ -883,6 +946,21 @@ namespace CleanArchitecture.Persistence.Migrations
                 column: "SenderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_ActivityId",
+                table: "OrderItems",
+                column: "ActivityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_UserId1",
+                table: "Orders",
+                column: "UserId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Photos_ActivityId",
                 table: "Photos",
                 column: "ActivityId");
@@ -987,6 +1065,9 @@ namespace CleanArchitecture.Persistence.Migrations
                 name: "Messages");
 
             migrationBuilder.DropTable(
+                name: "OrderItems");
+
+            migrationBuilder.DropTable(
                 name: "Photos");
 
             migrationBuilder.DropTable(
@@ -1021,6 +1102,9 @@ namespace CleanArchitecture.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Blogs");

@@ -1,33 +1,34 @@
 ﻿using AutoMapper;
 using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
-using CleanArchitecture.Application.Location;
-using CleanArchitecture.Application.UserProfileComments;
-using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Application.User
+namespace CleanArchitecture.Application.Payment
 {
-    public class GetPaymentUserInfo
+    public class StartPayment
     {
-
-        public class Query : IRequest<PaymentUserInfoDto>
+        public class Query : IRequest<bool>
         {
+            public string CardNumber { get; set; }
+            public string CardHolderName { get; set; }
+            public string CVC { get; set; }
+            public string ExpireDate { get; set; }
+            public bool HasSignedPaymentContract { get; set; }
+            public bool HasSignedIyzicoContract { get; set; }
             public Guid ActivityId { get; set; }
-            public int Count { get; set; }
+            public int TicketCount { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, PaymentUserInfoDto>
+        public class Handler : IRequestHandler<Query, bool>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -43,7 +44,7 @@ namespace CleanArchitecture.Application.User
                 _userAccessor = userAccessor;
                 _httpContextAccessor = httpContextAccessor;
             }
-            public async Task<PaymentUserInfoDto> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(Query request, CancellationToken cancellationToken)
             {
                 var activity = await _context.Activities.FindAsync(request.ActivityId);
 
@@ -57,21 +58,17 @@ namespace CleanArchitecture.Application.User
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
 
-                PaymentUserInfoDto paymentUserInfo = new PaymentUserInfoDto()
-                {
-                    ActivityId = activity.Id,
-                    UserId = user.Id,
-                    Address = user.Address,
-                    Name = user.Name,
-                    Surname = user.Surname,
-                    GsmNumber = user.PhoneNumber,
-                    City = user.City !=null ? new CityDto() { Key = user.City.Id.ToString(), Text = user.City.Name, Value = user.City.Id.ToString() } : null,
-                    HasSignedIyzicoContract = user.HasSignedIyzicoContract,
-                    TicketCount = request.Count
-                };
+
+                //order yarat statüsü notpaid olan
+                //ödemeyi başlat
+                //sonucu ekrana dön ve order statüsü güncelle
+                //eğer sonuç başarılı ise kullanıcı attend et
+
+                return true;
+                throw new Exception("Problem saving user data");
 
 
-                return paymentUserInfo;
+
             }
         }
     }

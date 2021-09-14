@@ -157,7 +157,7 @@ export default class UserStore {
 
     @action createHubConnection = async () => {
         this.hubConnection = new HubConnectionBuilder()
-        .withUrl('http://localhost:5000/message',{
+        .withUrl(process.env.REACT_APP_API_MESSAGE_URL!,{
             accessTokenFactory: () => this.rootStore.commonStore.token!
         })
             .configureLogging(LogLevel.Information)

@@ -1716,3 +1716,62 @@ button, input, optgroup, select, textarea {
   color:#1a2b49;
   cursor: pointer;
 }
+
+
+.paymentFormContainer{
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.ui.steps .active.step .icon {
+  color: #2185d0 !important
+}
+
+.activity_paymentpage_price_header{
+  line-height: 1.28571429em;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    color: #263a5e;
+    font-size: 22px;
+}
+
+.activity_paymentpage_price_containerdiv{
+  display: flex;
+  flex-direction: column;
+  margin: 1.5rem 15px;
+}
+
+.activity_paymentpage_price_items{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  color:#666;
+}
+
+.activityDetail_payment_footer.activity_paymentpage_price_footer{
+
+  margin-top: 15px;
+  border-top: 1px solid rgba(34,36,38,.15);
+  border-bottom: 1px solid rgba(34,36,38,.15);
+  padding: 10px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.equal.width.fields.creditCard{
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 1rem 0;
+
+}
+.equalField{
+  width: 40%;
+}
+
+.equalUserInfoField{
+  width: 45%;
+}

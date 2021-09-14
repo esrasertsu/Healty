@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { history } from '../..';
 import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
-import { ActivityFormValues, ActivityOnlineJoinInfo, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, ILevel, IPaymentUserInfoDetails, PaymentUserInfoDetails } from '../models/activity';
+import { ActivityFormValues, ActivityOnlineJoinInfo, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, PaymentUserInfoDetails } from '../models/activity';
 import { RootStore } from './rootStore';
 
 const LIMIT = 10;
@@ -190,7 +190,7 @@ export default class ActivityStore {
 
     @action createHubConnection = (activityId: string) => {
         this.hubConnection = new HubConnectionBuilder()
-        .withUrl('http://localhost:5000/chat',{
+        .withUrl(process.env.REACT_APP_API_CHAT_URL!,{
             accessTokenFactory: () => this.rootStore.commonStore.token!
         })
             .configureLogging(LogLevel.Information)
@@ -362,11 +362,9 @@ export default class ActivityStore {
         } catch (error) {
             runInAction('Editing activity error', () => {
                 this.submitting = false;
-
-                if(error.status === 400)
-                    toast.warning('Activity has been already updated');
-
             });
+            
+
             console.log(error);
         }
     }
@@ -529,18 +527,37 @@ export default class ActivityStore {
     @action getIyzicoPaymentPage = async (details:IPaymentUserInfoDetails) =>{
         this.loadingPaymentPage = true;
         try {
-            const result = await agent.Payment.getIyzicoPaymentPage(details);
+            const res = await agent.Payment.getIyzicoPaymentPage(details);
             runInAction('Opening payment content', () => {
                 this.loadingPaymentPage = false;
-               console.log(result);
             });
-            return result;
+
+            return res;
 
         } catch (error) {
             runInAction('Opening payment content error', () => {
                 this.loadingPaymentPage = false;
             });
             toast.error('Problem opening payment content');
+            console.log(error);
+        }
+    };
+
+    @action processPayment = async (details:IPaymentCardInfo) =>{
+        this.loadingPaymentPage = true;
+        try {
+            const res = await agent.Payment.processPayment(details);
+            runInAction('Processing payment', () => {
+                this.loadingPaymentPage = false;
+            });
+
+            return res;
+
+        } catch (error) {
+            runInAction('Processing payment error', () => {
+                this.loadingPaymentPage = false;
+            });
+            toast.error('Problem Processing payment');
             console.log(error);
         }
     };

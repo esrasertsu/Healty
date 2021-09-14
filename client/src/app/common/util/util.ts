@@ -2,6 +2,65 @@ import { IActivity, IAttendee } from "../../models/activity";
 import { IMessage } from "../../models/message";
 import { IProfile } from "../../models/profile";
 import { IUser } from "../../models/user";
+import Payment from "payment";
+
+function clearNumber(value = "") {
+  return value.replace(/\D+/g, "");
+}
+
+export function formatCreditCardNumber(value:any) {
+  if (!value) {
+    return value;
+  }
+
+  const issuer = Payment.fns.cardType(value);
+  const clearValue = clearNumber(value);
+  let nextValue;
+
+  switch (issuer) {
+    case "amex":
+      nextValue = `${clearValue.slice(0, 4)} ${clearValue.slice(
+        4,
+        10
+      )} ${clearValue.slice(10, 15)}`;
+      break;
+    default:
+      nextValue = `${clearValue.slice(0, 4)} ${clearValue.slice(
+        4,
+        8
+      )} ${clearValue.slice(8, 12)} ${clearValue.slice(12, 19)}`;
+      break;
+  }
+
+  return nextValue.trim();
+}
+
+export function formatCVC(value:any, prevValue:any, allValues:any = {}) {
+  const clearValue = clearNumber(value);
+  let maxLength = 4;
+
+  if (allValues.number) {
+    const issuer = Payment.fns.cardType(allValues.number);
+    maxLength = issuer === "amex" ? 4 : 3;
+  }
+
+  return clearValue.slice(0, maxLength);
+}
+
+export function formatExpirationDate(value:any) {
+  const clearValue = clearNumber(value);
+
+  if (clearValue.length >= 3) {
+    return `${clearValue.slice(0, 2)}/${clearValue.slice(2, 4)}`;
+  }
+
+  return clearValue;
+}
+
+export function formatFormData(data:any) {
+  return Object.keys(data).map(d => `${d}: ${data[d]}`);
+}
+
 
 export const combineDateAndTime = (date: Date, time: Date) => {
     // const timeString = time.getHours() + ':' + time.getMinutes() + ':00';

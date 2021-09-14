@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite';
 import { formatDistance } from 'date-fns';
 import NumberInput from '../../../app/common/form/NumberInput';
 import SelectInput from '../../../app/common/form/SelectInput';
-import { IActivity, IPaymentUserInfoDetails, PaymentUserInfoDetails } from '../../../app/models/activity';
+import { IActivity, IPaymentCardInfo, IPaymentUserInfoDetails, PaymentUserInfoDetails } from '../../../app/models/activity';
 import { OnChange } from 'react-final-form-listeners';
 import tr  from 'date-fns/locale/tr'
 import { format } from 'date-fns';
@@ -31,11 +31,11 @@ interface IProps extends RouteComponentProps<DetailParams> {}
  const ActivityPaymentPage: React.FC<IProps> = ({match}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const {getActivityPaymentPage,setActivityUserPaymentInfo,activityUserPaymentInfo,getIyzicoPaymentPage} = rootStore.activityStore;
+  const {getActivityPaymentPage,setActivityUserPaymentInfo,activityUserPaymentInfo,getIyzicoPaymentPage,
+    processPayment} = rootStore.activityStore;
   const {
     cities
   } = rootStore.commonStore;
-  const {openModal,closeModal,modal} = rootStore.modalStore;
 
   const [count, setCount] = useState(1);  
   const [loading, setLoading] = useState(false);
@@ -49,7 +49,6 @@ interface IProps extends RouteComponentProps<DetailParams> {}
     const[showPaymentPage, setShowPaymentPage] = useState(false);
     const[showUserPaymentInfoPage, setShowUserPaymentInfoPage] = useState(true);
 
-    const [paymentUrl, setPaymentUrl] = useState("");
     
     useEffect(() => {
     if (match.params.id) {
@@ -66,34 +65,40 @@ interface IProps extends RouteComponentProps<DetailParams> {}
   }, [match.params.id,getActivityPaymentPage])
 
   
-  const openIyzicoModal = (e:any) => {
-    e.stopPropagation();
-    if(modal.open) closeModal();
-  
-        openModal("Uzman Başvuru Formu", <>
-        <Modal.Description>
-        <iframe style={{width:"100%", border:"none"}} src="https://www.iyzico.com/pazaryeri-alici-anlasma/" />
-        </Modal.Description>
-        </>,false,
-       "","", false) 
-       
-  }
 
   const handleFinalFormSubmit = (values: IPaymentUserInfoDetails) => {
 
     setLoading(true);
     debugger;
     getIyzicoPaymentPage(values).then(action((res) => {
-    console.log(res);
-    if(res != "")
-  {
-    setPaymentUrl(res! +"&iframe=true");
+      debugger;
+   if(res! === true)
+   { 
+     setShowPaymentPage(true);
+    setStepNo(1);
+    setStep0Completed(true);
+    setShowUserPaymentInfoPage(false);
+
+   }
+   
+  
+  }))
+  .finally(() => setLoading(false));
+  }
+
+
+  const handlePaymentFormSubmit = (values: IPaymentCardInfo) => {
+
+    setLoading(true);
+    debugger;
+    processPayment(values).then(action(() => {
+      debugger;
+   
     setShowPaymentPage(true);
     setStepNo(1);
     setStep0Completed(true);
     setShowUserPaymentInfoPage(false);
-  }   
-    
+  
   }))
   .finally(() => setLoading(false));
   }
@@ -120,20 +125,20 @@ interface IProps extends RouteComponentProps<DetailParams> {}
  }
     return (
     <Fragment>
-   <Step.Group style={{marginTop:"30px"}}>
+   <Step.Group style={{marginTop:"30px", width:"100%"}}>
     <Step onClick={() => handleStepClick(0)} active={stepNo === 0}>
       <Icon name='user' />
       <Step.Content>
         <Step.Title>Üye Bilgileri</Step.Title>
-        <Step.Description>Aktiviteye katılacak üyenin bilgileri</Step.Description>
+        <Step.Description>Profil bilgilerini düzenle</Step.Description>
       </Step.Content>
     </Step>
 
-    <Step  active={stepNo === 1}>
+    <Step  active={stepNo === 1} disabled={showPaymentPage === false}>
       <Icon name='payment' />
       <Step.Content>
         <Step.Title>Ödeme</Step.Title>
-        <Step.Description>3D Secure ile ödeme</Step.Description>
+        <Step.Description>Kredi kartı bilgileri</Step.Description>
       </Step.Content>
     </Step>
 
@@ -155,8 +160,10 @@ interface IProps extends RouteComponentProps<DetailParams> {}
             initialValues={activityUserPaymentInfo}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid }) => (
-              <Form onSubmit={handleSubmit} loading={loading}>
-                  <Form.Group widths="equal">
+              <Form onSubmit={handleSubmit} loading={loading} style={{margin:"2.5rem"}}>
+                  <Form.Group widths="equal" className="creditCard" style={{width:"60%"}}>
+                    <div className="equalUserInfoField">
+                    <label>Ad*</label>
                   <Field
                   name="name"
                   placeholder="Ad"
@@ -169,6 +176,9 @@ interface IProps extends RouteComponentProps<DetailParams> {}
                         setActivityUserPaymentInfo({...activityUserPaymentInfo,name: value});
                 }}
                 </OnChange>
+                    </div>
+                    <div className="equalUserInfoField">
+                <label>Soyad*</label>
                   <Field
                   name="surname"
                   placeholder="Soyad"
@@ -181,6 +191,7 @@ interface IProps extends RouteComponentProps<DetailParams> {}
                         setActivityUserPaymentInfo({...activityUserPaymentInfo,surname: value});
                 }}
                 </OnChange>
+                </div>
                 </Form.Group>
 
                   <label>Telefon Numarası*</label>
@@ -222,27 +233,7 @@ interface IProps extends RouteComponentProps<DetailParams> {}
                   style={{marginBottom:15}}
                 />
             
-            <div style={{marginBottom:15}}>
-                  <Field
-                      name="hasSignedIyzicoContract"
-                      component="input"
-                      type="checkbox"
-                      width={4}
-                      format={v =>v === true}
-                      parse={v => (v ? true : false) }
-                    />&nbsp;&nbsp;
-                   <span><a style={{cursor:"pointer"}} onClick={openIyzicoModal}>iyzico Platform Kullanım Sözleşmesi</a>'ni onaylıyorum.</span> 
-                   <OnChange name="online">
-                {(value, previous) => {
-                    if(value !== activityUserPaymentInfo.hasSignedIyzicoContract)
-                    {
-                        // setUpdateEnabled(true);
-                        setActivityUserPaymentInfo({...activityUserPaymentInfo,hasSignedIyzicoContract: value});
-                    }
-                }}
-                </OnChange>
-                </div>
-              
+         
               
                 <Button
                   //loading={submitting}
@@ -250,8 +241,7 @@ interface IProps extends RouteComponentProps<DetailParams> {}
                   floated="right"
                   positive
                   type="submit"
-                  content="Kaydet ve Devam et"
-                />
+                >Kaydet ve Devam et <Icon style={{opacity:"1", marginLeft:"5px"}} name="angle right"></Icon></Button>
                 {/* <Button
                   floated="left"
                   disabled={loading}
@@ -290,9 +280,8 @@ interface IProps extends RouteComponentProps<DetailParams> {}
    {showPaymentPage && 
    (
      <>
-           <iframe scrolling="no" style={{width:"100%", minHeight:"1800px",maxHeight:"1800px", border:"none"}} src={paymentUrl}
-      />
-
+         
+      <ActivityPaymentStarterPage handlePaymentFormSubmit={handlePaymentFormSubmit} activityId={match.params.id} count={match.params.count} />
    
      </>
    )

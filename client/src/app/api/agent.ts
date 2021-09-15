@@ -81,7 +81,6 @@ const requests = {
     },
     editProfile: async (url: string, profile: Partial<IProfileFormValues>) =>{
         let formData = new FormData();
-       debugger;
         profile.displayName && formData.append('DisplayName', profile.displayName);
         profile.title && formData.append('Title', profile.title);
         profile.experience && profile.experience!=="" && formData.append('Experience', profile.experience);
@@ -167,7 +166,6 @@ const requests = {
 
     updateBlogDesc: async (url: string, blog: Partial<IBlogUpdateFormValues>) =>{
         let formData = new FormData();
-       debugger;
         blog.title && blog.title !== "" && formData.append('Title', blog.title);
         blog.description && blog.description !== "" && formData.append('Description', blog.description);
         blog.categoryId && blog.categoryId !== "" && formData.append('CategoryId', blog.categoryId);
@@ -211,7 +209,6 @@ const requests = {
     },
     registerTrainer: async (url: string, trainer: ITrainerFormValues) =>{
         let formData = new FormData();
-        debugger;
          formData.append('displayname', trainer.displayname!);
          formData.append('username', trainer.username!);
          formData.append('email', trainer.email);

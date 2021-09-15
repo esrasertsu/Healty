@@ -5,16 +5,25 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import { format } from 'date-fns';
 import Scrollbars from 'react-custom-scrollbars';
-import tr  from 'date-fns/locale/tr'
+import tr  from 'date-fns/locale/tr';
+import { useMediaQuery } from 'react-responsive'
+
 const styles = {
   color:"#000"
 }
-const ChatRoomList: React.FC = () => {
+
+interface IProps{
+  setshowChatRoomList:(value:boolean) => void;
+}
+
+const ChatRoomList: React.FC<IProps> = ({setshowChatRoomList}) => {
 
     const rootStore = useContext(RootStoreContext);
     const {loadingChatRooms, chatRooms,chatRoomId,setChatRoomId } = rootStore.messageStore;
     const [activeChatRoomIndex, setActiveChatRoomIndex] = useState<string|null>(null)
     const {onlineUsers} = rootStore.userStore;
+    const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
+
     useEffect(() => {
       setActiveChatRoomIndex(chatRoomId);
       return () => {
@@ -25,6 +34,8 @@ const ChatRoomList: React.FC = () => {
     const handleChatRoomClick = (e:any, id:any) => {
           setChatRoomId(id);
           setActiveChatRoomIndex(id);
+          if(isMobile)
+            setshowChatRoomList(false);
     }
 
     if(loadingChatRooms) return <LoadingComponent content='Loading chat rooms...'/>  

@@ -9,7 +9,12 @@ import InfiniteScroll from 'react-infinite-scroller';
 import Scrollbars from 'react-custom-scrollbars';
 import { history } from '../..';
 import tr  from 'date-fns/locale/tr'
-const MessageChat: React.FC = () => {
+import { useMediaQuery } from 'react-responsive'
+
+interface IProps{
+    setshowChatRoomList:(value:boolean) => void;
+  }
+const MessageChat: React.FC<IProps> = ({setshowChatRoomList}) => {
     const rootStore = useContext(RootStoreContext);
     const { messagesByDate, setPage,loadMessages ,page, totalPages ,chatRoomId,addComment, chatRooms} = rootStore.messageStore;
     const [loadingNext, setLoadingNext] = useState(false);
@@ -17,6 +22,7 @@ const MessageChat: React.FC = () => {
     const scrollRef = React.createRef<any>();
     const [top, setTop] = useState(0);
     const [handledGetNext, sethandledGetNext] = useState(false);
+    const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
 
     const handleGetNext = () => {
         setLoadingNext(true);
@@ -61,9 +67,9 @@ const MessageChat: React.FC = () => {
             <Segment className="chat_segment">
             <div className="chat_profile_details">{
           chatRooms &&
-          <Item.Group key={"seeUserProfile_itemGroup"}>
+          <Item.Group key={"seeUserProfile_itemGroup"} className="chat_messageitems">
             <Item style={{alignItems:"center"}} key="seeUserProfile" onClick={() => history.push(`/profile/${chatRooms.filter(x => x.id === chatRoomId)[0].userName}`)}>
-                <Item.Image size="mini" circular src={chatRooms.filter(x => x.id === chatRoomId)[0].userImage || '/assets/user.png'} />
+                <Item.Image className="chat_images" size="mini" circular src={chatRooms.filter(x => x.id === chatRoomId)[0].userImage || '/assets/user.png'} />
           
                 <Item.Content>
                   <Item.Header>{chatRooms.filter(x => x.id === chatRoomId)[0].displayName} profilini görmek için tıkla</Item.Header>
@@ -108,10 +114,10 @@ const MessageChat: React.FC = () => {
                            {format(new Date(group), 'dd MMMM yyyy, eeee',{locale: tr})}
                            </Label>
                        </div>
-                       <Item.Group key={group + "_message"}>
+                       <Item.Group key={group + "_message"} >
                        {messages.map((message) => (
                            <Item key={message.id} className={message.username === user!.userName ? "currentUserMessage": "otherUserMessage" }>
-                               <Item.Image size='mini' style={{ height: "100%"}} circular src={message.image  || '/assets/user.png'} />
+                               <Item.Image size='mini' className="chat_images" style={{height: "100%"}} circular src={message.image  || '/assets/user.png'} />
                                <Item.Content className={message.username === user!.userName ? "currentUserMessage_content": "otherUserMessage_content" } verticalAlign='middle'>
                                    {message.body}
                                    <Item.Extra>
@@ -172,8 +178,9 @@ const MessageChat: React.FC = () => {
                 />
 
                 </div>
+                {isMobile &&  <Button fluid onClick={() => setshowChatRoomList(true)} content="Mesajlara dön.."/>} 
+
             </div>
-           
         </Fragment>
         </>
     )

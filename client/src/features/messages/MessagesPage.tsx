@@ -1,4 +1,4 @@
-import React, {Fragment, useContext, useEffect} from 'react';
+import React, {Fragment, useContext, useEffect, useState} from 'react';
 import { Grid, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
@@ -6,6 +6,7 @@ import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import MessageChat from './MessageChat';
 import ChatRoomList from './ChatRoomList';
 import Scrollbars from 'react-custom-scrollbars';
+import { useMediaQuery } from 'react-responsive'
 
 
 const MessagesPage: React.FC = () => {
@@ -13,9 +14,10 @@ const MessagesPage: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
     const { loadingChatRooms, loadChatRooms , chatRoomId, setChatRoomId} = rootStore.messageStore;
     const { hubConnection,createHubConnection} = rootStore.userStore;
+    const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
+    const [showChatRoomList, setshowChatRoomList] = useState(true);
 
     useEffect(() => {
-        debugger;
         hubConnection === null ? 
         createHubConnection().then(()=>{
         loadChatRooms()
@@ -31,9 +33,11 @@ const MessagesPage: React.FC = () => {
     return (
         <div className="inbox-wrapper" >
         <Grid stackable className="inbox-grid">
-          <Grid.Column width="6" >
-           <ChatRoomList />
+        {showChatRoomList &&  <Grid.Column width="6" >
+          <ChatRoomList setshowChatRoomList={setshowChatRoomList}/>
           </Grid.Column>
+        }
+         {!isMobile &&
           <Grid.Column width="10"className="messageChat_grid">
           {
                      chatRoomId === null ? (
@@ -51,9 +55,20 @@ const MessagesPage: React.FC = () => {
                              </Fragment>
 
                      )  : 
-                     <MessageChat/>
+                     <MessageChat setshowChatRoomList={setshowChatRoomList}/>
          }
           </Grid.Column>
+        }
+
+
+        {
+            isMobile && !showChatRoomList &&
+            <Grid.Column width="10"className="messageChat_grid">
+            {
+               <MessageChat setshowChatRoomList={setshowChatRoomList}/>
+            }
+            </Grid.Column>
+        }
          </Grid>
         </div>
        

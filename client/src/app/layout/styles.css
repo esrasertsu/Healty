@@ -711,6 +711,43 @@ a.ui.card:hover {
   padding: 40px 80px 40px 80px !important;
   margin: 0px 100px 100px 100px !important;
 }
+
+.currentUserMessage{
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  border-radius: .28571429rem !important;
+  border: 1px solid rgba(34,36,38,.15) !important;
+  width: 65% !important;
+  margin-left: 35% !important;
+  margin-bottom: 15px !important;
+  padding: 10px !important;
+  background-color: rgb(149 166 198) !important;
+  color: #fff !important;
+  font-size: 1.1em !important;
+
+}
+
+.otherUserMessage{
+border-radius: .28571429rem !important;
+  border: 1px solid rgba(91, 106, 121, 0.15) !important;
+  max-width: 60% !important;
+  margin-bottom: 15px !important;
+  padding: 10px !important;
+  background-color: #f1f1f1 !important;
+  color: rgb(0 0 0 / 87%) !important;
+  font-size: 1.1em !important;
+}
+
+
+.currentUserMessage_content{
+flex: none !important;
+padding-right: 1.5em !important;
+max-width: 95%;
+width: 95% !important;
+}
+.otherUserMessage_content{
+max-width: 95%;
+}
 }
 
 @media (max-width: 768px){
@@ -958,6 +995,58 @@ a.ui.card:hover {
 .allProfileCards .profileHeader_Name{
   font-size: 1.11571429em !important
 
+}
+
+.currentUserMessage{
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  border-radius: .28571429rem !important;
+  border: 1px solid rgba(34,36,38,.15) !important;
+  width: 80% !important;
+  margin-left: 20% !important;
+  margin-bottom: 15px !important;
+  padding: 10px !important;
+  background-color: rgb(149 166 198) !important;
+  color: #fff !important;
+  font-size: 1.1em !important;
+  align-items: center;
+
+}
+
+.otherUserMessage{
+border-radius: .28571429rem !important;
+  border: 1px solid rgba(91, 106, 121, 0.15) !important;
+  max-width: 80% !important;
+  margin-bottom: 15px !important;
+  padding: 10px !important;
+  background-color: #f1f1f1 !important;
+  color: rgb(0 0 0 / 87%) !important;
+  font-size: 1.1em !important;
+  display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+}
+
+
+.currentUserMessage_content{
+flex: none !important;
+padding-right: 1.5em !important;
+max-width: 80%;
+width: 80% !important;
+}
+.otherUserMessage_content{
+max-width: 80%;
+}
+
+.ui.items.chat_messageitems:not(.unstackable)>.item{
+  flex-direction: row !important;
+  margin-top: 0 !important;
+}
+.ui.items.chat_messageitems:not(.unstackable)>.item .content{
+  padding: 0 !important;
+}
+.ui.stackable.grid>.wide.column.messageChat_grid {
+  padding: 2rem 0 4rem 0 !important;
 }
 }
 
@@ -1652,41 +1741,14 @@ button, input, optgroup, select, textarea {
   justify-content: center;
 }
 
-.currentUserMessage{
-    display: flex;
-    flex-direction: row-reverse;
-    border-radius: .28571429rem !important;
-    border: 1px solid rgba(34,36,38,.15) !important;
-    width: 65% !important;
-    margin-left: 35% !important;
-    margin-bottom: 15px !important;
-    padding: 10px !important;
-    background-color: rgb(149 166 198) !important;
-    color: #fff !important;
-    font-size: 1.1em !important;
 
+
+.currentUserMessage img, .otherUserMessage img{
+   width: 35px !important
 }
 
-.otherUserMessage{
-  border-radius: .28571429rem !important;
-    border: 1px solid rgba(91, 106, 121, 0.15) !important;
-    max-width: 60% !important;
-    margin-bottom: 15px !important;
-    padding: 10px !important;
-    background-color: #f1f1f1 !important;
-    color: rgb(0 0 0 / 87%) !important;
-    font-size: 1.1em !important;
-  }
-
-
-.currentUserMessage_content{
-  flex: none !important;
-  padding-right: 1.5em !important;
-  max-width: 95%;
-  width: 95% !important;
-}
-.otherUserMessage_content{
-  max-width: 95%;
+.ui.items:not(.unstackable)>.item>.image.chat_images, .ui.items:not(.unstackable)>.item>.image.chat_images>img{
+  width: 35px !important;
 }
 .emptyMessageBox{
   display: flex;

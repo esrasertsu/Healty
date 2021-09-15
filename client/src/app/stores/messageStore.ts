@@ -121,7 +121,6 @@ export default class MessageStore {
         }
     }
     @action setMessageSeen =  (message:IMessage) =>{
-        debugger;
        var listMessages: IMessage[]|null = this.messageRegistery.get(message.chatRoomId)!;
        if(listMessages !==null)
         listMessages.filter(x => x.id === message.id)[0].seen = true;
@@ -161,10 +160,9 @@ export default class MessageStore {
                     messages.forEach(async(message) =>{
                         setMessageProps(message,this.rootStore.userStore.user!);
                         messageList.push(message);
-                        debugger;
                         if(message.username !== this.rootStore.userStore.user!.userName)
                         {
-                            debugger;
+                            
                             var values = {
                                 id:message.id,
                                 chatRoomId: message.chatRoomId,

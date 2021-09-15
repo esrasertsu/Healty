@@ -97,7 +97,6 @@ export class ActivityFormValues implements IActivityFormValues {
 
         if(init)
         {   
-            debugger;
         init.categoryIds = [];
         init.subCategoryIds=[];
         init.levelIds =[];
@@ -224,7 +223,6 @@ export class PaymentUserInfoDetails implements IPaymentUserInfoDetails {
         constructor(init?: IPaymentUserInfoDetails){
             if(init)
             {   
-                debugger;
       
             init.cityId = init.city ? init.city.value : "";
             Object.assign(this, init);

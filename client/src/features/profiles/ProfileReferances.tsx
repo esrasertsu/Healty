@@ -8,7 +8,7 @@ import { IRefencePic } from '../../app/models/profile'
 import PhotoWidgetDropzone from '../../app/common/photoUpload/PhotoWidgetDropzone'
 import PhotoWidgetCropper from '../../app/common/photoUpload/PhotoWidgetCropper'
 import { observer } from 'mobx-react-lite'
-
+import { useMediaQuery } from 'react-responsive'
 
 
 
@@ -36,12 +36,14 @@ const [title, setTitle] = useState("");
      )
   }
 
+  const isWideMobileOrSmaller = useMediaQuery({ query: '(max-width: 430px)' })
 
     const smallItemStyles: React.CSSProperties = {
       cursor: 'pointer',
       objectFit: 'cover',
       width: '100%',
       maxHeight: '100%',
+      height:"100%"
     }
     return (
 <>
@@ -55,7 +57,8 @@ const [title, setTitle] = useState("");
     >
       {/* <Modal.Header></Modal.Header> */}
       <Modal.Content>
-      { files.length === 0 ? 
+      { 
+      files.length === 0 ? 
         <Modal.Description>
              <div style={{marginBottom:15}}>
              <PhotoWidgetDropzone setFiles={setFiles} />
@@ -115,12 +118,19 @@ const [title, setTitle] = useState("");
      {referencePics.length !== 0 ?      
       <Gallery id="simple-gallery">
         <div
-          style={{
+          style={!isWideMobileOrSmaller ? {
             display: 'grid',
-            gridTemplateColumns: '240px 171px 171px 171px',
+            gridTemplateColumns: '25% 25% 25% 25%',
             gridTemplateRows: '114px 114px',
             gridGap: 12,
-          }}
+          }:{
+            display: 'grid',
+            gridTemplateColumns: '50% 50%',
+            gridTemplateRows: '114px 114px',
+            gridGap: 12,
+          }
+          
+        }
         >
          {referencePics.map((image: IRefencePic,index:number) => (
           <Item
@@ -137,7 +147,10 @@ const [title, setTitle] = useState("");
               <Popup key={image.thumbnailPublicId+"popup"} trigger={
                 <img
                 key={image.thumbnailPublicId}
-                style={index === 0 ? { cursor: 'pointer' }: index === 4 ? { ...smallItemStyles, gridColumnStart: 2 } : smallItemStyles} //transform: `${hovered ? 'scale(1.5,1.5)' : 'scale(1, 1)'}`
+                style={
+                   index === 4 ?
+                    { ...smallItemStyles, gridColumnStart: 1 } : 
+                    smallItemStyles} //transform: `${hovered ? 'scale(1.5,1.5)' : 'scale(1, 1)'}`
                 src={image.thumbnailUrl}
                 ref={ref as React.MutableRefObject<HTMLImageElement>}
                 onClick={open}

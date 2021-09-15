@@ -63,10 +63,13 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
         <>
         {profile===null || profile!.userName !== match.params.username ? (<LoadingComponent content='Loading profile...' />) :
        (
+         <>
         <Grid stackable>
             <Grid.Column width={16}>
                 <ProfileHeader profile={profile!} isCurrentUser={isCurrentUser} follow={follow} unfollow={unfollow} loading={loading} />
             </Grid.Column>
+            </Grid>
+            <Grid stackable className="profilePage_Container_Grid_mobile">
             <Grid.Column width={11} style={{marginTop:"40px"}}>
                   <ProfileContent profile={profile!} setActiveTab={setActiveTab}/>   
                   {(loadingReferencePics || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileRefPlaceholder />: ( profile!.role === "Trainer" && <ProfileReferances /> )}
@@ -150,14 +153,10 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
             }
             
             </Grid.Column>
+            </Grid>
+          </>
            
-          
-            {/* <Grid.Row>
-                <Grid.Column width={11} >
-                <ProfileComments />
-                </Grid.Column>
-            </Grid.Row> */}
-        </Grid>
+        
          )}
          <br></br>
       <br></br>

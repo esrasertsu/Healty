@@ -382,7 +382,7 @@ const HomePage = () => {
     </div>
 <br/>
 
-     <Statistics />
+     {/* <Statistics /> */}
      <div style={{display:"flex"}}>
         <div className="spacingContainer__small" />
     </div>

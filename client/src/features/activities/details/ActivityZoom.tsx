@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import Countdown from 'react-countdown';
 import { action } from 'mobx';
 import ActivityJoinInfoForm from './ActivityJoinInfoForm';
+import { useMediaQuery } from 'react-responsive'
 
 
 const meetConfig = {
@@ -28,6 +29,7 @@ const Completionist = () => <span>You are good to go!</span>;
     const { generateZoomToken } = rootStore.activityStore;
     const { user } = rootStore.userStore;
     const {openModal, closeModal} = rootStore.modalStore;
+    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
 
   //const initiateMeeting = (ZoomMtg: any,signature:string) => {
 
@@ -152,7 +154,7 @@ const Completionist = () => <span>You are good to go!</span>;
 
             </Segment>
             <Segment clearing attached='bottom' style={{backgroundColor:"#e8e8e8d1", display:"flex", justifyContent:"flex-end"}}>
-            {activity.activityJoinDetails && activity.activityJoinDetails.zoom &&
+            {activity.activityJoinDetails && activity.activityJoinDetails.zoom && !isTablet &&
                <Button color="green" onClick={handleJoinMeeting} content={"Katıl"} icon="video" labelPosition="right"></Button>
             }
                </Segment>

@@ -11,6 +11,7 @@ import { RootStoreContext } from '../../../app/stores/rootStore';
 import ActivityDetailPaymentSegment from './ActivityDetailPaymentSegment';
 import ActivityZoom from './ActivityZoom';
 import ActivityCountDown from './ActivityCountDown';
+import { useMediaQuery } from 'react-responsive'
 
 interface DetailParams{
     id:string
@@ -21,6 +22,8 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
     const rootStore = useContext(RootStoreContext);
     const { activity, loadActivity, loadingActivity } = rootStore.activityStore;
     const { user } = rootStore.userStore;
+ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     useEffect(() => {
         loadActivity(match.params.id);
@@ -32,16 +35,20 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
     return <h2>Not Found</h2>
 
     return (
-      <Grid>
+      <Grid  stackable style={{marginBottom:"50px"}}>
           <Grid.Column width={11}>
             <ActivityDetailedHeader activity={activity}/>
+            {
+                  (activity.isGoing || activity.isHost) && isMobile &&
+                 <ActivityCountDown activity={activity} />
+                 }   
             <ActivityDetailedInfo activity={activity} />
-{
-  user &&
-  activity.attendees.filter(x => x.userName === user.userName).length>0 &&
-  <ActivityDetailedChat />
+            {
+              user && !isMobile &&
+              activity.attendees.filter(x => x.userName === user.userName).length>0 &&
+              <ActivityDetailedChat />
 
-}
+            }
           </Grid.Column>
 
           <Grid.Column width={5}>
@@ -53,13 +60,19 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
                  <ActivityDetailPaymentSegment activity={activity} />
                  }  
                    {
-                  (activity.isGoing || activity.isHost) &&
+                  (activity.isGoing || activity.isHost) && !isMobile &&
                  <ActivityCountDown activity={activity} />
                  }   
                   {
                   (activity.isGoing || activity.isHost) &&
                  <ActivityZoom activity={activity} />
                  }  
+                 {
+                  user &&  isMobile &&
+                  activity.attendees.filter(x => x.userName === user.userName).length>0 &&
+                  <ActivityDetailedChat />
+
+                }
                    
           </Grid.Column>
       </Grid>

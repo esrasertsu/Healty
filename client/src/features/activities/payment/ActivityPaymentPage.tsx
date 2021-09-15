@@ -54,10 +54,8 @@ interface IProps extends RouteComponentProps<DetailParams> {}
     if (match.params.id) {
 
       setLoading(true);
-      debugger;
       getActivityPaymentPage(Number(match.params.count),match.params.id) 
       .then(action((res) => {
-      debugger;
       setActivityUserPaymentInfo(new PaymentUserInfoDetails(res!));
     }))
     .finally(() => setLoading(false));
@@ -69,9 +67,7 @@ interface IProps extends RouteComponentProps<DetailParams> {}
   const handleFinalFormSubmit = (values: IPaymentUserInfoDetails) => {
 
     setLoading(true);
-    debugger;
     getIyzicoPaymentPage(values).then(action((res) => {
-      debugger;
    if(res! === true)
    { 
      setShowPaymentPage(true);
@@ -90,9 +86,7 @@ interface IProps extends RouteComponentProps<DetailParams> {}
   const handlePaymentFormSubmit = (values: IPaymentCardInfo) => {
 
     setLoading(true);
-    debugger;
     processPayment(values).then(action(() => {
-      debugger;
    
     setShowPaymentPage(true);
     setStepNo(1);
@@ -125,7 +119,7 @@ interface IProps extends RouteComponentProps<DetailParams> {}
  }
     return (
     <Fragment>
-   <Step.Group style={{marginTop:"30px", width:"100%"}}>
+   <Step.Group style={{marginTop:"30px", width:"100%"}} >
     <Step onClick={() => handleStepClick(0)} active={stepNo === 0}>
       <Icon name='user' />
       <Step.Content>
@@ -151,7 +145,7 @@ interface IProps extends RouteComponentProps<DetailParams> {}
     </Step>
   </Step.Group>
 {showUserPaymentInfoPage &&  
-     <Grid stackable>
+     <Grid stackable style={{marginBottom:"100px"}}>
       <Grid.Row>
       <Grid.Column>
         <Segment clearing>
@@ -161,7 +155,7 @@ interface IProps extends RouteComponentProps<DetailParams> {}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid }) => (
               <Form onSubmit={handleSubmit} loading={loading} style={{margin:"2.5rem"}}>
-                  <Form.Group widths="equal" className="creditCard" style={{width:"60%"}}>
+                  <Form.Group widths="equal" className="creditCard" style={isMobile ? {width:"100%"} :{width:"60%"}}>
                     <div className="equalUserInfoField">
                     <label>Ad*</label>
                   <Field
@@ -240,7 +234,9 @@ interface IProps extends RouteComponentProps<DetailParams> {}
                   disabled={loading || invalid }
                   floated="right"
                   positive
+                  fluid={isMobile}
                   type="submit"
+                  style={{margin:"20px 0"}}
                 >Kaydet ve Devam et <Icon style={{opacity:"1", marginLeft:"5px"}} name="angle right"></Icon></Button>
                 {/* <Button
                   floated="left"

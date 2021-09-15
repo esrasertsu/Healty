@@ -49,7 +49,9 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
   const [imageChange, setImageChange] = useState(false);
   const [imageDeleted, setImageDeleted] = useState(false);
   const [originalImage, setOriginalImage] = useState<Blob | null>(null);
+
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isMobile = useMediaQuery({ query: '(max-width: 375px)' })
 
   const [files, setFiles] = useState<any[]>([]);
   const [image, setImage] = useState<Blob | null>(null);
@@ -71,7 +73,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
 
   return (
     <>
-    <Segment.Group style={{border:"none"}}>
+    <Segment.Group style={{border:"none",marginBottom:"0"}} >
          <Dimmer.Dimmable as={Segment} dimmed={uploadingCoverImage} basic attached='top' style={{ padding: '0' ,border:"none"}}>
           <Dimmer active={uploadingCoverImage} inverted>
             <Loader>Loading</Loader>
@@ -130,10 +132,10 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
       </Segment.Group>
     <Segment className="profieHeader_segment" style={{marginTop:0}}>
       <Grid stackable>
-        <Grid.Column width={12}>
+        <Grid.Column width={12} className="profieHeader_segment_column">
           <Item.Group>
             <Item className="profieHeader_segment_item" style={{marginTop:"-112px"}}>
-              <Item.Image
+              <Image
                 avatar
                 size='small'
                 src={profile.image || '/assets/user.png'}
@@ -163,19 +165,25 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
             </Item>
           </Item.Group>
         </Grid.Column>
-        <Grid.Column width={4}>
+        <Grid.Column width={4} className="profieHeader_segment_column">
         <Statistic.Group widths={3} size='tiny'>
           <Statistic>
             <Statistic.Value>{profile.activityCount}</Statistic.Value>
-            <Statistic.Label className="statisticLabels">Aktivite <Icon size="large" name="calendar check outline"></Icon></Statistic.Label>
+            <Statistic.Label className="statisticLabels">Aktivite 
+           {!isMobile && <Icon size="large" name="calendar check outline"></Icon>} 
+            </Statistic.Label>
           </Statistic>
           <Statistic>
             <Statistic.Value>{profile.blogCount}</Statistic.Value>
-            <Statistic.Label className="statisticLabels">Blog <Icon size="large" name="newspaper outline"></Icon></Statistic.Label>
+            <Statistic.Label className="statisticLabels">Blog 
+            {!isMobile &&<Icon size="large" name="newspaper outline"></Icon>}
+            </Statistic.Label>
           </Statistic>
           <Statistic>
             <Statistic.Value>{profile.interactionCount}</Statistic.Value>
-            <Statistic.Label className="statisticLabels">Etkileşim <Icon size="large" name="comments outline"></Icon></Statistic.Label>
+            <Statistic.Label className="statisticLabels">Etkileşim 
+            {!isMobile && <Icon size="large" name="comments outline"></Icon>}
+            </Statistic.Label>
           </Statistic>
           </Statistic.Group>
           <Divider/>

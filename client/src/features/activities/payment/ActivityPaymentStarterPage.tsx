@@ -2,15 +2,9 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Segment, Header, Form, Button,Comment, Icon, Container, Grid, Image, Modal } from 'semantic-ui-react'
 import { RootStoreContext } from '../../../app/stores/rootStore'
 import { Form as FinalForm, Field} from 'react-final-form';
-import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-import { formatDistance } from 'date-fns';
-import NumberInput from '../../../app/common/form/NumberInput';
-import SelectInput from '../../../app/common/form/SelectInput';
-import { IActivity, IPaymentCardInfo, PaymentCardInfo } from '../../../app/models/activity';
+import {  IPaymentCardInfo, PaymentCardInfo } from '../../../app/models/activity';
 import { OnChange } from 'react-final-form-listeners';
-import tr  from 'date-fns/locale/tr'
-import { format } from 'date-fns';
 import Card from 'react-credit-cards';
 import {
   formatCreditCardNumber,
@@ -20,6 +14,7 @@ import {
 import 'react-credit-cards/es/styles-compiled.css';
 import { LoadingComponent } from '../../../app/layout/LoadingComponent';
 import Payment from "payment";
+import { useMediaQuery } from 'react-responsive'
 
 
   interface IProps{
@@ -52,6 +47,7 @@ import Payment from "payment";
 const [paymentContract, setPaymentContract] = useState(false);
 const [iyzicoContract, setIyzicoContract] = useState(false);
 
+const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
 
   const { activity, loadActivity, loadingActivity } = rootStore.activityStore;
     const { user } = rootStore.userStore;
@@ -69,7 +65,6 @@ const [iyzicoContract, setIyzicoContract] = useState(false);
 
 
   const onSubmit = async (values:any) => {
-    debugger;
 
     if(!Payment.fns.validateCardNumber(cardNumber))
     {
@@ -115,8 +110,8 @@ const [iyzicoContract, setIyzicoContract] = useState(false);
     return (
 
      <Fragment>
-     <Grid>
-<Grid.Column width={12}>
+     <Grid stackable style={{marginBottom:"50px"}}>
+<Grid.Column width={!isTablet ? 12 : 11}>
 
 
          <Segment>
@@ -167,7 +162,6 @@ const [iyzicoContract, setIyzicoContract] = useState(false);
 
                     if(Payment.fns.validateCardNumber(value))
                     {
-                      debugger;
                         setCardNoIcon(true);
                         setCardNoErrorMessage(false);
                       }else {
@@ -218,7 +212,6 @@ const [iyzicoContract, setIyzicoContract] = useState(false);
 
                     if(Payment.fns.validateCardExpiry(value))
                     {
-                      debugger;
                         // setUpdateEnabled(true);
                         setExpireIcon(true);
                         setExpireErrorMessage(false);
@@ -250,7 +243,6 @@ const [iyzicoContract, setIyzicoContract] = useState(false);
                   
                     if(Payment.fns.validateCardCVC(value))
                     {
-                      debugger;
                         setCvcIcon(true);
                         setCvcErrorMessage(false);
 
@@ -311,7 +303,7 @@ const [iyzicoContract, setIyzicoContract] = useState(false);
 
     </Segment>
     </Grid.Column>
-    <Grid.Column width="4">
+    <Grid.Column width={!isTablet ? 4 : 5}>
     <Segment>
     <Container>
       {

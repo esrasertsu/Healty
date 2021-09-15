@@ -5,20 +5,22 @@ import { Segment, Grid, Icon } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity'
 import dompurify from 'dompurify';
 import tr  from 'date-fns/locale/tr'
+import { useMediaQuery } from 'react-responsive'
 
 const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
 
   const sanitizer = dompurify.sanitize;
   const [showMore, setShowMore] = useState(false);
+  const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     return (
        <Segment.Group className="activityDetails_GridSegment">
           <Segment attached>
                <Grid verticalAlign='middle'>
-                 <Grid.Column width={1}>
+                 <Grid.Column width={isMobile? 2 : 1}>
                    <Icon name='bookmark' size='large'  style={{color:"#263a5e"}} />
                  </Grid.Column>
-                 <Grid.Column width={15}>
+                 <Grid.Column width={isMobile? 14 :15}>
                    
                     <span className="activityDetailLabel">Kategori: </span> 
                    {
@@ -31,10 +33,10 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              </Segment>
              <Segment attached>
                <Grid verticalAlign='middle'>
-                 <Grid.Column width={1}>
+                 <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='tags' size='large'  style={{color:"#263a5e"}} />
                  </Grid.Column>
-                 <Grid.Column width={15}>
+                 <Grid.Column width={isMobile? 14 :15}>
                  <span className="activityDetailLabel">Branş: </span> 
                    {
                      activity.subCategories && activity.subCategories.length> 0 ?
@@ -46,10 +48,10 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              </Segment>
              <Segment attached>
                <Grid>
-                 <Grid.Column width={1}>
+                 <Grid.Column width={isMobile? 2 :1}>
                    <Icon size='large'  style={{color:"#263a5e"}} name='info' />
                  </Grid.Column>
-                 <Grid.Column width={15}>
+                 <Grid.Column width={isMobile? 14 :15}>
                 {
                   !showMore ?
                   <>
@@ -67,7 +69,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              </Segment>
              <Segment attached>
                <Grid verticalAlign='middle'>
-                 <Grid.Column width={1}>
+                 <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='heartbeat' size='large' style={{color:"#263a5e"}} />
                  </Grid.Column>
                  <Grid.Column width={11}>
@@ -84,19 +86,19 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              </Segment>
              <Segment attached>
                <Grid verticalAlign='middle'>
-                 <Grid.Column width={1}>
+                 <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='calendar alternate outline' size='large'  style={{color:"#263a5e"}} />
                  </Grid.Column>
-                 <Grid.Column width={7}>
+                 <Grid.Column width={isMobile? 6 :7}>
                  <span className="activityDetailLabel">Tarih: </span> 
                    <span>
                      { activity.date &&  format(activity.date, 'dd MMMM yyyy, eeee',{locale: tr})} 
                    </span>
                  </Grid.Column>
-                 <Grid.Column width={1}>
+                 <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='clock outline' size='large'  style={{color:"#263a5e"}} />
                  </Grid.Column>
-                 <Grid.Column width={7}>
+                 <Grid.Column width={isMobile? 6 :7}>
                  <span className="activityDetailLabel">Saat: </span> 
                    <span>
                    { activity.date && format(activity.date, 'H:mm',{locale: tr})}
@@ -106,7 +108,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              </Segment>
              <Segment attached>
                <Grid verticalAlign='middle'>
-                 <Grid.Column width={1}>
+                 <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='map outline' size='large'  style={{color:"#263a5e"}} />
                  </Grid.Column>
                  <Grid.Column width={11}>
@@ -118,7 +120,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              </Segment>
              <Segment attached>
                <Grid verticalAlign='middle'>
-                 <Grid.Column width={1}>
+                 <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='map pin' size='large'  style={{color:"#263a5e"}} />
                  </Grid.Column>
                  <Grid.Column width={11}>
@@ -129,7 +131,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              </Segment>
              <Segment attached>
                <Grid verticalAlign='middle'>
-                 <Grid.Column width={1}>
+                 <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='wifi' size='large'  style={{color:"#263a5e"}} />
                  </Grid.Column>
                  <Grid.Column width={11}>
@@ -139,7 +141,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              </Segment>
              <Segment attached>
                <Grid verticalAlign='middle'>
-                 <Grid.Column width={1}>
+                 <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='users' size='large'  style={{color:"#263a5e"}} />
                  </Grid.Column>
                  <Grid.Column width={11}>
@@ -150,7 +152,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              </Segment>
              <Segment attached>
                <Grid verticalAlign='middle'>
-                 <Grid.Column width={1}>
+                 <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='money' size='large' style={{color:"#263a5e"}} />
                  </Grid.Column>
                  <Grid.Column width={11}>

@@ -87,7 +87,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                      setActiveMenu(-1)
                      setVisibleMobileNav(false);
                  }}
-                 className="loginRegMobileButton" primary labelPosition="right" icon='sign-in'>Giriş Yap/Hesap Oluştur</Button>
+                 className="loginRegMobileButton" primary>Giriş Yap/Hesap Oluştur</Button>
                   
                   </Menu.Item>
            )}

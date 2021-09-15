@@ -433,8 +433,7 @@ label{
    /* linear-gradient(#fc6901 ,#d34451,#d5107d)  !important; */
   color:#fff !important;
   padding:3em !important;
-  border-radius: 1.285714rem !important;
-  border:none !important
+ 
 }
 .activityDetail_Countdown{
    font-size: 15px;
@@ -541,6 +540,10 @@ a.ui.card:hover {
   padding: 15px;
   color: rgb(38, 58, 94) !important;
 }
+
+.ui.items:not(.unstackable)>.item>.image.profieHeader_userImage{
+  max-height: 165px !important;
+}
 }
 
 @media only screen and (min-width: 430px){
@@ -643,6 +646,14 @@ a.ui.card:hover {
 }
 
 @media (min-width: 1200px){
+  .profieHeader_segment{
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin-left: calc(625px - 50vw) !important;
+      width: 100vw;
+      padding: 0 calc(50vw - 625px) !important;
+  }
   .page-header__content {
     padding-left: 40px;
     padding-right: 40px;
@@ -703,6 +714,9 @@ a.ui.card:hover {
 }
 
 @media (max-width: 768px){
+  .modals .content{
+    margin-top: 30px;
+  }
   .ui.text.container{
     text-align: center;
     font-family: AssistantRegular, Arial, Helvetica, sans-serif;
@@ -713,7 +727,9 @@ a.ui.card:hover {
     background-size: cover !important;
     border-radius: .28571429rem !important;
   }
-
+  .activityDetails_Countdown_Segment{
+    padding: 1em !important;
+  }
   .profileList_WelcomeMessage{
     margin-top: 20px;
   }
@@ -761,6 +777,12 @@ a.ui.card:hover {
   font-size: 1em !important;
   margin:0 !important
 }
+
+.ui.secondary.pointing.menu.profilemenu_tab  .item {
+  padding: .85714286em 0.55em;
+  margin: 0 auto;
+}
+
 }
 
 @media (min-width: 768px) and (max-width: 1024px){
@@ -774,6 +796,11 @@ a.ui.card:hover {
     background-size: cover !important;
     background-position-y: -160px !important;
     border-radius: .28571429rem !important;
+  }
+
+  .ui.grid>[class*="twelve wide"].column.profieHeader_segment_column,
+  .ui.grid>[class*="four wide"].column.profieHeader_segment_column {
+    width: 50% !important;
   }
 
 }
@@ -824,12 +851,7 @@ a.ui.card:hover {
   transform: translateY(-3px);
 }
 
-.coverImage {
-  height: 300px !important;
-  /* margin-left: calc(625px - 50vw) !important; */
-  width: 100%;
-  border: 6px solid #fff !important
-}
+
 *, :after, :before {
   -webkit-box-sizing: inherit;
   box-sizing: inherit;
@@ -867,6 +889,8 @@ a.ui.card:hover {
   .ui.form.profileFilterForm .fields{
     flex-direction: row !important;
   }
+
+ 
   
 }
 
@@ -971,6 +995,19 @@ a.ui.card:hover {
     color: rgb(38, 58, 94) !important;
 
   }
+
+  .coverImage {
+    height: 300px !important;
+    /* margin-left: calc(625px - 50vw) !important; */
+    width: 100%;
+    border: 6px solid #fff !important
+  }
+  .coverImage img {
+    height: 288px !important;
+    /* margin-left: calc(625px - 50vw) !important; */
+    width: 100%;
+  }
+  
 }
 
 
@@ -1058,12 +1095,20 @@ i.search.inverted.icon {
   color:black;
   opacity: 1;
 }
-
+.activity_paymentpage_price_header{
+  margin-top: 30px;
+}
 }
 @media (min-width: 769px){
   .ui.modal>.close{
     color: #fff;
     opacity: 1;
+  }
+  .paymentFormContainer{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+    align-items: center;
   }
   }
 @media (max-width: 500px){
@@ -1093,6 +1138,8 @@ button, input, optgroup, select, textarea {
     justify-content: space-between;
 
 }
+
+
 }
 @media (min-width: 501px){
 
@@ -1372,7 +1419,7 @@ button, input, optgroup, select, textarea {
   background-color: rgb(244, 245, 245)  !important;
 }
 
-@media only screen and (max-width: 767px){
+@media (max-width: 767px){
   .ui.grid .ui.stackable.grid {
     margin-left: -0!important; 
      margin-right: -0!important; 
@@ -1384,17 +1431,31 @@ button, input, optgroup, select, textarea {
   font-size: 14px;
   color: #1a2b49c2 !important;
 }
+
+.coverImage {
+  height: 165px !important;
+  /* margin-left: calc(625px - 50vw) !important; */
+  width: 100%;
+  border: 6px solid #fff !important
+}
+
+.coverImage img {
+  height: 154px !important;
+  /* margin-left: calc(625px - 50vw) !important; */
+  width: 100%;
+}
+
+.ui.items:not(.unstackable)>.item>.image.profieHeader_userImage{
+  max-height: 165px !important;
+}
+.ui.grid.profilePage_Container_Grid_mobile{
+  display: flex;
+  flex-direction: column-reverse;
+}
 }
 
 @media only screen and (min-width: 768px){
-  .profieHeader_segment{
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important;
-    border: none !important;
-    margin-left: calc(625px - 50vw) !important;
-      width: 100vw;
-      padding: 0 calc(50vw - 625px) !important;
-  }
+  
   .profieHeader_userImage{
      width: 175px;
      height: 175px;
@@ -1718,12 +1779,7 @@ button, input, optgroup, select, textarea {
 }
 
 
-.paymentFormContainer{
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-around;
-  align-items: center;
-}
+
 
 .ui.steps .active.step .icon {
   color: #2185d0 !important

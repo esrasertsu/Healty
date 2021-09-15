@@ -9,11 +9,9 @@ import TextInput from '../../app/common/form/TextInput';
 import { ITrainerCreationFormValues, ITrainerFormValues, TrainerFormValues } from '../../app/models/user';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { OnChange } from 'react-final-form-listeners';
-import { toast } from 'react-toastify';
 import { useMediaQuery } from 'react-responsive'
 import { action } from 'mobx';
 import FormPage2 from './FormPage2';
-import PhoneNumberInput from '../../app/common/form/PhoneNumberInput';
 
 
 const validate = combineValidators({
@@ -40,7 +38,6 @@ const FormPage1:React.FC = () =>{
     // }
 
    const handleSubmitTrainerForm = (values:ITrainerCreationFormValues) =>{
-    debugger;
 
     isUserNameAvailable(tranierCreationForm.username, tranierCreationForm.email).then(action((response) => {
 
@@ -107,7 +104,7 @@ const FormPage1:React.FC = () =>{
         }
         validate={values => {
           const errors:any = {};
-          debugger;
+
           if (!values.username) {
             errors.username = 'Zorunlu alan'
           }
@@ -139,8 +136,8 @@ const FormPage1:React.FC = () =>{
             <Field name="username" placeholder="Kullanıcı Adı" component={TextInput} value={tranierCreationForm.username}/>
             <OnChange name="username">
                 {(value, previous) => {
-                  debugger;
-                    if(value !== tranierCreationForm.username)
+
+if(value !== tranierCreationForm.username)
                     {
                       setTrainerCreationForm({...tranierCreationForm,username: value});
                     }

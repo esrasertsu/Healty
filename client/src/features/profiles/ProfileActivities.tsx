@@ -6,6 +6,7 @@ import { IProfile, IUserActivity } from '../../app/models/profile';
 import { format } from 'date-fns';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import tr  from 'date-fns/locale/tr'
+import { useMediaQuery } from 'react-responsive'
 
 const getPanes = (profile:IProfile) => {
 
@@ -34,6 +35,7 @@ const ProfileEvents = () => {
     loadingActivities,
     userActivities
   } = rootStore.profileStore!;
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
 
   useEffect(() => {
     loadUserActivities(profile!.userName);
@@ -71,7 +73,7 @@ const ProfileEvents = () => {
             onTabChange={(e, data) => handleTabChange(e, data)}
           />
           <br />
-          <Card.Group itemsPerRow={4}>
+          <Card.Group itemsPerRow={!isTabletOrMobile ? 4 : 2}>
             {userActivities.map((activity: IUserActivity) => (
               <Card
                 as={Link}

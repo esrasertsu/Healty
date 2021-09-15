@@ -4,6 +4,7 @@ import { Button, Card, Grid, Header, Icon, Image, Label, Modal, Segment, Tab } f
 import { RootStoreContext } from "../../app/stores/rootStore";
 import PhotoWidgetCropper from "../../app/common/photoUpload/PhotoWidgetCropper";
 import PhotoWidgetDropzone from "../../app/common/photoUpload/PhotoWidgetDropzone";
+import { useMediaQuery } from 'react-responsive'
 
  const ProfilePhotos = () => {
   const rootStore = useContext(RootStoreContext);
@@ -23,6 +24,9 @@ const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
 const [imageChange, setImageChange] = useState(false);
 const [imageDeleted, setImageDeleted] = useState(false);
 const [open, setOpen] = React.useState(false)
+
+const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+
 
   const handleUploadImage = (photo: Blob) => {
     uploadPhoto(photo).then(() => {
@@ -132,7 +136,7 @@ const [open, setOpen] = React.useState(false)
           
           ) : (
             <>
-            <Card.Group itemsPerRow={5}>
+            <Card.Group itemsPerRow={isTabletOrMobile ? 3 :5}>
               {profile &&
                 profile.photos.filter(x => x.isCoverPic === false).map((photo) => (
                   <Card key={photo.id}>

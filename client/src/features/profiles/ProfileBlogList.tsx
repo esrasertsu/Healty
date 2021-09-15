@@ -7,6 +7,7 @@ import { Button, Card, Grid,Image } from 'semantic-ui-react';
 import { IProfileBlog } from '../../app/models/profile';
 import { history } from '../..';
 import tr  from 'date-fns/locale/tr'
+import { useMediaQuery } from 'react-responsive'
 
 interface IProps 
 {
@@ -19,12 +20,13 @@ const ProfileBlogList: React.FC<IProps> = ({profileBlogs,profileUserName,display
 
   const rootStore = useContext(RootStoreContext);
    const { setPredicate,clearPredicates ,setPredicateDisplayName,setClearedBeforeNewPredicateComing} = rootStore.blogStore;
+   const isWideMobileOrSmaller = useMediaQuery({ query: '(max-width: 430px)' })
 
   return (
     <Fragment>
 <Grid>
         <Grid.Column width={16}>
-          <Card.Group itemsPerRow={4}>
+          <Card.Group itemsPerRow={isWideMobileOrSmaller ? 2 :4}>
               {profileBlogs.map((blog: IProfileBlog) => (
                       <Card
                       as={Link}

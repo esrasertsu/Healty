@@ -49,7 +49,7 @@ const ChatRoomList: React.FC<IProps> = ({setshowChatRoomList}) => {
         
              >
                 <List selection divided verticalAlign='middle'>
-            {chatRooms!.map((room)=>(
+            {chatRooms && chatRooms!.map((room)=>(
               <List.Item
               key={room.id}
               style={room.unReadMessageCount>0 ? styles : null}

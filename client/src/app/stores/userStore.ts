@@ -120,14 +120,14 @@ export default class UserStore {
             return response;
 
         } catch (error) {
-            if(error.data.errors.Email!==undefined)
+            if((error as any).data.errors.Email!==undefined)
             {
                 this.setTrainerFormMessage(true);
-                this.setErrorMessage(error.data.errors.Email);
+                this.setErrorMessage((error as any).data.errors.Email);
             }
-            if(error.data.errors.UserName!==undefined)
+            if((error as any).data.errors.UserName!==undefined)
               {
-                this.setErrorMessage(error.data.errors.UserName);
+                this.setErrorMessage((error as any).data.errors.UserName);
                 this.setTrainerFormMessage(true);
               }  
             this.settrainerRegisteringFalse();
@@ -236,14 +236,14 @@ export default class UserStore {
             this.hubConnection!.on('Online', user => {
                 runInAction(() => {
                     this.setUserOnline(user);
-                    toast.info(user +" online")
+                   // toast.info(user +" online")
                 })
             })
 
             this.hubConnection!.on('Offline', user => {
                 runInAction(() => {
                     this.setUserOffline(user);
-                    toast.info(user +" offline")
+                   // toast.info(user +" offline")
                 }
             )
             })

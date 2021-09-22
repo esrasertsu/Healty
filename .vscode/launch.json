@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CleanArchitecture.API/bin/Debug/netcoreapp2.2/CleanArchitecture.API.dll",
+            "program": "${workspaceFolder}/CleanArchitecture.API/bin/Debug/netcoreapp3.1/CleanArchitecture.API.dll",
             "args": [],
             "cwd": "${workspaceFolder}/CleanArchitecture.API",
             "stopAtEntry": false,
@@ -20,7 +20,7 @@
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "Production"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"

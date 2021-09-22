@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CleanArchitecture.Persistence.Migrations
 {
-    public partial class Initialize : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -116,7 +115,7 @@ namespace CleanArchitecture.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -161,7 +160,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     Online = table.Column<bool>(nullable: false),
                     AttendancyLimit = table.Column<int>(nullable: true),
                     AttendanceCount = table.Column<int>(nullable: false),
-                    Price = table.Column<decimal>(nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,4)", nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
                     CityId = table.Column<Guid>(nullable: true),
                     Venue = table.Column<string>(nullable: true),
@@ -208,7 +207,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     Name = table.Column<string>(nullable: true),
                     Surname = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
-                    ExperienceYear = table.Column<decimal>(nullable: false),
+                    ExperienceYear = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     Experience = table.Column<string>(nullable: true),
                     Dependency = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true),
@@ -331,7 +330,7 @@ namespace CleanArchitecture.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -813,7 +812,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     OrderId = table.Column<Guid>(nullable: false),
                     ActivityId = table.Column<Guid>(nullable: false),
-                    Price = table.Column<decimal>(nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     Quantity = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -867,7 +866,8 @@ namespace CleanArchitecture.Persistence.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -898,7 +898,8 @@ namespace CleanArchitecture.Persistence.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Blogs_AuthorId",

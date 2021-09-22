@@ -17,6 +17,15 @@ body {
   font-family: AssistantRegular, Arial, Helvetica, sans-serif !important
   
 }
+html, body {
+  overflow-x: hidden;
+}
+body {
+  position: relative
+}
+.pageContainer.ui.container{
+  min-height: 100vh;
+}
 
 .popup{
   font-family: AssistantRegular, Arial, Helvetica, sans-serif  !important;
@@ -596,25 +605,22 @@ a.ui.card:hover {
 }
 .homepage_Segment{
   margin: 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  display: block;
 }
-.homepageContainer.ui.container{
+.pageContainer.home{
   text-align: center;
 }
 
 
 
-@media only screen and (min-width: 1200px){
+@media (min-width: 1200px){
 .pageContainer.ui.container {
     width: 1350px;
     margin: auto!important;
     max-width: 1400px;
    
-  }
-
-  .homepageContainer.ui.container{
-    width: 1210px;
-    margin: auto!important;
-    max-width: 1400px;
   }
 
  
@@ -1540,6 +1546,10 @@ button, input, optgroup, select, textarea {
 .ui.grid.profilePage_Container_Grid_mobile{
   display: flex;
   flex-direction: column-reverse;
+}
+
+.ui.selection.dropdown .menu {
+  max-height: 11.11428571rem !important;
 }
 }
 

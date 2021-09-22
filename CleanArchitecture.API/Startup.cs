@@ -46,7 +46,7 @@ namespace CleanArchitecture.API
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseLazyLoadingProxies();
-                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
             });
 
             ConfigureServices(services);
@@ -57,7 +57,10 @@ namespace CleanArchitecture.API
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseLazyLoadingProxies();
-                opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), builder =>
+                {
+                    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                });
             });
 
             ConfigureServices(services);
@@ -65,16 +68,16 @@ namespace CleanArchitecture.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-          
 
-             services.AddCors(opt => 
+            services.AddCors(opt => 
             {
                 opt.AddPolicy("CorsPolicy", policy => 
                 {
                     policy.AllowAnyHeader()
                     .AllowAnyMethod()
-                    .WithExposedHeaders("WWW-Authenticate")
-                    .WithOrigins("http://localhost:3000", "http://localhost:9999")
+                  //  .AllowAnyOrigin();
+                     .WithExposedHeaders("WWW-Authenticate")
+                     .WithOrigins("http://localhost:3000", "http://localhost:9999")
                     .AllowCredentials();
                 });
             });
@@ -172,11 +175,31 @@ namespace CleanArchitecture.API
 
             if (env.IsDevelopment())
             {
-               // app.UseDeveloperExceptionPage();
+                // app.UseDeveloperExceptionPage();
             }
-         //   app.UseRequestResponseLogging();
+            else
+            {
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
+            //   app.UseRequestResponseLogging();
 
             // app.UseHttpsRedirection();
+
+            app.UseXContentTypeOptions();
+            app.UseReferrerPolicy(x => x.NoReferrer());
+            app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
+            app.UseXfo(op => op.Deny());
+            app.UseCsp(opt => opt
+                .BlockAllMixedContent()
+                .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com","sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs="))
+                .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com","data:"))
+                .FormActions(s => s.Self())
+                .FrameAncestors(s => s.Self())
+                .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com","blob:","data:"))
+                .ScriptSources(s => s.Self().CustomSources("sha256-eE1k/Cs1U0Li9/ihPPQ7jKIGDvR8fYw65VJw+txfifw="))
+                );
 
             app.UseDefaultFiles();
             app.UseStaticFiles();

@@ -15,13 +15,12 @@ import { LoadingComponent } from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
 import ProfilePage  from '../../features/profiles/ProfilePage';
 import ProfileDashboard  from '../../features/profiles/ProfileDashboard';
-import ActivitySearchPage from '../../features/activities/search/ActivitySearchPage';
 import PostForm from '../../features/posts/PostForm';
 import BlogList from '../../features/blog/BlogList';
 import BlogPage from '../../features/blog/BlogPage';
 import MessagesPage from '../../features/messages/MessagesPage';
-import { useLoadScript } from "@react-google-maps/api";
-import { LoadScriptUrlOptions } from "@react-google-maps/api/dist/utils/make-load-script-url";
+// import { useLoadScript } from "@react-google-maps/api";
+// import { LoadScriptUrlOptions } from "@react-google-maps/api/dist/utils/make-load-script-url";
 import { runInAction } from 'mobx';
 import PrivateRoute from './PrivateRoute';
 import { LoginRequiredPage } from './LoginRequiredPage';
@@ -32,7 +31,7 @@ import MobileNavMenu from '../../features/nav/MobileNavMenu';
 import ActivityPaymentPage from '../../features/activities/payment/ActivityPaymentPage';
 import Footer from '../../features/home/Footer';
 
-const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
+// const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
 const App: React.FC<RouteComponentProps> = ({location}) => {
 
@@ -41,10 +40,10 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   const { getUser,user,createHubConnection,hubConnection,stopHubConnection } = rootStore.userStore;
   const { loadCategories} = rootStore.categoryStore;
 
-  useLoadScript({
-      googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
-      libraries
-  });
+  // useLoadScript({
+  //     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
+  //     libraries
+  // });
 
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
   const [visible, setVisible] = useState(false);
@@ -133,7 +132,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <Route path="/messages" component={MessagesPage}/>
                  <Route path="/login" component={LoginForm}/>
                  <Route path="/login-required" component={LoginRequiredPage}/>
-                 <Route exact path="/activitysearch" component={ActivitySearchPage}/>
+                 {/* <Route exact path="/activitysearch" component={ActivitySearchPage}/> */}
                  <Route exact path="/admin" component={Admin}/>
                  <Route component={NotFound}/>
                </Switch>
@@ -178,7 +177,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <Route path="/messages" component={MessagesPage}/>
                  <Route path="/login" component={LoginForm}/>
                  <Route path="/login-required" component={LoginRequiredPage}/>
-                 <Route exact path="/activitysearch" component={ActivitySearchPage}/>
+                 {/* <Route exact path="/activitysearch" component={ActivitySearchPage}/> */}
                  <Route exact path="/admin" component={Admin}/>
                   <Route component={NotFound}/>
                 </Switch>

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace CleanArchitecture.Persistence
@@ -13,7 +15,7 @@ namespace CleanArchitecture.Persistence
         {
 
         }
-        public DbSet<Activity> Activities { get; set; }
+        public DbSet<Domain.Activity> Activities { get; set; }
         public DbSet<UserActivity> UserActivities { get; set; }
         public DbSet<Video> Videos { get; set; }
         public DbSet<Photo> Photos { get; set; }
@@ -46,7 +48,13 @@ namespace CleanArchitecture.Persistence
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //Debugger.Launch();
+            builder.Entity<Domain.Activity>().Property(p => p.Price).HasColumnType("decimal(18,4)");
+            builder.Entity<AppUser>().Property(p => p.ExperienceYear).HasColumnType("decimal(18,4)");
+            builder.Entity<OrderItem>().Property(p => p.Price).HasColumnType("decimal(18,4)");
+
             base.OnModelCreating(builder); //pk vermeyi sağlıyor migration sırasında
+
 
             builder.Entity<UserActivity>(x => x.HasKey(ua => 
                 new {ua.AppUserId, ua.ActivityId}));

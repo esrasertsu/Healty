@@ -254,23 +254,9 @@ interface IProps extends RouteComponentProps<DetailParams> {}
           />
         </Segment>
       </Grid.Column>
-      {/* <Grid.Column width={7}>
-        <Segment>
-    <>  
-          <ActivityFormMap />
-          </>
-           <ActivitySearchPage />
-        </Segment>
-      </Grid.Column> */}
+      
        </Grid.Row>
-       {/*<Grid.Row>
-      <Grid.Column width={16}>
-        <Segment>
-          <ActivityFormMap /> 
-        <ActivitySearchPage />
-        </Segment>
-        </Grid.Column>
-      </Grid.Row> */}
+      
     </Grid>
    }  
    {showPaymentPage && 

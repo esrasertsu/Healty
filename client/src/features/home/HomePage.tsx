@@ -207,10 +207,9 @@ const HomePage = () => {
                   
                </Container>
            </Segment>
-           <Segment className="homepage_Segment">
+           <Container className="pageContainer home">
            <div className="spacingContainer__small" />
            
-           <Container className="homepageContainer">
            <Header as='h1'  style={{fontSize: '34px',  textAlign:'center', width:"100%" }}>
                 Doğru uzmanı tam yerinde keşfet
                 </Header>
@@ -382,13 +381,8 @@ const HomePage = () => {
     </div>
 <br/>
 
-     {/* <Statistics /> */}
-     <div style={{display:"flex"}}>
-        <div className="spacingContainer__small" />
-    </div>
-<br/>
+    
       </Container>
-      </Segment>
         </Fragment>
     </>
     );

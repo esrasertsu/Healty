@@ -92,15 +92,15 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                          <Popup
                          header={"Bu etkinliğe gidiyorsun"}
                          trigger={
-                            <FontAwesomeIcon icon={faWalking} size="2x" style={{position:"absolute", top:10, right:10, color:"#00b5ad"}}/>
-                         }
+                            <Icon name="user" style={{position:"absolute", top:10, right:10, color:"#00b5ad",height:"2em"}} />
+                        }
                        />
                         }
                          {activity.isHost && 
                             <Popup
                             header={"Bu etkinliğin düzenleyeni sensin."}
                             trigger={
-                                <FontAwesomeIcon icon={faUserEdit} size="2x" style={{position:"absolute", top:10, right:10, color:"#00b5ad"}}/>
+                                <Icon name="edit" style={{position:"absolute", top:10, right:10, color:"#00b5ad",height:"2em"}}/>
                             }
                           />
                     }
@@ -153,7 +153,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                     </Item.Content>
                     <Item.Content className={isTabletOrMobile ? "activity_listItem_extraContent_mobile":"activity_listItem_extraContent"} >
                     <Item.Description style={{textAlign:"right", display: "flex", justifyContent: "flex-end"}}>
-                     <StarRating rating={3} editing={false} size={'small'} showCount={false}/>
+                     <StarRating rating={5} editing={false} size={'small'} showCount={false}/>
                     </Item.Description>
                     <Item.Description style={{flex:"end"}}>
                     <div className="baseline-pricing">

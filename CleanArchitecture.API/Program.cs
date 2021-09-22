@@ -51,6 +51,8 @@ namespace CleanArchitecture.API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureKestrel(serverOpt => serverOpt.AddServerHeader = false);
+
                 });
     }
 }

@@ -86,12 +86,13 @@ const NavBar: React.FC = () => {
           setActiveMenu(-1);
             history.push(`/`);
           }}
+          style={{ padding:"0.5em 1.14285714em"}}
           >
                 <div style={{display:"flex", alignItems:"center"}}>
                   <img
                       src="/assets/logo.png"
                       alt="logo"
-                      style={{ height:"40px"}}
+                      style={{ height:"50px"}}
                     />
                 </div>
                   

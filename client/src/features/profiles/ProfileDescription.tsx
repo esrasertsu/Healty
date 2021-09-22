@@ -4,13 +4,17 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileEditForm from './ProfileUpdateForm';
 import { observer } from 'mobx-react-lite';
 import { toast } from 'react-toastify';
+import { Category, ICategory } from '../../app/models/category';
 
 const ProfileDescription = () => {
   const rootStore = useContext(RootStoreContext);
   const { updateProfile, profile, isCurrentUser ,setUpdatedProfile, updatedProfile,deleteDocument} = rootStore.profileStore;
   const [editMode, setEditMode] = useState(false);
   const {openModal,closeModal,modal} = rootStore.modalStore;
+  const {allCategoriesOptionList,loadAllCategoryList} = rootStore.categoryStore;
 
+  const [categoryOptions, setcategoryOptions] = useState<ICategory[]>([]);
+  let options:ICategory[] = [];
   useEffect(() => {
     if(updatedProfile)
      {
@@ -19,6 +23,21 @@ const ProfileDescription = () => {
      }
    
   }, [updatedProfile])
+
+  useEffect(() => {
+    if(allCategoriesOptionList.length === 0)
+    {
+      loadAllCategoryList();
+    }else{
+      allCategoriesOptionList.filter(x=>x.parentId===null).map(option => (
+        options.push(new Category({key: option.key, value: option.value, text: option.text}))
+   ));
+   setcategoryOptions(options);
+
+    }
+    
+  
+  }, [allCategoriesOptionList])
 
   const ref = React.useRef<any>();
   const [height, setHeight] = React.useState("100px");
@@ -62,7 +81,8 @@ const ProfileDescription = () => {
               basic
               content={editMode ? 'İptal' : 'Düzenle' }
               onClick={() => 
-                { setEditMode(!editMode);
+                { 
+                  setEditMode(!editMode);
                  setUpdatedProfile(false);
                 }}
             />
@@ -70,7 +90,7 @@ const ProfileDescription = () => {
         </Grid.Column>
         <Grid.Column width={16}>
           {editMode && !updatedProfile ? (
-            <ProfileEditForm updateProfile={updateProfile} profile={profile!} deleteDocument={deleteDocument} />
+            <ProfileEditForm updateProfile={updateProfile} profile={profile!} deleteDocument={deleteDocument} categoryOptions={categoryOptions} />
           ) : 
             (
               <Grid stackable={true} style={{fontSize:"1.1rem"}}>

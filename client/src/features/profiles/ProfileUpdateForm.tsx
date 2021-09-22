@@ -23,16 +23,16 @@ interface IProps {
   updateProfile: (profile: Partial<IProfile>) => void;
   profile: IProfile;
   deleteDocument:(id:string) => void;
+  categoryOptions:ICategory[];
 }
 
 
-const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocument }) => {
+const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocument,categoryOptions }) => {
    
     const rootStore = useContext(RootStoreContext);
     const {accessibilities, profileForm, setProfileForm, deletingDocument} = rootStore.profileStore;
     const {allCategoriesOptionList} = rootStore.categoryStore;
     const {cities} = rootStore.commonStore;
-    const categoryOptions: ICategory[] = [];
     const subCategoryOptionFilteredList: ICategory[] = [];
 
     const [updateEnabled, setUpdateEnabled] = useState<boolean>(false);
@@ -72,9 +72,7 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocu
             setUpdateEnabled(true);
      }
 
-    allCategoriesOptionList.filter(x=>x.parentId===null).map(option => (
-          categoryOptions.push(new Category({key: option.key, value: option.value, text: option.text}))
-     ));
+   
 
      const loadSubCatOptions = () =>{
       allCategoriesOptionList.filter(x=> profileForm!.categoryIds.findIndex(y=> y === x.parentId!) > -1).map(option => (
@@ -178,7 +176,7 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocu
             </OnChange>
            <label>Tecrübe (Yıl)</label>
            <Field 
-                  width={2}
+                  width={3}
                   name="experienceYear"
                   type="number"
                   placeholder="Tecrübe (Yıl)"
@@ -222,7 +220,7 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocu
                   value={profileForm!.categoryIds}
                   component={DropdownMultiple}
                   options = {categoryOptions}
-                  onChange={(e: any,data:[])=>
+                  onChange={(e: any,data:any)=>
                     {
                       debugger;
                       handleCategoryChanged(e,data)}}

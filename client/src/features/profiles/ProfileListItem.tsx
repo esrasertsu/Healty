@@ -114,7 +114,7 @@ interface IProps {
         key={profile.userName+Math.random() +"_accessibilityPopover"}
         trigger={
           <div key={profile.userName+Math.random()+"acc"} className="profileListItem_subCats"> <Icon key={profile.userName+Math.random()+"accIcon"} name="bolt" /> 
-          Erişilebilirlik:
+          Erişim:
           {profile.accessibilities && profile.accessibilities.length > 0 ? 
      
      profile.accessibilities.map<React.ReactNode>(s =>

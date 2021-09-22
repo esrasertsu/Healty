@@ -14,7 +14,8 @@
 
 body {
   background-color: #f8f7f791  !important;
-  font-family: AssistantRegular, Arial, Helvetica, sans-serif !important
+  font-family: AssistantRegular, Arial, Helvetica, sans-serif !important;
+  font-size: 16px;
   
 }
 html, body {
@@ -584,7 +585,7 @@ a.ui.card:hover {
 }
 
 .spacingContainer__small{
-  height: 60px;
+  height: 45px;
   float: left;
   clear: none;
   width: 100%;
@@ -756,7 +757,11 @@ max-width: 95%;
 }
 }
 
-@media (max-width: 768px){
+@media screen and (max-width: 768px){
+  .ui.search,.ui.input,.ui.form,.ui.dropdown .menu>.item,.ui.card>.content, .ui.cards>.card>.content, input,
+  .ui.large.label,.ui.button, .ui.buttons .button, .ui.buttons .or{
+    font-size: 16px !important;
+  }
   .modals .content{
     margin-top: 30px;
   }
@@ -862,9 +867,6 @@ max-width: 95%;
 
 }
 
-.profileHeaderImageCrop .ReactCrop__crop-selection{
-  height: 300px !important;
-}
 
 .profileHeader_label{
   box-shadow:2px 8px 14px 0px #bcbdbdcc, 0 0 0 1px #d4d4d557;
@@ -1102,6 +1104,10 @@ max-width: 80%;
     /* margin-left: calc(625px - 50vw) !important; */
     width: 100%;
   }
+
+  .profileHeaderImageCrop .ReactCrop__crop-selection{
+    height: 300px !important;
+  }
   
 }
 
@@ -1208,7 +1214,7 @@ i.search.inverted.icon {
   }
 @media (max-width: 500px){
   .homePage-button_Container {
-    height: 50px;
+    height: 60px;
 }
 .SearchArea {
   width: 63%;
@@ -1549,7 +1555,7 @@ button, input, optgroup, select, textarea {
 }
 
 .ui.selection.dropdown .menu {
-  max-height: 11.11428571rem !important;
+  max-height: 12.11428571rem !important;
 }
 }
 
@@ -1800,7 +1806,6 @@ button, input, optgroup, select, textarea {
 
 .scroll-to-top {
   position: fixed;
-  bottom: 3rem;
   right: 3rem;
   animation: fadeIn 700ms ease-in-out 1s both;
   cursor: pointer;

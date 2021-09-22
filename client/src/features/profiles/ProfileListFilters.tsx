@@ -23,7 +23,7 @@ const ProfileListFilters: React.FC = () => {
     cities
  } = rootStore.commonStore;
 
-  const {accessibilities, profileFilterForm, setProfileFilterForm, loadProfiles, clearProfileRegistery,setPage} = rootStore.profileStore;
+  const {accessibilities, profileFilterForm, setProfileFilterForm, loadPopularProfiles, clearPopularProfileRegistery ,clearProfileRegistery,setPage} = rootStore.profileStore;
 
   //const [filters, setFilters] = useState(new ProfilesFilterFormValues());
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -118,9 +118,10 @@ const ProfileListFilters: React.FC = () => {
                   content="Ara"
                   style={{marginRight:"10px"}}
                   onClick={() => {
+                    clearPopularProfileRegistery();
                     clearProfileRegistery();
                     setPage(0);
-                    loadProfiles();
+                    loadPopularProfiles();
                   }}
                 />
                 <Button
@@ -131,9 +132,10 @@ const ProfileListFilters: React.FC = () => {
                   onClick={() =>{
                     setProfileFilterForm(new ProfileFilterFormValues( {categoryId:"", subCategoryIds:[], cityId:"", accessibilityId:"", followingTrainers:false}));
                     setButtonDisabled(false);
+                    clearPopularProfileRegistery();
                     clearProfileRegistery();
                     setPage(0);
-                    loadProfiles();
+                    loadPopularProfiles();
                   }
                   }
                 />

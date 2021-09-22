@@ -17,9 +17,10 @@ import { useMediaQuery } from 'react-responsive'
       loadCategories,
       allDetailedList,
       loadSubCategories,
+      loadingAllDetailedList
     } = rootStore.categoryStore;
     const {userCity} = rootStore.commonStore;
-    const {setProfileFilterForm,profileFilterForm,clearProfileRegistery, setPage} = rootStore.profileStore;
+    const {setProfileFilterForm,profileFilterForm,clearPopularProfileRegistery, setPage} = rootStore.profileStore;
 
     const [results, setResults] = useState<IAllCategoryList[]>([]);
     const [value, setValue] = useState('');
@@ -31,6 +32,7 @@ import { useMediaQuery } from 'react-responsive'
     const isMobile = useMediaQuery({ query: '(max-width: 500px)' })
 
     useEffect(() => {
+      if(allDetailedList.length === 0)
       loadAllCategoryList();
     },[loadAllCategoryList]); 
 
@@ -58,7 +60,7 @@ import { useMediaQuery } from 'react-responsive'
        <Container className='homePage-button_Container'>
         <Search
                         fluid
-                        loading={isSearchLoading}
+                        loading={isSearchLoading }
                         onResultSelect={handleResultSelect}
                         onSearchChange={_.debounce(handleSearchChange, 500, {
                           leading: true,
@@ -67,7 +69,7 @@ import { useMediaQuery } from 'react-responsive'
                         value={value}
                         resultRenderer={resultRenderer}
                         className="SearchArea"
-                        placeholder={isMobile ? "Kategori ismi girin" :"Arama yapmak istediğin kategori.." }
+                        placeholder={loadingAllDetailedList ? "Yükleniyor..." : isMobile ? "Kategori ismi girin" :"Arama yapmak istediğin kategori.." }
                         noResultsMessage="Aradığınız kategori bulunamadı"
                 />
                       <Button size={isMobile ? 'tiny': 'big'} primary circular onClick={() => {
@@ -75,14 +77,15 @@ import { useMediaQuery } from 'react-responsive'
                            if(result && result.parentId === null)
                               {
                                 loadCategories();
-                                setProfileFilterForm({...profileFilterForm, categoryId:result.key, cityId: userCity});
+                                loadSubCategories(result.key);
+                                setProfileFilterForm({...profileFilterForm, categoryId:result.key, cityId: userCity, subCategoryIds: []});
                               }
                               else 
                               { 
                                 result && loadSubCategories(result.parentId!);
                                 result && setProfileFilterForm({...profileFilterForm,cityId: userCity, categoryId:result.parentId!, subCategoryIds:[result.key]});
                               }
-                          clearProfileRegistery();
+                              clearPopularProfileRegistery();
                           history.push("/profiles");
                         }}>
                       <Icon name='search' inverted></Icon> Ara

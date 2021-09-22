@@ -27,11 +27,12 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new ProfileList.Query(limit, offset, categoryId, subCategoryIds,accessibilityId,cityId, sort));
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<List<Profile>>> List()
-        //{
-        //    return await Mediator.Send(new ProfileList.Query { Role = role });
-        //}
+        [HttpGet("popularList")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<Profile>>> ListPopularProfiles(int? limit, int? offset, Guid? categoryId, [FromQuery(Name = "subCategoryIds")] List<Guid> subCategoryIds, Guid? accessibilityId, Guid? cityId, string sort)
+        {
+            return await Mediator.Send(new PopularProfilesList.Query(limit, offset, categoryId, subCategoryIds, accessibilityId, cityId, sort));
+        }
 
         [HttpGet("{username}/activities")]
         [AllowAnonymous]

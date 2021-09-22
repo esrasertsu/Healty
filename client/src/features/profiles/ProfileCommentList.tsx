@@ -27,8 +27,8 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
   return (
 <Fragment>
 {getCommentsByDate.length === 0 ? 
-              <p>
-Eğitmen hakkında henüz yorum yapılmamış
+              <p style={{fontSize:"16px"}}>
+                Eğitmen hakkında henüz yorum yapılmamış.
               </p>  :
     <Comment.Group style={{maxWidth: "100%"}}>
                  {getCommentsByDate.map((comment) => (

@@ -10,18 +10,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+
 namespace CleanArchitecture.Application.Profiles
 {
-    public class ProfileList
+    public class PopularProfilesList
     {
-        public class ProfilesEnvelope
-        {
-            public List<Profile> ProfileList { get; set; }
-            public int ProfileCount { get; set; }
-
-        }
-
-        public class Query : IRequest<ProfilesEnvelope>
+        
+        public class Query : IRequest<List<Profile>>
         {
             public Query(int? limit, int? offset, Guid? categoryId, List<Guid> subCategoryIds, Guid? accessibilityId, Guid? cityId, string sort)
             {
@@ -44,7 +39,7 @@ namespace CleanArchitecture.Application.Profiles
         }
 
 
-        public class Handler : IRequestHandler<Query, ProfilesEnvelope>
+        public class Handler : IRequestHandler<Query, List<Profile>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -55,7 +50,7 @@ namespace CleanArchitecture.Application.Profiles
                 _mapper = mapper;
                 _profileReader = profileReader;
             }
-            public async Task<ProfilesEnvelope> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<Profile>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var queryableUsers = _context.Users
                     .AsQueryable();
@@ -69,13 +64,13 @@ namespace CleanArchitecture.Application.Profiles
                 }
                 if (request.CityId != null)
                 {
-                    queryableUsers = queryableUsers.Where(x => x.City.Id== request.CityId);
+                    queryableUsers = queryableUsers.Where(x => x.City.Id == request.CityId);
                 }
                 if (request.AccessibilityId != null)
                 {
                     queryableUsers = queryableUsers.Where(x => x.UserAccessibilities.Any(x => x.AccessibilityId == request.AccessibilityId));
                 }
-            
+
                 if (request.SubCategoryIds != null && request.SubCategoryIds.Count > 0)
                 {
                     queryableUsers = queryableUsers.Where(x => x.UserSubCategories.Any(
@@ -83,44 +78,22 @@ namespace CleanArchitecture.Application.Profiles
                 }
                 #endregion
 
+                #region 10 popular profile
+                /*<---  popüler profile ----->*/
                 var queryableUsersCopy = await queryableUsers.ToListAsync();
-
-                if (queryableUsers.ToList().Count < request.Limit)
-                    request.Limit = queryableUsers.ToList().Count;
-
-                var users = await queryableUsers
-                   //filtrelenmiş user datası
-                   .Skip(request.Offset ?? 0)
-                   .Take(request.Limit ?? 6).ToListAsync();
-
-                var profiles = new List<Profile>();
-
-                if (request.Sort == "popular")
+                var popularUsers = queryableUsersCopy.OrderByDescending(x => x.ReceivedComments.Count).ToList();
+                var popularProfiles = new List<Profile>();
+                foreach (var user in popularUsers)
                 {
-                    var popularUsers = queryableUsersCopy.OrderByDescending(x => x.ReceivedComments.Count).ToList();
-                    var popularProfiles = new List<Profile>();
-                    foreach (var user in popularUsers)
-                    {
-                        popularProfiles.Add(await _profileReader.ReadProfileCard(user.UserName));
-                    }
-                    profiles = popularProfiles.OrderByDescending(x => x.Star).Skip(request.Offset ?? 0).Take(request.Limit ?? 6).ToList();
-
+                    popularProfiles.Add(await _profileReader.ReadProfileCard(user.UserName));
                 }
-                else
-                {
-                    foreach (var user in users)
-                    {
-                        profiles.Add(await _profileReader.ReadProfileCard(user.UserName));
-                    }
-                }
-                    
-                return new ProfilesEnvelope
-                {
-                    ProfileList = profiles,
-                    ProfileCount = queryableUsers.Count()
-                };
+                var orderedpopularProfiles = popularProfiles.OrderByDescending(x => x.Star).Take(10).ToList();
+                /*<--- end of popüler profile ----->*/
+                #endregion
+
+
+                return orderedpopularProfiles;
             }
         }
-
     }
 }

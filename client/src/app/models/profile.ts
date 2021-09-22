@@ -4,7 +4,6 @@ import { ICity } from "./location";
 export interface IProfileEnvelope {
     profileList :IProfile[];
     profileCount: number;
-    popularProfiles :IProfile[];
 }
 export interface IProfile {
     id:string,

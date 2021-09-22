@@ -5,7 +5,7 @@ import { IAccessibility, IPhoto, IProfile, IProfileBlog, IProfileComment, IProfi
 import { RootStore } from "./rootStore";
 import { IMessageForm } from "../models/message";
 
-const LIMIT = 5;
+const LIMIT = 10; //axios'u düzeltmeyi unutma
 
 export default class ProfileStore{
     rootStore: RootStore
@@ -34,10 +34,12 @@ export default class ProfileStore{
     @observable profile: IProfile | null = null;
     @observable commentRegistery = new Map();
     @observable profileRegistery = new Map();
+    @observable popularProfileRegistery = new Map();
+
     @observable popularProfileList: IProfile[] = [];
     @observable blogRegistery = new Map();
     @observable loadingProfile = true;
-    @observable loadingProfiles = true;
+    @observable loadingPopularProfiles = true;
     @observable loadingOnlyProfiles = false;
     
     @observable loadingAccessibilities = false;
@@ -77,7 +79,7 @@ export default class ProfileStore{
     @observable referencePics: IRefencePic[] = [];
     @observable deletingReferencePic = false;
     
-
+    @observable totalProfilePage = 0;
     @observable page = 0;
     @computed get isCurrentUser(){
         if (this.rootStore.userStore.user && this.profile){
@@ -87,6 +89,7 @@ export default class ProfileStore{
         }
     }
     @computed get totalProfileListPages(){
+        debugger;
         return Math.ceil(this.profilePageCount / LIMIT);
     }
     @computed get totalPages(){
@@ -102,7 +105,9 @@ export default class ProfileStore{
     @action setPage = (page:number) =>{
         this.page = page;
     }
-
+    @action setTotalProfilePage = (page:number) =>{
+        this.profilePageCount = page;
+    }
     @action setProfileNull = () =>{
         this.profile = null;
     }
@@ -117,6 +122,9 @@ export default class ProfileStore{
         this.profileRegistery.clear();
     }
 
+    @action clearPopularProfileRegistery = () => {
+        this.popularProfileRegistery.clear();
+    }
     @computed get getCommentsByDate(){
         // return this.activities.sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
       //  return Array.from(this.activityRegistery.values()).sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
@@ -148,8 +156,8 @@ export default class ProfileStore{
     }
 
     
-    @action setLoadingProfiles = (lp : boolean) =>{
-        this.loadingProfiles = lp;
+    @action setLoadingPopularProfiles = (lp : boolean) =>{
+        this.loadingPopularProfiles = lp;
     }
 
     @action setUpdatedProfile = (up: boolean) =>{
@@ -290,36 +298,43 @@ export default class ProfileStore{
         return params;
     }
 
-    @action loadProfiles = async () =>{
-        this.loadingProfiles = true;
-        try {
-            const profilesEnvelope= await agent.Profiles.list(this.axiosParams);
-            const {profileList, profileCount,popularProfiles } = profilesEnvelope;
 
+    @action loadPopularProfiles = async () =>{
+        debugger;
+        this.loadingPopularProfiles = true;
+        this.loadingOnlyProfiles = true;
+        try {
+            var params = this.axiosParams;
+            const popularProfiles= await agent.Profiles.popularlist(this.axiosParams);
             runInAction('Loading profiles',()=>{
-                this.popularProfileList=popularProfiles;
-                profileList.forEach((profile) =>{
-                    this.profileRegistery.set(profile.userName, profile);
+                popularProfiles.forEach((profile) =>{
+                    this.popularProfileRegistery.set(profile.userName, profile);
                 });
-                this.loadAccessibilities();
-                if(this.rootStore.categoryStore.categoryList.length===0)
-                     this.rootStore.categoryStore.loadCategories();
-                this.profileList = profileList;
-                this.profilePageCount = profileCount;
-                this.loadingProfiles = false;
+                this.popularProfileList=popularProfiles;
+                this.loadingPopularProfiles = false;
+                if(popularProfiles.length > 0)
+                    this.loadProfiles(params);
+                else
+                {
+                    this.clearProfileRegistery();   
+                    this.profileList = [];
+                    this.loadingOnlyProfiles = false;
+                }  
+             
             })
         } catch (error) {
             runInAction(()=>{
-                this.loadingProfiles = false;
+                this.loadingPopularProfiles = false;
             })
             console.log(error);
         }
     }
 
-    @action sortProfiles = async () =>{
+    @action loadProfiles = async (params?:URLSearchParams) =>{
+        debugger;
         this.loadingOnlyProfiles = true;
         try {
-            const profilesEnvelope= await agent.Profiles.list(this.axiosParams);
+            const profilesEnvelope= await agent.Profiles.list(params ? params : this.axiosParams);
             const {profileList, profileCount } = profilesEnvelope;
 
             runInAction('Loading profiles',()=>{
@@ -327,7 +342,7 @@ export default class ProfileStore{
                     this.profileRegistery.set(profile.userName, profile);
                 });
                 this.profileList = profileList;
-                this.profilePageCount = profileCount;
+                this.setTotalProfilePage(profileCount);
                 this.loadingOnlyProfiles = false;
             })
         } catch (error) {
@@ -431,13 +446,11 @@ export default class ProfileStore{
             runInAction(() => {
                 if(this.profile)
                 {
-                    this.profile.photos.push(photo);
+                    
                     if(photo.isCoverPic && this.rootStore.userStore.user)
                     {
                         setImageChange(false);
                         this.profile.coverImage = photo.url;
-                        this.profile!.photos = this.profile!.photos.filter(e => e.isCoverPic !== true);
-                        this.profile!.photos.find(e => e.id === photo.id)!.isCoverPic = true;
                     }
                 }
 
@@ -446,7 +459,7 @@ export default class ProfileStore{
         } catch (error) {
             console.log(error);
 
-            if(error.status === 400)
+            if((error as any).status === 400)
             toast.warning('Cover photo has been already updated');
             else 
             toast.error('Problem uploading cover photo');

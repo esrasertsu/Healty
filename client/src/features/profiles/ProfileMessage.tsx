@@ -19,7 +19,7 @@ const ProfileMessage: React.FC<IProps> = ({profile}) => {
                         </Grid.Column>
                         <Grid.Column width={11}>
                             <Header>{profile.displayName}</Header>
-                            <Label>Cevap verme %{profile.responseRate}&nbsp;
+                            <Label size="large">Cevap verme %{profile.responseRate}&nbsp;
                                 {/* <Icon size="large" name="question circle" className="questionmarkicon"></Icon> */}
                             </Label>
                         </Grid.Column>

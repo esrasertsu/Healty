@@ -6,8 +6,6 @@ import {ActivityListItemAttendees } from './ActivityListItemAttendees';
 import { history } from '../../../index'
 import { StarRating } from '../../../app/common/form/StarRating';
 import { colors } from '../../../app/models/category';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWalking, faUserEdit } from '@fortawesome/free-solid-svg-icons'
 import { LoginForm } from '../../user/LoginForm';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import { RegisterForm } from '../../user/RegisterForm';

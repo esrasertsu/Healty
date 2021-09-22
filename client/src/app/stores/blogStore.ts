@@ -277,7 +277,7 @@ export default class BlogStore{
             runInAction('Editing blog error', () => {
                 this.submitting = false;
 
-                if(error.status === 400)
+                if((error as any).status === 400)
                     toast.warning('Blog has been already updated');
 
             });
@@ -299,7 +299,7 @@ export default class BlogStore{
             runInAction('Editing blog error', () => {
                 this.submittingPhoto = false;
 
-                if(error.status === 400)
+                if((error as any).status === 400)
                     toast.warning('Blog has been already updated');
 
             });

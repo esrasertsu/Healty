@@ -272,6 +272,7 @@ const User ={
 const Profiles = {
     get: (userName: string) => requests.get(`/profiles/${userName}/details`),
     list: (params: URLSearchParams): Promise<IProfileEnvelope> => axios.get(`/profiles`, {params:params}).then(responseBody),
+    popularlist: (params: URLSearchParams): Promise<IProfile[]> => axios.get(`/profiles/popularList`, {params:params}).then(responseBody),
     uploadPhoto: ( photo: Blob): Promise<IPhoto> => requests.postForm(`/photos`, photo),
     setMainPhoto: (id:string) => requests.post(`/photos/${id}/setMain`,{}),
     deletePhoto: (id:string) => requests.del(`/photos/${id}`),

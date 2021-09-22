@@ -15,14 +15,16 @@ const ActivityDashboard: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
   const {loadActivities, loadingInitial, setPage, page, totalPages,loadLevels,predicate,setPredicate
   ,setClearPredicateBeforeSearch,clearKeyPredicate,subCategoryIds,setSubCategoryIds,
-  categoryIds, setCategoryIds, setLevelIds,
-   setCityId, isOnline, setIsOnline} = rootStore.activityStore;
+  categoryIds, setCategoryIds, setLevelIds,levelList,
+   setCityId, isOnline, setIsOnline, activityRegistery} = rootStore.activityStore;
 
 
-  const { loadCategories } = rootStore.categoryStore;
+  const { loadCategories,categoryRegistery } = rootStore.categoryStore;
   const [loadingNext, setLoadingNext] = useState(false);
   const [isToggleVisible, setIsToggleVisible] = useState(false);
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
+
   const [visible, setVisible] = useState(false);
   const [activitySelectedFilters, setActivitySelectedFilters] = useState<IActivitySelectedFilter[]>([]);
   const [isAccOpen, setisAccOpen] = useState(false);
@@ -34,9 +36,18 @@ const ActivityDashboard: React.FC = () => {
     loadActivities().then(() => setLoadingNext(false))
   }
   useEffect(() => {
-    loadActivities();
-    loadCategories();
-    loadLevels();
+    if(Array.from(activityRegistery.values()).length === 0)
+    {
+      loadActivities();
+    }
+    if(Array.from(categoryRegistery.values()).length === 0)
+    {
+      loadCategories();
+    }
+    if(levelList.length === 0)
+    {
+      loadLevels();
+    }
   },[loadActivities,loadCategories,loadLevels]); //[] provides the same functionality with componentDidMounth..   dependency array
 
   useEffect(() => {
@@ -151,14 +162,27 @@ const ActivityDashboard: React.FC = () => {
          <Grid.Column width={12}>
               {loadingInitial && page === 0 ? <ActivityListItemPlaceholder/> :
               (
-              <InfiniteScroll
-              pageStart={0}
-              loadMore={handleGetNext}
-              hasMore={!loadingNext && page +1 < totalPages}
-              initialLoad={false}>
+              // <InfiniteScroll
+              // pageStart={0}
+              // loadMore={handleGetNext}
+              // hasMore={!loadingNext && page +1 < totalPages}
+              // initialLoad={false}>
+              <>
                 <ActivityList />
-              </InfiniteScroll>
+                <div style={{display:"flex", justifyContent:"center"}}>
+                 <Button  
+                  floated="right"
+                  fluid={isMobile} 
+                  size="large" disabled={loadingNext || (page +1 >= totalPages)} 
+                  onClick={()=> handleGetNext()} 
+                  style={{background:"dodgerblue", color:"white",margin:"20px 0"}}
+                > Daha Fazla Göster </Button>
+                </div>
+                </>
+              // </InfiniteScroll>
               )}
+              {(loadingNext) ? <ActivityListItemPlaceholder /> :""}
+
               <div className="scroll-to-top">
               {isToggleVisible && 
               <Label style={{display:"flex", alignItems:"center"}} onClick={scrollToTop}>
@@ -172,7 +196,6 @@ const ActivityDashboard: React.FC = () => {
               <Grid.Column width={12}>
               <br></br>
               <br></br>
-              <Loader active={loadingNext} />
               </Grid.Column>
            </Grid.Row>
            </Grid>
@@ -203,6 +226,7 @@ const ActivityDashboard: React.FC = () => {
             date = {true}
             time = {true}
             containerClassName="dtPicker_Style"
+            culture="tr"
           />
           <br/>
           <DateTimePicker

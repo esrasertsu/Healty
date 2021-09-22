@@ -9,10 +9,11 @@ import { history } from '../../index'
  const NavSearchArea = () => {
 
     const rootStore = useContext(RootStoreContext);
-    const {setProfileFilterForm,profileFilterForm,clearProfileRegistery, setPage,loadProfiles} = rootStore.profileStore;
+    const {setProfileFilterForm,profileFilterForm,clearPopularProfileRegistery, setPage,loadProfiles} = rootStore.profileStore;
 
     const {
       loadAllCategoryList,
+      loadCategories,
       allDetailedList,
       loadSubCategories
     } = rootStore.categoryStore;
@@ -24,6 +25,7 @@ import { history } from '../../index'
     
     
     useEffect(() => {
+      if(allDetailedList.length === 0)
       loadAllCategoryList();
     },[loadAllCategoryList]); 
 
@@ -33,6 +35,8 @@ import { history } from '../../index'
         setPage(0);
         if(result && result.parentId === null)
         {
+          loadCategories();
+          loadSubCategories(result.key);
           setProfileFilterForm({...profileFilterForm, categoryId:result.key,subCategoryIds:[]});
         }
         else 
@@ -40,7 +44,7 @@ import { history } from '../../index'
           result && loadSubCategories(result.parentId!);
           result && setProfileFilterForm({...profileFilterForm, categoryId:result.parentId!, subCategoryIds:[result.key]});
         }
-        clearProfileRegistery();
+        clearPopularProfileRegistery();
 
             if(history.location.pathname !== "/profiles")
                history.push('/profiles');

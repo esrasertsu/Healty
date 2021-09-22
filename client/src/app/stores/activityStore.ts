@@ -8,7 +8,7 @@ import { createAttendee, setActivityProps } from '../common/util/util';
 import { ActivityFormValues, ActivityOnlineJoinInfo, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, PaymentUserInfoDetails } from '../models/activity';
 import { RootStore } from './rootStore';
 
-const LIMIT = 10;
+const LIMIT = 6;
 export default class ActivityStore {
 
     rootStore:RootStore;

@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
-import { Menu, Container, Image, Dropdown, Label, Icon, Button, Modal } from 'semantic-ui-react';
+import { Menu, Container, Image, Label, Icon, Button, Modal } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import {history} from '../../index';
-import NavSearchArea from './NavSearchArea';
 import { LoginForm } from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
 import TrainerForm from '../user/TrainerForm';
@@ -200,7 +198,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                     setActiveMenu(-1)
                     setVisibleMobileNav(false);
                 }
-                } icon="power"
+                } 
                  className="logoutMobileButton" primary>Çıkış yap</Button>
                   
                   </Menu.Item>

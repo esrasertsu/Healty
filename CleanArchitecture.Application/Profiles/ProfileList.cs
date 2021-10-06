@@ -97,13 +97,13 @@ namespace CleanArchitecture.Application.Profiles
 
                 if (request.Sort == "popular")
                 {
-                    var popularUsers = queryableUsersCopy.OrderByDescending(x => x.ReceivedComments.Count).ToList();
-                    var popularProfiles = new List<Profile>();
+                    var popularUsers = queryableUsersCopy.OrderByDescending(x => x.StarCount).ThenByDescending(x => x.Star).Skip(request.Offset ?? 0).Take(request.Limit ?? 6).ToList();
+                 //   var popularProfiles = new List<Profile>();
                     foreach (var user in popularUsers)
                     {
-                        popularProfiles.Add(await _profileReader.ReadProfileCard(user.UserName));
+                        profiles.Add(await _profileReader.ReadProfileCard(user.UserName));
                     }
-                    profiles = popularProfiles.OrderByDescending(x => x.Star).Skip(request.Offset ?? 0).Take(request.Limit ?? 6).ToList();
+                 //   profiles = popularProfiles.OrderByDescending(x => x.Star).Skip(request.Offset ?? 0).Take(request.Limit ?? 6).ToList();
 
                 }
                 else

@@ -46,7 +46,8 @@ namespace CleanArchitecture.API
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseLazyLoadingProxies();
-                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                //opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
             });
 
             ConfigureServices(services);
@@ -57,10 +58,11 @@ namespace CleanArchitecture.API
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseLazyLoadingProxies();
-                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), builder =>
-                {
-                    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
-                });
+                opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
+                //opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), builder =>
+                //{
+                //    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                //});
             });
 
             ConfigureServices(services);
@@ -161,10 +163,12 @@ namespace CleanArchitecture.API
             services.AddScoped<IDocumentAccessor, DocumentAccessor>();
             services.AddScoped<IZoomAccessor, ZoomAccessor>();
             services.AddScoped<IPaymentAccessor, PaymentAccessor>();
+            services.AddScoped<IFacebookAccessor, FacebookAccessor>();
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
             services.Configure<ZoomSettings>(Configuration.GetSection("Zoom"));
             services.Configure<IyzicoSettings>(Configuration.GetSection("Iyzico"));
+            services.Configure<FacebookAppSettings>(Configuration.GetSection("Authentication:Facebook"));
 
         }
 

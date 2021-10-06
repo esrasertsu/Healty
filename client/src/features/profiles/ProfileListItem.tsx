@@ -6,7 +6,7 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { StarRating } from '../../app/common/form/StarRating';
 import { colors } from '../../app/models/category';
 import { observer } from 'mobx-react-lite';
-import { LoginForm } from '../user/LoginForm';
+import LoginForm from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
 
 interface IProps {

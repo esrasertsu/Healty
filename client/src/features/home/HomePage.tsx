@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useState } from 'react'
 import { Button, Container, Header, Segment, Image, Grid, Card, Icon, Form, GridColumn, Label, Modal } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
-import { LoginForm } from '../user/LoginForm';
+import LoginForm from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; 

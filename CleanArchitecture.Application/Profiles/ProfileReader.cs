@@ -101,8 +101,8 @@ namespace CleanArchitecture.Application.Profiles
                 City = _mapper.Map<City, CityDto>(user.City),
                 FollowerCount = user.Followers.Count(),
                 FollowingCount = user.Followings.Count(),
-                StarCount = GetStarCount(user),
-                Star = CalculateStar(user),
+                StarCount = user.StarCount,
+                Star = user.Star,
                 IsOnline = user.IsOnline,
                 ResponseRate = CalculateResponseRate(user),
                 Accessibilities = accessDtoToReturn,
@@ -202,8 +202,8 @@ namespace CleanArchitecture.Application.Profiles
                 ExperienceYear = user.ExperienceYear,
                 City = _mapper.Map<City, CityDto>(user.City),
                 FollowerCount = user.Followers.Count(),
-                StarCount = GetStarCount(user),
-                Star = CalculateStar(user),
+                StarCount = user.StarCount,
+                Star = user.Star,
                 IsOnline = user.IsOnline,
                 Accessibilities = accessDtoToReturn,
                 Categories = catsToReturn,
@@ -222,14 +222,14 @@ namespace CleanArchitecture.Application.Profiles
             return profile;
 
         }
-        private int GetStarCount(AppUser user)
-        {
-            return  Convert.ToInt32(user.ReceivedComments.Count() >0 ? user.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Count() : 0);
-        }
-        private int CalculateStar(AppUser user)
-        {
-            return Convert.ToInt32(user.ReceivedComments.Count() > 0 ? user.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Average() : 0);
-        }
+        //private int GetStarCount(AppUser user)
+        //{
+        //    return  Convert.ToInt32(user.ReceivedComments.Count() >0 ? user.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Count() : 0);
+        //}
+        //private int CalculateStar(AppUser user)
+        //{
+        //    return Convert.ToInt32(user.ReceivedComments.Count() > 0 ? user.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Average() : 0);
+        //}
         private int CalculateResponseRate(AppUser user)
         {
            var receivedFirstMessagesCount = user.ChatRooms.Where(x => x.ChatRoom.StarterId != user.Id).Count();

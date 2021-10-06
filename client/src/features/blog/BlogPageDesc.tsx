@@ -7,7 +7,7 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { history } from '../../index'
 import dompurify from 'dompurify';
 import PostUpdateForm from '../posts/PostUpdateForm';
-import { LoginForm } from '../user/LoginForm';
+import LoginForm from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
 import { useMediaQuery } from 'react-responsive'
 import tr  from 'date-fns/locale/tr'

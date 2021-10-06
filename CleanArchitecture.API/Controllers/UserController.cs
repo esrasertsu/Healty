@@ -53,5 +53,12 @@ namespace CleanArchitecture.API.Controllers
         {
             return await Mediator.Send(new IsUserNameAvailable.Query { UserName = username, Email = email });
         }
+
+        [AllowAnonymous]
+        [HttpPost("facebook")]
+        public async Task<ActionResult<User>> FacebookLogin(ExternalLogin.Query query)
+        {
+            return await Mediator.Send(query);
+        }
     }
 }

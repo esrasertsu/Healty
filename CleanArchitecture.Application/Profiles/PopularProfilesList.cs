@@ -81,18 +81,18 @@ namespace CleanArchitecture.Application.Profiles
                 #region 10 popular profile
                 /*<---  popüler profile ----->*/
                 var queryableUsersCopy = await queryableUsers.ToListAsync();
-                var popularUsers = queryableUsersCopy.OrderByDescending(x => x.ReceivedComments.Count).ToList();
+                var popularUsers = queryableUsersCopy.OrderByDescending(x => x.StarCount).ThenByDescending(x => x.Star).Take(10).ToList();
                 var popularProfiles = new List<Profile>();
                 foreach (var user in popularUsers)
                 {
                     popularProfiles.Add(await _profileReader.ReadProfileCard(user.UserName));
                 }
-                var orderedpopularProfiles = popularProfiles.OrderByDescending(x => x.Star).Take(10).ToList();
+                //var orderedpopularProfiles = popularProfiles.OrderByDescending(x => x.Star).Take(10).ToList();
                 /*<--- end of popüler profile ----->*/
                 #endregion
 
 
-                return orderedpopularProfiles;
+                return popularProfiles;
             }
         }
     }

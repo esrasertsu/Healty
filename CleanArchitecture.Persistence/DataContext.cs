@@ -15,6 +15,16 @@ namespace CleanArchitecture.Persistence
         {
 
         }
+        public DataContext() { }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseMySql("Server=localhost; Database=afitapp; Uid=esrasertsu; Pwd=Si.9ocak1990");
+            }
+        }
+
         public DbSet<Domain.Activity> Activities { get; set; }
         public DbSet<UserActivity> UserActivities { get; set; }
         public DbSet<Video> Videos { get; set; }

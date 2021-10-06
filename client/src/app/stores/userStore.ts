@@ -28,7 +28,7 @@ export default class UserStore {
     @observable trainerRegisteredSuccess = false;
     @observable trainerFormMessage = false;
     @observable errorMessage = "";
-
+    @observable loadingFbLogin = false;
     
     @action setTrainerFormMessage = (value: boolean) => {
         this.trainerFormMessage = value;
@@ -314,5 +314,24 @@ export default class UserStore {
                 history.push('/');
             })
           
+    }
+
+    @action fbLogin = async (response:any) => {
+        this.loadingFbLogin = true;
+        try{
+            const user = await agent.User.fbLogin(response.accessToken);
+            console.log(user);
+            runInAction(() => {
+                this.user = user;
+                this.rootStore.commonStore.setToken(user.token);
+                this.rootStore.modalStore.closeModal();
+                this.loadingFbLogin = false;
+            });
+       
+            window.location.reload();
+        }catch(error){
+            this.loadingFbLogin = false;
+            throw error;
+        }
     }
 }

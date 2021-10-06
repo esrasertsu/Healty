@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Header, Icon, Image, Modal, Segment } from 'semantic-ui-react'
-import { LoginForm } from '../../features/user/LoginForm';
+import LoginForm from '../../features/user/LoginForm';
 import { RegisterForm } from '../../features/user/RegisterForm';
 import { RootStoreContext } from '../stores/rootStore';
 

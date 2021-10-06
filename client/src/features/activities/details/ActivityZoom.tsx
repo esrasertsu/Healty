@@ -84,7 +84,7 @@ const Completionist = () => <span>You are good to go!</span>;
         // a.ZoomMtg.setZoomJSLib('https://source.zoom.us/1.9.5/lib', '/av'); 
         // a.ZoomMtg.preLoadWasm();
         // a.ZoomMtg.prepareWebSDK();
-        var url = generateUrl("http://localhost:9999",{ 
+        var url = generateUrl("https://zoom.afitapp.com",{ 
             mid: meetConfig.meetingNumber,
             pwd: meetConfig.passWord,
             role: meetConfig.role,

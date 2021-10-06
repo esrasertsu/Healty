@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react'
 import { Route, RouteComponentProps, RouteProps } from 'react-router-dom'
 import { Image, Modal } from 'semantic-ui-react';
 import { history } from '../../index';
-import { LoginForm } from '../../features/user/LoginForm';
+import  LoginForm from '../../features/user/LoginForm';
 import {RootStoreContext} from '../stores/rootStore';
 
 interface IProps extends RouteProps{

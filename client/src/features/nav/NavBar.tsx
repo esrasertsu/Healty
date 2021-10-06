@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import {history} from '../../index';
 import NavSearchArea from './NavSearchArea';
-import { LoginForm } from '../user/LoginForm';
+import LoginForm from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
 import TrainerForm from '../user/TrainerForm';
 import { useMediaQuery } from 'react-responsive'

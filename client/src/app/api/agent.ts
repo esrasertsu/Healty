@@ -266,7 +266,8 @@ const User ={
     update: (status:boolean) => requests.put(`/user?status=${status}`,{}),
     isUserNameAvailable: ( username : string, email:string) : Promise<Boolean> => requests.post(`/user/isUserNameAvailable?username=${username}&email=${email}`, {}),
     registerTrainer: ( trainer : ITrainerFormValues) => requests.registerTrainer('/user/registertrainer', trainer),
-    fbLogin: (accessToken: string) => requests.post(`/user/facebook`, {accessToken})
+    fbLogin: (accessToken: string) => requests.post(`/user/facebook`, {accessToken}),
+    refreshToken: () : Promise<IUser> => requests.post(`/user/refreshToken`,{})
 }
 
 const Profiles = {

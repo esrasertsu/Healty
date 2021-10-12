@@ -98,7 +98,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   useEffect(() => {
     if(appLoaded && user!==null && hubConnection === null)
     {
-      createHubConnection();
+      createHubConnection(true);
 
     }
 

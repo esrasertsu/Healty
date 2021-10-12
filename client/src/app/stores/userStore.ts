@@ -8,6 +8,9 @@ import { toast } from 'react-toastify';
 import { IMessage } from "../models/message";
 
 export default class UserStore {
+
+    refreshTokenTimeout :any;
+
     rootStore:RootStore;
     constructor(rootStore: RootStore){
         this.rootStore = rootStore;
@@ -83,9 +86,10 @@ export default class UserStore {
             const user = await agent.User.login(values);
             runInAction(()=>{
                 this.user = user;
-                this.hubConnection === null && this.createHubConnection();
+                this.hubConnection === null && this.createHubConnection(false);
             })
             this.rootStore.commonStore.setToken(user.token);
+            this.startRefreshTokenTimer(user);
             this.rootStore.modalStore.closeModal();
             history.push(location);
         } catch (error) {
@@ -100,9 +104,10 @@ export default class UserStore {
                 this.user = user;
             })
             this.rootStore.commonStore.setToken(user.token);
+            this.startRefreshTokenTimer(user);
             this.rootStore.modalStore.closeModal();
             history.push(location);
-            this.hubConnection === null && this.createHubConnection();
+            this.hubConnection === null && this.createHubConnection(false);
 
         } catch (error) {
             throw error;
@@ -155,7 +160,7 @@ export default class UserStore {
         }
     }
 
-    @action createHubConnection = async () => {
+    @action createHubConnection = async (updateUserAsOnline : boolean) => {
         this.hubConnection = new HubConnectionBuilder()
         .withUrl(process.env.REACT_APP_API_MESSAGE_URL!,{
             accessTokenFactory: () => this.rootStore.commonStore.token!
@@ -172,7 +177,8 @@ export default class UserStore {
             {
 
                 await this.hubConnection!.invoke('SetUserOnline');
-                const b = await agent.User.update(true);
+                if(updateUserAsOnline)
+                   await agent.User.update(true);
                 runInAction(() => {
 
                     this.rootStore.messageStore.loadChatRooms().then(() => {
@@ -284,13 +290,31 @@ export default class UserStore {
 
     }
 
+    @action refreshToken = async  () =>{
+        this.stopRefreshTokenTimer();
+        try {
+            const user = await agent.User.refreshToken();
+            runInAction(() =>
+            {
+                this.user = user;
+            })
+            this.rootStore.commonStore.setToken(user.token);
+            this.startRefreshTokenTimer(user);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     @action getUser = async () =>{
         try{
             const user = await agent.User.current();
             runInAction(() => {
                 this.user = user;
 
-            })
+            });
+            this.rootStore.commonStore.setToken(user.token);
+            this.startRefreshTokenTimer(user);
+
         }catch(error){
             console.log(error);
         }
@@ -323,7 +347,9 @@ export default class UserStore {
             console.log(user);
             runInAction(() => {
                 this.user = user;
+                this.hubConnection === null && this.createHubConnection(false);
                 this.rootStore.commonStore.setToken(user.token);
+                this.startRefreshTokenTimer(user);
                 this.rootStore.modalStore.closeModal();
                 this.loadingFbLogin = false;
             });
@@ -333,5 +359,18 @@ export default class UserStore {
             this.loadingFbLogin = false;
             throw error;
         }
+    }
+
+
+    private startRefreshTokenTimer(user: IUser){
+        const jwtToken = JSON.parse(atob(user.token.split('.')[1]));
+        const expires = new Date(jwtToken.exp * 1000);
+        const timeout = expires.getTime() - Date.now() - (60*1000);
+        
+        this.refreshTokenTimeout = setTimeout(this.refreshToken, timeout);
+    }
+
+    private stopRefreshTokenTimer(){
+       clearTimeout(this.refreshTokenTimeout);
     }
 }

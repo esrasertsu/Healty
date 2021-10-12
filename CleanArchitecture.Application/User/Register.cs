@@ -68,20 +68,18 @@ namespace CleanArchitecture.Application.User
                         UserName = request.UserName,
                         Role = Role.User,
                         RegistrationDate = DateTime.Now,
-                        LastLoginDate = DateTime.Now
+                        LastLoginDate = DateTime.Now,
+                        IsOnline = true
                     };
+
+                    var resfreshToken = _jwtGenerator.GenerateRefreshToken();
+                    user.RefreshTokens.Add(resfreshToken);
 
                     var result = await _userManager.CreateAsync(user, request.Password);
 
                     if (result.Succeeded)
                     {
-                        return new User
-                        {
-                            DisplayName = user.DisplayName,
-                            Token = _jwtGenerator.CreateToken(user),
-                            UserName = user.UserName,
-                            Role = user.Role.ToString()
-                        };
+                        return new User(user, _jwtGenerator, resfreshToken.Token);
                     }
 
                 }

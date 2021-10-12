@@ -1,7 +1,9 @@
 ﻿using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,10 +26,14 @@ namespace CleanArchitecture.Application.User
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
-            public Handler(DataContext context, IUserAccessor userAccessor)
+            private readonly UserManager<AppUser> _userManager;
+
+            public Handler(DataContext context, UserManager<AppUser> userManager, IUserAccessor userAccessor)
             {
                 _context = context;
                 _userAccessor = userAccessor;
+                _userManager = userManager;
+
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -40,8 +46,9 @@ namespace CleanArchitecture.Application.User
                 if (user.IsOnline != request.Status)
                 {
                     user.IsOnline = request.Status;
-                    var success = await _context.SaveChangesAsync() > 0;
-                    if (success) return Unit.Value;
+                    var result = await _userManager.UpdateAsync(user);
+
+                    if (result.Succeeded) return Unit.Value;
                 }
                 else
                     return Unit.Value;

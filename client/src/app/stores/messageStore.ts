@@ -24,7 +24,7 @@ export default class MessageStore {
                     }
                     this.messageRegistery.set(this.chatRoomId, null);
                     this.rootStore.userStore.hubConnection === null ? 
-                    this.rootStore.userStore.createHubConnection().then(()=>{this.loadMessages(this.chatRoomId!)})
+                    this.rootStore.userStore.createHubConnection(true).then(()=>{this.loadMessages(this.chatRoomId!)})
                     : 
                     this.loadMessages(this.chatRoomId!);
                 }

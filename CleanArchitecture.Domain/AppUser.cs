@@ -48,6 +48,8 @@ namespace CleanArchitecture.Domain
         public virtual ICollection<UserCategories> UserCategories { get; set; }
         public virtual ICollection<ReferencePic> ReferencePics { get; set; }
         public virtual ICollection<Certificate> Certificates { get; set; }
+        public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
+
     }
 
     public enum Role

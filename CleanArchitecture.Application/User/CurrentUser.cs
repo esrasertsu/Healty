@@ -34,14 +34,12 @@ namespace CleanArchitecture.Application.User
             {
                 var user = await _userManager.FindByNameAsync(_userAccessor.GetCurrentUsername());
 
-                return new User
-                {
-                    DisplayName = user.DisplayName,
-                    UserName = user.UserName,
-                    Token = _jwtGenerator.CreateToken(user),
-                    Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
-                    Role = user.Role.ToString()
-                };
+                var resfreshToken = _jwtGenerator.GenerateRefreshToken();
+                user.RefreshTokens.Add(resfreshToken);
+
+                await _userManager.UpdateAsync(user);
+
+                return new User(user, _jwtGenerator, resfreshToken.Token);
                 
             }
         }

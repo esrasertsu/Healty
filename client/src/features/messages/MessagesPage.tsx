@@ -19,7 +19,7 @@ const MessagesPage: React.FC = () => {
 
     useEffect(() => {
         hubConnection === null ? 
-        createHubConnection().then(()=>{
+        createHubConnection(true).then(()=>{
         loadChatRooms()
          }): 
          loadChatRooms()

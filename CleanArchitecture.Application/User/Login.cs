@@ -57,19 +57,14 @@ namespace CleanArchitecture.Application.User
 
                 if(result.Succeeded)
                 {
-                    var current = await _context.Users.SingleOrDefaultAsync(x => x.UserName == user.UserName);
-                    current.LastLoginDate = DateTime.Now;
-                    var success = await _context.SaveChangesAsync() > 0;
+                    user.LastLoginDate = DateTime.Now;
+                    user.IsOnline = true;
+                    var resfreshToken = _jwtGenerator.GenerateRefreshToken();
+                    user.RefreshTokens.Add(resfreshToken);
 
-                    //TODO generate token
-                    return new User
-                    {
-                        DisplayName = user.DisplayName,
-                        Token = _jwtGenerator.CreateToken(user),
-                        UserName = user.UserName,
-                        Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
-                        Role = user.Role.ToString()
-                    };
+                    await _userManager.UpdateAsync(user);
+
+                    return new User(user, _jwtGenerator, resfreshToken.Token);
                 }
 
                 throw new RestException(HttpStatusCode.Unauthorized);

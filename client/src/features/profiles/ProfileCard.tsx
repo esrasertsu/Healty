@@ -14,7 +14,8 @@ const ProfileCard: React.FC<IProps> = ({profile}) => {
   const {setLoadingProfile} = rootStore.profileStore;
 
   return (
-    <Card onClick={() => {
+    <Card onClick={(e:any) => {
+      e.stopPropagation();
       setLoadingProfile(true);
       history.push(`/profile/${profile.userName}`)
       

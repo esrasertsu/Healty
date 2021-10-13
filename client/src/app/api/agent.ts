@@ -267,7 +267,9 @@ const User ={
     isUserNameAvailable: ( username : string, email:string) : Promise<Boolean> => requests.post(`/user/isUserNameAvailable?username=${username}&email=${email}`, {}),
     registerTrainer: ( trainer : ITrainerFormValues) => requests.registerTrainer('/user/registertrainer', trainer),
     fbLogin: (accessToken: string) => requests.post(`/user/facebook`, {accessToken}),
-    refreshToken: () : Promise<IUser> => requests.post(`/user/refreshToken`,{})
+    refreshToken: () : Promise<IUser> => requests.post(`/user/refreshToken`,{}),
+    verifyEmail: (token: string, email:string): Promise<void> => requests.post(`/user/verifyEmail`,{token,email}),
+    resendVerifyEmailConfirm:(email:string): Promise<void> => requests.get(`/user/resendEmailVerification?email=${email}`)
 }
 
 const Profiles = {

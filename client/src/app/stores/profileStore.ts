@@ -89,7 +89,6 @@ export default class ProfileStore{
         }
     }
     @computed get totalProfileListPages(){
-        debugger;
         return Math.ceil(this.profilePageCount / LIMIT);
     }
     @computed get totalPages(){
@@ -300,7 +299,6 @@ export default class ProfileStore{
 
 
     @action loadPopularProfiles = async () =>{
-        debugger;
         this.loadingPopularProfiles = true;
         this.loadingOnlyProfiles = true;
         try {
@@ -331,7 +329,6 @@ export default class ProfileStore{
     }
 
     @action loadProfiles = async (params?:URLSearchParams) =>{
-        debugger;
         this.loadingOnlyProfiles = true;
         try {
             const profilesEnvelope= await agent.Profiles.list(params ? params : this.axiosParams);

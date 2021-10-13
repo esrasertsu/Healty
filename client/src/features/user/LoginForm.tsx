@@ -27,6 +27,7 @@ const LoginForm:React.FC<IProps> = ({location}) => {
     return (
       <FinalForm
         onSubmit={(values: IUserFormValues) =>
+
           login(values,location)
           .catch((error) => ({
             [FORM_ERROR]: error,

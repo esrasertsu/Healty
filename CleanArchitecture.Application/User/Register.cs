@@ -6,6 +6,7 @@ using CleanArchitecture.Persistence;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,14 @@ namespace CleanArchitecture.Application.User
 {
     public class Register
     {
-        public class Command : IRequest<User>
+        public class Command : IRequest
         {
             public string DisplayName { get; set; }
             public string UserName { get; set; }
             public string Email { get; set; }
             public string Password { get; set; }
+            public string Origin { get; set; }
+
 
         }
 
@@ -38,19 +41,20 @@ namespace CleanArchitecture.Application.User
                 RuleFor(x => x.Password).Password();
             }
         }
-        public class Handler : IRequestHandler<Command, User>
+        public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
             private readonly UserManager<AppUser> _userManager;
-            private readonly IJwtGenerator _jwtGenerator;
-            public Handler(DataContext context, UserManager<AppUser> userManager, IJwtGenerator jwtGenerator)
+            private readonly IEmailSender _emailSender;
+
+            public Handler(DataContext context, UserManager<AppUser> userManager, IEmailSender emailSender)
             {
                 _context = context;
                 _userManager = userManager;
-                _jwtGenerator = jwtGenerator;
+                _emailSender = emailSender;
             }
 
-            public async Task<User> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
 
                 if (await _context.Users.AnyAsync(x => x.Email == request.Email))
@@ -59,38 +63,33 @@ namespace CleanArchitecture.Application.User
                 if (await _context.Users.AnyAsync(x => x.UserName == request.UserName))
                     throw new RestException(HttpStatusCode.BadRequest, new { UserName = "UserName already exists." });
 
-                try
+             
+                var user = new AppUser
                 {
-                    var user = new AppUser
-                    {
-                        DisplayName = request.DisplayName,
-                        Email = request.Email,
-                        UserName = request.UserName,
-                        Role = Role.User,
-                        RegistrationDate = DateTime.Now,
-                        LastLoginDate = DateTime.Now,
-                        IsOnline = true
-                    };
+                    DisplayName = request.DisplayName,
+                    Email = request.Email,
+                    UserName = request.UserName,
+                    Role = Role.User,
+                    RegistrationDate = DateTime.Now,
+                    LastLoginDate = DateTime.Now,
+                    IsOnline = true
+                };
 
-                    var resfreshToken = _jwtGenerator.GenerateRefreshToken();
-                    user.RefreshTokens.Add(resfreshToken);
+                var result = await _userManager.CreateAsync(user, request.Password);
 
-                    var result = await _userManager.CreateAsync(user, request.Password);
+                if (!result.Succeeded) throw new RestException(HttpStatusCode.BadRequest, new { UserName = "Problem creating user" });
 
-                    if (result.Succeeded)
-                    {
-                        return new User(user, _jwtGenerator, resfreshToken.Token);
-                    }
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-                }
-                catch (Exception)
-                {
+                token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-                    throw new RestException(HttpStatusCode.BadRequest, new { UserName = "Problem creating user" });
-                }
+                var verifyUrl = $"{request.Origin}/user/verifyEmail?token={token}&email={request.Email}";
 
-                throw new RestException(HttpStatusCode.BadRequest, new { UserName = "Problem creating user" });
+                var message = $"<p>Merhaba,</p><p>Email adresini aşağıdaki linke tıklayarak doğrulayabilir ve siteye giriş yapabilirsiniz.</p><p><a href='{verifyUrl}'>{verifyUrl}></a></p>";
 
+                await _emailSender.SendEmailAsync(request.Email, "Hesap Doğrulama", message);
+
+                return Unit.Value;
             }
         }
     }

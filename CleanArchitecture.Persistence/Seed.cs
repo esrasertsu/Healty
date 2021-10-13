@@ -804,12 +804,14 @@ namespace Persistence
                         DisplayName = "Bob",
                         UserName = "bob",
                         Email = "bob@test.com",
+                        Title="Personal Trainer",
                         Role=Role.Trainer,
                         Experience="çok tecrübeliyim yıllarıdr bu işi yapıyorum",
                         ExperienceYear=5,
                         Dependency="MacFit",
                         ApplicationDate = DateTime.Now,
                         RegistrationDate = DateTime.Now,
+                        EmailConfirmed = true,
                         UserAccessibilities = new List<UserAccessibility>
                         {
                             new UserAccessibility
@@ -836,16 +838,7 @@ namespace Persistence
                                 Category = Spor
                             },
                         }
-                         ,Photos = new List<Photo>
-                         {
-                             new Photo
-                             {
-                                 Url= "https://res.cloudinary.com/esrasertsu/image/upload/v1626098298/vybxc2tlp4natc4dnimp.jpg",
-                                 Id = "photo1",
-                                 IsMain = true,
-                                 IsCoverPic = false
-                             }
-                         }
+                       
                     },
                     new AppUser
                     {
@@ -853,11 +846,13 @@ namespace Persistence
                         DisplayName = "Jane",
                         UserName = "jane",
                         Email = "jane@test.com",
+                        Title="Personal Trainer",
                         Role=Role.Trainer,
                          ExperienceYear=5,
                         Dependency="MacFit",
                         ApplicationDate = DateTime.Now,
                         RegistrationDate = DateTime.Now,
+                        EmailConfirmed = true,
                         UserAccessibilities = new List<UserAccessibility>
                         {
                             new UserAccessibility
@@ -893,9 +888,11 @@ namespace Persistence
                         Email = "tom@test.com",
                         Role=Role.Trainer,
                          ExperienceYear=3,
+                        Title="Yoga Uzmanı",
                         Dependency="Tom'un Yeri",
                         ApplicationDate = DateTime.Now,
                         RegistrationDate = DateTime.Now,
+                        EmailConfirmed = true,
                           UserAccessibilities = new List<UserAccessibility>
                         {
                             new UserAccessibility
@@ -932,9 +929,11 @@ namespace Persistence
                         Email = "esra@test.com",
                         Role=Role.Trainer,
                         ExperienceYear=2,
+                       Title="Basketbol Antrenoru",
                         Dependency="Esra'un Yeri",
                         ApplicationDate = DateTime.Now,
                         RegistrationDate = DateTime.Now,
+                       EmailConfirmed = true,
                       UserCategories = new List<UserCategories>
                         {
                             new UserCategories
@@ -1006,6 +1005,7 @@ namespace Persistence
                         UserName = "semih",
                         Email = "semih@test.com",
                         Role=Role.Trainer,
+                        Title="Tenis Antrenorü",
                        ApplicationDate = DateTime.Now,
                         RegistrationDate = DateTime.Now,
                         UserAccessibilities = new List<UserAccessibility>

@@ -920,6 +920,9 @@ max-width: 95%;
 /*home page styles*/
 
 @media (min-width: 769px){
+  body{
+    font-size: 14px;
+  }
   .masthead_page {
     display: flex;
     align-items: center;
@@ -1805,10 +1808,16 @@ button, input, optgroup, select, textarea {
 }
 
 .scroll-to-top {
-  position: fixed;
-  right: 3rem;
-  animation: fadeIn 700ms ease-in-out 1s both;
-  cursor: pointer;
+  position: relative;
+    /* right: 3rem; */
+    animation: fadeIn 700ms ease-in-out 1s both;
+    cursor: pointer;
+    float: right;
+}
+
+.stopScrollCss{
+  height: 100vh;
+  overflow-y: hidden;
 }
 
 .activity_userPredicate_MenuItem{

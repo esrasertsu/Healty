@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import React, { Fragment, useContext, useEffect,useState } from 'react'
+import React, { createRef, Fragment, useContext, useEffect,useRef,useState } from 'react'
 import {Container, Grid, Icon, Label, Message, Segment, Select } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileListItem from './ProfileListItem'
@@ -48,9 +48,38 @@ const responsive = {
       
   const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
-
-
   
+  let firstClientX :any,firstClientY :any, clientX,clientY;
+
+  const preventTouch = (e:any) => {
+    const minValue = 80; // threshold
+    const minValueY = 50; // threshold
+
+    clientX = e.touches[0].clientX - firstClientX;
+    clientY = e.touches[0].clientY - firstClientY;
+
+    // Vertical scrolling does not work when you start swiping horizontally.
+    if (Math.abs(clientX) > minValue && Math.abs(clientY) < minValueY) {
+      // console.log(Math.abs(clientX));
+     
+      e.stopPropagation();
+      e.returnValue = false;
+      document.body.classList.add("stopScrollCss");
+      return false;
+    }
+  };
+  
+  const touchStart = (e:any) => {
+    firstClientX = e.touches[0].clientX;
+    firstClientY = e.touches[0].clientY;
+
+  };
+
+  const enableScroll = (e:any) => {
+    // firstClientX = e.touches[0].clientX;
+    document.body.classList.remove("stopScrollCss");
+
+  };
 
     return (
         <>
@@ -58,7 +87,15 @@ const responsive = {
                En popüler 10
                </Label>
         <Grid>
-          <Grid.Column width={16} className="carousel-padding">
+          <Grid.Column 
+          width={16} 
+          className="carousel-padding"
+          id="multi-carousel"
+          onTouchStart={(touchStartEvent:any) =>  touchStart(touchStartEvent)}
+          onTouchMove={(touchMoveEvent:any) => preventTouch(touchMoveEvent)}
+          onTouchEnd={(touchEndEvent:any) => enableScroll(touchEndEvent)}
+
+          >
             {
             loadingPopularProfiles ?  <ProfileListItemsPlaceholder itemPerRow={isMobile ? oneItem : isTablet ? threeItem :5}/> :
             <Carousel
@@ -77,6 +114,14 @@ const responsive = {
             focusOnSelect={true}
             containerClass="profileList_carousel-container"
             itemClass="carousel-item-padding-10-px"
+            // beforeChange={(nextSlide,{currentSlide}) => {
+            //   document.querySelector('body')!.addEventListener('touchstart', touchStart);
+            //   document.querySelector('body')!.addEventListener('touchmove', preventTouch, {passive: false});
+            // }}
+            // afterChange={() => {
+            //   document.querySelector('body')!.removeEventListener('touchstart', touchStart);
+            //   document.querySelector('body')!.removeEventListener('touchmove', preventTouch);
+            // }}
           //  additionalTransfrom={additionalTransfrom}
           //   beforeChange={nextSlide => {
           //     if (nextSlide !== 0 && additionalTransfrom !== 72) {

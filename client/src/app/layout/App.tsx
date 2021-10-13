@@ -30,6 +30,10 @@ import MobileNavBar from '../../features/nav/MobileNavBar';
 import MobileNavMenu from '../../features/nav/MobileNavMenu';
 import ActivityPaymentPage from '../../features/activities/payment/ActivityPaymentPage';
 import Footer from '../../features/home/Footer';
+import { history } from '../../index';
+import RegisterSuccess from '../../features/user/RegisterSuccess';
+import VerifyEmail from '../../features/user/VerifyEmail';
+
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
@@ -102,7 +106,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
 
     }
 
-  }, [appLoaded,user])
+  }, [appLoaded,user,hubConnection])
 
 
   if(!appLoaded) return <LoadingComponent content='Loading app...' />
@@ -115,6 +119,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
          {!isTabletOrMobile ? 
           <>
           <NavBar/>
+        
         <Route exact path="/" component={HomePage} />
         <Route path={'/(.+)'} render={()=>(
           <Fragment>
@@ -133,12 +138,15 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <Route path="/login" component={LoginForm}/>
                  <Route path="/login-required" component={LoginRequiredPage}/>
                  {/* <Route exact path="/activitysearch" component={ActivitySearchPage}/> */}
+                 <Route path="/user/registerSuccess" component={RegisterSuccess}/>
+                 <Route path="/user/verifyEmail" component={VerifyEmail}/>
                  <Route exact path="/admin" component={Admin}/>
                  <Route component={NotFound}/>
                </Switch>
              </Container>
           </Fragment>
         )} />
+       
         </>
            :
 
@@ -178,6 +186,8 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <Route path="/login" component={LoginForm}/>
                  <Route path="/login-required" component={LoginRequiredPage}/>
                  {/* <Route exact path="/activitysearch" component={ActivitySearchPage}/> */}
+                 <Route path="/user/registerSuccess" component={RegisterSuccess}/>
+                 <Route path="/user/verifyEmail" component={VerifyEmail}/>
                  <Route exact path="/admin" component={Admin}/>
                   <Route component={NotFound}/>
                 </Switch>

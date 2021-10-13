@@ -52,7 +52,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
     return () => {
         setProfileNull();
     }
-    }, [loadProfile,match,setActiveTab,setProfileForm])
+    }, [])
 
 
 

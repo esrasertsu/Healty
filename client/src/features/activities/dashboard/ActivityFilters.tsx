@@ -144,10 +144,8 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
   }
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    document.querySelector('body')!.scrollTo(0,0)
+
   };
 
   const handleSearch = (e:any, data:any) => {

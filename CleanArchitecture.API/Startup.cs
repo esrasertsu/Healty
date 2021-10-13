@@ -8,6 +8,7 @@ using CleanArchitecture.Application.Profiles;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using FluentValidation.AspNetCore;
+using Infrastructure.Email;
 using Infrastructure.Payment;
 using Infrastructure.Photos;
 using Infrastructure.Security;
@@ -101,12 +102,16 @@ namespace CleanArchitecture.API
             //     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             // );
 
-            var builder = services.AddIdentityCore<AppUser>();
+            var builder = services.AddIdentityCore<AppUser>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = true;
+            });
 
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
             identityBuilder.AddRoles<IdentityRole>();
             identityBuilder.AddEntityFrameworkStores<DataContext>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
+            identityBuilder.AddDefaultTokenProviders();
 
             services.AddAuthorization(opt =>
             {
@@ -164,11 +169,14 @@ namespace CleanArchitecture.API
             services.AddScoped<IZoomAccessor, ZoomAccessor>();
             services.AddScoped<IPaymentAccessor, PaymentAccessor>();
             services.AddScoped<IFacebookAccessor, FacebookAccessor>();
+            services.AddScoped<IEmailSender, EmailSender>();
+
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
             services.Configure<ZoomSettings>(Configuration.GetSection("Zoom"));
             services.Configure<IyzicoSettings>(Configuration.GetSection("Iyzico"));
             services.Configure<FacebookAppSettings>(Configuration.GetSection("Authentication:Facebook"));
+            services.Configure<SendGridSettings>(Configuration.GetSection("SendGrid"));
 
         }
 

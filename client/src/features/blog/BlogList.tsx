@@ -51,10 +51,8 @@ const BlogList: React.FC = () => {
   // Set the top cordinate to 0
   // make scrolling smooth
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    document.querySelector('body')!.scrollTo(0,0)
+
   };
 
   const handleAccClick = () =>{

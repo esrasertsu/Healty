@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { Fragment, useContext, useEffect,useState } from 'react'
-import {Button, Container, Grid, Label, Message, Segment, Select } from 'semantic-ui-react'
+import {Button, Container, Grid, Icon, Label, Message, Segment, Select } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileListFilters from './ProfileListFilters';
 import { profileSortingOptions } from "../../app/common/options/profileSortingOptions";
@@ -72,17 +72,37 @@ const sixItem:SemanticWIDTHS = 6;
     }, [])// && userCityPlaced
   
     // Show button when page is scorlled upto given distance
-    const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
-        setIsToggleVisible(true);
-      } else {
-        setIsToggleVisible(false);
-      }
-    };
+
+    function getWindowDimensions() {
+      const { innerWidth: width, innerHeight: height } = window;
+      return {
+        width,
+        height
+      };
+    }
+
+    // const toggleVisibility = () => {
+    //   debugger;
+    //   if (document.querySelector('body')!.pageYOffset > 100) {
+    //     setIsToggleVisible(true);
+    //   } else {
+    //     setIsToggleVisible(false);
+    //   }
+    // };
   
+    // useEffect(() => {
+    //   document.querySelector('body')!.addEventListener("scroll", toggleVisibility);
+      
+    //   return () => {
+    //     document.querySelector('body')!.removeEventListener("scroll", toggleVisibility);
+    //   }
+    // }, []);
     // Set the top cordinate to 0
     // make scrolling smooth
-    
+    // const scrollToTop = () => {
+    //   document.querySelector('body')!.scrollTo(0,0)
+  
+    // };
 
     
     const handleSortingChange = (e:any,data:any) => {
@@ -156,6 +176,13 @@ const sixItem:SemanticWIDTHS = 6;
           // initialLoad={false}>
             <>  
            <ProfileList />
+           {/* <div className="scroll-to-top">
+           {isToggleVisible && 
+            <Label style={{display:"flex", alignItems:"center"}} onClick={scrollToTop}>
+              <Icon size="large" name="arrow up"/> 
+              <span>Başa dön</span>
+            </Label>} 
+        </div> */}
         <div style={{display:"flex", justifyContent:"center"}}>
         <Button  
                   floated="right"
@@ -172,13 +199,7 @@ const sixItem:SemanticWIDTHS = 6;
           // </InfiniteScroll> 
           }
           {(loadingNext) ? <ProfileListItemsPlaceholder itemPerRow={isMobile ? twoItems : isTablet ? threeItem: 5}/> :""}
-          <div className="scroll-to-top">
-          {/* {isToggleVisible && 
-            <Label style={{display:"flex", alignItems:"center"}} onClick={scrollToTop}>
-              <Icon size="large" name="arrow up"/> 
-              <span>Başa dön</span>
-            </Label>} */}
-        </div>
+         
           </Grid.Column>
       </Grid>
        

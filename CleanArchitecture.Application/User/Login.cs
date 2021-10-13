@@ -53,6 +53,8 @@ namespace CleanArchitecture.Application.User
                 if (user == null)
                     throw new RestException(HttpStatusCode.Unauthorized);
 
+                if (!user.EmailConfirmed) throw new RestException(HttpStatusCode.BadRequest, new { Email = "Email doğrulaması gerçekleştirilmedi." });
+
                 var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
                 if(result.Succeeded)

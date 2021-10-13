@@ -45,6 +45,7 @@ namespace CleanArchitecture.Application.User
 
                 if (user.IsOnline != request.Status)
                 {
+                    Thread.Sleep(2000);
                     user.IsOnline = request.Status;
                     var result = await _userManager.UpdateAsync(user);
 

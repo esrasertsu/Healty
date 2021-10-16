@@ -269,8 +269,8 @@ const User ={
     fbLogin: (accessToken: string) => requests.post(`/user/facebook`, {accessToken}),
     refreshToken: () : Promise<IUser> => requests.post(`/user/refreshToken`,{}),
     verifyEmail: (token: string, email:string): Promise<void> => requests.post(`/user/verifyEmail`,{token,email}),
-    resendVerifyEmailConfirm:(email:string): Promise<void> => requests.get(`/user/resendEmailVerification?email=${email}`),
-    resetPasswordRequest:(email:string): Promise<boolean> => requests.get(`/user/resetPswRequest?email=${email}`),
+    resendVerifyEmailConfirm:(email:string): Promise<void> => requests.post(`/user/resendEmailVerification?email=${email}`,{}),
+    resetPasswordRequest:(email:string): Promise<boolean> => requests.post(`/user/resetPswRequest?email=${email}`,{}),
     resetPassword:(token:string, email:string,password:string): Promise<any> => requests.get(`/user/resetPassword?token=${token}&email=${email}&password=${password}`)
 }
 

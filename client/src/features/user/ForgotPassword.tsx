@@ -31,8 +31,10 @@ const ForgotPassword = () => {
                 debugger;
                 if(res === true)
                 {
+                    setshowErrorMessage(false);
                    setshowSuccessMessage(true);
                 }else{
+                    setshowSuccessMessage(false);
                    setshowErrorMessage(true);
                 }
             })

@@ -90,7 +90,7 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("resendEmailVerification")]
+        [HttpPost("resendEmailVerification")]
         public async Task<ActionResult> ResendEmailVerification([FromQuery]ResendEmailVerification.Query query)
         {
             query.Origin = Request.Headers["origin"];
@@ -100,8 +100,8 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("resetPswRequest")]
-        public async Task<ActionResult<bool>> ResetPasswordRequest([FromQuery] ResetPasswordRequest.Query query)
+        [HttpPost("resetPswRequest")]
+        public async Task<ActionResult<bool>> ResetPasswordRequest([FromQuery]ResetPasswordRequest.Query query)
         {
             query.Origin = Request.Headers["origin"];
             var res = await Mediator.Send(query);
@@ -111,7 +111,7 @@ namespace CleanArchitecture.API.Controllers
 
         [AllowAnonymous]
         [HttpGet("resetPassword")]
-        public async Task<IdentityResult> ResetPassword([FromQuery] ResetPassword.Query query)
+        public async Task<IdentityResult> ResetPassword([FromQuery]ResetPassword.Query query)
         {
             var result = await Mediator.Send(query);
             return result;

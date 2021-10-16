@@ -10,10 +10,9 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 
 
 const validate = combineValidators({
-    username: isRequired('username'),
-    displayname: isRequired('display name'),
-    email: isRequired('email'),
-    password: isRequired('password')
+    username: isRequired({ message: 'Kullanıcı adı zorunlu alan.' }),
+    email: isRequired({ message: 'Email zorunlu alan.' }),
+    password: isRequired({ message: 'Şifre zorunlu alan.' })
 })
 interface IProps {
   location: string;
@@ -47,12 +46,12 @@ export const RegisterForm:React.FC<IProps> = ({location}) =>{
               color="teal"
               textAlign="center"
             />
-            <Field name="username" placeholder="Kullanıcı Adı" component={TextInput}/>
+            <Field name="username" placeholder="*Kullanıcı Adı" component={TextInput}/>
             <Field name="displayname" placeholder="Ad Soyad" component={TextInput} />
-            <Field name="email" placeholder="Email" component={TextInput} />
+            <Field name="email" type="email" placeholder="*Email" component={TextInput} />
             <Field
               name="password"
-              placeholder="Şifre"
+              placeholder="*Şifre"
               type="password"
               component={TextInput}
             />

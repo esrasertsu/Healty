@@ -7,6 +7,7 @@ using CleanArchitecture.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.API.Controllers
@@ -96,6 +97,24 @@ namespace CleanArchitecture.API.Controllers
             await Mediator.Send(query);
 
             return Ok("Email verification link sent - please check email");
+        }
+
+        [AllowAnonymous]
+        [HttpGet("resetPswRequest")]
+        public async Task<ActionResult<bool>> ResetPasswordRequest([FromQuery] ResetPasswordRequest.Query query)
+        {
+            query.Origin = Request.Headers["origin"];
+            var res = await Mediator.Send(query);
+
+            return res;
+        }
+
+        [AllowAnonymous]
+        [HttpGet("resetPassword")]
+        public async Task<IdentityResult> ResetPassword([FromQuery] ResetPassword.Query query)
+        {
+            var result = await Mediator.Send(query);
+            return result;
         }
 
         private void SetTokenCookie(string refreshToken)

@@ -51,7 +51,7 @@ const HomePage = () => {
           <LoginForm location={"/"} />
           </Modal.Description>
           </>,true,
-           <p>Üye olmak için <span className="registerLoginAnchor" onClick={handleRegisterClick}>tıklayınız</span></p>) 
+           <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={handleRegisterClick}>tıklayınız</span></p>) 
       }
 
       const handleRegisterClick = (e:any) => {
@@ -65,10 +65,10 @@ const HomePage = () => {
             <RegisterForm location={"/"} />
             </Modal.Description>
             </>,true,
-            <>
+            <div className="modalformFooter">
             <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>
             <p>Uzman başvuru için <span className="registerLoginAnchor" onClick={handleTrainerFormClick}>tıkla!</span></p>
-            </>) 
+            </div>) 
         }
 
         const handleTrainerFormClick= (e:any) => {

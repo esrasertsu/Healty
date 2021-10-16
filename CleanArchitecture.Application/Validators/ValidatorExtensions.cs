@@ -11,11 +11,9 @@ namespace CleanArchitecture.Application.Validators
         {
             var options = ruleBuilder
                 .NotEmpty()
-                .MinimumLength(6).WithMessage("Password must at least 6 characters")
-                .Matches("[A-Z]").WithMessage("Password must contain at least 1 uppercase letter")
-                .Matches("[a-z]").WithMessage("Password must contain at least 1 lowercase letter")
-                .Matches("[0-9]").WithMessage("Password must contain at least 1 number")
-                .Matches("[^a-zA-Z0-9]").WithMessage("Password must contain non alphanumeric");
+                .MinimumLength(6).WithMessage("Şifre en az 6 karakter uzunluğunda olmalı.")
+                .Matches("[a-z]").WithMessage("Şifre en az 1 küçük harf içermeli.")
+                .Matches("[0-9]").WithMessage("Şifre en az 1 rakam içermeli.");
           
             return options;
         }

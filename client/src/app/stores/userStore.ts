@@ -308,6 +308,7 @@ export default class UserStore {
                 this.user = user;
 
             });
+
             this.rootStore.commonStore.setToken(user.token);
             this.startRefreshTokenTimer(user);
 
@@ -331,8 +332,8 @@ export default class UserStore {
                 this.rootStore.messageStore.setChatRoomsEmpty();
                 this.clearCurrentUser();
                 this.rootStore.commonStore.setToken(null);
-                history.push('/');
             })
+            
           
     }
 

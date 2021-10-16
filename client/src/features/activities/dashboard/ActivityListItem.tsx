@@ -33,7 +33,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
             <LoginForm location={str} />
             </Modal.Description>
             </>,true,
-            <p>Üye olmak için <span className="registerLoginAnchor" onClick={() => openRegisterModal(e,str)}>tıklayınız</span></p>) 
+            <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={() => openRegisterModal(e,str)}>tıklayınız</span></p>) 
         }
     
         const openRegisterModal = (e:any,str:string) => {

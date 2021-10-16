@@ -42,7 +42,7 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
         <LoginForm location={str} />
         </Modal.Description>
         </>,true,
-        <p>Üye olmak için <span className="registerLoginAnchor" onClick={() => openRegisterModal(e,str)}>tıklayınız</span></p>) 
+        <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={() => openRegisterModal(e,str)}>tıklayınız</span></p>) 
     }
 
     const openRegisterModal = (e:any,str:string) => {
@@ -55,7 +55,7 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
         <RegisterForm location={str} />
         </Modal.Description>
         </>,true,
-        <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={() => handleLoginClick(e,str)}>Giriş</span></p>) 
+        <p className="modalformFooter">Zaten üye misin? <span className="registerLoginAnchor" onClick={() => handleLoginClick(e,str)}>Giriş</span></p>) 
     }
 
  const handleShowProfileClick = (e:any) => {

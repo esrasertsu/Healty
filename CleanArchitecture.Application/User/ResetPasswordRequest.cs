@@ -13,15 +13,15 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.User
 {
-    public class ResendEmailVerification
+    public class ResetPasswordRequest
     {
-        public class Query : IRequest
+        public class Query : IRequest<bool>
         {
             public string Email { get; set; }
             public string Origin { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query>
+        public class Handler : IRequestHandler<Query,bool>
         {
             private readonly UserManager<AppUser> _userManager;
             private readonly IEmailSender _emailSender;
@@ -32,24 +32,24 @@ namespace CleanArchitecture.Application.User
                 _emailSender = emailSender;
             }
 
-            public async Task<Unit> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _userManager.FindByEmailAsync(request.Email);
 
                 if (user == null)
-                    throw new RestException(HttpStatusCode.BadRequest);
+                    return false;
 
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
                 token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-                var verifyUrl = $"{request.Origin}/user/verifyEmail?token={token}&email={request.Email}";
+                var verifyUrl = $"{request.Origin}/user/resetPassword?token={token}&email={request.Email}";
 
-                var message = $"<p>Merhaba,</p><p>Email adresini aşağıdaki linke tıklayarak doğrulayabilir ve siteye giriş yapabilirsiniz.</p><p><a href='{verifyUrl}'>{verifyUrl}></a></p>";
+                var message = $"<p>Merhaba,</p><p>Yeni şifrenizi oluşturmak için lütfen aşağıdaki linke tıklayınız.</p><p>Eğer bu istek size ait değilse lütfen mesajı dikkate almayınız.</p><p><a href='{verifyUrl}'>{verifyUrl}></a></p>";
 
-                await _emailSender.SendEmailAsync(request.Email, "Hesap Doğrulama", message);
+                await _emailSender.SendEmailAsync(request.Email, "Şifre Yenileme", message);
 
-                return Unit.Value;
+                return true;
             }
         }
     }

@@ -51,7 +51,7 @@ interface IProps {
           <LoginForm location={str} />
           </Modal.Description>
           </>,true,
-           <p>Üye olmak için <span className="registerLoginAnchor" onClick={() => handleRegisterClick(e,str)}>tıklayınız</span></p>) 
+           <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={() => handleRegisterClick(e,str)}>tıklayınız</span></p>) 
       }
 
 

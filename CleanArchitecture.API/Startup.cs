@@ -5,6 +5,7 @@ using CleanArchitecture.Application.Activities;
 using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Application.Messages;
 using CleanArchitecture.Application.Profiles;
+using CleanArchitecture.Application.Validators;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using FluentValidation.AspNetCore;
@@ -105,7 +106,13 @@ namespace CleanArchitecture.API
             var builder = services.AddIdentityCore<AppUser>(options =>
             {
                 options.SignIn.RequireConfirmedEmail = true;
-            });
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 0;
+            }).AddErrorDescriber<CustomIdentityErrorDescriber>();
 
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
             identityBuilder.AddRoles<IdentityRole>();

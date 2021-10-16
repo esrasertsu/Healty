@@ -33,7 +33,7 @@ const NavBar: React.FC = () => {
             <LoginForm location={"/"} />
             </Modal.Description>
             </>,true,
-             <p>Üye olmak için <span className="registerLoginAnchor" onClick={handleRegisterClick}>tıklayınız</span></p>) 
+             <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={handleRegisterClick}>tıklayınız</span></p>) 
         }
   
         const handleRegisterClick = (e:any) => {

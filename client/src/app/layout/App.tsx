@@ -33,6 +33,7 @@ import Footer from '../../features/home/Footer';
 import { history } from '../../index';
 import RegisterSuccess from '../../features/user/RegisterSuccess';
 import VerifyEmail from '../../features/user/VerifyEmail';
+import ResetPassword from '../../features/user/ResetPassword';
 
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
@@ -72,7 +73,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
  }
   useEffect(() => {
 
-    if(token) {
+    if(appLoaded && token !== null && user === null) {//refresh sırasında token silinmiyor dolayısıyla buraya sadece ilk açılış
       getUser().then(() => {
         loadCities().then(()=>
         {
@@ -97,16 +98,17 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
       
       window.removeEventListener('beforeunload', alertUser)
     }
-  },[token])
+  },[appLoaded,token])
 
   useEffect(() => {
     if(appLoaded && user!==null && hubConnection === null)
     {
+      debugger;
       createHubConnection(true);
 
     }
 
-  }, [appLoaded,user,hubConnection])
+  }, [appLoaded,user])
 
 
   if(!appLoaded) return <LoadingComponent content='Loading app...' />
@@ -140,6 +142,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  {/* <Route exact path="/activitysearch" component={ActivitySearchPage}/> */}
                  <Route path="/user/registerSuccess" component={RegisterSuccess}/>
                  <Route path="/user/verifyEmail" component={VerifyEmail}/>
+                 <Route path="/user/resetPassword" component={ResetPassword}/>
                  <Route exact path="/admin" component={Admin}/>
                  <Route component={NotFound}/>
                </Switch>
@@ -188,6 +191,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  {/* <Route exact path="/activitysearch" component={ActivitySearchPage}/> */}
                  <Route path="/user/registerSuccess" component={RegisterSuccess}/>
                  <Route path="/user/verifyEmail" component={VerifyEmail}/>
+                 <Route path="/user/resetPassword" component={ResetPassword}/>
                  <Route exact path="/admin" component={Admin}/>
                   <Route component={NotFound}/>
                 </Switch>

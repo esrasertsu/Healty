@@ -516,6 +516,10 @@ a.ui.card:hover {
 }
 
 @media only screen and (max-width: 767px){
+  
+.ui.modal>.actions {
+  padding: 1rem 1rem !important;
+}
 .ui.stackable.allProfileCards.cards>.card {
    display: inline-grid !important;
     height: auto!important;
@@ -759,9 +763,10 @@ max-width: 95%;
 
 @media screen and (max-width: 768px){
   .ui.search,.ui.input,.ui.form,.ui.dropdown .menu>.item,.ui.card>.content, .ui.cards>.card>.content, input,
-  .ui.large.label,.ui.button, .ui.buttons .button, .ui.buttons .or{
+  .ui.large.label,.ui.button, .ui.buttons .button, .ui.buttons .or, .forgotPasswordLink,.modalformFooter{
     font-size: 16px !important;
   }
+  
   .modals .content{
     margin-top: 30px;
   }
@@ -1846,6 +1851,20 @@ button, input, optgroup, select, textarea {
   -webkit-box-flex: 1;
   -ms-flex: 1 !important;
   flex: 1 0 !important;
+}
+.forgotPasswordLink{
+  text-align: right;
+  display: block;
+  margin-bottom: 20px;
+  text-decoration: underline;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.modalformFooter{
+  font-size: 1rem;
+  margin-bottom: 20px;
+  margin-top: 20px;
+
 }
 
 .registerLoginAnchor{

@@ -19,7 +19,7 @@ export const LoginRequiredPage = () => {
         <LoginForm location={"/"} />
         </Modal.Description>
         </>,true,
-        <p>Üye olmak için <span className="registerLoginAnchor" onClick={openRegisterModal}>tıklayınız</span></p>) 
+        <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={openRegisterModal}>tıklayınız</span></p>) 
     }
 
     const openRegisterModal = (e:any) => {
@@ -31,7 +31,7 @@ export const LoginRequiredPage = () => {
         <RegisterForm location={"/"} />
         </Modal.Description>
         </>,true,
-        <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
+        <p className="modalformFooter">Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
     }
 
     

@@ -15,23 +15,35 @@ namespace CleanArchitecture.API.Controllers
 
         [HttpGet("activity/{id}/{count}")]
         [Authorize]
-        public async Task<ActionResult<PaymentUserInfoDto>> GetActivityPaymentPage(string activityId, string count)
+        public async Task<ActionResult<PaymentUserInfoDto>> GetPaymentUserInfo(string activityId, string count)
         {
             return await Mediator.Send(new GetPaymentUserInfo.Query { ActivityId = Guid.Parse(activityId), Count = Convert.ToInt32(count) });
 
         }
 
-        [HttpPost("{id}/paymentpage")]
-        public async Task<ActionResult<bool>> GetIyzicoPaymentPage(GetIyzicoPaymentPage.Query query)
+        [HttpPost("{id}/updateUserBeforePayment")]
+        public async Task<ActionResult<bool>> UpdateUserDetailedInfo(UpdateUserDetailedInfo.Query query)
         {
             return await Mediator.Send(query);
         }
 
         [HttpPost("{id}/paymentStart")]
-        public async Task<ActionResult<bool>> StartIyzicoPayment(StartPayment.Query query)
+        public async Task<ActionResult<string>> StartIyzicoPayment(StartPayment.Query query)
         {
+            if (Request.Headers.ContainsKey("X-Forwarded-For"))
+                 query.UserIpAddress = Request.Headers["X-Forwarded-For"];
+            else
+                query.UserIpAddress = HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+
             return await Mediator.Send(query);
         }
 
+        [AllowAnonymous]
+        [HttpPost("callbackIyzicoPaymentStart")]
+        public async Task<ActionResult<bool>> CallbackIyzicoPaymentStart(CallbackIyzicoPaymentStart.Command command)
+        {
+            var result = await Mediator.Send(command);
+            return true;
+        }
     }
 }

@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.Payment
 {
-    public class GetIyzicoPaymentPage
+    public class UpdateUserDetailedInfo
     {
 
         public class Query : IRequest<bool>
@@ -69,31 +69,26 @@ namespace CleanArchitecture.Application.Payment
 
                 if (user.Name != request.Name || user.Surname != request.Surname || user.Address != request.Address || user.PhoneNumber != request.GsmNumber ||
                     user.City.Id != request.CityId)
-                {                
+                {
                     user.Address = request.Address;
                     user.PhoneNumber = request.GsmNumber;
-                  //  user.HasSignedIyzicoContract = request.HasSignedIyzicoContract;
+                    //  user.HasSignedIyzicoContract = request.HasSignedIyzicoContract;
                     user.City = city;
                     user.Name = request.Name;
                     user.Surname = request.Surname;
-                  
+
                     success = await _context.SaveChangesAsync() > 0;
 
                 }
 
                 if (success)
                 {
-
-                   // IPAddress userIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
-
-                   // var paymentPageContent = _paymentAccessor.GetActivityPaymentPageFromIyzico(activity, user, request.TicketCount, userIp);
-
                     return true;
                 }
                 throw new Exception("Problem saving user data");
 
 
-               
+
             }
         }
     }

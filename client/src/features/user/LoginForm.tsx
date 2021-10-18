@@ -45,11 +45,10 @@ const handleResetPassword = (e:any) => {
 
     return (
       <FinalForm
-        onSubmit={(values: IUserFormValues) =>
-
+        onSubmit={(values: IUserFormValues) => 
           login(values,location)
           .catch((error) => ({
-            [FORM_ERROR]: error,
+            [FORM_ERROR]: error
           }))
         }
         validate={validate}
@@ -90,7 +89,7 @@ const handleResetPassword = (e:any) => {
               fluid
             />
             <Divider horizontal>veya</Divider>
-            <SocialLogin loading={loadingFbLogin} fbCallback={fbLogin} />
+            <SocialLogin loading={loadingFbLogin} fbCallback={(resonse:any) => fbLogin(resonse,location)} />
 
           </Form>
         )}

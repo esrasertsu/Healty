@@ -1179,6 +1179,13 @@ i.search.inverted.icon {
   width: 100% !important;
   background: #d02121 !important
 }
+.logoutWebButton{
+  width: 100% !important;
+  background: #d02121 !important;
+  font-size: .92857143rem !important;
+
+}
+
 .mobileNavMenu_container .ui.inverted.icon.menu .item{
   color: "#1a2b49"
 }
@@ -1853,11 +1860,13 @@ button, input, optgroup, select, textarea {
   flex: 1 0 !important;
 }
 .forgotPasswordLink{
-  text-align: right;
-  display: block;
+  display: flex;
   margin-bottom: 20px;
   text-decoration: underline;
   font-size: 1rem;
+  justify-content: end;
+}
+.forgotPasswordLink p{
   cursor: pointer;
 }
 .modalformFooter{
@@ -1935,4 +1944,8 @@ button, input, optgroup, select, textarea {
 
 .equalUserInfoField{
   width: 45%;
+}
+
+.errorLabel{
+  color:red
 }

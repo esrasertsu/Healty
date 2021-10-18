@@ -37,12 +37,18 @@ namespace CleanArchitecture.Application.User
             {
                 var user = await _userManager.FindByNameAsync(_userAccessor.GetCurrentUsername());
 
+                if(user == null) throw new RestException(HttpStatusCode.Unauthorized);
+
                 var oldToken = user.RefreshTokens.SingleOrDefault(x => x.Token == request.RefreshToken);
 
                 if (oldToken != null && !oldToken.IsActive)
                     throw new RestException(HttpStatusCode.Unauthorized);
 
-                if(oldToken != null)
+                var inactiveTokens = user.RefreshTokens.Where(t => !t.Token.Equals(oldToken.Token)).ToList();
+                foreach (var token in inactiveTokens)
+                    user.RefreshTokens.Remove(token);
+
+                if (oldToken != null)
                 {
                     oldToken.Revoked = DateTime.UtcNow;
                 }

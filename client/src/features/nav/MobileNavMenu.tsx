@@ -14,7 +14,7 @@ interface IProps{
 }
 const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
     const rootStore = useContext(RootStoreContext);
-    const { user, logout} = rootStore.userStore;
+    const { user, logout,loggingOut} = rootStore.userStore;
     const { activeMenu,setActiveMenu, token } = rootStore.commonStore;
     const { notificationCount, isLoggedIn } = rootStore.userStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;
@@ -193,6 +193,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                     </Menu.Item>
                     <Menu.Item>
                 <Button
+                loading={loggingOut}
                   onClick={() => 
                    { logout();
                     setActiveMenu(-1)

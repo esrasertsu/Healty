@@ -9,6 +9,7 @@ using IyzipayCore.Request;
 using CleanArchitecture.Domain;
 using System.Net;
 using System.Linq;
+using CleanArchitecture.Application.Errors;
 
 namespace Infrastructure.Payment
 {
@@ -23,7 +24,107 @@ namespace Infrastructure.Payment
             _options.BaseUrl = config.Value.BaseUrl;
         }
 
-        public string GetActivityPaymentPageFromIyzico(Activity activity, AppUser user, int count, IPAddress userIp)
+        public string CreateSubMerchantIyzico(CleanArchitecture.Domain.SubMerchant subMerchantDomain)
+        {
+            var conversaitonId = Guid.NewGuid().ToString(); 
+            CreateSubMerchantRequest request = new CreateSubMerchantRequest();
+            request.Locale = Locale.TR.ToString();
+            request.ConversationId = conversaitonId;
+            request.SubMerchantExternalId = subMerchantDomain.Id.ToString();
+            request.Address = subMerchantDomain.Address;
+            request.ContactName = subMerchantDomain.ContactName;
+            request.ContactSurname = subMerchantDomain.ContactSurname;
+            request.Email = subMerchantDomain.Email;
+            request.GsmNumber = subMerchantDomain.GsmNumber;
+            request.Name = subMerchantDomain.Name;
+            request.Iban = subMerchantDomain.Iban;
+            request.IdentityNumber = subMerchantDomain.IdentityNumber;
+            request.Currency = Currency.TRY.ToString();
+
+            if (subMerchantDomain.MerchantType == MerchantType.Personal)
+                request.SubMerchantType = SubMerchantType.PERSONAL.ToString();
+            else if (subMerchantDomain.MerchantType == MerchantType.Anonim)
+            {
+                request.SubMerchantType = SubMerchantType.PRIVATE_COMPANY.ToString();
+                request.TaxOffice = subMerchantDomain.TaxOffice;
+                request.LegalCompanyTitle = subMerchantDomain.LegalCompanyTitle;
+            }
+            else if (subMerchantDomain.MerchantType == MerchantType.Limited)
+            {
+                request.SubMerchantType = SubMerchantType.LIMITED_OR_JOINT_STOCK_COMPANY.ToString();
+                request.TaxOffice = subMerchantDomain.TaxOffice;
+                request.TaxNumber = subMerchantDomain.TaxNumber;
+                request.LegalCompanyTitle = subMerchantDomain.LegalCompanyTitle;
+            }
+            else return "false";
+
+
+            IyzipayCore.Model.SubMerchant subMerchant = IyzipayCore.Model.SubMerchant.Create(request, _options);
+
+            if (subMerchant.ConversationId == conversaitonId)
+                return subMerchant.SubMerchantKey;
+            else return "false";
+        }
+
+        public string UpdateSubMerchantIyzico(CleanArchitecture.Domain.SubMerchant subMerchantDomain)
+        {
+            var conversaitonId = Guid.NewGuid().ToString();
+
+            UpdateSubMerchantRequest request = new UpdateSubMerchantRequest();
+            request.Locale = Locale.TR.ToString();
+            request.ConversationId = conversaitonId;
+            request.SubMerchantKey = subMerchantDomain.SubMerchantKey;
+            request.Iban = subMerchantDomain.Iban;
+            request.Address = subMerchantDomain.Address;
+            request.ContactName = subMerchantDomain.ContactName;
+            request.ContactSurname = subMerchantDomain.ContactSurname;
+            request.Email = subMerchantDomain.Email;
+            request.GsmNumber = subMerchantDomain.GsmNumber;
+            request.Name = subMerchantDomain.Name;
+            request.IdentityNumber = subMerchantDomain.IdentityNumber;
+            request.Currency = Currency.TRY.ToString();
+
+            if (subMerchantDomain.MerchantType == MerchantType.Anonim)
+            {
+                request.TaxOffice = subMerchantDomain.TaxOffice;
+                request.LegalCompanyTitle = subMerchantDomain.LegalCompanyTitle;
+            }
+            else if (subMerchantDomain.MerchantType == MerchantType.Limited)
+            {
+                request.TaxOffice = subMerchantDomain.TaxOffice;
+                request.TaxNumber = subMerchantDomain.TaxNumber;
+                request.LegalCompanyTitle = subMerchantDomain.LegalCompanyTitle;
+            }
+            else return "false";
+
+            IyzipayCore.Model.SubMerchant subMerchant = IyzipayCore.Model.SubMerchant.Update(request, _options);
+
+            if (subMerchant.ConversationId == conversaitonId)
+                return subMerchant.SubMerchantKey;
+            else return "false";
+        }
+
+
+        public string FinishPaymentWithIyzico(string conversationId, string paymentId, string conversationData)
+        {
+            CreateThreedsPaymentRequest request = new CreateThreedsPaymentRequest();
+            request.Locale = Locale.TR.ToString();
+            request.ConversationId = conversationId;
+            request.PaymentId = paymentId;// "1";
+            request.ConversationData = conversationData;// "conversation data";
+            
+            ThreedsPayment threedsPayment = ThreedsPayment.Create(request, _options);
+            if (threedsPayment.Status != "Success")
+            {
+                throw new RestException(HttpStatusCode.BadRequest, new { Iyzico = threedsPayment.ErrorMessage.ToString() });
+            }
+            else
+            {
+                return paymentId;
+            }
+        }
+
+        public string GetActivityPaymentPageFromIyzico(Activity activity, AppUser user, int count, string userIp)
         {
             CreateCheckoutFormInitializeRequest request = new CreateCheckoutFormInitializeRequest();
             request.Locale = Locale.TR.ToString();
@@ -49,7 +150,7 @@ namespace Infrastructure.Payment
             buyer.Email = user.Email;
             buyer.IdentityNumber = "11111111111";
             buyer.RegistrationAddress = user.Address;
-            buyer.Ip = userIp.ToString();//"85.34.78.112";
+            buyer.Ip = userIp;//"85.34.78.112";
             buyer.City = user.City.Name;
             buyer.Country = "Turkey";
             request.Buyer = buyer;
@@ -81,74 +182,78 @@ namespace Infrastructure.Payment
             var b = checkoutFormInitialize.ToString();
             return checkoutFormInitialize.PaymentPageUrl;
         }
-    
-        public string PaymentProcessWithIyzico(Activity activity, AppUser user, int count, IPAddress userIp)
+
+        public string PaymentProcessWithIyzico(Activity activity, AppUser user, int count, string userIp, string conversationId, string cardHolderName, string cardNumber, string cvc, string expireMonth, string expireYear)
         {
 
             CreatePaymentRequest request = new CreatePaymentRequest();
             request.Locale = Locale.TR.ToString();
-            request.ConversationId = "123456789";
-            request.Price = "1";
-            request.PaidPrice = "1.2";
+            request.ConversationId = conversationId;
+            request.Price = (activity.Price * count).ToString().Split(',')[0];
+            request.PaidPrice = (activity.Price * count).ToString().Split(',')[0];
             request.Currency = Currency.TRY.ToString();
             request.Installment = 1;
-            request.BasketId = "B67832";
+            //request.BasketId = "B67832";
             request.PaymentChannel = PaymentChannel.WEB.ToString();
-            request.PaymentGroup = PaymentGroup.LISTING.ToString();
+            request.PaymentGroup = PaymentGroup.PRODUCT.ToString();
+            request.CallbackUrl = "https://www.afitapp.com/callbackIyzicoPaymentStart"; //verify Email sayfası gibi olcak içerik
+
 
             PaymentCard paymentCard = new PaymentCard();
-            paymentCard.CardHolderName = "John Doe";
-            paymentCard.CardNumber = "5528790000000008";
-            paymentCard.ExpireMonth = "12";
-            paymentCard.ExpireYear = "2020";
-            paymentCard.Cvc = "123";
+            paymentCard.CardHolderName = cardHolderName;
+            paymentCard.CardNumber =cardNumber;
+            paymentCard.ExpireMonth = expireMonth;
+            paymentCard.ExpireYear = expireYear;
+            paymentCard.Cvc = cvc;
             paymentCard.RegisterCard = 0;
             request.PaymentCard = paymentCard;
 
             Buyer buyer = new Buyer();
-            buyer.Id = "BY789";
-            buyer.Name = "John";
-            buyer.Surname = "Doe";
-            buyer.GsmNumber = "+905350000000";
-            buyer.Email = "email@email.com";
-            buyer.IdentityNumber = "74300864791";
-            buyer.LastLoginDate = "2015-10-05 12:43:35";
-            buyer.RegistrationDate = "2013-04-21 15:12:09";
-            buyer.RegistrationAddress = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1";
-            buyer.Ip = "85.34.78.112";
-            buyer.City = "Istanbul";
+            buyer.Id = user.Id;
+            buyer.Name = user.Name;
+            buyer.Surname = user.Surname;
+            buyer.GsmNumber = user.PhoneNumber;
+            buyer.Email = user.Email;
+            buyer.IdentityNumber = "11111111111";
+            buyer.LastLoginDate = user.LastLoginDate.ToString("yyyy-MM-dd HH:mm:ss");
+            buyer.RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd HH:mm:ss");
+            buyer.RegistrationAddress = user.Address;
+            buyer.Ip = userIp; //85.34.78.112
+            buyer.City = user.City.Name;
             buyer.Country = "Turkey";
-            buyer.ZipCode = "34732";
             request.Buyer = buyer;
 
+            //BENIM FATURA BILGILERİM
             Address billingAddress = new Address();
-            billingAddress.ContactName = "Jane Doe";
+            billingAddress.ContactName = "Esra Sertsu";
             billingAddress.City = "Istanbul";
             billingAddress.Country = "Turkey";
             billingAddress.Description = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1";
             billingAddress.ZipCode = "34742";
             request.BillingAddress = billingAddress;
 
+
             List<BasketItem> basketItems = new List<BasketItem>();
             BasketItem firstBasketItem = new BasketItem();
-            firstBasketItem.Id = "BI101";
-            firstBasketItem.Name = "Binocular";
-            firstBasketItem.Category1 = "Collectibles";
-            firstBasketItem.Category2 = "Accessories";
+            firstBasketItem.Id = activity.Id.ToString();
+            firstBasketItem.Name = activity.Title;
+            firstBasketItem.Category1 = activity.Categories.Select(x => x.Category.Name).FirstOrDefault();
             firstBasketItem.ItemType = BasketItemType.VIRTUAL.ToString();
-            firstBasketItem.Price = "0.3";
-            firstBasketItem.SubMerchantKey = "sub merchant key";
-            firstBasketItem.SubMerchantPrice = "0.27";
+            firstBasketItem.Price = (activity.Price * count).ToString().Split(',')[0];
+            firstBasketItem.SubMerchantKey = "sub merchant key";   
+            firstBasketItem.SubMerchantPrice = (activity.Price * 80 / 100 * count).ToString().Split(',')[0];
             basketItems.Add(firstBasketItem);
 
-          
+            request.BasketItems = basketItems;
 
-            IyzipayCore.Model.Payment payment = IyzipayCore.Model.Payment.Create(request, _options);
+            ThreedsInitialize payment = ThreedsInitialize.Create(request, _options);
+            //IyzipayCore.Model.Payment payment = IyzipayCore.Model.Payment.Create(request, _options);
 
-
-            return "";
+            if (payment.Status == "success" && payment.ConversationId == conversationId)
+                return "";
+            else return "false";
         }
 
-
+        
     }
 }

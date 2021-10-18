@@ -15,6 +15,7 @@ axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.interceptors.request.use((config) => {
     const token = window.localStorage.getItem('jwt');
     if(token) config.headers.Authorization = `Bearer ${token}`;
+    config.withCredentials = true;
     return config;
 }, error =>{
     return Promise.reject(error);
@@ -346,7 +347,7 @@ const Zoom = {
 
 const Payment = {
     getActivityPaymentPage: (count:number,id: string): Promise<IPaymentUserInfoDetails> => requests.get(`/payment/activity/${id}/${count}?activityId=${id}&count=${count}`),
-    getIyzicoPaymentPage: (details:IPaymentUserInfoDetails): Promise<boolean> => requests.post(`/payment/${details.activityId}/paymentpage`,details),
+    getUserPaymentDetailedInfo: (details:IPaymentUserInfoDetails): Promise<boolean> => requests.post(`/payment/${details.activityId}/updateUserBeforePayment`,details),
     processPayment: (details:IPaymentCardInfo): Promise<boolean> => requests.post(`/payment/${details.activityId}/paymentstart`,details),
 
 } 

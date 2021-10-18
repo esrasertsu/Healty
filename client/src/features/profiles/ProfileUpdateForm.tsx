@@ -107,9 +107,9 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocu
       initialValues={profileForm!}
       render={({ handleSubmit, invalid, submitting }) => (
         <Form onSubmit={handleSubmit} error>
-          <label>Ad Soyad*</label>
+          <label id="nameLabel">Ad Soyad*</label>
           <Field
-            label="Ad/Soyad"
+            labelName="nameLabel"
             name='displayName'
             component={TextInput}
             placeholder='Display Name'
@@ -124,8 +124,9 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocu
                     }
                 }}
             </OnChange>
-            <label>Ünvan*</label>
+            <label id="titlelabel">Ünvan*</label>
           <Field
+            labelName="titlelabel"
             name='title'
             component={TextInput}
             placeholder='Örn: Kişisel Gelişim Uzmanı / Personal Trainer / Pedagog'
@@ -192,13 +193,15 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocu
                     }
                 }}
             </OnChange>
-                <label>Şehir*</label>
+                <label id="citylabel">Şehir*</label>
                 <Field 
                   name="cityId"
                   placeholder="City"
                   component={DropdownInput}
                   options={cities}
                   value={profileForm!.cityId}
+                  labelName="citylabel"
+                  emptyError={profileForm.cityId}
                   onChange={(e: any,data: any)=>handleCityChanged(e,data)}
                 />
                 <label>Erişilebilirlik</label>
@@ -213,25 +216,29 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocu
                     {
                       handleAccessChanged(e,data)}}
                 /> 
-                 <label>Kategori*</label>
+                 <label id="categoryLabel">Kategori*</label>
                  <Field
                   name="categoryIds"
                   placeholder="Kategori"
                   value={profileForm!.categoryIds}
                   component={DropdownMultiple}
                   options = {categoryOptions}
+                  labelName="categoryLabel"
+                  emptyError={profileForm.categoryIds}
                   onChange={(e: any,data:any)=>
                     {
                       debugger;
                       handleCategoryChanged(e,data)}}
                 /> 
-                 <label>Branşlar*</label>        
+                 <label id="subCatLabel">Branşlar*</label>        
                  <Field
                   name="subCategoryIds"
                   placeholder="Alt Kategori"
                   value={profileForm!.subCategoryIds}
                   component={DropdownMultiple}
                   options={subCategoryOptions}
+                  labelName="subCatLabel"
+                  emptyError={profileForm.subCategoryIds}
                   onChange={(e: any,data:[])=>
                     {
                       debugger;

@@ -56,8 +56,12 @@ namespace CleanArchitecture.Application.Activities
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
 
-                IPAddress userIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
-
+                string userIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+             
+                //if (Request.Headers.ContainsKey("X-Forwarded-For"))
+                //    return Request.Headers["X-Forwarded-For"];
+                //else
+                //    return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
 
                 var paymentPageContent = _paymentAccessor.GetActivityPaymentPageFromIyzico(activity, user, request.Count, userIp);
 

@@ -9,6 +9,7 @@ export interface IUser {
     image?: string;
     role: string;
     isOnline: boolean;
+    isSubMerchant:boolean;
 }
 
 export interface IUserFormValues {
@@ -108,5 +109,56 @@ export class TrainerFormValues implements ITrainerFormValues{
 
          }
         Object.assign(this, init);
+    }
+}
+
+
+
+export interface ISubMerchantInfo {
+    id?: string;
+    subMerchantKey?: string;
+    merchantType : string; 
+    contactName : string;
+    contactSurname : string;
+    email: string;
+    gsmNumber : string;
+    name: string;
+    taxOffice : string;
+    taxNumber? : number|null; 
+    address : string;
+    iban : string;
+    identityNumber: string;
+    legalCompanyTitle: string;
+    hasSignedContract: string;
+
+}
+
+
+export class SubMerchantInfo implements ISubMerchantInfo {
+
+    id?: string = undefined;
+    subMerchantKey?: string = undefined;
+    merchantType : string = ""; //0 şahıs 1 şirket
+    contactName : string = "";
+    contactSurname : string = "";
+    email: string = "";
+    gsmNumber : string = "";
+    name: string = "";
+    taxOffice : string = "";
+    taxNumber? : number|null = null;
+    address : string = "";
+    iban : string = "";
+    identityNumber: string = "";
+    legalCompanyTitle: string = "";
+    hasSignedContract: string = "";
+
+
+    constructor(init?: ISubMerchantInfo){
+        if(init)
+        {   
+
+             Object.assign(this, init);
+
+        }
     }
 }

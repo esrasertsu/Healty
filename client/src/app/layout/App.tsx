@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
-import { Container, Icon, Menu, Segment, Sidebar } from 'semantic-ui-react';
+import { Container, Icon, Image, Menu, Modal, Segment, Sidebar } from 'semantic-ui-react';
 import NavBar from '../../features/nav/NavBar';
 import { observer } from 'mobx-react-lite';
 import { Route , RouteComponentProps, Switch, withRouter} from 'react-router-dom';
@@ -34,6 +34,7 @@ import { history } from '../../index';
 import RegisterSuccess from '../../features/user/RegisterSuccess';
 import VerifyEmail from '../../features/user/VerifyEmail';
 import ResetPassword from '../../features/user/ResetPassword';
+import { IUser } from '../models/user';
 
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
@@ -44,12 +45,14 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   const {setAppLoaded, token, appLoaded,loadCities} = rootStore.commonStore;
   const { getUser,user,createHubConnection,hubConnection,stopHubConnection } = rootStore.userStore;
   const { loadCategories} = rootStore.categoryStore;
+  const { modal, openModal, closeModal} = rootStore.modalStore;
 
   // useLoadScript({
   //     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
   //     libraries
   // });
-
+  const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+  const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
   const [visible, setVisible] = useState(false);
   // useEffect(() => {
@@ -71,44 +74,82 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
      )
      
  }
-  useEffect(() => {
 
-    if(appLoaded && token !== null && user === null) {//refresh sırasında token silinmiyor dolayısıyla buraya sadece ilk açılış
-      getUser().then(() => {
-        loadCities().then(()=>
-        {
-          window.addEventListener('beforeunload', alertUser);
-          runInAction(() => {
+
+ const handleLoginClick = () => {
+  if(modal.open) closeModal();
+      openModal("Giriş Yap", <>
+      <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.png' wrapped />
+      <Modal.Description className="loginreg">
+      <LoginForm location={location.pathname} />
+      </Modal.Description>
+      </>,true,
+     "","",false) 
+  }
+
+  useEffect(() => {
+      if(token)
+      {
+        getUser().then((res) => {
+          if(res){
+            window.addEventListener('beforeunload', alertUser);
+            createHubConnection(true)
+            .finally(() => 
+           {
+              loadCities().then(()=>
+                 runInAction(() => {
+                  loadCategories();
+                  setAppLoaded();
+                }));
+            }
+          );
+          }else{
             setAppLoaded();
-            loadCategories();
-          });
-        }
-        );
-        
-      })
-    }else {
-      loadCities().then(()=>
-      runInAction(() => {
-        setAppLoaded();
+            handleLoginClick();
+          }
+          }
+          )
+      }else{
+        loadCities();
         loadCategories();
-      })
-      );
-    }
+        setAppLoaded();
+      }
+       
     return () => {
-      
+      if(user)
       window.removeEventListener('beforeunload', alertUser)
     }
-  },[appLoaded,token])
+  },[])
 
-  useEffect(() => {
-    if(appLoaded && user!==null && hubConnection === null)
-    {
-      debugger;
-      createHubConnection(true);
+  // useEffect(() => {
+  //   if(appLoaded && user!==null && hubConnection === null)
+  //   {
+  //     debugger;
+  //     createHubConnection(true);
 
-    }
+  //   }
 
-  }, [appLoaded,user])
+  // }, [appLoaded,user])
+
+  // useEffect(() => {
+  //   loadCities().then(()=>
+  //   runInAction(() => {
+  //     setAppLoaded();
+  //     loadCategories();
+  //   })
+  //   );
+  
+  // }, [])
+
+
+  // useEffect(() => {
+  //   debugger;
+  //   if (token) {
+  //     getUser().finally(() => setAppLoaded())
+  //   } else {
+  //     setAppLoaded();
+  //   }
+  // }, [getUser, setAppLoaded, token])
 
 
   if(!appLoaded) return <LoadingComponent content='Loading app...' />

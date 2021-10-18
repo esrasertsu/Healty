@@ -15,9 +15,7 @@ interface IProps{
 
 const MobileNavBar: React.FC<IProps> = ({setVisibleMobileNav,visible}) => {
     const rootStore = useContext(RootStoreContext);
-    const { user, logout} = rootStore.userStore;
     const { activeMenu,setActiveMenu } = rootStore.commonStore;
-    const { notificationCount } = rootStore.userStore;
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     const fixed = "top";

@@ -12,7 +12,7 @@ import { useMediaQuery } from 'react-responsive'
 
 const NavBar: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
-    const { user, logout,isLoggedIn} = rootStore.userStore;
+    const { user, logout,isLoggedIn,loggingOut} = rootStore.userStore;
     const { activeMenu,setActiveMenu } = rootStore.commonStore;
     const { notificationCount } = rootStore.userStore;
 
@@ -133,7 +133,7 @@ const NavBar: React.FC = () => {
                     key="profil"
                     as={Link}
                     to={`/profile/${user.userName}`}
-                    text="Profil"
+                    text="Profilim"
                     icon="user"
                   ></Dropdown.Item>
                   <Dropdown.Item
@@ -146,7 +146,31 @@ const NavBar: React.FC = () => {
                     {notificationCount}
                     </Label>
                   </Dropdown.Item>
-                  <Dropdown.Item text="Logout" onClick={logout} icon="power" />
+                  <Dropdown.Item
+                    key="order"
+                    as={Link}
+                    to={`/orders`}
+                  >  <Icon name='unordered list' />
+                       Siparişlerim
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    key="settings"
+                    as={Link}
+                    to={`/orders`}
+                  >  <Icon name='settings' />
+                       Ayarlar
+                  </Dropdown.Item>
+                  <Dropdown.Item>
+                  <Button
+                  icon
+                  size="mini"
+                  labelPosition="right"
+                  loading={loggingOut}
+                  onClick={logout} 
+                  className="logoutWebButton" primary>Çıkış
+                 <Icon name='log out' />
+                  </Button>
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>

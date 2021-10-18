@@ -25,11 +25,10 @@ import { action } from "mobx";
 import { toast } from "react-toastify";
 
 const validate = combineValidators({
-  title: isRequired({message: 'The event title is required'}),
+  title: isRequired({message: 'Aktivite başlığı zorunlu alandır.'}),
   categoryIds: isRequired('Category'),
   description: composeValidators(
-    isRequired('Description'),
-    hasLengthGreaterThan(4)({message: 'Description needs to be at least 5 characters'})
+    hasLengthGreaterThan(50)({message: 'Açıklama en az 50 karakter uzunluğunda olmalıdır.'})
   )(),
   date: isRequired('Date'),
   time: isRequired('Time')
@@ -189,8 +188,9 @@ const handleTimeChange = (time:any) =>{
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid }) => (
               <Form onSubmit={handleSubmit} loading={loading}>
-                <label>Aktivite Başlığı*</label>
+                <label id="activityName">Aktivite Başlığı*</label>
                 <Field
+                  labelName="activityName"
                   name="title"
                   placeholder="Title"
                   value={activityForm.title}
@@ -198,10 +198,11 @@ const handleTimeChange = (time:any) =>{
                 />
                   <OnChange name="title">
                 {(value, previous) => {
+                  debugger;
                       setActivityForm({...activityForm,title: value});
                 }}
                  </OnChange>
-                 <label>Aktivite Liste Fotoğrafı*</label>
+                 <label className={image === null ? "errorLabel" : ""}>Aktivite Liste Fotoğrafı*</label>
                  {
                    activityForm.mainImage && !imageChange ?
                    <Segment>
@@ -229,9 +230,9 @@ const handleTimeChange = (time:any) =>{
                   <Grid.Column width="eight">
                   <div style={{display:"flex"}}>
                   <Label style={{marginBottom:"20px", marginRight:"20px", cursor:"pointer"}} 
-                  onClick={()=> {setFiles([]);setImageDeleted(true);}}>Değiştir/Sil <Icon name="trash"></Icon></Label>
-                  <Label style={{marginBottom:"20px", cursor:"pointer"}} onClick={()=> {
-                  setImageChange(false); setImageDeleted(false); setFiles([])}}>Değişiklikleri geri al <Icon name="backward"></Icon> </Label>   
+                  onClick={()=> {setFiles([]);setImageDeleted(true); setImage(null)}}>Sil  <Icon name="trash"></Icon></Label>
+                  {/* <Label style={{marginBottom:"20px", cursor:"pointer"}} onClick={()=> {
+                  setImageChange(false); setImageDeleted(false); setFiles([])}}>Değişiklikleri geri al <Icon name="backward"></Icon> </Label>    */}
                   </div>             
                   </Grid.Column>
                </Grid>

@@ -57,6 +57,13 @@ namespace CleanArchitecture.Application.User
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
 
+                if (activity.AttendancyLimit != null && activity.AttendancyLimit >0)
+                {
+                    var atcount = activity.AttendanceCount + request.Count;
+                    if(atcount > activity.AttendancyLimit)
+                        throw new RestException(HttpStatusCode.BadRequest, new { Activity = "Katılımcı sayısı doldu. Lütfen aktivite sahibiyle iletişime geçin." });
+                }
+
                 PaymentUserInfoDto paymentUserInfo = new PaymentUserInfoDto()
                 {
                     ActivityId = activity.Id,

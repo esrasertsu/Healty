@@ -507,6 +507,7 @@ export default class ActivityStore {
 
     @action getActivityPaymentPage = async (count:number,activityId:string) =>{
         this.loadingPaymentPage = true;
+
         try {
             const result = await agent.Payment.getActivityPaymentPage(count,activityId);
             runInAction('Opening payment content', () => {
@@ -524,10 +525,10 @@ export default class ActivityStore {
         }
     };
 
-    @action getIyzicoPaymentPage = async (details:IPaymentUserInfoDetails) =>{
+    @action getUserPaymentDetailedInfo = async (details:IPaymentUserInfoDetails) =>{
         this.loadingPaymentPage = true;
         try {
-            const res = await agent.Payment.getIyzicoPaymentPage(details);
+            const res = await agent.Payment.getUserPaymentDetailedInfo(details);
             runInAction('Opening payment content', () => {
                 this.loadingPaymentPage = false;
             });

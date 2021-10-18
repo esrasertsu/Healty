@@ -51,7 +51,7 @@ namespace CleanArchitecture.Application.User
                 var user = await _userManager.FindByEmailAsync(request.Email);
 
                 if (user == null)
-                    throw new RestException(HttpStatusCode.Unauthorized);
+                    throw new RestException(HttpStatusCode.BadRequest, new { Email = "Sistemde bu email adresiyle kayıtlı bir kullanıcı bulunamadı."});
 
                 if (!user.EmailConfirmed) throw new RestException(HttpStatusCode.BadRequest, new { Email = "Email doğrulaması gerçekleştirilmedi." });
 

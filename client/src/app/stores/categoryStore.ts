@@ -60,7 +60,6 @@ export default class CategoryStore{
 
     @action loadCategories = async () =>{
         this.loadingCategories = true;
-
         try {
             const categoryList = await agent.Categories.list();
             runInAction(()=>{
@@ -77,6 +76,7 @@ export default class CategoryStore{
             })
             console.log(error);
         }
+    
     }
 
 

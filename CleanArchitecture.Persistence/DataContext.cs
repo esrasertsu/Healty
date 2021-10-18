@@ -54,6 +54,7 @@ namespace CleanArchitecture.Persistence
         public DbSet<ActivityJoinDetails> ActivityJoinDetails { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<SubMerchant> SubMerchants { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -240,6 +241,15 @@ namespace CleanArchitecture.Persistence
 
             builder.Entity<ReferencePic>(x => x.HasKey(ua =>
              new { ua.OriginalPublicId, ua.ThumbnailPublicId }));
+
+
+            builder.Entity<Order>()
+            .HasIndex(p => p.OrderNumber)
+            .IsUnique();
+
+            builder.Entity<SubMerchant>()
+                .HasIndex(prop => prop.SubMerchantKey)
+                .IsUnique();
 
         }
     }

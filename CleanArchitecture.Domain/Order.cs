@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace CleanArchitecture.Domain
 {
     public class Order
     {
+        public Order()
+        {
+            OrderItems = new Collection<OrderItem>();
+        }
         public Guid Id { get; set; }
-        public string OrderNumber { get; set; }
+        public long OrderNumber { get; set; }
         public DateTime OrderDate { get; set; }
         public EnumOrderState OrderState { get; set; }
         public EnumPaymentTypes PaymentType { get; set; }
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public virtual AppUser User { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

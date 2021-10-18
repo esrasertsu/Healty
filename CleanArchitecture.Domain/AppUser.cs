@@ -12,6 +12,8 @@ namespace CleanArchitecture.Domain
         public AppUser()
         {
             Photos = new Collection<Photo>();
+            Orders = new Collection<Order>();
+            RefreshTokens = new Collection<RefreshToken>();
         }
         public string DisplayName { get; set; }
         public string Name { get; set; }
@@ -21,6 +23,8 @@ namespace CleanArchitecture.Domain
         public string Experience { get; set; }
         public string Dependency { get; set; }//þirket , freelance vs
         public string Address { get; set; }
+        public string SubMerchantKey { get; set; }
+        public SubMerchant SubMerchantDetails { get; set;}
         public Role Role { get; set; }
         public DateTime RegistrationDate { get; set; }
         public DateTime LastLoginDate { get; set; }
@@ -32,7 +36,9 @@ namespace CleanArchitecture.Domain
         public int Star { get { return Convert.ToInt32(this.ReceivedComments.Count() > 0 ? this.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Average() : 0); } } //rating
         public int StarCount { get { return Convert.ToInt32(this.ReceivedComments.Count() > 0 ? this.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Count() : 0); } } //total rate votes ( bigger than zero) 
         public bool HasSignedIyzicoContract { get; set; }
-        public string SubMerchantKey { get; set; }
+        public DateTime? IyzicoContractSignedDate { get; set; }
+        public bool HasSignedPaymentContract { get; set; }
+        public DateTime? PaymentSignedDate { get; set; }
         public virtual ICollection<ActivityComment> ActivityComments { get; set; }
         public virtual ICollection<UserActivity> UserActivities { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
@@ -49,7 +55,7 @@ namespace CleanArchitecture.Domain
         public virtual ICollection<ReferencePic> ReferencePics { get; set; }
         public virtual ICollection<Certificate> Certificates { get; set; }
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
-
+   
     }
 
     public enum Role

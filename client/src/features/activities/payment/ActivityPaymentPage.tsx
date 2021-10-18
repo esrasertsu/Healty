@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { Segment, Header, Form, Button,Comment, Icon, Grid, Modal, Step } from 'semantic-ui-react'
+import { Segment, Header, Form, Button,Comment, Icon, Grid, Modal, Step, Label, Container } from 'semantic-ui-react'
 import { RootStoreContext } from '../../../app/stores/rootStore'
 import { Form as FinalForm, Field} from 'react-final-form';
 import { Link, RouteComponentProps } from 'react-router-dom';
@@ -19,6 +19,9 @@ import PhoneNumberInput from '../../../app/common/form/PhoneNumberInput';
 import { useMediaQuery } from 'react-responsive'
 import { isValidPhoneNumber } from 'react-phone-number-input'
 import ActivityPaymentStarterPage from './ActivityPaymentStarterPage';
+import { combineValidators, isRequired } from 'revalidate';
+import { history } from '../../..';
+import { LoadingComponent } from '../../../app/layout/LoadingComponent';
 
 interface DetailParams{
     id:string,
@@ -27,17 +30,23 @@ interface DetailParams{
 
 interface IProps extends RouteComponentProps<DetailParams> {}
 
+const validate = combineValidators({
+  name: isRequired('name'),
+  surname: isRequired('surname'),
+  gsmNumber: isRequired('gsmNumber'),
+  cityId: isRequired('cityId')
+
+})
 
  const ActivityPaymentPage: React.FC<IProps> = ({match}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const {getActivityPaymentPage,setActivityUserPaymentInfo,activityUserPaymentInfo,getIyzicoPaymentPage,
-    processPayment} = rootStore.activityStore;
+  const {getActivityPaymentPage,setActivityUserPaymentInfo,activityUserPaymentInfo,getUserPaymentDetailedInfo,
+    processPayment, loadActivity, loadingActivity,activity} = rootStore.activityStore;
   const {
     cities
   } = rootStore.commonStore;
 
-  const [count, setCount] = useState(1);  
   const [loading, setLoading] = useState(false);
   const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
@@ -48,6 +57,7 @@ interface IProps extends RouteComponentProps<DetailParams> {}
     const[showInfo, setShowInfo] = useState(false);
     const[showPaymentPage, setShowPaymentPage] = useState(false);
     const[showUserPaymentInfoPage, setShowUserPaymentInfoPage] = useState(true);
+    const[phoneError, setphoneError] = useState(false);
 
     
     useEffect(() => {
@@ -62,12 +72,19 @@ interface IProps extends RouteComponentProps<DetailParams> {}
   }
   }, [match.params.id,getActivityPaymentPage])
 
+
+  useEffect(() => {
+    loadActivity(match.params.id);
+}, [loadActivity, match.params.id]) // sadece 1 kere çalışcak, koymazsak her component render olduğunda
+
+if(loadingActivity) return <LoadingComponent content='Loading...'/>  
+
   
 
   const handleFinalFormSubmit = (values: IPaymentUserInfoDetails) => {
 
     setLoading(true);
-    getIyzicoPaymentPage(values).then(action((res) => {
+    getUserPaymentDetailedInfo(values).then(action((res) => {
    if(res! === true)
    { 
      setShowPaymentPage(true);
@@ -145,21 +162,23 @@ interface IProps extends RouteComponentProps<DetailParams> {}
     </Step>
   </Step.Group>
 {showUserPaymentInfoPage &&  
-     <Grid stackable style={{marginBottom:"100px"}}>
+     <Grid stackable style={{marginBottom:"50px"}}>
+     
       <Grid.Row>
-      <Grid.Column>
+      <Grid.Column width={!isTablet ? 12 : 11}>
         <Segment clearing>
           <FinalForm
-           // validate = {validate}
+            validate = {validate}
             initialValues={activityUserPaymentInfo}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid }) => (
               <Form onSubmit={handleSubmit} loading={loading} style={{margin:"2.5rem"}}>
                   <Form.Group widths="equal" className="creditCard" style={isMobile ? {width:"100%"} :{width:"60%"}}>
                     <div className="equalUserInfoField">
-                    <label>Ad*</label>
+                    <label id="nameLabel">Ad*</label>
                   <Field
                   name="name"
+                  labelName="nameLabel"
                   placeholder="Ad"
                   value={activityUserPaymentInfo.name}
                   component={TextInput}
@@ -172,9 +191,10 @@ interface IProps extends RouteComponentProps<DetailParams> {}
                 </OnChange>
                     </div>
                     <div className="equalUserInfoField">
-                <label>Soyad*</label>
+                <label id="surnameLabel">Soyad*</label>
                   <Field
                   name="surname"
+                  labelName="surnameLabel"
                   placeholder="Soyad"
                   value={activityUserPaymentInfo.surname}
                   component={TextInput}
@@ -188,17 +208,21 @@ interface IProps extends RouteComponentProps<DetailParams> {}
                 </div>
                 </Form.Group>
 
-                  <label>Telefon Numarası*</label>
+                <label id="gsmNumber_label">Telefon Numarası*</label>
                 <Field
+                  width={isMobile ? "16" :"4"}
                   name="gsmNumber"
+                  labelName="gsmNumber_label"
                   placeholder="Telefon Numarası"
                   component={PhoneNumberInput}
                   value={activityUserPaymentInfo.gsmNumber}
                 /> 
-                    <OnChange name="gsmNumber">
+                <OnChange name="gsmNumber">
                 {(value, previous) => {
                        // setUpdateEnabled(true);
+                       debugger;
                         setActivityUserPaymentInfo({...activityUserPaymentInfo,gsmNumber: value});
+                      
                 }}
                 </OnChange>
                   <label>Adres</label>
@@ -215,22 +239,25 @@ interface IProps extends RouteComponentProps<DetailParams> {}
                         setActivityUserPaymentInfo({...activityUserPaymentInfo,address: value});
                 }}
                 </OnChange>
-                <label>Şehir</label>
+                <label id="cityLabel">Şehir*</label>
                 <Field 
                   name="cityId"
+                  labelName="cityLabel"
                   placeholder="Şehir"
                   component={DropdownInput}
                   options={cities}
                   value={activityUserPaymentInfo.cityId}
                   clearable={true}
+                  emptyError={activityUserPaymentInfo.cityId}
                   onChange={(e: any,data: any)=>handleCityChanged(e,data)}
                   style={{marginBottom:15}}
+                  width={isMobile ? "16" :"4"}
                 />
             
          
               
                 <Button
-                  //loading={submitting}
+                  loading={loading}
                   disabled={loading || invalid }
                   floated="right"
                   positive
@@ -238,23 +265,53 @@ interface IProps extends RouteComponentProps<DetailParams> {}
                   type="submit"
                   style={{margin:"20px 0"}}
                 >Kaydet ve Devam et <Icon style={{opacity:"1", marginLeft:"5px"}} name="angle right"></Icon></Button>
-                {/* <Button
+                { <Button
                   floated="left"
                   disabled={loading}
                   type="cancel"
                   content="İptal"
                   onClick={
-                    activityForm.id
-                      ? () => history.push(`/activities/${activityForm.id}`)
+                    match.params.id
+                      ? () => history.push(`/activities/${match.params.id}`)
                       : () => history.push("/activities")
                   }
-                /> */}
+                />}
               </Form>
             )}
           />
         </Segment>
       </Grid.Column>
+      <Grid.Column width={!isTablet ? 4 : 5}>
+    <Segment>
+    <Container>
+      {
+        activity && (
+          <>
+          <div className="activity_paymentpage_price_containerdiv">
+            <div className="activity_paymentpage_price_header" style={{marginBottom:"20px"}}>Ödenecek Tutar</div>
+            <div className="activity_paymentpage_price_items"><span>Aktivite fiyatı</span> <span>{activity.price} ₺</span> </div>
+            <div className="activity_paymentpage_price_items"><span>Kişi sayısı</span> <span>{match.params.count}</span> </div>
+            <div className="activity_paymentpage_price_items"><span>İndirim</span> <span>0 ₺</span> </div>
+          
+            <div className="activityDetail_payment_footer activity_paymentpage_price_footer">
+                <div style={{fontSize:"18px"}}>Toplam </div> 
+                <div className="price">{activity.price! * Number(match.params.count)} ₺</div>
+            </div>
+            <div>
+            {/* <Button size="large" positive fluid  floated="right" style={{marginTop:"20px"}}
+                  type="submit" onClick={onSubmit} disabled={!paymentContract || !iyzicoContract}>
+                Ödemeyi Tamamla <Icon style={{opacity:"1", marginLeft:"5px"}} name="thumbs up"></Icon>
+              </Button> */}
+            </div>
+          </div>
+ 
+          </>
+        )
+      }
       
+       </Container>
+    </Segment>
+    </Grid.Column>
        </Grid.Row>
       
     </Grid>
@@ -263,7 +320,7 @@ interface IProps extends RouteComponentProps<DetailParams> {}
    (
      <>
          
-      <ActivityPaymentStarterPage handlePaymentFormSubmit={handlePaymentFormSubmit} activityId={match.params.id} count={match.params.count} />
+      <ActivityPaymentStarterPage handlePaymentFormSubmit={handlePaymentFormSubmit} activity={activity} count={match.params.count} />
    
      </>
    )

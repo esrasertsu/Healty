@@ -237,6 +237,8 @@ export interface IPaymentCardInfo {
     cardHolderName : string;
     cvc : string;
     expireDate : string;
+    expireYear: string;
+    expireMonth: string;
     hasSignedPaymentContract : boolean;
     hasSignedIyzicoContract  : boolean;
     activityId : string;
@@ -251,6 +253,9 @@ export class PaymentCardInfo implements IPaymentCardInfo {
     cardHolderName : string = "";
     cvc : string = "";
     expireDate : string = "";
+    expireYear : string = "";
+    expireMonth : string = "";
+
     address : string = "";
     hasSignedPaymentContract : boolean = false;
     hasSignedIyzicoContract : boolean = false;
@@ -266,3 +271,5 @@ export class PaymentCardInfo implements IPaymentCardInfo {
         }
     }
 }
+
+

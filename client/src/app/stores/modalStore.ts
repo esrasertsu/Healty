@@ -1,5 +1,6 @@
 import { action, observable } from "mobx";
 import { RootStore } from "./rootStore";
+import { history } from '../../index';
 
 export default class ModalStore {
     rootStore : RootStore;
@@ -14,10 +15,13 @@ export default class ModalStore {
         image:false,
         footer:null,
         dimmer:"blurring",
-        closeOnDimmerClick:true
+        closeOnDimmerClick:true,
+        redirectPage:""
     }
 
-    @action openModal = (header:any, content: any, image:any, footer:any, dimmer?:string,closeOnDimmerClick?:boolean) =>{
+    @action openModal = (header:any, content: any, image:any, footer:any, dimmer?:string,closeOnDimmerClick?:boolean,
+      //  redirectPage?:string
+        ) =>{
         this.modal.open = true;
         this.modal.body = content;
         this.modal.header = header;
@@ -25,6 +29,7 @@ export default class ModalStore {
         this.modal.footer = footer;
         this.modal.dimmer = dimmer === "inverted" ? "inverted" : "blurring";
         this.modal.closeOnDimmerClick = closeOnDimmerClick === true ? true :false;
+       // this.modal.redirectPage=redirectPage ? redirectPage : "";
     }
 
     @action closeModal = () => {
@@ -33,5 +38,7 @@ export default class ModalStore {
         this.modal.header = null;
         this.modal.image = false;
         this.modal.footer = null;
+        // if(this.modal.redirectPage && this.modal.redirectPage!=="")
+        //  history.push(this.modal.redirectPage);
     }
 }

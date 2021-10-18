@@ -3,7 +3,7 @@ import { Segment, Header, Form, Button,Comment, Icon, Container, Grid, Image, Mo
 import { RootStoreContext } from '../../../app/stores/rootStore'
 import { Form as FinalForm, Field} from 'react-final-form';
 import { observer } from 'mobx-react-lite';
-import {  IPaymentCardInfo, PaymentCardInfo } from '../../../app/models/activity';
+import {  IActivity, IPaymentCardInfo, PaymentCardInfo } from '../../../app/models/activity';
 import { OnChange } from 'react-final-form-listeners';
 import Card from 'react-credit-cards';
 import {
@@ -18,12 +18,12 @@ import { useMediaQuery } from 'react-responsive'
 
 
   interface IProps{
-    activityId: string;
+    activity:IActivity | null;
     handlePaymentFormSubmit: (values:any) => void;
     count: string;
   }
 
- const ActivityPaymentStarterPage:React.FC<IProps> = ({handlePaymentFormSubmit,activityId, count}) =>  {
+ const ActivityPaymentStarterPage:React.FC<IProps> = ({handlePaymentFormSubmit,activity, count}) =>  {
 
   const rootStore = useContext(RootStoreContext);
   const [focused, setFocused] = useState("");
@@ -31,6 +31,8 @@ import { useMediaQuery } from 'react-responsive'
   const [cardExpire, setCardExpire] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [cardName, setCardName] = useState("");
+  const [exMonth,setExMonth] = useState("");
+  const [exYear,setExYear] = useState("");
 
   const [paymentInfo, setPaymentInfo] = useState<IPaymentCardInfo>(new PaymentCardInfo());
 
@@ -49,16 +51,10 @@ const [iyzicoContract, setIyzicoContract] = useState(false);
 
 const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
 
-  const { activity, loadActivity, loadingActivity } = rootStore.activityStore;
     const { user } = rootStore.userStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;
 
-    useEffect(() => {
-        loadActivity(activityId);
-    }, [loadActivity, activityId]) // sadece 1 kere çalışcak, koymazsak her component render olduğunda
-
-    if(loadingActivity) return <LoadingComponent content='Loading activity...'/>  
-
+  
   const handleInputFocus = ({ target }:any) => {
     setFocused(target.name);
   };
@@ -86,7 +82,9 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
   else{
 
     setPaymentInfo({...paymentInfo, cardNumber:cardNumber, cardHolderName:cardName, cvc:cvc,expireDate:cardExpire,
-    hasSignedIyzicoContract:iyzicoContract, hasSignedPaymentContract:paymentContract, activityId:activityId,ticketCount:Number(count)});
+    hasSignedIyzicoContract:iyzicoContract, hasSignedPaymentContract:paymentContract, activityId:activity!.id,
+    expireMonth: exMonth, expireYear: exYear,
+    ticketCount:Number(count)});
 
     handlePaymentFormSubmit(paymentInfo);
 
@@ -215,6 +213,8 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
                         // setUpdateEnabled(true);
                         setExpireIcon(true);
                         setExpireErrorMessage(false);
+                        setExMonth(Payment.fns.cardExpiryVal(value).month.toString());
+                        setExYear(Payment.fns.cardExpiryVal(value).year.toString());
 
                       }else{
                         setExpireIcon(false);

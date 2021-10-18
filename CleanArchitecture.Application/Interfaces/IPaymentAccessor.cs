@@ -8,7 +8,11 @@ namespace CleanArchitecture.Application.Interfaces
 {
     public interface IPaymentAccessor
     {
-        string GetActivityPaymentPageFromIyzico(Activity activity, AppUser user, int count, IPAddress userIp);
-
+        string GetActivityPaymentPageFromIyzico(Activity activity, AppUser user, int count, string userIp);
+        string PaymentProcessWithIyzico(Activity activity, AppUser user, int count, string userIp, string conversationId,
+         string cardHolderName,string cardNumber, string cvc ,string expireMonth, string expireYear);
+        string FinishPaymentWithIyzico(string conversationId, string paymentId, string conversationData);
+        string CreateSubMerchantIyzico(SubMerchant subMerchant);
+        string UpdateSubMerchantIyzico(SubMerchant subMerchant);
     }
 }

@@ -135,11 +135,13 @@ const NavBar: React.FC = () => {
                     to={`/profile/${user.userName}`}
                     text="Profilim"
                     icon="user"
+                    onClick={()=>{setActiveMenu(-1);}}
                   ></Dropdown.Item>
                   <Dropdown.Item
                     key="mesaj"
                     as={Link}
                     to={`/messages`}
+                    onClick={()=>{setActiveMenu(-1);}}
                   >  <Icon name='mail' />
                        Mesajlar
                     <Label style={{margin:"0 0 0 10px"}} color='green'>
@@ -150,13 +152,15 @@ const NavBar: React.FC = () => {
                     key="order"
                     as={Link}
                     to={`/orders`}
+                    onClick={()=>{setActiveMenu(-1);}}
                   >  <Icon name='unordered list' />
                        Siparişlerim
                   </Dropdown.Item>
                   <Dropdown.Item
                     key="settings"
                     as={Link}
-                    to={`/orders`}
+                    to={`/settings`}
+                    onClick={()=>{setActiveMenu(-1);}}
                   >  <Icon name='settings' />
                        Ayarlar
                   </Dropdown.Item>

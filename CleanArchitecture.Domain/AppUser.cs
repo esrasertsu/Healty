@@ -24,7 +24,6 @@ namespace CleanArchitecture.Domain
         public string Dependency { get; set; }//þirket , freelance vs
         public string Address { get; set; }
         public string SubMerchantKey { get; set; }
-        public SubMerchant SubMerchantDetails { get; set;}
         public Role Role { get; set; }
         public DateTime RegistrationDate { get; set; }
         public DateTime LastLoginDate { get; set; }
@@ -39,6 +38,7 @@ namespace CleanArchitecture.Domain
         public DateTime? IyzicoContractSignedDate { get; set; }
         public bool HasSignedPaymentContract { get; set; }
         public DateTime? PaymentSignedDate { get; set; }
+        public virtual SubMerchant SubMerchantDetails { get; set; }
         public virtual ICollection<ActivityComment> ActivityComments { get; set; }
         public virtual ICollection<UserActivity> UserActivities { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }

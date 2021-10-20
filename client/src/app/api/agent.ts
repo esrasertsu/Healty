@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
-import { ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues } from '../models/user';
+import { ISubMerchantInfo, ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues } from '../models/user';
 import { IAccessibility, IDocument, IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope, IProfileEnvelope, IProfileFormValues, IRefencePic } from '../models/profile';
 import { IBlogsEnvelope, IBlog, IPostFormValues, IBlogUpdateFormValues } from '../models/blog';
 import { IAllCategoryList, ICategory, ISubCategory } from '../models/category';
@@ -272,7 +272,11 @@ const User ={
     verifyEmail: (token: string, email:string): Promise<void> => requests.post(`/user/verifyEmail`,{token,email}),
     resendVerifyEmailConfirm:(email:string): Promise<void> => requests.post(`/user/resendEmailVerification?email=${email}`,{}),
     resetPasswordRequest:(email:string): Promise<boolean> => requests.post(`/user/resetPswRequest?email=${email}`,{}),
-    resetPassword:(token:string, email:string,password:string): Promise<any> => requests.get(`/user/resetPassword?token=${token}&email=${email}&password=${password}`)
+    resetPassword:(token:string, email:string,password:string): Promise<any> => requests.get(`/user/resetPassword?token=${token}&email=${email}&password=${password}`),
+    getSubMerchantInfo: () : Promise<ISubMerchantInfo> => requests.get('/user/submerchantInfo'),
+    createSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<string> => requests.post('/user/createSubMerchant', subMerchant),
+    editSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<string> => requests.post('/user/editSubMerchant', subMerchant),
+
 }
 
 const Profiles = {

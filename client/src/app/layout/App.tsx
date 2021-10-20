@@ -35,6 +35,8 @@ import RegisterSuccess from '../../features/user/RegisterSuccess';
 import VerifyEmail from '../../features/user/VerifyEmail';
 import ResetPassword from '../../features/user/ResetPassword';
 import { IUser } from '../models/user';
+import SubMerchantDetails from '../../features/subMerchant/SubMerchantDetails';
+import { Settings } from '../../features/user/Settings';
 
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
@@ -105,7 +107,8 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
           );
           }else{
             setAppLoaded();
-            handleLoginClick();
+            if(location.pathname != "/")
+              handleLoginClick();
           }
           }
           )
@@ -184,6 +187,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <Route path="/user/registerSuccess" component={RegisterSuccess}/>
                  <Route path="/user/verifyEmail" component={VerifyEmail}/>
                  <Route path="/user/resetPassword" component={ResetPassword}/>
+                 <Route path="/settings" component={Settings}/>
                  <Route exact path="/admin" component={Admin}/>
                  <Route component={NotFound}/>
                </Switch>
@@ -233,6 +237,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <Route path="/user/registerSuccess" component={RegisterSuccess}/>
                  <Route path="/user/verifyEmail" component={VerifyEmail}/>
                  <Route path="/user/resetPassword" component={ResetPassword}/>
+                 <Route path="/settings" component={Settings}/>
                  <Route exact path="/admin" component={Admin}/>
                   <Route component={NotFound}/>
                 </Switch>

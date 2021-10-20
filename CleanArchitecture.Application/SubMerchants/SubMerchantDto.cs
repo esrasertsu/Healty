@@ -8,8 +8,9 @@ namespace CleanArchitecture.Application.SubMerchants
     public class SubMerchantDto
     {
         public Guid Id { get; set; }
+        public string UserId { get; set; }
         public string SubMerchantKey { get; set; }
-        public int MerchantType { get; set; }
+        public string MerchantType { get; set; }
         public string Address { get; set; }
         public string TaxOffice { get; set; } //private,ltd
         public string TaxNumber { get; set; } //ltd
@@ -22,8 +23,7 @@ namespace CleanArchitecture.Application.SubMerchants
         public string Iban { get; set; }
         public string IdentityNumber { get; set; }
         public string Currency { get; set; }
-        public DateTime RegistrationDate { get; set; }
-        public DateTime? ApplicationDate { get; set; }
+        public DateTime ApplicationDate { get; set; }
         public bool HasSignedContract { get; set; }
     }
 }

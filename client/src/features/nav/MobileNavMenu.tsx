@@ -175,7 +175,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                                     </Label>
                                     </h3>
                     </Menu.Item>
-                    <Menu.Item as={Link} to={`/profile/${user!.userName}`}
+                    <Menu.Item as={Link} to={`/settings`}
                     active={activeMenu === 5}
                     className="mobileNavMenu_container_item"
 

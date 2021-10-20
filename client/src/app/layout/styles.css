@@ -41,6 +41,20 @@ body {
   background: #fff;
 
 }
+.settingsVerticalMenu{
+  width: 100% !important;
+}
+.ui.top.left.pointing.dropdown>.menu{
+  left:-25px;
+}
+.companyFinalForm label{
+  width: 20% !important;
+}
+
+.companyFinalForm .equal.width.fields label
+{
+ margin-left: 6px; 
+}
 
 .activityAccMenu{
    border: 1px solid rgba(34,36,38,.15) !important;
@@ -251,7 +265,7 @@ h1, h2, h3, h4, h5 {
 }
 .ui.segment.blogFilter_Category_Filter {
   border: none;
-  background: #fafafa;
+  background: #f1f2f7;
   color: #335084;
   margin-top: 0 !important;
 }
@@ -265,11 +279,15 @@ h1, h2, h3, h4, h5 {
   font-size: 1.05em !important;
   color: #345289 !important;
 }
+.blogFilter_menuItem.active.item{
+  background:#ebecef !important;
+}
+
 .blogFilter_accordion{
    width: 100% !important;
    box-shadow: none !important;
    border: none !important;
-   background: #fafafa !important;
+   background: #f1f2f7 !important;
    font-size: 1.1rem !important;
   min-height: 2em !important;
 }

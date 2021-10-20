@@ -251,6 +251,11 @@ namespace CleanArchitecture.Persistence
                 .HasIndex(prop => prop.SubMerchantKey)
                 .IsUnique();
 
+            builder.Entity<AppUser>()
+               .HasOne<SubMerchant>(s => s.SubMerchantDetails)
+               .WithOne(ad => ad.User)
+               .HasForeignKey<SubMerchant>(ad => ad.UserId);
+
         }
     }
 }

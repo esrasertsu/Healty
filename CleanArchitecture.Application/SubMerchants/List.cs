@@ -56,7 +56,7 @@ namespace CleanArchitecture.Application.SubMerchants
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
 
                 var queryable = _context.SubMerchants
-                  .OrderBy(x => x.RegistrationDate)
+                  .OrderBy(x => x.ApplicationDate)
                   .AsQueryable();
 
                 var subMerchants = await queryable

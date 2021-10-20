@@ -8,6 +8,7 @@ namespace CleanArchitecture.Domain
     {
         public Guid Id { get; set; }
         public string UserId { get; set; }
+        public virtual AppUser User { get; set; }
         public string SubMerchantKey { get; set; }
         public MerchantType MerchantType { get; set; }
         public string Address { get; set; }
@@ -21,7 +22,7 @@ namespace CleanArchitecture.Domain
         public string Name { get; set; }
         public string Iban { get; set; }
         public string IdentityNumber { get; set; }
-        public string Currency { get; set; } = "TR";
+        public string Currency { get; set; }
         public DateTime ApplicationDate { get; set; }
         public DateTime? LastEditDate { get; set; }
         public bool HasSignedContract { get; set; }

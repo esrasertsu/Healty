@@ -6,6 +6,7 @@ import { ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues,
 import { RootStore } from "./rootStore";
 import { toast } from 'react-toastify';
 import { IMessage } from "../models/message";
+import { ISubMerchantInfo, SubMerchantInfo } from "../models/user";
 
 export default class UserStore {
 
@@ -32,12 +33,25 @@ export default class UserStore {
     @observable trainerFormMessage = false;
     @observable errorMessage = "";
     @observable loadingFbLogin = false;
+    @observable loggingOut = false;
+
+    @observable subMerchantForm: ISubMerchantInfo = new SubMerchantInfo();
+
     
     @action setTrainerFormMessage = (value: boolean) => {
         this.trainerFormMessage = value;
     }
 
-    
+    @action setLoadingFbLogin = (value: boolean) => {
+        this.loadingFbLogin = value;
+    }
+    @action setLoggingOut = (value: boolean) => {
+        this.loggingOut = value;
+    }
+
+    @action setsubMerchantFormValues = (info: ISubMerchantInfo) => {
+        this.subMerchantForm = info;
+    }
     @action setErrorMessage = (value: string) => {
         this.errorMessage = value;
     }
@@ -83,6 +97,7 @@ export default class UserStore {
     }
     @action login = async (values : IUserFormValues,location:string) =>{
         try {
+            debugger;
             const user = await agent.User.login(values);
             runInAction(()=>{
                 this.user = user;
@@ -91,7 +106,11 @@ export default class UserStore {
             this.rootStore.commonStore.setToken(user.token);
             this.startRefreshTokenTimer(user);
             this.rootStore.modalStore.closeModal();
-            history.push(location);
+            if(location!==null && location !=="")
+              history.push(location);
+            else
+              window.location.reload();
+
         } catch (error) {
             throw error;
         }
@@ -161,9 +180,10 @@ export default class UserStore {
         .withUrl(process.env.REACT_APP_API_MESSAGE_URL!,{
             accessTokenFactory: () => this.rootStore.commonStore.token!
         })
-            .configureLogging(LogLevel.Information)
-            .withAutomaticReconnect()
+            .configureLogging(LogLevel.Debug)
             .build();
+
+     this.hubConnection.serverTimeoutInMilliseconds = 1000*60*63;
 
      this.hubConnection
         .start()
@@ -261,6 +281,8 @@ export default class UserStore {
                     );
                 })
             })
+
+            
     }
 
     @action handleNewlyAddedChatRoom = async (senderName:string,) => {
@@ -311,14 +333,53 @@ export default class UserStore {
 
             this.rootStore.commonStore.setToken(user.token);
             this.startRefreshTokenTimer(user);
+            return user;
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+
+    @action getSubMerchantInfo = async () =>{
+        try{
+            const subMerchant = await agent.User.getSubMerchantInfo();
+            return subMerchant;
 
         }catch(error){
             console.log(error);
         }
     }
 
+    @action createSubMerchant = async (values: ISubMerchantInfo) =>{
+        try{
+            const subMerchantKey = await agent.User.createSubMerchant(values);
+            runInAction(() => {
+                this.user!.isSubMerchant = true;
+
+            });
+
+            return subMerchantKey;
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    @action editSubMerchant = async (values: ISubMerchantInfo) =>{
+        try{
+            const subMerchantKey = await agent.User.editSubMerchant(values);
+            runInAction(() => {
+                this.user!.isSubMerchant = true;
+
+            });
+
+            return subMerchantKey;
+        }catch(error){
+            console.log(error);
+        }
+    }
+
     @action logout = async () => {
-       
+        this.loggingOut = true;
             await this.stopHubConnection();
             runInAction(async()=>{
                 this.hubConnection &&
@@ -331,13 +392,17 @@ export default class UserStore {
                 this.rootStore.messageStore.setChatRoomId(null);
                 this.rootStore.messageStore.setChatRoomsEmpty();
                 this.clearCurrentUser();
+                this.stopRefreshTokenTimer();
                 this.rootStore.commonStore.setToken(null);
+                this.setLoggingOut(false);
+                history.push("/");
             })
+           
             
           
     }
 
-    @action fbLogin = async (response:any) => {
+    @action fbLogin = async (response:any,location:string) => {
         this.loadingFbLogin = true;
         try{
             const user = await agent.User.fbLogin(response.accessToken);
@@ -348,12 +413,15 @@ export default class UserStore {
                 this.rootStore.commonStore.setToken(user.token);
                 this.startRefreshTokenTimer(user);
                 this.rootStore.modalStore.closeModal();
-                this.loadingFbLogin = false;
+                this.setLoadingFbLogin(false);
             });
        
-            window.location.reload();
+            if(location!==null && location !=="")
+              history.push(location);
+            else
+              window.location.reload();
         }catch(error){
-            this.loadingFbLogin = false;
+            this.setLoadingFbLogin(false);
             throw error;
         }
     }

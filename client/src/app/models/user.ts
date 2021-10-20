@@ -129,7 +129,7 @@ export interface ISubMerchantInfo {
     iban : string;
     identityNumber: string;
     legalCompanyTitle: string;
-    hasSignedContract: string;
+    hasSignedContract: boolean;
 
 }
 
@@ -150,13 +150,14 @@ export class SubMerchantInfo implements ISubMerchantInfo {
     iban : string = "";
     identityNumber: string = "";
     legalCompanyTitle: string = "";
-    hasSignedContract: string = "";
+    hasSignedContract: boolean = true;
 
 
     constructor(init?: ISubMerchantInfo){
         if(init)
         {   
-
+debugger;
+             
              Object.assign(this, init);
 
         }

@@ -72,7 +72,8 @@ namespace CleanArchitecture.Application.Profiles
                     user.Bio = request.Bio ?? String.Empty;
                     user.Experience = request.Experience ?? String.Empty;
                     user.ExperienceYear = Convert.ToDecimal(request.ExperienceYear) > 0 ? Convert.ToDecimal(request.ExperienceYear) : user.ExperienceYear;
-                    
+                    user.LastProfileUpdatedDate = DateTime.Now;
+
                     if(request.CityId != null && request.CityId != Guid.Empty)
                     {
                         var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == request.CityId);

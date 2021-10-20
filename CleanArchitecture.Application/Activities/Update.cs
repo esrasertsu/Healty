@@ -35,6 +35,7 @@ namespace CleanArchitecture.Application.Activities
             public string Price { get; set; }
             public string Address { get; set; }
             public virtual IFormFile Photo { get; set; }
+
         }
 
 
@@ -187,6 +188,7 @@ namespace CleanArchitecture.Application.Activities
                 activity.AttendanceCount = Convert.ToInt32(request.AttendanceCount);
                 activity.Price = String.IsNullOrEmpty(request.Price) ? 0 : Convert.ToDecimal(request.Price);
                 activity.Online = Convert.ToBoolean(request.Online);
+                activity.LastUpdateDate = DateTime.Now;
 
                // _context.Activities.Update(activity);
                 var success = await _context.SaveChangesAsync() > 0;

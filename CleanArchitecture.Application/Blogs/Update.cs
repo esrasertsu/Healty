@@ -97,7 +97,8 @@ namespace CleanArchitecture.Application.Blogs
                 blog.Title = request.Title ?? blog.Title;
                 blog.Description = request.Description ?? blog.Description;
                 blog.Category = category ?? blog.Category;
-                
+                blog.LastUpdateDate = DateTime.Now;
+
                 _context.Blogs.Update(blog);
 
                 if(request.SubCategoryIds != null)

@@ -61,8 +61,10 @@ namespace Infrastructure.Payment
 
             IyzipayCore.Model.SubMerchant subMerchant = IyzipayCore.Model.SubMerchant.Create(request, _options);
 
-            if (subMerchant.ConversationId == conversaitonId)
-                return subMerchant.SubMerchantKey;
+            if (subMerchant.ConversationId == conversaitonId && subMerchant.Status == "success")
+            {
+               return subMerchant.SubMerchantKey;
+            }
             else return "false";
         }
 
@@ -95,7 +97,6 @@ namespace Infrastructure.Payment
                 request.TaxNumber = subMerchantDomain.TaxNumber;
                 request.LegalCompanyTitle = subMerchantDomain.LegalCompanyTitle;
             }
-            else return "false";
 
             IyzipayCore.Model.SubMerchant subMerchant = IyzipayCore.Model.SubMerchant.Update(request, _options);
 

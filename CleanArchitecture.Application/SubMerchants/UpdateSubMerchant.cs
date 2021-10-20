@@ -18,7 +18,7 @@ namespace CleanArchitecture.Application.SubMerchants
 {
     public class UpdateSubMerchant
     {
-        public class Command : IRequest<string>
+        public class Command : IRequest<bool>
         {
             public string Id { get; set; }
             public string SubMerchantKey { get; set; }
@@ -37,7 +37,7 @@ namespace CleanArchitecture.Application.SubMerchants
 
         }
 
-        public class Handler : IRequestHandler<Command, string>
+        public class Handler : IRequestHandler<Command, bool>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -53,7 +53,7 @@ namespace CleanArchitecture.Application.SubMerchants
                 _userAccessor = userAccessor;
                 _httpContextAccessor = httpContextAccessor;
             }
-            public async Task<string> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.SingleOrDefaultAsync(x =>
                            x.UserName == _userAccessor.GetCurrentUsername());
@@ -67,7 +67,7 @@ namespace CleanArchitecture.Application.SubMerchants
                     throw new RestException(HttpStatusCode.NotFound, new { MerchantType = "Not found" });
                 }
 
-                var subMerchant = await _context.SubMerchants.FindAsync(request.Id);
+                var subMerchant = await _context.SubMerchants.FindAsync(new Guid(request.Id));
 
                 if (subMerchant == null)
                     throw new RestException(HttpStatusCode.NotFound, new { activity = "Not Found" });
@@ -87,30 +87,38 @@ namespace CleanArchitecture.Application.SubMerchants
                 subMerchant.IdentityNumber = request.IdentityNumber;
                 subMerchant.LegalCompanyTitle = request.LegalCompanyTitle;
                 subMerchant.Name = request.Name;
+                subMerchant.LastEditDate = DateTime.Now;
 
-
-                try
+                var updatedSubMerchant = await _context.SaveChangesAsync() > 0;
+                if (updatedSubMerchant)
                 {
-                    var subMerchantKey = _paymentAccessor.UpdateSubMerchantIyzico(subMerchant);
-
-                    if (subMerchantKey != "false")
+                    try
                     {
-                        var updatedSubMerchant = await _context.SaveChangesAsync() > 0;
-                        if (updatedSubMerchant)
-                            return subMerchantKey;
+                        var subMerchantKey = _paymentAccessor.UpdateSubMerchantIyzico(subMerchant);
+
+                        if (subMerchantKey != "false")
+                        {
+                            return true;
+
+                        }
                         else
                         {
-                            throw new Exception("Problem creating subMerchant on DB");
+                            throw new Exception("Problem updating subMerchant on Iyzico");
                         }
+
+
                     }
+                    catch (Exception ex)
+                    {
 
-                  
+                        throw new Exception(ex.Message);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-
-                    throw new Exception(ex.Message);
+                    throw new Exception("Problem updating subMerchant on DB");
                 }
+               
 
                 throw new Exception("Problem creating subMerchant");
 

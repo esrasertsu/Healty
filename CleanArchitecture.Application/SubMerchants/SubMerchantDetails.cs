@@ -44,11 +44,11 @@ namespace CleanArchitecture.Application.SubMerchants
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
 
-                if(user.SubMerchantDetails == null || user.SubMerchantKey =="" || user.SubMerchantKey == null)
-                {
-                    throw new RestException(HttpStatusCode.NotFound, new { SubMerchantDetails = "Not found" });
+                //if(user.SubMerchantDetails == null || user.SubMerchantKey =="" || user.SubMerchantKey == null)
+                //{
+                //    throw new RestException(HttpStatusCode.NotFound, new { SubMerchantDetails = "Not found" });
 
-                }
+                //}
 
                 return _mapper.Map<SubMerchant, SubMerchantDto>(user.SubMerchantDetails);
 

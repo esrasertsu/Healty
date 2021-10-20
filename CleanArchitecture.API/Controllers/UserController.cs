@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CleanArchitecture.Application.SubMerchants;
 using CleanArchitecture.Application.User;
 using CleanArchitecture.Domain;
 using MediatR;
@@ -39,6 +40,25 @@ namespace CleanArchitecture.API.Controllers
             SetTokenCookie(user.RefreshToken);
             return user;
         }
+
+        [HttpGet("submerchantInfo")]
+        public async Task<ActionResult<SubMerchantDto>> GetSubmerchantnfo()
+        {
+           return await Mediator.Send(new SubMerchantDetails.Query());
+        }
+
+        [HttpPost("createSubMerchant")]
+        public async Task<ActionResult<bool>> CreateSubMerchant(CreateSubMerchant.Query query)
+        {
+            return await Mediator.Send(query);
+        }
+
+        [HttpPut("editSubMerchant")]
+        public async Task<ActionResult<bool>> EditSubMerchant(UpdateSubMerchant.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
 
         [HttpPut]
         public async Task<ActionResult<Unit>> Update(bool status)

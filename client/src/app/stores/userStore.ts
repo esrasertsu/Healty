@@ -352,13 +352,14 @@ export default class UserStore {
 
     @action createSubMerchant = async (values: ISubMerchantInfo) =>{
         try{
-            const subMerchantKey = await agent.User.createSubMerchant(values);
+            const res = await agent.User.createSubMerchant(values);
             runInAction(() => {
-                this.user!.isSubMerchant = true;
+                if(res)
+                    this.user!.isSubMerchant = true;
 
             });
 
-            return subMerchantKey;
+            return res;
         }catch(error){
             console.log(error);
         }
@@ -366,13 +367,14 @@ export default class UserStore {
 
     @action editSubMerchant = async (values: ISubMerchantInfo) =>{
         try{
-            const subMerchantKey = await agent.User.editSubMerchant(values);
+            const res = await agent.User.editSubMerchant(values);
             runInAction(() => {
-                this.user!.isSubMerchant = true;
+                if(res)
+                  this.user!.isSubMerchant = true;
 
             });
 
-            return subMerchantKey;
+            return res;
         }catch(error){
             console.log(error);
         }

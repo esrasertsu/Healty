@@ -39,6 +39,7 @@ namespace CleanArchitecture.Domain
         public bool HasSignedPaymentContract { get; set; }
         public DateTime? PaymentSignedDate { get; set; }
         public virtual SubMerchant SubMerchantDetails { get; set; }
+        public DateTime LastProfileUpdatedDate { get; set; }
         public virtual ICollection<ActivityComment> ActivityComments { get; set; }
         public virtual ICollection<UserActivity> UserActivities { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
@@ -55,7 +56,7 @@ namespace CleanArchitecture.Domain
         public virtual ICollection<ReferencePic> ReferencePics { get; set; }
         public virtual ICollection<Certificate> Certificates { get; set; }
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
-   
+
     }
 
     public enum Role

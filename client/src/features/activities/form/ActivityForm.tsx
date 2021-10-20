@@ -24,15 +24,15 @@ import PhotoWidgetCropper from "../../../app/common/photoUpload/PhotoWidgetCropp
 import { action } from "mobx";
 import { toast } from "react-toastify";
 
-const validate = combineValidators({
-  title: isRequired({message: 'Aktivite başlığı zorunlu alandır.'}),
-  categoryIds: isRequired('Category'),
-  description: composeValidators(
-    hasLengthGreaterThan(50)({message: 'Açıklama en az 50 karakter uzunluğunda olmalıdır.'})
-  )(),
-  date: isRequired('Date'),
-  time: isRequired('Time')
-})
+// const validate = combineValidators({
+//   title: isRequired({message: 'Aktivite başlığı zorunlu alandır.'}),
+//   categoryIds: isRequired('Category'),
+//   description: composeValidators(
+//     hasLengthGreaterThan(50)({message: 'Açıklama en az 50 karakter uzunluğunda olmalıdır.'})
+//   )(),
+//   date: isRequired('Date'),
+//   time: isRequired('Time')
+// })
 interface DetailParams {
   id: string;
 }
@@ -144,7 +144,7 @@ const handleTimeChange = (time:any) =>{
     const dateAndTime = combineDateAndTime(values.date, values.time);
     const { date, time, ...activity } = values;
     activity.date = dateAndTime;
-
+debugger;
     if (!activity.id) {
           let newActivity = {
             ...activity,
@@ -183,7 +183,7 @@ const handleTimeChange = (time:any) =>{
       <Grid.Column>
         <Segment clearing>
           <FinalForm
-            validate = {validate}
+            //validate = {validate}
             initialValues={activityForm}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid }) => (
@@ -410,7 +410,7 @@ const handleTimeChange = (time:any) =>{
                 </OnChange>
                 <Button
                   loading={submitting}
-                  disabled={loading || invalid }
+                  disabled={loading }
                   floated="right"
                   positive
                   type="submit"

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Segment, Form, Button, Grid, Label, Header, Image, Icon } from "semantic-ui-react";
 import {
+  ISubMerchantInfo,
    SubMerchantInfo
 } from "../../app/models/user";
 import { v4 as uuid } from "uuid";
@@ -8,7 +9,7 @@ import { observer } from "mobx-react-lite";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../app/common/form/TextInput";
 import TextAreaInput from "../../app/common/form/TextAreaInput";
-import {combineValidators, composeValidators, hasLengthGreaterThan, isRequired} from 'revalidate';
+import {combineValidators, composeValidators, hasLengthGreaterThan, hasLengthLessThan, isRequired} from 'revalidate';
 import { RootStoreContext } from "../../app/stores/rootStore";
 import { OnChange } from 'react-final-form-listeners';
 import { action } from "mobx";
@@ -17,15 +18,16 @@ import { history } from "../..";
 import SelectInput from "../../app/common/form/SelectInput";
 import PhoneNumberInput from "../../app/common/form/PhoneNumberInput";
 import NumberInput from "../../app/common/form/NumberInput";
-
+import IBAN from "iban";
 const validate = combineValidators({
-  title: isRequired({message: 'Aktivite başlığı zorunlu alandır.'}),
-  categoryIds: isRequired('Category'),
-  description: composeValidators(
-    hasLengthGreaterThan(50)({message: 'Açıklama en az 50 karakter uzunluğunda olmalıdır.'})
-  )(),
-  date: isRequired('Date'),
-  time: isRequired('Time')
+  contactName: isRequired({message: 'Ad zorunlu alandır.'}),
+  contactSurname: isRequired({message: 'Ad zorunlu alandır.'}),
+  gsmNumber: isRequired({message: 'Telefon zorunlu alandır.'}),
+  email: isRequired({message: 'Email zorunlu alandır.'}),
+  iban: isRequired({message:""})
+  // description: composeValidators(
+  //   hasLengthGreaterThan(50)({message: 'Açıklama en az 50 karakter uzunluğunda olmalıdır.'})
+  // )(),
 })
 
 const companyTypeOptions = [
@@ -45,7 +47,9 @@ const SubMerchantDetails: React.FC = () => {
 
 
   const [updateEnabled, setUpdateEnabled] = useState<boolean>(false);
+  const [IBANValidMessage, setIBANValidMessage] = useState<string>("");
 
+  
   const [loading, setLoading] = useState(false);
 
   
@@ -55,8 +59,9 @@ const SubMerchantDetails: React.FC = () => {
       setLoading(true);
       getSubMerchantInfo()
         .then(action((res) => {
+          debugger;
             if(res)
-            setsubMerchantFormValues(new SubMerchantInfo());
+            setsubMerchantFormValues(new SubMerchantInfo(res));
         }))
         .finally(() => setLoading(false));
     
@@ -68,22 +73,40 @@ const SubMerchantDetails: React.FC = () => {
 
 
 
-  const handleFinalFormSubmit = (values: any) => {
+  const handleFinalFormSubmit = (values: ISubMerchantInfo) => {
 
-    if (!values.id) {
-          let subMerchant = {
-            ...values,
-            id: uuid(),
-          };
-          createSubMerchant(subMerchant);
-        } else {
-          debugger;
-              let editedMerchant = {
-                ...values
-              }
-              editSubMerchant(editedMerchant);
-   
-        }
+    if(!IBAN.isValid(values.iban))
+       setIBANValidMessage("IBAN numarası geçersiz");
+    else{
+
+      if (!values.id) {
+        let subMerchant = {
+          ...values,
+          iban:values.iban.trim(),
+          id: uuid(),
+        };
+        createSubMerchant(subMerchant).then((res) =>{
+          if(res)
+          toast.success("Bilgileriniz başarıyla kaydedilmiştir.");
+          else toast.error("Bilgileriniz kaydedilemedi. Sorun devam ederse bize ulaşın.");
+
+        })
+      } else {
+        debugger;
+            let editedMerchant = {
+              ...values,
+              iban:values.iban.trim()
+            }
+            editSubMerchant(editedMerchant).then((res) =>{
+              if(res)
+              toast.success("Bilgileriniz başarıyla kaydedilmiştir.");
+              else toast.error("Bilgileriniz kaydedilemedi. Sorun devam ederse bize ulaşın.");
+    
+            });
+ 
+      }
+    }
+    
   };
 
   return (
@@ -190,7 +213,7 @@ const SubMerchantDetails: React.FC = () => {
                     />
                         <OnChange name="taxNumber">
                     {(value, previous) => {
-                            setsubMerchantFormValues({...subMerchantForm,taxOffice: value});
+                            setsubMerchantFormValues({...subMerchantForm,identityNumber: value});
                     }}
                     </OnChange>
                     </>
@@ -207,7 +230,7 @@ const SubMerchantDetails: React.FC = () => {
                 />
                     <OnChange name="taxNumber">
                 {(value, previous) => {
-                        setsubMerchantFormValues({...subMerchantForm,taxOffice: value});
+                        setsubMerchantFormValues({...subMerchantForm,taxNumber: value});
                 }}
                 </OnChange>
                     </>
@@ -279,17 +302,24 @@ const SubMerchantDetails: React.FC = () => {
                         setsubMerchantFormValues({...subMerchantForm,address: value});
                 }}
                 </OnChange>
-                <label>IBAN*</label>
+                <label id="ibanlabel">IBAN*</label>
                 <Field
                   name="iban"
+                  labelName="ibanlabel"
                   placeholder="TR180006200119000006672315"
                   value={subMerchantForm.iban}
                   component={TextInput}
                   style={{marginBottom:15}}
                 />
+                {IBANValidMessage!=="" && <label style={{color:"red"}}>{IBANValidMessage}</label>}            
                     <OnChange name="iban">
                 {(value, previous) => {
-                        setsubMerchantFormValues({...subMerchantForm,iban: value});
+                        if(IBAN.isValid(value))
+                         { 
+                           setsubMerchantFormValues({...subMerchantForm,iban: value});
+                           setIBANValidMessage("");
+                          }
+
                 }}
                 </OnChange>
                

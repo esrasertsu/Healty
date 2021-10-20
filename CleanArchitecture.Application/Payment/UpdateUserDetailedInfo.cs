@@ -76,6 +76,7 @@ namespace CleanArchitecture.Application.Payment
                     user.City = city;
                     user.Name = request.Name;
                     user.Surname = request.Surname;
+                    user.LastProfileUpdatedDate = DateTime.Now;
 
                     success = await _context.SaveChangesAsync() > 0;
 

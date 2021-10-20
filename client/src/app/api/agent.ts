@@ -274,8 +274,8 @@ const User ={
     resetPasswordRequest:(email:string): Promise<boolean> => requests.post(`/user/resetPswRequest?email=${email}`,{}),
     resetPassword:(token:string, email:string,password:string): Promise<any> => requests.get(`/user/resetPassword?token=${token}&email=${email}&password=${password}`),
     getSubMerchantInfo: () : Promise<ISubMerchantInfo> => requests.get('/user/submerchantInfo'),
-    createSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<string> => requests.post('/user/createSubMerchant', subMerchant),
-    editSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<string> => requests.post('/user/editSubMerchant', subMerchant),
+    createSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<boolean> => requests.post('/user/createSubMerchant', subMerchant),
+    editSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<boolean> => requests.put('/user/editSubMerchant', subMerchant),
 
 }
 

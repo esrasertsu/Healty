@@ -25,7 +25,8 @@ namespace CleanArchitecture.Domain
         public virtual ICollection<ActivityComment> Comments { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
         public virtual ICollection<Video> Videos { get; set; }
-
+        public DateTime CreationDate { get; set; }
+        public DateTime LastUpdateDate { get; set; }
 
     }
 }

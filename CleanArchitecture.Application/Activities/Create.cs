@@ -71,7 +71,7 @@ namespace CleanArchitecture.Application.Activities
             public async Task<ActivityDto> Handle(Command request, CancellationToken cancellationToken)
             {
                 var image = new Photo();
-               
+
                 var activity = new Activity
                 {
                     Id = request.Id,
@@ -84,6 +84,7 @@ namespace CleanArchitecture.Application.Activities
                     AttendanceCount = 0,
                     Price = String.IsNullOrEmpty(request.Price) ? 0 : Convert.ToDecimal(request.Price),
                     Online = request.Online,
+                    CreationDate = DateTime.Now
                      
                 };
                 if (!string.IsNullOrEmpty(request.CityId))

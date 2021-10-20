@@ -14,6 +14,7 @@ namespace CleanArchitecture.Domain
         public virtual List<SubCatBlogs> SubCategories { get; set; }
         public virtual BlogImage BlogImage { get; set; }
         public virtual AppUser Author { get; set; }
+        public DateTime LastUpdateDate { get; set; }
     }
 }
 

@@ -3,14 +3,16 @@ using System;
 using CleanArchitecture.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CleanArchitecture.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211020101441_SubMerchantStatus")]
+    partial class SubMerchantStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,17 +55,11 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<Guid?>("CityId")
                         .HasColumnType("char(36)");
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<DateTime>("LastUpdateDate")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<bool>("Online")
                         .HasColumnType("tinyint(1)");
@@ -239,9 +235,6 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<DateTime>("LastLoginDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime>("LastProfileUpdatedDate")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
 
@@ -333,9 +326,6 @@ namespace CleanArchitecture.Persistence.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<DateTime>("LastUpdateDate")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Title")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");

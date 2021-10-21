@@ -47,13 +47,23 @@ body {
 .ui.top.left.pointing.dropdown>.menu{
   left:-25px;
 }
-.companyFinalForm label{
+.companyFinalForm label.fieldLabel{
   width: 20% !important;
 }
 
-.companyFinalForm .equal.width.fields label
+.companyFinalForm .equal.width.fields label.fieldLabel
 {
  margin-left: 6px; 
+}
+
+.ui.form .field :disabled {
+  pointer-events: none;
+  opacity: 1.45;
+  background: #edecec;
+}
+
+.companyFinalForm .equal.hiddenField{
+  width: 50% !important;
 }
 
 .activityAccMenu{
@@ -1965,5 +1975,6 @@ button, input, optgroup, select, textarea {
 }
 
 .errorLabel{
-  color:red
+  color:red;
+  width: 100% !important;
 }

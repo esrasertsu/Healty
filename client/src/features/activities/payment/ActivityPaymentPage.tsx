@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { Segment,  Form, Button,Icon, Grid,  Step,  Container } from 'semantic-ui-react'
+import { Segment,  Form, Button,Icon, Grid,  Step,  Container, Modal } from 'semantic-ui-react'
 import { RootStoreContext } from '../../../app/stores/rootStore'
 import { Form as FinalForm, Field} from 'react-final-form';
 import {  RouteComponentProps } from 'react-router-dom';
@@ -17,6 +17,9 @@ import ActivityPaymentStarterPage from './ActivityPaymentStarterPage';
 import { combineValidators, isRequired } from 'revalidate';
 import { history } from '../../..';
 import { LoadingComponent } from '../../../app/layout/LoadingComponent';
+import { toast } from 'react-toastify';
+import dompurify from 'dompurify';
+import { JSDOM } from 'jsdom'
 
 interface DetailParams{
     id:string,
@@ -26,11 +29,11 @@ interface DetailParams{
 interface IProps extends RouteComponentProps<DetailParams> {}
 
 const validate = combineValidators({
-  name: isRequired('name'),
-  surname: isRequired('surname'),
-  gsmNumber: isRequired('gsmNumber'),
-  cityId: isRequired('cityId')
-
+  name: isRequired({message: 'Ad zorunlu alandır.'}),
+  surname: isRequired({message: 'Soyad zorunlu alandır.'}),
+  gsmNumber: isRequired({message: 'Telefon numarası zorunlu alandır.'}),
+  cityId: isRequired({message:'Şehir seçimi zorunlu alandır.'}),
+  address: isRequired({message:'Adres zorunlu alandır.'})
 })
 
  const ActivityPaymentPage: React.FC<IProps> = ({match}) => {
@@ -41,6 +44,10 @@ const validate = combineValidators({
   const {
     cities
   } = rootStore.commonStore;
+
+  const {
+    openModal,closeModal,modal
+  } = rootStore.modalStore;
 
   const [loading, setLoading] = useState(false);
   const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
@@ -55,6 +62,8 @@ const validate = combineValidators({
     const[phoneError, setphoneError] = useState(false);
 
     
+    const sanitizer = dompurify.sanitize;
+
     useEffect(() => {
     if (match.params.id) {
 
@@ -97,15 +106,36 @@ if(loadingActivity) return <LoadingComponent content='Loading...'/>
 
   const handlePaymentFormSubmit = (values: IPaymentCardInfo) => {
 
+debugger;
     setLoading(true);
-    processPayment(values).then(action(() => {
-   
-    setShowPaymentPage(true);
-    setStepNo(1);
-    setStep0Completed(true);
-    setShowUserPaymentInfoPage(false);
+    processPayment(values).then((res) => {
+  if(res)
+  {
+    if(res.status === false)
+    {
+      setLoading(false);
+      toast.error("3D ödeme sayfası başlatılamıyor. Formu gözden geçirip tekrar deneyin. Sorun devam ederse site yöneticisiyle ilteşime geçin.")
+    }else {
+
+      setLoading(false);
+      if(modal.open) closeModal();
+      openModal("Giriş Yap", <>
+      <Modal.Description className="loginreg">
+      { <iframe style={{width:"100%", border:"none", height:"800px"}}  srcDoc={res.contentHtml}  /> }
+      </Modal.Description>
+      </>,false,
+     "","",false) 
+      // setShowPaymentPage(true);
+      // setStepNo(1);
+      // setStep0Completed(true);
+      // setShowUserPaymentInfoPage(false);
+    }
+  }
+  setLoading(false);
+
+    
   
-  }))
+  })
   .finally(() => setLoading(false));
   }
 
@@ -220,9 +250,10 @@ if(loadingActivity) return <LoadingComponent content='Loading...'/>
                       
                 }}
                 </OnChange>
-                  <label>Adres</label>
+                  <label id="adresLabel">Adres*</label>
                  <Field
                   name="address"
+                  labelName="adresLabel"
                   placeholder="Açık adres"
                   value={activityUserPaymentInfo.address}
                   component={TextAreaInput}

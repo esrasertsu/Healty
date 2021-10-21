@@ -6,7 +6,7 @@ interface IProps extends FieldRenderProps<string, HTMLElement>, FormFieldProps {
 
 const TextInput:React.FC<IProps> = ({input, width, type, placeholder,labelName, meta:{ touched, error}}) => {
 
-    if(error)
+    if(touched && error)
     {
         document.getElementById(labelName) && document.getElementById(labelName)!.classList.add("errorLabel")
     }else{
@@ -16,9 +16,9 @@ const TextInput:React.FC<IProps> = ({input, width, type, placeholder,labelName, 
     return (
         <Form.Field  type={type} width={width}>
             <input {...input} placeholder={placeholder}/>
-            {/* {touched && error && (
-                <Label basic color='red'>{error}</Label>
-            )} */}
+            {touched && error && (
+                <label style={{color:"red"}}>{error}</label>
+            )} 
         </Form.Field>
     )
 };

@@ -184,7 +184,8 @@ namespace Infrastructure.Payment
             return checkoutFormInitialize.PaymentPageUrl;
         }
 
-        public string PaymentProcessWithIyzico(Activity activity, AppUser user, int count, string userIp, string conversationId, string cardHolderName, string cardNumber, string cvc, string expireMonth, string expireYear)
+        public string PaymentProcessWithIyzico(Activity activity, AppUser user, int count, string userIp, string conversationId, 
+            string cardHolderName, string cardNumber, string cvc, string expireMonth, string expireYear, string subMerchantKey)
         {
 
             CreatePaymentRequest request = new CreatePaymentRequest();
@@ -241,7 +242,7 @@ namespace Infrastructure.Payment
             firstBasketItem.Category1 = activity.Categories.Select(x => x.Category.Name).FirstOrDefault();
             firstBasketItem.ItemType = BasketItemType.VIRTUAL.ToString();
             firstBasketItem.Price = (activity.Price * count).ToString().Split(',')[0];
-            firstBasketItem.SubMerchantKey = "sub merchant key";   
+            firstBasketItem.SubMerchantKey = subMerchantKey;   
             firstBasketItem.SubMerchantPrice = (activity.Price * 80 / 100 * count).ToString().Split(',')[0];
             basketItems.Add(firstBasketItem);
 
@@ -251,10 +252,56 @@ namespace Infrastructure.Payment
             //IyzipayCore.Model.Payment payment = IyzipayCore.Model.Payment.Create(request, _options);
 
             if (payment.Status == "success" && payment.ConversationId == conversationId)
-                return "";
+                return payment.HtmlContent;
             else return "false";
         }
 
-        
+        public CleanArchitecture.Domain.SubMerchant GetSubMerchantFromIyzico(string subMerchantExternalId)
+        {
+            var conversaitonId = Guid.NewGuid().ToString();
+
+            RetrieveSubMerchantRequest request = new RetrieveSubMerchantRequest();
+            request.Locale = Locale.TR.ToString();
+            request.ConversationId = conversaitonId;
+            request.SubMerchantExternalId = subMerchantExternalId;
+
+            IyzipayCore.Model.SubMerchant subMerchant = IyzipayCore.Model.SubMerchant.Retrieve(request, _options);
+
+            if (subMerchant.ConversationId == conversaitonId)
+                return new CleanArchitecture.Domain.SubMerchant() { 
+                  Status = subMerchant.Status == "success" ? true : false,
+                  Address = subMerchant.Address,
+                  GsmNumber = subMerchant.GsmNumber,
+                  ContactName= subMerchant.ContactName,
+                  ContactSurname = subMerchant.ContactSurname,
+                  MerchantType = GetMerchantType(subMerchant.SubMerchantType),
+                  SubMerchantKey = subMerchant.SubMerchantKey,
+                  Email = subMerchant.Email,
+                  TaxNumber= subMerchant.TaxNumber,
+                  TaxOffice = subMerchant.TaxOffice,
+                  Iban= subMerchant.Iban,
+                  IdentityNumber= subMerchant.IdentityNumber,
+                  LegalCompanyTitle= subMerchant.LegalCompanyTitle
+                };
+
+            else return new CleanArchitecture.Domain.SubMerchant();
+        }
+
+        private MerchantType GetMerchantType(string merchantType)
+        {
+            Enum.TryParse(typeof(SubMerchantType), merchantType, out var result);
+            switch (result)
+            {
+                case SubMerchantType.PERSONAL:
+                    return MerchantType.Personal;
+                case SubMerchantType.PRIVATE_COMPANY:
+                    return MerchantType.Anonim;
+                case SubMerchantType.LIMITED_OR_JOINT_STOCK_COMPANY:
+                    return MerchantType.Limited;
+            }
+
+            throw new RestException(HttpStatusCode.BadRequest, new { MerchantType = "Iyzico submerchant type cant be found" });
+
+        }
     }
 }

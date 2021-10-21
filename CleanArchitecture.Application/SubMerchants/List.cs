@@ -26,6 +26,11 @@ namespace CleanArchitecture.Application.SubMerchants
         }
         public class Query : IRequest<SubMerchantListEnvelope>
         {
+            public Query(int? limit, int? offset)
+            {
+                Limit = limit;
+                Offset = offset;
+            }
             public int? Limit { get; set; }
             public int? Offset { get; set; }
         }

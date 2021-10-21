@@ -4,12 +4,19 @@ import { Form, FormFieldProps, Label } from 'semantic-ui-react'
 
 interface IProps extends FieldRenderProps<string, HTMLElement>, FormFieldProps {}
 
-const TextAreaInput:React.FC<IProps> = ({input, rows, placeholder,className, disabled=false,meta:{ touched, error}}) => {
+const TextAreaInput:React.FC<IProps> = ({input, rows, placeholder,className,labelName, disabled=false,meta:{ touched, error}}) => {
+    if(touched && error)
+    {
+        document.getElementById(labelName) && document.getElementById(labelName)!.classList.add("errorLabel")
+    }else{
+        document.getElementById(labelName) && document.getElementById(labelName)!.classList.remove("errorLabel")
+    }
+    
     return (
-        <Form.Field className={className} error={touched && !!error}>
+        <Form.Field className={className} >
         <textarea {...input} placeholder={placeholder} rows={rows}  maxLength={500} disabled={disabled}/>
         {touched && error && (
-            <Label basic color='red'>{error}</Label>
+            <label style={{color:"red"}}>{error}</label>
         )}
     </Form.Field>
     )

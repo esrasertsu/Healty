@@ -1,17 +1,27 @@
 import { FORM_ERROR } from 'final-form';
 import React, { useContext } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
-import { combineValidators, isRequired } from 'revalidate';
+import { combineValidators, composeValidators, createValidator, isRequired } from 'revalidate';
 import { Button, Form, Header } from 'semantic-ui-react';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
 import { IUserFormValues } from '../../app/models/user';
 import { RootStoreContext } from '../../app/stores/rootStore';
 
-
+const isValidEmail = createValidator(
+  message => value => {
+    if (value && !/.+@.+\.[A-Za-z]+$/.test(value)) {
+      return message
+    }
+  },
+  'Geçersiz e-posta'
+)
 const validate = combineValidators({
     username: isRequired({ message: 'Kullanıcı adı zorunlu alan.' }),
-    email: isRequired({ message: 'Email zorunlu alan.' }),
+    email: composeValidators(
+      isRequired({message: 'Email zorunlu alandır.'}),
+      isValidEmail
+    )(),
     password: isRequired({ message: 'Şifre zorunlu alan.' })
 })
 interface IProps {

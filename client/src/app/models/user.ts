@@ -122,7 +122,7 @@ export interface ISubMerchantInfo {
     contactSurname : string;
     email: string;
     gsmNumber : string;
-    name: string;
+    // name: string;
     taxOffice : string;
     taxNumber? : number|null; 
     address : string;
@@ -143,7 +143,7 @@ export class SubMerchantInfo implements ISubMerchantInfo {
     contactSurname : string = "";
     email: string = "";
     gsmNumber : string = "";
-    name: string = "";
+    // name: string = "";
     taxOffice : string = "";
     taxNumber? : number|null = null;
     address : string = "";

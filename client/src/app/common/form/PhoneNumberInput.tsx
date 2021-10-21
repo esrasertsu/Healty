@@ -5,10 +5,10 @@ import PhoneInput, { formatPhoneNumber, formatPhoneNumberIntl, isValidPhoneNumbe
 
 interface IProps extends FieldRenderProps<string, HTMLElement>, FormFieldProps {}
 
-const PhoneNumberInput:React.FC<IProps> = ({input, width,labelName, type, meta:{ touched, error}},
+const PhoneNumberInput:React.FC<IProps> = ({input, width,labelName, type, meta:{touched, error}},
     ...rest) => {
 
-        if(error)
+        if(error && touched )
         {
             document.getElementById(labelName) && document.getElementById(labelName)!.classList.add("errorLabel")
         }else{
@@ -16,7 +16,7 @@ const PhoneNumberInput:React.FC<IProps> = ({input, width,labelName, type, meta:{
         }
     return (
         <Form.Field 
-        // error={input.touched && !!input.error} 
+         error={input.touched && !!input.error} 
         type={type} 
         width={width}
         >
@@ -27,12 +27,12 @@ const PhoneNumberInput:React.FC<IProps> = ({input, width,labelName, type, meta:{
             defaultCountry="TR"
             placeholder="Telefon numarası"
             value={input.value}
-            onChange={input.onChange}
-            {...rest}
+            onChange={(event:any) => input.onChange(event)}
+            onBlur={(event:any) => input.onBlur(event)}
             />
-            {/* {touched && error && (
-                <Label basic color='red'>{error}</Label>
-            )} */}
+             {touched && error && (
+                <label style={{color:"red"}}>{error}</label>
+            )} 
         </Form.Field>
     );
 };

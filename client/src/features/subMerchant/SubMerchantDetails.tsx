@@ -9,31 +9,23 @@ import { observer } from "mobx-react-lite";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../app/common/form/TextInput";
 import TextAreaInput from "../../app/common/form/TextAreaInput";
-import {combineValidators, composeValidators, hasLengthGreaterThan, hasLengthLessThan, isRequired} from 'revalidate';
+import {combineValidators, composeValidators, createValidator, hasLengthGreaterThan, hasLengthLessThan, isRequired} from 'revalidate';
 import { RootStoreContext } from "../../app/stores/rootStore";
 import { OnChange } from 'react-final-form-listeners';
-import { action } from "mobx";
+import { action, values } from "mobx";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import SelectInput from "../../app/common/form/SelectInput";
 import PhoneNumberInput from "../../app/common/form/PhoneNumberInput";
 import NumberInput from "../../app/common/form/NumberInput";
 import IBAN from "iban";
-const validate = combineValidators({
-  contactName: isRequired({message: 'Ad zorunlu alandır.'}),
-  contactSurname: isRequired({message: 'Ad zorunlu alandır.'}),
-  gsmNumber: isRequired({message: 'Telefon zorunlu alandır.'}),
-  email: isRequired({message: 'Email zorunlu alandır.'}),
-  iban: isRequired({message:""})
-  // description: composeValidators(
-  //   hasLengthGreaterThan(50)({message: 'Açıklama en az 50 karakter uzunluğunda olmalıdır.'})
-  // )(),
-})
+
+
 
 const companyTypeOptions = [
     { key: '0', value: '0', text: 'Şahıs Şirketi' },
-    { key: '1', value: '1', text: 'Anonim Şirket' },
-    { key: '2', value: '2', text: 'Limited Şirket' },
+    { key: '1', value: '1', text: 'Limited Şirket' },
+    { key: '2', value: '2', text: 'Anonim Şirket' },
 ]
 
 const SubMerchantDetails: React.FC = () => {
@@ -46,15 +38,72 @@ const SubMerchantDetails: React.FC = () => {
   const {getSubMerchantInfo,setsubMerchantFormValues, subMerchantForm,createSubMerchant,editSubMerchant } = rootStore.userStore;
 
 
-  const [updateEnabled, setUpdateEnabled] = useState<boolean>(false);
   const [IBANValidMessage, setIBANValidMessage] = useState<string>("");
+  const [companyTypeErrorMessage,setCompanyTypeErrorMessage]= useState<string>("");
+  const [tcknMessage,setTcknMessage]= useState<string>("");
+  const [TaxOfficeMessage,setTaxOfficeMessage]= useState<string>("");
+  const [TaxNumberMessage,setTaxNumberMessage]= useState<string>("");
+  const [legalCompanyTitleMessage,setlegalCompanyTitleMessage]= useState<string>("");
 
-  
   const [loading, setLoading] = useState(false);
 
+  const isValidEmail = createValidator(
+    message => value => {
+      if (value && !/.+@.+\.[A-Za-z]+$/.test(value)) {
+        return message
+      }
+    },
+    'Geçersiz e-posta'
+  )
+
+  const isValidIdentityNumber = createValidator(
+    message => value => {
+      if (subMerchantForm.merchantType ==="0" && value && value.length !== 11) {
+        setTcknMessage(message)
+      }else{
+        setTcknMessage("");
+      }
+    },
+    'Geçersiz TCKN'
+  )
+
+  const customTcknIsRequired = subMerchantForm.merchantType === "0" ? isRequired({message: 'TCKN zorunlu alandır.'}) : 
+  isRequired({message:""})
+
+  const customTaxOfficeRequired = subMerchantForm.merchantType !== "0" ? 
+  isRequired({message: 'Vergi dairesi zorunlu alandır.'}) : 
+  isRequired({message:""})
+
+  const customTaxNumberRequired = subMerchantForm.merchantType === "1" ? 
+  isRequired({message: 'Vergi no zorunlu alandır.'}) : 
+  isRequired({message:""})
+
+  const customlegalNameRequired = subMerchantForm.merchantType !== "0" ? 
+  isRequired({message: 'Yasal şirket adı zorunlu alandır.'}) : 
+  isRequired({message:""})
   
-
-
+  const validate = combineValidators({
+    contactName: isRequired({message: 'Ad zorunlu alandır.'}),
+    contactSurname: isRequired({message: 'Soyad zorunlu alandır.'}),
+    gsmNumber: isRequired({message: 'Telefon numarası zorunlu alandır.'}),
+    email: composeValidators(
+      isRequired({message: 'Email zorunlu alandır.'}),
+      isValidEmail
+    )(),
+    iban: isRequired({message:'Iban zorunlu alandır.'}),
+    identityNumber:composeValidators(
+      customTcknIsRequired,
+      isValidIdentityNumber
+    )(),
+    taxOffice:customTaxOfficeRequired,
+    taxNumber: customTaxNumberRequired,
+    legalCompanyTitle: customlegalNameRequired,
+    address: isRequired({message:'Adres zorunlu alandır.'}),
+    //contactName: isRequired({message: 'Ad zorunlu alandır.'}),
+    // description: composeValidators(
+    //   hasLengthGreaterThan(50)({message: 'Açıklama en az 50 karakter uzunluğunda olmalıdır.'})
+    // )(),
+  })
   useEffect(() => {
       setLoading(true);
       getSubMerchantInfo()
@@ -71,41 +120,101 @@ const SubMerchantDetails: React.FC = () => {
     }
   }, [getSubMerchantInfo]);
 
-
-
   const handleFinalFormSubmit = (values: ISubMerchantInfo) => {
 
+    let ok = true;
+
     if(!IBAN.isValid(values.iban))
-       setIBANValidMessage("IBAN numarası geçersiz");
-    else{
+     {
+         setIBANValidMessage("IBAN numarası geçersiz");
+         ok = false;
+     }
+    if(values.merchantType === "" || values.merchantType ===null)
+    {
+      setCompanyTypeErrorMessage("Şirket türü zorunlu alan.");
+      ok = false;
 
-      if (!values.id) {
-        let subMerchant = {
-          ...values,
-          iban:values.iban.trim(),
-          id: uuid(),
-        };
-        createSubMerchant(subMerchant).then((res) =>{
-          if(res)
-          toast.success("Bilgileriniz başarıyla kaydedilmiştir.");
-          else toast.error("Bilgileriniz kaydedilemedi. Sorun devam ederse bize ulaşın.");
-
-        })
-      } else {
-        debugger;
-            let editedMerchant = {
-              ...values,
-              iban:values.iban.trim()
-            }
-            editSubMerchant(editedMerchant).then((res) =>{
-              if(res)
-              toast.success("Bilgileriniz başarıyla kaydedilmiştir.");
-              else toast.error("Bilgileriniz kaydedilemedi. Sorun devam ederse bize ulaşın.");
-    
-            });
- 
-      }
     }
+    if(values.merchantType === "0")
+    {
+      if(values.identityNumber ==="" || values.identityNumber === null)
+      {
+        setTcknMessage("TCKN zorunlu alan.");
+        ok = false;
+
+      }
+    }else if(values.merchantType === "1")
+    {
+      if(values.taxOffice ==="" || values.taxOffice === null)
+      {
+        setTaxOfficeMessage("Vergi dairesi zorunlu alan.");
+        ok = false;
+
+      }
+      if(values.taxNumber === undefined || values.taxNumber === null || values.taxNumber === 0)
+      {
+        setTaxNumberMessage("Vergi No zorunlu alan.");
+        ok = false;
+
+
+      }
+      if(values.legalCompanyTitle ==="" || values.taxOffice === null)
+      {
+        setlegalCompanyTitleMessage("Yasal şirket ünvanı zorunlu alan.");
+        ok = false;
+
+      }
+
+    }else if(values.merchantType ==="2")
+    {
+      if(values.taxOffice ==="" || values.taxOffice === null)
+      {
+        setTaxOfficeMessage("Vergi dairesi zorunlu alan.");
+        ok = false;
+
+      }
+      if(values.legalCompanyTitle ==="" || values.taxOffice === null)
+      {
+        setlegalCompanyTitleMessage("Yasal şirket ünvanı zorunlu alan.");
+        ok = false;
+
+      }
+
+    }
+
+      if(ok)
+      {
+        if (!values.id) {
+          let subMerchant = {
+            ...values,
+            iban:values.iban.trim(),
+            id: uuid(),
+          };
+          createSubMerchant(subMerchant).then((res) =>{
+            if(res)
+            toast.success("Bilgileriniz başarıyla kaydedilmiştir.");
+            else toast.error("Bilgileriniz kaydedilemedi. Sorun devam ederse bize ulaşın.");
+  
+          })
+        } else {
+          debugger;
+              let editedMerchant = {
+                ...values,
+                iban:values.iban.trim()
+              }
+              editSubMerchant(editedMerchant).then((res) =>{
+                if(res)
+                toast.success("Bilgileriniz başarıyla kaydedilmiştir.");
+                else toast.error("Bilgileriniz kaydedilemedi. Sorun devam ederse bize ulaşın.");
+      
+              });
+   
+        }
+      }else {
+        toast.error("Formu gözden geçirin")
+      }
+     
+    
     
   };
 
@@ -123,8 +232,9 @@ const SubMerchantDetails: React.FC = () => {
               >
                 
                 <Form.Group widths="equal">
-                <label>Ad*</label>
+                <label className="fieldLabel" id="contactNamelabel">Ad*</label>
                 <Field
+                 labelName="contactNamelabel"
                   name="contactName"
                   placeholder=""
                   value={subMerchantForm.contactName}
@@ -136,8 +246,9 @@ const SubMerchantDetails: React.FC = () => {
                         setsubMerchantFormValues({...subMerchantForm,contactName: value});
                 }}
                 </OnChange>
-                <label>Soyad*</label>
+                <label className="fieldLabel" id="contactSurNamelabel">Soyad*</label>
                 <Field
+                labelName="contactSurNamelabel"
                   name="contactSurname"
                   placeholder=""
                   value={subMerchantForm.contactSurname}
@@ -146,14 +257,16 @@ const SubMerchantDetails: React.FC = () => {
                 />
                     <OnChange name="contactSurname">
                 {(value, previous) => {
+                  previous !=null &&
                         setsubMerchantFormValues({...subMerchantForm,contactSurname: value});
                 }}
                 </OnChange>
                 </Form.Group>
 
                 <Form.Group widths="equal">
-                <label>Email*</label>
+                <label className="fieldLabel" id="emaillabel">Email*</label>
                 <Field 
+                labelName="emaillabel"
                 type="email" 
                 name="email" 
                 placeholder=""
@@ -164,7 +277,7 @@ const SubMerchantDetails: React.FC = () => {
                         setsubMerchantFormValues({...subMerchantForm,email: value});
                 }}
                 </OnChange>
-                <label id="gsmNumber_label">Telefon Numarası*</label>
+                <label className="fieldLabel" id="gsmNumber_label">Telefon Numarası*</label>
                 <Field
                   name="gsmNumber"
                   labelName="gsmNumber_label"
@@ -182,8 +295,10 @@ const SubMerchantDetails: React.FC = () => {
                 </OnChange>
                 </Form.Group>
                 <Form.Group  widths="equal">
-                <label id="companyTypeLabel">Şirket Türü*</label>
+                <label className="fieldLabel" id="companyTypeLabel">Şirket Türü*</label>
                 <Field
+                  emptyError={subMerchantForm!.merchantType}
+                  labelName="companyTypeLabel"
                   name="merchantType"
                   placeholder="Seçiniz"
                   value={subMerchantForm!.merchantType}
@@ -191,19 +306,40 @@ const SubMerchantDetails: React.FC = () => {
                   options={companyTypeOptions}
 
                 />
+                 {companyTypeErrorMessage!=="" && <label style={{color:"red"}}>{companyTypeErrorMessage}</label>}            
                  <OnChange name="merchantType">
                 {(value, previous) => {
-                    if(value !== subMerchantForm.merchantType)
+                  if(value === "0")
+                    { 
+                      setTaxNumberMessage("");
+                      setTaxOfficeMessage("");
+                      setlegalCompanyTitleMessage("");                   
+                      setsubMerchantFormValues({...subMerchantForm,merchantType: value, taxOffice:"",taxNumber:null,legalCompanyTitle:""});
+                    }                    
+                    else if(value === "1")
                     {
-                        setsubMerchantFormValues({...subMerchantForm,merchantType: value});
+                      setsubMerchantFormValues({...subMerchantForm,merchantType: value, identityNumber:""});
+                      setTcknMessage("");
                     }
+                    
+                    else if(value === "2")
+                    {
+                      setsubMerchantFormValues({...subMerchantForm,merchantType: value,taxNumber:null, identityNumber:""});
+                      setTcknMessage("");
+                      setTaxNumberMessage("");
+                    }
+                    
+                  
+                  setCompanyTypeErrorMessage("");
                 }}
                   </OnChange>
                   {
                     subMerchantForm.merchantType === "0" ? 
                     <>
-                    <label>TC Kimlik Numarası*</label>
+                    <label className="fieldLabel" id="tcknLabel">TC Kimlik Numarası*</label>
+                    <div className="field" style={{display:"flex", flexDirection:"column"}}>
                     <Field
+                      labelName="tcknLabel"
                       name="identityNumber"
                       type="number"
                       placeholder=""
@@ -211,34 +347,41 @@ const SubMerchantDetails: React.FC = () => {
                       component={TextInput}
                       style={{marginBottom:15}}
                     />
-                        <OnChange name="taxNumber">
+                     {tcknMessage!=="" && <label style={{color:"red"}}>{tcknMessage}</label>}   
+                     </div>         
+                        <OnChange name="identityNumber">
                     {(value, previous) => {
                             setsubMerchantFormValues({...subMerchantForm,identityNumber: value});
+                            setTcknMessage("");
                     }}
                     </OnChange>
                     </>
                     :
                     <>
-                <label>Vergi No*</label>
+                <label id="taxNumberLabel" className="fieldLabel">Vergi No*</label>
                 <Field
+                  labelName="taxNumberLabel"
                   name="taxNumber"
                   type="number"
                   placeholder=""
+                  disabled={subMerchantForm.merchantType !== "1"}
                   value={subMerchantForm.taxNumber}
                   component={NumberInput}
                   style={{marginBottom:15}}
                 />
+                 {TaxNumberMessage!=="" && <label style={{color:"red"}}>{TaxNumberMessage}</label>}            
                     <OnChange name="taxNumber">
                 {(value, previous) => {
                         setsubMerchantFormValues({...subMerchantForm,taxNumber: value});
+                        setTaxNumberMessage("");
                 }}
                 </OnChange>
-                    </>
+                    </> 
                   }
                  
                   </Form.Group>
                  
-              <label>Şirket Adı*</label>
+              {/* <label className="fieldLabel">Şirket Adı*</label>
              <Field 
                   name="name"
                   placeholder=""
@@ -253,45 +396,52 @@ const SubMerchantDetails: React.FC = () => {
                         setsubMerchantFormValues({...subMerchantForm,name: value});
                     }
                 }}
-                </OnChange>
+                </OnChange> */}
                 {
                     subMerchantForm.merchantType !== "0" &&
                     <>
-                <label>Vergi Dairesi*</label>
+                <label id="taxOfficeLabel" className="fieldLabel">Vergi Dairesi*</label>
                 <Field
+                labelName="taxOfficeLabel"
                   name="taxOffice"
                   placeholder=""
                   value={subMerchantForm.taxOffice}
                   component={TextInput}
                   style={{marginBottom:15}}
                 />
+                {TaxOfficeMessage!=="" && <label style={{color:"red"}}>{TaxOfficeMessage}</label>}            
                     <OnChange name="taxOffice">
                 {(value, previous) => {
                         setsubMerchantFormValues({...subMerchantForm,taxOffice: value});
+                        setTaxOfficeMessage("");
                 }}
                 </OnChange>
                
 
-                <label>Yasal Şirket Ünvanı*</label>
+                <label id="legalCompanyTitleLabel" className="fieldLabel">Yasal Şirket Ünvanı*</label>
                 <Field
                   name="legalCompanyTitle"
+                  labelName="legalCompanyTitleLabel"
                   placeholder=""
                   value={subMerchantForm.legalCompanyTitle}
                   component={TextInput}
                   style={{marginBottom:15}}
                 />
+                 {legalCompanyTitleMessage!=="" && <label style={{color:"red"}}>{legalCompanyTitleMessage}</label>}            
                     <OnChange name="legalCompanyTitle">
                 {(value, previous) => {
                         setsubMerchantFormValues({...subMerchantForm,legalCompanyTitle: value});
+                        setlegalCompanyTitleMessage("");
                 }}
                 </OnChange>
 
                 </>
 
 }
-                <label>Adres*</label>
+                <label id="addressLabel" className="fieldLabel">Adres*</label>
                  <Field
                   name="address"
+                  labelName="addressLabel"
                   placeholder="Açık adres"
                   value={subMerchantForm.address}
                   component={TextAreaInput}
@@ -302,7 +452,7 @@ const SubMerchantDetails: React.FC = () => {
                         setsubMerchantFormValues({...subMerchantForm,address: value});
                 }}
                 </OnChange>
-                <label id="ibanlabel">IBAN*</label>
+                <label className="fieldLabel" id="ibanlabel">IBAN*</label>
                 <Field
                   name="iban"
                   labelName="ibanlabel"
@@ -314,11 +464,18 @@ const SubMerchantDetails: React.FC = () => {
                 {IBANValidMessage!=="" && <label style={{color:"red"}}>{IBANValidMessage}</label>}            
                     <OnChange name="iban">
                 {(value, previous) => {
-                        if(IBAN.isValid(value))
+                        if(value===""){
+                          setIBANValidMessage("");
+                          setsubMerchantFormValues({...subMerchantForm,iban: value});
+                        }else if(IBAN.isValid(value))
                          { 
                            setsubMerchantFormValues({...subMerchantForm,iban: value});
                            setIBANValidMessage("");
-                          }
+                        }else if(!IBAN.isValid(value))
+                        {
+                          setsubMerchantFormValues({...subMerchantForm,iban: value});
+                          setIBANValidMessage("IBAN numarası geçersiz");
+                        }
 
                 }}
                 </OnChange>

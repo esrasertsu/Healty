@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails } from '../models/activity';
+import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, PaymentThreeDResult } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { ISubMerchantInfo, ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues } from '../models/user';
@@ -352,7 +352,7 @@ const Zoom = {
 const Payment = {
     getActivityPaymentPage: (count:number,id: string): Promise<IPaymentUserInfoDetails> => requests.get(`/payment/activity/${id}/${count}?activityId=${id}&count=${count}`),
     getUserPaymentDetailedInfo: (details:IPaymentUserInfoDetails): Promise<boolean> => requests.post(`/payment/${details.activityId}/updateUserBeforePayment`,details),
-    processPayment: (details:IPaymentCardInfo): Promise<boolean> => requests.post(`/payment/${details.activityId}/paymentstart`,details),
+    processPayment: (details:IPaymentCardInfo): Promise<PaymentThreeDResult> => requests.post(`/payment/${details.activityId}/paymentstart`,details),
 
 } 
 export default {

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import React, { useContext } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
 import { Link } from 'react-router-dom';
-import { combineValidators, isRequired } from 'revalidate';
+import { combineValidators, composeValidators, createValidator, isRequired } from 'revalidate';
 import { Button, Divider, Form, Header, Image, Modal } from 'semantic-ui-react';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
@@ -12,8 +12,20 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import ForgotPassword from './ForgotPassword';
 import SocialLogin from './SocialLogin';
 
+const isValidEmail = createValidator(
+  message => value => {
+    if (value && !/.+@.+\.[A-Za-z]+$/.test(value)) {
+      return message
+    }
+  },
+  'Geçersiz e-posta'
+)
+
 const validate = combineValidators({
-  email: isRequired({ message: 'Email zorunlu alan.' }),
+  email: composeValidators(
+    isRequired({message: 'Email zorunlu alandır.'}),
+    isValidEmail
+  )(),
   password: isRequired({ message: 'Şifre zorunlu alan.' })
 })
 

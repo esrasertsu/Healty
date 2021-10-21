@@ -28,7 +28,7 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPost("{id}/paymentStart")]
-        public async Task<ActionResult<string>> StartIyzicoPayment(StartPayment.Query query)
+        public async Task<ActionResult<PaymentThreeDResult>> StartIyzicoPayment(StartPayment.Query query)
         {
             if (Request.Headers.ContainsKey("X-Forwarded-For"))
                  query.UserIpAddress = Request.Headers["X-Forwarded-For"];

@@ -551,7 +551,6 @@ export default class ActivityStore {
             runInAction('Processing payment', () => {
                 this.loadingPaymentPage = false;
             });
-
             return res;
 
         } catch (error) {

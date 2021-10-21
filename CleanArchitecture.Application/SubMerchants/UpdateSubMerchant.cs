@@ -3,8 +3,10 @@ using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -37,6 +39,20 @@ namespace CleanArchitecture.Application.SubMerchants
 
         }
 
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.ContactName).NotEmpty();
+                RuleFor(x => x.ContactSurname).NotEmpty();
+                RuleFor(x => x.MerchantType).NotEmpty();
+                RuleFor(x => x.Email).NotEmpty();
+                RuleFor(x => x.GsmNumber).NotEmpty();
+                RuleFor(x => x.Iban).NotEmpty();
+
+            }
+        }
+
         public class Handler : IRequestHandler<Command, bool>
         {
             private readonly DataContext _context;
@@ -44,14 +60,16 @@ namespace CleanArchitecture.Application.SubMerchants
             private readonly IUserAccessor _userAccessor;
             private readonly IPaymentAccessor _paymentAccessor;
             private readonly IHttpContextAccessor _httpContextAccessor;
+            private readonly UserManager<AppUser> _userManager;
 
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPaymentAccessor paymentAccessor, IHttpContextAccessor httpContextAccessor)
+            public Handler(DataContext context, IMapper mapper, UserManager<AppUser> userManager, IUserAccessor userAccessor, IPaymentAccessor paymentAccessor, IHttpContextAccessor httpContextAccessor)
             {
                 _context = context;
                 _mapper = mapper;
                 _paymentAccessor = paymentAccessor;
                 _userAccessor = userAccessor;
                 _httpContextAccessor = httpContextAccessor;
+                _userManager = userManager;
             }
             public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -76,8 +94,6 @@ namespace CleanArchitecture.Application.SubMerchants
 
                 subMerchant.MerchantType = (MerchantType)merchantType;
                 subMerchant.Address = request.Address;
-                subMerchant.TaxOffice = request.TaxOffice;
-                subMerchant.TaxNumber = request.TaxNumber;
                 subMerchant.LastEditDate = DateTime.Now;
                 subMerchant.ContactName = request.ContactName;
                 subMerchant.ContactSurname = request.ContactSurname;
@@ -85,26 +101,80 @@ namespace CleanArchitecture.Application.SubMerchants
                 subMerchant.GsmNumber = request.GsmNumber;
                 subMerchant.Iban = request.Iban;
                 subMerchant.IdentityNumber = request.IdentityNumber;
-                subMerchant.LegalCompanyTitle = request.LegalCompanyTitle;
-                subMerchant.Name = request.Name;
+                subMerchant.Name = request.LegalCompanyTitle;
                 subMerchant.LastEditDate = DateTime.Now;
+
+                if (subMerchant.MerchantType == MerchantType.Anonim)
+                {
+                    if(request.TaxOffice == "" || request.TaxOffice == null || request.LegalCompanyTitle =="" || request.TaxOffice =="")
+                        throw new Exception("Problem creating subMerchant -- tax office and/or legal company title not be null");
+
+                    subMerchant.TaxOffice = request.TaxOffice;
+                    subMerchant.LegalCompanyTitle = request.LegalCompanyTitle;
+                }
+                else if (subMerchant.MerchantType == MerchantType.Limited)
+                {
+                    if (request.TaxOffice == "" || request.TaxOffice == null || request.LegalCompanyTitle == "" || request.TaxOffice == "" 
+                        || request.TaxNumber == "" || request.TaxNumber == null)
+                        throw new Exception("Problem creating subMerchant -- tax office , tax number and/or legal company title not be null");
+
+                    subMerchant.TaxOffice = request.TaxOffice;
+                    subMerchant.TaxNumber = request.TaxNumber;
+                    subMerchant.LegalCompanyTitle = request.LegalCompanyTitle;
+                }
+                else if (subMerchant.MerchantType == MerchantType.Personal)
+                {
+                    if (request.IdentityNumber == "" || request.IdentityNumber == null)
+                        throw new Exception("Problem creating subMerchant -- TCKN not be null");
+                }
+
 
                 var updatedSubMerchant = await _context.SaveChangesAsync() > 0;
                 if (updatedSubMerchant)
                 {
                     try
                     {
-                        var subMerchantKey = _paymentAccessor.UpdateSubMerchantIyzico(subMerchant);
-
-                        if (subMerchantKey != "false")
+                        if (request.SubMerchantKey == "" || request.SubMerchantKey == null)
                         {
-                            return true;
+                            var subMerchantKey = _paymentAccessor.CreateSubMerchantIyzico(subMerchant);
+                            if (subMerchantKey != "false")
+                            {
+                                subMerchant.SubMerchantKey = subMerchantKey;
+                                subMerchant.Status = true;
+                                var editedSubMerchant = await _context.SaveChangesAsync() > 0;
 
+                                if (editedSubMerchant)
+                                {
+                                    user.SubMerchantKey = subMerchantKey;
+                                    await _userManager.UpdateAsync(user);
+
+                                    return true;
+                                }
+                                else
+                                {
+                                    throw new Exception("Problem editing subMerchant Key on DB");
+                                }
+
+                            }
+                            else
+                            {
+                                throw new Exception("Problem creating subMerchant on Iyzico");
+                            }
                         }
                         else
                         {
-                            throw new Exception("Problem updating subMerchant on Iyzico");
+                            var response = _paymentAccessor.UpdateSubMerchantIyzico(subMerchant);
+                            if (response != "false")
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                throw new Exception("Problem updating subMerchant on Iyzico");
+                            }
                         }
+
+                       
 
 
                     }

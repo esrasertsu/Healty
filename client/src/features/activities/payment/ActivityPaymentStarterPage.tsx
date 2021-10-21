@@ -55,36 +55,55 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
     const {openModal,closeModal,modal} = rootStore.modalStore;
 
   
-  const handleInputFocus = ({ target }:any) => {
-    setFocused(target.name);
+  const handleInputFocus = (e:any) => {
+    e.stopPropagation();
+    setFocused(e.target.name);
   };
 
+  useEffect(() => {
+    if(activity)
+    setPaymentInfo({...paymentInfo, activityId:activity!.id, ticketCount:Number(count)});
 
-  const onSubmit = async (values:any) => {
+    return () => {
+      //cleanup
+    }
+  }, [activity])
 
-    if(!Payment.fns.validateCardNumber(cardNumber))
+  const onSubmit = async (e:any) => {
+    debugger;
+    e.stopPropagation();
+    e.preventDefault()
+;
+    let success = true;
+
+    if(!Payment.fns.validateCardNumber(paymentInfo.cardNumber))
     {
       setCardNoErrorMessage(true);
+      success = false;
     }
-    else if(cardName.length < 4)
+     if(cardName.length < 4)
     {
       setCardNameErrorMessage(true);
+      success = false;
+
     }
-    else if(!Payment.fns.validateCardExpiry(cardExpire))
+     if(!Payment.fns.validateCardExpiry(paymentInfo.expireDate))
     {
       setExpireErrorMessage(true);
+      success = false;
 
     }
-    else if(!Payment.fns.validateCardCVC(cvc))
+   if(!Payment.fns.validateCardCVC(paymentInfo.cvc))
     {
       setCvcErrorMessage(true);
+      success = false;
     }
-  else{
+  if(success){
 
-    setPaymentInfo({...paymentInfo, cardNumber:cardNumber, cardHolderName:cardName, cvc:cvc,expireDate:cardExpire,
-    hasSignedIyzicoContract:iyzicoContract, hasSignedPaymentContract:paymentContract, activityId:activity!.id,
-    expireMonth: exMonth, expireYear: exYear,
-    ticketCount:Number(count)});
+    // setPaymentInfo({...paymentInfo, 
+    //    activityId:activity!.id,
+    //   expireMonth: exMonth, expireYear: exYear,
+    //   ticketCount:Number(count)});
 
     handlePaymentFormSubmit(paymentInfo);
 
@@ -115,7 +134,7 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
          <Segment>
 
        <FinalForm
-      onSubmit={onSubmit}
+      onSubmit={(e) => onSubmit(e)}
       render={({
         handleSubmit,
         form,
@@ -151,12 +170,13 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
                 placeholder="Kart Numarası"
                 format={formatCreditCardNumber}
                 required
+                value={paymentInfo.cardNumber}
                 onFocus={handleInputFocus}
               />
             {cardNoErrorMessage && <label style={{color:"red"}}>Geçerli bir kart numarası giriniz</label>}  
                <OnChange name="number">
                 {(value, previous) => {
-                     setCardNumber(value);
+                     setPaymentInfo({...paymentInfo, cardNumber:value});
 
                     if(Payment.fns.validateCardNumber(value))
                     {
@@ -175,12 +195,14 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
                 component="input"
                 type="text"
                 placeholder="Ad Soyad"
+                value={paymentInfo.cardHolderName}
                 onFocus={handleInputFocus}
               />
                  {cardNameErrorMessage &&   <label style={{color:"red"}}>Kart üzerindeki ad/soyad giriniz</label>}            
                 <OnChange name="name">
                 {(value, previous) => {
                      setCardName(value);
+                     setPaymentInfo({...paymentInfo, cardHolderName:value});
 
                     if(value.length > 5)
                     {
@@ -201,18 +223,22 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
                   placeholder="__/__"
                   format={formatExpirationDate}
                   onFocus={handleInputFocus}
+                  value={paymentInfo.expireDate}
 
                 />
                 {expireErrorMessage &&  <label style={{color:"red"}}>Tarihi geçmiş kart girdiniz</label>}
                  <OnChange name="expiry">
                 {(value, previous) => {
                      setCardExpire(value);
+                     setPaymentInfo({...paymentInfo, expireDate:value});
 
                     if(Payment.fns.validateCardExpiry(value))
                     {
                         // setUpdateEnabled(true);
                         setExpireIcon(true);
                         setExpireErrorMessage(false);
+                        setPaymentInfo({...paymentInfo, expireDate:value,expireMonth: Payment.fns.cardExpiryVal(value).month.toString(), expireYear: Payment.fns.cardExpiryVal(value).year.toString()});
+
                         setExMonth(Payment.fns.cardExpiryVal(value).month.toString());
                         setExYear(Payment.fns.cardExpiryVal(value).year.toString());
 
@@ -235,12 +261,15 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
                 placeholder="CVC"
                 format={formatCVC}
                 onFocus={handleInputFocus}
+                value={paymentInfo.cvc}
+
               />
                {cvcErrorMessage && <label style={{color:"red"}}>Geçerli bir CVC numarası giriniz</label>}
               <OnChange name="cvc">
                 {(value, previous) => {
                     setCVC(value);
-                  
+                    setPaymentInfo({...paymentInfo, cvc:value});
+
                     if(Payment.fns.validateCardCVC(value))
                     {
                         setCvcIcon(true);
@@ -262,12 +291,13 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
                       type="checkbox"
                       width={4}
                       format={v =>v === true}
+                      initialValue={paymentInfo.hasSignedPaymentContract}
                       parse={v => (v ? true : false) }
                     />&nbsp;&nbsp;
                    <span><a style={{cursor:"pointer"}}  onClick={openIyzicoModal} >Ön Bilgilendirme Satış Sözleşmesi</a>'ni okudum.</span> 
                     <OnChange name="paymentContract">
                 {(value, previous) => {
-                  
+                        setPaymentInfo({...paymentInfo, hasSignedPaymentContract:value});
                         setPaymentContract(value);
                     
                 }}
@@ -277,6 +307,7 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
                       name="hasSignedIyzicoContract"
                       component="input"
                       type="checkbox"
+                      initialValue={paymentInfo.hasSignedIyzicoContract}
                       width={4}
                       format={v =>v === true}
                       parse={v => (v ? true : false) }
@@ -284,6 +315,7 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
                    <span><a style={{cursor:"pointer"}} onClick={openIyzicoModal}>iyzico Platform Kullanım Sözleşmesi</a>'ni onaylıyorum.</span> 
                    <OnChange name="hasSignedIyzicoContract">
                 {(value, previous) => {
+                    setPaymentInfo({...paymentInfo, hasSignedIyzicoContract:value});
                     setIyzicoContract(value);
 
                 }}

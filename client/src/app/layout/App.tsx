@@ -106,16 +106,22 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
             }
           );
           }else{
-            setAppLoaded();
+            loadCities().then(()=>
+            runInAction(() => {
+             loadCategories();
+             setAppLoaded();
+           }));
             if(location.pathname != "/")
               handleLoginClick();
           }
           }
           )
       }else{
-        loadCities();
-        loadCategories();
-        setAppLoaded();
+        loadCities().then(()=>
+        runInAction(() => {
+         loadCategories();
+         setAppLoaded();
+       }));
       }
        
     return () => {

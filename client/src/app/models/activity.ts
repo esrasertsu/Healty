@@ -271,5 +271,8 @@ export class PaymentCardInfo implements IPaymentCardInfo {
         }
     }
 }
-
+export interface PaymentThreeDResult {
+    status: boolean;
+    contentHtml : string;
+}
 

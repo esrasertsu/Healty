@@ -3,6 +3,7 @@ using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -37,6 +38,21 @@ namespace CleanArchitecture.Application.SubMerchants
             public bool HasSignedContract { get; set; }
 
         }
+
+        public class CommandValidator : AbstractValidator<Query>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.ContactName).NotEmpty();
+                RuleFor(x => x.ContactSurname).NotEmpty();
+                RuleFor(x => x.MerchantType).NotEmpty();
+                RuleFor(x => x.Email).NotEmpty();
+                RuleFor(x => x.GsmNumber).NotEmpty();
+                RuleFor(x => x.Iban).NotEmpty();
+
+            }
+        }
+
 
         public class Handler : IRequestHandler<Query, bool>
         {
@@ -85,8 +101,6 @@ namespace CleanArchitecture.Application.SubMerchants
                 subMerchant.UserId = user.Id;
                 subMerchant.MerchantType = (MerchantType)merchantType;
                 subMerchant.Address = request.Address;
-                subMerchant.TaxOffice = request.TaxOffice;
-                subMerchant.TaxNumber = request.TaxNumber;
                 subMerchant.ApplicationDate = DateTime.Now;
                 subMerchant.ContactName = request.ContactName;
                 subMerchant.ContactSurname = request.ContactSurname;
@@ -94,8 +108,33 @@ namespace CleanArchitecture.Application.SubMerchants
                 subMerchant.GsmNumber = request.GsmNumber;
                 subMerchant.Iban = request.Iban;
                 subMerchant.IdentityNumber = request.IdentityNumber;
-                subMerchant.LegalCompanyTitle = request.LegalCompanyTitle;
-                subMerchant.Name = request.Name;
+                subMerchant.Name = request.LegalCompanyTitle;
+
+                if (subMerchant.MerchantType == MerchantType.Anonim)
+                {
+                    if (request.TaxOffice == "" || request.TaxOffice == null || request.LegalCompanyTitle == "" || request.TaxOffice == "")
+                        throw new Exception("Problem creating subMerchant -- tax office and/or legal company title not be null");
+
+                    subMerchant.TaxOffice = request.TaxOffice;
+                    subMerchant.LegalCompanyTitle = request.LegalCompanyTitle;
+                }
+                else if (subMerchant.MerchantType == MerchantType.Limited)
+                {
+                    if (request.TaxOffice == "" || request.TaxOffice == null || request.LegalCompanyTitle == "" || request.TaxOffice == ""
+                        || request.TaxNumber == "" || request.TaxNumber == null)
+                        throw new Exception("Problem creating subMerchant -- tax office , tax number and/or legal company title not be null");
+
+                    subMerchant.TaxOffice = request.TaxOffice;
+                    subMerchant.TaxNumber = request.TaxNumber;
+                    subMerchant.LegalCompanyTitle = request.LegalCompanyTitle;
+                }
+                else if (subMerchant.MerchantType == MerchantType.Personal)
+                {
+                    if (request.IdentityNumber == "" || request.IdentityNumber == null)
+                        throw new Exception("Problem creating subMerchant -- TCKN not be null");
+                }
+
+
                 user.SubMerchantDetails = subMerchant;
 
                 var createdSubMerchant = await _context.SaveChangesAsync() > 0;

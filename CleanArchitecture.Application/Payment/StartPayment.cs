@@ -31,6 +31,7 @@ namespace CleanArchitecture.Application.Payment
             public Guid ActivityId { get; set; }
             public int TicketCount { get; set; }
             public string UserIpAddress { get; set; }
+            public string Origin { get; set; }
 
         }
 
@@ -71,11 +72,11 @@ namespace CleanArchitecture.Application.Payment
                     if (atcount > activity.AttendancyLimit)
                         throw new RestException(HttpStatusCode.BadRequest, new { Activity = "Katılımcı sayısı doldu. Lütfen aktivite sahibiyle iletişime geçin." });
                 }
-                var userSameActivityOrders = user.Orders.Where(x => x.OrderItems.Any(y => y.ActivityId == activity.Id)).ToList();
-                if (userSameActivityOrders.Any(x=> x.OrderState== EnumOrderState.Unpaid))
-                {
-                    throw new Exception("Bu aktivite için ödenmemiş sipariş bulunmakta. Lütfen 'siparişlerim' sayfasını kontrol edin.");
-                }
+                //var userSameActivityOrders = user.Orders.Where(x => x.OrderItems.Any(y => y.ActivityId == activity.Id)).ToList();
+                //if (userSameActivityOrders.Any(x=> x.OrderState== EnumOrderState.Unpaid))
+                //{
+                //    throw new Exception("Bu aktivite için ödenmemiş sipariş bulunmakta. Lütfen 'siparişlerim' sayfasını kontrol edin.");
+                //}
 
                 var lastOrder = await _context.Orders.FirstOrDefaultAsync(p => p.OrderNumber == _context.Orders.Max(x => x.OrderNumber));
 
@@ -144,8 +145,10 @@ namespace CleanArchitecture.Application.Payment
                             if(subMerchantKey != IyzicoMerchant.SubMerchantKey)
                                 throw new Exception("Problem with Iyzico merchantKey and system key. Please contact System Manager");
 
+                            var callbackUrl = "http://localhost:5000/api/payment/callback/"+activity.Id+"/"+request.TicketCount+ "?id=" + activity.Id + "&count=" + request.TicketCount+"";
+                            //var callbackUrl = "http://localhost:5000/payment/callback?id="+activity.Id+"&count="+request.TicketCount;
                             var paymentStartedRes = _paymentAccessor.PaymentProcessWithIyzico(activity, user, request.TicketCount, request.UserIpAddress,
-                            order.ConversationId, request.CardHolderName, request.CardNumber, request.CVC, request.ExpireMonth, request.ExpireYear, subMerchantKey);
+                            order.ConversationId, request.CardHolderName, request.CardNumber, request.CVC, request.ExpireMonth, request.ExpireYear, subMerchantKey, callbackUrl);
 
                             if (paymentStartedRes != "false")
                             {

@@ -17,6 +17,7 @@ import format from "date-fns/format";
 import getDay from "date-fns/getDay";
 import { tr } from "date-fns/locale";
 import parse from "date-fns/parse";
+import ReactDOMServer from 'react-dom/server';
 
 const locales = {
   "tr": tr
@@ -31,13 +32,25 @@ dateFnsLocalizer({
 
 export const history = createBrowserHistory();
 
-ReactDOM.render(
-   <Router history={history}>
-    <ScrollToTop>
-      <App />
-    </ScrollToTop>
-    </Router>
-, document.getElementById('root'));
+// if(history.location.pathname=="/payment/threeDpage")
+// {
+//   debugger;
+//   const HtmlToReactParser = require('html-to-react').Parser;
+//   const htmlToReactParser = new HtmlToReactParser();
+// const reactElement = htmlToReactParser.parse("<div></div>");
+//   ReactDOMServer.renderToStaticMarkup(reactElement);
+
+// }else{
+  ReactDOM.render(
+    <Router history={history}>
+     <ScrollToTop>
+       <App />
+     </ScrollToTop>
+     </Router>
+ , document.getElementById('root'));
+
+
+
 
 
 // If you want your app to work offline and load faster, you can change

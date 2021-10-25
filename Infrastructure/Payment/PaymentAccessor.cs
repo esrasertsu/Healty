@@ -115,7 +115,7 @@ namespace Infrastructure.Payment
             request.ConversationData = conversationData;// "conversation data";
             
             ThreedsPayment threedsPayment = ThreedsPayment.Create(request, _options);
-            if (threedsPayment.Status != "Success")
+            if (threedsPayment.Status != "success")
             {
                 throw new RestException(HttpStatusCode.BadRequest, new { Iyzico = threedsPayment.ErrorMessage.ToString() });
             }
@@ -185,7 +185,7 @@ namespace Infrastructure.Payment
         }
 
         public string PaymentProcessWithIyzico(Activity activity, AppUser user, int count, string userIp, string conversationId, 
-            string cardHolderName, string cardNumber, string cvc, string expireMonth, string expireYear, string subMerchantKey)
+            string cardHolderName, string cardNumber, string cvc, string expireMonth, string expireYear, string subMerchantKey, string callbackUrl)
         {
 
             CreatePaymentRequest request = new CreatePaymentRequest();
@@ -198,8 +198,7 @@ namespace Infrastructure.Payment
             //request.BasketId = "B67832";
             request.PaymentChannel = PaymentChannel.WEB.ToString();
             request.PaymentGroup = PaymentGroup.PRODUCT.ToString();
-            request.CallbackUrl = "https://www.afitapp.com/callbackIyzicoPaymentStart"; //verify Email sayfası gibi olcak içerik
-
+            request.CallbackUrl = callbackUrl; //verify Email sayfası gibi olcak içerik
 
             PaymentCard paymentCard = new PaymentCard();
             paymentCard.CardHolderName = cardHolderName;

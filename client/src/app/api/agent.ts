@@ -276,6 +276,8 @@ const User ={
     getSubMerchantInfo: () : Promise<ISubMerchantInfo> => requests.get('/user/submerchantInfo'),
     createSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<boolean> => requests.post('/user/createSubMerchant', subMerchant),
     editSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<boolean> => requests.put('/user/editSubMerchant', subMerchant),
+    checkCallbackandStartPayment: (id:string, count:string, status:string, paymentId:string, conversationData:string, conversationId:string, mdStatus:string): Promise<Boolean> => 
+        requests.post(`/payment/callback`,{id, count, status, paymentId, conversationData, conversationId, mdStatus}),
 
 }
 

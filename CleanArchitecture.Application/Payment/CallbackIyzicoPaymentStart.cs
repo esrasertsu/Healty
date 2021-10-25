@@ -23,7 +23,8 @@ namespace CleanArchitecture.Application.Payment
             public string conversationData { get; set; }
             public long conversationId { get; set; }
             public string mdStatus { get; set; }
-
+            public Guid Id { get; set; }
+            public int count { get; set; }
         }
 
 

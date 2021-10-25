@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -81,7 +82,7 @@ namespace CleanArchitecture.API
                     .AllowAnyMethod()
                   //  .AllowAnyOrigin();
                      .WithExposedHeaders("WWW-Authenticate")
-                     .WithOrigins("http://localhost:3000", "http://localhost:9999")
+                     .WithOrigins("http://localhost:3000", "http://localhost:9999", "https://sandbox-api.iyzipay.com")
                     .AllowCredentials();
                 });
             });
@@ -168,6 +169,8 @@ namespace CleanArchitecture.API
                 }
                );
             services.AddHttpContextAccessor();
+            services.ConfigureApplicationCookie(options => { options.Cookie.SameSite = SameSiteMode.None; });
+
 
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();
@@ -211,17 +214,19 @@ namespace CleanArchitecture.API
             // app.UseHttpsRedirection();
 
             app.UseXContentTypeOptions();
-            app.UseReferrerPolicy(x => x.NoReferrer());
+         //   app.UseReferrerPolicy(x => x.NoReferrer());
             app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
-            app.UseXfo(op => op.Deny());
+         //   app.UseXfo(op => op.Deny);
             app.UseCsp(opt => opt
                 .BlockAllMixedContent()
                 .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com","sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs="))
                 .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com","data:"))
-                .FormActions(s => s.Self())
-                .FrameAncestors(s => s.Self())
+             //   .FormActions(s => s.Self())
+               // .FrameAncestors(s => s.Self().CustomSources("https://sandbox-api.iyzipay.com"))
+                //.FrameSources(s => s.Self())
+                //.ObjectSources(s => s.Self())
                 .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com","blob:","data:"))
-                .ScriptSources(s => s.Self().CustomSources("https://www.youtube.com", "sha256-eE1k/Cs1U0Li9/ihPPQ7jKIGDvR8fYw65VJw+txfifw="))
+               // .ScriptSources(s => s.Self().CustomSources("https://www.youtube.com", "sha256-eE1k/Cs1U0Li9/ihPPQ7jKIGDvR8fYw65VJw+txfifw="))
                 );
 
             app.UseDefaultFiles();

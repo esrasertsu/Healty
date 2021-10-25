@@ -35,15 +35,19 @@ namespace CleanArchitecture.API.Controllers
             else
                 query.UserIpAddress = HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
 
+            query.Origin = Request.Headers["origin"];
             return await Mediator.Send(query);
         }
-
+    
         [AllowAnonymous]
-        [HttpPost("callbackIyzicoPaymentStart")]
-        public async Task<ActionResult<bool>> CallbackIyzicoPaymentStart(CallbackIyzicoPaymentStart.Command command)
+        [HttpPost("callback/{id}/{count}")]
+        public async Task<RedirectResult> CallbackIyzicoPaymentStart(Guid id, int count,[FromForm] CallbackIyzicoPaymentStart.Command command)
         {
+            command.Id = id;
+            command.count = count;
             var result = await Mediator.Send(command);
-            return true;
+            return Redirect(Request.Scheme +"://"+Request.Host+"/payment/success");
+
         }
     }
 }

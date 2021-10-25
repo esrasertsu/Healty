@@ -20,6 +20,7 @@ import { LoadingComponent } from '../../../app/layout/LoadingComponent';
 import { toast } from 'react-toastify';
 import dompurify from 'dompurify';
 import { JSDOM } from 'jsdom'
+import queryString from 'query-string';
 
 interface DetailParams{
     id:string,
@@ -36,7 +37,7 @@ const validate = combineValidators({
   address: isRequired({message:'Adres zorunlu alandır.'})
 })
 
- const ActivityPaymentPage: React.FC<IProps> = ({match}) => {
+ const ActivityPaymentPage: React.FC<IProps> = ({match,location}) => {
 
   const rootStore = useContext(RootStoreContext);
   const {getActivityPaymentPage,setActivityUserPaymentInfo,activityUserPaymentInfo,getUserPaymentDetailedInfo,
@@ -61,7 +62,8 @@ const validate = combineValidators({
     const[showUserPaymentInfoPage, setShowUserPaymentInfoPage] = useState(true);
     const[phoneError, setphoneError] = useState(false);
 
-    
+    const {status} = queryString.parse(location.search);
+
     const sanitizer = dompurify.sanitize;
 
     useEffect(() => {
@@ -116,15 +118,22 @@ debugger;
       setLoading(false);
       toast.error("3D ödeme sayfası başlatılamıyor. Formu gözden geçirip tekrar deneyin. Sorun devam ederse site yöneticisiyle ilteşime geçin.")
     }else {
+   //   history.push(`/payment/threeDpage?html=${res.contentHtml}`)
 
       setLoading(false);
-      if(modal.open) closeModal();
-      openModal("Giriş Yap", <>
-      <Modal.Description className="loginreg">
-      { <iframe style={{width:"100%", border:"none", height:"800px"}}  srcDoc={res.contentHtml}  /> }
-      </Modal.Description>
-      </>,false,
-     "","",false) 
+
+      var newDoc = document.open("text/html", "replace");
+      newDoc.write(res.contentHtml);
+      newDoc.close();
+    //   if(modal.open) closeModal();
+    //   openModal("Giriş Yap", <>
+    //   <Modal.Description className="loginreg">
+    //   { 
+      
+    //   <iframe style={{width:"100%", border:"none", height:"800px"}}  srcDoc={res.contentHtml}  /> }
+    //   </Modal.Description>
+    //   </>,false,
+    //  "","",false) 
       // setShowPaymentPage(true);
       // setStepNo(1);
       // setStep0Completed(true);

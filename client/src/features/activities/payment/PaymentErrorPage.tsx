@@ -8,25 +8,28 @@ import { observer } from 'mobx-react-lite';
 
 
 const PaymentSuccessPage : React.FC<RouteComponentProps> = ({location}) =>{
-    const {status,activityId,count, paidPrice, paymentTransactionId, paymentId} = queryString.parse(location.search);
-const [activityName, setActivityName] = useState("");
+    const {errorMessage, errorCode } = queryString.parse(location.search);
+const [errorsMessage, setErrorMessage] = useState("");
+const [errorsCode, setErrorCode] = useState("");
+
    useEffect(() => {
-       if(status == "success")
-         agent.Activities.details(activityId as string).then((res)=>{
-           setActivityName(res.title)
-         })
-   }, [status])
+       if(errorMessage !== "" && errorMessage !== null)
+         setErrorMessage(errorMessage.toString());
+         errorCode ? setErrorCode(errorCode.toString()) : setErrorCode("");
+   }, [errorMessage])
 
     return(
         <Segment placeholder>
             <Header icon>
-                <Icon name="check" />
+                <Icon color="red" name="exclamation triangle" />
             </Header>
 
             <Segment.Inline>
                 <div className="center">
-                    <p>Satın alma işleminiz başarıyla gerçekleşti.</p>
-                    <p>{activityName}</p>
+                    <p>Satın alma gerçekleşemedi.</p>
+                    <p>{errorsMessage}</p>
+                    <p>{errorCode}</p>
+                    <p>Lütfen kartınızı kontrol edin ya da bankanızla iletişime geçin.</p>
                 </div>
             </Segment.Inline>
         </Segment>

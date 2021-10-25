@@ -39,6 +39,7 @@ import SubMerchantDetails from '../../features/subMerchant/SubMerchantDetails';
 import { Settings } from '../../features/user/Settings';
 import ActivityPaymentCallback from '../../features/activities/payment/ActivityPaymentCallback';
 import PaymentSuccessPage from '../../features/activities/payment/PaymentSuccessPage';
+import PaymentErrorPage from '../../features/activities/payment/PaymentErrorPage';
 
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
@@ -199,6 +200,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  {/* <Route path="/payment/callback/:id/:count" component={ActivityPaymentCallback} />  */}
                  <Route path="/settings" component={Settings}/>
                  <Route exact path="/payment/success" component={PaymentSuccessPage} />
+                 <Route exact path="/payment/error" component={PaymentErrorPage} />
                  <Route exact path="/admin" component={Admin}/>
                  <Route component={NotFound}/>
                </Switch>
@@ -251,6 +253,8 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                   {/* <Route path="/payment/callback/:id/:count" component={ActivityPaymentCallback} />  */}
                  <Route path="/settings" component={Settings}/>
                  <Route exact path="/payment/success" component={PaymentSuccessPage} />
+                 <Route exact path="/payment/error" component={PaymentErrorPage} />
+
                  <Route exact path="/admin" component={Admin}/>
                   <Route component={NotFound}/>
                 </Switch>

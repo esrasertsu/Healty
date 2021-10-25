@@ -145,8 +145,7 @@ namespace CleanArchitecture.Application.Payment
                             if(subMerchantKey != IyzicoMerchant.SubMerchantKey)
                                 throw new Exception("Problem with Iyzico merchantKey and system key. Please contact System Manager");
 
-                            var callbackUrl = "http://localhost:5000/api/payment/callback/"+activity.Id+"/"+request.TicketCount+ "?id=" + activity.Id + "&count=" + request.TicketCount+"";
-                            //var callbackUrl = "http://localhost:5000/payment/callback?id="+activity.Id+"&count="+request.TicketCount;
+                            var callbackUrl = $"{request.Origin}/api/payment/callback/"+activity.Id+"/"+request.TicketCount+ "?id=" + activity.Id + "&count=" + request.TicketCount+"";
                             var paymentStartedRes = _paymentAccessor.PaymentProcessWithIyzico(activity, user, request.TicketCount, request.UserIpAddress,
                             order.ConversationId, request.CardHolderName, request.CardNumber, request.CVC, request.ExpireMonth, request.ExpireYear, subMerchantKey, callbackUrl);
 

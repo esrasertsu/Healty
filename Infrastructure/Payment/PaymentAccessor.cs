@@ -10,6 +10,7 @@ using CleanArchitecture.Domain;
 using System.Net;
 using System.Linq;
 using CleanArchitecture.Application.Errors;
+using CleanArchitecture.Application.Payment;
 
 namespace Infrastructure.Payment
 {
@@ -106,7 +107,7 @@ namespace Infrastructure.Payment
         }
 
 
-        public string FinishPaymentWithIyzico(string conversationId, string paymentId, string conversationData)
+        public IyzicoPaymentResult FinishPaymentWithIyzico(string conversationId, string paymentId, string conversationData)
         {
             CreateThreedsPaymentRequest request = new CreateThreedsPaymentRequest();
             request.Locale = Locale.TR.ToString();
@@ -115,14 +116,29 @@ namespace Infrastructure.Payment
             request.ConversationData = conversationData;// "conversation data";
             
             ThreedsPayment threedsPayment = ThreedsPayment.Create(request, _options);
-            if (threedsPayment.Status != "success")
+
+            if(threedsPayment.ConversationId == conversationId)
             {
-                throw new RestException(HttpStatusCode.BadRequest, new { Iyzico = threedsPayment.ErrorMessage.ToString() });
+                return new IyzicoPaymentResult()
+                {
+                    ConversationId = threedsPayment.ConversationId ?? "",
+                    PaymentStatus = threedsPayment.PaymentStatus ?? "",
+                    PaymentTransactionId = threedsPayment.PaymentItems !=null ? threedsPayment.PaymentItems.Select(x => x.PaymentTransactionId).FirstOrDefault() : "",
+                    ErrorCode = threedsPayment.ErrorCode ?? "",
+                    ErrorMessage = threedsPayment.ErrorMessage ?? "",
+                    Status = threedsPayment.Status ?? "",
+                    Currency = threedsPayment.Currency ?? "",
+                    Installment = threedsPayment.Installment ?? 1,
+                    ItemId = threedsPayment.PaymentItems != null ? threedsPayment.PaymentItems.Select(x => x.ItemId).FirstOrDefault() : "",
+                    PaidPrice = threedsPayment.PaidPrice ?? "",
+                    PaymentId = threedsPayment.PaymentId ?? "",
+                    Price = threedsPayment.Price ?? ""
+                };
             }
-            else
-            {
-                return paymentId;
-            }
+
+            throw new RestException(HttpStatusCode.BadRequest, new { ThreedsPayment = "Iyzico conversation Id error" });
+
+
         }
 
         public string GetActivityPaymentPageFromIyzico(Activity activity, AppUser user, int count, string userIp)

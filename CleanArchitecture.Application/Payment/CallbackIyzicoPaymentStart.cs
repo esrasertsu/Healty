@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -16,7 +17,7 @@ namespace CleanArchitecture.Application.Payment
 {
     public class CallbackIyzicoPaymentStart
     {
-        public class Command : IRequest<bool>
+        public class Command : IRequest<IyzicoPaymentResult>
         {
             public string status { get; set; }
             public string paymentId { get; set; }
@@ -28,7 +29,7 @@ namespace CleanArchitecture.Application.Payment
         }
 
 
-        public class Handler : IRequestHandler<Command, bool>
+        public class Handler : IRequestHandler<Command, IyzicoPaymentResult>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -45,7 +46,7 @@ namespace CleanArchitecture.Application.Payment
                 _httpContextAccessor = httpContextAccessor;
             }
 
-            public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<IyzicoPaymentResult> Handle(Command request, CancellationToken cancellationToken)
             {
                 if(request.status == "failure")
                 {
@@ -54,16 +55,28 @@ namespace CleanArchitecture.Application.Payment
                 else
                 {
                      var order = await _context.Orders.SingleOrDefaultAsync(x => x.OrderNumber == request.conversationId);
-                    var paymentId = _paymentAccessor.FinishPaymentWithIyzico(request.conversationId.ToString(), request.paymentId, request.conversationData);
+                    var iyzicoPaymentResult = _paymentAccessor.FinishPaymentWithIyzico(request.conversationId.ToString(), request.paymentId, request.conversationData);
                   
+                    if(iyzicoPaymentResult.Status =="success")
+                    {
                         order.OrderState = Domain.EnumOrderState.Completed;
-                        order.PaymentId = paymentId;
+                        order.PaymentId = iyzicoPaymentResult.PaymentId;
 
+                        var item = order.OrderItems.FirstOrDefault(x => x.ActivityId == new Guid(iyzicoPaymentResult.ItemId));
+                        item.PaymentTransactionId = iyzicoPaymentResult.PaymentTransactionId;
                         var orderStateChanged = await _context.SaveChangesAsync() > 0;
-                        return true;
 
-                    
-                 
+                        if (orderStateChanged)
+                            return iyzicoPaymentResult;
+                        else throw new RestException(HttpStatusCode.BadRequest, new { OrderState = "Order state cannot changed" });
+
+                    }
+
+                    return iyzicoPaymentResult;
+
+
+
+
                 }
             }
         }

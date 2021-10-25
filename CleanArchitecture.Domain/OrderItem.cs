@@ -9,7 +9,7 @@ namespace CleanArchitecture.Domain
         public Guid Id { get; set; }
         public Guid OrderId { get; set; }
         public virtual Order Order { get; set; }
-
+        public string PaymentTransactionId { get; set; }
         public Guid ActivityId { get; set; }
         public virtual Activity Activity { get; set; }
 

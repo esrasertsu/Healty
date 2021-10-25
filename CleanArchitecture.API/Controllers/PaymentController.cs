@@ -46,7 +46,12 @@ namespace CleanArchitecture.API.Controllers
             command.Id = id;
             command.count = count;
             var result = await Mediator.Send(command);
-            return Redirect(Request.Scheme +"://"+Request.Host+"/payment/success");
+
+            if(result.Status =="success")
+
+              return Redirect(Request.Scheme +"://"+Request.Host+"/payment/success?paymentId="+result.PaymentId+"&paymentTransactionId="+result.PaymentTransactionId+"&paidPrice="+result.PaidPrice+"&status="+result.Status+"&count="+count+ "&activityId=" + id+"");
+            else
+              return Redirect(Request.Scheme + "://" + Request.Host + "/payment/error?errorCode=" + result.ErrorCode + "&errorMessage=" + result.ErrorMessage +"");
 
         }
     }

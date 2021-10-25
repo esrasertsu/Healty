@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Domain;
+﻿using CleanArchitecture.Application.Payment;
+using CleanArchitecture.Domain;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -11,7 +12,7 @@ namespace CleanArchitecture.Application.Interfaces
         string GetActivityPaymentPageFromIyzico(Activity activity, AppUser user, int count, string userIp);
         string PaymentProcessWithIyzico(Activity activity, AppUser user, int count, string userIp, string conversationId,
          string cardHolderName,string cardNumber, string cvc ,string expireMonth, string expireYear, string subMerchantKey, string callbackUrl);
-        string FinishPaymentWithIyzico(string conversationId, string paymentId, string conversationData);
+        IyzicoPaymentResult FinishPaymentWithIyzico(string conversationId, string paymentId, string conversationData);
         string CreateSubMerchantIyzico(SubMerchant subMerchant);
         string UpdateSubMerchantIyzico(SubMerchant subMerchant);
 

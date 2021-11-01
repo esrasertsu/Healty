@@ -75,15 +75,18 @@ const handleResetPassword = (e:any) => {
           <Form onSubmit={handleSubmit} error>
             <Header
               as="h2"
-              content="Afitapp'a Giriş Yap"
-              color="teal"
+              content="Giriş Yap"
               textAlign="center"
             />
-            <Field type="email" name="email" placeholder="*Email" component={TextInput}
+            <label id="lbl_Email">Email*</label>
+            <Field labelName="lbl_Email" type="email" name="email" placeholder="Email" component={TextInput}
             />
+
+            <label id="lbl_Password">Şifre*</label>
             <Field
+              labelName="lbl_Password"
               name="password"
-              placeholder="*Şifre"
+              placeholder="*******"
               type="password"
               component={TextInput}
             />

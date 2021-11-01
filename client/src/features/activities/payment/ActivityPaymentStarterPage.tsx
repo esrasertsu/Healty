@@ -343,13 +343,13 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
           <>
           <div className="activity_paymentpage_price_containerdiv">
             <div className="activity_paymentpage_price_header" style={{marginBottom:"20px"}}>Ödenecek Tutar</div>
-            <div className="activity_paymentpage_price_items"><span>Aktivite fiyatı</span> <span>{activity.price} ₺</span> </div>
+            <div className="activity_paymentpage_price_items"><span>Aktivite fiyatı</span> <span>{activity.price} TL</span> </div>
             <div className="activity_paymentpage_price_items"><span>Kişi sayısı</span> <span>{count}</span> </div>
-            <div className="activity_paymentpage_price_items"><span>İndirim</span> <span>0 ₺</span> </div>
+            <div className="activity_paymentpage_price_items"><span>İndirim</span> <span>0 TL</span> </div>
           
             <div className="activityDetail_payment_footer activity_paymentpage_price_footer">
                 <div style={{fontSize:"18px"}}>Toplam </div> 
-                <div className="price">{activity.price! * Number(count)} ₺</div>
+                <div className="price">{activity.price! * Number(count)} TL</div>
             </div>
             <div>
             <Button size="large" positive fluid  floated="right" style={{marginTop:"20px"}}

@@ -15,7 +15,7 @@ namespace CleanArchitecture.Domain
         public long OrderNumber { get; set; }
         public DateTime OrderDate { get; set; }
         public EnumOrderState OrderState { get; set; }
-        public EnumPaymentTypes PaymentType { get; set; }
+        public string PaymentType { get; set; }
         public string UserId { get; set; }
         public virtual AppUser User { get; set; }
         public string FirstName { get; set; }
@@ -26,7 +26,12 @@ namespace CleanArchitecture.Domain
         public string PaymentId { get; set; }
         public string PaymentToken { get; set; }
         public string ConversationId { get; set; }
-
+        public string BuyerName { get; set; }
+        public string CardLastFourDigit { get; set; }
+        public string CardFamily { get; set; }
+        public string CardAssociation { get; set; }
+        public string PaidPrice { get; set; }
+        public string Currency { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
 
     }
@@ -36,7 +41,10 @@ namespace CleanArchitecture.Domain
     {
         Waiting = 0,
         Unpaid = 1,
-        Completed =2
+        Completed =2,
+        Cancelled =3,
+        Failed = 4,
+        FailedServer = 5
     }
 
     public enum EnumPaymentTypes

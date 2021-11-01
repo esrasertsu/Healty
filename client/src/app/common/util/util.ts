@@ -106,3 +106,60 @@ export const createAttendee = ( user: IUser): IAttendee => {
         userRole: user.role
     }
 }
+
+
+export const getStatusTranslate = (status: string): IOrderStatus => {
+ const orderStat: IOrderStatus = new OrderStatus();
+
+  switch (status) {
+    case "Completed":
+      { 
+        orderStat.desc = "Ödeme Yapıldı";
+        orderStat.color ="green";
+        orderStat.icon ="check"
+        return orderStat;
+
+      }
+    case "Unpaid":
+     { 
+       orderStat.color ="orange";
+       orderStat.desc = "Ödeme Bekleniyor";
+       orderStat.icon ="clock outline"
+
+       return orderStat;
+
+      }
+      case "Cancelled":
+        { 
+          orderStat.color ="red";
+          orderStat.desc = "İptal Edildi";
+          orderStat.icon ="delete"
+   
+          return orderStat;
+   
+         }
+     default:
+      {  
+        orderStat.color ="green";
+        orderStat.desc = "";
+        return orderStat;
+
+      }
+  }
+}
+
+export interface IOrderStatus {
+  color: string;
+  desc: string;
+  icon: string;
+}
+
+export class OrderStatus implements IOrderStatus {
+  color: string ="";
+  desc: string = "";
+  icon: string = "";
+
+  constructor(init?: IOrderStatus){
+    Object.assign(this, init);
+}
+}

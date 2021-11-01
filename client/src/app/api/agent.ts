@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, PaymentThreeDResult } from '../models/activity';
+import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IRefundPayment, PaymentThreeDResult } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { ISubMerchantInfo, ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues } from '../models/user';
@@ -8,6 +8,7 @@ import { IBlogsEnvelope, IBlog, IPostFormValues, IBlogUpdateFormValues } from '.
 import { IAllCategoryList, ICategory, ISubCategory } from '../models/category';
 import { IChatRoom, IMessage, IMessageEnvelope, IMessageForm } from '../models/message';
 import { ICity } from '../models/location';
+import { IOrderListEnvelope } from '../models/order';
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -239,6 +240,16 @@ const requests = {
             headers: {'Content-type': 'application/json'}
          }).then(responseBody)
     },
+    refundPayment:async (url: string,paymentTransactionId:string, activityId: string, orderId: string) =>{
+        let formData = new FormData();
+        formData.append('paymentTransactionId', paymentTransactionId);
+        formData.append('activityId', activityId);
+        formData.append('orderId', orderId);
+
+        return axios.post(url, formData, {
+            headers: {'Content-type': 'application/json'}
+         }).then(responseBody)
+    }
 }
 
 const Activities = {
@@ -355,6 +366,14 @@ const Payment = {
     getActivityPaymentPage: (count:number,id: string): Promise<IPaymentUserInfoDetails> => requests.get(`/payment/activity/${id}/${count}?activityId=${id}&count=${count}`),
     getUserPaymentDetailedInfo: (details:IPaymentUserInfoDetails): Promise<boolean> => requests.post(`/payment/${details.activityId}/updateUserBeforePayment`,details),
     processPayment: (details:IPaymentCardInfo): Promise<PaymentThreeDResult> => requests.post(`/payment/${details.activityId}/paymentstart`,details),
+    refundPayment: (paymentTransactionId:string, activityId: string, orderId: string):Promise<IRefundPayment> => requests.refundPayment(`/payment/refundPayment`, paymentTransactionId, activityId, orderId)
+
+} 
+
+const Order = {
+    list: (limit?:number, offset?:number): Promise<IOrderListEnvelope> => 
+    requests.get(`/orders?limit=${limit}&offset=${offset}`),
+    details: (id: string) => requests.get(`/orders/${id}`),
 
 } 
 export default {
@@ -367,5 +386,6 @@ export default {
     Cities,
     Documents,
     Zoom,
-    Payment
+    Payment,
+    Order
 }

@@ -36,7 +36,7 @@ const SubMerchantDetails: React.FC = () => {
   } = rootStore.commonStore;
 
   const {getSubMerchantInfo,setsubMerchantFormValues, subMerchantForm,createSubMerchant,editSubMerchant } = rootStore.userStore;
-
+  const { isLoggedIn } = rootStore.userStore;
 
   const [IBANValidMessage, setIBANValidMessage] = useState<string>("");
   const [companyTypeErrorMessage,setCompanyTypeErrorMessage]= useState<string>("");
@@ -105,20 +105,22 @@ const SubMerchantDetails: React.FC = () => {
     // )(),
   })
   useEffect(() => {
+    debugger;
+
+    if(isLoggedIn)
+     {
       setLoading(true);
       getSubMerchantInfo()
         .then(action((res) => {
-          debugger;
             if(res)
             setsubMerchantFormValues(new SubMerchantInfo(res));
         }))
         .finally(() => setLoading(false));
-    
-
+     } 
     return () => {
         setsubMerchantFormValues(new SubMerchantInfo());
     }
-  }, [getSubMerchantInfo]);
+  }, [getSubMerchantInfo,isLoggedIn]);
 
   const handleFinalFormSubmit = (values: ISubMerchantInfo) => {
 

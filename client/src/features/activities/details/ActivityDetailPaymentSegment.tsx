@@ -102,11 +102,11 @@ debugger;
 
                 <div className="activityDetail_payment_calculation">
                     <div className="calculation">
-                         <span style={{textDecoration:"underline",color: "#263a5e"}}>{activity.price!} ₺ * {count} kişi</span>
+                         <span style={{textDecoration:"underline",color: "#263a5e"}}>{activity.price!} TL * {count} kişi</span>
                     </div>
                     <div>
                                 <div>Toplam </div> 
-                                <div className="price">{activity.price! * count} ₺</div>
+                                <div className="price">{activity.price! * count} TL</div>
                      </div>
                 </div>
         
@@ -119,7 +119,7 @@ debugger;
 
                     <div>
                                 <div>Toplam </div> 
-                                <div className="price">{activity.price! * count} ₺</div>
+                                <div className="price">{activity.price! * count} TL</div>
                      </div>
                       <Button  floated='right' onClick ={handlePaySubmit} color='orange' disabled={count === 0}
                        content={activity.price && activity.price > 0 ? 'Ödemeye geç': 'Rezervasyonu Tamamla'}></Button>

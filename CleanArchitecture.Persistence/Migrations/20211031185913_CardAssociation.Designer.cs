@@ -3,14 +3,16 @@ using System;
 using CleanArchitecture.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CleanArchitecture.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211031185913_CardAssociation")]
+    partial class CardAssociation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -501,9 +503,6 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("ConversationId")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("Currency")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<string>("Email")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -521,9 +520,6 @@ namespace CleanArchitecture.Persistence.Migrations
 
                     b.Property<int>("OrderState")
                         .HasColumnType("int");
-
-                    b.Property<string>("PaidPrice")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("PaymentId")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");

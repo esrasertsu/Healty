@@ -276,3 +276,15 @@ export interface PaymentThreeDResult {
     contentHtml : string;
 }
 
+
+export interface IRefundPayment{
+    paymentId : string;
+    paymentTransactionId:string;
+    price: string;
+    currency:string;
+    status:string;
+    errorCode: string;
+    errorMessage: string;
+    errorGroup: string;
+    
+}

@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useState } from 'react'
 import { Route, RouteComponentProps, RouteProps } from 'react-router-dom'
-import { Image, Modal } from 'semantic-ui-react';
+import { Image, Modal, Segment } from 'semantic-ui-react';
 import { history } from '../../index';
 import  LoginForm from '../../features/user/LoginForm';
 import {RootStoreContext} from '../stores/rootStore';
@@ -22,26 +22,29 @@ interface IProps extends RouteProps{
         render={(props) => isLoggedIn ?
              <Component {...props} />
              : 
-                    <Modal
-                    closeIcon
-                    dimmer='blurring'
-                    open={open} 
-                    closeOnEscape={true}
-                    closeOnDimmerClick={false}
-                    onClose={() =>{ 
-                       setOpen(false);
-                       history.push("/login-required");
-                    }}
-                    size='small'
-                    >
-                    <Modal.Content image>
-                    <Image size='medium' src='/assets/placeholder.png' wrapped />
-                    <Modal.Description>
-                         <LoginForm location={history.location.pathname} />
-                    </Modal.Description>
-                    </Modal.Content>
+             <Segment className="login-page-segment">
+               <LoginForm location={history.location.pathname} />
+             </Segment>
+                  //   <Modal
+                  //   closeIcon
+                  //   dimmer='blurring'
+                  //   open={open} 
+                  //   closeOnEscape={true}
+                  //   closeOnDimmerClick={false}
+                  //   onClose={() =>{ 
+                  //      setOpen(false);
+                  //      history.push("/login-required");
+                  //   }}
+                  //   size='small'
+                  //   >
+                  //   <Modal.Content image>
+                  //   <Image size='medium' src='/assets/placeholder.png' wrapped />
+                  //   <Modal.Description>
+                  //        <LoginForm location={history.location.pathname} />
+                  //   </Modal.Description>
+                  //   </Modal.Content>
                     
-                    </Modal>
+                  //   </Modal>
                  
             }
         />

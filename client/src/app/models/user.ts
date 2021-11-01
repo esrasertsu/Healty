@@ -156,7 +156,6 @@ export class SubMerchantInfo implements ISubMerchantInfo {
     constructor(init?: ISubMerchantInfo){
         if(init)
         {   
-debugger;
              
              Object.assign(this, init);
 

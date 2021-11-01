@@ -41,18 +41,30 @@ namespace CleanArchitecture.API.Controllers
     
         [AllowAnonymous]
         [HttpPost("callback/{id}/{count}")]
-        public async Task<RedirectResult> CallbackIyzicoPaymentStart(Guid id, int count,[FromForm] CallbackIyzicoPaymentStart.Command command)
+        public async Task<RedirectResult> CallbackIyzicoPaymentStart(Guid id, int count,string uid,[FromForm] CallbackIyzicoPaymentStart.Command command)
         {
             command.Id = id;
             command.count = count;
+            command.uid = uid;
             var result = await Mediator.Send(command);
 
             if(result.Status =="success")
-
-              return Redirect(Request.Scheme +"://"+Request.Host+"/payment/success?paymentId="+result.PaymentId+"&paymentTransactionId="+result.PaymentTransactionId+"&paidPrice="+result.PaidPrice+"&status="+result.Status+"&count="+count+ "&activityId=" + id+"");
+                return Redirect(Request.Scheme +"://"+Request.Host+"/payment/success?paymentId="+result.PaymentId+"&paymentTransactionId="+result.PaymentTransactionId+"&paidPrice="+result.PaidPrice+"&status="+result.Status+"&count="+count+ "&activityId=" + id+"");
             else
-              return Redirect(Request.Scheme + "://" + Request.Host + "/payment/error?errorCode=" + result.ErrorCode + "&errorMessage=" + result.ErrorMessage +"");
+                return Redirect(Request.Scheme + "://" + Request.Host + "/payment/error?errorCode=" + result.ErrorCode + "&errorMessage=" + result.ErrorMessage +"");
 
+        }
+
+
+        [HttpPost("refundPayment")]
+        public async Task<ActionResult<RefundDto>> RefundPayment([FromForm] RefundPayment.Command command)
+        {
+            if (Request.Headers.ContainsKey("X-Forwarded-For"))
+                command.UserIpAddress = Request.Headers["X-Forwarded-For"];
+            else
+                command.UserIpAddress = HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+
+            return await Mediator.Send(command);
         }
     }
 }

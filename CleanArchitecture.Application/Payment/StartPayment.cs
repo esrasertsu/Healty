@@ -72,11 +72,6 @@ namespace CleanArchitecture.Application.Payment
                     if (atcount > activity.AttendancyLimit)
                         throw new RestException(HttpStatusCode.BadRequest, new { Activity = "Katılımcı sayısı doldu. Lütfen aktivite sahibiyle iletişime geçin." });
                 }
-                //var userSameActivityOrders = user.Orders.Where(x => x.OrderItems.Any(y => y.ActivityId == activity.Id)).ToList();
-                //if (userSameActivityOrders.Any(x=> x.OrderState== EnumOrderState.Unpaid))
-                //{
-                //    throw new Exception("Bu aktivite için ödenmemiş sipariş bulunmakta. Lütfen 'siparişlerim' sayfasını kontrol edin.");
-                //}
 
                 var lastOrder = await _context.Orders.FirstOrDefaultAsync(p => p.OrderNumber == _context.Orders.Max(x => x.OrderNumber));
 
@@ -85,7 +80,6 @@ namespace CleanArchitecture.Application.Payment
 
                 order.OrderNumber = lastOrder != null ? lastOrder.OrderNumber + 1 : 1;
                 order.OrderState = EnumOrderState.Unpaid;
-                order.PaymentType = EnumPaymentTypes.Creditcard;
                 order.OrderDate = DateTime.Now;
                 order.FirstName = user.Name;
                 order.LastName = user.Surname;
@@ -94,7 +88,9 @@ namespace CleanArchitecture.Application.Payment
                 order.UserId = user.Id;
                 order.ConversationId = order.OrderNumber.ToString();
                 order.User = user;
-                order.UserId = user.Id;
+                order.BuyerName = request.CardHolderName;
+                var cardLength = request.CardNumber.Length;
+                order.CardLastFourDigit = request.CardNumber.Substring(cardLength - 4, 4);
 
                 var orderItem = new OrderItem()
                 {
@@ -124,43 +120,51 @@ namespace CleanArchitecture.Application.Payment
 
                     if (orderCreatedSuccess)
                     {
-                        activity.AttendanceCount = activity.AttendanceCount + request.TicketCount;
+                       // activity.AttendanceCount = activity.AttendanceCount + request.TicketCount; BUNU EN SON YAP
 
-                        var subMerchantKey = activity.UserActivities.Where(x => x.IsHost == true).Select(y => y.AppUser.SubMerchantKey).SingleOrDefault().ToString();
+                        var subMerchantKey = activity.UserActivities.Where(x => x.IsHost == true).Select(y => y.AppUser.SubMerchantKey).SingleOrDefault();
                         var subMerchant = activity.UserActivities.Where(x => x.IsHost == true).Select(y => y.AppUser.SubMerchantDetails).SingleOrDefault();
 
-                        var IyzicoMerchant = _paymentAccessor.GetSubMerchantFromIyzico(subMerchant.Id.ToString());
 
-                        if (IyzicoMerchant.Status == false || IyzicoMerchant.SubMerchantKey == "" || IyzicoMerchant.SubMerchantKey == null)
+                        if (subMerchantKey == "" || subMerchantKey == null)
                         {
-                            if(subMerchantKey != "" || subMerchantKey != null)
-                            {
-                                throw new Exception("Problem getting merchant from Iyzico. Please contact System Manager");
-                            }
-
                             //kendim alıyorum
                         }
                         else
                         {
-                            if(subMerchantKey != IyzicoMerchant.SubMerchantKey)
-                                throw new Exception("Problem with Iyzico merchantKey and system key. Please contact System Manager");
+                            var IyzicoMerchant = _paymentAccessor.GetSubMerchantFromIyzico(subMerchant.Id.ToString());
 
-                            var callbackUrl = $"{request.Origin}/api/payment/callback/"+activity.Id+"/"+request.TicketCount+ "?id=" + activity.Id + "&count=" + request.TicketCount+"";
-                            var paymentStartedRes = _paymentAccessor.PaymentProcessWithIyzico(activity, user, request.TicketCount, request.UserIpAddress,
-                            order.ConversationId, request.CardHolderName, request.CardNumber, request.CVC, request.ExpireMonth, request.ExpireYear, subMerchantKey, callbackUrl);
+                            if (IyzicoMerchant.Status == false || IyzicoMerchant.SubMerchantKey == "" || IyzicoMerchant.SubMerchantKey == null)
+                            {
 
-                            if (paymentStartedRes != "false")
+                                throw new Exception("Problem getting merchant from Iyzico. Please contact System Manager");
+
+
+                                //kendim alıyorum
+                            }
+                            else
                             {
-                                return new PaymentThreeDResult() {
-                                   Status= true,
-                                   ContentHtml = paymentStartedRes
-                                };
-                            }else
-                            {
-                                throw new Exception("Problem with data sending to Iyzico");
+                                if (subMerchantKey != IyzicoMerchant.SubMerchantKey)
+                                    throw new Exception("Problem with Iyzico merchantKey and system key. Please contact System Manager");
+                              
+                                var callbackUrl = $"{request.Origin}/api/payment/callback/" + activity.Id + "/" + request.TicketCount + "?id=" + activity.Id + "&count=" + request.TicketCount + "&uId=" + user.Id + "";
+                                var paymentStartedRes = _paymentAccessor.PaymentProcessWithIyzico(activity, user, request.TicketCount, request.UserIpAddress,
+                                order.ConversationId, request.CardHolderName, request.CardNumber, request.CVC, request.ExpireMonth, request.ExpireYear, subMerchantKey, callbackUrl);
+
+                                if (paymentStartedRes != "false")
+                                {
+                                    return new PaymentThreeDResult()
+                                    {
+                                        Status = true,
+                                        ContentHtml = paymentStartedRes
+                                    };
+                                }
+                                else
+                                {
+                                    throw new Exception("Problem with data sending to Iyzico");
+                                }
                             }
                         }
-                        
 
                     }
                     else
@@ -173,13 +177,10 @@ namespace CleanArchitecture.Application.Payment
 
                     throw new Exception(ex.Message);
                 }
-               
 
-                //order yarat statüsü notpaid olan
-                //ödemeyi başlat
-                //sonucu ekrana dön ve order statüsü güncelle
-                //eğer sonuç başarılı ise kullanıcı attend et
 
+                _context.Orders.Remove(order);
+                await _context.SaveChangesAsync();
                 throw new Exception("Problem getting 3D page");
 
             }

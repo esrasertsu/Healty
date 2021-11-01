@@ -158,7 +158,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                          <p className="baseline-pricing__from">Kişi başı</p> 
                         <div className="baseline-pricing__container">
                         <p className="baseline-pricing__value">
-                           {activity.price}&nbsp;₺
+                           {activity.price}&nbsp;TL
                          </p>
                          </div> 
                          <p className="baseline-pricing__category">

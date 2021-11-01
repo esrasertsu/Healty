@@ -357,7 +357,7 @@ debugger;
                   component="input"
                   type="number"
                   value={activityForm.price}
-                  placeholder="0.00₺"
+                  placeholder="0.00TL"
                   style={{marginBottom:15}}
                 />
                  <OnChange name="price">

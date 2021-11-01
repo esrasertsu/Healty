@@ -60,11 +60,8 @@ const validate = combineValidators({
     const[showInfo, setShowInfo] = useState(false);
     const[showPaymentPage, setShowPaymentPage] = useState(false);
     const[showUserPaymentInfoPage, setShowUserPaymentInfoPage] = useState(true);
-    const[phoneError, setphoneError] = useState(false);
 
-    const {status} = queryString.parse(location.search);
 
-    const sanitizer = dompurify.sanitize;
 
     useEffect(() => {
     if (match.params.id) {
@@ -108,7 +105,6 @@ if(loadingActivity) return <LoadingComponent content='Loading...'/>
 
   const handlePaymentFormSubmit = (values: IPaymentCardInfo) => {
 
-debugger;
     setLoading(true);
     processPayment(values).then((res) => {
   if(res)
@@ -118,26 +114,12 @@ debugger;
       setLoading(false);
       toast.error("3D ödeme sayfası başlatılamıyor. Formu gözden geçirip tekrar deneyin. Sorun devam ederse site yöneticisiyle ilteşime geçin.")
     }else {
-   //   history.push(`/payment/threeDpage?html=${res.contentHtml}`)
 
       setLoading(false);
 
       var newDoc = document.open("text/html", "replace");
       newDoc.write(res.contentHtml);
       newDoc.close();
-    //   if(modal.open) closeModal();
-    //   openModal("Giriş Yap", <>
-    //   <Modal.Description className="loginreg">
-    //   { 
-      
-    //   <iframe style={{width:"100%", border:"none", height:"800px"}}  srcDoc={res.contentHtml}  /> }
-    //   </Modal.Description>
-    //   </>,false,
-    //  "","",false) 
-      // setShowPaymentPage(true);
-      // setStepNo(1);
-      // setStep0Completed(true);
-      // setShowUserPaymentInfoPage(false);
     }
   }
   setLoading(false);
@@ -179,7 +161,7 @@ debugger;
       </Step.Content>
     </Step>
 
-    <Step  active={stepNo === 1} disabled={showPaymentPage === false}>
+    <Step active={stepNo === 1} disabled={showPaymentPage === false}>
       <Icon name='payment' />
       <Step.Content>
         <Step.Title>Ödeme</Step.Title>
@@ -324,13 +306,13 @@ debugger;
           <>
           <div className="activity_paymentpage_price_containerdiv">
             <div className="activity_paymentpage_price_header" style={{marginBottom:"20px"}}>Ödenecek Tutar</div>
-            <div className="activity_paymentpage_price_items"><span>Aktivite fiyatı</span> <span>{activity.price} ₺</span> </div>
+            <div className="activity_paymentpage_price_items"><span>Aktivite fiyatı</span> <span>{activity.price} TL</span> </div>
             <div className="activity_paymentpage_price_items"><span>Kişi sayısı</span> <span>{match.params.count}</span> </div>
-            <div className="activity_paymentpage_price_items"><span>İndirim</span> <span>0 ₺</span> </div>
+            <div className="activity_paymentpage_price_items"><span>İndirim</span> <span>0 TL</span> </div>
           
             <div className="activityDetail_payment_footer activity_paymentpage_price_footer">
                 <div style={{fontSize:"18px"}}>Toplam </div> 
-                <div className="price">{activity.price! * Number(match.params.count)} ₺</div>
+                <div className="price">{activity.price! * Number(match.params.count)} TL</div>
             </div>
             <div>
             {/* <Button size="large" positive fluid  floated="right" style={{marginTop:"20px"}}

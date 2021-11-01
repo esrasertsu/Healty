@@ -53,7 +53,6 @@ export const RegisterForm:React.FC<IProps> = ({location}) =>{
             <Header
               as="h2"
               content="Yeni Üye"
-              color="teal"
               textAlign="center"
             />
             <Field name="username" placeholder="*Kullanıcı Adı" component={TextInput}/>

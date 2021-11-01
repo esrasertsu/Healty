@@ -6,6 +6,7 @@ import { history } from '../..';
 import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
 import { ActivityFormValues, ActivityOnlineJoinInfo, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, PaymentUserInfoDetails } from '../models/activity';
+import { IOrder } from '../models/order';
 import { RootStore } from './rootStore';
 
 const LIMIT = 6;
@@ -29,9 +30,13 @@ export default class ActivityStore {
     }
 
     @observable activityRegistery = new Map();
+    @observable orderRegistery = new Map<string,IOrder>();
     @observable activity: IActivity | null = null;
+    @observable order: IOrder | null = null;
     @observable loadingInitial = false;
     @observable loadingActivity = false;
+    @observable loadingOrders = false;
+    @observable loadingOrder = false;
     @observable levelList: ILevel[] = [];
     @observable loadingLevels = false;
     @observable generatingToken = false;
@@ -48,6 +53,9 @@ export default class ActivityStore {
     @observable.ref hubConnection : HubConnection | null = null;
     @observable activityCount = 0;
     @observable page = 0;
+    @observable orderCount = 0;
+    @observable orderPage = 0;
+
     @observable predicate = new Map();
     @observable activityForm: IActivityFormValues = new ActivityFormValues();
     @observable activityOnlineJoinInfo: IActivityOnlineJoinInfo = new ActivityOnlineJoinInfo();
@@ -66,6 +74,9 @@ export default class ActivityStore {
 
     @observable isOnline = false;
     @observable loadingPaymentPage = false;
+    @observable loadingRefundPaymentPage = false;
+
+
     @action setActiveIndex = (index:number) =>{
         this.activeIndex = index;
     }
@@ -89,12 +100,18 @@ export default class ActivityStore {
     @action setIsOnline = (bool : boolean) =>{
         this.isOnline = bool;
     }
-  
+    @action setOrderPage = (index:number) =>{
+        this.orderPage = index;
+    }
     /* ---- */
 
     
     @computed get totalPages(){
         return Math.ceil(this.activityCount / LIMIT);
+    }
+
+    @computed get totalOrderPages(){
+        return Math.ceil(this.orderCount / 5);
     }
 
     @action setPage = (page:number) =>{
@@ -128,12 +145,16 @@ export default class ActivityStore {
     @action deleteActivityRegisteryItem = (id:string) => {
         this.activityRegistery.delete(id);
     }
-
+    @action deleteOrderRegisteryItem = (id:string) => {
+        this.orderRegistery.delete(id);
+    }
     @action clearActivityRegistery = () => {
         this.activityRegistery.clear();
     }
 
-    
+    @action clearOrderRegistery = () => {
+        this.orderRegistery.clear();
+    }
     @action setLoadingInitial = (lp : boolean) =>{
         this.loadingInitial = lp;
     }
@@ -245,6 +266,10 @@ export default class ActivityStore {
          return this.groupActivitiesByDate(Array.from(this.activityRegistery.values()));
     }
 
+    @computed get orderList(){
+          return Array.from(this.orderRegistery.values());
+     }
+
     groupActivitiesByDate(activities: IActivity[]){
         const sortedActivities = activities.sort(
             (a,b) => a.date.getTime() -b.date.getTime()
@@ -280,6 +305,27 @@ export default class ActivityStore {
             }
     };
 
+
+    @action getOrders = async () => {
+        this.loadingOrders = true;
+        try {
+            const ordersEnvelope = await agent.Order.list(5, this.orderPage ? this.orderPage * 5 : 0);
+            const {orderList, orderCount } = ordersEnvelope;
+            runInAction('Loading activities',() => {
+                orderList.forEach((order) =>{
+                    this.orderRegistery.set(order.id, order);
+                });
+                this.orderCount = orderCount;
+                this.loadingOrders = false;
+            })
+            } catch (error) {
+                console.log(error);
+                runInAction('Loading orders error',() => {
+                  this.loadingOrders = false
+                });
+            }
+    }
+
     @action loadActivity = async (id:string) => {
         let activity = this.getActivity(id);
 
@@ -296,8 +342,6 @@ export default class ActivityStore {
                     setActivityProps(activity,this.rootStore.userStore.user!)
                     this.rootStore.categoryStore.loadAllCategoryList();
                     this.activity = activity;
-                    this.activityRegistery.delete(activity.id);
-                    this.activityRegistery.set(activity.id, activity);
                     this.loadingActivity = false;
                 })
                 return activity;
@@ -310,12 +354,44 @@ export default class ActivityStore {
             }
     };
 
+    
+    @action getOrderDetails = async (id:string) => {
+        let order = this.getOrder(id);
+
+        if(order){
+            this.order = order;
+            return toJS(order);
+        } 
+        else{
+            this.loadingOrder = true;
+            try {
+                let order = await agent.Order.details(id);
+                runInAction('Getting activity',() => {
+                    this.order = order;
+                    this.loadingOrder = false;
+                })
+                return order;
+                } catch (error) {
+                    runInAction('Getting activity error',() => {
+                      this.loadingOrder = false
+                    });
+                    console.log(error);
+                }
+            }
+    };
+
+    
+
     @action clearActivity = () => {
         this.activity = null;
     }
 
     getActivity = (id:string) => {
         return this.activityRegistery.get(id);
+    }
+
+    getOrder = (id:string) => {
+        return this.orderRegistery.get(id);
     }
 
     @action createActivity = async (activity: IActivityFormValues) =>{
@@ -346,7 +422,6 @@ export default class ActivityStore {
     };
 
     @action editActivity = async (activity: IActivityFormValues) =>{
-        debugger;
         this.submitting = true;
         try {
             var activityReturned = await agent.Activities.update(activity);
@@ -370,7 +445,6 @@ export default class ActivityStore {
     }
 
     @action deleteActivity = async (event: SyntheticEvent<HTMLButtonElement>, id: string) => {
-        debugger;
         this.submitting = true;
         this.target = event.currentTarget.name;
         try {
@@ -558,6 +632,38 @@ export default class ActivityStore {
                 this.loadingPaymentPage = false;
             });
             toast.error('Problem Processing payment');
+            console.log(error);
+        }
+    };
+
+    @action refundPayment = async (paymentTransactionId:string, activityId: string, orderId: string) =>{
+        this.loadingRefundPaymentPage = true;
+        try {
+            const res = await agent.Payment.refundPayment(paymentTransactionId, activityId, orderId);
+            runInAction('Processing refund payment', async() => {
+                this.loadingRefundPaymentPage = false;
+                if(res.status === "success")
+                {
+                    let activity = await this.loadActivity(activityId);                    
+                    runInAction('Processing refund payment', () => {
+                        activity.isGoing = false;
+                        this.deleteActivityRegisteryItem(activity.id);
+                        this.activityRegistery.set(activity.id, res);
+                        this.deleteOrderRegisteryItem(orderId);
+                        this.order!.orderStatus = res.status;
+                        this.orderRegistery.set(orderId, this.order!);
+                    });
+
+                
+                }
+            });
+            return res;
+
+        } catch (error) {
+            runInAction('Processing refund payment error', () => {
+                this.loadingRefundPaymentPage = false;
+            });
+            toast.error('Problem Processing refund payment');
             console.log(error);
         }
     };

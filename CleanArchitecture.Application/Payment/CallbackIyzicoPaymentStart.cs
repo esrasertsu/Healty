@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -26,6 +27,7 @@ namespace CleanArchitecture.Application.Payment
             public string mdStatus { get; set; }
             public Guid Id { get; set; }
             public int count { get; set; }
+            public string uid { get; set; }
         }
 
 
@@ -61,21 +63,58 @@ namespace CleanArchitecture.Application.Payment
                     {
                         order.OrderState = Domain.EnumOrderState.Completed;
                         order.PaymentId = iyzicoPaymentResult.PaymentId;
+                        order.PaymentType = iyzicoPaymentResult.CardType;
+                        order.CardFamily = iyzicoPaymentResult.CardFamily;
+                        order.CardAssociation = iyzicoPaymentResult.CardAssociation;
+                        order.PaidPrice = iyzicoPaymentResult.PaidPrice;
+                        order.Currency = iyzicoPaymentResult.Currency;
 
                         var item = order.OrderItems.FirstOrDefault(x => x.ActivityId == new Guid(iyzicoPaymentResult.ItemId));
                         item.PaymentTransactionId = iyzicoPaymentResult.PaymentTransactionId;
+
+                        var user = await _context.Users.SingleOrDefaultAsync(x =>
+                          x.Id == request.uid);
+                        
+                        if (user != null)
+                        {
+                            var activity = await _context.Activities.FindAsync(request.Id);
+
+                            if (activity == null)
+                                throw new RestException(HttpStatusCode.NotFound,
+                                    new { Activity = "Couldn't find activity" });
+
+                            var attendance = await _context.UserActivities.SingleOrDefaultAsync(x =>
+                               x.ActivityId == request.Id && x.AppUserId == user.Id);
+
+                            if (attendance != null)
+                                throw new RestException(HttpStatusCode.BadRequest, new { Attendance = "Already attending this activity" });
+
+                            attendance = new UserActivity
+                            {
+                                Activity = activity,
+                                AppUser = user,
+                                IsHost = false,
+                                DateJoined = DateTime.Now,
+                                ShowName = true
+                            };
+
+                            _context.UserActivities.Add(attendance);
+                        }
+
                         var orderStateChanged = await _context.SaveChangesAsync() > 0;
 
                         if (orderStateChanged)
                             return iyzicoPaymentResult;
-                        else throw new RestException(HttpStatusCode.BadRequest, new { OrderState = "Order state cannot changed" });
+                        else throw new RestException(HttpStatusCode.BadRequest, new { OrderState = "Order state and activity cannot changed" });
 
+                    }
+                    else
+                    {
+                        order.OrderState = Domain.EnumOrderState.Failed;
+                        await _context.SaveChangesAsync();
                     }
 
                     return iyzicoPaymentResult;
-
-
-
 
                 }
             }

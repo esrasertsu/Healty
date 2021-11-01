@@ -18,6 +18,10 @@ namespace CleanArchitecture.Application.Payment
         public int? Installment { get; set; }
         public string Price { get; set; }
         public string Status { get; set; }
+        public string CardType { get; set; }
+        public string CardFamily { get; set; }
+        public string BinNumber { get; set; }
+        public string CardAssociation { get; set; }
 
     }
 }

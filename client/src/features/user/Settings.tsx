@@ -1,21 +1,26 @@
 import React, { useState } from 'react'
-import { Container, Grid, Menu } from 'semantic-ui-react'
+import { Container, Grid, Header, Menu } from 'semantic-ui-react'
 import ActivityCreationPage from '../activities/form/ActivityCreationPage'
+import OrderList from '../orders/OrderList'
 import SubMerchantDetails from '../subMerchant/SubMerchantDetails'
+import { useMediaQuery } from 'react-responsive';
 
 export const Settings = () => {
 
-    const [activeItem, setActiveItem] = useState("Şirket Bilgilerim")
+    const [activeItem, setActiveItem] = useState("Siparişlerim")
     const handleMenuItemClick = (e:any,data:any) =>{
         setActiveItem(data.name);
     }
+    const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
+
 
     return (
 
-        <Grid style={{marginTop:"40px", width:"100%"}} >
+        <Grid stackable style={{ margin:"0 20px 0 0",width:"100%"}} >
             <Grid.Row>
-                <Grid.Column width={3}>
-                    <Container>
+                <Grid.Column width={3}  style={!isMobile ? {paddingTop:"30px"}: {}}>
+                    <div>
+                 <Header content="Ayarlar"/>
                    <Menu pointing vertical className="settingsVerticalMenu">
                     <Menu.Item
                     className="settingsMenuItem"
@@ -38,14 +43,23 @@ export const Settings = () => {
                     active={activeItem === 'Mesajlar'}
                     onClick={handleMenuItemClick}
                     />
+                    <Menu.Item
+                    key="3"
+                    className="settingsMenuItem"
+                    name='Siparişlerim'
+                    active={activeItem === 'Siparişlerim'}
+                    onClick={handleMenuItemClick}
+                    />
                 </Menu>
-                    </Container>
+                </div>
                 </Grid.Column>
-                <Grid.Column width={13}>
+                <Grid.Column style={{paddingRight:0}} width={13}>
                     {
                         activeItem === "Şirket Bilgilerim" ?
                         <SubMerchantDetails />
-: <ActivityCreationPage />
+                        : activeItem === "Siparişlerim" ? 
+                        <OrderList settings={true}/>
+                        :<ActivityCreationPage />
 
                     }
                 </Grid.Column>

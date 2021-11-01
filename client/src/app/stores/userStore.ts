@@ -393,6 +393,12 @@ export default class UserStore {
                 this.setInitialMessageNull();
                 this.rootStore.messageStore.setChatRoomId(null);
                 this.rootStore.messageStore.setChatRoomsEmpty();
+                this.rootStore.activityStore.setPage(0);
+                this.rootStore.activityStore.clearActivityRegistery();
+                this.rootStore.profileStore.setPage(0);
+                this.rootStore.profileStore.clearProfileRegistery();
+                this.rootStore.activityStore.setOrderPage(0);
+                this.rootStore.activityStore.clearOrderRegistery();
                 this.clearCurrentUser();
                 this.stopRefreshTokenTimer();
                 this.rootStore.commonStore.setToken(null);

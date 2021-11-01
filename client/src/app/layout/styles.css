@@ -12,6 +12,9 @@
   font-weight: normal;
 }
 
+
+
+
 body {
   background-color: #f8f7f791  !important;
   font-family: AssistantRegular, Arial, Helvetica, sans-serif !important;
@@ -24,9 +27,9 @@ html, body {
 body {
   position: relative
 }
-.pageContainer.ui.container{
-  min-height: 100vh;
-}
+ .pageContainer.ui.container{
+  padding-bottom: 40px !important;
+} 
 
 .popup{
   font-family: AssistantRegular, Arial, Helvetica, sans-serif  !important;
@@ -570,15 +573,41 @@ a.ui.card:hover {
 .activity_listItem_mobile{
   width: 60%;
 }
+.order_listItem_mobile{
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.order_listItem_mobile .header{
+  margin-bottom: 10px;
+
+}
 .activity_listItem_extraContent_mobile{
   width: 40%;
   display: flex !important;
   justify-content: space-between;
   flex-direction: column;
 }
+
+.order_listItem_extraContent_mobile{
+  width: 100%;
+  display: flex !important;
+  flex-direction: column;
+  margin-bottom: 10px;
+
+}
+
+
+
+
 .activityListItem_content_div{
   width: 100%;
   display: flex;
+  padding: 15px;
+  color: rgb(38, 58, 94) !important;
+}
+.orderListItem_content_div{
+  width: 100%;
   padding: 15px;
   color: rgb(38, 58, 94) !important;
 }
@@ -645,7 +674,90 @@ a.ui.card:hover {
 .pageContainer.home{
   text-align: center;
 }
+.orderItemDetails_grid .column {
+    display: flex !important;
+    align-items: center !important;
+}
 
+.orderItemDetails_grid .mainHeader, .myOrdersHeader{
+  font-size: 16px !important;
+  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  color: rgb(38, 58, 94) !important;
+}
+.orderItemDetails_grid .column_header{
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  flex-direction: column;
+}
+
+.orderItemDetails_grid .column_header .headerItem{
+  color: #666666;
+  font-size: 14px;
+  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+}
+
+
+.orderItemDetails_grid_detail{
+   font-size: 13px;
+   color:#7a7a7a;
+
+}
+
+.orderItem_BuyerDetails_Header{
+  display: flex !important;
+  width: 100% !important;
+  height: 42px !important;
+  border-radius: .28571429rem .28571429rem 0 0 !important;
+  border-bottom: solid 1px #e2e2e2 !important;
+  background-color: #fafafa !important;
+  align-items: center !important;
+  box-sizing: border-box;
+  justify-content: space-between !important;
+  padding: 0 20px !important;
+  color: #666666;
+  
+}
+
+.orderItem_BuyerDetails_Container,.orderItem_PaymentDetails_Container{
+  width: 100% !important;
+  border-radius:  0 0  .28571429rem .28571429rem !important;
+  font-size: 13.5px !important;
+  font-family: AssistantRegular, Arial, Helvetica, sans-serif !important;
+  padding: 20px !important
+}
+.orderItem_PaymentDetails_Container .item{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1px 0;
+  color: rgba(0,0,0,.7);
+  border-bottom: solid 1px #e2e2e2;
+  line-height: 30px;
+}
+
+.orderItem_PaymentDetails_Container .last.item{
+ 
+  border-bottom: none;
+}
+
+.orderItem_PaymentDetails_Container .last.item .content{
+ 
+  color: #f27a1a;
+}
+
+.orderItem_PaymentDetails_Container .item .content{
+  color: #333333;
+  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+}
+
+
+.orderItem_BuyerDetails_Header .item{
+  font-weight: 500;
+  font-size: 15px;
+  color: #666666;
+  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+}
 
 
 @media (min-width: 1200px){
@@ -653,7 +765,6 @@ a.ui.card:hover {
     width: 1350px;
     margin: auto!important;
     max-width: 1400px;
-   
   }
 
  
@@ -864,6 +975,14 @@ max-width: 95%;
   margin: 0 auto;
 }
 
+.orderItemDetails_grid .column {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.ui.button.orderListButton{
+ font-size: 13px !important;
+}
 }
 
 @media (min-width: 768px) and (max-width: 1024px){
@@ -1115,6 +1234,9 @@ max-width: 80%;
     width:60%;
     margin:10px 10px 6px 15px !important
   }
+  .order_listItem{
+    width:35%;
+  }
   .content.activity_listItem_extraContent{
     display: flex !important;
     justify-content: space-between;
@@ -1122,12 +1244,43 @@ max-width: 80%;
     margin: 10px !important;
     width: 50%;
   }
+
+ .content.order_listItem_extraContent{
+    display: flex !important;
+    justify-content: space-between;
+    flex-direction: column;
+    margin: 10px !important;
+    width: 22%;
+  }
+
   .activityListItem_content_div{
     width: 100%;
     display: flex;
     color: rgb(38, 58, 94) !important;
 
   }
+  .orderListItem_content_div{
+    width: 100%;
+    display: flex;
+    color: rgb(38, 58, 94) !important;
+    align-items: center;
+    padding: 0 10px;
+  }
+
+  .orderItem_review{
+    color:#f27a1a !important;
+    cursor: pointer;
+    font-size: 14px;
+ }
+  
+ 
+ .orderItem_paymentSegment{
+   background: none  !important;
+   box-shadow: none !important;
+   border: none !important;
+   padding: 0 !important;
+   margin-top: 20px !important;
+ }
 
   .coverImage {
     height: 300px !important;
@@ -1147,6 +1300,24 @@ max-width: 80%;
   
 }
 
+.orderItem_paymentContainer{
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  align-items: center !important;
+}
+
+.orderItem_paymentContainer_GridRow{
+ padding-right: 20px !important;
+ padding-left: 20px !important;
+ display: flex !important;
+ flex-direction: row !important;
+ justify-content: space-between !important;
+ align-items: center !important;
+}
+
+.orderItem_paymentContainer_GridRow a{
+  color: #7a7a7a;
+}
 
 
 .profileFilterButtons{
@@ -1283,6 +1454,15 @@ button, input, optgroup, select, textarea {
 
 }
 
+.login-page-segment{
+    margin-top: 30px !important;
+    width: 100%;
+}
+
+.order_listItem_extraContent_mobile .button{
+  width: 100%;
+}
+
 
 }
 @media (min-width: 501px){
@@ -1301,6 +1481,14 @@ button, input, optgroup, select, textarea {
     justify-content: space-between;
 
 }
+
+.login-page-segment{
+  margin: 0 auto !important;
+  margin-top: 30px !important;
+  width: 415px;
+
+}
+
 }
 
 .masthead-button_Container{
@@ -1619,6 +1807,11 @@ button, input, optgroup, select, textarea {
     font-size: 14px;
     color: #fff;
  }
+
+ .pageContainer.ui.container {
+ 
+  min-height: 90vh;
+}
 }
 
 /*end map page styles*/

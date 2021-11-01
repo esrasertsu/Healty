@@ -132,7 +132,10 @@ namespace Infrastructure.Payment
                     ItemId = threedsPayment.PaymentItems != null ? threedsPayment.PaymentItems.Select(x => x.ItemId).FirstOrDefault() : "",
                     PaidPrice = threedsPayment.PaidPrice ?? "",
                     PaymentId = threedsPayment.PaymentId ?? "",
-                    Price = threedsPayment.Price ?? ""
+                    Price = threedsPayment.Price ?? "",
+                    CardFamily = threedsPayment.CardFamily ?? "",
+                    CardType = threedsPayment.CardType ?? "",
+                    CardAssociation = threedsPayment.CardAssociation ?? ""
                 };
             }
 
@@ -317,6 +320,41 @@ namespace Infrastructure.Payment
 
             throw new RestException(HttpStatusCode.BadRequest, new { MerchantType = "Iyzico submerchant type cant be found" });
 
+        }
+
+
+        public RefundDto IyzicoRefund(string paymentTransactionId, string price, string ip)
+        {
+            var conversationId = new Guid();
+            CreateRefundRequest request = new CreateRefundRequest();
+            request.ConversationId = conversationId.ToString();
+            request.Locale = Locale.TR.ToString();
+            request.PaymentTransactionId = paymentTransactionId;
+            request.Price = price; 
+            request.Ip = ip;
+            request.Currency = Currency.TRY.ToString();
+
+            Refund refund = Refund.Create(request, _options);
+
+            if (refund.ConversationId == conversationId.ToString() && refund.Status == Status.SUCCESS.ToString())
+            {
+                return new RefundDto()
+                {
+                    Status = refund.Status,
+                    PaymentId = refund.PaymentId,
+                    PaymentTransactionId = refund.PaymentTransactionId,
+                    Price = refund.Price,
+                    Currency = refund.Currency,
+                };
+            }
+            else 
+                return new RefundDto()
+            {
+                ErrorCode = refund.ErrorCode,
+                ErrorMessage = refund.ErrorMessage,
+                ErrorGroup = refund.ErrorGroup,
+                Status = refund.Status
+            };
         }
     }
 }

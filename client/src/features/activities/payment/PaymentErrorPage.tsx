@@ -26,9 +26,8 @@ const [errorsCode, setErrorCode] = useState("");
 
             <Segment.Inline>
                 <div className="center">
-                    <p>Satın alma gerçekleşemedi.</p>
-                    <p>{errorsMessage}</p>
-                    <p>{errorCode}</p>
+                    <p>Üzgünüz, satın alma işlemi gerçekleşemedi.</p>
+                    <p>{errorCode} - {errorsMessage}</p>
                     <p>Lütfen kartınızı kontrol edin ya da bankanızla iletişime geçin.</p>
                 </div>
             </Segment.Inline>

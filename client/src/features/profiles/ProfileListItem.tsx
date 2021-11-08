@@ -58,15 +58,15 @@ interface IProps {
   const handleCardClick = (e:any) => {
     debugger;
     e.stopPropagation() ;
-        if(!isLoggedIn)
-    {    var str = `/profile/${profile.userName}`;
-         handleLoginClick(e,str);
-    }
-    else
-    {
+    //     if(!isLoggedIn)
+    // {    var str = `/profile/${profile.userName}`;
+    //      handleLoginClick(e,str);
+    // }
+    // else
+    // {
       setLoadingProfile(true);
       history.push(`/profile/${profile.userName}`)
-    }
+   // }
       
 }
   return (

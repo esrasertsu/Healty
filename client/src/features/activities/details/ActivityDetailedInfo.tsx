@@ -56,12 +56,12 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                   !showMore ?
                   <>
                  <span className="activityDetailLabel">Açıklama: </span> 
-                  <span key={activity.id+"_desc"} className="homepage_subheader" dangerouslySetInnerHTML={{__html:sanitizer(activity.description.slice(0, 2000))}} />
+                  <span key={activity.id+"_desc"} dangerouslySetInnerHTML={{__html:sanitizer(activity.description.slice(0, 2000))}} />
                   {activity.description.length > 2000 && <div className="readMore" onClick={() => setShowMore(true)}>Read more</div>} 
                   </> :
                   <>
                  <span className="activityDetailLabel">Açıklama </span> 
-                <span key={activity.id+"_desc"} className="homepage_subheader" dangerouslySetInnerHTML={{__html:sanitizer(activity.description)}} />
+                <span key={activity.id+"_desc"} dangerouslySetInnerHTML={{__html:sanitizer(activity.description)}} />
                 </>
                 }
                  </Grid.Column>

@@ -10,10 +10,10 @@ import cx from 'classnames';
 
 interface IProps extends FieldRenderProps<string, HTMLElement>, FormFieldProps {}
 
-const WYSIWYGEditor:React.FC<IProps> = ({ input,  meta:{ touched, error} }) => {
+const WYSIWYGEditor:React.FC<IProps> = ({ input,labelName,  meta:{ touched, error} }) => {
     const [editorState, setEditorState] = useState(EditorState.createEmpty())
-
     useEffect(() => {
+     
         if (toHtml(editorState) === input.value) return //added
     
         setEditorState(
@@ -26,141 +26,51 @@ const WYSIWYGEditor:React.FC<IProps> = ({ input,  meta:{ touched, error} }) => {
           ),
         )
       }, [input.value])
-
-
-    //   function onEditorStateChange(es) {
-    //     setEditorState(es)
-    //     const html = toHtml(es) //added
-    //     if (value !== html) {
-    //       onChange({ target: { name: 'text', value: html } })
-    //     }
-    //   }
     
       function toHtml(es: EditorState) {
         return draftToHtml(convertToRaw(es.getCurrentContent())) // added
       }
 
     const [focused, setFocused] = useState(false);
-    // const decorator = new CompositeDecorator([
-    //     {
-    //       strategy: findLinkEntities,
-    //       component: Link,
-    //     },
-    //     {
-    //       strategy: findImageEntities,
-    //       component: Image,
-    //     },
-    //   ]);
-
-    // const blocksFromHTML = htmlToDraft(input.value);
-    // const state = ContentState.createFromBlockArray(
-    //     blocksFromHTML.contentBlocks
-    //   );
-     
-    //const [contentState, setContentState] = useState(convertToRaw(state));
-
-  //  const [editorState, setEditorState] = useState(EditorState.createWithContent(state,decorator));
  
-   // let editorState = EditorState.createWithContent(state,decorator);
 
     const onEditorStateChange = (meditorState:EditorState) => {
-        debugger;
         setEditorState(meditorState);
         const html = toHtml(meditorState) //added
         if (input.value !== html) {
             input.onChange({ target: { name: 'text', value: html } })
+            if(html && html.length < 50)
+            {
+              document.getElementById(labelName) && document.getElementById(labelName)!.classList.add("errorLabel")
+            }else{
+              document.getElementById(labelName) && document.getElementById(labelName)!.classList.remove("errorLabel")
+          }
         }
-       //if(editorState.getCurrentContent() !== meditorState.getCurrentContent())
-       //{
-      //  editorState = meditorState;
-       // return input.onChange(draftToHtml(convertToRaw(meditorState.getCurrentContent())))
-      // }
-    
+
     } 
     const onFocus = () => setFocused(true);
     const onBlur = () => setFocused(false);
 
-    // const onContentStateChange = (contentState:RawDraftContentState) => {
-    //     debugger;
-    //     setContentState(contentState);
-    // } 
+ 
           return (
-              <Form.Field error={touched && !!error}>
+              <Form.Field error={!!error}>
                 <div className="editor">
                                 <Editor 
                                 editorState={editorState} 
-                               // contentState={contentState}
                                 wrapperClassName="html-editor-wrapper"
                                 editorClassName={cx("html-editor",{focused})}
                                 onEditorStateChange={onEditorStateChange}
-                               // onContentStateChange={onContentStateChange}
                                onBlur={onBlur}
                                onFocus={onFocus}
                                 toolbar={{
                                     options:  ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'image', 'remove', 'history']
                                 }}
                                 />
-                                {/* {
-                                    console.log('editorState => ', editorState)
-                                }  */}
                             </div>
+                            <label style={{color:"red"}}>{error}</label>
               </Form.Field>
            
         )
-  
-   
 }
-
-
-
-// function findLinkEntities(contentBlock:any, callback:any, contentState:any) {
-//     contentBlock.findEntityRanges(
-//       (character:any) => {
-//         const entityKey = character.getEntity();
-//         return (
-//           entityKey !== null &&
-//           contentState.getEntity(entityKey).getType() === 'LINK'
-//         );
-//       },
-//       callback
-//     );
-//   }
-
-  // const Link = (props:any) => {
-  //   const {url} = props.contentState.getEntity(props.entityKey).getData();
-  //   return (
-  //     <a href={url}>
-  //       {props.children}
-  //     </a>
-  //   );
-  // };
-
-  // function findImageEntities(contentBlock:any, callback:any, contentState:any) {
-  //   contentBlock.findEntityRanges(
-  //     (character:any) => {
-  //       const entityKey = character.getEntity();
-  //       return (
-  //         entityKey !== null &&
-  //         contentState.getEntity(entityKey).getType() === 'IMAGE'
-  //       );
-  //     },
-  //     callback
-  //   );
-  // }
-
-  // const Image = (props:any) => {
-  //   const {
-  //     height,
-  //     src,
-  //     width,
-  //   } = props.contentState.getEntity(props.entityKey).getData();
-
-  //   return (
-  //     <img src={src} height={height} width={width} />
-  //   );
-  // };
-
- 
-
 
 export default WYSIWYGEditor

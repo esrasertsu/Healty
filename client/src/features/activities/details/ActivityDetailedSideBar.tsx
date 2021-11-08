@@ -1,14 +1,21 @@
 import { observer } from 'mobx-react-lite'
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { Segment, List, Item, Label,Image, Header } from 'semantic-ui-react'
+import { Segment, List, Item, Label,Image, Header, Divider } from 'semantic-ui-react'
 import { IAttendee } from '../../../app/models/activity'
 import { Scrollbars } from 'react-custom-scrollbars';
+import { RootStoreContext } from '../../../app/stores/rootStore'
 
 interface IProps{
   attendees: IAttendee[];
+  date: Date;
 }
- const ActivityDetailedSideBar: React.FC<IProps> = ({attendees}) => {
+ const ActivityDetailedSideBar: React.FC<IProps> = ({attendees,date}) => {
+
+  const rootStore = useContext(RootStoreContext);
+
+  const { isLoggedIn } = rootStore.userStore;
+
     return (
           <Fragment>
             <Segment
@@ -19,7 +26,8 @@ interface IProps{
               className="segmentHeader"
 
             >
-             <Header>{attendees && attendees.length} Kişi Katılıyor </Header>
+             <Header>{attendees && attendees.length} Kişi  
+            { (new Date(date).getTime() > new Date().getTime()) ? " Katılıyor" : " Katıldı" } </Header>
 
             </Segment>
             <Segment attached style={{  padding:"1em 0"}}>
@@ -36,7 +44,8 @@ interface IProps{
             autoHideDuration={200}
              >
             <List relaxed divided style={{margin: "0px 29px 14px 14px"}}>
-                {attendees.map((attendee) => (
+                {isLoggedIn ?
+                attendees.map((attendee) => (
                   <Item key={attendee.userName} style={{ position: 'relative' }}>
                  {attendee.isHost &&
                   <Label
@@ -44,7 +53,7 @@ interface IProps{
                     color='orange'
                     ribbon='right'
                   >
-                    Host
+                    Düzenleyen
                   </Label> 
                   }
                   <Image className="activityAttendees_Image" src={attendee.image  || '/assets/user.png'} />
@@ -57,7 +66,27 @@ interface IProps{
                     }
                   </Item.Content>
                 </Item>
-                ))}
+                )) :
+                <>
+                <Item key={attendees.filter(x => x.isHost === true)[0].userName} style={{ position: 'relative' }}>
+                 <Label
+                   style={{ position: 'absolute' }}
+                   color='orange'
+                   ribbon='right'
+                 >
+                   Düzenleyen
+                 </Label> 
+                 <Image className="activityAttendees_Image" src={attendees.filter(x => x.isHost === true)[0].image  || '/assets/user.png'} />
+                 <Item.Content verticalAlign='middle'>
+                   <Item.Header as='h3'>
+                     <Link to={`/profile/${attendees.filter(x => x.isHost === true)[0].userName}`}>{attendees.filter(x => x.isHost === true)[0].displayName}</Link>
+                   </Item.Header>
+                 </Item.Content>
+               </Item>
+                <Divider />
+                <div style={{color:"#263a5e", textAlign:"center"}}>Tüm aktivite katılımcılarını görebilmek için giriş yapmalısın.</div>
+                </>
+              }
               </List>
             </Scrollbars> 
             </Segment>

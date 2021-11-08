@@ -65,6 +65,13 @@ body {
   background: #edecec;
 }
 
+.ui.form .field :disabled {
+  pointer-events: none;
+  opacity: 1.45;
+  background: #f7f7f7
+  ;
+}
+
 .companyFinalForm .equal.hiddenField{
   width: 50% !important;
 }
@@ -361,8 +368,7 @@ p.baseline-pricing__value{
     width: 100% !important;
 }
 .activityDetails_GridSegment .segment.attached{
-  border: none !important;
-  font-size: 16px;
+  font-size: 14px;
 }
 .activityDetailLabel{
   color:rgb(38, 58, 94)
@@ -467,6 +473,11 @@ font-size: 17px;
 
 label{
   color:#1a2b49
+}
+.ui.form .field>label{
+  color:#1a2b49;
+  font-size: 1rem;
+  font-weight: 500;
 }
 .activityDetails_Countdown_Segment{
   background-color: #f64f00  !important;
@@ -714,9 +725,12 @@ a.ui.card:hover {
   align-items: center !important;
   box-sizing: border-box;
   justify-content: space-between !important;
-  padding: 0 20px !important;
   color: #666666;
   
+}
+
+.orderItem_review{
+  color: #f2711c;
 }
 
 .orderItem_BuyerDetails_Container,.orderItem_PaymentDetails_Container{
@@ -1214,6 +1228,9 @@ max-width: 80%;
 }
 
 @media (min-width:768px){
+  .orderItem_BuyerDetails_Header{
+    padding: 0 20px !important;
+  }
 
   .scrollHeight:not(.active){
     overflow-y: scroll;
@@ -1706,8 +1723,8 @@ button, input, optgroup, select, textarea {
   opacity: 1 !important
 }
 .sendMessageButton:hover {
-  background-color: rgb(5, 138, 138) !important;
-  border: 0.0625rem solid rgb(5, 138, 138) !important
+  background-color: #f2711c !important;
+  border: 0.0625rem solid #f2711c !important
 }
 .followingButtonOut_redClassName{
   border: 0.0625rem solid rgb(218, 35, 35) !important;
@@ -2167,7 +2184,7 @@ button, input, optgroup, select, textarea {
   width: 45%;
 }
 
-.errorLabel{
-  color:red;
+.errorLabel,.customErrorLabel{
+  color:red !important;
   width: 100% !important;
 }

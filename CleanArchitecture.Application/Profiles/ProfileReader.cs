@@ -114,26 +114,32 @@ namespace CleanArchitecture.Application.Profiles
                 InteractionCount = user.ChatRooms.Where(x => x.ChatRoom.StarterId != user.Id).Count(),
                 VideoUrl = user.VideoUrl
         };
-
-            if (currentUser.Followings.Any(x => x.TargetId == user.Id))
+            if (currentUser != null)
             {
-                profile.IsFollowed = true;
-            }
+                if (currentUser.Followings.Any(x => x.TargetId == user.Id))
+                {
+                    profile.IsFollowed = true;
+                }
+                var queryable = _context.UserChatRooms.AsQueryable();
 
-            var queryable = _context.UserChatRooms.AsQueryable();
+                var chatRooms = queryable.Where(x => x.AppUserId == currentUser.Id);
 
-            var chatRooms = queryable.Where(x => x.AppUserId == currentUser.Id);
-
-           
-
-                var existingChatRoomWithReceiver =  queryable
+                var existingChatRoomWithReceiver = queryable
                      .Where(x => chatRooms.Any(y => y.ChatRoomId == x.ChatRoomId) && x.AppUserId == user.Id);
 
-                if (existingChatRoomWithReceiver.Count() >0 )
+                if (existingChatRoomWithReceiver.Count() > 0)
                 {
                     profile.HasConversation = true;
                 }
 
+            }
+            else
+            {
+                profile.IsFollowed = false;
+                profile.HasConversation = false;
+            }
+
+           
             return profile;
         }
 

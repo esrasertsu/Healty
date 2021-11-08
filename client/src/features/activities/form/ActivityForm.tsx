@@ -1,5 +1,5 @@
 ﻿import React, { useContext, useEffect, useState } from "react";
-import { Segment, Form, Button, Grid, Label, Header, Image, Icon } from "semantic-ui-react";
+import { Segment, Form, Button, Grid, Label, Header, Image, Icon, Popup } from "semantic-ui-react";
 import {
   ActivityFormValues
 } from "../../../app/models/activity";
@@ -24,15 +24,7 @@ import PhotoWidgetCropper from "../../../app/common/photoUpload/PhotoWidgetCropp
 import { action } from "mobx";
 import { toast } from "react-toastify";
 
-// const validate = combineValidators({
-//   title: isRequired({message: 'Aktivite başlığı zorunlu alandır.'}),
-//   categoryIds: isRequired('Category'),
-//   description: composeValidators(
-//     hasLengthGreaterThan(50)({message: 'Açıklama en az 50 karakter uzunluğunda olmalıdır.'})
-//   )(),
-//   date: isRequired('Date'),
-//   time: isRequired('Time')
-// })
+
 interface DetailParams {
   id: string;
 }
@@ -56,6 +48,25 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
   const {
     cities
   } = rootStore.commonStore;
+
+
+
+  const customCityRequired = activityForm.online ? 
+  isRequired({message:""}):
+  isRequired({message: 'Şehir zorunlu alandır.'}) 
+
+const validate = combineValidators({
+  title: isRequired({message: 'Aktivite başlığı zorunlu alandır.'}),
+  categoryIds: isRequired({message: 'Kategori zorunlu alandır.'}),
+  description: composeValidators(
+    hasLengthGreaterThan(50)({message: 'Açıklama en az 50 karakter uzunluğunda olmalıdır.'})
+  )(),
+  date: isRequired({message: 'Tarih zorunlu alandır.'}),
+  time:isRequired({message: 'Saat zorunlu alandır.'}),
+  price:isRequired('price'),
+  cityId: customCityRequired
+})
+
 
   const {allCategoriesOptionList} = rootStore.categoryStore;
   let categoryOptions: ICategory[] = [];
@@ -83,7 +94,10 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
         .then(action((activity) => {
           setActivityForm(new ActivityFormValues(activity!));
         }))
-        .finally(() => setLoading(false));
+        .finally(() =>
+         setLoading(false));
+    }else{
+        setImageDeleted(true);
     }
     loadLevels();
 
@@ -144,14 +158,21 @@ const handleTimeChange = (time:any) =>{
     const dateAndTime = combineDateAndTime(values.date, values.time);
     const { date, time, ...activity } = values;
     activity.date = dateAndTime;
-debugger;
+
     if (!activity.id) {
-          let newActivity = {
-            ...activity,
-            photo: image,
-            id: uuid(),
-          };
-          createActivity(newActivity);
+         debugger;
+            if(image == null)
+            {
+              setImageDeleted(true);
+            }else{
+              let newActivity = {
+                ...activity,
+                photo: image,
+                id: uuid(),
+              };
+              createActivity(newActivity);
+            }
+          //
         } else {
           debugger;
           if(!imageDeleted)
@@ -183,12 +204,12 @@ debugger;
       <Grid.Column>
         <Segment clearing>
           <FinalForm
-            //validate = {validate}
+            validate = {validate}
             initialValues={activityForm}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid }) => (
               <Form onSubmit={handleSubmit} loading={loading}>
-                <label id="activityName">Aktivite Başlığı*</label>
+                <label id="activityName" className={activityForm.title === "" ? "customErrorLabel" :""}>Aktivite Başlığı*</label>
                 <Field
                   labelName="activityName"
                   name="title"
@@ -202,7 +223,7 @@ debugger;
                       setActivityForm({...activityForm,title: value});
                 }}
                  </OnChange>
-                 <label className={image === null ? "errorLabel" : ""}>Aktivite Liste Fotoğrafı*</label>
+                 <label className={image === null && imageDeleted ? "errorLabel" : ""}>Aktivite Liste Fotoğrafı*</label>
                  {
                    activityForm.mainImage && !imageChange ?
                    <Segment>
@@ -237,9 +258,22 @@ debugger;
                   </Grid.Column>
                </Grid>
                )
-         }  
-                  <label>Açıklama*</label>
+         }    
+                  <label  className={activityForm.description === "" ? "customErrorLabel" :""} id="activityDesc">Açıklama* 
+                  <Popup 
+                    hoverable
+                    on={['hover', 'click']}
+                    positionFixed 
+                    size='large' 
+                    trigger={<Icon style={{cursor:"pointer", marginLeft:"5px"}} 
+                    name="info circle" />}>
+                      <Popup.Content>
+                        <div style={{fontSize:"14px"}}>Aktivitenin detaylı açıklaması. Min 50 karakter uzunluğunda olmalıdır.</div>
+                      </Popup.Content>
+                    </Popup>
+                    </label>
                   <Field
+                  labelName="activityDesc"
                   name="description"
                   component={WYSIWYGEditor}
                   value={activityForm.description}
@@ -249,43 +283,99 @@ debugger;
                   setActivityForm({...activityForm,description: value});
                 }}
                  </OnChange>
-                <label>Kategori*</label>
+                <label id="activityCat">Kategori*
+                <Popup 
+                    hoverable
+                    on={['hover', 'click']}
+                    positionFixed 
+                    size='large' 
+                    trigger={<Icon style={{cursor:"pointer", marginLeft:"5px"}} 
+                    name="info circle" />}>
+                      <Popup.Content>
+                        <div style={{fontSize:"14px"}}>Aktivitenin kategori bilgisi. Birden fazla seçilebilir.</div>
+                      </Popup.Content>
+                    </Popup>
+                    </label>
                  <Field
+                  labelName="activityCat"
                   name="categoryIds"
                   placeholder="Kategori"
                   value={activityForm.categoryIds}
                   component={DropdownMultiple}
+                  emptyError={activityForm.categoryIds}
                   options = {categoryOptions}
                   onChange={(e: any,data:[])=>
                     {
                       debugger;
-                      handleCategoryChanged(e,data)}}
+                      handleCategoryChanged(e,data)}
+                    }
                 /> 
-                 <label>Branşlar*</label>        
+                 <label id="activitySubCat">Branşlar*
+                 <Popup 
+                    hoverable
+                    on={['hover', 'click']}
+                    positionFixed 
+                    size='large' 
+                    trigger={<Icon style={{cursor:"pointer", marginLeft:"5px"}} 
+                    name="info circle" />}>
+                      <Popup.Content>
+                        <div style={{fontSize:"14px"}}>Aktivitenin alt kategori/branş bilgisi. Kategori seçiminden sonra gelmektedir. Birden fazla seçilebilir.</div>
+                      </Popup.Content>
+                    </Popup>
+                    </label>        
                  <Field
+                  labelName="activitySubCat"
                   name="subCategoryIds"
                   placeholder="Alt Kategori"
                   value={activityForm.subCategoryIds}
                   component={DropdownMultiple}
+                  emptyError={activityForm.subCategoryIds}
                   options={subCategoryOptions}
                   onChange={(e: any,data:[])=>
                     {
-                      debugger;
                       handleSubCategoryChanged(e,data)}}
                 />  
-                 <label>Seviye*</label>
+                 <label id="actvityLevel">Seviye*
+                 <Popup 
+                    hoverable
+                    on={['hover', 'click']}
+                    positionFixed 
+                    size='large' 
+                    trigger={<Icon style={{cursor:"pointer", marginLeft:"5px"}} 
+                    name="info circle" />}>
+                      <Popup.Content>
+                        <div style={{fontSize:"14px"}}>Aktivitenin seviye bilgisi. Birden fazla seçilebilir.</div>
+                      </Popup.Content>
+                    </Popup>
+                    </label>
                 <Field
                 clearable
+                labelName="actvityLevel"
                   name="levelIds"
                   placeholder="Seviye"
                   value={activityForm.levelIds}
                   component={DropdownMultiple}
+                  emptyError={activityForm.levelIds}
                   options={levelList}
                   onChange={(e: any,data:any)=>
                     {
                       handleLevelChanged(e,data)}}
                 /> 
-              <label>Katılımcı Sınırı</label>
+                <>
+              <label>Katılımcı Sınırı 
+                <Popup 
+                hoverable
+                on={['hover', 'click']}
+                positionFixed 
+                size='large' 
+                trigger={<Icon style={{cursor:"pointer", marginLeft:"5px"}} 
+                name="info circle" />}>
+                  <Popup.Content>
+                    <div style={{fontSize:"14px"}}>Etkinliğe katılabilecek max kişi sayısıdır. Boş bırakıldığı takdirde sınırsız katılımcı olarak değerlendirilmektedir.</div>
+                  </Popup.Content>
+                </Popup>
+              </label>
+              </>
              <Field 
                   name="attendancyLimit"
                   type="number"
@@ -312,7 +402,19 @@ debugger;
                       format={v =>v === true}
                       parse={v => (v ? true : false) }
                     />&nbsp;&nbsp;
-                   <span>Online katılma açık</span> 
+                   <span>Online katılma açık
+                   <Popup 
+                    hoverable
+                    on={['hover', 'click']}
+                    positionFixed 
+                    size='large' 
+                    trigger={<Icon style={{cursor:"pointer", marginLeft:"5px"}} 
+                    name="info circle" />}>
+                      <Popup.Content>
+                        <div style={{fontSize:"14px"}}>Aktivitenin online olması veya online katılıma açık olması durumunda işaretlenmelidir.</div>
+                      </Popup.Content>
+                    </Popup>
+                </span> 
                    <OnChange name="online">
                 {(value, previous) => {
                     if(value !== activityForm.online)
@@ -326,6 +428,7 @@ debugger;
               
                 <Form.Group widths="equal">
                   <Field
+                    label="Tarih*"
                     name="date"
                     date={true}
                     placeholder="Tarih"
@@ -338,6 +441,7 @@ debugger;
                     onChange={handleDateChange}
                   />
                   <Field
+                    label="Saat*"
                     name="time"
                     time={true}
                     placeholder="Saat"
@@ -351,13 +455,26 @@ debugger;
 
                   />
                 </Form.Group>
-                <label>Fiyat(TL)*</label>
+                <label id="priceLabel" className={activityForm.price === undefined ? "customErrorLabel fieldLabel" :"fieldLabel"} >Fiyat(TL)* 
+                <Popup 
+                    hoverable
+                    on={['hover', 'click']}
+                    positionFixed 
+                    size='large' 
+                    trigger={<Icon style={{cursor:"pointer", marginLeft:"5px"}} 
+                    name="info circle" />}>
+                      <Popup.Content>
+                        <div style={{fontSize:"14px"}}>Aktivitenin herşey dahil ücreti(KDV, site komisyonu vs). Ücretsiz aktiviteler için 0 (sıfır) giriniz.</div>
+                      </Popup.Content>
+                    </Popup>
+                    </label>
                 <Field
                   name="price"
-                  component="input"
-                  type="number"
+                  component={NumberInput}
                   value={activityForm.price}
-                  placeholder="0.00TL"
+                  placeholder="500TL"
+                  labelName="priceLabel"
+                  type="number"
                   style={{marginBottom:15}}
                 />
                  <OnChange name="price">
@@ -369,18 +486,44 @@ debugger;
                     }
                 }}
                 </OnChange>
-                <label>Şehir</label>
+                <label id="cityLabel">Şehir
+                <Popup 
+                    hoverable
+                    on={['hover', 'click']}
+                    positionFixed 
+                    size='large' 
+                    trigger={<Icon style={{cursor:"pointer", marginLeft:"5px"}} 
+                    name="info circle" />}>
+                      <Popup.Content>
+                        <div style={{fontSize:"14px"}}>Aktivitenin gerçekleşeceği şehir bilgisi. Online aktivite değilse girilmesi zorunludur.</div>
+                      </Popup.Content>
+                    </Popup>
+                </label>
                 <Field 
+                  labelName="cityLabel"
                   name="cityId"
                   placeholder="City"
                   component={DropdownInput}
                   options={cities}
                   value={activityForm.cityId}
+                  emptyError={activityForm.cityId}
                   clearable={true}
                   onChange={(e: any,data: any)=>handleCityChanged(e,data)}
                   style={{marginBottom:15}}
                 />
-                <label>Mekan</label>
+                <label>Mekan
+                <Popup 
+                    hoverable
+                    on={['hover', 'click']}
+                    positionFixed 
+                    size='large' 
+                    trigger={<Icon style={{cursor:"pointer", marginLeft:"5px"}} 
+                    name="info circle" />}>
+                      <Popup.Content>
+                        <div style={{fontSize:"14px"}}>Aktivitenin gerçekleşeceği lokasyon/mekan bilgisi. Online aktivite değilse girilmesi zorunludur.</div>
+                      </Popup.Content>
+                    </Popup>
+                </label>
                 <Field
                   name="venue"
                   placeholder="Örn: Mac Fit Balçova"
@@ -394,7 +537,19 @@ debugger;
                         setActivityForm({...activityForm,venue: value});
                 }}
                 </OnChange>
-                <label>Adres</label>
+                <label>Adres
+                <Popup 
+                    hoverable
+                    on={['hover', 'click']}
+                    positionFixed 
+                    size='large' 
+                    trigger={<Icon style={{cursor:"pointer", marginLeft:"5px"}} 
+                    name="info circle" />}>
+                      <Popup.Content>
+                        <div style={{fontSize:"14px"}}>Aktivitenin gerçekleşeceği adres bilgisi. Kullanıcıların lokasyonu bulabilmesi için detaylandırılmalıdır. Online aktivite değilse girilmesi beklenmektedir.</div>
+                      </Popup.Content>
+                    </Popup>
+                </label>
                  <Field
                   name="address"
                   placeholder="Açık adres"
@@ -410,7 +565,7 @@ debugger;
                 </OnChange>
                 <Button
                   loading={submitting}
-                  disabled={loading }
+                  disabled={loading}
                   floated="right"
                   positive
                   type="submit"

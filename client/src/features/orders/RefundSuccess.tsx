@@ -29,6 +29,7 @@ const RefundSuccess : React.FC<IProps> = ({RefundSuccess}) =>{
          <Segment.Inline>
                 <div className="center">
                     <p>Rezervasyon iptal işleminiz başarıyla gerçekleşti.</p>
+                    <p>İadenin karta yansıması bankadan bankaya değişmekle beraber birkaç günü bulabilir.</p>
                     <p>İade edilecek tutar : {RefundSuccess.price}TL</p>
                 </div> 
                 </Segment.Inline>
@@ -41,7 +42,8 @@ const RefundSuccess : React.FC<IProps> = ({RefundSuccess}) =>{
             <Segment.Inline>
                 <div className="center">
                 <p>Rezervasyon iptal işleminiz başarısız.</p>
-                <p>{RefundSuccess.errorMessage}</p>
+                <p>Lütfen bizimle iletişime geçin.</p>
+                <p>Hata Mesajı: {RefundSuccess.errorMessage}</p>
             </div>
             </Segment.Inline>
             </>

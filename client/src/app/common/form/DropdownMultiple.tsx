@@ -6,8 +6,7 @@ interface IProps extends FieldRenderProps<string[], HTMLElement>, FormFieldProps
 
  const DropdownMultiple:React.FC<IProps> = ({input,onChange,loading=false, width, options,labelName,emptyError, placeholder, meta:{ touched, error}}) => {
   
-    
-    if(emptyError===null ||emptyError===undefined || emptyError.length === 0)
+    if((emptyError===null ||emptyError===undefined || emptyError.length === 0))
     {
         document.getElementById(labelName) && document.getElementById(labelName)!.classList.add("errorLabel")
     }else{
@@ -21,6 +20,8 @@ interface IProps extends FieldRenderProps<string[], HTMLElement>, FormFieldProps
           value={input.value || []}
           deburr
              onChange={(e, data) => onChange(e,data.value)}
+             onBlur={(event:any) => input.onBlur(event)}
+
             fluid
             multiple
             search
@@ -32,10 +33,11 @@ interface IProps extends FieldRenderProps<string[], HTMLElement>, FormFieldProps
             wrapSelection={false}
             clearable={true}
             closeOnChange
+
          />
-        {/* {touched && error && (
-            <Label basic color='red'>{error}</Label>
-        )} */}
+        {touched && error && (
+                <label style={{color:"red"}}>{error}</label>
+            )} 
     </Form.Field>
     )
 }

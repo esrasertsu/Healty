@@ -23,7 +23,8 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
+        // [Authorize]
+        [AllowAnonymous]
         public async Task<ActionResult<ActivityDto>> Details(Guid id)
         {
             return await Mediator.Send(new Details.Query { Id = id});
@@ -51,12 +52,14 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPost("{id}/attend")]
+        [Authorize]
         public async Task<ActionResult<Unit>> Attend(Guid id, bool showName)
         {
             return await Mediator.Send(new Attend.Command {Id = id, ShowName = showName});
         }
 
         [HttpDelete("{id}/attend")]
+        [Authorize]
         public async Task<ActionResult<Unit>> Unattend(Guid id)
         {
             return await Mediator.Send(new Unattend.Command { Id = id });

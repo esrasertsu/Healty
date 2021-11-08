@@ -115,8 +115,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
              loadCategories();
              setAppLoaded();
            }));
-            if(location.pathname != "/")
-              handleLoginClick();
+           
           }
           }
           )
@@ -182,13 +181,13 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
              <Container className="pageContainer">
                <Switch>
                  <Route exact path="/activities" component={ActivityDashboard} />
-                 <PrivateRoute path="/activities/:id" component={ActivityDetails} />
+                 <Route path="/activities/:id" component={ActivityDetails} />
                  <Route exact path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
                  <Route exact path="/blog" component={BlogList} />
                  <Route exact path="/blog/:id" component={BlogPage} />
-                 <Route key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
-                 <Route key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
-                 <PrivateRoute path="/profile/:username" component={ProfilePage}/>
+                 <PrivateRoute key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
+                 <PrivateRoute key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
+                 <Route path="/profile/:username" component={ProfilePage}/>
                  <Route path="/profiles" component={ProfileDashboard}/>
                  <Route path="/messages" component={MessagesPage}/>
                  <Route path="/login" component={LoginForm}/>
@@ -236,13 +235,13 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
               <Container className="pageContainer">
                 <Switch>
                 <Route exact path="/activities" component={ActivityDashboard} />
-                 <PrivateRoute path="/activities/:id" component={ActivityDetails} />
+                 <Route path="/activities/:id" component={ActivityDetails} />
                  <Route exact path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
                  <Route exact path="/blog" component={BlogList} />
                  <Route exact path="/blog/:id" component={BlogPage} />
-                 <Route key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
-                 <Route key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
-                 <PrivateRoute path="/profile/:username" component={ProfilePage}/>
+                 <PrivateRoute key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
+                 <PrivateRoute key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
+                 <Route path="/profile/:username" component={ProfilePage}/>
                  <Route path="/profiles" component={ProfileDashboard}/>
                  <Route path="/messages" component={MessagesPage}/>
                  <Route path="/login" component={LoginForm}/>
@@ -251,12 +250,11 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <Route path="/user/registerSuccess" component={RegisterSuccess}/>
                  <Route path="/user/verifyEmail" component={VerifyEmail}/>
                  <Route path="/user/resetPassword" component={ResetPassword}/>
-                 <Route path="/settings" component={Settings}/>
+                 <PrivateRoute path="/settings" component={Settings}/>
                  <Route exact path="/payment/success" component={PaymentSuccessPage} />
                  <Route exact path="/payment/error" component={PaymentErrorPage} />
                  <Route exact path="/orders" component={OrderList}/>
                  <Route exact path="/orders/:id" component={OrderItemDetail}/>
-
                  <Route exact path="/admin" component={Admin}/>
                   <Route component={NotFound}/>
                 </Switch>

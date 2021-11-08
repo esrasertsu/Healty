@@ -19,11 +19,13 @@ export default class ProfileStore{
                 if(this.profile!.role=== "Trainer" && (activeIndex ===3 || activeIndex===4))
                 {
                     const predicate = activeIndex ===4 ? 'followers' : 'following';
-                    this.loadFollowings(predicate);
+                    if(rootStore.userStore.isLoggedIn)
+                     this.loadFollowings(predicate);
                 }if(this.profile!.role!== "Trainer" && (activeIndex ===2 || activeIndex===3))
                 {
                     const predicate = activeIndex ===3 ? 'followers' : 'following';
-                    this.loadFollowings(predicate);
+                    if(rootStore.userStore.isLoggedIn)
+                        this.loadFollowings(predicate);
                 }else{
                     this.followings = [];
                 }

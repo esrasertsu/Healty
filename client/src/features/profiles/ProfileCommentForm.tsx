@@ -16,6 +16,7 @@ interface IProps{
   const {
     sendTrainerComment
   } = rootStore.profileStore;
+  const {isLoggedIn} = rootStore.userStore;
 
     const [rating, setRating] = useState(0);
 
@@ -23,12 +24,15 @@ interface IProps{
     const handleFinalFormSubmit = async (values: IProfileComment) => {
        const { ...comment } = values;
   
-    
-            let newComment = {
-              ...comment,
-              StarCount: rating,
-            };
-           await sendTrainerComment(newComment);
+    if(isLoggedIn)
+    {
+      let newComment = {
+        ...comment,
+        StarCount: rating,
+      };
+     await sendTrainerComment(newComment);
+    }
+        
     };
 
     return (
@@ -85,6 +89,7 @@ interface IProps{
             icon="send"
             positive
             loading={submitting}
+            disabled={!isLoggedIn}
           />
         </Form>
         

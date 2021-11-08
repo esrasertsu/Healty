@@ -72,7 +72,7 @@ namespace CleanArchitecture.Application.Payment
                 }
 
               
-                var refundRes = _paymentAccessor.IyzicoRefund(orderItem.PaymentTransactionId, order.PaidPrice, request.UserIpAddress);
+                var refundRes = _paymentAccessor.IyzicoRefund(orderItem.PaymentTransactionId, (orderItem.Price * orderItem.Quantity).ToString().Split(',')[0] , request.UserIpAddress);
 
                 if(refundRes.Status == "success")
                 {

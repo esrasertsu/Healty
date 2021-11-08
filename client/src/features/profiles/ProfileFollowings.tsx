@@ -1,13 +1,15 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext } from 'react';
-import { Tab, Grid, Card } from 'semantic-ui-react';
+import { Tab, Grid, Card, Header } from 'semantic-ui-react';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileCard from './ProfileCard';
 import { useMediaQuery } from 'react-responsive'
 
 const ProfileFollowings = () => {
   const rootStore = useContext(RootStoreContext);
-  const {  followings, loading } = rootStore.profileStore;
+  const {  followings, loading,activeTab } = rootStore.profileStore;
+  const {  isLoggedIn } = rootStore.userStore;
+
   const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
@@ -15,21 +17,25 @@ const ProfileFollowings = () => {
     <Tab.Pane style={{ borderRadius: "12px"}} loading={loading} >
       <Grid>
         <Grid.Column width={16}>
-          {/* <Header
+          { <Header
             floated='left'
             icon='user'
             content={
               activeTab === 4
-                ? `People following ${profile!.displayName}`
-                : `People ${profile!.displayName} is following`
+                ? `Takipçileri`
+                : `Takip Ettikleri`
             }
-          /> */}
+          /> }
         </Grid.Column>
         <Grid.Column width={16}>
           <Card.Group itemsPerRow={isMobile ? 2 : isTablet ? 3 :6}>
-              {followings.map((profile) => (
-                   <ProfileCard key={profile.userName} profile={profile} />
-              ))}
+            {isLoggedIn?
+            followings.map((profile) => (
+              <ProfileCard key={profile.userName} profile={profile} />
+            )):
+            <div style={{marginLeft:"10px", marginBottom:"10px"}}>Uzmanın takip ettiklerini ya da takipçilerini görebilmek için online olmalısın.</div>
+            }
+             
           </Card.Group>
         </Grid.Column>
       </Grid>

@@ -223,7 +223,7 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
 
                         >
                     <div className="header_text">Ödeme Bilgileri</div>
-                    <div className="header_text">{order.paymentType} {order.cardFamily} ****{order.cardLastFourDigit}</div>
+                    <div className="header_text">{order.cardAssociation}/{order.cardFamily} ****{order.cardLastFourDigit}</div>
                     </Segment>
                     <Segment className="orderItem_PaymentDetails_Container" attached >
                     <div className="item">

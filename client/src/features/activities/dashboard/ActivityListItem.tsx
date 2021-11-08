@@ -50,14 +50,14 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
 
     const handleCardClick = (e:any) => {
         debugger;
-        if(!isLoggedIn)
-        {    var str = `/activities/${activity.id}`;
-            handleLoginClick(e,str); 
-        }
-        else
-        {
+        // if(!isLoggedIn)
+        // {    var str = `/activities/${activity.id}`;
+        //     handleLoginClick(e,str); 
+        // }
+        // else
+        // {
             history.push(`/activities/${activity.id}`);
-        }
+        //}
           
     }
 
@@ -90,7 +90,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                          <Popup
                          header={"Bu etkinliğe gidiyorsun"}
                          trigger={
-                            <Icon name="user" style={{position:"absolute", top:10, right:10, color:"#00b5ad",height:"2em"}} />
+                            <Icon name="check circle" style={{position:"absolute", top:10, right:10, color:"#f2711c",height:"2em"}} />
                         }
                        />
                         }

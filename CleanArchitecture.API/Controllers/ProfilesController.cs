@@ -15,6 +15,7 @@ namespace CleanArchitecture.API.Controllers
     public class ProfilesController : BaseController
     {
         [HttpGet("{username}/details")]
+        [AllowAnonymous]
         public async Task<ActionResult<Profile>> Get(string username)
         {
             return await Mediator.Send(new Details.Query { UserName = username });
@@ -49,6 +50,7 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet("{username}/comments")]
+        [AllowAnonymous]
         public async Task<ActionResult<ListComments.UserProfileCommentsEnvelope>> GetUserComments(string username, int? limit, int? offset)
         {
             return await Mediator.Send(new ListComments.Query { Username = username , Limit= limit, Offset= offset});
@@ -81,6 +83,7 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet("{username}/referencepics")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<ReferencePic>>> GetUserReferencePics(string username)
         {
             return await Mediator.Send(new ListReferencePics.Query { Username = username });

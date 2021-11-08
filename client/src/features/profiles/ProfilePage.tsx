@@ -29,7 +29,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
     const rootStore = useContext(RootStoreContext);
     const {setProfileNull,loadingProfile, loadProfile, loadingBlogs, loadingComments, loadingReferencePics, profile, follow,
          unfollow, isCurrentUser, loading,setActiveTab, setProfileForm} = rootStore.profileStore;
-
+    const {isLoggedIn } = rootStore.userStore;
     useEffect(() => {
         if(profile)
        { 
@@ -111,6 +111,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
                 fluid
                 className={profile.isFollowing ? 'followingButtonOut_redClassName' : 'followingButtonOut_greenClassName'}
                 content={profile.isFollowing ? 'Takipten Çık' : 'Takip Et'}
+                disabled={!isLoggedIn}
                 onClick={profile.isFollowing ? () => unfollow(profile.userName): () => follow(profile.userName)}
               />
             </Reveal.Content>

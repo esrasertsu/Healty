@@ -34,7 +34,7 @@ import { formatDistance } from 'date-fns';
                style={{ border: 'none' }}
                className="segmentHeader"
              >
-               <Header>Chat about this event</Header>
+               <Header>Grup Mesajları</Header>
              </Segment>
              <Segment attached>
                <Comment.Group>

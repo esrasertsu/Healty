@@ -11,7 +11,7 @@ import { action } from 'mobx';
 
 
 
-const Completionist = () => <span>You are good to go!</span>;
+const Completionist = () => <span>Aktivite başladı!</span>;
 
 
  const ActivityCountDown:React.FC<{activity:IActivity}> = ({activity}) =>  {
@@ -55,7 +55,7 @@ const Completionist = () => <span>You are good to go!</span>;
   };
 
     return (<>
-        {
+        { (new Date(activity.date).getTime() > new Date().getTime()) ?
            <>
             <Segment className="activityDetails_Countdown_Segment">
                 <div className="activityDetail_Countdown_Header">
@@ -63,13 +63,29 @@ const Completionist = () => <span>You are good to go!</span>;
                     {/* <Icon loading name='hourglass half' />    */}
                 </div>
                 <div className="activityDetail_Countdown">
-                <Countdown date={new Date(activity.date)} renderer={renderer}  />
-
+                   <Countdown date={new Date(activity.date)} renderer={renderer}  />
                 </div>
                 
             </Segment>
-            
+           
             </>
+            :
+            <Fragment>
+             <Segment
+               textAlign='center'
+               attached='top'
+               inverted
+               style={{ border: 'none' }}
+               className="segmentHeader"
+             >
+               <Header>Değerlendirme</Header>
+             </Segment>
+             <Segment attached>
+             <div className="activityDetail_zoom_info">
+                Aktivite hakkındaki görüşlerin bizler ve gelecekte katılmak isteyen diğer kullanıcılar için çok değerli. 
+            </div>
+            </Segment>
+            </Fragment>
           
         }
         </>

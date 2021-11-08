@@ -103,10 +103,10 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                       activity.attendancyLimit && (activity.attendancyLimit !==0 && (activity.attendancyLimit>0) && (activity.attendancyLimit - activity.attendees.length) <4) ?
                       <span style={{color:"red"}}>Son {activity.attendancyLimit - activity.attendees.length} katılımcı!</span> : ""
                       }
-                      {
+                      {/* {
                       (activity.attendancyLimit ===null ||activity.attendancyLimit ===0 || (activity.attendancyLimit && (activity.attendancyLimit > activity.attendees.length))) &&
                       <Button  floated='right' loading={loading} onClick={attendActivity} color='teal'>Aktiviteye Katıl</Button>
-                      }   
+                      }    */}
                       
                       </>
                     )}

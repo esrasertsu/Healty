@@ -36,7 +36,7 @@ const ActivityDashboard: React.FC = () => {
     loadActivities().then(() => setLoadingNext(false))
   }
   useEffect(() => {
-    debugger;
+    
     if(Array.from(activityRegistery.values()).length === 0)
     {
       loadActivities();

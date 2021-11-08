@@ -38,7 +38,7 @@ namespace CleanArchitecture.Application.Activities
                 if (activity == null)
                     throw new RestException(HttpStatusCode.NotFound, new { Activity = "Not Found" });
 
-                var currentUser = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
+               // var currentUser = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
 
                 var levelsDto = new List<LevelDto>();
 

@@ -4,10 +4,11 @@ import { Form, FormFieldProps, Label } from 'semantic-ui-react'
 import { DateTimePicker } from 'react-widgets'
 
 interface IProps extends FieldRenderProps<Date, HTMLElement>, FormFieldProps {}
-
+debugger;
 const DateInput: React.FC<IProps> = ({
   input,
   width,
+  label,
   placeholder,
   date = false,
   time = false,
@@ -15,7 +16,8 @@ const DateInput: React.FC<IProps> = ({
   ...rest
 }) => {
   return (
-    <Form.Field error={touched && !!error} width={width}>
+    <Form.Field width={width}>
+      <label className={input.value.toString() === "" ? "errorLabel" :""}>{label}</label>
       <DateTimePicker
         placeholder={placeholder}
         value={input.value || null}
@@ -30,9 +32,9 @@ const DateInput: React.FC<IProps> = ({
         culture="tr"
       />
       {touched && error && (
-        <Label basic color="red">
+        <label style={{color:"red"}}>
           {error}
-        </Label>
+        </label>
       )}
     </Form.Field>
   );

@@ -52,10 +52,10 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
           </Grid.Column>
 
           <Grid.Column width={5}>
-              <ActivityDetailedSideBar attendees={activity.attendees}/>
+              <ActivityDetailedSideBar attendees={activity.attendees} date={activity.date}/>
               {/* <ActivityDetailsMap centerLocation={center} /> */}
                 {
-                  !activity.isGoing && !activity.isHost &&
+                  !activity.isGoing && !activity.isHost && (new Date(activity.date).getTime() > new Date().getTime()) &&
                 (activity.attendancyLimit ===null ||activity.attendancyLimit ===0 || (activity.attendancyLimit && (activity.attendancyLimit > activity.attendees.length))) &&
                  <ActivityDetailPaymentSegment activity={activity} />
                  }  
@@ -64,7 +64,7 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
                  <ActivityCountDown activity={activity} />
                  }   
                   {
-                  (activity.isGoing || activity.isHost) &&
+                  (activity.isGoing || activity.isHost) && 
                  <ActivityZoom activity={activity} />
                  }  
                  {

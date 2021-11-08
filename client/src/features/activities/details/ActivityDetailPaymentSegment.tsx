@@ -1,16 +1,18 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { Segment, Header, Form, Button,Comment, Icon } from 'semantic-ui-react'
+import { Segment, Header, Form, Button,Comment, Icon , Image, Modal} from 'semantic-ui-react'
+
 import { RootStoreContext } from '../../../app/stores/rootStore'
 import { Form as FinalForm, Field} from 'react-final-form';
 import { history } from '../../../index'
 import { observer } from 'mobx-react-lite';
-import { formatDistance } from 'date-fns';
+import { RegisterForm } from '../../user/RegisterForm';
 import NumberInput from '../../../app/common/form/NumberInput';
 import SelectInput from '../../../app/common/form/SelectInput';
 import { IActivity } from '../../../app/models/activity';
 import { OnChange } from 'react-final-form-listeners';
 import tr  from 'date-fns/locale/tr'
 import { format } from 'date-fns';
+import LoginForm from '../../user/LoginForm';
 
 const numberOptions = [
     { key: '1', value: 1, text: '1' },
@@ -29,6 +31,8 @@ const numberOptions = [
 
   const rootStore = useContext(RootStoreContext);
   const {getActivityPaymentPage,attendActivity} = rootStore.activityStore;
+  const {isLoggedIn} = rootStore.userStore;
+  const {openModal,closeModal,modal} = rootStore.modalStore;
 
   const [count, setCount] = useState(1);  
 
@@ -37,19 +41,64 @@ const numberOptions = [
   // }
 
 
-  const handlePaySubmit = (e:any) => {
-debugger;
-    if(activity.price && activity.price > 0 )
-    {    
-        var str = `/payment/activity/${activity.id}/${count.toString()}`; //controlller'ı yok
-        history.push(str);
+  const handleLoginClick = (e:any,str:string) => {
+    e.stopPropagation();
+    if(modal.open) closeModal();
 
+        openModal("Giriş Yap", <>
+        <Image size='large' src='/assets/Login1.png' wrapped />
+        <Modal.Description>
+        <LoginForm location={str} />
+        </Modal.Description>
+        </>,true,
+        <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={() => openRegisterModal(e,str)}>tıklayınız</span></p>) 
     }
+
+    const openRegisterModal = (e:any,str:string) => {
+        e.stopPropagation();
+        if(modal.open) closeModal();
+        openModal("Üye Kaydı", <>
+        <Image size='large' src='/assets/Login1.png' wrapped />
+        <Modal.Description>
+        <RegisterForm location={str} />
+        </Modal.Description>
+        </>,true,
+        <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={() => handleLoginClick(e,str)}>Giriş</span></p>) 
+    }
+
+const handleCardClick = (e:any) => {
+    debugger;
+    // if(!isLoggedIn)
+    // {    var str = `/activities/${activity.id}`;
+    //     handleLoginClick(e,str); 
+    // }
+    // else
+    // {
+        history.push(`/activities/${activity.id}`);
+    //}
+      
+}
+
+  const handlePaySubmit = (e:any) => {
+      if(!isLoggedIn)
+          {    
+            var str = `/payment/activity/${activity.id}/${count.toString()}`; 
+
+              handleLoginClick(e,str); 
+          }
     else
     {
-      attendActivity();
-    }
-      
+      if(activity.price && activity.price > 0 )
+      {    
+          var str = `/payment/activity/${activity.id}/${count.toString()}`; 
+          history.push(str);
+
+      }
+      else
+      {
+        attendActivity();
+      }
+  }
 }
 
     return (

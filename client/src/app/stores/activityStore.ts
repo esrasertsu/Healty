@@ -1,8 +1,9 @@
-import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { HttpTransportType, HubConnection, HubConnectionBuilder, JsonHubProtocol, LogLevel } from '@microsoft/signalr';
 import {observable, action, computed, runInAction, reaction, toJS} from 'mobx';
 import { SyntheticEvent } from 'react';
 import { toast } from 'react-toastify';
 import { history } from '../..';
+import ProfileDashboardPopularProfiles from '../../features/profiles/ProfileDashboardPopularProfiles';
 import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
 import { ActivityFormValues, ActivityOnlineJoinInfo, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, PaymentUserInfoDetails } from '../models/activity';
@@ -208,28 +209,42 @@ export default class ActivityStore {
         return params;
     }
 
+ 
 
     @action createHubConnection = (activityId: string) => {
-        this.hubConnection = new HubConnectionBuilder()
-        .withUrl(process.env.REACT_APP_API_CHAT_URL!,{
+    
+        const protocol = new JsonHubProtocol();
+    
+        // let transport to fall back to to LongPolling if it needs to
+        const transport = HttpTransportType.WebSockets | HttpTransportType.LongPolling;
+
+        const options = {
+            transport,
+            logMessageContent: true,
+            logger: LogLevel.Warning,
             accessTokenFactory: () => this.rootStore.commonStore.token!
-        })
-            .configureLogging(LogLevel.Information)
-            .build();
+          };
+    
+        this.hubConnection = new HubConnectionBuilder()
+        .withUrl(process.env.REACT_APP_API_CHAT_URL!,options)
+        .withHubProtocol(protocol)
+        .build();
 
-        this.hubConnection
-        .start()
-        .then(() => console.log(this.hubConnection!.state))
-        .then(() => {
-            if(this.hubConnection!.state === 'Connected')
-            {
-                this.hubConnection!.invoke('AddToGroup', activityId);
-            }
-        })
-        .catch(error => 
-            console.log('Error establishing connection:', error));
+        this.hubConnection.serverTimeoutInMilliseconds = 1000*60*63;
 
-
+            this.hubConnection!
+            .start()
+            .then(() => console.log(this.hubConnection!.state))
+            .then(() => {
+                if(this.hubConnection!.state === 'Connected')
+                {
+                    this.hubConnection!.invoke('AddToGroup', activityId);
+                }
+            })
+            .catch(error => 
+                console.log('Error establishing connection:', error));
+    
+        
         this.hubConnection.on('ReceiveComment', comment => {
             runInAction(() => {
                 this.activity!.comments.push(comment);
@@ -239,6 +254,8 @@ export default class ActivityStore {
         this.hubConnection.on('Send', message => {
           //  toast.info(message);
         })
+        this.hubConnection.onclose(() => setTimeout(this.createHubConnection(activityId), 5000));
+        return "";
     };
 
 
@@ -356,13 +373,7 @@ export default class ActivityStore {
 
     
     @action getOrderDetails = async (id:string) => {
-        let order = this.getOrder(id);
-
-        if(order){
-            this.order = order;
-            return toJS(order);
-        } 
-        else{
+      
             this.loadingOrder = true;
             try {
                 let order = await agent.Order.details(id);
@@ -377,7 +388,7 @@ export default class ActivityStore {
                     });
                     console.log(error);
                 }
-            }
+            
     };
 
     
@@ -658,6 +669,27 @@ export default class ActivityStore {
                 }
             });
             return res;
+
+        } catch (error) {
+            runInAction('Processing refund payment error', () => {
+                this.loadingRefundPaymentPage = false;
+            });
+            toast.error('Problem Processing refund payment');
+            console.log(error);
+        }
+    };
+
+
+    @action deleteOrder = async (orderId: string) =>{
+        this.loadingRefundPaymentPage = true;
+        try {
+           await agent.Order.deleteOrder(orderId);
+            runInAction('Processing deleting order', async() => {
+                this.deleteOrderRegisteryItem(orderId);
+                this.loadingRefundPaymentPage = false;
+               // this.target = '';
+                history.push(`/orders`);
+            });
 
         } catch (error) {
             runInAction('Processing refund payment error', () => {

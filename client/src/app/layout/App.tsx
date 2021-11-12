@@ -41,6 +41,7 @@ import PaymentSuccessPage from '../../features/activities/payment/PaymentSuccess
 import PaymentErrorPage from '../../features/activities/payment/PaymentErrorPage';
 import OrderList from '../../features/orders/OrderList';
 import OrderItemDetail  from '../../features/orders/OrderItemDetail';
+import TrainerForm from '../../features/user/TrainerForm';
 
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
@@ -49,7 +50,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
 
   const rootStore = useContext(RootStoreContext);
   const {setAppLoaded, token, appLoaded,loadCities} = rootStore.commonStore;
-  const { getUser,user,createHubConnection,hubConnection,stopHubConnection } = rootStore.userStore;
+  const { getUser,user,createHubConnection,hubConnection,stopHubConnection ,loggingOut} = rootStore.userStore;
   const { loadCategories} = rootStore.categoryStore;
   const { modal, openModal, closeModal} = rootStore.modalStore;
 
@@ -164,8 +165,8 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   // }, [getUser, setAppLoaded, token])
 
 
-  if(!appLoaded) return <LoadingComponent content='Loading app...' />
-
+  if(!appLoaded) return <LoadingComponent content='Yükleniyor...' />
+  if(loggingOut) return <LoadingComponent content='Çıkış yapılıyor...' />
 
     return (
        <Fragment>
@@ -182,25 +183,26 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                <Switch>
                  <Route exact path="/activities" component={ActivityDashboard} />
                  <Route path="/activities/:id" component={ActivityDetails} />
-                 <Route exact path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
+                 <PrivateRoute exact path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
                  <Route exact path="/blog" component={BlogList} />
                  <Route exact path="/blog/:id" component={BlogPage} />
                  <PrivateRoute key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
                  <PrivateRoute key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
                  <Route path="/profile/:username" component={ProfilePage}/>
                  <Route path="/profiles" component={ProfileDashboard}/>
-                 <Route path="/messages" component={MessagesPage}/>
+                 <PrivateRoute path="/messages" component={MessagesPage}/>
                  <Route path="/login" component={LoginForm}/>
                  <Route path="/login-required" component={LoginRequiredPage}/>
                  {/* <Route exact path="/activitysearch" component={ActivitySearchPage}/> */}
                  <Route path="/user/registerSuccess" component={RegisterSuccess}/>
                  <Route path="/user/verifyEmail" component={VerifyEmail}/>
                  <Route path="/user/resetPassword" component={ResetPassword}/>
+                 <Route path="/trainer-application" component={TrainerForm} />
                  <PrivateRoute path="/settings" component={Settings}/>
-                 <Route exact path="/payment/success" component={PaymentSuccessPage} />
-                 <Route exact path="/payment/error" component={PaymentErrorPage} />
+                 <PrivateRoute exact path="/payment/success" component={PaymentSuccessPage} />
+                 <PrivateRoute exact path="/payment/error" component={PaymentErrorPage} />
                  <Route exact path="/orders" component={OrderList}/>
-                 <Route exact path="/orders/:id" component={OrderItemDetail}/>
+                 <PrivateRoute exact path="/orders/:id" component={OrderItemDetail}/>
                  <Route exact path="/admin" component={Admin}/>
                  <Route component={NotFound}/>
                </Switch>
@@ -236,27 +238,28 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                 <Switch>
                 <Route exact path="/activities" component={ActivityDashboard} />
                  <Route path="/activities/:id" component={ActivityDetails} />
-                 <Route exact path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
+                 <PrivateRoute exact path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
                  <Route exact path="/blog" component={BlogList} />
                  <Route exact path="/blog/:id" component={BlogPage} />
                  <PrivateRoute key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
                  <PrivateRoute key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
                  <Route path="/profile/:username" component={ProfilePage}/>
                  <Route path="/profiles" component={ProfileDashboard}/>
-                 <Route path="/messages" component={MessagesPage}/>
+                 <PrivateRoute path="/messages" component={MessagesPage}/>
                  <Route path="/login" component={LoginForm}/>
                  <Route path="/login-required" component={LoginRequiredPage}/>
                  {/* <Route exact path="/activitysearch" component={ActivitySearchPage}/> */}
                  <Route path="/user/registerSuccess" component={RegisterSuccess}/>
                  <Route path="/user/verifyEmail" component={VerifyEmail}/>
                  <Route path="/user/resetPassword" component={ResetPassword}/>
+                 <Route path="/trainer-application" component={TrainerForm} />
                  <PrivateRoute path="/settings" component={Settings}/>
-                 <Route exact path="/payment/success" component={PaymentSuccessPage} />
-                 <Route exact path="/payment/error" component={PaymentErrorPage} />
+                 <PrivateRoute exact path="/payment/success" component={PaymentSuccessPage} />
+                 <PrivateRoute exact path="/payment/error" component={PaymentErrorPage} />
                  <Route exact path="/orders" component={OrderList}/>
-                 <Route exact path="/orders/:id" component={OrderItemDetail}/>
+                 <PrivateRoute exact path="/orders/:id" component={OrderItemDetail}/>
                  <Route exact path="/admin" component={Admin}/>
-                  <Route component={NotFound}/>
+                 <Route component={NotFound}/>
                 </Switch>
               </Container>
            </Fragment>

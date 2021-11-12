@@ -90,7 +90,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                          <Popup
                          header={"Bu etkinliğe gidiyorsun"}
                          trigger={
-                            <Icon name="check circle" style={{position:"absolute", top:10, right:10, color:"#f2711c",height:"2em"}} />
+                            <Image src={'/icons/event-accepted.png'} style={{position:"absolute", top:10, right:10, color:"#f2711c",height:"40px"}} />
                         }
                        />
                         }
@@ -98,7 +98,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                             <Popup
                             header={"Bu etkinliğin düzenleyeni sensin."}
                             trigger={
-                                <Icon name="edit" style={{position:"absolute", top:10, right:10, color:"#00b5ad",height:"2em"}}/>
+                                <Image src={"/icons/edit-calendar.png"} name="edit" style={{position:"absolute", top:10, right:10, color:"#00b5ad",height:"40px"}}/>
                             }
                           />
                     }

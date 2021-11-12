@@ -44,7 +44,8 @@ namespace CleanArchitecture.Domain
         Completed =2,
         Cancelled =3,
         Failed = 4,
-        FailedServer = 5
+        FailedServer = 5,
+        Deleted = 6
     }
 
     public enum EnumPaymentTypes

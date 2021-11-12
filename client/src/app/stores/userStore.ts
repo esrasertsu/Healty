@@ -1,5 +1,5 @@
 import { action, computed, observable, runInAction } from "mobx";
-import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { HttpTransportType, HubConnection, HubConnectionBuilder, JsonHubProtocol, LogLevel } from '@microsoft/signalr';
 import { history } from "../..";
 import agent from "../api/agent";
 import { ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues, TrainerCreationFormValues, TrainerFormValues } from "../models/user";
@@ -176,12 +176,23 @@ export default class UserStore {
     }
 
     @action createHubConnection = async (updateUserAsOnline : boolean) => {
-        this.hubConnection = new HubConnectionBuilder()
-        .withUrl(process.env.REACT_APP_API_MESSAGE_URL!,{
+
+        const protocol = new JsonHubProtocol();
+    
+        // let transport to fall back to to LongPolling if it needs to
+        const transport = HttpTransportType.WebSockets | HttpTransportType.LongPolling;
+
+        const options = {
+            transport,
+            logMessageContent: true,
+            logger: LogLevel.Warning,
             accessTokenFactory: () => this.rootStore.commonStore.token!
-        })
-            .configureLogging(LogLevel.Debug)
-            .build();
+          };
+    
+        this.hubConnection = new HubConnectionBuilder()
+        .withUrl(process.env.REACT_APP_API_MESSAGE_URL!,options)
+        .withHubProtocol(protocol)
+        .build();
 
      this.hubConnection.serverTimeoutInMilliseconds = 1000*60*63;
 
@@ -292,20 +303,22 @@ export default class UserStore {
     }
 
     @action  stopHubConnection = async () => {
-        await this.hubConnection!.invoke('SetUserOffline');
-        const b = await agent.User.update(false);
-        runInAction(async() => {
-            await Promise.all(
-                this.rootStore.messageStore.chatRooms!.map(async(chatroom)=>{
-                  const a =  await this.hubConnection!.invoke('RemoveFromChat', chatroom.id)
-                })
-            )
-
-        })
-        
-        .catch(err =>{ console.log(err);
-          })
-
+        if(this.hubConnection && this.hubConnection!.state === 'Connected')
+        {
+            await this.hubConnection!.invoke('SetUserOffline');
+            const b = await agent.User.update(false);
+            runInAction(async() => {
+                await Promise.all(
+                    this.rootStore.messageStore.chatRooms!.map(async(chatroom)=>{
+                      const a =  await this.hubConnection!.invoke('RemoveFromChat', chatroom.id)
+                    })
+                )
+    
+            })
+            
+            .catch(err =>{ console.log(err);
+              })
+        }
     }
 
     @action refreshToken = async  () =>{
@@ -330,9 +343,11 @@ export default class UserStore {
                 this.user = user;
 
             });
-
-            this.rootStore.commonStore.setToken(user.token);
-            this.startRefreshTokenTimer(user);
+            if(user)
+            {
+                this.rootStore.commonStore.setToken(user.token);
+                this.startRefreshTokenTimer(user);
+            }
             return user;
         }catch(error){
             console.log(error);

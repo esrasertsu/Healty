@@ -154,7 +154,7 @@ const NavBar: React.FC = () => {
                     to={`/orders`}
                     onClick={()=>{setActiveMenu(-1);}}
                   >  <Icon name='unordered list' />
-                       Siparişlerim
+                       Rezervasyonlarım
                   </Dropdown.Item>
                   <Dropdown.Item
                     key="settings"

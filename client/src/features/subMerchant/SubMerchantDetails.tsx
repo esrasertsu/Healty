@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Segment, Form, Button, Grid, Label, Header, Image, Icon } from "semantic-ui-react";
+import { Segment, Form, Button, Grid, Label, Header, Image, Icon, Modal } from "semantic-ui-react";
 import {
   ISubMerchantInfo,
    SubMerchantInfo
@@ -37,6 +37,7 @@ const SubMerchantDetails: React.FC = () => {
 
   const {getSubMerchantInfo,setsubMerchantFormValues, subMerchantForm,createSubMerchant,editSubMerchant } = rootStore.userStore;
   const { isLoggedIn } = rootStore.userStore;
+  const {openModal,closeModal,modal} = rootStore.modalStore;
 
   const [IBANValidMessage, setIBANValidMessage] = useState<string>("");
   const [companyTypeErrorMessage,setCompanyTypeErrorMessage]= useState<string>("");
@@ -44,8 +45,23 @@ const SubMerchantDetails: React.FC = () => {
   const [TaxOfficeMessage,setTaxOfficeMessage]= useState<string>("");
   const [TaxNumberMessage,setTaxNumberMessage]= useState<string>("");
   const [legalCompanyTitleMessage,setlegalCompanyTitleMessage]= useState<string>("");
-
+  const [iyzicoContract, setIyzicoContract] = useState(false); 
+  const [showIyzicoContract, setShowIyzicoContract] = useState(true);
+  const [contractErrorMessage,setContractErrorMessage]= useState("");
   const [loading, setLoading] = useState(false);
+
+  const openIyzicoModal = (e:any) => {
+    e.stopPropagation();
+    if(modal.open) closeModal();
+  
+        openModal("Uzman Başvuru Formu", <>
+        <Modal.Description>
+        <iframe style={{width:"100%", border:"none"}} src="https://www.iyzico.com/pazaryeri-satici-anlasma/" />
+        </Modal.Description>
+        </>,false,
+       "","", false) 
+       
+  }
 
   const isValidEmail = createValidator(
     message => value => {
@@ -105,15 +121,21 @@ const SubMerchantDetails: React.FC = () => {
     // )(),
   })
   useEffect(() => {
-    debugger;
-
     if(isLoggedIn)
      {
       setLoading(true);
       getSubMerchantInfo()
         .then(action((res) => {
             if(res)
-            setsubMerchantFormValues(new SubMerchantInfo(res));
+            {
+              setsubMerchantFormValues(new SubMerchantInfo(res));
+              if(res && res.hasSignedContract)
+              {
+                setShowIyzicoContract(false);
+                setIyzicoContract(true);
+              }
+            }
+             
         }))
         .finally(() => setLoading(false));
      } 
@@ -126,6 +148,11 @@ const SubMerchantDetails: React.FC = () => {
 
     let ok = true;
 
+    if(!iyzicoContract)
+    {
+      setContractErrorMessage("Sözleşme imzalanması zorunludur");
+      ok = false;
+    }
     if(!IBAN.isValid(values.iban))
      {
          setIBANValidMessage("IBAN numarası geçersiz");
@@ -186,6 +213,7 @@ const SubMerchantDetails: React.FC = () => {
 
       if(ok)
       {
+        setLoading(true);
         if (!values.id) {
           let subMerchant = {
             ...values,
@@ -193,18 +221,20 @@ const SubMerchantDetails: React.FC = () => {
             id: uuid(),
           };
           createSubMerchant(subMerchant).then((res) =>{
+            setLoading(false);
             if(res)
             toast.success("Bilgileriniz başarıyla kaydedilmiştir.");
             else toast.error("Bilgileriniz kaydedilemedi. Sorun devam ederse bize ulaşın.");
   
           })
         } else {
-          debugger;
               let editedMerchant = {
                 ...values,
                 iban:values.iban.trim()
               }
               editSubMerchant(editedMerchant).then((res) =>{
+                setLoading(false);
+
                 if(res)
                 toast.success("Bilgileriniz başarıyla kaydedilmiştir.");
                 else toast.error("Bilgileriniz kaydedilemedi. Sorun devam ederse bize ulaşın.");
@@ -458,7 +488,7 @@ const SubMerchantDetails: React.FC = () => {
                 <Field
                   name="iban"
                   labelName="ibanlabel"
-                  placeholder="TR180006200119000006672315"
+                  placeholder="TR111106200119000006672315"
                   value={subMerchantForm.iban}
                   component={TextInput}
                   style={{marginBottom:15}}
@@ -481,6 +511,29 @@ const SubMerchantDetails: React.FC = () => {
 
                 }}
                 </OnChange>
+               { showIyzicoContract &&
+                    <div style={{margin:"30px 0"}}>
+                    <Field
+                        name="hasSignedContract"
+                        component="input"
+                        type="checkbox"
+                        initialValue={subMerchantForm.hasSignedContract}
+                        width={4}
+                        format={v =>v === true}
+                        parse={v => (v ? true : false) }
+                      />&nbsp;&nbsp;
+                      <span><a style={{cursor:"pointer"}} onClick={openIyzicoModal}>iyzico Pazaryeri Satıcı Anlaşma Sözleşmesi</a>'ni onaylıyorum.</span> 
+                      {contractErrorMessage!=="" && <label style={{color:"red"}}>{contractErrorMessage}</label>}    
+                      <OnChange name="hasSignedContract">
+                  {(value, previous) => {
+                      setsubMerchantFormValues({...subMerchantForm, hasSignedContract:value});
+                      setIyzicoContract(value);
+
+                  }}
+                  </OnChange>
+                  </div>
+               }
+                
                
                 <Button
                   loading={loading}

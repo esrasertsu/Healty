@@ -45,10 +45,13 @@ namespace CleanArchitecture.Application.User
 
                 if (user.IsOnline != request.Status)
                 {
-                    Thread.Sleep(2000);
-                    user.IsOnline = request.Status;
+                    Thread.Sleep(3000);
+                    user.IsOnline = request.Status;                    
+                    
                     var result = await _userManager.UpdateAsync(user);
 
+                    if(result.Errors.Any(x => x.Code == "ConcurrencyFailure"))
+                        return Unit.Value;
                     if (result.Succeeded) return Unit.Value;
                 }
                 else

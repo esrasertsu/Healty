@@ -12,6 +12,19 @@
   font-weight: normal;
 }
 
+@font-face {
+  font-family: "Inter";
+  src: local("Inter"),
+    url("./fonts/Inter-Variable-Font.woff2") format("woff");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: local("Roboto"),
+    url("./fonts/RobotoMonoRegular.woff2") format("woff");
+  font-weight: normal;
+}
 
 
 
@@ -197,6 +210,8 @@ body {
 
 h1, h2, h3, h4, h5 {
   font-family:  AssistantRegular, Arial, Helvetica, sans-serif !important;
+  /* font-family:  "Inter","Helvetica Neue","Segoe UI","Fira Sans",Roboto,Oxygen,Ubuntu,"Droid Sans","Arial",sans-serif!important */
+
 }
 
 .defaultButtonColor{
@@ -2187,4 +2202,8 @@ button, input, optgroup, select, textarea {
 .errorLabel,.customErrorLabel{
   color:red !important;
   width: 100% !important;
+}
+
+.profile_activity_card_header{
+  font-size: 16px !important;
 }

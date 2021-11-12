@@ -15,6 +15,7 @@ namespace CleanArchitecture.Application.Orders
         public string Description { get; set; }
         public string ProductId { get; set; }
         public decimal? Price { get; set; }
+        public string PaidPrice { get; set; }
         public string PaymentInfo { get; set; }
         public string BuyerName { get; set; }
         public string Email { get; set; }

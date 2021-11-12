@@ -95,7 +95,13 @@ const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
     <Tab.Pane style={{ borderRadius: "12px"}}>
       <Grid>
         <Grid.Column width={16} style={{ paddingBottom: 0 }}>
-          {/* <Header floated="left" icon="image" content="Photos" /> */}
+        { isTabletOrMobile && 
+          <Header
+            floated='left'
+            icon='user'
+            style={{fontSize:"16px"}}
+            content="Fotoğraflar"
+          /> }
           {isCurrentUser && (
             <Button
               floated="right"

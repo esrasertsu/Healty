@@ -21,9 +21,10 @@ import { useMediaQuery } from 'react-responsive'
     activity:IActivity | null;
     handlePaymentFormSubmit: (values:any) => void;
     count: string;
+    loading: boolean;
   }
 
- const ActivityPaymentStarterPage:React.FC<IProps> = ({handlePaymentFormSubmit,activity, count}) =>  {
+ const ActivityPaymentStarterPage:React.FC<IProps> = ({handlePaymentFormSubmit,activity, count,loading}) =>  {
 
   const rootStore = useContext(RootStoreContext);
   const [focused, setFocused] = useState("");
@@ -48,7 +49,7 @@ import { useMediaQuery } from 'react-responsive'
 
 const [paymentContract, setPaymentContract] = useState(false);
 const [iyzicoContract, setIyzicoContract] = useState(false);
-
+const [loading3DPage, setLoading3DPage] = useState(false);
 const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
 
     const { user } = rootStore.userStore;
@@ -104,7 +105,7 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
     //    activityId:activity!.id,
     //   expireMonth: exMonth, expireYear: exYear,
     //   ticketCount:Number(count)});
-
+    //setLoading3DPage(true);
     handlePaymentFormSubmit(paymentInfo);
 
   }
@@ -123,6 +124,9 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
        "","", false) 
        
   }
+
+  if(loading) return <LoadingComponent content='Sizi 3D Secure Ödeme Sayfasına Aktarıyoruz. Lütfen sayfayı kapatmayınız.'/>  
+    
 
     return (
 
@@ -146,7 +150,7 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
       }:any) => {
         return (
           <>
-          <Form onSubmit={handleSubmit} style={{margin:"2.5rem 0"}}>
+          <Form onSubmit={handleSubmit} loading={loading} style={{margin:"2.5rem 0"}}>
             <div className="paymentFormContainer">
             <div>
             <Card

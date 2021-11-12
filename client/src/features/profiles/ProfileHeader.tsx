@@ -140,7 +140,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                 size='small'
                 src={profile.image || '/assets/user.png'}
                 className="profieHeader_userImage"
-                style={{border: "4px solid #fff"}}
+                style={{border: "4px solid #fff", height:"150px"}}
               />
               <Item.Content verticalAlign='middle' className="profileHeader_content">
                 <Grid.Row>

@@ -10,6 +10,7 @@ import { history } from '../..';
 import ActivityListItemPlaceholder from '../activities/dashboard/ActivityListItemPlaceHolder';
 import { getStatusTranslate } from '../../app/common/util/util';
 import { SemanticICONS } from 'semantic-ui-react/dist/commonjs/generic';
+import LoginForm from '../user/LoginForm';
 
 interface IProps{
     settings?: boolean
@@ -35,13 +36,19 @@ const OrderList: React.FC<IProps> = ({settings}) => {
   useEffect(() => {
       if(isLoggedIn)
          getOrders();
-      return () => {
-        setOrderPage(0);
-        clearOrderRegistery();
-    }
+    //   return () => {
+    //     setOrderPage(0);
+    //     clearOrderRegistery();
+    // }
       
   }, [getOrders,isLoggedIn])
 
+  if(!isLoggedIn)
+    return (
+        <Segment className="login-page-segment">
+            <LoginForm location={history.location.pathname} />
+        </Segment>
+    )
 
   return (
     <Fragment>
@@ -49,7 +56,7 @@ const OrderList: React.FC<IProps> = ({settings}) => {
      orderList.length > 0 ?
       <>
       <Segment className="myOrdersHeader" style={!settings ? {marginTop:"40px"} : {}}>
-          Siparişlerim
+        Rezervasyonlarım
       </Segment>
       {
       orderList.map((order) =>(
@@ -92,7 +99,10 @@ const OrderList: React.FC<IProps> = ({settings}) => {
                      Kişi sayısı : {order.count}
                  </div>
                  <div>
-                     Ücret : {Number(order.price)}TL
+                     Fiyat : {Number(order.price)}TL
+                 </div>
+                 <div>
+                    Toplam Ödenen : {Number(order.paidPrice)}TL
                  </div>
 
              </Item.Description>

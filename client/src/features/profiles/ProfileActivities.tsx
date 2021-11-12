@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Tab, Grid, Card, Image, TabProps } from 'semantic-ui-react';
+import { Tab, Grid, Card, Image, TabProps, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { IProfile, IUserActivity } from '../../app/models/profile';
 import { format } from 'date-fns';
@@ -12,18 +12,23 @@ const getPanes = (profile:IProfile) => {
 
   let panes = [];
 
-  if(profile.role === "Trainer")
-  {
-    return panes = [
-      { menuItem: 'Gelecek', pane: { key: 'futureEvents' } },
-      { menuItem: 'Geçmiş', pane: { key: 'pastEvents' } },
-      { menuItem: 'Düzenledikleri', pane: { key: 'hosted' } }
-    ];
-  }else 
-      return panes = [
-        { menuItem: 'Gelecek', pane: { key: 'futureEvents' } },
-        { menuItem: 'Geçmiş', pane: { key: 'pastEvents' } }
-      ];
+  return panes = [
+    { menuItem: 'Gelecek', pane: { key: 'futureEvents' } },
+    { menuItem: 'Geçmiş', pane: { key: 'pastEvents' } }
+  ];
+  
+  // if(profile.role === "Trainer")
+  // {
+  //   return panes = [
+  //     { menuItem: 'Gelecek', pane: { key: 'futureEvents' } },
+  //     { menuItem: 'Geçmiş', pane: { key: 'pastEvents' } },
+  //     { menuItem: 'Düzenledikleri', pane: { key: 'hosted' } }
+  //   ];
+  // }else 
+  //     return panes = [
+  //       { menuItem: 'Gelecek', pane: { key: 'futureEvents' } },
+  //       { menuItem: 'Geçmiş', pane: { key: 'pastEvents' } }
+  //     ];
 
 }
 
@@ -63,9 +68,13 @@ const ProfileEvents = () => {
   return (
     <Tab.Pane style={{ borderRadius: "12px"}} loading={loadingActivities}>
       <Grid>
-        {/* <Grid.Column width={16}>
-          <Header floated='left' icon='calendar' content={'Activities'} />
-        </Grid.Column> */}
+        {
+          isTabletOrMobile && 
+          <Grid.Column width={16}>
+          <Header floated='left' icon='calendar check outline' style={{fontSize:"16px"}} content={'Activities'} />
+        </Grid.Column>
+        }
+          
         <Grid.Column width={16}>
           <Tab
             panes={getPanes(profile!)}
@@ -85,7 +94,7 @@ const ProfileEvents = () => {
                   style={{ minHeight: 100, objectFit: 'cover' }}
                 />
                 <Card.Content>
-                  <Card.Header textAlign='center'>{activity.title}</Card.Header>
+                  <Card.Header className="profile_activity_card_header" textAlign='center'>{activity.title}</Card.Header>
                   <Card.Meta textAlign='center'>
                     <div>{format(new Date(activity.date), 'dd LLL yyyy',{locale: tr})}</div>
                     <div>{format(new Date(activity.date), 'HH:mm')}</div>

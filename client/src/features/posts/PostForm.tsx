@@ -13,15 +13,16 @@ import PhotoWidgetCropper from "../../app/common/photoUpload/PhotoWidgetCropper"
 import DropdownInput from "../../app/common/form/DropdownInput";
 import DropdownMultiple from "../../app/common/form/DropdownMultiple";
 import { OnChange } from "react-final-form-listeners";
+import { combineValidators, composeValidators, hasLengthGreaterThan, isRequired } from "revalidate";
 
-// const validate = combineValidators({
-//   title: isRequired({message: 'The event title is required'}),
-//   category: isRequired('Category'),
-//   description: composeValidators(
-//     isRequired('description'),
-//     hasLengthGreaterThan(150)({message: 'Blog needs to be at least 150 characters'})
-//   )()
-// })
+const validate = combineValidators({
+  title: isRequired({message: 'Blog başlığı zorunlu alandır.'}),
+  categoryId: isRequired({message: 'Kategori zorunlu alandır.'}),
+  subCategoryIds:isRequired({message: 'Alt kategori zorunlu alandır.'}),
+  description: composeValidators(
+    hasLengthGreaterThan(150)({message: 'Blog en az 150 karakter uzunluğunda olmalıdır.'})
+  )(),
+})
 
 interface DetailParams {
   id: string;
@@ -84,19 +85,29 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
   const handleFinalFormSubmit = (values: any) => {
     debugger;
     const { ...post } = values;
+    let done = true;
 
+    if(image == null || imageDeleted)
+     {
+        setImageDeleted(true);
+        done= false;
+    }
+     if(post.decription && post.decription.length < 50){
+        document.getElementById("descLabel") && document.getElementById("descLabel")!.classList.add("errorLabel")
+        done= false;
+    }
+    if(done){
     if (!post.id) {
           let newPost = {
             ...post,
             id: uuid(),
             file:image,
-            // categoryId:category,
-            // subCategoryIds:subCategory
           };
           createPost(newPost);
         } else {
           editPost(post);
         }
+      }
   };
 
   return (
@@ -104,13 +115,14 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
       <Grid.Column width={16}>
         <Segment clearing>
           <FinalForm
-            //validate = {validate}
+            validate = {validate}
             initialValues={post}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid, pristine }) => (
               <Form onSubmit={handleSubmit} loading={loading}>
-                <Header className="postFormHeader" color='teal' sub content='Adım 1 - Metin başlığınızı girin ' />
+                <Header id="titleHeader" className="postFormHeader" sub content='Adım 1 - Metin başlığınızı girin ' />
                 <Field
+                 labelName="titleHeader"
                   name="title"
                   placeholder="Başlık"
                   value={post.title}
@@ -121,7 +133,7 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
                       setPost({...post,title: value});                    
                 }}
             </OnChange>
-                <Header className="postFormHeader" color='teal' sub content='Adım 2 - Metnin temel görselini yükleyin' />
+                <Header className={image === null || imageDeleted ? "errorLabel postFormHeader" : " postFormHeader"}  sub content='Adım 2 - Metnin temel görselini yükleyin' />
               {
                 files.length === 0 ? 
                 <PhotoWidgetDropzone setFiles={setFiles}/>
@@ -138,13 +150,14 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   </Grid.Column>
 
                   <Grid.Column width="eight">
-                  <Button type="danger" icon='close' disabled={loading} onClick={()=> setFiles([])}>Değiştir/Sil</Button>
+                  <Button type="danger" icon='close' disabled={loading} onClick={()=> {setFiles([]);setImageDeleted(true); setImage(null)}}>Değiştir/Sil</Button>
                   </Grid.Column>
                </Grid>
                )
               }  
-                <Header className="postFormHeader" color='teal' sub content='Adım 3 - Bloğunuzu oluşturun' />
+                <Header id="descLabel" className="postFormHeader" sub content='Adım 3 - Bloğunuzu oluşturun' />
                <Field
+                  labelName="descLabel"
                   name="description"
                   component={WYSIWYGEditor}
                   value={post.description}
@@ -154,22 +167,26 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
                       setPost({...post,description: value});                    
                 }}
             </OnChange>
-                <Header className="postFormHeader" color='teal' sub content='Adım 4 - Kategori seçin' />
+                <Header id="categoryLabel" className="postFormHeader" sub content='Adım 4 - Kategori seçin' />
                 <Field 
+                  labelName="categoryLabel"
                   name="categoryId"
                   placeholder="Kategori"
                   component={DropdownInput}
                   options={categoryList}
                   value={post.categoryId}
+                  emptyError={post.categoryId}
                   onChange={(e: any,data: any)=>handleCategoryChanged(e,data)}
                 />
-                  <Header className="postFormHeader" color='teal' sub content='Adım 5 - Alt Kategorileri seçin' />
+                  <Header id="subcategoryLabel" className="postFormHeader" sub content='Adım 5 - Alt Kategorileri seçin' />
                  <Field
+                 labelName="subcategoryLabel"
                   name="subCategoryIds"
                   placeholder="Alt Kategori"
                   value={post.subCategoryIds}
                   component={DropdownMultiple}
                   options={subcategoryList}
+                  emptyError={post.subCategoryIds}
                   onChange={(e: any,data:[])=>
                     {
                       handleSubCategoryChanged(e,data)}}

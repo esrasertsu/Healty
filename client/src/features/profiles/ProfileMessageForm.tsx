@@ -25,7 +25,7 @@ import { observer } from 'mobx-react-lite';
     
   const handleRegisterClick = (e:any,str:string) => {
     
-    e.stopPropagation();
+    e && e.stopPropagation();
     if(modal.open) closeModal();
 
         openModal("Üye Kaydı", <>
@@ -38,7 +38,7 @@ import { observer } from 'mobx-react-lite';
     }
 
     const handleLoginClick = (e:any,str:string) => {
-      e.stopPropagation();
+      e && e.stopPropagation();
       if(modal.open) closeModal();
 
           openModal("Giriş Yap", <>
@@ -50,11 +50,17 @@ import { observer } from 'mobx-react-lite';
            <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={() => handleRegisterClick(e,str)}>tıklayınız</span></p>) 
       }
 
-    const handleFinalFormSubmit = async (e:any,values: IMessageForm) => {
+    const handleFinalFormSubmit = async (values: IMessageForm) => {
         let newMessage = {
           ...values
         };
-             await sendMessageFromProfile(newMessage);
+        if(isLoggedIn)
+            {
+              await sendMessageFromProfile(newMessage);
+            }else{
+              var str = `/profile/${profile!.userName}`;
+              handleLoginClick(null,str);
+            }
     
     };
 
@@ -63,21 +69,11 @@ import { observer } from 'mobx-react-lite';
             <Grid.Row>
             <Grid.Column>
         <FinalForm 
-        onSubmit ={() => handleFinalFormSubmit}
+        onSubmit ={handleFinalFormSubmit}
        // initialValues={{ body:"" }}
         render={({handleSubmit, submitting, form}) => (
           <Form widths={"equal"} 
-          onSubmit={(e) => {
-            if(isLoggedIn)
-            {
-              handleSubmit()!.then(()=> {form.reset();})
-            }else{
-              var str = `/profile/${profile!.userName}`;
-              handleLoginClick(e,str);
-            }
-          }
-           
-          }
+          onSubmit={() =>  handleSubmit()!.then(()=> {form.reset();})}
           >
            <Field
                   name="body"

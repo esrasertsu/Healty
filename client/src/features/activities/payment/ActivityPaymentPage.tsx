@@ -337,7 +337,7 @@ if(loadingActivity) return <LoadingComponent content='Loading...'/>
    (
      <>
          
-      <ActivityPaymentStarterPage handlePaymentFormSubmit={handlePaymentFormSubmit} activity={activity} count={match.params.count} />
+      <ActivityPaymentStarterPage handlePaymentFormSubmit={handlePaymentFormSubmit} activity={activity} count={match.params.count} loading={loading}/>
    
      </>
    )

@@ -1,11 +1,13 @@
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom';
-import { Segment, Item, Header, Button, Image, Modal, Icon } from 'semantic-ui-react'
+import { Segment, Item, Header, Button, Image, Modal, Icon, Confirm } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import tr  from 'date-fns/locale/tr'
+import { history } from '../../..';
+import { toast } from 'react-toastify';
 
 const activityImageStyle = {
   filter: 'brightness(50%)',
@@ -27,15 +29,55 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
 
   const rootStore = useContext(RootStoreContext);
   const { attendActivity, cancelAttendance, loading, deleteActivity} = rootStore.activityStore;
+  const { getOrders, orderList } = rootStore.activityStore;
+
   const [open, setOpen] = React.useState(false);
+  const [cancellationUserOpen, setcancellationUserOpen] = React.useState(false);
 
   const handleDeleteActivity = (e:any) => {
     debugger;
     deleteActivity(e,activity.id);
   }
 
+  useEffect(() => {
+    getOrders()
+   
+  }, [activity])
+
+  const handleSendUserToOrders = () =>{
+    if(orderList.length > 1)
+    {
+      debugger;
+          const relatedOrder = orderList.find(x=> x.productId === activity.id);
+          if(relatedOrder){
+  
+            history.push(`/orders/${relatedOrder.id}`)
+  
+          }else{
+            toast.warning("Rezervasyonunuzu şuan getiremiyoruz. Lütfen rezervasyonlarım sayfasından deneyiniz.");
+            setcancellationUserOpen(false)
+          }
+        
+        
+
+
+      }
+    }
+
+  
+  
+
     return (
       <>
+        <Confirm
+          content={'Bu rezervasyonu iptal etmek istediğinize emin misiniz? Sizi rezervasyonlarım sayfasına aktaracağız.'}
+          open={cancellationUserOpen}
+          header="Rezervasyon iptali"
+          confirmButton="Devam et"
+          cancelButton="Geri"
+          onCancel={() =>setcancellationUserOpen(false)}
+          onConfirm={handleSendUserToOrders}
+        />
         <div>
                 <Segment.Group>
                   <Segment basic attached='top' style={{ padding: '0' }}>
@@ -96,7 +138,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                       </Modal>
                     </>                   
                     ): activity.isGoing ? (
-                      <Button loading={loading} onClick={cancelAttendance}>Katılımı iptal et</Button>
+                      <Button loading={loading} onClick={()=>setcancellationUserOpen(true)}>Katılımı iptal et</Button>
                     ): (
                       <>
                       { 

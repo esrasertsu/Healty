@@ -366,14 +366,14 @@ const Payment = {
     getActivityPaymentPage: (count:number,id: string): Promise<IPaymentUserInfoDetails> => requests.get(`/payment/activity/${id}/${count}?activityId=${id}&count=${count}`),
     getUserPaymentDetailedInfo: (details:IPaymentUserInfoDetails): Promise<boolean> => requests.post(`/payment/${details.activityId}/updateUserBeforePayment`,details),
     processPayment: (details:IPaymentCardInfo): Promise<PaymentThreeDResult> => requests.post(`/payment/${details.activityId}/paymentstart`,details),
-    refundPayment: (paymentTransactionId:string, activityId: string, orderId: string):Promise<IRefundPayment> => requests.refundPayment(`/payment/refundPayment`, paymentTransactionId, activityId, orderId)
-
+    refundPayment: (paymentTransactionId:string, activityId: string, orderId: string):Promise<IRefundPayment> => requests.refundPayment(`/payment/refundPayment`, paymentTransactionId, activityId, orderId),
 } 
 
 const Order = {
     list: (limit?:number, offset?:number): Promise<IOrderListEnvelope> => 
     requests.get(`/orders?limit=${limit}&offset=${offset}`),
     details: (id: string) => requests.get(`/orders/${id}`),
+    deleteOrder:(orderId: string) => requests.del(`/orders/${orderId}`),
 
 } 
 export default {

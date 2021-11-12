@@ -42,13 +42,21 @@ namespace CleanArchitecture.Application.Profiles
                 switch (request.Predicate)
                 {
                     case "past":
-                        queryable = queryable.Where(a => a.Activity.Date <= DateTime.Now);
+                        {
+                            if (user.Role == Domain.Role.Trainer)
+                                queryable = queryable.Where(a => a.Activity.Date <= DateTime.Now && a.IsHost);
+                            else queryable = queryable.Where(a => a.Activity.Date <= DateTime.Now);
+                        }
                         break;
                     case "hosting":
                         queryable = queryable.Where(a => a.IsHost);
                         break;
                     default:
-                        queryable = queryable.Where(a => a.Activity.Date >= DateTime.Now);
+                        {
+                            if (user.Role == Domain.Role.Trainer)
+                                queryable = queryable.Where(a => a.Activity.Date >= DateTime.Now && a.IsHost);
+                            else queryable = queryable.Where(a => a.Activity.Date >= DateTime.Now);
+                        }
                         break;
                 }
 

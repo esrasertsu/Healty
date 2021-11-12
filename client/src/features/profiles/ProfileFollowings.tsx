@@ -16,17 +16,18 @@ const ProfileFollowings = () => {
   return (
     <Tab.Pane style={{ borderRadius: "12px"}} loading={loading} >
       <Grid>
-        <Grid.Column width={16}>
-          { <Header
+      { isTablet &&  <Grid.Column width={16}>
+          <Header
             floated='left'
             icon='user'
+            style={{fontSize:"16px"}}
             content={
               activeTab === 4
                 ? `Takipçileri`
                 : `Takip Ettikleri`
             }
-          /> }
-        </Grid.Column>
+          /> 
+        </Grid.Column>}
         <Grid.Column width={16}>
           <Card.Group itemsPerRow={isMobile ? 2 : isTablet ? 3 :6}>
             {isLoggedIn?

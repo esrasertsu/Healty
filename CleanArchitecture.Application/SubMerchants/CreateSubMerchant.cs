@@ -88,6 +88,14 @@ namespace CleanArchitecture.Application.SubMerchants
                     throw new RestException(HttpStatusCode.NotFound, new { MerchantType = "Not found" });
                 }
 
+                if (!string.IsNullOrEmpty(user.SubMerchantKey))
+                {
+                    _context.SubMerchants.Remove(user.SubMerchantDetails);
+                    user.SubMerchantKey = "";
+                    await _context.SaveChangesAsync();
+                }
+                
+
                 //subMerchant yarat
                 var subMerchant = new SubMerchant();
 

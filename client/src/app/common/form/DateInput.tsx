@@ -4,7 +4,6 @@ import { Form, FormFieldProps, Label } from 'semantic-ui-react'
 import { DateTimePicker } from 'react-widgets'
 
 interface IProps extends FieldRenderProps<Date, HTMLElement>, FormFieldProps {}
-debugger;
 const DateInput: React.FC<IProps> = ({
   input,
   width,

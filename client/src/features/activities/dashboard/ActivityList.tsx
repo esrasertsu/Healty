@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from 'react'
-import { Item, Label, Message } from 'semantic-ui-react'
+import { Header, Image, Item, Label, Message } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
 import { ActivityListItem } from './ActivityListItem';
 import { RootStoreContext } from '../../../app/stores/rootStore';
@@ -17,6 +17,7 @@ const ActivityList: React.FC = () => {
     'Ya da bir eğitmen olarak kriterlere uygun bir aktivite açabilirsiniz :)'
   ]
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   return (
     <Fragment>
@@ -35,7 +36,13 @@ const ActivityList: React.FC = () => {
       )) :
       <>
       {!isTabletOrMobile && <br></br> }
-       <Message className="activityNotFoundMessage"  header='Aradığınız kriterlere uygun bir aktivite bulunamadı :(' list={list} />
+      <div style={isMobile? {textAlign:"center", marginBottom:"40px" } : {display:"flex", justifyContent:"center" , marginTop:"40px"}}>
+        <div>
+        <Header size="large" style={{color:"#263a5e"}} content="Merhaba!"/>
+        <Header size="medium" style={{color:"#263a5e"}} content="Şimdilik açılmış uygun bir aktivite bulamadık ama senin için oluşturmaya devam ediyoruz. Takipte kal"/>
+          </div>
+       <Image src={"/icons/clip-searching.png"} style={isMobile? {width:"100%", marginTop:"75px"} : {width:"50%", marginTop:"75px"}} />
+      </div>
      </>
     }
     </Fragment>

@@ -37,19 +37,19 @@ const ActivityDashboard: React.FC = () => {
   }
   useEffect(() => {
     
-    if(Array.from(activityRegistery.values()).length === 0)
+    if(activityRegistery.size <= 1)
     {
       loadActivities();
     }
-    if(Array.from(categoryRegistery.values()).length === 0)
+    if(categoryRegistery.size <= 1)
     {
       loadCategories();
     }
-    if(levelList.length === 0)
+    if(levelList.length <=1)
     {
       loadLevels();
     }
-  },[loadActivities,loadCategories,loadLevels]); //[] provides the same functionality with componentDidMounth..   dependency array
+  },[activityRegistery.size,categoryRegistery.size,levelList,loadActivities,loadCategories,loadLevels]); //[] provides the same functionality with componentDidMounth..   dependency array
 
   useEffect(() => {
     window.addEventListener("scroll", toggleVisibility);
@@ -167,6 +167,7 @@ const ActivityDashboard: React.FC = () => {
               // initialLoad={false}>
               <>
                 <ActivityList />
+                {activityRegistery.size > 0 && 
                 <div style={{display:"flex", justifyContent:"center"}}>
                  <Button  
                   floated="right"
@@ -176,6 +177,7 @@ const ActivityDashboard: React.FC = () => {
                   style={{background:"dodgerblue", color:"white",margin:"20px 0"}}
                 > Daha Fazla Göster </Button>
                 </div>
+                }
                 </>
               // </InfiniteScroll>
               )}
@@ -228,7 +230,7 @@ const ActivityDashboard: React.FC = () => {
           />
           <br/>
           <DateTimePicker
-            value={predicate.get('endDate') || null}
+            value={predicate.get('endDate') || new Date()}
             onChange={(date)=> {
               setClearPredicateBeforeSearch(true); 
               clearKeyPredicate("endDate");
@@ -238,6 +240,7 @@ const ActivityDashboard: React.FC = () => {
             date = {true}
             time = {true}
             containerClassName="dtPicker_Style"
+            culture="tr"
           />
           </Accordion.Content>
         </Accordion>
@@ -278,13 +281,27 @@ const ActivityDashboard: React.FC = () => {
               <Grid.Column width={16}>
               {loadingInitial && page === 0 ? <ActivityListItemPlaceholder/> :
               (
-              <InfiniteScroll
-              pageStart={0}
-              loadMore={handleGetNext}
-              hasMore={!loadingNext && page +1 < totalPages}
-              initialLoad={false}>
+              // <InfiniteScroll
+              // pageStart={0}
+              // loadMore={handleGetNext}
+              // hasMore={!loadingNext && page +1 < totalPages}
+              // initialLoad={false}>
+              <>
                 <ActivityList />
-              </InfiniteScroll>
+                {activityRegistery.size > 0 && 
+                <div style={{display:"flex", justifyContent:"center"}}>
+                <Button  
+                 floated="right"
+                 fluid={isMobile} 
+                 size="large" disabled={loadingNext || (page +1 >= totalPages)} 
+                 onClick={()=> handleGetNext()} 
+                 style={{background:"dodgerblue", color:"white",margin:"20px 0"}}
+               > Daha Fazla Göster </Button>
+               </div>
+                }
+                
+               </>
+             // </InfiniteScroll>
               )}
               <div className="scroll-to-top">
               {isToggleVisible && 

@@ -69,6 +69,7 @@ namespace CleanArchitecture.Application.Orders
                     Photo = orderItem.Activity.Photos.Count > 0 ? orderItem.Activity.Photos.FirstOrDefault(x => x.IsMain).Url : "",
                     OrderStatus = order.OrderState.ToString(),
                     Price = orderItem.Price,
+                    PaidPrice = order.PaidPrice,
                     ProductId = orderItem.Activity.Id.ToString(),
                     TrainerId = trainer.AppUser.UserName,
                     TrainerImage = trainer.AppUser.Photos.Count > 0 ? trainer.AppUser.Photos.FirstOrDefault(x => x.IsMain == true).Url : "",

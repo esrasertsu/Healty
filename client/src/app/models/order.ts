@@ -14,6 +14,7 @@ export interface IOrder {
     orderNo: string;
     description: string;
     price?:number;
+    paidPrice:string;
     productId : string;
     paymentInfo : string;
     email: string;

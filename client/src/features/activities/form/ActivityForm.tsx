@@ -59,6 +59,7 @@ const validate = combineValidators({
   title: isRequired({message: 'Aktivite başlığı zorunlu alandır.'}),
   categoryIds: isRequired({message: 'Kategori zorunlu alandır.'}),
   description: composeValidators(
+    isRequired({message: 'Açıklama zorunlu alandır.'}),
     hasLengthGreaterThan(50)({message: 'Açıklama en az 50 karakter uzunluğunda olmalıdır.'})
   )(),
   date: isRequired({message: 'Tarih zorunlu alandır.'}),
@@ -93,6 +94,10 @@ const validate = combineValidators({
       loadActivity(match.params.id)
         .then(action((activity) => {
           setActivityForm(new ActivityFormValues(activity!));
+          if(activity.mainImage===undefined)
+          {
+            setImageDeleted(true);
+          }
         }))
         .finally(() =>
          setLoading(false));
@@ -159,8 +164,9 @@ const handleTimeChange = (time:any) =>{
     const { date, time, ...activity } = values;
     activity.date = dateAndTime;
 
-    if (!activity.id) {
-         debugger;
+
+        if (!activity.id) {
+          debugger;
             if(image == null)
             {
               setImageDeleted(true);
@@ -193,9 +199,12 @@ const handleTimeChange = (time:any) =>{
           
           }else 
           {
-              toast.warning("Resim silinemez")
+              toast.warning("Resim silinemez/ boş geçilemez.")
           }
-        }
+        
+
+}
+    
   };
 
   return (
@@ -223,7 +232,7 @@ const handleTimeChange = (time:any) =>{
                       setActivityForm({...activityForm,title: value});
                 }}
                  </OnChange>
-                 <label className={image === null && imageDeleted ? "errorLabel" : ""}>Aktivite Liste Fotoğrafı*</label>
+                 <label className={ activityForm.mainImage === null || imageDeleted ? "errorLabel" : ""}>Aktivite Liste Fotoğrafı*</label>
                  {
                    activityForm.mainImage && !imageChange ?
                    <Segment>
@@ -502,7 +511,7 @@ const handleTimeChange = (time:any) =>{
                 <Field 
                   labelName="cityLabel"
                   name="cityId"
-                  placeholder="City"
+                  placeholder="Şehir"
                   component={DropdownInput}
                   options={cities}
                   value={activityForm.cityId}

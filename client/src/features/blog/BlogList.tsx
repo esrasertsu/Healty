@@ -1,5 +1,5 @@
 import React,  { useEffect, useContext, useState, Fragment}  from 'react';
-import { Accordion, Button, Card, Grid, Icon, Label} from 'semantic-ui-react';
+import { Accordion, Button, Card, Grid, Header, Icon, Image, Label} from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -21,6 +21,7 @@ const BlogList: React.FC = () => {
 
   const [loadingNext, setLoadingNext] = useState(false);
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   const handleGetNext = () => {
     setLoadingNext(true);
@@ -129,11 +130,13 @@ const BlogList: React.FC = () => {
               </>
              :""
        }
-        <InfiniteScroll
+        {/* <InfiniteScroll
         pageStart={0}
         loadMore={handleGetNext}
         hasMore={!loadingNext && page +1 < totalPages}
-        initialLoad={false}>
+        initialLoad={false}> */}
+          {getBlogsByDate.length > 0 ?
+          <>
           <Card.Group itemsPerRow={isTabletOrMobile ?1:3}>
               {
                 getBlogsByDate.map((blog) => (
@@ -141,7 +144,29 @@ const BlogList: React.FC = () => {
                 ))
               }
             </Card.Group>
-            </InfiniteScroll>
+              <div style={{display:"flex", justifyContent:"center"}}>
+              <Button  
+               floated="right"
+               fluid={isMobile} 
+               size="large" disabled={loadingNext || (page +1 >= totalPages)} 
+               onClick={()=> handleGetNext()} 
+               style={{background:"dodgerblue", color:"white",margin:"20px 0"}}
+             > Daha Fazla Göster </Button>
+             </div>
+               </>
+            :
+            <>
+            {!isTabletOrMobile && <br></br> }
+            <div style={isMobile? {textAlign:"center" , marginBottom:"40px"  } : {display:"flex", justifyContent:"center" }}>
+              <div>
+              <Header size="large" style={{color:"#263a5e"}} content="Merhaba!"/>
+              <Header size="medium" style={{color:"#263a5e"}} content="Uzmanlarımız her gün bilgilendirici bloglar yazmaya devam ediyor. Takipte kal"/>
+                </div>
+             <Image src={"/icons/clip-computer-workstation.png"} style={isMobile? {width:"100%"} : {width:"60%"}} />
+            </div>
+           </>
+}
+           {/* </InfiniteScroll> */}
             <div className="scroll-to-top">
         {isToggleVisible && 
           <Label style={{display:"flex", alignItems:"center"}} onClick={scrollToTop}>

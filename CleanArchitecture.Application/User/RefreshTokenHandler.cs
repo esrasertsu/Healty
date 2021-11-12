@@ -1,6 +1,7 @@
 ﻿using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Domain;
+using CleanArchitecture.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -22,12 +23,14 @@ namespace CleanArchitecture.Application.User
 
         public class Handler : IRequestHandler<Command, User>
         {
+            private readonly DataContext _context;
             private readonly UserManager<AppUser> _userManager;
             private readonly IJwtGenerator _jwtGenerator;
             private readonly IUserAccessor _userAccessor;
 
-            public Handler(UserManager<AppUser> userManager, IJwtGenerator jwtGenerator, IUserAccessor userAccessor)
+            public Handler(DataContext context,UserManager<AppUser> userManager, IJwtGenerator jwtGenerator, IUserAccessor userAccessor)
             {
+                _context = context;
                 _userManager = userManager;
                 _jwtGenerator = jwtGenerator;
                 _userAccessor = userAccessor;
@@ -41,12 +44,25 @@ namespace CleanArchitecture.Application.User
 
                 var oldToken = user.RefreshTokens.SingleOrDefault(x => x.Token == request.RefreshToken);
 
+                //if(oldToken != null && oldToken.IsActive && (DateTime.UtcNow - oldToken.LastRefreshed > TimeSpan.FromMinutes(9)))
+                //{
+                //    var exTokens = user.RefreshTokens.Where(t => !t.Token.Equals(oldToken.Token)).ToList();
+                //    foreach (var token in exTokens)
+                //        _context.RefreshTokens.Remove(token);
+                //        oldToken.Revoked = DateTime.UtcNow;
+                //}
+
                 if (oldToken != null && !oldToken.IsActive)
                     throw new RestException(HttpStatusCode.Unauthorized);
 
                 var inactiveTokens = user.RefreshTokens.Where(t => !t.Token.Equals(oldToken.Token)).ToList();
                 foreach (var token in inactiveTokens)
-                    user.RefreshTokens.Remove(token);
+                {
+                    if(DateTime.UtcNow - token.LastRefreshed > TimeSpan.FromMinutes(9))
+                    {
+                        _context.RefreshTokens.Remove(token);
+                    }
+                }
 
                 if (oldToken != null)
                 {
@@ -56,7 +72,7 @@ namespace CleanArchitecture.Application.User
                 var newRefreshToken = _jwtGenerator.GenerateRefreshToken();
                 user.RefreshTokens.Add(newRefreshToken);
 
-                await _userManager.UpdateAsync(user);
+                await _context.SaveChangesAsync();
 
                 return new User(user, _jwtGenerator, newRefreshToken.Token);
             }

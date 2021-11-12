@@ -13,13 +13,22 @@ const ProfileCard: React.FC<IProps> = ({profile}) => {
   const rootStore = useContext(RootStoreContext);
   const {setLoadingProfile} = rootStore.profileStore;
 
-  return (
-    <Card onClick={(e:any) => {
-      e.stopPropagation();
-      setLoadingProfile(true);
+  const handleCardClick = (e:any) => {
+    debugger;
+    e.stopPropagation() ;
+    //     if(!isLoggedIn)
+    // {    var str = `/profile/${profile.userName}`;
+    //      handleLoginClick(e,str);
+    // }
+    // else
+    // {
       history.push(`/profile/${profile.userName}`)
+   // }
       
-      }} >
+}
+
+  return (
+    <Card onClick={handleCardClick} >
       <Image src={profile.image || '/assets/user.png'} />
       <Card.Content>
         <Card.Header>{profile.displayName}</Card.Header>

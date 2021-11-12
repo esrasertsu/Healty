@@ -7,7 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 
 export const Settings = () => {
 
-    const [activeItem, setActiveItem] = useState("Siparişlerim")
+    const [activeItem, setActiveItem] = useState("Rezervasyonlarım")
     const handleMenuItemClick = (e:any,data:any) =>{
         setActiveItem(data.name);
     }
@@ -46,8 +46,8 @@ export const Settings = () => {
                     <Menu.Item
                     key="3"
                     className="settingsMenuItem"
-                    name='Siparişlerim'
-                    active={activeItem === 'Siparişlerim'}
+                    name='Rezervasyonlarım'
+                    active={activeItem === 'Rezervasyonlarım'}
                     onClick={handleMenuItemClick}
                     />
                 </Menu>
@@ -57,7 +57,7 @@ export const Settings = () => {
                     {
                         activeItem === "Şirket Bilgilerim" ?
                         <SubMerchantDetails />
-                        : activeItem === "Siparişlerim" ? 
+                        : activeItem === "Rezervasyonlarım" ? 
                         <OrderList settings={true}/>
                         :<ActivityCreationPage />
 

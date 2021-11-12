@@ -16,12 +16,12 @@ export default class ProfileStore{
             () => this.activeTab,
             activeIndex => {
                 this.updatedProfile= false;
-                if(this.profile!.role=== "Trainer" && (activeIndex ===3 || activeIndex===4))
+                if(this.profile && this.profile.role=== "Trainer" && (activeIndex ===3 || activeIndex===4))
                 {
                     const predicate = activeIndex ===4 ? 'followers' : 'following';
                     if(rootStore.userStore.isLoggedIn)
                      this.loadFollowings(predicate);
-                }if(this.profile!.role!== "Trainer" && (activeIndex ===2 || activeIndex===3))
+                }if(this.profile && this.profile.role == "Trainer" && (activeIndex ===2 || activeIndex===3))
                 {
                     const predicate = activeIndex ===3 ? 'followers' : 'following';
                     if(rootStore.userStore.isLoggedIn)
@@ -232,11 +232,14 @@ export default class ProfileStore{
     }
 
     getProfile = (username:string) => {
+        debugger;
+
         this.updatedProfile = false;             
         return this.profileRegistery.get(username);
     }
     @action loadProfile = async (username: string) =>{
-            this.loadingProfile = true;
+        debugger;
+            this.setLoadingProfile(true);
             this.updatedProfile = false;             
             this.setCommentPage(0);
             this.setBlogPagination(0);
@@ -251,7 +254,7 @@ export default class ProfileStore{
                     this.loadBlogs(profile.userName);
                     this.loadComments(profile.userName);
                     this.loadUserReferencePics(profile.userName);
-                    this.loadingProfile = false;
+                    this.setLoadingProfile(false);
                     this.loadAccessibilities();
                     this.rootStore.categoryStore.loadCategories();
 
@@ -259,7 +262,7 @@ export default class ProfileStore{
                 return profile;
             } catch (error) {
                 runInAction(()=>{
-                    this.loadingProfile = false;
+                    this.setLoadingProfile(false);
                 })
                 console.log(error);
             }
@@ -627,7 +630,15 @@ export default class ProfileStore{
                 // }
                 const senderName = this.rootStore.userStore.user!.displayName;
                 toast.success("Mesajın iletidi. Konuşmaya devam etmek için mesaj kutunu kontrol et.")
+
+                this.rootStore.userStore.hubConnection === null ? 
+                this.rootStore.userStore.createHubConnection(true).then(()=>{
+                    this.rootStore.userStore.hubConnection!.invoke('AddToNewChat', newMessage.chatRoomId, this.profile!.userName,senderName);
+                })
+                : 
                 this.rootStore.userStore.hubConnection!.invoke('AddToNewChat', newMessage.chatRoomId, this.profile!.userName,senderName);
+
+
             });
         } catch (error) {
             runInAction('Sending message error', () => {

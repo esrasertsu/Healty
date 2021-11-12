@@ -203,18 +203,18 @@ namespace Infrastructure.Payment
             return checkoutFormInitialize.PaymentPageUrl;
         }
 
-        public string PaymentProcessWithIyzico(Activity activity, AppUser user, int count, string userIp, string conversationId, 
+        public StartPaymentResult PaymentProcessWithIyzico(Activity activity, AppUser user, int count, string userIp, string conversationId, 
             string cardHolderName, string cardNumber, string cvc, string expireMonth, string expireYear, string subMerchantKey, string callbackUrl)
         {
 
             CreatePaymentRequest request = new CreatePaymentRequest();
             request.Locale = Locale.TR.ToString();
             request.ConversationId = conversationId;
-            request.Price = (activity.Price * count).ToString().Split(',')[0];
-            request.PaidPrice = (activity.Price * count).ToString().Split(',')[0];
+            request.Price = RemoveTrailingZeros((activity.Price * count).ToString().Split(',')[0]);
+            request.PaidPrice = RemoveTrailingZeros((activity.Price * count).ToString().Split(',')[0]);
             request.Currency = Currency.TRY.ToString();
             request.Installment = 1;
-            //request.BasketId = "B67832";
+            request.BasketId = "B67832";
             request.PaymentChannel = PaymentChannel.WEB.ToString();
             request.PaymentGroup = PaymentGroup.PRODUCT.ToString();
             request.CallbackUrl = callbackUrl; //verify Email sayfası gibi olcak içerik
@@ -241,6 +241,7 @@ namespace Infrastructure.Payment
             buyer.Ip = userIp; //85.34.78.112
             buyer.City = user.City.Name;
             buyer.Country = "Turkey";
+            buyer.ZipCode = "";
             request.Buyer = buyer;
 
             //BENIM FATURA BILGILERİM
@@ -252,6 +253,9 @@ namespace Infrastructure.Payment
             billingAddress.ZipCode = "34742";
             request.BillingAddress = billingAddress;
 
+            var comision = 50 / 100;
+            var KDV = 18/100;
+            var submerchantprice = activity.Price * 50 / 100 + activity.Price * 50 / 100 * 18 / 100;
 
             List<BasketItem> basketItems = new List<BasketItem>();
             BasketItem firstBasketItem = new BasketItem();
@@ -259,20 +263,22 @@ namespace Infrastructure.Payment
             firstBasketItem.Name = activity.Title;
             firstBasketItem.Category1 = activity.Categories.Select(x => x.Category.Name).FirstOrDefault();
             firstBasketItem.ItemType = BasketItemType.VIRTUAL.ToString();
-            firstBasketItem.Price = (activity.Price * count).ToString().Split(',')[0];
-            firstBasketItem.SubMerchantKey = subMerchantKey;   
-            firstBasketItem.SubMerchantPrice = (activity.Price * 80 / 100 * count).ToString().Split(',')[0];
+            firstBasketItem.Price = RemoveTrailingZeros((activity.Price * count).ToString().Split(',')[0]);
+            firstBasketItem.SubMerchantKey = subMerchantKey;
+            firstBasketItem.SubMerchantPrice = RemoveTrailingZeros((submerchantprice * count).ToString().Split(',')[0]);
             basketItems.Add(firstBasketItem);
 
             request.BasketItems = basketItems;
-
+            
             ThreedsInitialize payment = ThreedsInitialize.Create(request, _options);
             //IyzipayCore.Model.Payment payment = IyzipayCore.Model.Payment.Create(request, _options);
 
             if (payment.Status == "success" && payment.ConversationId == conversationId)
-                return payment.HtmlContent;
-            else return "false";
+                return new StartPaymentResult { ContentHtml = payment.HtmlContent, ErrorMessage = "", ErrorCode = "", ErrorGroup="",  };
+            else return new StartPaymentResult { ContentHtml = "", ErrorMessage = payment.ErrorMessage, ErrorCode = payment.ErrorCode, ErrorGroup = _options.ApiKey, Request = _options.SecretKey };
         }
+
+     
 
         public CleanArchitecture.Domain.SubMerchant GetSubMerchantFromIyzico(string subMerchantExternalId)
         {
@@ -285,24 +291,28 @@ namespace Infrastructure.Payment
 
             IyzipayCore.Model.SubMerchant subMerchant = IyzipayCore.Model.SubMerchant.Retrieve(request, _options);
 
-            if (subMerchant.ConversationId == conversaitonId)
-                return new CleanArchitecture.Domain.SubMerchant() { 
-                  Status = subMerchant.Status == "success" ? true : false,
-                  Address = subMerchant.Address,
-                  GsmNumber = subMerchant.GsmNumber,
-                  ContactName= subMerchant.ContactName,
-                  ContactSurname = subMerchant.ContactSurname,
-                  MerchantType = GetMerchantType(subMerchant.SubMerchantType),
-                  SubMerchantKey = subMerchant.SubMerchantKey,
-                  Email = subMerchant.Email,
-                  TaxNumber= subMerchant.TaxNumber,
-                  TaxOffice = subMerchant.TaxOffice,
-                  Iban= subMerchant.Iban,
-                  IdentityNumber= subMerchant.IdentityNumber,
-                  LegalCompanyTitle= subMerchant.LegalCompanyTitle
+            if (subMerchant.ConversationId == conversaitonId && subMerchant.Status != "failure" && string.IsNullOrEmpty(subMerchant.ErrorMessage))
+                return new CleanArchitecture.Domain.SubMerchant()
+                {
+                    Status = subMerchant.Status == "success" ? true : false,
+                    Address = subMerchant.Address,
+                    GsmNumber = subMerchant.GsmNumber,
+                    ContactName = subMerchant.ContactName,
+                    ContactSurname = subMerchant.ContactSurname,
+                    MerchantType = GetMerchantType(subMerchant.SubMerchantType),
+                    SubMerchantKey = subMerchant.SubMerchantKey,
+                    Email = subMerchant.Email,
+                    TaxNumber = subMerchant.TaxNumber,
+                    TaxOffice = subMerchant.TaxOffice,
+                    Iban = subMerchant.Iban,
+                    IdentityNumber = subMerchant.IdentityNumber,
+                    LegalCompanyTitle = subMerchant.LegalCompanyTitle
                 };
 
-            else return new CleanArchitecture.Domain.SubMerchant();
+            else return new CleanArchitecture.Domain.SubMerchant()
+            {
+                Status = false
+            };
         }
 
         private MerchantType GetMerchantType(string merchantType)
@@ -322,6 +332,11 @@ namespace Infrastructure.Payment
 
         }
 
+        private string RemoveTrailingZeros(string strPrice)
+        {
+            return strPrice.Contains(".") ? strPrice.TrimEnd('0').TrimEnd('.') : strPrice;
+        }
+
 
         public RefundDto IyzicoRefund(string paymentTransactionId, string price, string ip)
         {
@@ -330,7 +345,7 @@ namespace Infrastructure.Payment
             request.ConversationId = conversationId.ToString();
             request.Locale = Locale.TR.ToString();
             request.PaymentTransactionId = paymentTransactionId;
-            request.Price = price; 
+            request.Price = RemoveTrailingZeros(price); 
             request.Ip = ip;
             request.Currency = Currency.TRY.ToString();
 

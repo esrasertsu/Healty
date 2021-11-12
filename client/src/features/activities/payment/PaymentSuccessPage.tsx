@@ -79,7 +79,7 @@ const PaymentSuccessPage : React.FC<RouteComponentProps> = ({location}) =>{
                     <Icon name='wifi' color="green" />
                     Online katılım </div>
                      :
-                   <span>{activity.city ? activity.city : "Şehir Belirtilmemiş"} - {activity.venue? activity.venue : "Yer Belirtilmemiş"}</span> 
+                   <span>{activity.city ? activity.city.text : "Şehir Belirtilmemiş"} - {activity.venue? activity.venue : "Lokasyon Belirtilmemiş"}</span> 
                 }
                  </div> 
                  <div>

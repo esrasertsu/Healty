@@ -89,7 +89,7 @@ namespace CleanArchitecture.Application.Payment
                 order.ConversationId = order.OrderNumber.ToString();
                 order.User = user;
                 order.BuyerName = request.CardHolderName;
-                var cardLength = request.CardNumber.Length;
+                var cardLength = request.CardNumber.Replace(" ","").Length;
                 order.CardLastFourDigit = request.CardNumber.Substring(cardLength - 4, 4);
 
                 var orderItem = new OrderItem()
@@ -136,32 +136,36 @@ namespace CleanArchitecture.Application.Payment
 
                             if (IyzicoMerchant.Status == false || IyzicoMerchant.SubMerchantKey == "" || IyzicoMerchant.SubMerchantKey == null)
                             {
-
-                                throw new Exception("Problem getting merchant from Iyzico. Please contact System Manager");
-
+                              throw new Exception("Problem getting merchant from Iyzico. Please contact System Manager");
 
                                 //kendim alıyorum
                             }
                             else
                             {
                                 if (subMerchantKey != IyzicoMerchant.SubMerchantKey)
+                                {
+                                    //_context.Orders.Remove(order);
+                                    //await _context.SaveChangesAsync();
                                     throw new Exception("Problem with Iyzico merchantKey and system key. Please contact System Manager");
-                              
+                                }
                                 var callbackUrl = $"{request.Origin}/api/payment/callback/" + activity.Id + "/" + request.TicketCount + "?id=" + activity.Id + "&count=" + request.TicketCount + "&uId=" + user.Id + "";
+                               
                                 var paymentStartedRes = _paymentAccessor.PaymentProcessWithIyzico(activity, user, request.TicketCount, request.UserIpAddress,
-                                order.ConversationId, request.CardHolderName, request.CardNumber, request.CVC, request.ExpireMonth, request.ExpireYear, subMerchantKey, callbackUrl);
+                                order.ConversationId, request.CardHolderName, request.CardNumber.Replace(" ", ""), request.CVC, request.ExpireMonth, request.ExpireYear, subMerchantKey, callbackUrl);
 
-                                if (paymentStartedRes != "false")
+                                if (paymentStartedRes.ErrorMessage == "")
                                 {
                                     return new PaymentThreeDResult()
                                     {
                                         Status = true,
-                                        ContentHtml = paymentStartedRes
+                                        ContentHtml = paymentStartedRes.ContentHtml
                                     };
                                 }
                                 else
                                 {
-                                    throw new Exception("Problem with data sending to Iyzico");
+                                    _context.Orders.Remove(order);
+                                    await _context.SaveChangesAsync();
+                                    throw new Exception(paymentStartedRes.ErrorMessage + "," + paymentStartedRes.ErrorGroup + "," + paymentStartedRes.ErrorCode + "," + paymentStartedRes.Request );
                                 }
                             }
                         }
@@ -174,7 +178,8 @@ namespace CleanArchitecture.Application.Payment
                 }
                 catch (Exception ex)
                 {
-
+                    //_context.Orders.Remove(order);
+                    //await _context.SaveChangesAsync();
                     throw new Exception(ex.Message);
                 }
 

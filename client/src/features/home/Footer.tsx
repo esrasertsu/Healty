@@ -32,6 +32,7 @@ const Footer = () => {
               </Header>
               <p>
                 Extra space for a call to action inside the footer that could help re-engage users.
+                <a target="_blank" href="https://icons8.com/icon/26066/event-accepted-tentatively">Event Accepted Tentatively</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
               </p>
             </Grid.Column>
           </Grid.Row>

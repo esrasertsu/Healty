@@ -654,6 +654,9 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<DateTime>("Expires")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<DateTime>("LastRefreshed")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateTime?>("Revoked")
                         .HasColumnType("datetime(6)");
 
@@ -664,7 +667,7 @@ namespace CleanArchitecture.Persistence.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("RefreshToken");
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.SubCatBlogs", b =>

@@ -243,7 +243,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
        />
        <br/>
        <DateTimePicker
-         value={predicate.get('endDate') || null}
+         value={predicate.get('endDate') || new Date()}
          onChange={(date)=> {
            setClearPredicateBeforeSearch(true); 
            clearKeyPredicate("endDate");

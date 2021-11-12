@@ -15,6 +15,7 @@ using Infrastructure.Photos;
 using Infrastructure.Security;
 using Infrastructure.Zoom;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -80,9 +81,8 @@ namespace CleanArchitecture.API
                 {
                     policy.AllowAnyHeader()
                     .AllowAnyMethod()
-                  //  .AllowAnyOrigin();
                      .WithExposedHeaders("WWW-Authenticate")
-                     .WithOrigins("http://localhost:3000", "http://localhost:9999", "https://sandbox-api.iyzipay.com")
+                     .WithOrigins("http://localhost:3000", "http://localhost:9999", "https://sandbox-api.iyzipay.com", "https://afitapp.com")
                     .AllowCredentials();
                 });
             });
@@ -169,7 +169,16 @@ namespace CleanArchitecture.API
                 }
                );
             services.AddHttpContextAccessor();
-            services.ConfigureApplicationCookie(options => { options.Cookie.SameSite = SameSiteMode.None; });
+            services.ConfigureApplicationCookie(options => { 
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.LoginPath = new PathString("/login-required");
+                options.LogoutPath = new PathString("/");
+                options.Cookie.MaxAge = TimeSpan.FromDays(7);
+                options.ExpireTimeSpan = TimeSpan.FromDays(7);
+                options.Cookie.HttpOnly = true;
+                options.SlidingExpiration = true;
+                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+            });
 
 
             services.AddScoped<IJwtGenerator, JwtGenerator>();
@@ -199,40 +208,56 @@ namespace CleanArchitecture.API
         {
             app.UseMiddleware<ErrorHandlingMiddleware>(); // always top 
 
+           
+            //   app.UseRequestResponseLogging();
+
+            // app.UseHttpsRedirection();
+
+            app.UseXContentTypeOptions();
+            app.UseReferrerPolicy(x => x.NoReferrer());
+            app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
+            app.UseXfo(op => op.Deny());
+            app.UseCsp(opt => opt
+                .BlockAllMixedContent()
+                .StyleSources(s => s.Self().CustomSources(
+                    "https://fonts.googleapis.com",
+                    "sha256-yChqzBduCCi4o4xdbXRXh4U/t1rP4UUUMJt+rB+ylUI=",
+                    "sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs="))
+                .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com","data:"))
+                .FormActions(s => s.Self().CustomSources("https://sandbox-api.iyzipay.com"))
+                .FrameAncestors(s => s.Self().CustomSources("https://sandbox-api.iyzipay.com"))
+                .ImageSources(s => s.Self().CustomSources(
+                    "https://res.cloudinary.com",
+                    "https://www.facebook.com",
+                    "https://platform-lookaside.fbsbx.com",
+                    "https://purecatamphetamine.github.io",
+                    "data:",
+                    "blob:"
+                    ))
+                .ScriptSources(s => s.Self().CustomSources(
+                    "https://www.youtube.com",
+                    "https://connect.facebook.net",
+                    "sha256-eE1k/Cs1U0Li9/ihPPQ7jKIGDvR8fYw65VJw+txfifw=",
+                    "sha256-rQPGpX1K43jebTtYXBT+mlyP+LK8/XEaJ2xTV7ZzY6E="))
+                );
+
             if (env.IsDevelopment())
             {
                 // app.UseDeveloperExceptionPage();
             }
             else
             {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                app.Use(async (context, next) =>
+                {
+                    context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
+                    await next.Invoke();
+                });
             }
-
-            //   app.UseRequestResponseLogging();
-
-            // app.UseHttpsRedirection();
-
-            app.UseXContentTypeOptions();
-         //   app.UseReferrerPolicy(x => x.NoReferrer());
-            app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
-         //   app.UseXfo(op => op.Deny);
-            app.UseCsp(opt => opt
-                .BlockAllMixedContent()
-                .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com","sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs="))
-                .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com","data:"))
-             //   .FormActions(s => s.Self())
-               // .FrameAncestors(s => s.Self().CustomSources("https://sandbox-api.iyzipay.com"))
-                //.FrameSources(s => s.Self())
-                //.ObjectSources(s => s.Self())
-                .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com","blob:","data:"))
-               // .ScriptSources(s => s.Self().CustomSources("https://www.youtube.com", "sha256-eE1k/Cs1U0Li9/ihPPQ7jKIGDvR8fYw65VJw+txfifw="))
-                );
+            app.UseRouting();
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            app.UseRouting();
             app.UseCors("CorsPolicy");
 
             app.UseAuthentication();

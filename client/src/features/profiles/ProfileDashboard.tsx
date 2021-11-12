@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { Fragment, useContext, useEffect,useState } from 'react'
-import {Button, Container, Grid, Icon, Label, Message, Segment, Select } from 'semantic-ui-react'
+import {Button, Container, Grid, Header, Icon, Image, Label, Message, Segment, Select } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileListFilters from './ProfileListFilters';
 import { profileSortingOptions } from "../../app/common/options/profileSortingOptions";
@@ -133,8 +133,8 @@ const sixItem:SemanticWIDTHS = 6;
     return (
       <Fragment>
          <Container className="profileList_WelcomeMessage" style={{textAlign:"center"}}>
-             <h2 style={{fontWeight:400, color:"#263a5e"}}>Kullanıcıların Tavsiye Ettikleri ve Çok Daha Fazlası</h2>
-          </Container>
+         <Header size="large" style={{color:"#263a5e"}} content="Kullanıcıların Tavsiye Ettikleri ve Çok Daha Fazlası"/>
+         </Container>
         {
           //  !isTablet &&
           <Segment inverted textAlign='center' vertical className='masthead_page'>
@@ -148,8 +148,13 @@ const sixItem:SemanticWIDTHS = 6;
       {Array.from(popularProfileRegistery.values()).length === 0 && !loadingPopularProfiles && !loadingNext?
        <>
        <br></br>
-        <Message style={{marginTop:"30px"}} header='Aradığınız kriterlere uygun bir uzman bulunamadı :(' list={list} />
-      </> :
+       <div style={isMobile? {textAlign:"center", marginBottom:"40px"  } : {display:"flex", justifyContent:"center", alignItems:"center" }}>
+        <div>
+        <Header size="large" style={{color:"#263a5e"}} content="Hay aksi!"/>
+        <Header size="medium" style={{color:"#263a5e"}} content="Şimdilik aradığın kriterlerde bir uzman bulamadık ama senin için hergün yüzlerce farklı uzmanla görüşüyor ve en iyilerini arıyoruz. Takipte kal"/>
+          </div>
+       <Image src={"/icons/academic.png"} style={isMobile? {width:"100%"} : {width:"50%"}} />
+      </div>      </> :
       <>
       <ProfileDashboardPopularProfiles />
       <Grid>

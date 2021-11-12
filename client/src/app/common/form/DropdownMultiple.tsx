@@ -35,7 +35,7 @@ interface IProps extends FieldRenderProps<string[], HTMLElement>, FormFieldProps
             closeOnChange
 
          />
-        {touched && error && (
+        {error && (
                 <label style={{color:"red"}}>{error}</label>
             )} 
     </Form.Field>

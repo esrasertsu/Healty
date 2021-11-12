@@ -31,28 +31,19 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
          unfollow, isCurrentUser, loading,setActiveTab, setProfileForm} = rootStore.profileStore;
     const {isLoggedIn } = rootStore.userStore;
     useEffect(() => {
-        if(profile)
-       { 
-        
-           loadProfile(match.params.username)
-        .then((profile) => 
-        {   
-            setProfileForm(new ProfileFormValues(profile!))}
-            )
-        setActiveTab(0);
-    }else {
+       
         loadProfile(match.params.username)
         .then((profile) => 
         {   
             setProfileForm(new ProfileFormValues(profile!))}
             )
         setActiveTab(0);
-    }
+    
 
     return () => {
         setProfileNull();
     }
-    }, [])
+    }, [match.params.username])
 
 
 

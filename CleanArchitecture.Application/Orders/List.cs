@@ -60,7 +60,7 @@ namespace CleanArchitecture.Application.Orders
                     throw new RestException(HttpStatusCode.NotFound, new { User = "NotFound" });
 
                 var queryable = _context.Orders
-                    .Where(x => x.UserId == currentUser.Id)
+                    .Where(x => x.UserId == currentUser.Id && x.OrderState != EnumOrderState.Deleted)
                     .OrderByDescending(x => x.OrderDate)
                     .AsQueryable();
 
@@ -85,7 +85,8 @@ namespace CleanArchitecture.Application.Orders
                         Photo = activity.Activity.Photos.Count > 0 ? activity.Activity.Photos.FirstOrDefault(x => x.IsMain).Url : "",
                         OrderStatus = item.OrderState.ToString(),
                         Price = activity.Price,
-                        ProductId = activity.Id.ToString(),
+                        PaidPrice = item.PaidPrice,
+                        ProductId = activity.Activity.Id.ToString(),
                         TrainerId = trainer.AppUser.UserName,
                         TrainerImage = trainer.AppUser.Photos.Count > 0 ? trainer.AppUser.Photos.FirstOrDefault(x => x.IsMain == true).Url : ""
 

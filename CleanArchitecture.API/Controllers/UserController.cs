@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Application.SubMerchants;
 using CleanArchitecture.Application.User;
 using CleanArchitecture.Domain;
@@ -15,6 +16,7 @@ namespace CleanArchitecture.API.Controllers
 {
     public class UserController : BaseController
     {
+
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<User>> Login(Login.Query query)
@@ -37,7 +39,8 @@ namespace CleanArchitecture.API.Controllers
         public async Task<ActionResult<User>> CurrentUser()
         {
             var user = await Mediator.Send(new CurrentUser.Query());
-            SetTokenCookie(user.RefreshToken);
+            if(user!=null)
+                SetTokenCookie(user.RefreshToken);
             return user;
         }
 
@@ -100,6 +103,7 @@ namespace CleanArchitecture.API.Controllers
             SetTokenCookie(user.RefreshToken);
             return user;
         }
+
         [AllowAnonymous]
         [HttpPost("verifyEmail")]
         public async Task<ActionResult> VerifyEmail(ConfirmEmail.Command command)

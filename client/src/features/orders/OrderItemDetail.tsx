@@ -19,19 +19,24 @@ interface DetailParams{
 const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, history}) => {
 
     const rootStore = useContext(RootStoreContext);
-    const { getOrderDetails,order,loadingOrder,loadingRefundPaymentPage,refundPayment } = rootStore.activityStore;
+    const { getOrderDetails,order,loadingOrder,loadingRefundPaymentPage,refundPayment ,deleteOrder} = rootStore.activityStore;
     const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
     const [open, setOpen] = useState(false);
+    const [removeItemOpen, setRemoveItemOpen] = useState(false);
+
     const { modal, openModal, closeModal} = rootStore.modalStore;
 
     useEffect(() => {
+        debugger;
         getOrderDetails(match.params.id)
     }, [getOrderDetails, match.params.id]) // sadece 1 kere çalışcak, koymazsak her component render olduğunda
     
 
    const handleDeleteOrderItem = () =>{
-        
+     setOpen(false);
+     if(order)
+     deleteOrder(order!.id)
    }
 
    const handlePayOrderItem = () =>{
@@ -39,7 +44,6 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
    }
 
    const handleRefundPayment = () =>{
-       debugger;
        setOpen(false);
 
        if(order)
@@ -95,6 +99,15 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
           onCancel={() =>setOpen(false)}
           onConfirm={handleRefundPayment}
         />
+         <Confirm
+          content='Bu rezervasyonu listenizden çıkartmak istediğinize emin misiniz?'
+          open={removeItemOpen}
+          header="Bekleyen rezervasyonu sil"
+          cancelButton='Geri'
+          confirmButton="Rezervasyonu sil"
+          onCancel={() =>setRemoveItemOpen(false)}
+          onConfirm={handleDeleteOrderItem}
+        />
            <Segment className="orderItem_paymentSegment">
                <Grid>
                    <Grid.Row className="orderItem_paymentContainer_GridRow">
@@ -122,7 +135,7 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
                            order.orderStatus == "Unpaid" &&
                            <>
                             <Button
-                                    onClick={()=> handleDeleteOrderItem()}
+                                    onClick={()=> setRemoveItemOpen(true)}
                                     floated="right"
                                     content="Sil"
                                     color="red"
@@ -228,7 +241,7 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
                     <Segment className="orderItem_PaymentDetails_Container" attached >
                     <div className="item">
                            <span className="title">Fiyat</span>
-                           <span className="content">{order.price} TL</span>
+                           <span className="content">{Number(order.price)} TL</span>
                        </div>
                     <div className="item">
                            <span className="title">Adet</span>
@@ -240,7 +253,7 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
                        </div>
                        <div className="last item">
                            <span style={{fontWeight:"bold"}} className="title">Toplam</span>
-                           <span style={{fontWeight:"bold"}} className="content">{order.price} TL</span>
+                           <span style={{fontWeight:"bold"}} className="content">{Number(order.paidPrice)} TL</span>
                        </div>
                     </Segment>
                    

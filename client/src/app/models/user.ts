@@ -150,7 +150,7 @@ export class SubMerchantInfo implements ISubMerchantInfo {
     iban : string = "";
     identityNumber: string = "";
     legalCompanyTitle: string = "";
-    hasSignedContract: boolean = true;
+    hasSignedContract: boolean = false;
 
 
     constructor(init?: ISubMerchantInfo){

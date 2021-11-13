@@ -41,7 +41,9 @@ import PaymentSuccessPage from '../../features/activities/payment/PaymentSuccess
 import PaymentErrorPage from '../../features/activities/payment/PaymentErrorPage';
 import OrderList from '../../features/orders/OrderList';
 import OrderItemDetail  from '../../features/orders/OrderItemDetail';
-import TrainerForm from '../../features/user/TrainerForm';
+import TrainerForm from '../../features/user/TrainerRegisterModal';
+import TrainerOnboardingPage from '../../features/user/TrainerOnboardingPage';
+import TrainerRegisterPage from '../../features/user/TrainerRegisterPage';
 
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
@@ -197,7 +199,9 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <Route path="/user/registerSuccess" component={RegisterSuccess}/>
                  <Route path="/user/verifyEmail" component={VerifyEmail}/>
                  <Route path="/user/resetPassword" component={ResetPassword}/>
-                 <Route path="/trainer-application" component={TrainerForm} />
+                 <Route path="/TrainerOnboarding" component={TrainerOnboardingPage} />
+                 <Route path="/TrainerRegister" component={TrainerRegisterPage} />
+
                  <PrivateRoute path="/settings" component={Settings}/>
                  <PrivateRoute exact path="/payment/success" component={PaymentSuccessPage} />
                  <PrivateRoute exact path="/payment/error" component={PaymentErrorPage} />
@@ -252,7 +256,8 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <Route path="/user/registerSuccess" component={RegisterSuccess}/>
                  <Route path="/user/verifyEmail" component={VerifyEmail}/>
                  <Route path="/user/resetPassword" component={ResetPassword}/>
-                 <Route path="/trainer-application" component={TrainerForm} />
+                 <Route path="/TrainerOnboarding" component={TrainerOnboardingPage} />
+                 <Route path="/TrainerRegister" component={TrainerRegisterPage} />
                  <PrivateRoute path="/settings" component={Settings}/>
                  <PrivateRoute exact path="/payment/success" component={PaymentSuccessPage} />
                  <PrivateRoute exact path="/payment/error" component={PaymentErrorPage} />

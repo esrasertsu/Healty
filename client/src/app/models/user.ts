@@ -24,7 +24,8 @@ export interface ITrainerCreationFormValues {
     password: string;
     displayname: string;
     username: string;
-    // phone:string;
+    phone:string;
+    hasSignedContract: boolean;
 }
 
 export class TrainerCreationFormValues implements ITrainerCreationFormValues{
@@ -32,7 +33,8 @@ export class TrainerCreationFormValues implements ITrainerCreationFormValues{
     password:string = "";
     displayname:string = "";
     username:string = "";
-    // phone: string = "";
+     phone: string = "";
+     hasSignedContract: boolean = false;
 }
 
 export interface ITrainerFormValues {
@@ -40,6 +42,8 @@ export interface ITrainerFormValues {
     password: string;
     displayname?: string;
     username?: string;
+    phone: string;
+    hasSignedContract: boolean;
     experienceYear:number;
     accessibilities: IAccessibility[];
     city?: ICity|null;
@@ -63,6 +67,8 @@ export class TrainerFormValues implements ITrainerFormValues{
     password:string = "";
     displayname:string = "";
     username:string = "";
+    phone: string = "";
+    hasSignedContract: boolean = false;
     experienceYear: number = 0;
     experience:string = '';
     certificates:File[] =[];

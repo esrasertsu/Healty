@@ -12,6 +12,8 @@ import { OnChange } from 'react-final-form-listeners';
 import { useMediaQuery } from 'react-responsive'
 import { action } from 'mobx';
 import FormPage2 from './FormPage2';
+import PhoneNumberInput from '../../app/common/form/PhoneNumberInput';
+import { history } from '../..';
 
 
 const validate = combineValidators({
@@ -33,9 +35,9 @@ const FormPage1:React.FC = () =>{
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
 
-    // const handlePhoneNumberChange = (value:any) => {
-    //   setTrainerCreationForm({...tranierCreationForm,phone: value});
-    // }
+    const handlePhoneNumberChange = (value:any) => {
+      setTrainerCreationForm({...tranierCreationForm,phone: value});
+    }
 
    const handleSubmitTrainerForm = (values:ITrainerCreationFormValues) =>{
 
@@ -44,13 +46,7 @@ const FormPage1:React.FC = () =>{
       if(response)
       {
         if(modal.open) closeModal();
-
-        openModal("Uzman Başvuru Formu", <>
-        <Modal.Description>
-        <FormPage2 />
-        </Modal.Description>
-        </>,false,
-      "","", false) 
+        history.push('/trainerRegister');
       }
     }
     )).catch((error) => (
@@ -69,12 +65,7 @@ const FormPage1:React.FC = () =>{
 
     return (
       <>
-      <Header
-              as="h2"
-              content="Uzman Kayıt Formu"
-              color="teal"
-              textAlign="center"
-            />
+    
       {trainerRegistering ? 
       <>
         <Message icon>
@@ -114,9 +105,9 @@ const FormPage1:React.FC = () =>{
           if (!values.email) {
             errors.email = 'Zorunlu alan'
           }
-          // if (!values.phone) {
-          //   errors.phone = 'Zorunlu alan'
-          // }
+          if (!values.phone) {
+            errors.phone = 'Zorunlu alan'
+          }
           if (!values.password) {
             errors.password = 'Zorunlu alan'
           }
@@ -153,6 +144,7 @@ if(value !== tranierCreationForm.username)
                     }
                 }}
             </OnChange>
+            
             <label>Email*</label>
             <Field name="email" placeholder="Email" component={TextInput} value={tranierCreationForm.email}/>
             <OnChange name="email">
@@ -163,14 +155,15 @@ if(value !== tranierCreationForm.username)
                     }
                 }}
             </OnChange>
-            {/* <label>Telefon Numarası*</label>
+           
+             <label>Telefon Numarası*</label>
             <Field
               name="phone"
               placeholder="Telefon"
               component={PhoneNumberInput}
               value={tranierCreationForm.phone}
               onchange={handlePhoneNumberChange}
-            /> */}
+            /> 
             <label>Şifre*</label>
             <Field
               name="password"
@@ -191,13 +184,39 @@ if(value !== tranierCreationForm.username)
              <ErrorMessage error={submitError}
              text={JSON.stringify(submitError.data.errors)} />
             )}
+
+
+
+<div style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
+<div style={{margin:"30px 0"}}>
+                    <Field
+                        name="hasSignedContract"
+                        component="input"
+                        type="checkbox"
+                        initialValue={tranierCreationForm.hasSignedContract}
+                        width={4}
+                        format={v =>v === true}
+                        parse={v => (v ? true : false) }
+                      />&nbsp;&nbsp;
+                      <span><a style={{cursor:"pointer"}} onClick={()=>{}}>Aydınlatma metni</a>'ni okudum ve onayladım.</span> 
+                      {/* {contractErrorMessage!=="" && <label style={{color:"red"}}>{contractErrorMessage}</label>}     */}
+                      <OnChange name="hasSignedContract">
+                  {(value, previous) => {
+                      setTrainerCreationForm({...tranierCreationForm, hasSignedContract:value});
+                   //   setIyzicoContract(value);
+
+                  }}
+                  </OnChange>
+                  </div>
             <Button
               disabled={(invalid)}
               loading={submitting}
-              color='teal'
               content="Devam"
-              fluid
+              positive
+              style={{width:"150px"}}
             />
+          </div>
+
           </Form>
         )}
       />

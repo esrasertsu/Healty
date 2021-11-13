@@ -20,6 +20,7 @@ import { toast } from 'react-toastify';
 import { useMediaQuery } from 'react-responsive'
 import FormPage1 from './FormPage1';
 import NumberInput from '../../app/common/form/NumberInput';
+import { history } from '../..';
 
 
 const FormPage2 = () =>{
@@ -157,17 +158,8 @@ const messages = [];
 
     
  const handlePreviousButtonClick = (e:any) =>{
-
-  e.stopPropagation();
-  if(modal.open) closeModal();
-
-      openModal("Uzman Başvuru Formu", <>
-      <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'} src='/assets/welcome.png' wrapped />
-      <Modal.Description>
-      <FormPage1 />
-      </Modal.Description>
-      </>,true,
-     "","", false) 
+ 
+  history.push("/trainerOnboarding")
      
  }
     return (
@@ -206,12 +198,7 @@ const messages = [];
           submitError
         }) => (
           <Form onSubmit={handleSubmit} error>
-            <Header
-              as="h2"
-              content="Uzman Kayıt Formu"
-              color="teal"
-              textAlign="center"
-            />
+           
            <Label content="<< Geri" color="orange" onClick={handlePreviousButtonClick} style={{cursor:"pointer", marginBottom:"20px"}}/>
         <div>
         <label>Uzman Kategorisi*</label>

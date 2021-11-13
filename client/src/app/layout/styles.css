@@ -1495,6 +1495,21 @@ button, input, optgroup, select, textarea {
   width: 100%;
 }
 
+.trainer_onboarding_announcement {
+  margin-top: 40px!important;
+  display: flex;
+  align-items: flex-end;
+  background: #1970b1 !important;
+  color: rgb(255, 255, 255);
+  font-size: 16px;
+  flex-direction: column;
+}
+
+.trainer_onboarding_announcement .image{
+  height: 60px;
+  margin-right: 10px;
+  transform: rotate(-20deg);
+}
 
 }
 @media (min-width: 501px){
@@ -1519,6 +1534,23 @@ button, input, optgroup, select, textarea {
   margin-top: 30px !important;
   width: 415px;
 
+}
+
+.trainer_onboarding_announcement{
+  margin-top: 40px !important;
+  display: flex;
+  align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      background: #1970b1 !important;
+      color: rgb(255, 255, 255);
+      font-size: 16px;
+}
+
+.trainer_onboarding_announcement .image{
+  height: 90px;
+  margin-right: 20px;
+  transform: rotate(-20deg);
 }
 
 }
@@ -2207,3 +2239,4 @@ button, input, optgroup, select, textarea {
 .profile_activity_card_header{
   font-size: 16px !important;
 }
+

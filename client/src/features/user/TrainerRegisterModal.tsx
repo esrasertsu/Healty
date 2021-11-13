@@ -6,6 +6,7 @@ import { useMediaQuery } from 'react-responsive'
 
 import { RootStoreContext } from '../../app/stores/rootStore';
 import FormPage1 from './FormPage1';
+import { history } from '../..';
 
 const TrainerForm:React.FC = () =>{
     const rootStore = useContext(RootStoreContext);
@@ -24,13 +25,7 @@ const TrainerForm:React.FC = () =>{
   e.stopPropagation();
   if(modal.open) closeModal();
 
-      openModal("Uzman Başvuru Formu", <>
-      <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'} src='/assets/welcome.png' wrapped />
-      <Modal.Description>
-      <FormPage1 />
-      </Modal.Description>
-      </>,true,
-     "","", false) 
+    history.push('/trainerOnboarding');
      
  }
 

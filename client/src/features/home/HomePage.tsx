@@ -9,7 +9,7 @@ import TextInput from '../../app/common/form/TextInput';
 import { Form as FinalForm, Field } from "react-final-form";
 import SearchArea from './SearchArea';
 import { history } from '../../index'
-import TrainerForm from '../user/TrainerForm';
+import TrainerForm from '../user/TrainerRegisterModal';
 import Statistics from './Statistics';
 import { useMediaQuery } from 'react-responsive'
 

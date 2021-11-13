@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import LoginForm from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
-import TrainerForm from '../user/TrainerForm';
+import TrainerForm from '../user/TrainerRegisterModal';
 import { useMediaQuery } from 'react-responsive'
 
 interface IProps{

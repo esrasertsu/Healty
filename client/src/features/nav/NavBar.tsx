@@ -7,7 +7,7 @@ import {history} from '../../index';
 import NavSearchArea from './NavSearchArea';
 import LoginForm from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
-import TrainerForm from '../user/TrainerForm';
+import TrainerForm from '../user/TrainerRegisterModal';
 import { useMediaQuery } from 'react-responsive'
 
 const NavBar: React.FC = () => {

@@ -13,6 +13,7 @@ using Infrastructure.Email;
 using Infrastructure.Payment;
 using Infrastructure.Photos;
 using Infrastructure.Security;
+using Infrastructure.Sms;
 using Infrastructure.Zoom;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -193,6 +194,7 @@ namespace CleanArchitecture.API
             services.AddScoped<IPaymentAccessor, PaymentAccessor>();
             services.AddScoped<IFacebookAccessor, FacebookAccessor>();
             services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<ISmsSender, SmsSender>();
 
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
@@ -200,6 +202,7 @@ namespace CleanArchitecture.API
             services.Configure<IyzicoSettings>(Configuration.GetSection("Iyzico"));
             services.Configure<FacebookAppSettings>(Configuration.GetSection("Authentication:Facebook"));
             services.Configure<SendGridSettings>(Configuration.GetSection("SendGrid"));
+            services.Configure<TwilioSmsSettings>(Configuration.GetSection("Twilio"));
 
         }
 

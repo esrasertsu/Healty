@@ -22,6 +22,7 @@ export interface IUserFormValues {
 export interface ITrainerCreationFormValues {
     email: string;
     password: string;
+    repassword: string;
     displayname: string;
     username: string;
     phone:string;
@@ -31,6 +32,7 @@ export interface ITrainerCreationFormValues {
 export class TrainerCreationFormValues implements ITrainerCreationFormValues{
     email: string = "";
     password:string = "";
+    repassword:string = "";
     displayname:string = "";
     username:string = "";
      phone: string = "";

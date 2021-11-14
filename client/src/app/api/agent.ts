@@ -289,6 +289,9 @@ const User ={
     editSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<boolean> => requests.put('/user/editSubMerchant', subMerchant),
     checkCallbackandStartPayment: (id:string, count:string, status:string, paymentId:string, conversationData:string, conversationId:string, mdStatus:string): Promise<Boolean> => 
         requests.post(`/payment/callback`,{id, count, status, paymentId, conversationData, conversationId, mdStatus}),
+    sendSms: ( phoneNumber : string) : Promise<Boolean> => requests.post(`/user/sendSms?phoneNumber=${phoneNumber}`, {}),
+    sendSmsVerification: (phone: string, code : string) : Promise<Boolean> => requests.post(`/user/sendSmsVerification?phoneNumber=${phone}&code=${code}`, {}),
+    registerWaitingTrainer: ( user : ITrainerCreationFormValues) : Promise<void> => requests.post('/user/registerWaitingTrainer', user),
 
 }
 

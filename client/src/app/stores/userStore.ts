@@ -31,6 +31,7 @@ export default class UserStore {
 
     @observable trainerRegisteredSuccess = false;
     @observable trainerFormMessage = false;
+    @observable resendEmailVeriMessage = false;
     @observable errorMessage = "";
     @observable loadingFbLogin = false;
     @observable loggingOut = false;
@@ -40,6 +41,10 @@ export default class UserStore {
     
     @action setTrainerFormMessage = (value: boolean) => {
         this.trainerFormMessage = value;
+    }
+
+    @action setResendEmailVeriMessage = (value: boolean) =>{
+         this.resendEmailVeriMessage = value;
     }
 
     @action setLoadingFbLogin = (value: boolean) => {
@@ -112,6 +117,10 @@ export default class UserStore {
               window.location.reload();
 
         } catch (error) {
+            if((error as any).data.errors.EmailVerification!==undefined)
+            {
+                this.setResendEmailVeriMessage(true);
+            }
             throw error;
         }
     }
@@ -147,8 +156,8 @@ export default class UserStore {
             }
             if((error as any).data.errors.UserName!==undefined)
               {
-                this.setErrorMessage((error as any).data.errors.UserName);
                 this.setTrainerFormMessage(true);
+                this.setErrorMessage((error as any).data.errors.UserName);
               }  
             this.settrainerRegisteringFalse();
             throw error;

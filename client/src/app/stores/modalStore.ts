@@ -16,10 +16,10 @@ export default class ModalStore {
         footer:null,
         dimmer:"blurring",
         closeOnDimmerClick:true,
-        redirectPage:""
+        redirectPage:"",
     }
 
-    @action openModal = (header:any, content: any, image:any, footer:any, dimmer?:string,closeOnDimmerClick?:boolean,
+    @action openModal = (header:any, content: any, image:any, footer:any, dimmer?:string,closeOnDimmerClick?:boolean
       //  redirectPage?:string
         ) =>{
         this.modal.open = true;

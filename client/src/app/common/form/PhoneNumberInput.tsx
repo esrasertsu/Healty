@@ -5,7 +5,7 @@ import PhoneInput, { formatPhoneNumber, formatPhoneNumberIntl, isValidPhoneNumbe
 
 interface IProps extends FieldRenderProps<string, HTMLElement>, FormFieldProps {}
 
-const PhoneNumberInput:React.FC<IProps> = ({input, width,labelName, type, meta:{touched, error}},
+const PhoneNumberInput:React.FC<IProps> = ({input, width,labelName, type, label, meta:{touched, error}},
     ...rest) => {
 
         if(error && touched )
@@ -20,6 +20,7 @@ const PhoneNumberInput:React.FC<IProps> = ({input, width,labelName, type, meta:{
         type={type} 
         width={width}
         >
+            {label && <label id={labelName}>{label}</label>}
             <PhoneInput
             width="30%"
             name={input.name}

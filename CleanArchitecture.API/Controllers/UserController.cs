@@ -71,6 +71,15 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [AllowAnonymous]
+        [HttpPost("registerWaitingTrainer")]
+        public async Task<ActionResult<Unit>> RegisterWaitingTrainer([FromForm] RegisterWaitingTrainer.Command command)
+        {
+            command.Origin = Request.Headers["origin"];
+            await Mediator.Send(command);
+            return await Mediator.Send(command);
+        }
+
+        [AllowAnonymous]
         [HttpPost("registertrainer")]
         public async Task<ActionResult<Unit>> RegisterTrainer([FromForm] RegisterTrainer.Command command)
         {
@@ -82,6 +91,20 @@ namespace CleanArchitecture.API.Controllers
         public async Task<ActionResult<bool>> IsUserNameAvailable(string username, string email)
         {
             return await Mediator.Send(new IsUserNameAvailable.Query { UserName = username, Email = email });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("sendSms")]
+        public async Task<ActionResult<bool>> SendSms(string phoneNumber)
+        {
+            return await Mediator.Send(new SendSms.Query { PhoneNumber = phoneNumber });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("sendSmsVerification")]
+        public async Task<ActionResult<bool>> SendSmsVerification(string phoneNumber, string code)
+        {
+            return await Mediator.Send(new SendSmsVerification.Query { PhoneNumber = phoneNumber, Code = code });
         }
 
         [AllowAnonymous]

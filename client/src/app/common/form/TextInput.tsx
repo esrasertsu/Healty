@@ -4,7 +4,7 @@ import { Form, FormFieldProps, Label } from 'semantic-ui-react'
 
 interface IProps extends FieldRenderProps<string, HTMLElement>, FormFieldProps {}
 
-const TextInput:React.FC<IProps> = ({input, width, type, placeholder,labelName, meta:{ touched, error}}) => {
+const TextInput:React.FC<IProps> = ({input, width, type, placeholder,labelName, label, meta:{ touched, error}}) => {
 
     if(touched && error)
     {
@@ -15,6 +15,7 @@ const TextInput:React.FC<IProps> = ({input, width, type, placeholder,labelName, 
 
     return (
         <Form.Field  type={type} width={width}>
+            {label && <label id={labelName}>{label}</label>}
             <input {...input} placeholder={placeholder}/>
             {touched && error && (
                 <label style={{color:"red"}}>{error}</label>

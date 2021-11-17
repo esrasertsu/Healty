@@ -1535,7 +1535,7 @@ i.search.inverted.icon {
 }
 
 .mobileNavMenu_Header{
-  background: #263a5e !important;
+  background: #072750  !important;
   color: #ffff !important;
   height: 175px !important;
   display: flex;
@@ -2067,6 +2067,10 @@ button, input, optgroup, select, textarea {
  
   min-height: 90vh;
 }
+.masthead_page.profileDashboard
+  {
+    margin-top: 50px !important;
+  }
 }
 
 /*end map page styles*/

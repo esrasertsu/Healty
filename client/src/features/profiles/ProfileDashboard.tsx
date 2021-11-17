@@ -168,6 +168,7 @@ const sixItem:SemanticWIDTHS = 6;
                 </p>
 
          </Container>
+         <Container className="pageContainer">
         {
           //  !isTablet &&
           <Segment inverted textAlign='center' vertical className='masthead_page profileDashboard'>
@@ -177,7 +178,7 @@ const sixItem:SemanticWIDTHS = 6;
       </Segment>
 
         }
-      <Container className="pageContainer">
+    
       {Array.from(popularProfileRegistery.values()).length === 0 && !loadingPopularProfiles && !loadingNext?
        <>
        <br></br>

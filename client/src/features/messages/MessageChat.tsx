@@ -1,5 +1,5 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react';
-import { Button, Form, Icon, Item, Label, Loader, Popup, Segment } from 'semantic-ui-react';
+import { Button, Container, Form, Icon, Item, Label, Loader, Popup, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
@@ -62,7 +62,8 @@ const MessageChat: React.FC<IProps> = ({setshowChatRoomList}) => {
 
 
     return (
-        <>
+        <Container className="pageContainer">
+
         <Fragment>
             <Segment className="chat_segment">
             <div className="chat_profile_details">{
@@ -182,7 +183,7 @@ const MessageChat: React.FC<IProps> = ({setshowChatRoomList}) => {
 
             </div>
         </Fragment>
-        </>
+        </Container>
     )
 }
 

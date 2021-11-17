@@ -41,7 +41,7 @@ SwiperCore.use([Pagination,Navigation]);
               "clickable": true
             }} 
             spaceBetween={10}
-            slidesPerView={isMobile? 1 :5}
+            slidesPerView={isMobile? 1: isTablet?3 :5}
             navigation={true} 
             initialSlide={0}
         >

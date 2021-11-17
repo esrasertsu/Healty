@@ -70,7 +70,6 @@ const handleResetPassword = (e:any) => {
 }
 
     return (
-      <Container className="pageContainer">
 
       <FinalForm
         onSubmit={(values: IUserFormValues) => 
@@ -135,7 +134,6 @@ const handleResetPassword = (e:any) => {
           </Form>
         )}
       />
-      </Container>
     );
 }
 

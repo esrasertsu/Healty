@@ -238,9 +238,6 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
            <Fragment>
                 <Switch>
                 <Route path="/profiles" component={ProfileDashboard}/>
-
-                <Container className="pageContainer">
-
                 <Route exact path="/activities" component={ActivityDashboard} />
                  <Route path="/activities/:id" component={ActivityDetails} />
                  <PrivateRoute exact path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
@@ -265,7 +262,6 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <PrivateRoute exact path="/orders/:id" component={OrderItemDetail}/>
                  <Route exact path="/admin" component={Admin}/>
                  <Route component={NotFound}/>
-                 </Container>
            </Switch>
            </Fragment>
          )} />

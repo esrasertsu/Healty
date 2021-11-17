@@ -1,5 +1,5 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react';
-import { Icon, Image, List, Popup, Segment } from 'semantic-ui-react';
+import { Container, Icon, Image, List, Popup, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
@@ -41,6 +41,8 @@ const ChatRoomList: React.FC<IProps> = ({setshowChatRoomList}) => {
     if(loadingChatRooms) return <LoadingComponent content='Loading chat rooms...'/>  
 
     return (
+      <Container className="pageContainer">
+
       <Fragment>
        <Segment secondary attached style={{ border: 'none', height:"100%"}}>
             <Scrollbars
@@ -91,6 +93,7 @@ const ChatRoomList: React.FC<IProps> = ({setshowChatRoomList}) => {
              </Scrollbars>
              </Segment>
       </Fragment>
+    </Container>
     )
 }
 

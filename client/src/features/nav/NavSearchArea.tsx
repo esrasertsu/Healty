@@ -9,7 +9,8 @@ import { history } from '../../index'
  const NavSearchArea = () => {
 
     const rootStore = useContext(RootStoreContext);
-    const {setProfileFilterForm,profileFilterForm,clearPopularProfileRegistery,clearProfileRegistery,navSearchValue, setNavSearchValue, setPage,loadPopularProfiles} = rootStore.profileStore;
+    const {setProfileFilterForm,profileFilterForm,clearPopularProfileRegistery,clearProfileRegistery,
+      navSearchValue, setNavSearchValue, setPage,loadPopularProfiles,setprofileSearchAreaValue} = rootStore.profileStore;
 
     const {
       loadAllCategoryList,
@@ -31,6 +32,8 @@ import { history } from '../../index'
 
     const handleResultSelect = (e:any, { result}:any) => {
       setNavSearchValue(result.text);
+      setprofileSearchAreaValue("");
+
         setPage(0);
         if(result && result.parentId === null)
         {
@@ -77,7 +80,7 @@ import { history } from '../../index'
                         value={navSearchValue}
                         resultRenderer={resultRenderer}
                         className="nav_SearchArea"
-                        placeholder="Kategori ara" 
+                        placeholder="Uzman Kategorisi..." 
                         noResultsMessage="Aradığınız kategori bulunamadı"
                 />
                      

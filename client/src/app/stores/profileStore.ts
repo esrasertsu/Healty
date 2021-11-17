@@ -81,6 +81,7 @@ export default class ProfileStore{
     @observable referencePics: IRefencePic[] = [];
     @observable deletingReferencePic = false;
     @observable navSearchValue = "";
+    @observable profileSearchAreaValue ="";
     @observable totalProfilePage = 0;
     @observable page = 0;
     @computed get isCurrentUser(){
@@ -125,6 +126,10 @@ export default class ProfileStore{
 
     @action setNavSearchValue = (value:string) => {
         this.navSearchValue = value;
+    }
+
+    @action setprofileSearchAreaValue = (value:string) => {
+        this.profileSearchAreaValue = value;
     }
 
     @action clearPopularProfileRegistery = () => {

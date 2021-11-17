@@ -21,10 +21,9 @@ import { useMediaQuery } from 'react-responsive'
     } = rootStore.categoryStore;
     const {userCity} = rootStore.commonStore;
     const {setProfileFilterForm,profileFilterForm,clearPopularProfileRegistery,clearProfileRegistery, setPage
-    ,setNavSearchValue,loadPopularProfiles} = rootStore.profileStore;
+    ,setNavSearchValue,loadPopularProfiles, profileSearchAreaValue, setprofileSearchAreaValue} = rootStore.profileStore;
 
     const [results, setResults] = useState<IAllCategoryList[]>([]);
-    const [value, setValue] = useState('');
     const [result, setResult] = useState<IAllCategoryList>();
 
 
@@ -39,12 +38,12 @@ import { useMediaQuery } from 'react-responsive'
 
 
     const handleResultSelect = (e:any, { result}:any) => {
-        setValue(result.text);
+      setprofileSearchAreaValue(result.text);
         setResult(result);
     }
     const handleSearchChange = (e:any, { value }: any) => {
       setSearchLoading(true);
-      setValue(value);
+      setprofileSearchAreaValue(value);
   
       setTimeout(() => {  
         const re = new RegExp(_.escapeRegExp(value), 'i')
@@ -67,7 +66,7 @@ import { useMediaQuery } from 'react-responsive'
                           leading: true,
                         })}
                         results={results}
-                        value={value}
+                        value={profileSearchAreaValue}
                         resultRenderer={resultRenderer}
                         className="SearchArea"
                         placeholder={loadingAllDetailedList ? "Yükleniyor..." : isMobile ? "Kategori ismi girin" :"Arama yapmak istediğin kategori.." }

@@ -24,7 +24,7 @@ const ProfileListFilters: React.FC = () => {
  } = rootStore.commonStore;
 
   const {accessibilities, profileFilterForm, setProfileFilterForm, loadPopularProfiles, 
-    clearPopularProfileRegistery ,clearProfileRegistery,setPage, setNavSearchValue} = rootStore.profileStore;
+    clearPopularProfileRegistery ,clearProfileRegistery,setPage, setNavSearchValue,setprofileSearchAreaValue} = rootStore.profileStore;
 
   //const [filters, setFilters] = useState(new ProfilesFilterFormValues());
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -139,6 +139,7 @@ const ProfileListFilters: React.FC = () => {
                     setPage(0);
                     loadPopularProfiles();
                     setNavSearchValue("");
+                    setprofileSearchAreaValue("");
 
                   }
                   }

@@ -1,5 +1,5 @@
 ﻿import React, { useContext, useEffect, useState } from "react";
-import { Segment, Form, Button, Grid, Label, Header, Image, Icon, Popup } from "semantic-ui-react";
+import { Segment, Form, Button, Grid, Label, Header, Image, Icon, Popup, Container } from "semantic-ui-react";
 import {
   ActivityFormValues
 } from "../../../app/models/activity";
@@ -208,6 +208,8 @@ const handleTimeChange = (time:any) =>{
   };
 
   return (
+    <Container className="pageContainer">
+
     <Grid stackable>
       <Grid.Row>
       <Grid.Column>
@@ -600,6 +602,7 @@ const handleTimeChange = (time:any) =>{
        </Grid.Row>
     
     </Grid>
+ </Container>
   );
 };
 

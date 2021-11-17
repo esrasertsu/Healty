@@ -76,8 +76,10 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
        <Container className="mobileNavMenu_container">
            
            {!isLoggedIn && (
-       <Menu.Item header>
-               <p style={{ fontSize: '1em', color: "#1a2b49", fontWeight:500, textAlign:"left" }}>Eğitmenlere erişmek ve aktivitelere katılabilmek için:</p>
+               <>
+       <Menu.Item header className="mobileNavMenu_Header">
+               <h2 style={{fontWeight:500}}>Hoşgeldin!</h2>
+               <p style={{ fontSize: '16px', fontWeight:500 }}>Uzmanlarla iletişime geçebilmek, aktivitelere katılabilmek ve çok daha fazlası için:</p>
                 <Button
                    onClick={(e:any) => 
                     { 
@@ -85,52 +87,68 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                      setActiveMenu(-1)
                      setVisibleMobileNav(false);
                  }}
-                 className="loginRegMobileButton" primary>Giriş Yap/Hesap Oluştur</Button>
+                 className="loginRegMobileButton" primary>Hesap Oluştur</Button>
                   
                   </Menu.Item>
-           )}
-                  <Menu.Item as={Link} to="/profiles" 
+           
+            <Menu.Item
                   active={activeMenu === 0}
                   className="mobileNavMenu_container_item"
-                onClick={() => {
-                   //setLoadingProfiles(true);
+                onClick={(e:any) => {
+                   handleLoginClick(e);
                    setActiveMenu(0);
                    setVisibleMobileNav(false);
                     }} >
                         <h3 className="mobileNavMenu_container_item">
-                        <Icon size="large" name="users" style={{marginRight:"10px"}} ></Icon>
-                          Eğitmenler
+                        <Icon name="user" style={{marginRight:"10px"}} ></Icon>
+                          Giriş Yap
+                        </h3>
+                        </Menu.Item> 
+                        </>
+                        )}
+                        
+                  <Menu.Item as={Link} to="/profiles" 
+                  active={activeMenu === 1}
+                  className="mobileNavMenu_container_item"
+                onClick={() => {
+                   //setLoadingProfiles(true);
+                   setActiveMenu(1);
+                   setVisibleMobileNav(false);
+                    }} >
+                        <h3 className="mobileNavMenu_container_item">
+                        <Icon name="graduation cap" style={{marginRight:"10px"}} ></Icon>
+                          Uzmanlar
                         </h3>
                         </Menu.Item> 
                <Menu.Item as={Link} to="/activities" 
-                active={activeMenu === 1}
+                active={activeMenu === 2}
                 className="mobileNavMenu_container_item"
 
                   onClick={() => {
                  //   setLoadingInitial(true);
-                    setActiveMenu(1)
+                    setActiveMenu(2)
                     setVisibleMobileNav(false);
                 }}>
                       <h3 className="mobileNavMenu_container_item">
-                        <Icon size="large" name="calendar alternate outline" style={{marginRight:"10px"}} ></Icon>
+                        <Icon name="calendar alternate outline" style={{marginRight:"10px"}} ></Icon>
                         Aktiviteler
                         </h3>
                 </Menu.Item>
 
                 
           <Menu.Item as={Link} to="/blog" 
-           active={activeMenu === 2}
+           active={activeMenu === 3}
            className="mobileNavMenu_container_item"
 
              onClick={() => {
                  //  setLoadingPosts(true);
                    // history.push(`/blog`);
-                    setActiveMenu(2)
+                    setActiveMenu(3)
                     setVisibleMobileNav(false);
                     }} >
                         
                       <h3 className="mobileNavMenu_container_item">
-                      <Icon size="large" name="pencil alternate" style={{marginRight:"10px"}} ></Icon>
+                      <Icon name="pencil alternate" style={{marginRight:"10px"}} ></Icon>
                         Blog Yazılar
                         </h3>
                     </Menu.Item>
@@ -141,22 +159,6 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                <p style={{ fontSize: '1em', color: "#1a2b49", fontWeight:500, textAlign:"left" }}>Hesabım:</p>
              </Menu.Item>
               <Menu.Item as={Link} to={`/profile/${user!.userName}`}
-                    active={activeMenu === 3}
-                    className="mobileNavMenu_container_item"
-
-                        onClick={() => {
-                            //  setLoadingPosts(true);
-                            // history.push(`/blog`);
-                                setActiveMenu(3)
-                                setVisibleMobileNav(false);
-                                }} >
-                                    
-                                <h3 className="mobileNavMenu_container_item">
-                                <Icon size="large" name="user" style={{marginRight:"10px"}} ></Icon>
-                                    Profilim
-                                    </h3>
-                    </Menu.Item>
-                    <Menu.Item as={Link} to={`/messages`}
                     active={activeMenu === 4}
                     className="mobileNavMenu_container_item"
 
@@ -168,14 +170,11 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                                 }} >
                                     
                                 <h3 className="mobileNavMenu_container_item">
-                                <Icon size="large" name="mail" style={{marginRight:"10px"}} ></Icon>
-                                    Mesajlar
-                                    <Label style={{margin:"0 0 0 10px"}} className="messageNotificationCount">
-                                    {notificationCount}
-                                    </Label>
+                                <Icon name="user" style={{marginRight:"10px"}} ></Icon>
+                                    Profilim
                                     </h3>
                     </Menu.Item>
-                    <Menu.Item as={Link} to={`/settings`}
+                    <Menu.Item as={Link} to={`/messages`}
                     active={activeMenu === 5}
                     className="mobileNavMenu_container_item"
 
@@ -187,8 +186,27 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                                 }} >
                                     
                                 <h3 className="mobileNavMenu_container_item">
-                                <Icon size="large" name="settings" style={{marginRight:"10px"}} ></Icon>
-                                    Ayarlar
+                                <Icon name="mail" style={{marginRight:"10px"}} ></Icon>
+                                    Mesajlar
+                                    <Label style={{margin:"0 0 0 10px"}} className="messageNotificationCount">
+                                    {notificationCount}
+                                    </Label>
+                                    </h3>
+                    </Menu.Item>
+                    <Menu.Item as={Link} to={`/settings`}
+                    active={activeMenu === 6}
+                    className="mobileNavMenu_container_item"
+
+                        onClick={() => {
+                            //  setLoadingPosts(true);
+                            // history.push(`/blog`);
+                                setActiveMenu(6)
+                                setVisibleMobileNav(false);
+                                }} >
+                                    
+                                <h3 className="mobileNavMenu_container_item">
+                                <Icon name="settings" style={{marginRight:"10px"}} ></Icon>
+                                   Hesap Ayarları
                                     </h3>
                     </Menu.Item>
                     <Menu.Item>

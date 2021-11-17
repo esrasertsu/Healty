@@ -230,6 +230,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
       <DateTimePicker
          value={predicate.get('startDate') || new Date()}
          onChange={(date)=> {
+           
            setClearPredicateBeforeSearch(true); 
            clearKeyPredicate("startDate");
            setClearPredicateBeforeSearch(false); 
@@ -243,7 +244,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
        />
        <br/>
        <DateTimePicker
-         value={predicate.get('endDate') || new Date()}
+         value={predicate.get('endDate')}
          onChange={(date)=> {
            setClearPredicateBeforeSearch(true); 
            clearKeyPredicate("endDate");
@@ -255,6 +256,20 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
          containerClassName="dtPicker_Style"
          culture="tr"
      
+       />
+       <Button 
+       inverted 
+       content="Temizle" 
+       style={{marginTop:"10px"}}
+       onClick={() =>{
+        clearKeyPredicate("startDate");
+        clearKeyPredicate("endDate");
+        setPage(0);
+        clearActivityRegistery();
+        loadActivities();
+        setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
+        scrollToTop();
+       }}
        />
       </Segment>
       }

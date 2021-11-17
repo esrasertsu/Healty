@@ -132,7 +132,7 @@ export default class CommonStore {
             maximumAge: 0,
           };
 
-        if (navigator.geolocation) {
+        if (navigator.geolocation && ( navigator.permissions && navigator.permissions.query )) {
             navigator.permissions
               .query({ name: "geolocation" })
               .then(function (result) {
@@ -152,9 +152,7 @@ export default class CommonStore {
                   console.log(result.state);
                 };
               });
-          } else {
-            alert("Sorry Not available!");
-          }
+          } 
         }
     
 }

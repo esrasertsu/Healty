@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {RouteComponentProps} from 'react-router-dom';
 import queryString from 'query-string';
-import { Button, Header, Icon, Image, Modal, Segment } from 'semantic-ui-react';
+import { Button, Container, Header, Icon, Image, Modal, Segment } from 'semantic-ui-react';
 import agent from '../../app/api/agent';
 import { toast } from 'react-toastify';
 import { RootStoreContext } from '../../app/stores/rootStore';
@@ -84,6 +84,8 @@ const VerifyEmail : React.FC<RouteComponentProps> = ({location}) =>{
 
 
     return(
+        <Container className="pageContainer">
+
         <Segment placeholder>
             <Header icon>
                 <Icon name="envelope" />
@@ -96,6 +98,7 @@ const VerifyEmail : React.FC<RouteComponentProps> = ({location}) =>{
                 </div>
             </Segment.Inline>
         </Segment>
+        </Container>
     )
 }
 

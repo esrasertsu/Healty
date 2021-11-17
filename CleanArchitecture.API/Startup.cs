@@ -224,6 +224,7 @@ namespace CleanArchitecture.API
                 .BlockAllMixedContent()
                 .StyleSources(s => s.Self().CustomSources(
                     "https://fonts.googleapis.com",
+                    "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
                     "sha256-yChqzBduCCi4o4xdbXRXh4U/t1rP4UUUMJt+rB+ylUI=",
                     "sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs="))
                 .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com","data:"))

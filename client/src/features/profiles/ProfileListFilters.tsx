@@ -23,7 +23,8 @@ const ProfileListFilters: React.FC = () => {
     cities
  } = rootStore.commonStore;
 
-  const {accessibilities, profileFilterForm, setProfileFilterForm, loadPopularProfiles, clearPopularProfileRegistery ,clearProfileRegistery,setPage} = rootStore.profileStore;
+  const {accessibilities, profileFilterForm, setProfileFilterForm, loadPopularProfiles, 
+    clearPopularProfileRegistery ,clearProfileRegistery,setPage, setNavSearchValue} = rootStore.profileStore;
 
   //const [filters, setFilters] = useState(new ProfilesFilterFormValues());
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -136,6 +137,8 @@ const ProfileListFilters: React.FC = () => {
                     clearProfileRegistery();
                     setPage(0);
                     loadPopularProfiles();
+                    setNavSearchValue("");
+
                   }
                   }
                 />

@@ -71,7 +71,7 @@ interface IProps {
 }
   return (
     <Card onClick={handleCardClick}
-      style={{height:"100%"}}
+      style={{height:"100%", marginBottom:"10px", minHeight:"450px"}}
       key={profile.userName+Math.random()} >
       <Image circular src={profile.image || '/assets/user.png'} />
       <div className="profileListItem_badges">   
@@ -82,13 +82,17 @@ interface IProps {
      
       <Card.Content className="profileCard_Content">
         <Card.Header className="profileHeader_Name" style={{textAlign:"center"}}>{profile.displayName}</Card.Header>
-       {profile.title &&  <div style={{textAlign:"center", marginBottom:"5px"}}>{profile.title}</div>}
+       {profile.title &&  <div className="ellipsis" style={{textAlign:"center", marginBottom:"5px"}}>{profile.title}</div>}
         {/* <div style={{textAlign:"center", marginBottom:"15px"}}>
           {profile.hasPhoneNumber && <Icon name="phone" color="green" /> }
           <Icon name="envelope" style={{color:"#263a5e"}} />
         </div> */}
         <Card.Description key={profile.userName+Math.random()+"desc"}>
         <Popup
+         hoverable
+         position="top center"
+         on={['hover', 'click']}
+         positionFixed 
         content={profile.subCategories && profile.subCategories.length> 0 ?
           profile.subCategories.map<React.ReactNode>(s => <span key={profile.userName+Math.random()+"subspan"}>{s.text}</span>).reduce((prev, cur) => [prev, ', ', cur])
           : "Bilgi yok"}
@@ -103,6 +107,10 @@ interface IProps {
       />
          
             <Popup
+             hoverable
+             position="top center"
+             on={['hover', 'click']}
+             positionFixed 
         content={profile.accessibilities && profile.accessibilities.length > 0 ? 
      
           profile.accessibilities.map<React.ReactNode>(s =>

@@ -14,8 +14,11 @@ const SocialLogin: React.FC<IProps> = ({fbCallback, loading}) => {
             <FacebookLogin
              appId="372698491064171"
              fields="name,email,picture"
+             autoLoad={false}
             // onClick={componentClicked}
              callback={fbCallback}
+             cssClass="fbtn"
+             disableMobileRedirect={true}
              render={(renderProps:any) =>(
                  <Button loading={loading} onClick={renderProps.onClick} type="button" fluid color="facebook">
                      <Icon name="facebook"/>

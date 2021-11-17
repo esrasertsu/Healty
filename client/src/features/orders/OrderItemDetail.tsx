@@ -71,7 +71,8 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
 
     return (
      !order ? 
-     <>
+     <Container className="pageContainer">
+
      {!isTabletOrMobile && <br></br> }
      <Segment placeholder>
            <Header icon>
@@ -86,9 +87,9 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
                </div>
            </Segment.Inline>
        </Segment>
-    </>
+    </Container>
     :
-        <div>
+    <Container className="pageContainer">
           
         <Confirm
           content='Bu rezervasyonu iptal etmek istediğinize emin misiniz?'
@@ -339,7 +340,7 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
                             </Item.Group>
                             </Segment>
                     </Segment>
-        </div>
+        </Container>
     )
 }
 

@@ -151,8 +151,8 @@ if(loadingActivity) return <LoadingComponent content='Loading...'/>
     
  }
     return (
-    <Fragment>
-   <Step.Group style={{marginTop:"30px", width:"100%"}} >
+      <Container className="pageContainer">
+      <Step.Group style={{marginTop:"30px", width:"100%"}} >
     <Step onClick={() => handleStepClick(0)} active={stepNo === 0}>
       <Icon name='user' />
       <Step.Content>
@@ -345,7 +345,7 @@ if(loadingActivity) return <LoadingComponent content='Loading...'/>
 
    }
     
-   </Fragment>
+   </Container>
     )
 }
 

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {Link, RouteComponentProps} from 'react-router-dom';
 import queryString from 'query-string';
-import { Button, Header, Icon, Item, Segment } from 'semantic-ui-react';
+import { Button, Container, Header, Icon, Item, Segment } from 'semantic-ui-react';
 import agent from '../../../app/api/agent';
 import { toast } from 'react-toastify';
 import { observer } from 'mobx-react-lite';
@@ -29,6 +29,8 @@ const PaymentSuccessPage : React.FC<RouteComponentProps> = ({location}) =>{
 
    if(!activity)
     return (
+        <Container className="pageContainer">
+
         <Segment placeholder>
         <Header icon>
             <Icon name="check" />
@@ -40,10 +42,12 @@ const PaymentSuccessPage : React.FC<RouteComponentProps> = ({location}) =>{
         </div>
         </Segment.Inline>
         </Segment>
+        </Container>
     )
 
     return(
-        <>
+        <Container className="pageContainer">
+
         <Segment placeholder>
             <Header icon>
                 <Icon color="green" name="check" />
@@ -126,7 +130,7 @@ const PaymentSuccessPage : React.FC<RouteComponentProps> = ({location}) =>{
  </Item>
         </Item.Group>
         </Segment>
-        </>
+        </Container>
     )
 };
 

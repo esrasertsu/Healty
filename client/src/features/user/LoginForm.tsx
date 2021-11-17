@@ -6,7 +6,7 @@ import { OnChange } from 'react-final-form-listeners';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { combineValidators, composeValidators, createValidator, isRequired } from 'revalidate';
-import { Button, Divider, Form, Header, Image, Modal } from 'semantic-ui-react';
+import { Button, Container, Divider, Form, Header, Image, Modal } from 'semantic-ui-react';
 import agent from '../../app/api/agent';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
@@ -70,6 +70,8 @@ const handleResetPassword = (e:any) => {
 }
 
     return (
+      <Container className="pageContainer">
+
       <FinalForm
         onSubmit={(values: IUserFormValues) => 
           login(values,location)
@@ -120,7 +122,6 @@ const handleResetPassword = (e:any) => {
             {submitError && !dirtySinceLastSubmit && (
              <ErrorMessage error={submitError} text='Geçersiz email adresi / şifre' />
             )}
-           
             <Button
               disabled={(invalid && !dirtySinceLastSubmit) || pristine}
               loading={submitting}
@@ -134,6 +135,7 @@ const handleResetPassword = (e:any) => {
           </Form>
         )}
       />
+      </Container>
     );
 }
 

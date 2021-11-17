@@ -15,6 +15,7 @@ export const Settings = () => {
 
 
     return (
+        <Container className="pageContainer">
 
         <Grid stackable style={{ margin:"0 20px 0 0",width:"100%"}} >
             <Grid.Row>
@@ -65,6 +66,6 @@ export const Settings = () => {
                 </Grid.Column>
             </Grid.Row>
         </Grid>
-
+</Container>
         )
 }

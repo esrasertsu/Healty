@@ -12,6 +12,14 @@
   font-weight: normal;
 }
 
+
+@font-face {
+  font-family: "AssistantBold";
+  src: local("AssistantBold"),
+    url("./fonts/GT-Eesti-Pro-Display-Bold.woff2") format("woff");
+  font-weight: normal;
+}
+
 @font-face {
   font-family: "Inter";
   src: local("Inter"),
@@ -30,7 +38,7 @@
 
 body {
   background-color: #f8f7f791  !important;
-  font-family: AssistantRegular, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantRegular, Arial, sans-serif !important;
   font-size: 16px;
   
 }
@@ -44,16 +52,24 @@ body {
   padding-bottom: 40px !important;
 } 
 
+:root {
+  --swiper-theme-color: #1bbe3e!important;
+}
+
 .popup{
-  font-family: AssistantRegular, Arial, Helvetica, sans-serif  !important;
-  color: black !important;
-  font-size: smaller !important
+  font-family: AssistantRegular, Arial, sans-serif  !important;
+  color: rgb(38, 58, 94) !important;
+  font-size: 12px !important
+}
+
+.pushable{
+  background: #ffffff !important;
 }
 .a {
   color: #263a5e 
 }
 .ui.vertical.menu,.ui.accordion.menu .item .title {
-  font-family: AssistantRegular, Arial, Helvetica, sans-serif;
+  font-family: AssistantRegular, Arial,  sans-serif;
   background: #fff;
 
 }
@@ -85,6 +101,32 @@ body {
   ;
 }
 
+
+@keyframes slideBg {
+   
+  0%{
+    background-image: url("../layout/img/banner-2.jpg"); 
+  }
+  20%{
+    background-image: url("../layout/img/banner-2.jpg") ; 
+  }
+  40%{
+    background-image: url("../layout/img/psikolog.jpg") ; 
+  }
+  60%{
+    background-image: url("../layout/img/dietitian.jpg"); 
+  }
+  80%{
+    background-image: url("../layout/img/meditation-sitting.jpg") ; 
+  }
+  100%{
+    background-image: url("../layout/img/psikolog3.png") ; 
+  }
+}
+
+
+
+
 .companyFinalForm .equal.hiddenField{
   width: 50% !important;
 }
@@ -96,13 +138,13 @@ body {
     border-radius: .28571429rem  !important;
 }
 .ui.button,.ui.input>input{
-  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantMedium, Arial,  sans-serif !important;
   font-weight: 500 !important;
 }
 .ui.header, .ui.header .content{
-  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantMedium, Arial,  sans-serif !important;
   font-weight: normal;
-  color: #1a2b49 ;
+  color: #263a5e ;
 }
 .ui.statistic>.value, .ui.statistics .statistic>.value, .segmentHeader {
   font-family: AssistantRegular, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
@@ -143,7 +185,7 @@ body {
 }
 
 .ui.card>.content>.header, .ui.cards>.card>.content>.header,.ui.secondary.menu .item {
-  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantMedium, Arial, sans-serif !important;
   font-size: 1.1rem;
   line-height: 1.25rem;
   font-weight: 500 !important;
@@ -171,7 +213,7 @@ body {
   margin-bottom: -2px !important;
 }
 .ui.items>.item>.content>a.header{
-  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantMedium, Arial, sans-serif !important;
   font-size: 1.3rem !important;
   line-height: 1.25rem !important;
   font-weight: 500 !important;
@@ -179,7 +221,7 @@ body {
 }
 
 .ui.large.label,.ui.label, .ui.large.labels .label{
-  font-family: AssistantRegular, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantRegular, Arial, sans-serif !important;
   background-color: rgb(38, 58, 94);
     color: rgb(255, 255, 255);
     font-weight: 500;
@@ -187,6 +229,9 @@ body {
     line-height: 1rem;
 
 }
+
+
+
 
 .blogFilterPlaceholder{
   background: #f3f4f5;
@@ -196,7 +241,7 @@ body {
   color: #263a5e !important;
 }
 .ui.form input:not([type]), .ui.form input[type=date], .ui.form input[type=datetime-local], .ui.form input[type=email], .ui.form input[type=file], .ui.form input[type=number], .ui.form input[type=password], .ui.form input[type=search], .ui.form input[type=tel], .ui.form input[type=text], .ui.form input[type=time], .ui.form input[type=url]{
-  font-family: AssistantRegular, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantRegular, Arial,  sans-serif !important;
 }
 
 .ui.form .disabled.field, .ui.form .disabled.fields .field, .ui.form .field :disabled {
@@ -209,7 +254,7 @@ body {
 }
 
 h1, h2, h3, h4, h5 {
-  font-family:  AssistantRegular, Arial, Helvetica, sans-serif !important;
+  font-family:  AssistantRegular, Arial,  sans-serif !important;
   /* font-family:  "Inter","Helvetica Neue","Segoe UI","Fira Sans",Roboto,Oxygen,Ubuntu,"Droid Sans","Arial",sans-serif!important */
 
 }
@@ -255,7 +300,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .ui.statistic>.label, .ui.statistics .statistic>.label {
-  font-family:  AssistantRegular, Arial, Helvetica, sans-serif;
+  font-family:  AssistantRegular, Arial,  sans-serif;
   font-size: 1em;
   font-weight: 500;
   color: #1a2b49 !important;
@@ -328,7 +373,7 @@ h1, h2, h3, h4, h5 {
 }
 .ui.accordion .title:not(.ui) {
   padding: .4em 0;
-  font-family: AssistantRegular, Arial, Helvetica, sans-serif;
+  font-family: AssistantRegular, Arial,  sans-serif;
   font-size: 1.1em;
   color: #345289;
 }
@@ -443,7 +488,7 @@ font-size: 17px;
 
 
 .activityDetail_payment_footer .price{
-  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantMedium, Arial, sans-serif !important;
   font-weight: normal;
   color: #263a5e;
   font-size: 22px;
@@ -462,7 +507,7 @@ font-size: 17px;
 
 .activityDetail_title{
   margin: 10px 0 10px 0;
-  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantMedium, Arial,  sans-serif !important;
     font-weight: normal;
     color: #263a5e;
     font-size: 17px;
@@ -514,7 +559,7 @@ label{
   color: #fff ;
   font-size: 25px ;
   text-align: left ;
-  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantMedium, Arial, sans-serif !important;
   line-height: 30px;
   width: 96% !important;
   margin: auto;
@@ -625,6 +670,12 @@ a.ui.card:hover {
 
 
 
+.ui.container.homePage-button_Container {
+    width: 100%!important;
+    margin-left: 0!important;
+    margin-right: -35px!important;
+    max-width: 100%!important;
+}
 
 .activityListItem_content_div{
   width: 100%;
@@ -700,6 +751,10 @@ a.ui.card:hover {
 .pageContainer.home{
   text-align: center;
 }
+
+.activityListGrid{
+  text-align: left;
+}
 .orderItemDetails_grid .column {
     display: flex !important;
     align-items: center !important;
@@ -707,7 +762,7 @@ a.ui.card:hover {
 
 .orderItemDetails_grid .mainHeader, .myOrdersHeader{
   font-size: 16px !important;
-  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantMedium, Arial,sans-serif !important;
   color: rgb(38, 58, 94) !important;
 }
 .orderItemDetails_grid .column_header{
@@ -720,7 +775,7 @@ a.ui.card:hover {
 .orderItemDetails_grid .column_header .headerItem{
   color: #666666;
   font-size: 14px;
-  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantMedium, Arial, sans-serif !important;
 }
 
 
@@ -752,7 +807,7 @@ a.ui.card:hover {
   width: 100% !important;
   border-radius:  0 0  .28571429rem .28571429rem !important;
   font-size: 13.5px !important;
-  font-family: AssistantRegular, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantRegular, Arial,sans-serif !important;
   padding: 20px !important
 }
 .orderItem_PaymentDetails_Container .item{
@@ -777,7 +832,7 @@ a.ui.card:hover {
 
 .orderItem_PaymentDetails_Container .item .content{
   color: #333333;
-  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantMedium, Arial, sans-serif !important;
 }
 
 
@@ -785,7 +840,7 @@ a.ui.card:hover {
   font-weight: 500;
   font-size: 15px;
   color: #666666;
-  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantMedium, Arial, sans-serif !important;
 }
 
 
@@ -821,7 +876,24 @@ a.ui.card:hover {
     padding-left: 96px;
     padding-right: 96px;
 }
-
+#slideImages.masthead {
+  height: 25vw;
+  width: 100%;
+  display: flex;
+  align-items: center;
+   background-position: center center;
+   background-size: cover !important;
+   background-repeat: no-repeat;
+   backface-visibility: hidden;
+   animation-name: slideBg;
+   animation-duration: 30s;
+   animation-iteration-count: infinite;
+   background-image: url("../layout/img/banner-2.jpg"); 
+   animation-delay: 3s;
+   animation-timing-function:step-start;
+   animation-fill-mode: both;
+   background-position-y: -260px !important;
+ }
 }
 
 @media (min-width: 1200px){
@@ -847,9 +919,43 @@ a.ui.card:hover {
     padding-right: 32px;
     width: 100%;
 }
+.activityListGrid{
+  margin:0 80px !important;
+}
+}
+@media (min-width: 1025px){
+#slideImages.masthead {
+  height: 25vw;
+  width: 100%;
+  display: flex;
+  align-items: center;
+   background-position: center center;
+   background-size: cover !important;
+   background-repeat: no-repeat;
+   backface-visibility: hidden;
+   animation-name: slideBg;
+   animation-duration: 30s;
+   animation-iteration-count: infinite;
+   background-image: url("../layout/img/banner-2.jpg"); 
+   animation-delay: 3s;
+   animation-timing-function:step-start;
+   animation-fill-mode: both;
+   background-position-y: -220px !important;
+ }
+ .masthead.profileDashboard{
+  width: 100%;
+  display: flex;
+  align-items: center;
+   background-position: center center;
+   background-size: cover !important;
+   backface-visibility: hidden !important;
+   background-image: url("../layout/img/profiles.jpg") !important;
+   background-position-y: -285px !important; 
+}
 }
 
 @media (min-width: 769px){
+  
 .page-header__content[data-v-0ca1fdc0] {
     margin-left: auto;
     margin-right: auto;
@@ -859,7 +965,7 @@ a.ui.card:hover {
 .ui.text.container{
   margin-left: 150px !important;
   text-align: left;
-  font-family: AssistantRegular, Arial, Helvetica, sans-serif;
+  font-family: AssistantRegular, Arial, sans-serif;
   max-width: 500px !important;
 }
 .ui.top.fixed.menu{
@@ -868,7 +974,7 @@ a.ui.card:hover {
 }
 
 .profileList_WelcomeMessage{
-  margin-top: 30px;
+  margin-top: 40px;
 }
 .activityNotFoundMessage{
   margin-top: 30px;
@@ -940,19 +1046,14 @@ max-width: 95%;
   }
   .ui.text.container{
     text-align: center;
-    font-family: AssistantRegular, Arial, Helvetica, sans-serif;
+    font-family: AssistantRegular, Arial, sans-serif;
   }
-  .masthead {
-   
-    background-image: url("../layout/img/banner-2.jpg") !important; 
-    background-size: cover !important;
-    border-radius: .28571429rem !important;
-  }
+
   .activityDetails_Countdown_Segment{
     padding: 1em !important;
   }
   .profileList_WelcomeMessage{
-    margin-top: 20px;
+    margin-top: 40px;
   }
   .dtPicker_Container_Style{
     margin-top:0 !important
@@ -1015,17 +1116,36 @@ max-width: 95%;
 }
 
 @media (min-width: 768px) and (max-width: 1024px){
-  .masthead {
-    display: flex;
-    align-items: center;
-    height: 33vw;
-    width: 100%;
-    background: #84c68f !important;
-    background-image: url("../layout/img/banner-2.jpg") !important; 
-    background-size: cover !important;
-    background-position-y: -160px !important;
-    border-radius: .28571429rem !important;
-  }
+ 
+  
+#slideImages.masthead {
+  height: 40vw;
+  width: 100%;
+  display: flex;
+  align-items: center;
+   background-position: center center;
+   background-size: cover !important;
+   background-repeat: no-repeat;
+   backface-visibility: hidden;
+   animation-name: slideBg;
+   animation-duration: 30s;
+   animation-iteration-count: infinite;
+   background-image: url("../layout/img/banner-2.jpg"); 
+   animation-delay: 3s;
+   animation-timing-function:step-start;
+   animation-fill-mode: both;
+ }
+
+ .masthead.profileDashboard{
+  width: 100%;
+  display: flex;
+  align-items: center;
+   background-position: center center;
+   background-size: cover !important;
+   backface-visibility: hidden !important;
+   background-image: url("../layout/img/profiles.jpg") !important;
+   background-position-y: -80px !important; 
+}
 
   .ui.grid>[class*="twelve wide"].column.profieHeader_segment_column,
   .ui.grid>[class*="four wide"].column.profieHeader_segment_column {
@@ -1060,7 +1180,7 @@ max-width: 95%;
   flex-direction: row;
   align-items: center;
   font-size: 15px;
-  font-family: AssistantMedium, Arial, Helvetica, sans-serif !important;
+  font-family: AssistantMedium, Arial, sans-serif !important;
   cursor: pointer;
   z-index: 5;
   background: #fff;
@@ -1083,20 +1203,7 @@ max-width: 95%;
   box-sizing: inherit;
 }
   
-@media (min-width: 1024px){
-  .masthead {
-    display: flex;
-    align-items: center;
-    height: 25vw;
-    width: 100%;
-    background: #84c68f !important;
-    background-image: url("../layout/img/banner-2.jpg") !important; 
-    background-size: cover !important;
-    background-position-y: -260px !important;
-    border-radius: .28571429rem !important;
-  }
 
-}
 
 /*home page styles*/
 
@@ -1125,6 +1232,8 @@ max-width: 95%;
 
 
 @media (max-width: 768px){
+  
+
   .masthead_page {
     display: flex;
     align-items: center;
@@ -1377,8 +1486,8 @@ max-width: 80%;
   line-height: 2.75rem;
   font-size: 36px;
   font-weight: 500;
-    font-family:  AssistantRegular, Arial, Helvetica, sans-serif;
-    margin-bottom: 50px;
+    font-family:  AssistantRegular, Arial, sans-serif;
+    margin-bottom: 40px;
     text-shadow: 1.5px 1.5px #263a5e;
 }
 i.search.inverted.icon {
@@ -1402,8 +1511,12 @@ i.search.inverted.icon {
 }
 
 .loginRegMobileButton{
-  width: 100% !important;
-  background: #f2711c !important
+  background: #f2711c !important;
+  border-radius: 5rem !important;
+}
+
+.ui.menu .header.item, .ui.vertical.menu .header.item{
+  font-weight: 500 !important;
 }
 
 .logoutMobileButton{
@@ -1421,6 +1534,17 @@ i.search.inverted.icon {
   color: "#1a2b49"
 }
 
+.mobileNavMenu_Header{
+  background: #263a5e !important;
+  color: #ffff !important;
+  height: 175px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}
 .messageNotificationCount{
   background-color: #03b500!important;
     border-color: #03b500!important;
@@ -1511,6 +1635,15 @@ button, input, optgroup, select, textarea {
   transform: rotate(-20deg);
 }
 
+.slick-arrow.slick-prev,.slick-arrow.slick-next{
+  display: none !important;
+}
+
+/* .dtPicker_Style.secondDtPicker .rw-select.rw-select-bordered .rw-btn.rw-btn-select
+{
+  margin-top: -5px !important;
+} */
+
 }
 @media (min-width: 501px){
 
@@ -1564,7 +1697,7 @@ button, input, optgroup, select, textarea {
 }
 
 .homepage_subheader{
-  font-family:  AssistantRegular, Arial, Helvetica, sans-serif;
+  font-family:  AssistantRegular, Arial, sans-serif;
   margin-top: 10px  !important;
   font-size: 1.2rem !important;
 }
@@ -1815,7 +1948,65 @@ button, input, optgroup, select, textarea {
   background-color: rgb(244, 245, 245)  !important;
 }
 
+@media screen and (max-width: 340px){
+  
+  #slideImages.masthead {
+    width: 100%;
+    height: 45vh;
+    display: flex;
+    align-items: center;
+     background-position: center center;
+     background-size: cover !important;
+     background-repeat: no-repeat;
+     backface-visibility: hidden;
+     animation-name: slideBg;
+     animation-duration: 30s;
+     animation-iteration-count: infinite;
+     background-image: url("../layout/img/banner-2.jpg"); 
+     animation-delay: 3s;
+     animation-timing-function:step-start;
+     animation-fill-mode: both;
+   }
+}
+
+@media (min-width: 341px) and (max-width: 767px){
+  
+  #slideImages.masthead {
+    width: 100%;
+    height: 35vh;
+    display: flex;
+    align-items: center;
+     background-position: center center;
+     background-size: cover !important;
+     background-repeat: no-repeat;
+     backface-visibility: hidden;
+     animation-name: slideBg;
+     animation-duration: 30s;
+     animation-iteration-count: infinite;
+     background-image: url("../layout/img/banner-2.jpg"); 
+     animation-delay: 3s;
+     animation-timing-function:step-start;
+     animation-fill-mode: both;
+   }
+
+}
+
 @media (max-width: 767px){
+
+   .masthead.profileDashboard{
+    width: 100%;
+    display: flex;
+    align-items: center;
+     background-position: left top !important;
+     background-repeat: no-repeat !important;
+     backface-visibility: hidden !important;
+     background-image: url("../layout/img/profiles.jpg") !important;
+  }
+  .masthead_page.profileDashboard
+  {
+    margin-top: 20px !important;
+  }
+
   .ui.grid .ui.stackable.grid {
     margin-left: -0!important; 
      margin-right: -0!important; 
@@ -2252,4 +2443,23 @@ button, input, optgroup, select, textarea {
     text-align: center !important;
     color: #273142;
     margin-left: 15px;
+}
+
+
+.slickCard{
+  padding: 0 10px !important;
+  height: 100% !important;
+}
+
+.slick-prev:before, .slick-next:before{
+  font-size: 30px !important;
+  color: #1a2b49 !important;
+}
+
+.swiper-wrapper{
+  padding:0 0 40px 0 !important;
+}
+
+.swiper-button-prev, .swiper-button-next{
+  color:orange !important;
 }

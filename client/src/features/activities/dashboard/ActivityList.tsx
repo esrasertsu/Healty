@@ -39,7 +39,7 @@ const ActivityList: React.FC = () => {
       <div style={isMobile? {textAlign:"center", marginBottom:"40px" } : {display:"flex", justifyContent:"center" , marginTop:"40px"}}>
         <div>
         <Header size="large" style={{color:"#263a5e"}} content="Merhaba!"/>
-        <Header size="medium" style={{color:"#263a5e"}} content="Şimdilik açılmış uygun bir aktivite bulamadık ama senin için oluşturmaya devam ediyoruz. Takipte kal"/>
+        <Header size="medium" style={{color:"#263a5e"}} content="Şimdilik arama kriterlerine uygun açılmış bir aktivite bulamadık ama senin için oluşturmaya devam ediyoruz. Takipte kal"/>
           </div>
        <Image src={"/icons/clip-searching.png"} style={isMobile? {width:"100%", marginTop:"75px"} : {width:"50%", marginTop:"75px"}} />
       </div>

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Header, Icon, Image, Modal, Segment } from 'semantic-ui-react'
+import { Button, Container, Header, Icon, Image, Modal, Segment } from 'semantic-ui-react'
 import LoginForm from '../../features/user/LoginForm';
 import { RegisterForm } from '../../features/user/RegisterForm';
 import { RootStoreContext } from '../stores/rootStore';
@@ -36,6 +36,8 @@ export const LoginRequiredPage = () => {
 
     
     return (
+        <Container className="pageContainer">
+
         <Segment placeholder>
         <Header icon>
             <Icon name='search' />
@@ -50,5 +52,6 @@ export const LoginRequiredPage = () => {
             </Button>
         </Segment.Inline>
     </Segment>
+    </Container>
     )
 }

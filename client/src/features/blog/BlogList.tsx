@@ -1,5 +1,5 @@
 import React,  { useEffect, useContext, useState, Fragment}  from 'react';
-import { Accordion, Button, Card, Grid, Header, Icon, Image, Label} from 'semantic-ui-react';
+import { Accordion, Button, Card, Container, Grid, Header, Icon, Image, Label} from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -61,7 +61,8 @@ const BlogList: React.FC = () => {
 }
 
   return (
-    <>
+    <Container className="pageContainer">
+
     <Grid className="blogPageGrid">
       <Grid.Row>
        
@@ -184,7 +185,7 @@ const BlogList: React.FC = () => {
     </Grid>
     <br></br>
       <br></br>
-    </>
+    </Container>
   );
 };
 

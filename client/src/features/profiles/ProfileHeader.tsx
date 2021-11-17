@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useRef, useState } from 'react';
-import { Segment, Item, Header, Button, Grid, Statistic, Divider, Reveal, ButtonGroup, Label, Icon, Dimmer, Loader, Image } from 'semantic-ui-react';
+import { Segment, Item, Header, Button, Grid, Statistic, Divider, ButtonGroup, Label, Icon, Dimmer, Loader, Image } from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { StarRating } from '../../app/common/form/StarRating';
 import { colors } from '../../app/models/category';

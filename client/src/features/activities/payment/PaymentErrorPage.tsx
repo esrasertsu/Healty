@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {RouteComponentProps} from 'react-router-dom';
 import queryString from 'query-string';
-import { Button, Header, Icon, Segment } from 'semantic-ui-react';
+import { Button, Container, Header, Icon, Segment } from 'semantic-ui-react';
 import agent from '../../../app/api/agent';
 import { toast } from 'react-toastify';
 import { observer } from 'mobx-react-lite';
@@ -19,6 +19,8 @@ const [errorsCode, setErrorCode] = useState("");
    }, [errorMessage])
 
     return(
+        <Container className="pageContainer">
+
         <Segment placeholder>
             <Header icon>
                 <Icon color="red" name="exclamation triangle" />
@@ -32,6 +34,7 @@ const [errorsCode, setErrorCode] = useState("");
                 </div>
             </Segment.Inline>
         </Segment>
+        </Container>
     )
 };
 

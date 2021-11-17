@@ -181,27 +181,25 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
         <Route exact path="/" component={HomePage} />
         <Route path={'/(.+)'} render={()=>(
           <Fragment>
-             <Container className="pageContainer">
-               <Switch>
-                 <Route exact path="/activities" component={ActivityDashboard} />
-                 <Route path="/activities/:id" component={ActivityDetails} />
-                 <PrivateRoute exact path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
-                 <Route exact path="/blog" component={BlogList} />
-                 <Route exact path="/blog/:id" component={BlogPage} />
-                 <PrivateRoute key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
-                 <PrivateRoute key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
-                 <Route path="/profile/:username" component={ProfilePage}/>
-                 <Route path="/profiles" component={ProfileDashboard}/>
-                 <PrivateRoute path="/messages" component={MessagesPage}/>
-                 <Route path="/login" component={LoginForm}/>
-                 <Route path="/login-required" component={LoginRequiredPage}/>
+             <Switch>
+             <Route path="/profiles" component={ProfileDashboard}/>
+             <Route exact path="/activities" component={ActivityDashboard} />
+             <Route path="/activities/:id" component={ActivityDetails} />
+             <PrivateRoute exact path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
+             <Route exact path="/blog" component={BlogList} />
+             <Route exact path="/blog/:id" component={BlogPage} />
+             <PrivateRoute key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
+             <PrivateRoute key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
+             <Route path="/profile/:username" component={ProfilePage}/>
+             <PrivateRoute path="/messages" component={MessagesPage}/>
+             <Route path="/login" component={LoginForm}/>
+             <Route path="/login-required" component={LoginRequiredPage}/>
                  {/* <Route exact path="/activitysearch" component={ActivitySearchPage}/> */}
                  <Route path="/user/registerSuccess" component={RegisterSuccess}/>
                  <Route path="/user/verifyEmail" component={VerifyEmail}/>
                  <Route path="/user/resetPassword" component={ResetPassword}/>
                  <Route path="/TrainerOnboarding" component={TrainerOnboardingPage} />
                  <Route path="/TrainerRegister" component={TrainerRegisterPage} />
-
                  <PrivateRoute path="/settings" component={Settings}/>
                  <PrivateRoute exact path="/payment/success" component={PaymentSuccessPage} />
                  <PrivateRoute exact path="/payment/error" component={PaymentErrorPage} />
@@ -209,8 +207,8 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <PrivateRoute exact path="/orders/:id" component={OrderItemDetail}/>
                  <Route exact path="/admin" component={Admin}/>
                  <Route component={NotFound}/>
-               </Switch>
-             </Container>
+
+              </Switch>
           </Fragment>
         )} />
        
@@ -238,8 +236,11 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
         <Route exact path="/" component={HomePage} />
          <Route path={'/(.+)'} render={()=>(
            <Fragment>
-              <Container className="pageContainer">
                 <Switch>
+                <Route path="/profiles" component={ProfileDashboard}/>
+
+                <Container className="pageContainer">
+
                 <Route exact path="/activities" component={ActivityDashboard} />
                  <Route path="/activities/:id" component={ActivityDetails} />
                  <PrivateRoute exact path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
@@ -248,7 +249,6 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <PrivateRoute key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
                  <PrivateRoute key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
                  <Route path="/profile/:username" component={ProfilePage}/>
-                 <Route path="/profiles" component={ProfileDashboard}/>
                  <PrivateRoute path="/messages" component={MessagesPage}/>
                  <Route path="/login" component={LoginForm}/>
                  <Route path="/login-required" component={LoginRequiredPage}/>
@@ -265,8 +265,8 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <PrivateRoute exact path="/orders/:id" component={OrderItemDetail}/>
                  <Route exact path="/admin" component={Admin}/>
                  <Route component={NotFound}/>
-                </Switch>
-              </Container>
+                 </Container>
+           </Switch>
            </Fragment>
          )} />
         </Sidebar.Pusher>

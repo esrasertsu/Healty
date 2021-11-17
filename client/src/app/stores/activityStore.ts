@@ -6,7 +6,7 @@ import { history } from '../..';
 import ProfileDashboardPopularProfiles from '../../features/profiles/ProfileDashboardPopularProfiles';
 import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
-import { ActivityFormValues, ActivityOnlineJoinInfo, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, PaymentUserInfoDetails } from '../models/activity';
+import { ActivityFormValues, ActivityOnlineJoinInfo, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, IActivitySelectedFilter, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, PaymentUserInfoDetails } from '../models/activity';
 import { IOrder } from '../models/order';
 import { RootStore } from './rootStore';
 
@@ -39,6 +39,7 @@ export default class ActivityStore {
     @observable loadingOrders = false;
     @observable loadingOrder = false;
     @observable levelList: ILevel[] = [];
+    @observable activitySelectedFilters: IActivitySelectedFilter[] =[];
     @observable loadingLevels = false;
     @observable generatingToken = false;
     @observable submittingJoinInfo = false;
@@ -76,7 +77,8 @@ export default class ActivityStore {
     @observable isOnline = false;
     @observable loadingPaymentPage = false;
     @observable loadingRefundPaymentPage = false;
-
+    @observable selectedStartDate : Date | undefined = new Date();
+    @observable selectedEndDate: Date | undefined = new Date();
 
     @action setActiveIndex = (index:number) =>{
         this.activeIndex = index;
@@ -84,7 +86,12 @@ export default class ActivityStore {
     @action setActiveUserPreIndex = (index:number) =>{
         this.activeUserPreIndex = index;
     }
-
+    @action setSelectedStartDate = (date:Date | undefined ) =>{
+        this.selectedStartDate = date;
+    }
+    @action setSelectedEndDate = (date:Date | undefined ) =>{
+        this.selectedEndDate = date;
+    }
     @action setCategoryIds = (Ids : string[]) =>{
         this.categoryIds = Ids;
     }
@@ -103,6 +110,10 @@ export default class ActivityStore {
     }
     @action setOrderPage = (index:number) =>{
         this.orderPage = index;
+    }
+
+    @action setActivitySelectedFilters = (selectedFilters:IActivitySelectedFilter[]) => {
+        this.activitySelectedFilters = selectedFilters;
     }
     /* ---- */
 

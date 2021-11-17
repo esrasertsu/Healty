@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import {Button, ButtonGroup, Icon, Label, Menu, Reveal, Tab} from 'semantic-ui-react';
+import {Button, ButtonGroup, Icon, Label, Menu, Tab} from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileActivities from './ProfileActivities';

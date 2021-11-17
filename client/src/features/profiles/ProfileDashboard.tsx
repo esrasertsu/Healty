@@ -4,12 +4,12 @@ import {Button, Container, Grid, Header, Icon, Image, Label, Message, Segment, S
 import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileListFilters from './ProfileListFilters';
 import { profileSortingOptions } from "../../app/common/options/profileSortingOptions";
-import 'react-multi-carousel/lib/styles.css';
 import ProfileListItemsPlaceholder from './ProfileListItemsPlaceholder';
 import ProfileList from './ProfileList';
 import { SemanticWIDTHS } from 'semantic-ui-react/dist/commonjs/generic';
 import { useMediaQuery } from 'react-responsive'
 import ProfileDashboardPopularProfiles from './ProfileDashboardPopularProfiles';
+import SearchArea from '../home/SearchArea';
 
 
 const threeItem:SemanticWIDTHS = 3;
@@ -40,7 +40,7 @@ const responsive = {
 const fiveItem:SemanticWIDTHS = 5;
 const sixItem:SemanticWIDTHS = 6;
 
- const ProfileDashboard: React.FC = () => {
+ const ProfileDashboard= () => {
 
     const rootStore = useContext(RootStoreContext);
     const {loadingPopularProfiles,popularProfileRegistery
@@ -132,19 +132,52 @@ const sixItem:SemanticWIDTHS = 6;
 
     return (
       <Fragment>
+         <Segment textAlign='center' vertical className='masthead profileDashboard'>
+               <Container text>
+                   <Header as='h1' inverted style={{margin:"20px 0 20px 0"}}>
+                       {/* <Image size='massive' src='/assets/logo.png' alt='logo' style={{marginBottom: 12}}/> */}
+                       Dilediğin kategoride sağlıklı yaşam uzmanını ara
+                   </Header>
+                   {/* {isLoggedIn && user && token ? (  */}
+                   <Fragment>
+                        <SearchArea/>
+                   </Fragment>
+                   {/* ): (
+                       <Fragment>
+                            <Header as='h2' inverted content={`Afitapp'a Hoşgeldin!`} />
+                            <Button onClick={handleLoginClick} size='huge' inverted>
+                                Üye Girişi
+                             </Button>
+                             <Button onClick={handleRegisterClick}  size='huge' inverted>
+                                Yeni Kullanıcı
+                             </Button>
+                       </Fragment>
+                   ) } */}
+                  
+                  
+               </Container>
+           </Segment>
          <Container className="profileList_WelcomeMessage" style={{textAlign:"center"}}>
-         <Header size="large" style={{color:"#263a5e"}} content="Kullanıcıların Tavsiye Ettikleri ve Çok Daha Fazlası"/>
+         <Header as='h1'  style={{fontSize: '34px',  textAlign:'center', width:"100%",color:"rgb(38, 58, 94)" }}>
+                {/* Doğru uzmanı tam yerinde keşfet */}
+                Kullanıcıların Tavsiye Ettikleri ve Çok Daha Fazlası
+                </Header>
+                <p style={{ fontSize: '1.3rem', color: "rgb(38, 58, 94)" }}>
+                Spor koçundan diyetisyene, meditasyon eğitmeninden psikoloğa ihtiyacın olan en doğru uzmanı en kolay şekilde bulabileceğin yerdesin. 
+                Üstelik uzmanlarla direk iletişime geçebilir, düzenledikleri aktivitelere katılabilir veya paylaştıkları blogları okuyarak ilgilendiğin alanda bilgi sahibi olabilirsin. 
+                </p>
+
          </Container>
         {
           //  !isTablet &&
-          <Segment inverted textAlign='center' vertical className='masthead_page'>
+          <Segment inverted textAlign='center' vertical className='masthead_page profileDashboard'>
                <Container>
                <ProfileListFilters />
                </Container>
       </Segment>
 
         }
-      
+      <Container className="pageContainer">
       {Array.from(popularProfileRegistery.values()).length === 0 && !loadingPopularProfiles && !loadingNext?
        <>
        <br></br>
@@ -158,9 +191,10 @@ const sixItem:SemanticWIDTHS = 6;
       <>
       <ProfileDashboardPopularProfiles />
       <Grid>
+        <Grid.Row style={{marginTop:"20px"}}>
           <Grid.Column width={16} className="profileList_headerAndSorting">
           <div>
-          <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff",fontSize: '16px'}}> Tümü ({profilePageCount}) </Label>
+          <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff",fontSize: '17px'}}> Tümü ({profilePageCount}) </Label>
           </div>
           <div>
           <Select 
@@ -170,6 +204,8 @@ const sixItem:SemanticWIDTHS = 6;
             options={profileSortingOptions}
          />  </div>
           </Grid.Column>
+          </Grid.Row>
+          <Grid.Row style={{marginTop:"20px"}}>
          <Grid.Column width={16}>
          {
          page === 0 && loadingOnlyProfiles ? 
@@ -188,7 +224,7 @@ const sixItem:SemanticWIDTHS = 6;
               <span>Başa dön</span>
             </Label>} 
         </div> */}
-        <div style={{display:"flex", justifyContent:"center"}}>
+        <div style={{display:"flex", justifyContent:"center", marginTop:"20px"}}>
         <Button  
                   floated="right"
                   fluid={isMobile} 
@@ -206,6 +242,7 @@ const sixItem:SemanticWIDTHS = 6;
           {(loadingNext) ? <ProfileListItemsPlaceholder itemPerRow={isMobile ? twoItems : isTablet ? threeItem: 5}/> :""}
          
           </Grid.Column>
+          </Grid.Row>
       </Grid>
        
     
@@ -213,6 +250,7 @@ const sixItem:SemanticWIDTHS = 6;
       <br></br>
       </>
       }
+      </Container>
       </Fragment>
     )
 }

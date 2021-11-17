@@ -1,5 +1,5 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react';
-import { Grid, Segment } from 'semantic-ui-react';
+import { Container, Grid, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
@@ -31,6 +31,8 @@ const MessagesPage: React.FC = () => {
     if(loadingChatRooms) return <LoadingComponent content='Loading messages...'/>  
 
     return (
+        <Container className="pageContainer">
+
         <div className="inbox-wrapper" >
         <Grid stackable className="inbox-grid">
         {showChatRoomList &&  <Grid.Column width="6" >
@@ -72,7 +74,7 @@ const MessagesPage: React.FC = () => {
          </Grid>
         </div>
        
-     
+     </Container>
     )
 }
 

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {RouteComponentProps} from 'react-router-dom';
 import queryString from 'query-string';
-import { Button, Form, Header, Icon, Image, Message, Modal, Segment ,Input} from 'semantic-ui-react';
+import { Button, Form, Header, Icon, Image, Message, Modal, Segment ,Input, Container} from 'semantic-ui-react';
 import agent from '../../app/api/agent';
 import { toast } from 'react-toastify';
 import { RootStoreContext } from '../../app/stores/rootStore';
@@ -88,6 +88,8 @@ const ResetPassword : React.FC<RouteComponentProps> = ({location}) =>{
         }
 
     return(
+        <Container className="pageContainer">
+
         <Segment placeholder>
             
             {
@@ -167,6 +169,7 @@ const ResetPassword : React.FC<RouteComponentProps> = ({location}) =>{
                 </div>
             </Segment.Inline>
         </Segment>
+   </Container>
     )
 }
 

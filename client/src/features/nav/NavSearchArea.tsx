@@ -9,7 +9,7 @@ import { history } from '../../index'
  const NavSearchArea = () => {
 
     const rootStore = useContext(RootStoreContext);
-    const {setProfileFilterForm,profileFilterForm,clearPopularProfileRegistery, setPage,loadProfiles} = rootStore.profileStore;
+    const {setProfileFilterForm,profileFilterForm,clearPopularProfileRegistery,clearProfileRegistery,navSearchValue, setNavSearchValue, setPage,loadPopularProfiles} = rootStore.profileStore;
 
     const {
       loadAllCategoryList,
@@ -19,7 +19,6 @@ import { history } from '../../index'
     } = rootStore.categoryStore;
   
     const [results, setResults] = useState([] as any);
-    const [value, setValue] = useState('');
 
     const [isSearchLoading, setSearchLoading] = useState(false);
     
@@ -31,7 +30,7 @@ import { history } from '../../index'
 
 
     const handleResultSelect = (e:any, { result}:any) => {
-        setValue(result.text);
+      setNavSearchValue(result.text);
         setPage(0);
         if(result && result.parentId === null)
         {
@@ -45,15 +44,15 @@ import { history } from '../../index'
           result && setProfileFilterForm({...profileFilterForm, categoryId:result.parentId!, subCategoryIds:[result.key]});
         }
         clearPopularProfileRegistery();
-
+        clearProfileRegistery();
             if(history.location.pathname !== "/profiles")
                history.push('/profiles');
-            else loadProfiles();
+            else loadPopularProfiles();
     }
 
     const handleSearchChange = (e:any, { value }: any) => {
       setSearchLoading(true);
-      setValue(value);
+      setNavSearchValue(value);
   
       setTimeout(() => {  
         const re = new RegExp(_.escapeRegExp(value), 'i')
@@ -75,7 +74,7 @@ import { history } from '../../index'
                           leading: true,
                         })}
                         results={results}
-                        value={value}
+                        value={navSearchValue}
                         resultRenderer={resultRenderer}
                         className="nav_SearchArea"
                         placeholder="Kategori ara" 

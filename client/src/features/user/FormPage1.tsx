@@ -403,7 +403,7 @@ const FormPage1:React.FC = () =>{
 
 
 
-                  <div style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
+           <div style={!isMobile ? {display:"flex", justifyContent:"space-between", alignItems:"center"} : {}}>
                   <div style={{margin:"30px 0"}}>
                         <Field
                         name="hasSignedContract"
@@ -427,6 +427,7 @@ const FormPage1:React.FC = () =>{
               loading={submitting}
               content="Devam"
               positive
+              fluid={isMobile}
               style={{width:"150px"}}
             />
           </div>

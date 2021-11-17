@@ -1,5 +1,5 @@
 import React, {  useContext, useEffect, useState } from "react";
-import { Segment, Form, Button, Grid, Header, Image } from "semantic-ui-react";
+import { Segment, Form, Button, Grid, Header, Image, Container } from "semantic-ui-react";
 import { v4 as uuid } from "uuid";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
@@ -111,6 +111,8 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
   };
 
   return (
+    <Container className="pageContainer">
+
     <Grid>
       <Grid.Column width={16}>
         <Segment clearing>
@@ -206,6 +208,7 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
         </Segment>
       </Grid.Column>
     </Grid>
+  </Container>
   );
 };
 

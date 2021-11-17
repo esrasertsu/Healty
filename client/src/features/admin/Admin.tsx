@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Container, Grid } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import {  RouteComponentProps } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
@@ -16,13 +16,14 @@ const Admin: React.FC = () => {
     const [editMode, setEditMode] = useState(false);
 
     return (
-     <> 
+        <Container className="pageContainer">
+ 
       <Grid>
           <Grid.Column>
             
           </Grid.Column>
       </Grid>
-     </>
+     </Container>
     )
 }
 

@@ -8,7 +8,7 @@ import { history } from '../..';
 import { useMediaQuery } from 'react-responsive'
 
 
- const SearchArea:React.FC = () => {
+ const ActivitySearchArea:React.FC = () => {
 
     const rootStore = useContext(RootStoreContext);
 
@@ -20,8 +20,8 @@ import { useMediaQuery } from 'react-responsive'
       loadingAllDetailedList
     } = rootStore.categoryStore;
     const {userCity} = rootStore.commonStore;
-    const {setProfileFilterForm,profileFilterForm,clearPopularProfileRegistery,clearProfileRegistery, setPage
-    ,setNavSearchValue,loadPopularProfiles} = rootStore.profileStore;
+    const {loadActivities,setPage,setPredicate,setClearPredicateBeforeSearch,clearKeyPredicate,setCategoryIds,categoryIds
+      ,setSubCategoryIds,subCategoryIds} = rootStore.activityStore;
 
     const [results, setResults] = useState<IAllCategoryList[]>([]);
     const [value, setValue] = useState('');
@@ -74,23 +74,30 @@ import { useMediaQuery } from 'react-responsive'
                         noResultsMessage="Aradığınız kategori bulunamadı"
                 />
                       <Button size={isMobile ? 'tiny': 'big'} primary circular onClick={() => {
+                           setClearPredicateBeforeSearch(true); 
                            setPage(0);
+                           clearKeyPredicate("subCategoryIds");
+                           clearKeyPredicate("categoryIds");
                            if(result && result.parentId === null)
                               {
-                                loadCategories();
-                                loadSubCategories(result.key);
-                                setProfileFilterForm({...profileFilterForm, categoryId:result.key, cityId: userCity, subCategoryIds: []});
+                                setClearPredicateBeforeSearch(false);
+                                setPredicate("categoryIds",[result.key]);
+                                setCategoryIds([...categoryIds, result.key]);
+
+
                               }
-                              else 
+                              else if(result)
                               { 
-                                result && loadSubCategories(result.parentId!);
-                                result && setProfileFilterForm({...profileFilterForm,cityId: userCity, categoryId:result.parentId!, subCategoryIds:[result.key]});
+                                setPredicate("categoryIds",[result.key]);
+                                setClearPredicateBeforeSearch(false);
+                                setPredicate("subCategoryIds",[result.parentId!]);
+                                setCategoryIds([...categoryIds, result.key]);
+                                setSubCategoryIds([...subCategoryIds, result.parentId!])
+
                               }
-                              clearPopularProfileRegistery();
-                              clearProfileRegistery();
-                              setNavSearchValue("");
+
+                              history.push('/activities');
                              
-                            loadPopularProfiles();
                         }}>
                       <Icon name='search' inverted></Icon> Ara
                    </Button>
@@ -98,4 +105,4 @@ import { useMediaQuery } from 'react-responsive'
     );
 }
 
-export default observer(SearchArea);
+export default observer(ActivitySearchArea);

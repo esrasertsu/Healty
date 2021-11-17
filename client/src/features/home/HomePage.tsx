@@ -1,10 +1,8 @@
-import React, { Fragment, useContext, useState } from 'react'
-import { Button, Container, Header, Segment, Image, Grid, Card, Icon, Form, GridColumn, Label, Modal } from 'semantic-ui-react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
+import { Button, Container, Header, Segment, Image, Grid, Card, Icon, Form, GridColumn, Label, Modal, Loader } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import LoginForm from '../user/LoginForm';
 import { RegisterForm } from '../user/RegisterForm';
-import { Carousel } from 'react-responsive-carousel';
-import "react-responsive-carousel/lib/styles/carousel.min.css"; 
 import TextInput from '../../app/common/form/TextInput';
 import { Form as FinalForm, Field } from "react-final-form";
 import SearchArea from './SearchArea';
@@ -12,6 +10,10 @@ import { history } from '../../index'
 import TrainerForm from '../user/TrainerRegisterModal';
 import Statistics from './Statistics';
 import { useMediaQuery } from 'react-responsive'
+import ActivitySearchArea from './ActivitySearchArea';
+import { observer } from 'mobx-react-lite';
+import ActivityListItemPlaceholder from '../activities/dashboard/ActivityListItemPlaceHolder';
+import ActivityList from '../activities/dashboard/ActivityList';
 
 
 const HomePage = () => {
@@ -26,13 +28,44 @@ const HomePage = () => {
     const [title, setTitle] = React.useState("")
     const [allCatId, setAllCatId] = React.useState("")
 
-    const {setProfileFilterForm,profileFilterForm,clearProfileRegistery, setPage} = rootStore.profileStore;
+    const {setProfileFilterForm,profileFilterForm,clearProfileRegistery, setPage,page} = rootStore.profileStore;
     const {userCity} = rootStore.commonStore;
     const {setClearPredicateBeforeSearch,clearUserPredicates,clearKeyPredicate,setActiveUserPreIndex,
-      clearActivityRegistery, setCategoryIds,categoryIds,setPredicate,setActiveIndex} = rootStore.activityStore;
+      clearActivityRegistery, setCategoryIds,loadActivities,setPredicate,setActiveIndex,loadingInitial,activityRegistery,
+      levelList,loadLevels} = rootStore.activityStore;
+      const { loadCategories,categoryRegistery } = rootStore.categoryStore;
 
       const {setClearedBeforeNewPredicateComing,clearPredicates} = rootStore.blogStore;
 
+
+      useEffect(() => {
+        if(activityRegistery.size <= 1)
+        {
+        
+          clearUserPredicates();
+          clearKeyPredicate("subCategoryIds");
+          clearKeyPredicate("categoryIds");
+          clearKeyPredicate("isOnline");
+          clearKeyPredicate("startDate");
+          clearKeyPredicate("endDate");
+          clearKeyPredicate("levelIds");
+          clearKeyPredicate("cityId");
+          setPage(0);
+          clearActivityRegistery();
+          loadActivities();
+        }
+        if(categoryRegistery.size <= 1)
+        {
+          loadCategories();
+        }
+        if(levelList.length <=1)
+        {
+          loadLevels();
+        }
+       
+      },[activityRegistery.size,categoryRegistery.size,levelList,loadActivities,loadCategories,loadLevels]); //[] provides the same functionality with componentDidMounth..   dependency array
+    
+    
     
 
     const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
@@ -182,15 +215,15 @@ const HomePage = () => {
       </Modal.Actions> */}
     </Modal>
         <Fragment>
-           <Segment inverted textAlign='center' vertical className='masthead'>
+           <Segment textAlign='center' vertical className='masthead' id="slideImages">
                <Container text>
                    <Header as='h1' inverted>
                        {/* <Image size='massive' src='/assets/logo.png' alt='logo' style={{marginBottom: 12}}/> */}
-                       Dilediğin kategoride sağlıklı yaşam uzmanını ara
+                       Dilediğin kategoride aktivite ara, sağlıklı sosyalleşmenin tadını çıkar!
                    </Header>
                    {/* {isLoggedIn && user && token ? (  */}
                    <Fragment>
-                        <SearchArea/>
+                        <ActivitySearchArea />
                    </Fragment>
                    {/* ): (
                        <Fragment>
@@ -211,12 +244,97 @@ const HomePage = () => {
            <div className="spacingContainer__small" />
            
            <Header as='h1'  style={{fontSize: '34px',  textAlign:'center', width:"100%" }}>
-                Doğru uzmanı tam yerinde keşfet
+                Yeni etkinlikler yeni insanlar keşfet
                 </Header>
-                <p style={{ fontSize: '1.3rem', color: "#1a2b49" }}>
+                <p style={{ fontSize: '1.3rem', color: "#263a5e" }}>
                 Spor koçundan diyetisyene, meditasyon eğitmeninden psikoloğa ihtiyacın olan en doğru uzmanı en kolay şekilde bulabileceğin yerdesin. 
                 Üstelik istediğin lokasyonda ya da online olarak aktivitelere katılabilir, eğitmenlerin paylaştıkları blogları okuyarak ilgilendiğin alanda bilgi sahibi olabilirsin. 
                 </p>
+              <Grid className="activityListGrid">
+              <Grid.Row>
+              <Grid.Column width={16}>
+              {loadingInitial && page === 0 ? <ActivityListItemPlaceholder/> :
+              (
+              // <InfiniteScroll
+              // pageStart={0}
+              // loadMore={handleGetNext}
+              // hasMore={!loadingNext && page +1 < totalPages}
+              // initialLoad={false}>
+              <>
+                <ActivityList />
+                {activityRegistery.size > 0 && 
+                <div style={{display:"flex", justifyContent:"center"}}>
+                <Button  
+                 floated="right"
+                 fluid={isMobile} 
+                 size="large" 
+                 onClick={()=> history.push("/activities")} 
+                 style={{background:"dodgerblue", color:"white",margin:"20px 0"}}
+               > Daha Fazla Aktivite </Button>
+               </div>
+                }
+                
+               </>
+             // </InfiniteScroll>
+              )}
+              
+              </Grid.Column>
+              <Grid.Column width={4}>
+              </Grid.Column>
+              <Grid.Column width={12}>
+              <br></br>
+              <br></br>
+              </Grid.Column>
+              </Grid.Row>
+              </Grid>
+
+
+              <Grid columns={3} textAlign='center'>
+
+<Grid.Row >
+  <Grid.Column width={isMobile ? "16": "5"}>
+    <Header as='h3' icon>
+        <Icon style={{fontSize:"1.5rem",marginBottom:"15px"}} size="small" circular inverted color='orange' name='calendar check outline' />     
+        <Header.Content>
+            Aktivite Planla
+            <Header.Subheader className="homepage_subheader">
+            Uzman danışmanların oluşturmuş olduğu aktivitelere katılabilir, sağlığın için kendine vakit ayırırken aynı zamanda sosyalleşmenin de tadını çıkarabilirsin.  
+        </Header.Subheader>
+         </Header.Content> 
+    </Header>
+   
+  </Grid.Column>
+  <Grid.Column width={isMobile ? "16": "5"} >
+    <Header as='h3' icon>
+        <Icon style={{fontSize:"1.5rem",marginBottom:"15px"}} circular inverted color='orange' flipped='horizontally' name='history' />
+        <Header.Content>
+            Hızlı Erişim
+            <Header.Subheader className="homepage_subheader">
+            İhtiyacın olan uzmanı aramak için zaman kaybetme, uzman bloglarını ve yorumlarını inceleyerek tek bir platform üzerinden hızlıca bilgi sahibi ol.
+        </Header.Subheader>
+         </Header.Content> 
+    </Header>
+   
+  </Grid.Column>
+  
+  <Grid.Column width={isMobile ? "16": "5"}>
+    <Header as='h3' icon>
+        <Icon style={{fontSize:"1.5rem", marginBottom:"15px"}} size="small" circular inverted color='orange' name='heart' />
+        <Header.Content>
+            Online Destek 
+            <Header.Subheader className="homepage_subheader">
+            Deneyimini güçlendirmek ve sana daha iyi yardımcı olabilmek için doğrudan danışmanlarla iletişime geçmeni sağlıyoruz. 
+        </Header.Subheader>
+         </Header.Content> 
+    </Header>
+   
+  </Grid.Column>
+ 
+</Grid.Row>
+</Grid>
+<div style={{display:"flex"}}>
+        <div className="spacingContainer__small" />
+    </div>
            <Grid stackable >
         <Grid.Column width={16}>
           <Header
@@ -273,52 +391,6 @@ const HomePage = () => {
       </Grid>
       <div className="spacingContainer__small" />
 
-      <Grid columns={3} textAlign='center'>
-
-<Grid.Row >
-  <Grid.Column width={isMobile ? "16": "5"}>
-    <Header as='h3' icon>
-        <Icon style={{fontSize:"1.5rem",marginBottom:"15px"}} size="small" circular inverted color='teal' name='calendar check outline' />     
-        <Header.Content>
-            Aktivite Planla
-            <Header.Subheader className="homepage_subheader">
-            Uzman danışmanların oluşturmuş olduğu aktivitelere katılabilir, sağlığın için kendine vakit ayırırken aynı zamanda sosyalleşmenin de tadını çıkarabilirsin.  
-        </Header.Subheader>
-         </Header.Content> 
-    </Header>
-   
-  </Grid.Column>
-  <Grid.Column width={isMobile ? "16": "5"} >
-    <Header as='h3' icon>
-        <Icon style={{fontSize:"1.5rem",marginBottom:"15px"}} circular inverted color='teal' flipped='horizontally' name='history' />
-        <Header.Content>
-            Hızlı Erişim
-            <Header.Subheader className="homepage_subheader">
-            İhtiyacın olan uzmanı aramak için zaman kaybetme, uzman bloglarını ve yorumlarını inceleyerek tek bir platform üzerinden hızlıca bilgi sahibi ol.
-        </Header.Subheader>
-         </Header.Content> 
-    </Header>
-   
-  </Grid.Column>
-  
-  <Grid.Column width={isMobile ? "16": "5"}>
-    <Header as='h3' icon>
-        <Icon style={{fontSize:"1.5rem", marginBottom:"15px"}} size="small" circular inverted color='teal' name='heart' />
-        <Header.Content>
-            Online Destek 
-            <Header.Subheader className="homepage_subheader">
-            Deneyimini güçlendirmek ve sana daha iyi yardımcı olabilmek için doğrudan danışmanlarla iletişime geçmeni sağlıyoruz. 
-        </Header.Subheader>
-         </Header.Content> 
-    </Header>
-   
-  </Grid.Column>
- 
-</Grid.Row>
-</Grid>
-<div style={{display:"flex"}}>
-        <div className="spacingContainer__small" />
-    </div>
 <Segment clearing secondary className="homepage_contactus-form">
 <Grid columns={2} stackable textAlign='left'>
     <Grid.Row verticalAlign='middle' className="contactus-row">
@@ -328,16 +400,27 @@ const HomePage = () => {
        
         <Grid.Column>
                 <Header as="h1">
-                    <Header.Content>Desteğine herkesin ihtiyacı var</Header.Content>
+                    <Header.Content>Hoşgeldin!</Header.Content>
                 </Header>
                 <Header.Subheader style={{fontSize:"1.2rem",marginBottom:"20px"}}>
-                        Uzman olduğun alanda deneyimlerini paylaşmak ve hizmet vermek için bize doğrudan başvurabilirsin, dilersen mail adresine de bilgilendirme gönderebiliriz.
-                      <b><div style={{color:"#1a2b49", cursor:"pointer", textDecoration:"underline", marginTop:"10px"}} onClick={handleTrainerFormClick}>
-                                Uzman Başvuru Formu için tıklayın..
-                             </div></b>
+                      <div>Uzman olduğun alanda hizmet vermek için bize doğrudan başvurabilirsin.
+                        </div>  
+                            <div>
+                            <Button  
+                            primary
+                            circular
+                            disabled={loading}
+                            floated="left"
+                            style={{ marginTop:"20px"}} 
+                            onClick={handleTrainerFormClick}
+                            >
+                          Uzman eğitmen başvurusu <Icon name='send' inverted></Icon> 
+                        </Button>
+                            </div>
+                          
                      
                 </Header.Subheader>
-                <FinalForm
+                {/* <FinalForm
                // validate = {validate}
               //  initialValues={post}
                 onSubmit={handleFinalFormSubmit}
@@ -369,7 +452,7 @@ const HomePage = () => {
                    
                     </Form>
             )}
-            />
+            /> */}
              
         </Grid.Column>
 
@@ -387,5 +470,4 @@ const HomePage = () => {
     </>
     );
 };
-
-export default HomePage
+export default observer(HomePage)

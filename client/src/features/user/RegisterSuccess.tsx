@@ -1,7 +1,7 @@
 import React from 'react';
 import {RouteComponentProps} from 'react-router-dom';
 import queryString from 'query-string';
-import { Button, Header, Icon, Segment } from 'semantic-ui-react';
+import { Button, Container, Header, Icon, Segment } from 'semantic-ui-react';
 import agent from '../../app/api/agent';
 import { toast } from 'react-toastify';
 import { observer } from 'mobx-react-lite';
@@ -16,6 +16,8 @@ const RegisterSuccess : React.FC<RouteComponentProps> = ({location}) =>{
     }
 
     return(
+        <Container className="pageContainer">
+
         <Segment placeholder>
             <Header icon>
                 <Icon name="check" />
@@ -34,6 +36,7 @@ const RegisterSuccess : React.FC<RouteComponentProps> = ({location}) =>{
                 </div>
             </Segment.Inline>
         </Segment>
+        </Container>
     )
 };
 

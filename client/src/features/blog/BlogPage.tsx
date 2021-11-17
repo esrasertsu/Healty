@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Container, Grid } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import {  RouteComponentProps } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
@@ -42,7 +42,8 @@ const BlogPage: React.FC<RouteComponentProps<DetailParams>> = ({match, history})
     if(loadingPost) return <LoadingComponent content='Loading blog...'/>  
 
     return (
-     <> 
+        <Container className="pageContainer">
+ 
       <Grid>
           <Grid.Column>
             <BlogPageHeader blog={post!} />
@@ -51,7 +52,7 @@ const BlogPage: React.FC<RouteComponentProps<DetailParams>> = ({match, history})
             <BlogMoreFromThisCategory blog={post!} />
           </Grid.Column>
       </Grid>
-     </>
+     </Container>
     )
 }
 

@@ -1,15 +1,7 @@
 import { observer } from 'mobx-react-lite';
-import React, { Fragment, useContext, useEffect,useState } from 'react'
-import {Container, Grid, Icon, Label, Message, Segment, Select } from 'semantic-ui-react'
+import React, { useContext } from 'react'
 import { RootStoreContext } from '../../app/stores/rootStore';
-import ProfileListItem from './ProfileListItem'
-import ProfileListFilters from './ProfileListFilters';
-import { profileSortingOptions } from "../../app/common/options/profileSortingOptions";
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-import ProfileListItemsPlaceholder from './ProfileListItemsPlaceholder';
-import InfiniteScroll from 'react-infinite-scroller';
-import ProfileList from './ProfileList';
+
 import { SemanticWIDTHS } from 'semantic-ui-react/dist/commonjs/generic';
 import { useMediaQuery } from 'react-responsive'
 

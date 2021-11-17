@@ -1,5 +1,5 @@
 import React,  { useEffect, useContext, useState}  from 'react';
-import { Accordion, Button, Grid, Icon, Label, Loader, Radio, Segment, Sidebar } from 'semantic-ui-react';
+import { Accordion, Button, Container, Grid, Icon, Label, Loader, Radio, Segment, Sidebar } from 'semantic-ui-react';
 import ActivityList from './ActivityList';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../../app/stores/rootStore';
@@ -9,26 +9,29 @@ import ActivityListItemPlaceholder from './ActivityListItemPlaceHolder';
 import { useMediaQuery } from 'react-responsive'
 import { DateTimePicker } from 'react-widgets';
 import { IActivitySelectedFilter } from '../../../app/models/activity';
-
+import { format } from 'date-fns';
+import tr  from 'date-fns/locale/tr'
 
 const ActivityDashboard: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
   const {loadActivities, loadingInitial, setPage, page, totalPages,loadLevels,predicate,setPredicate
   ,setClearPredicateBeforeSearch,clearKeyPredicate,subCategoryIds,setSubCategoryIds,
   categoryIds, setCategoryIds, setLevelIds,levelList,
-   setCityId, isOnline, setIsOnline, activityRegistery} = rootStore.activityStore;
+   setCityId, isOnline, setIsOnline, activityRegistery,activitySelectedFilters, setActivitySelectedFilters,
+  setActiveUserPreIndex, selectedStartDate, selectedEndDate, setSelectedStartDate, setSelectedEndDate,clearActivityRegistery} = rootStore.activityStore;
 
 
   const { loadCategories,categoryRegistery } = rootStore.categoryStore;
+
+  const { cities } = rootStore.commonStore;
+
   const [loadingNext, setLoadingNext] = useState(false);
   const [isToggleVisible, setIsToggleVisible] = useState(false);
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   const [visible, setVisible] = useState(false);
-  const [activitySelectedFilters, setActivitySelectedFilters] = useState<IActivitySelectedFilter[]>([]);
   const [isAccOpen, setisAccOpen] = useState(false);
-  const [selectedStartDate, setSelectedStartDate] = useState("");
 
   const handleGetNext = () => {
     setLoadingNext(true);
@@ -120,15 +123,15 @@ const ActivityDashboard: React.FC = () => {
         clearKeyPredicate("levelIds");
       }else if(value === "isHost")
       {
-        setLevelIds([]);
+        setActiveUserPreIndex(0); 
         clearKeyPredicate("isHost");
       }else if(value === "isGoing")
       {
-        setLevelIds([]);
+        setActiveUserPreIndex(0); 
         clearKeyPredicate("isGoing");
       }else if(value === "isFollowed")
       {
-        setLevelIds([]);
+        setActiveUserPreIndex(0); 
         clearKeyPredicate("isFollowed");
       }
 
@@ -140,7 +143,8 @@ const ActivityDashboard: React.FC = () => {
       setisAccOpen(!isAccOpen);
   }
   return (
-    <>
+    <Container className="pageContainer">
+
    
         {!isTabletOrMobile ?
 <>
@@ -210,13 +214,16 @@ const ActivityDashboard: React.FC = () => {
             onClick={handleAccClick}
             style={{color:"#fff", fontWeight:500}}
           >
-           <Icon name='calendar alternate outline' /> Tarih/saat aralığı {selectedStartDate}  <Icon name='dropdown' />
+           <Icon name='calendar alternate outline' /> 
+            {(predicate.get('startDate') || predicate.get('endDate')) ? 
+            <span style={{color:"#6aeb6a"}}>Tarih saat aralığı seçili <Icon name="check circle outline" /> </span>
+           : "Tarih/saat aralığı"}  <Icon name='dropdown' />
           </Accordion.Title>
           <Accordion.Content active={isAccOpen}>
           <DateTimePicker
             value={predicate.get('startDate') || new Date()}
             onChange={(date)=> {
-              setSelectedStartDate(date!.toLocaleString())
+              setSelectedStartDate(date)
               setClearPredicateBeforeSearch(true); 
               clearKeyPredicate("startDate");
               setClearPredicateBeforeSearch(false); 
@@ -230,8 +237,9 @@ const ActivityDashboard: React.FC = () => {
           />
           <br/>
           <DateTimePicker
-            value={predicate.get('endDate') || new Date()}
+            value={predicate.get('endDate')}
             onChange={(date)=> {
+              setSelectedEndDate(date)
               setClearPredicateBeforeSearch(true); 
               clearKeyPredicate("endDate");
               setClearPredicateBeforeSearch(false); 
@@ -239,9 +247,23 @@ const ActivityDashboard: React.FC = () => {
             onKeyDown={(e) => e.preventDefault()}
             date = {true}
             time = {true}
-            containerClassName="dtPicker_Style"
+            containerClassName="dtPicker_Style secondDtPicker"
             culture="tr"
           />
+
+      <Button 
+       inverted 
+       content="Temizle" 
+       style={{marginTop:"10px"}}
+       onClick={() =>{
+        clearKeyPredicate("startDate");
+        clearKeyPredicate("endDate");
+        setPage(0);
+        clearActivityRegistery();
+        loadActivities();
+        scrollToTop();
+       }}
+       />
           </Accordion.Content>
         </Accordion>
          
@@ -257,11 +279,14 @@ const ActivityDashboard: React.FC = () => {
           </div>
        
           { activitySelectedFilters.map((value:IActivitySelectedFilter) =>(
-            <Label className="selectedFilterLabel" key={value.key}>{value.text} 
+            
+            <Label className="selectedFilterLabel" key={value.key}>{ value.value === "cityId" ? cities.filter(x => x.key === value.key)[0].text : value.text} 
             <Icon style={{opacity:1}} name="delete" onClick={(e:any) => handleDeleteFilterSelection(e,value.key, value.value)}></Icon>
             </Label>
 
-          ))}
+          ))
+          }
+         
         
               <Sidebar.Pushable key="activityPushable" style={{ overflow: 'hidden' }}>
               <Sidebar
@@ -328,7 +353,7 @@ const ActivityDashboard: React.FC = () => {
       
      
      
-    </>
+      </Container>
   );
 };
 

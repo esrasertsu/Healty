@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { Button, Card, Header, Icon, Item, Label, Message, Segment } from 'semantic-ui-react'
+import { Button, Card, Container, Header, Icon, Item, Label, Message, Segment } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
@@ -45,12 +45,17 @@ const OrderList: React.FC<IProps> = ({settings}) => {
 
   if(!isLoggedIn)
     return (
+      <Container className="pageContainer">
+
         <Segment className="login-page-segment">
             <LoginForm location={history.location.pathname} />
         </Segment>
+        </Container>
     )
 
   return (
+    <Container className="pageContainer">
+
     <Fragment>
      {loadingOrders && orderPage === 0 ? <ActivityListItemPlaceholder/> :
      orderList.length > 0 ?
@@ -159,7 +164,8 @@ const OrderList: React.FC<IProps> = ({settings}) => {
      </>
     }
     </Fragment>
-    
+    </Container>
+
   );
 };
 

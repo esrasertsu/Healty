@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import React, { useContext, useEffect } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
-import { Grid, Header, Icon, Image, Label, Segment, Statistic } from 'semantic-ui-react'
+import { Container, Grid, Header, Icon, Image, Label, Segment, Statistic } from 'semantic-ui-react'
 import { LoadingComponent } from '../../app/layout/LoadingComponent'
 import { ProfileFormValues } from '../../app/models/profile'
 import { RootStoreContext } from '../../app/stores/rootStore'
@@ -51,7 +51,8 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
     return <LoadingComponent content='Loading profile...' />
 
     return (
-        <>
+      <Container className="pageContainer">
+
         {profile===null || profile!.userName !== match.params.username ? (<LoadingComponent content='Loading profile...' />) :
        (
          <>
@@ -152,7 +153,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
          )}
          <br></br>
       <br></br>
-        </>
+        </Container>
     )
 }
 

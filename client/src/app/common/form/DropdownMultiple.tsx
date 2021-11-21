@@ -5,8 +5,7 @@ import { Form, FormFieldProps, Label, Dropdown } from 'semantic-ui-react'
 interface IProps extends FieldRenderProps<string[], HTMLElement>, FormFieldProps {}
 
  const DropdownMultiple:React.FC<IProps> = ({input,onChange,loading=false, width, options,labelName,emptyError, placeholder, meta:{ touched, error}}) => {
-  
-    if((emptyError===null ||emptyError===undefined || emptyError.length === 0))
+    if(touched &&(emptyError===null ||emptyError===undefined || emptyError.length === 0))
     {
         document.getElementById(labelName) && document.getElementById(labelName)!.classList.add("errorLabel")
     }else{
@@ -15,7 +14,9 @@ interface IProps extends FieldRenderProps<string[], HTMLElement>, FormFieldProps
 
   
     return (
-        <Form.Field error={touched && !!error} width={width}>
+        <Form.Field 
+        //error={touched && !!error}
+         width={width}>
          <Dropdown 
           value={input.value || []}
           deburr
@@ -35,7 +36,7 @@ interface IProps extends FieldRenderProps<string[], HTMLElement>, FormFieldProps
             closeOnChange
 
          />
-        {error && (
+        {error && (touched === true) && (
                 <label style={{color:"red"}}>{error}</label>
             )} 
     </Form.Field>

@@ -19,11 +19,7 @@ const numberOptions = [
     { key: '2', value: 2, text: '2' },
     { key: '3', value: 3, text: '3' },
     { key: '4', value: 4, text: '4' },
-    { key: '5', value: 5, text: '5' },
-    { key: '6', value:6, text: '6' },
-    { key: '7', value: 7, text: '7' },
-    { key: '8', value: 8, text: '8' },
-    { key: '9', value: 9, text: '9' }
+    { key: '5', value: 5, text: '5' }
   ]
   
 
@@ -125,6 +121,7 @@ const handleCardClick = (e:any) => {
             </Icon.Group>
             <span>{format(new Date(new Date(activity.date).valueOf() - 86400000),'dd MMMM yyyy, eeee',{locale: tr})} -  { activity.date && format(activity.date, 'H:mm',{locale: tr})} tarihine kadar ücretsiz iptal. </span>
               </div>              
+               { activity.price && activity.price >0 &&
                 <FinalForm 
                   onSubmit ={handlePaySubmit}
                   render={({ form}) => (
@@ -146,12 +143,12 @@ const handleCardClick = (e:any) => {
                     </div>
                   </Form>
                   )}
-                />
+                />}
 
 
                 <div className="activityDetail_payment_calculation">
                     <div className="calculation">
-                         <span style={{textDecoration:"underline",color: "#263a5e"}}>{activity.price!} TL * {count} kişi</span>
+                         <span style={{textDecoration:"underline",color: "#263a5e"}}>{activity.price || 0} TL * {count} kişi</span>
                     </div>
                     <div>
                                 <div>Toplam </div> 

@@ -75,37 +75,35 @@ namespace CleanArchitecture.Application.Payment
                         var user = await _context.Users.SingleOrDefaultAsync(x =>
                           x.Id == request.uid);
                         
-                        if (user != null)
+                        var activity = await _context.Activities.FindAsync(request.Id);
+
+                        var attendance = await _context.UserActivities.SingleOrDefaultAsync(x =>
+                            x.ActivityId == request.Id && x.AppUserId == user.Id);
+
+                        //if (attendance != null)
+                        //    throw new RestException(HttpStatusCode.BadRequest, new { Attendance = "Already attending this activity" });
+                        activity.AttendanceCount = activity.AttendanceCount + request.count;
+
+                        attendance = new UserActivity
                         {
-                            var activity = await _context.Activities.FindAsync(request.Id);
-
-                            if (activity == null)
-                                throw new RestException(HttpStatusCode.NotFound,
-                                    new { Activity = "Couldn't find activity" });
-
-                            var attendance = await _context.UserActivities.SingleOrDefaultAsync(x =>
-                               x.ActivityId == request.Id && x.AppUserId == user.Id);
-
-                            if (attendance != null)
-                                throw new RestException(HttpStatusCode.BadRequest, new { Attendance = "Already attending this activity" });
-
-                            attendance = new UserActivity
-                            {
-                                Activity = activity,
-                                AppUser = user,
-                                IsHost = false,
-                                DateJoined = DateTime.Now,
-                                ShowName = true
-                            };
+                            Activity = activity,
+                            AppUser = user,
+                            IsHost = false,
+                            DateJoined = DateTime.Now,
+                            ShowName = true
+                        };
 
                             _context.UserActivities.Add(attendance);
-                        }
+                        
 
                         var orderStateChanged = await _context.SaveChangesAsync() > 0;
 
-                        if (orderStateChanged)
-                            return iyzicoPaymentResult;
-                        else throw new RestException(HttpStatusCode.BadRequest, new { OrderState = "Order state and activity cannot changed" });
+                        if (!orderStateChanged)
+                        {
+                            iyzicoPaymentResult.ErrorCode = "9999";
+                            iyzicoPaymentResult.ErrorMessage = "Ödeme alındı ancak sipariş bilgisi ve/veya aktivite bilgileri sistem üzerinde güncellenemedi. Lütfen bizimle iletişime geçin.";
+                        }
+                        return iyzicoPaymentResult;
 
                     }
                     else

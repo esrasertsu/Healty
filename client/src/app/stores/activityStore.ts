@@ -519,6 +519,7 @@ export default class ActivityStore {
                 if(this.activity){
                     this.activity.attendees = this.activity.attendees.filter(a => a.userName !== this.rootStore.userStore.user!.userName);
                     this.activity.isGoing = false;
+                    this.activity.attendanceCount = this.activity.attendanceCount-1;
                     this.activityRegistery.set(this.activity.id, this.activity);
                     this.loading = false;
                 }

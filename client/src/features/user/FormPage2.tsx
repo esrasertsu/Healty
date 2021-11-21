@@ -2,8 +2,8 @@ import { FORM_ERROR } from 'final-form';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
-import { combineValidators, isRequired } from 'revalidate';
-import { Button, Form, Grid, Header, Icon, Image, Label, List, Message, Modal, Placeholder, Segment } from 'semantic-ui-react';
+import { combineValidators, createValidator, isRequired } from 'revalidate';
+import { Accordion, Button, Form, Grid, Header, Icon, Image, Label, List, Message, Modal, Placeholder, Segment } from 'semantic-ui-react';
 import DropdownInput from '../../app/common/form/DropdownInput';
 import DropdownMultiple from '../../app/common/form/DropdownMultiple';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
@@ -21,11 +21,18 @@ import { useMediaQuery } from 'react-responsive'
 import FormPage1 from './FormPage1';
 import NumberInput from '../../app/common/form/NumberInput';
 import { history } from '../..';
+import agent from '../../app/api/agent';
+import { action } from 'mobx';
+import IBAN from 'iban';
 
+interface IProps{
+  id:string;
+}
 
-const FormPage2 = () =>{
+const FormPage2: React.FC<IProps> = ({id}) =>{
     const rootStore = useContext(RootStoreContext);
-    const { trainerRegistering,trainerRegisteredSuccess, registerTrainer,tranierCreationForm,settrainerRegisteringFalse } = rootStore.userStore;
+    const { trainerRegistering,trainerRegisteredSuccess, registerTrainer,tranierCreationForm,
+      settrainerRegisteringFalse } = rootStore.userStore;
     const { cities } = rootStore.commonStore;
 
 
@@ -33,7 +40,7 @@ const FormPage2 = () =>{
    const [filedocs, setFileDocs] = useState<any[]>([]);
    const [updateEnabled, setUpdateEnabled] = useState(false);
 
-   
+   const [activeIndex, setActiveIndex] = useState(0);
     
   const {allCategoriesOptionList} = rootStore.categoryStore;
   const {trainerForm, setTrainerForm} = rootStore.userStore;
@@ -50,7 +57,7 @@ const FormPage2 = () =>{
 
     const [subCategoryOptions, setSubCategoryOptions] = useState<ICategory[]>([]);
     const [categoryOptions, setCategoryOptions] = useState<ICategory[]>([]);
-    const {openModal,closeModal,modal} = rootStore.modalStore;
+    const [tcknMessage,setTcknMessage]= useState<string>("");
 
     const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
@@ -60,11 +67,30 @@ useEffect(() => {
     setCategoryOptions(categoryOptions => [...categoryOptions, new Category({key: option.key, value: option.value, text: option.text})])
 ));
 }, [allCategoriesOptionList])
+
   
 useEffect(() => {
-   setTrainerForm(new TrainerFormValues());
+debugger;
+  agent.User.loadNewTrainer()
+  .then(action((newTrainer) =>
+  {
+    debugger;
+    setTrainerForm(new TrainerFormValues(newTrainer!));
+  })).catch((error) => 
+     console.log(error)
+      
+  )
+ // setActiveTab(0);
+  
    loadAccessibilities();
-}, [])
+}, [id])
+
+     const handleAccordionClick = (e:any, titleProps:any) => {
+        const { index } = titleProps
+        const newIndex = activeIndex === index ? -1 : index
+
+        setActiveIndex(newIndex)
+      }
 
 
     const handleCategoryChanged = (e: any, data: string[]) => {
@@ -82,7 +108,7 @@ useEffect(() => {
        }
     
     const loadSubCatOptions = () =>{
-        allCategoriesOptionList.filter(x=> category.findIndex(y=> y === x.parentId!) > -1).map(option => (
+        allCategoriesOptionList.filter(x=> trainerForm.categoryIds.findIndex(y=> y === x.parentId!) > -1).map(option => (
             subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
         ))
         setSubCategoryOptions(subCategoryOptionFilteredList);
@@ -100,9 +126,9 @@ useEffect(() => {
 
 
    const handleSubmitTrainerForm = (values:ITrainerFormValues) =>{
-debugger;
 
-const messages = [];
+
+    const messages = [];
     if(values.categoryIds.length === 0)
     {
       messages.push("Kategori alanı seçimi zorunludur.");
@@ -129,6 +155,16 @@ const messages = [];
        messages.push("Tecrübe yılı zorunludur.")
 
     }
+    if(values.tcknIdentityNo && String(values.tcknIdentityNo).length !== 11)
+    {
+      messages.push("Geçersiz TC Kimlik numarası.")
+    }
+    
+    if(!IBAN.isValid(values.iban))
+    {
+      messages.push("Geçersiz IBAN numarası.")
+    }
+
     if(messages.length > 0){
       setError2Message(messages);
       setTrainerForm2Message(true);
@@ -138,11 +174,8 @@ const messages = [];
       let edittedValues = {
       ...values,
       certificates: docs,
-      username:tranierCreationForm.username,
-      displayname: tranierCreationForm.displayname,
-      password: tranierCreationForm.password,
-      email: tranierCreationForm.email
     }
+    debugger;
       registerTrainer(edittedValues)
       .catch((error:any) => (
         settrainerRegisteringFalse(),
@@ -156,12 +189,7 @@ const messages = [];
    }
 
 
-    
- const handlePreviousButtonClick = (e:any) =>{
- 
-  history.push("/trainerOnboarding")
-     
- }
+
     return (
       <>
       {trainerRegistering ? 
@@ -199,11 +227,29 @@ const messages = [];
         }) => (
           <Form onSubmit={handleSubmit} error>
            
-           <Label content="<< Geri" color="orange" onClick={handlePreviousButtonClick} style={{cursor:"pointer", marginBottom:"20px"}}/>
-        <div>
-        <label>Uzman Kategorisi*</label>
-
-        </div>
+           {/* <Label content="<< Geri" color="orange" onClick={handlePreviousButtonClick} style={{cursor:"pointer", marginBottom:"20px"}}/> */}
+           <Accordion fluid styled>
+           <Accordion.Title
+          active={activeIndex === 0}
+          index={0}
+          onClick={handleAccordionClick}
+          className="trainerFormAccordionTitle"
+        >
+          <Icon name='dropdown' />
+         Mesleki Bilgiler
+        </Accordion.Title>
+        <Accordion.Content active={activeIndex === 0}>
+        <Message
+        className="trainerFormAccordionMessage"
+        info
+        content={<>
+        <li>Bu bölümde gireceğiniz bilgiler tamamen uzmanlık alanınızla ilgilidir.</li>
+        <li>Girmiş olduğunuz bilgiler kontrol edildikten sonra uzman profiliniz otomatik oluşturulacaktır.</li>
+        <li>Onay aşamasından sonra listelerde görünebilir ve aktivite açmaya başlayabilirsiniz.</li>
+        <li>Onay mesajını alana kadar (ya da profiliniz uzman profiline dönüşene kadar) bu formu istediğiniz kadar güncelleyebilirsiniz.</li>
+        </>}
+      />
+            <label>Uzman Kategorisi*</label>
             <Field
                   name="categoryIds"
                   placeholder="Kategori"
@@ -292,7 +338,7 @@ const messages = [];
                 <Field name="dependency" placeholder="Şirket Adı / Freelance" component={TextInput} value={trainerForm.dependency}/>
                 <OnChange name="dependency">
                     {(value, previous) => {
-                      debugger;
+                     
                         if(value !== trainerForm.dependency)
                         {
                             setTrainerForm({...trainerForm,dependency: value});
@@ -326,8 +372,64 @@ const messages = [];
                     }
                 }}
             </OnChange>
+            </Accordion.Content>
 
-        
+            <Accordion.Title
+          active={activeIndex === 1}
+          index={1}
+          onClick={handleAccordionClick}
+          className="trainerFormAccordionTitle"
+        >
+          <Icon name='dropdown' />
+         Banka Hesabı / Ödeme Bilgileri
+        </Accordion.Title>
+        <Accordion.Content active={activeIndex === 1}>
+        <Message
+        className="trainerFormAccordionMessage"
+        info
+        content={<>
+        <li>Bu bölümde gireceğiniz bilgiler sistem üzerinde kazandığınız paranın size aktarılması için gerekli bilgilerdir.</li>
+        <li>Ödemeler IYZICO şirketi tarafından otomatik gerçekleştirilmektedir.</li>
+        <li>Detaylı bilgi, her türlü soru ve istekleriniz için: admin@afitapp.com hesabına mail atabilirsiniz.</li>
+        </>}
+      />
+
+<>
+                    <label className="fieldLabel" id="tcknLabel">TC Kimlik Numarası*</label>
+                    <div className="field" style={{display:"flex", flexDirection:"column"}}>
+                    <Field
+                      labelName="tcknLabel"
+                      name="tcknIdentityNo"
+                      type="number"
+                      placeholder=""
+                      value={trainerForm.tcknIdentityNo}
+                      component={NumberInput}
+                      style={{marginBottom:15}}
+                    />
+                     </div>         
+                        <OnChange name="tcknIdentityNo">
+                    {(value, previous) => {
+                            setTrainerForm({...trainerForm,tcknIdentityNo: value});
+                    }}
+                    </OnChange>
+                    <label className="fieldLabel" id="ibanlabel">IBAN*</label>
+                <Field
+                  name="iban"
+                  labelName="ibanlabel"
+                  placeholder="TR111106200119000006672315"
+                  value={trainerForm.iban}
+                  component={TextInput}
+                  style={{marginBottom:15}}
+                />
+                    <OnChange name="iban">
+                {(value, previous) => {
+                          setTrainerForm({...trainerForm,iban: value});
+                }}
+                </OnChange>
+
+                    </>
+      </Accordion.Content>
+            </Accordion>
             {submitError && (
              <ErrorMessage error={submitError}
              text={JSON.stringify(submitError.data.errors)} />
@@ -342,6 +444,7 @@ const messages = [];
               color='teal'
               content="Kayıt Ol"
               fluid
+              style={{marginTop:"30px"}}
             />
           </Form>
         )}

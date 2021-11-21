@@ -44,6 +44,13 @@ namespace CleanArchitecture.API.Controllers
             return user;
         }
 
+        [HttpGet("newTrainerInfo")]
+        public async Task<ActionResult<WaitingTrainerInfoDto>> LoadWaitingTrainerInfo()
+        {
+            return await Mediator.Send(new WaitingTrainerInfo.Query());
+           
+        }
+
         [HttpGet("submerchantInfo")]
         public async Task<ActionResult<SubMerchantDto>> GetSubmerchantnfo()
         {
@@ -72,25 +79,27 @@ namespace CleanArchitecture.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("registerWaitingTrainer")]
-        public async Task<ActionResult<Unit>> RegisterWaitingTrainer([FromForm] RegisterWaitingTrainer.Command command)
+        public async Task<ActionResult<User>> RegisterWaitingTrainer([FromForm] RegisterWaitingTrainer.Command command)
         {
             command.Origin = Request.Headers["origin"];
-            await Mediator.Send(command);
-            return await Mediator.Send(command);
+            var user = await Mediator.Send(command);
+            if (user != null)
+                SetTokenCookie(user.RefreshToken);
+            return user;
         }
 
         [AllowAnonymous]
         [HttpPost("registertrainer")]
-        public async Task<ActionResult<Unit>> RegisterTrainer([FromForm] RegisterTrainer.Command command)
+        public async Task<ActionResult<Unit>> RegisterTrainer([FromForm]RegisterTrainer.Command command)
         {
             return await Mediator.Send(command);
         }
 
         [AllowAnonymous]
-        [HttpPost("isUserNameAvailable")]
-        public async Task<ActionResult<bool>> IsUserNameAvailable(string username, string email)
+        [HttpPost("userNameAndPhoneCheck")]
+        public async Task<ActionResult<bool>> UserNameAndPhoneCheck(string username, string email, string phone)
         {
-            return await Mediator.Send(new IsUserNameAvailable.Query { UserName = username, Email = email });
+            return await Mediator.Send(new IsUserNameAvailable.Query { UserName = username, Email = email, Phone = phone });
         }
 
         [AllowAnonymous]

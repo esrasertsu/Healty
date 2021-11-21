@@ -154,16 +154,28 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                      <StarRating rating={5} editing={false} size={'small'} showCount={false}/>
                     </Item.Description>
                     <Item.Description style={{flex:"end"}}>
-                    <div className="baseline-pricing">
-                         <p className="baseline-pricing__from">Kişi başı</p> 
+                        {activity.price === null || activity.price === 0 ? 
+                         <div className="baseline-pricing">
                         <div className="baseline-pricing__container">
                         <p className="baseline-pricing__value">
-                           {activity.price}&nbsp;TL
+                         Ücretsiz!
                          </p>
                          </div> 
-                         <p className="baseline-pricing__category">
-                        'den başlayan fiyatlarla
-                    </p></div>
+                         </div>
+                    
+                    : 
+                    <div className="baseline-pricing">
+                        <p className="baseline-pricing__from">Kişi başı</p> 
+                    <div className="baseline-pricing__container">
+                    <p className="baseline-pricing__value">
+                        {activity.price}&nbsp;TL
+                        </p>
+                        </div> 
+                        <p className="baseline-pricing__category">
+                    'den başlayan fiyatlarla
+                </p></div>
+               }
+                   
                     </Item.Description>
                     </Item.Content>
                     </div>

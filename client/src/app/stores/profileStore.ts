@@ -241,13 +241,13 @@ export default class ProfileStore{
     }
 
     getProfile = (username:string) => {
-        debugger;
+    
 
         this.updatedProfile = false;             
         return this.profileRegistery.get(username);
     }
     @action loadProfile = async (username: string) =>{
-        debugger;
+       
             this.setLoadingProfile(true);
             this.updatedProfile = false;             
             this.setCommentPage(0);

@@ -2,18 +2,18 @@ import React from 'react';
 import { Segment, Button, Header, Icon, Container } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
-const NotFound = () => {
+const Forbidden = () => {
     return (
         <Container className="pageContainer">
 
         <Segment placeholder>
             <Header icon>
                 <Icon name='search' />
-                Opps! Aradığın sayfayı bulamadık
+                Opps! Bu sayfayı görüntüleme iznin yok. 
             </Header>
             <Segment.Inline>
-                <Button as={Link} to='/activities' primary>
-                    Aktivitelere dön
+                <Button as={Link} to='/' primary>
+                    Anasayfaya geri dön
                 </Button>
             </Segment.Inline>
         </Segment>
@@ -21,4 +21,4 @@ const NotFound = () => {
     );
 };
 
-export default NotFound;
+export default Forbidden;

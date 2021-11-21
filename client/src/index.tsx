@@ -32,15 +32,7 @@ dateFnsLocalizer({
 
 export const history = createBrowserHistory();
 
-// if(history.location.pathname=="/payment/threeDpage")
-// {
-//   debugger;
-//   const HtmlToReactParser = require('html-to-react').Parser;
-//   const htmlToReactParser = new HtmlToReactParser();
-// const reactElement = htmlToReactParser.parse("<div></div>");
-//   ReactDOMServer.renderToStaticMarkup(reactElement);
 
-// }else{
   ReactDOM.render(
     <Router history={history}>
      <ScrollToTop>

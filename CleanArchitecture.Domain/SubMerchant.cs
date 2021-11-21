@@ -6,7 +6,7 @@ namespace CleanArchitecture.Domain
 {
     public class SubMerchant
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } //Iyzico submerchantExternalId
         public string UserId { get; set; }
         public virtual AppUser User { get; set; }
         public string SubMerchantKey { get; set; }

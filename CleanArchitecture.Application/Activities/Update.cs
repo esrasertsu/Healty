@@ -30,7 +30,6 @@ namespace CleanArchitecture.Application.Activities
             public string CityId { get; set; }
             public string Venue { get; set; }
             public bool Online { get; set; }
-            public string AttendanceCount { get; set; }
             public string AttendancyLimit { get; set; }
             public string Price { get; set; }
             public string Address { get; set; }
@@ -185,7 +184,6 @@ namespace CleanArchitecture.Application.Activities
                 activity.Address = request.Address ?? activity.Address;
                 activity.Venue = request.Venue ?? activity.Venue;
                 activity.AttendancyLimit = String.IsNullOrEmpty(request.AttendancyLimit) ? 0 : Convert.ToInt32(request.AttendancyLimit);
-                activity.AttendanceCount = Convert.ToInt32(request.AttendanceCount);
                 activity.Price = String.IsNullOrEmpty(request.Price) ? 0 : Convert.ToDecimal(request.Price);
                 activity.Online = Convert.ToBoolean(request.Online);
                 activity.LastUpdateDate = DateTime.Now;

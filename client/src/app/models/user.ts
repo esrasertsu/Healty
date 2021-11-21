@@ -1,6 +1,6 @@
 import { ICategory, ISubCategory } from "./category";
 import { ICity } from "./location";
-import { IAccessibility } from "./profile";
+import { IAccessibility, IDocument } from "./profile";
 
 export interface IUser {
     userName : string;
@@ -27,6 +27,8 @@ export interface ITrainerCreationFormValues {
     username: string;
     phone:string;
     hasSignedContract: boolean;
+    categories: ICategory[];
+    categoryIds: string[];
 }
 
 export class TrainerCreationFormValues implements ITrainerCreationFormValues{
@@ -37,6 +39,9 @@ export class TrainerCreationFormValues implements ITrainerCreationFormValues{
     username:string = "";
      phone: string = "";
      hasSignedContract: boolean = false;
+     categories: ICategory[] = [];
+     categoryIds: string[]  =[];
+
 }
 
 export interface ITrainerFormValues {
@@ -58,10 +63,11 @@ export interface ITrainerFormValues {
     accessibilityIds: string[],
     cityId:string,
     description: string,
-    certificates:File[],
-    title: string
-
-
+    documents:File[],
+    title: string;
+    certificates: IDocument[];
+    tcknIdentityNo: number| null;
+    iban : string;
 }
 
 export class TrainerFormValues implements ITrainerFormValues{
@@ -73,7 +79,8 @@ export class TrainerFormValues implements ITrainerFormValues{
     hasSignedContract: boolean = false;
     experienceYear: number = 0;
     experience:string = '';
-    certificates:File[] =[];
+    certificates:IDocument[]=[];
+    documents:File[] =[];
     dependency:string = '';
     subCategoryIds: string[] =[];
     categoryIds: string[]  =[];
@@ -86,8 +93,11 @@ export class TrainerFormValues implements ITrainerFormValues{
     accessibilities: IAccessibility[] = [];
     description: string ="";
     title: string="";
-
+    tcknIdentityNo: number | null = null;
+    iban : string= "";
     constructor(init?: ITrainerFormValues){
+        debugger;
+
         if(init)
         {    
             
@@ -95,7 +105,7 @@ export class TrainerFormValues implements ITrainerFormValues{
             init.subCategoryIds=[];
             init.categoryIds=[];
             init.cityId = init.city ? init.city.value : "";
-              init.accessibilities!.forEach(s=>
+              init.accessibilities && init.accessibilities!.forEach(s=>
                 {
                     init.accessibilityIds.push(s.value.toString())
 
@@ -108,7 +118,7 @@ export class TrainerFormValues implements ITrainerFormValues{
     
                     }
                     );
-                    init.subCategories!.forEach(s=>
+                    init.subCategories && init.subCategories!.forEach(s=>
                         {
                             init.subCategoryIds.push(s.value.toString())
         

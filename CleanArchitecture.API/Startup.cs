@@ -236,13 +236,18 @@ namespace CleanArchitecture.API
                     "https://platform-lookaside.fbsbx.com",
                     "https://purecatamphetamine.github.io",
                     "data:",
-                    "blob:"
+                    "blob:",
+                    "https://www.google-analytics.com/collect"
                     ))
+//                .ObjectSources(s => s.Self())
                 .ScriptSources(s => s.Self().CustomSources(
                     "https://www.youtube.com",
                     "https://connect.facebook.net",
                     "sha256-eE1k/Cs1U0Li9/ihPPQ7jKIGDvR8fYw65VJw+txfifw=",
-                    "sha256-rQPGpX1K43jebTtYXBT+mlyP+LK8/XEaJ2xTV7ZzY6E="))
+                    "sha256-rQPGpX1K43jebTtYXBT+mlyP+LK8/XEaJ2xTV7ZzY6E=",
+                    "sha256-HFNclDLj6iSv9QbDzx+r/dbp6qGgueQHe+zFYPyTAdg=",
+                    "https://www.googletagmanager.com/gtm.js",
+                    "https://www.google-analytics.com/analytics.js"))
                 );
 
             if (env.IsDevelopment())

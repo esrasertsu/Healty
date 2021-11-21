@@ -45,23 +45,26 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
   }, [activity])
 
   const handleSendUserToOrders = () =>{
-    if(orderList.length > 1)
-    {
-      debugger;
+
+    if(activity.price && activity.price > 0 )
+    { 
+      if(orderList.length > 0)
+      {
           const relatedOrder = orderList.find(x=> x.productId === activity.id);
           if(relatedOrder){
   
             history.push(`/orders/${relatedOrder.id}`)
   
           }else{
-            toast.warning("Rezervasyonunuzu şuan getiremiyoruz. Lütfen rezervasyonlarım sayfasından deneyiniz.");
+            toast.warning("Rezervasyon detayını şuan getiremiyoruz. Lütfen rezervasyonlarım sayfasından deneyiniz.");
             setcancellationUserOpen(false)
           }
-        
-        
-
-
       }
+
+    }else{
+      cancelAttendance();
+      setcancellationUserOpen(false)
+    }
     }
 
   
@@ -70,7 +73,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
     return (
       <>
         <Confirm
-          content={'Bu rezervasyonu iptal etmek istediğinize emin misiniz? Sizi rezervasyonlarım sayfasına aktaracağız.'}
+          content={'Bu rezervasyonu iptal etmek istediğinize emin misiniz?'}
           open={cancellationUserOpen}
           header="Rezervasyon iptali"
           confirmButton="Devam et"

@@ -28,7 +28,7 @@ export default class UserStore {
     @observable trainerForm: ITrainerFormValues = new TrainerFormValues();
     @observable tranierCreationForm : ITrainerCreationFormValues = new TrainerCreationFormValues();
     @observable trainerRegistering = false;
-
+    @observable loadingUserInfo = false;
     @observable trainerRegisteredSuccess = false;
     @observable trainerFormMessage = false;
     @observable resendEmailVeriMessage = false;
@@ -41,6 +41,10 @@ export default class UserStore {
     
     @action setTrainerFormMessage = (value: boolean) => {
         this.trainerFormMessage = value;
+    }
+
+    @action setloadingUserInfo = (value:boolean) =>{
+        this.loadingUserInfo = value;
     }
 
     @action setResendEmailVeriMessage = (value: boolean) =>{
@@ -138,11 +142,11 @@ export default class UserStore {
         }
     }
 
-    @action isUserNameAvailable = async (username: string, email: string) =>{
+    @action userNameAndPhoneCheck = async (username: string, email: string, phone: string) =>{
         try {
             this.trainerRegistering = true;
             
-            const response = await agent.User.isUserNameAvailable(username,email);
+            const response = await agent.User.userNameAndPhoneCheck(username,email,phone);
             runInAction(()=>{
                 this.trainerRegistering = false;
             })
@@ -159,11 +163,17 @@ export default class UserStore {
                 this.setTrainerFormMessage(true);
                 this.setErrorMessage((error as any).data.errors.UserName);
               }  
+              if((error as any).data.errors.Phone!==undefined)
+              {
+                this.setTrainerFormMessage(true);
+                this.setErrorMessage((error as any).data.errors.Phone);
+              }  
             this.settrainerRegisteringFalse();
             throw error;
 
         }
     }
+
 
     @action registerTrainer = async (values: ITrainerFormValues) =>{
         try {
@@ -179,6 +189,33 @@ export default class UserStore {
 
         } catch (error) {
             this.trainerRegistering = false;
+            throw error;
+
+        }
+    }
+
+
+    @action registerWaitingTrainer = async (values: ITrainerCreationFormValues) =>{
+        try {
+            this.trainerRegistering = true;
+            
+            const user = await agent.User.registerWaitingTrainer(values);
+            runInAction(()=>{
+                this.settrainerRegisteringFalse();
+                if(user)
+                {
+                    this.user = user;
+                    this.hubConnection === null && this.createHubConnection(false);
+                    this.rootStore.commonStore.setToken(user.token);
+                    this.startRefreshTokenTimer(user);
+                    this.rootStore.modalStore.closeModal();
+                    history.push(`/TrainerRegister/${user.userName}`);
+                }
+            })
+
+           
+        } catch (error) {
+            this.settrainerRegisteringFalse();
             throw error;
 
         }
@@ -362,7 +399,6 @@ export default class UserStore {
             console.log(error);
         }
     }
-
 
     @action getSubMerchantInfo = async () =>{
         try{

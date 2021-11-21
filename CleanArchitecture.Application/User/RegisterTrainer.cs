@@ -29,10 +29,13 @@ namespace CleanArchitecture.Application.User
             public string Password { get; set; }
             public string Description { get; set; }
             public string Dependency { get; set; }
-            public string ExperienceYear { get; set; }
+            public decimal ExperienceYear { get; set; }
+            public string Experience { get; set; }
             public string Title { get; set; }
-
-            //public string PhoneNumber { get; set; }
+            public string PhoneNumber { get; set; }
+            public string TCKNIdentityNo { get; set; }
+            public string Iban { get; set; }
+            public bool HasSignedContract { get; set; }
             public Guid CityId { get; set; }
             public List<Guid> CategoryIds { get; set; }
             public List<Guid> SubCategoryIds { get; set; }
@@ -91,20 +94,18 @@ namespace CleanArchitecture.Application.User
                     {
                         DisplayName = request.DisplayName,
                         Email = request.Email,
-                        UserName = request.UserName,
                         Role = Role.WaitingTrainer,
                         Bio = request.Description,
                         Dependency = request.Dependency,
                         ApplicationDate = DateTime.Now,
                         ExperienceYear = Convert.ToInt32(request.ExperienceYear),
-                        Title = request.Title
-                        //PhoneNumber = request.PhoneNumber
+                        Title = request.Title,
                     };
 
-                    var result = await _userManager.CreateAsync(user, request.Password);
-                    
+                    var result = await _context.SaveChangesAsync() > 0;
 
-                    if (result.Succeeded)
+
+                    if (result)
                     {
                         var docsUploaded = false;
 

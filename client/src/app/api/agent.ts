@@ -25,7 +25,7 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use(undefined, error => {
     if(error.message === 'Network Error' && !error.response)
     {
-        toast.error('Network error - make sure API is running!');
+        toast.error('Network error - Sunucu bağlantı hatası!');//make sure API is running!
     }
     const {status, data, config, headers} = error.response;
     if(status === 401 && headers['www-authenticate'] === 'Bearer error="invalid_token", error_description="The token is expired"')
@@ -38,13 +38,17 @@ axios.interceptors.response.use(undefined, error => {
     {
         history.push('/notFound');
     }   
+    if(status === 403)
+    {
+        history.push('/forbidden');
+    }  
     if(status === 400 && config.method === 'get' && data.errors.hasOwnProperty('id'))
     {
         history.push('/notFound');
     }
     if( status === 500 )
     {
-        toast.error('Server error - check the terminal for more info!');
+        toast.error('Hata oluştu!');//Server error - check the terminal for more info!
     }
     throw error.response;
 });
@@ -108,7 +112,7 @@ const requests = {
         }).then(responseBody)
     },
     editActivity: async (url:string,title: string, description:string, categoryIds: string[]| null,subCategoryIds: string[]| null, levelIds: string[]| null,
-        date:Date, cityId:string,venue:string,online:boolean, attendanceCount: number, attendancyLimit:number,price:number,photo:Blob,address:string ) =>{
+        date:Date, cityId:string,venue:string,online:boolean, attendancyLimit:number,price:number,photo:Blob,address:string ) =>{
         let formData = new FormData();
         formData.append('photo',photo);
         formData.append('Title', title);
@@ -118,7 +122,6 @@ const requests = {
         formData.append('venue', venue);
         formData.append('address', address);
         formData.append('online', String(online));
-        formData.append('attendanceCount', attendanceCount ? attendanceCount.toString(): "0");
         formData.append('attendancyLimit', attendancyLimit ? attendancyLimit.toString(): "0");
         formData.append('price', price ? price.toString(): "0");
 
@@ -137,7 +140,7 @@ const requests = {
         }).then(responseBody)
     },
     createActivity: async (url:string,title: string, description:string, categoryIds: string[]| null,subCategoryIds: string[]| null, levelIds: string[]| null,
-        date:Date, cityId:string,venue:string,online:boolean, attendanceCount: number, attendancyLimit:number,price:number,photo:Blob, address:string ) =>{
+        date:Date, cityId:string,venue:string,online:boolean, attendancyLimit:number,price:number,photo:Blob, address:string ) =>{
         let formData = new FormData();
         formData.append('photo',photo);
         formData.append('Title', title);
@@ -147,7 +150,6 @@ const requests = {
         formData.append('venue', venue);
         formData.append('address', address);
         formData.append('online', String(online));
-        formData.append('attendanceCount', attendanceCount ? attendanceCount.toString(): "0");
         formData.append('attendancyLimit', attendancyLimit ? attendancyLimit.toString(): "0");
         formData.append('price', price ? price.toString(): "0");
 
@@ -233,9 +235,28 @@ const requests = {
          trainer.accessibilityIds!.length>0 && trainer.accessibilityIds!.map((acc:string)=>(
             formData.append('AccessibilityIds', acc)
         ));
-         trainer.certificates!.length>0 && trainer.certificates!.map((acc:File)=>(
+         trainer.documents!.length>0 && trainer.documents!.map((acc:File)=>(
              formData.append('certificates', acc)
          ));
+         return axios.post(url, formData, {
+            headers: {'Content-type': 'application/json'}
+         }).then(responseBody)
+    },
+
+    registerWaitingTrainer: async (url: string, trainer: ITrainerCreationFormValues) =>{
+        let formData = new FormData();
+         formData.append('displayname', trainer.displayname!);
+         formData.append('username', trainer.username!);
+         formData.append('email', trainer.email);
+         formData.append('password', trainer.password);
+         formData.append('phone', trainer.phone);
+         formData.append('hasSignedContract', String(trainer.hasSignedContract) );
+
+      //   formData.append('photo',trainer.photo!);
+         trainer.categoryIds!.length>0 && trainer.categoryIds!.map((category:string)=>(
+             formData.append('CategoryIds', category)
+         ));
+       
          return axios.post(url, formData, {
             headers: {'Content-type': 'application/json'}
          }).then(responseBody)
@@ -262,10 +283,10 @@ const Activities = {
     listLevels: (): Promise<ILevel[]> => requests.get('/activities/levels'),
     update: (activity: IActivityFormValues): Promise<IActivity> => requests.editActivity(`/activities/${activity.id}`,activity.title!, activity.description!,
     activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,
-    activity.cityId!,activity.venue!, activity.online!,activity.attendanceCount!, activity.attendancyLimit!,activity.price!,activity.photo!, activity.address!),
+    activity.cityId!,activity.venue!, activity.online!, activity.attendancyLimit!,activity.price!,activity.photo!, activity.address!),
     create: (activity: IActivityFormValues): Promise<IActivity> => requests.createActivity(`/activities/`,activity.title!, activity.description!,
     activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,
-    activity.cityId!,activity.venue!, activity.online!,activity.attendanceCount!, activity.attendancyLimit!,activity.price!,activity.photo!,activity.address!),
+    activity.cityId!,activity.venue!, activity.online!, activity.attendancyLimit!,activity.price!,activity.photo!,activity.address!),
     editOnlineJoinInfo: ( form : IActivityOnlineJoinInfo) => requests.put(`/activities/${form.id}/joindetails`, form),
 
 
@@ -275,8 +296,12 @@ const User ={
     current: () : Promise<IUser> => requests.get('/user'),
     login: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/login', user),
     register: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/register', user),
+    registerWaitingTrainer: ( trainer : ITrainerCreationFormValues) : Promise<IUser>=> requests.registerWaitingTrainer('/user/registerWaitingTrainer', trainer),
+    loadNewTrainer: () : Promise<ITrainerFormValues> => requests.get('/user/newTrainerInfo'),
+    sendSms: ( phoneNumber : string) : Promise<Boolean> => requests.post(`/user/sendSms?phoneNumber=${phoneNumber}`, {}),
+    sendSmsVerification: (phone: string, code : string) : Promise<Boolean> => requests.post(`/user/sendSmsVerification?phoneNumber=${phone}&code=${code}`, {}),
     update: (status:boolean) => requests.put(`/user?status=${status}`,{}),
-    isUserNameAvailable: ( username : string, email:string) : Promise<Boolean> => requests.post(`/user/isUserNameAvailable?username=${username}&email=${email}`, {}),
+    userNameAndPhoneCheck: ( username : string, email:string, phone:string) : Promise<Boolean> => requests.post(`/user/userNameAndPhoneCheck?username=${username}&email=${email}&phone=${phone}`, {}),
     registerTrainer: ( trainer : ITrainerFormValues) => requests.registerTrainer('/user/registertrainer', trainer),
     fbLogin: (accessToken: string) => requests.post(`/user/facebook`, {accessToken}),
     refreshToken: () : Promise<IUser> => requests.post(`/user/refreshToken`,{}),
@@ -289,10 +314,7 @@ const User ={
     editSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<boolean> => requests.put('/user/editSubMerchant', subMerchant),
     checkCallbackandStartPayment: (id:string, count:string, status:string, paymentId:string, conversationData:string, conversationId:string, mdStatus:string): Promise<Boolean> => 
         requests.post(`/payment/callback`,{id, count, status, paymentId, conversationData, conversationId, mdStatus}),
-    sendSms: ( phoneNumber : string) : Promise<Boolean> => requests.post(`/user/sendSms?phoneNumber=${phoneNumber}`, {}),
-    sendSmsVerification: (phone: string, code : string) : Promise<Boolean> => requests.post(`/user/sendSmsVerification?phoneNumber=${phone}&code=${code}`, {}),
-    registerWaitingTrainer: ( user : ITrainerCreationFormValues) : Promise<void> => requests.post('/user/registerWaitingTrainer', user),
-
+  
 }
 
 const Profiles = {

@@ -32,7 +32,9 @@ namespace Infrastructure.Email
             msg.AddTo(new EmailAddress(userEmail));
             msg.SetClickTracking(false, false);
 
-            await client.SendEmailAsync(msg);
+            var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
+
+            Console.WriteLine(response.StatusCode);
         }
     }
 }

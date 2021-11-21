@@ -1,5 +1,5 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react';
-import { Container, Icon, Image, List, Popup, Segment } from 'semantic-ui-react';
+import { Button, Container, Icon, Image, List, Popup, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import Scrollbars from 'react-custom-scrollbars';
 import tr  from 'date-fns/locale/tr';
 import { useMediaQuery } from 'react-responsive'
+import { history } from '../..';
 
 const styles = {
   color:"#000"
@@ -41,8 +42,7 @@ const ChatRoomList: React.FC<IProps> = ({setshowChatRoomList}) => {
     if(loadingChatRooms) return <LoadingComponent content='Loading chat rooms...'/>  
 
     return (
-      <Container className="pageContainer">
-
+     
       <Fragment>
        <Segment secondary attached style={{ border: 'none', height:"100%"}}>
             <Scrollbars
@@ -51,7 +51,7 @@ const ChatRoomList: React.FC<IProps> = ({setshowChatRoomList}) => {
         
              >
                 <List selection divided verticalAlign='middle'>
-            {chatRooms && chatRooms!.map((room)=>(
+            {chatRooms && chatRooms.length>0 ? chatRooms.map((room)=>(
               <List.Item
               key={room.id}
               style={room.unReadMessageCount>0 ? styles : null}
@@ -88,12 +88,18 @@ const ChatRoomList: React.FC<IProps> = ({setshowChatRoomList}) => {
                 </List.Content>
               </List.Content>
           </List.Item>
-      ))}
+      ))
+      : 
+      <List.Item active={true} style={{display:"flex", justifyContent:"center", alignItems:"center",textAlign:"center", flexDirection:"column"}}>
+        <p style={{ marginTop:"20px"}}>Henüz iletişime geçtiğin bir uzman bulunamadı.</p>
+        <Button style={{ marginBottom:"20px"}} primary circular content="Uzmanları Göster" onClick={()=> history.push('/profiles')} />
+      </List.Item>
+      }
   </List>
              </Scrollbars>
              </Segment>
       </Fragment>
-    </Container>
+  
     )
 }
 

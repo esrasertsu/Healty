@@ -55,7 +55,7 @@ namespace CleanArchitecture.Application.Activities
                     DateJoined = DateTime.Now,
                     ShowName = request.ShowName
                 };
-
+                activity.AttendanceCount = activity.AttendanceCount + 1;
                 _context.UserActivities.Add(attendance);
 
                 var success = await _context.SaveChangesAsync() > 0;

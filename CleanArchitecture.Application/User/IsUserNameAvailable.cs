@@ -20,17 +20,20 @@ namespace CleanArchitecture.Application.User
         {
             public string UserName { get; set; }
             public string Email { get; set; }
+            public string Phone { get; set; }
 
         }
 
         public class Handler : IRequestHandler<Query, bool>
         {
             private readonly DataContext _context;
-         
+            private readonly ISmsSender _smsSender;
 
-            public Handler(DataContext context)
+
+            public Handler(DataContext context, ISmsSender smsSender)
             {
                 _context = context;
+                _smsSender = smsSender;
              
             }
             public async Task<bool> Handle(Query request, CancellationToken cancellationToken)
@@ -40,8 +43,29 @@ namespace CleanArchitecture.Application.User
 
                 if (await _context.Users.AnyAsync(x => x.UserName == request.UserName))
                     throw new RestException(HttpStatusCode.BadRequest, new { UserName = "Bu kullanıcı adı başka bir hesapla ilişkili." });
+               
+                var phone = request.Phone.Trim();
+                if (!phone.StartsWith("+"))
+                    phone = "+" + phone;
 
-                return true;
+                try
+                {
+                    var res = await _smsSender.SendSmsAsync(phone);
+                    if (res)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        throw new RestException(HttpStatusCode.BadRequest, new { Phone = "Göndermiş olduğunuz telefon numarası geçersiz." });
+                    }
+
+                }
+                catch (System.Exception ex)
+                {
+
+                    throw new RestException(HttpStatusCode.BadRequest, new { Phone = "Göndermiş olduğunuz telefon numarası geçersiz." });
+                }
 
             }
         }

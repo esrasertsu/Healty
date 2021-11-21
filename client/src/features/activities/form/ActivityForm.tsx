@@ -220,7 +220,9 @@ const handleTimeChange = (time:any) =>{
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid }) => (
               <Form onSubmit={handleSubmit} loading={loading}>
-                <label id="activityName" className={activityForm.title === "" ? "customErrorLabel" :""}>Aktivite Başlığı*</label>
+                <label id="activityName" 
+              //  className={activityForm.title === "" ? "customErrorLabel" :""}
+                >Aktivite Başlığı*</label>
                 <Field
                   labelName="activityName"
                   name="title"

@@ -391,7 +391,7 @@ const HomePage = () => {
       </Grid>
       <div className="spacingContainer__small" />
 
-<Segment clearing secondary className="homepage_contactus-form">
+{/* <Segment clearing secondary className="homepage_contactus-form">
 <Grid columns={2} stackable textAlign='left'>
     <Grid.Row verticalAlign='middle' className="contactus-row">
         <Grid.Column>
@@ -420,7 +420,7 @@ const HomePage = () => {
                           
                      
                 </Header.Subheader>
-                {/* <FinalForm
+                 <FinalForm
                // validate = {validate}
               //  initialValues={post}
                 onSubmit={handleFinalFormSubmit}
@@ -452,13 +452,13 @@ const HomePage = () => {
                    
                     </Form>
             )}
-            /> */}
+            /> 
              
         </Grid.Column>
 
         </Grid.Row>
         </Grid>
-        </Segment>
+        </Segment> */}
     <div style={{display:"flex"}}>
         <div className="spacingContainer__small" />
     </div>

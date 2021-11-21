@@ -65,7 +65,7 @@ namespace CleanArchitecture.Application.Payment
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
 
-                //activite katılımcı sayısını güncelle
+                //
                 if (activity.AttendancyLimit != null && activity.AttendancyLimit > 0)
                 {
                     var atcount = activity.AttendanceCount + request.TicketCount;
@@ -120,55 +120,52 @@ namespace CleanArchitecture.Application.Payment
 
                     if (orderCreatedSuccess)
                     {
-                       // activity.AttendanceCount = activity.AttendanceCount + request.TicketCount; BUNU EN SON YAP
+                        var ownerTrainer = activity.UserActivities.Where(x => x.IsHost == true).Select(y => y.AppUser).SingleOrDefault();
+                        var subMerchantKey = "";
+                        var subMerchant = new SubMerchant();
 
-                        var subMerchantKey = activity.UserActivities.Where(x => x.IsHost == true).Select(y => y.AppUser.SubMerchantKey).SingleOrDefault();
-                        var subMerchant = activity.UserActivities.Where(x => x.IsHost == true).Select(y => y.AppUser.SubMerchantDetails).SingleOrDefault();
-
-
-                        if (subMerchantKey == "" || subMerchantKey == null)
+                        //Aktivite açan hoca şirket mi değil mi kontrol ediliyor bilgisi alınıyor
+                        if (ownerTrainer != null)
                         {
-                            //kendim alıyorum
+                            subMerchantKey = ownerTrainer.SubMerchantKey;
+                            subMerchant = ownerTrainer.SubMerchantDetails;
+                        }
+                        //
+
+                        //Aktivite sahibi kişinin şirket ise Iyzico sistemindeki durumu kontrol ediliyor
+                        if (!string.IsNullOrEmpty(subMerchantKey))
+                        {
+                            var IyzicoMerchant = _paymentAccessor.GetSubMerchantFromIyzico(subMerchant.Id.ToString());
+                            
+                            if (IyzicoMerchant.Status == false || string.IsNullOrEmpty(IyzicoMerchant.SubMerchantKey) || subMerchantKey != IyzicoMerchant.SubMerchantKey)
+                            {
+                                // throw new Exception("Problem getting merchant from Iyzico. Please contact System Manager");
+                                subMerchantKey = "";
+
+                            }
+                        }
+                        //
+
+                        var callbackUrl = $"{request.Origin}/api/payment/callback/" + activity.Id + "/" + request.TicketCount + "?id=" + activity.Id + "&count=" + request.TicketCount + "&uId=" + user.Id + "";
+                               
+                        var paymentStartedRes = _paymentAccessor.PaymentProcessWithIyzico(activity, user, request.TicketCount, request.UserIpAddress,
+                        order.ConversationId, request.CardHolderName, request.CardNumber.Replace(" ", ""), request.CVC, request.ExpireMonth, request.ExpireYear,
+                        subMerchantKey, callbackUrl);
+
+                        if (paymentStartedRes.ErrorMessage == "" && paymentStartedRes.ErrorCode == "")
+                        {
+                            return new PaymentThreeDResult()
+                            {
+                                Status = true,
+                                ContentHtml = paymentStartedRes.ContentHtml
+                            };
                         }
                         else
                         {
-                            var IyzicoMerchant = _paymentAccessor.GetSubMerchantFromIyzico(subMerchant.Id.ToString());
-
-                            if (IyzicoMerchant.Status == false || IyzicoMerchant.SubMerchantKey == "" || IyzicoMerchant.SubMerchantKey == null)
-                            {
-                              throw new Exception("Problem getting merchant from Iyzico. Please contact System Manager");
-
-                                //kendim alıyorum
-                            }
-                            else
-                            {
-                                if (subMerchantKey != IyzicoMerchant.SubMerchantKey)
-                                {
-                                    //_context.Orders.Remove(order);
-                                    //await _context.SaveChangesAsync();
-                                    throw new Exception("Problem with Iyzico merchantKey and system key. Please contact System Manager");
-                                }
-                                var callbackUrl = $"{request.Origin}/api/payment/callback/" + activity.Id + "/" + request.TicketCount + "?id=" + activity.Id + "&count=" + request.TicketCount + "&uId=" + user.Id + "";
-                               
-                                var paymentStartedRes = _paymentAccessor.PaymentProcessWithIyzico(activity, user, request.TicketCount, request.UserIpAddress,
-                                order.ConversationId, request.CardHolderName, request.CardNumber.Replace(" ", ""), request.CVC, request.ExpireMonth, request.ExpireYear, subMerchantKey, callbackUrl);
-
-                                if (paymentStartedRes.ErrorMessage == "")
-                                {
-                                    return new PaymentThreeDResult()
-                                    {
-                                        Status = true,
-                                        ContentHtml = paymentStartedRes.ContentHtml
-                                    };
-                                }
-                                else
-                                {
-                                    _context.Orders.Remove(order);
-                                    await _context.SaveChangesAsync();
-                                    throw new Exception(paymentStartedRes.ErrorMessage + "," + paymentStartedRes.ErrorGroup + "," + paymentStartedRes.ErrorCode + "," + paymentStartedRes.Request );
-                                }
-                            }
+                            throw new Exception(paymentStartedRes.ErrorMessage + "," + paymentStartedRes.ErrorGroup + "," + paymentStartedRes.ErrorCode + "," + paymentStartedRes.Request );
                         }
+                            
+                        
 
                     }
                     else
@@ -178,8 +175,8 @@ namespace CleanArchitecture.Application.Payment
                 }
                 catch (Exception ex)
                 {
-                    //_context.Orders.Remove(order);
-                    //await _context.SaveChangesAsync();
+                    _context.Orders.Remove(order);
+                    await _context.SaveChangesAsync();
                     throw new Exception(ex.Message);
                 }
 

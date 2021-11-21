@@ -692,6 +692,10 @@ a.ui.card:hover {
 .ui.items:not(.unstackable)>.item>.image.profieHeader_userImage{
   max-height: 165px !important;
 }
+
+.trainerForm_ConfirmContent{
+  padding:20px !important;
+}
 }
 
 @media only screen and (min-width: 430px){
@@ -1611,7 +1615,7 @@ button, input, optgroup, select, textarea {
 }
 
 .login-page-segment{
-    margin-top: 30px !important;
+    margin: 30px 0 !important;
     width: 100%;
 }
 
@@ -1663,8 +1667,7 @@ button, input, optgroup, select, textarea {
 }
 
 .login-page-segment{
-  margin: 0 auto !important;
-  margin-top: 30px !important;
+  margin: 30px auto !important;
   width: 415px;
 
 }
@@ -2071,6 +2074,9 @@ button, input, optgroup, select, textarea {
   {
     margin-top: 50px !important;
   }
+  .trainerForm_ConfirmContent{
+    padding:20px 40px !important;
+  }
 }
 
 /*end map page styles*/
@@ -2466,4 +2472,15 @@ button, input, optgroup, select, textarea {
 
 .swiper-button-prev, .swiper-button-next{
   color:orange !important;
+}
+
+.trainerFormAccordionTitle{
+  font-family: AssistantMedium, Arial, sans-serif !important;
+  font-weight: normal !important;
+  color: #263a5e !important;
+  font-size: 1.31428571rem !important;
+  padding: 15px 0 15px 15px !important;
+}
+.trainerFormAccordionMessage{
+  padding-bottom: 0 !important;
 }

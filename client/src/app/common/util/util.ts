@@ -1,8 +1,40 @@
+import * as React from 'react'
 import { IActivity, IAttendee } from "../../models/activity";
 import { IMessage } from "../../models/message";
 import { IProfile } from "../../models/profile";
 import { IUser } from "../../models/user";
 import Payment from "payment";
+import ReactGA from "react-ga";
+import { useLocation } from 'react-router';
+
+export const UseAnalytics = () => {
+   const [initialized, setInitialized] = React.useState(false)
+
+   React.useEffect(() => {
+     ReactGA.initialize(process.env.REACT_APP_GOOGLE_TRACKING_ID!)
+    setInitialized(true);
+   }, [])
+
+   return initialized;
+}
+
+export interface WrapperProps{
+  initialized:boolean,
+  children:React.PropsWithChildren<any>
+}
+export const AnalyticsWrapper = (props:WrapperProps) =>{
+   const location = useLocation();
+
+   React.useEffect(() => {
+     if(props.initialized)
+     {
+       ReactGA.pageview(location.pathname+location.search)
+     }
+     
+   }, [props.initialized,location])
+
+   return props.children;
+}
 
 function clearNumber(value = "") {
   return value.replace(/\D+/g, "");
@@ -163,3 +195,4 @@ export class OrderStatus implements IOrderStatus {
     Object.assign(this, init);
 }
 }
+

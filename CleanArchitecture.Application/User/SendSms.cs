@@ -1,6 +1,8 @@
-﻿using CleanArchitecture.Application.Interfaces;
+﻿using CleanArchitecture.Application.Errors;
+using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Persistence;
 using MediatR;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,11 +29,27 @@ namespace CleanArchitecture.Application.User
             }
             public async Task<bool> Handle(Query request, CancellationToken cancellationToken)
             {
+                //
                 var phone = request.PhoneNumber.Trim();
                 if (!phone.StartsWith("+"))
                     phone = "+" + phone;
+                try
+                {
+                    var res = await _smsSender.SendSmsAsync(phone);
+                    if (res)
+                    {
+                        return true;
+                    }
+                    else return false;
 
-                return await _smsSender.SendSmsAsync(phone);
+                }
+                catch (System.Exception ex)
+                {
+
+                    throw new RestException(HttpStatusCode.BadRequest, new { Phone = "Göndermiş olduğunuz telefon numarası geçersiz." });
+                }
+
+
 
             }
         }

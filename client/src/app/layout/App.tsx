@@ -44,6 +44,8 @@ import OrderItemDetail  from '../../features/orders/OrderItemDetail';
 import TrainerForm from '../../features/user/TrainerRegisterModal';
 import TrainerOnboardingPage from '../../features/user/TrainerOnboardingPage';
 import TrainerRegisterPage from '../../features/user/TrainerRegisterPage';
+import { AnalyticsWrapper, UseAnalytics } from '../common/util/util';
+import Forbidden from './Forbidden';
 
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
@@ -55,6 +57,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   const { getUser,user,createHubConnection,hubConnection,stopHubConnection ,loggingOut} = rootStore.userStore;
   const { loadCategories} = rootStore.categoryStore;
   const { modal, openModal, closeModal} = rootStore.modalStore;
+  const initialized = UseAnalytics();
 
   // useLoadScript({
   //     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
@@ -171,17 +174,20 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   if(loggingOut) return <LoadingComponent content='Çıkış yapılıyor...' />
 
     return (
+      <AnalyticsWrapper initialized={initialized}>
+
        <Fragment>
          <ModalContainer />
          <ToastContainer position= 'bottom-right' />
          {!isTabletOrMobile ? 
           <>
           <NavBar/>
-        
+
         <Route exact path="/" component={HomePage} />
         <Route path={'/(.+)'} render={()=>(
           <Fragment>
              <Switch>
+
              <Route path="/profiles" component={ProfileDashboard}/>
              <Route exact path="/activities" component={ActivityDashboard} />
              <Route path="/activities/:id" component={ActivityDetails} />
@@ -199,19 +205,19 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <Route path="/user/verifyEmail" component={VerifyEmail}/>
                  <Route path="/user/resetPassword" component={ResetPassword}/>
                  <Route path="/TrainerOnboarding" component={TrainerOnboardingPage} />
-                 <Route path="/TrainerRegister" component={TrainerRegisterPage} />
+                 <PrivateRoute path="/TrainerRegister/:id" component={TrainerRegisterPage} />
                  <PrivateRoute path="/settings" component={Settings}/>
                  <PrivateRoute exact path="/payment/success" component={PaymentSuccessPage} />
                  <PrivateRoute exact path="/payment/error" component={PaymentErrorPage} />
                  <Route exact path="/orders" component={OrderList}/>
                  <PrivateRoute exact path="/orders/:id" component={OrderItemDetail}/>
                  <Route exact path="/admin" component={Admin}/>
+                 <Route exact path="/forbidden" component={Forbidden}/>
                  <Route component={NotFound}/>
-
               </Switch>
           </Fragment>
         )} />
-       
+
         </>
            :
 
@@ -254,13 +260,14 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <Route path="/user/verifyEmail" component={VerifyEmail}/>
                  <Route path="/user/resetPassword" component={ResetPassword}/>
                  <Route path="/TrainerOnboarding" component={TrainerOnboardingPage} />
-                 <Route path="/TrainerRegister" component={TrainerRegisterPage} />
+                 <PrivateRoute path="/TrainerRegister/:id" component={TrainerRegisterPage} />
                  <PrivateRoute path="/settings" component={Settings}/>
                  <PrivateRoute exact path="/payment/success" component={PaymentSuccessPage} />
                  <PrivateRoute exact path="/payment/error" component={PaymentErrorPage} />
                  <Route exact path="/orders" component={OrderList}/>
                  <PrivateRoute exact path="/orders/:id" component={OrderItemDetail}/>
                  <Route exact path="/admin" component={Admin}/>
+                 <Route exact path="/forbidden" component={Forbidden}/>
                  <Route component={NotFound}/>
            </Switch>
            </Fragment>
@@ -271,10 +278,14 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
 
         
          </>
+
 }
                 
    <Footer /> 
-        </Fragment>    
+
+        </Fragment>
+        </AnalyticsWrapper>
+    
     );
 };
 

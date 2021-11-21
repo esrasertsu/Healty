@@ -49,10 +49,11 @@ namespace CleanArchitecture.Application.Activities
                     return Unit.Value;
 
                 if(attendance.IsHost)
-                    throw new RestException(HttpStatusCode.BadRequest, new { Attendance = "You cannot remove yourself as host" });
+                    throw new RestException(HttpStatusCode.BadRequest, new { Attendance = "Aktivite sahibi olarak çıkış yapamazsın!" });
 
 
                 _context.UserActivities.Remove(attendance);
+                activity.AttendanceCount = activity.AttendanceCount - 1;
 
                 var success = await _context.SaveChangesAsync() > 0;
 

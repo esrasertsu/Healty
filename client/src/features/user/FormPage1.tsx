@@ -1,9 +1,9 @@
 import { FORM_ERROR } from 'final-form';
 import { observer } from 'mobx-react-lite';
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
 import { combineValidators, isRequired } from 'revalidate';
-import { Button, Form, Grid, Header, Icon,  Image,  Message, Modal, } from 'semantic-ui-react';
+import { Button, Confirm, Form, Grid, Header, Icon,  Image,  Message, Modal, Segment, } from 'semantic-ui-react';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
 import { ITrainerCreationFormValues, ITrainerFormValues, TrainerFormValues } from '../../app/models/user';
@@ -18,6 +18,8 @@ import agent from '../../app/api/agent';
 import { toast } from 'react-toastify';
 import OtpInput from 'react-otp-input';
 import Countdown from 'react-countdown';
+import DropdownMultiple from '../../app/common/form/DropdownMultiple';
+import { Category, ICategory } from '../../app/models/category';
 
 
 // const validate = combineValidators({
@@ -31,8 +33,8 @@ import Countdown from 'react-countdown';
 // })
 const FormPage1:React.FC = () =>{
     const rootStore = useContext(RootStoreContext);
-    const { trainerRegistering,trainerRegisteredSuccess, tranierCreationForm,setTrainerCreationForm,isUserNameAvailable,
-    setTrainerFormMessage, trainerFormMessage,errorMessage,setErrorMessage } = rootStore.userStore;
+    const { trainerRegistering,trainerRegisteredSuccess, tranierCreationForm,setTrainerCreationForm,userNameAndPhoneCheck,
+    setTrainerFormMessage, trainerFormMessage,errorMessage,setErrorMessage,registerWaitingTrainer } = rootStore.userStore;
    // trainerForm, setTrainerForm,
     const {openModal,closeModal,modal} = rootStore.modalStore;
 
@@ -42,30 +44,39 @@ const FormPage1:React.FC = () =>{
     const [passwordErrorMessage, setPasswordErrorMessage]= useState("")  
     const [contractErrorMessage, setcontractErrorMessage] = useState("")
     const [showPasswordModal, setshowPasswordModal] = useState(false)
+    const [loadingSmsModal, setLoadingSmsModal] = useState(false)
+
     const [otpInput, setOtpInput] = useState("")
     const [optInputDisabled, setoptInputDisabled] = useState(false)
     const [countDownDate, setCountDownDate]= useState(Date.now() +180000);
+    const [userConfirmOpen, setUserConfirmOpen] = useState(false);
+    const [categoryOptions, setCategoryOptions] = useState<ICategory[]>([]);
+    const {allCategoriesOptionList} = rootStore.categoryStore;
+
+
+    useEffect(() => {
+      allCategoriesOptionList.filter(x=>x.parentId===null).map(option => (
+        setCategoryOptions(categoryOptions => [...categoryOptions, new Category({key: option.key, value: option.value, text: option.text})])
+    ));
+    }, [allCategoriesOptionList])
 
    const handleSubmitTrainerForm = (values:ITrainerCreationFormValues) =>{
-
+    
     if(!values.hasSignedContract)
     {
       setcontractErrorMessage("Aydınlatma metni'ni okuyup onaylamanız gerekmektedir.")
     }else{
-
-       isUserNameAvailable(tranierCreationForm.username, tranierCreationForm.email).then(action((response) => {
-
+      userNameAndPhoneCheck(tranierCreationForm.username, tranierCreationForm.email, tranierCreationForm.phone).then(action((response) => {
         if(response)
         {
-          agent.User.sendSms(values.phone as string).then(() => {
             if(modal.open) closeModal();
             setoptInputDisabled(false);
             setCountDownDate(Date.now() +180000);
             setshowPasswordModal(true);
-        }).catch((error) => console.log(error));
         }
       }
-      )).catch((error) => (
+      )).catch((error) => 
+        (
         {
         [FORM_ERROR]: error,
       }))
@@ -81,13 +92,23 @@ const FormPage1:React.FC = () =>{
         setOtpInput("");
         setoptInputDisabled(false);
         setCountDownDate(Date.now());
-        history.push('/trainerRegister');
-        
+        setUserConfirmOpen(true);
       }else{
         toast.error("Yanlış kod gönderdiniz. Lütfen tekrar deneyin.")
       }
-      }).catch((error) => console.log(error));
+      }).catch((error) => toast.error(error));
    }
+
+   const handleSubmitWaitingTrainer = () =>{
+        registerWaitingTrainer(tranierCreationForm)
+   }
+
+
+
+   const handleCategoryChanged = (e: any, data: string[]) => {
+    setTrainerCreationForm({...tranierCreationForm,categoryIds: [...data]}); 
+ }
+
 
    const renderer = ({ days,hours, minutes, seconds, completed }: any) => {
     if (completed || (seconds===0 && minutes ===0)) {
@@ -109,6 +130,8 @@ const FormPage1:React.FC = () =>{
     }
 
    }
+
+
 
    if(showPasswordModal)
    {
@@ -167,17 +190,49 @@ const FormPage1:React.FC = () =>{
     
    }
 
-  
+
+  const getConfirmContent = () => {
+                return (
+                    <div className="center trainerForm_ConfirmContent" >
+                        <p>Girmiş olduğunuz bu bilgiler ile sisteme kayıt olmaktasınız:</p>
+                        <Segment>
+                         <p><span>Email: </span><span>{tranierCreationForm.email}</span></p>
+                         <p><span>Kullanıcı Adı: </span><span>{tranierCreationForm.username}</span></p>
+                         <p><span>Ad Soyad: </span><span>{tranierCreationForm.displayname}</span></p>
+                         <p><span>Telefon: </span><span>{tranierCreationForm.phone}</span></p>
+                         <p><span>Şifre: </span><span>******</span></p>
+                         <p><span>Uzmanlık kategorisi: </span>
+                         {(tranierCreationForm.categoryIds && tranierCreationForm.categoryIds.map((cat) => (
+                            <span key={tranierCreationForm.username+Math.random()+cat} >
+                              {categoryOptions.filter(x => x.key === cat)[0].text}</span>
+                          )))}</p>
+                        </Segment>
+                        {/* <p>Ancak Email adresinize gelen mesajdaki link üzerinden hesabınızı onaylamanız durumunda sisteme istediğiniz zaman giriş yapabilir. Formu doldurmaya devam edebilirsiniz.</p> */}
+                        <p><a style={{textDecoration:"underline"}}>Bir sonraki adım:</a> Belge yükleme</p>
+                        {/* <p>Hesabınız değerlendirildikten ve onay mesajını aldıktan sonra sistemde aktivite açmaya ve profil oluşturmaya başlayabilirsiniz.</p> */}
+
+                    </div>
+                )
+
+}
+
 
     return (
-      <>
-    
+      <>    
+         <Confirm
+          content={getConfirmContent()}
+          open={userConfirmOpen}
+          header="Uzman Kaydı"
+          confirmButton="Onayla/Devam et"
+          cancelButton="Geri"
+          onCancel={() =>setUserConfirmOpen(false)}
+          onConfirm={handleSubmitWaitingTrainer}
+        />
       {trainerRegistering ? 
       <>
         <Message icon>
         <Icon name='circle notched' loading />
         <Message.Content>
-          <Message.Header>Sadece 1 dakika</Message.Header>
           Girmiş olduğunuz bilgileri kontrol ediyoruz.
         </Message.Content>
       </Message>
@@ -201,24 +256,33 @@ const FormPage1:React.FC = () =>{
         }
         validate={values => {
           const errors:any = {};
-
+          if(values.categoryIds.length === 0)
+          {
+            errors.categoryIds = "Kategori alanı seçimi zorunludur."
+          }
           if (!values.username) {
-            errors.username = 'Zorunlu alan'
+            errors.username = 'Kullanıcı adı zorunlu alan'
           }
           if (!values.displayname) {
-            errors.displayname = 'Zorunlu alan'
+            errors.displayname = 'Ad Soyad zorunlu alan'
           }
           if (!values.email) {
-            errors.email = 'Zorunlu alan'
+            errors.email = 'Email zorunlu alan'
           }
+
+          if(!values.email || !/.+@.+\.[A-Za-z]+$/.test(values.email))
+          {
+            errors.email = 'Geçersiz email adresi'
+          }
+
           if (!values.phone) {
-            errors.phone = 'Zorunlu alan'
+            errors.phone = 'Telefon zorunlu alan'
           }
           if (!values.password) {
-            errors.password = 'Zorunlu alan'
+            errors.password = 'Şifre zorunlu alan'
           }
           if (!values.repassword) {
-            errors.repassword = 'Zorunlu alan'
+            errors.repassword = 'Şifre tekrarı zorunlu alan'
           }
           if (values.repassword !== values.password) {
             errors.repassword = 'Zorunlu alan';
@@ -227,7 +291,7 @@ const FormPage1:React.FC = () =>{
           if (!values.hasSignedContract) {
             errors.hasSignedContract = 'Zorunlu alan'
           }
-          debugger;
+         
           var hasNumeric = false;
           var hasletter = false;
 
@@ -255,22 +319,21 @@ const FormPage1:React.FC = () =>{
           dirtySinceLastSubmit
         }) => (
           <Form onSubmit={handleSubmit} error>
-            <Field 
-            name="username" 
-            label="Kullanıcı Adı*" 
-            labelName="usernameLabel" 
-            placeholder="Kullanıcı Adı" 
-            component={TextInput} 
-            value={tranierCreationForm.username}/>
-            <OnChange name="username">
-                {(value, previous) => {
-
-                if(value !== tranierCreationForm.username)
+            <label id="categoryLabel">Kategori* </label>
+            <Field
+                  labelName="categoryLabel"
+                  name="categoryIds"
+                  placeholder="Kategori"
+                  value={tranierCreationForm.categoryIds}
+                  component={DropdownMultiple}
+                  emptyError={tranierCreationForm.categoryIds}
+                  options = {categoryOptions}
+                  onChange={(e: any,data:[])=>
                     {
-                      setTrainerCreationForm({...tranierCreationForm,username: value});
+                      handleCategoryChanged(e,data)}
                     }
-                }}
-            </OnChange>
+                /> 
+           
             <Field 
             name="displayname" 
             label="Ad Soyad*" 
@@ -287,10 +350,25 @@ const FormPage1:React.FC = () =>{
                     }
                 }}
             </OnChange>
+            <Field 
+            name="username" 
+            label="Kullanıcı Adı*" 
+            labelName="usernameLabel" 
+            placeholder="Kullanıcı Adı" 
+            component={TextInput} 
+            value={tranierCreationForm.username}/>
+            <OnChange name="username">
+                {(value, previous) => {
+
+                if(value !== tranierCreationForm.username)
+                    {
+                      setTrainerCreationForm({...tranierCreationForm,username: value});
+                    }
+                }}
+            </OnChange>
             <Form.Group widths="equal">
             <Field 
             name="email" 
-            type="email"
             placeholder="Email" 
             label="Email*" 
             labelName="emailLabel" 

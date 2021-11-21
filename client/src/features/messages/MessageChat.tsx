@@ -62,7 +62,6 @@ const MessageChat: React.FC<IProps> = ({setshowChatRoomList}) => {
 
 
     return (
-        <Container className="pageContainer">
 
         <Fragment>
             <Segment className="chat_segment">
@@ -183,7 +182,7 @@ const MessageChat: React.FC<IProps> = ({setshowChatRoomList}) => {
 
             </div>
         </Fragment>
-        </Container>
+       
     )
 }
 

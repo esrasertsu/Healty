@@ -253,10 +253,7 @@ namespace Infrastructure.Payment
             billingAddress.ZipCode = "34742";
             request.BillingAddress = billingAddress;
 
-            var comision = 50 / 100;
-            var KDV = 18/100;
-            var submerchantprice = activity.Price * 50 / 100 + activity.Price * 50 / 100 * 18 / 100;
-
+            
             List<BasketItem> basketItems = new List<BasketItem>();
             BasketItem firstBasketItem = new BasketItem();
             firstBasketItem.Id = activity.Id.ToString();
@@ -264,8 +261,17 @@ namespace Infrastructure.Payment
             firstBasketItem.Category1 = activity.Categories.Select(x => x.Category.Name).FirstOrDefault();
             firstBasketItem.ItemType = BasketItemType.VIRTUAL.ToString();
             firstBasketItem.Price = RemoveTrailingZeros((activity.Price * count).ToString().Split(',')[0]);
-            firstBasketItem.SubMerchantKey = subMerchantKey;
-            firstBasketItem.SubMerchantPrice = RemoveTrailingZeros((submerchantprice * count).ToString().Split(',')[0]);
+
+            if (!string.IsNullOrEmpty(subMerchantKey))
+            {
+                var comision = 50 / 100;
+                var KDV = 18 / 100;
+                var submerchantprice = activity.Price * 50 / 100 + activity.Price * 50 / 100 * 18 / 100;
+                firstBasketItem.SubMerchantKey = subMerchantKey;
+                firstBasketItem.SubMerchantPrice = RemoveTrailingZeros((submerchantprice * count).ToString().Split(',')[0]);
+
+            }
+
             basketItems.Add(firstBasketItem);
 
             request.BasketItems = basketItems;

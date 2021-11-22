@@ -99,7 +99,7 @@ namespace CleanArchitecture.Application.User
                         Dependency = request.Dependency,
                         ApplicationDate = DateTime.Now,
                         ExperienceYear = Convert.ToInt32(request.ExperienceYear),
-                        Title = request.Title,
+                        Title = request.Title
                     };
 
                     var result = await _context.SaveChangesAsync() > 0;
@@ -209,6 +209,11 @@ namespace CleanArchitecture.Application.User
                         }
 
                         var success2 = await _context.SaveChangesAsync() > 0;
+
+
+
+
+
 
                         if (success2) return Unit.Value;
                         else

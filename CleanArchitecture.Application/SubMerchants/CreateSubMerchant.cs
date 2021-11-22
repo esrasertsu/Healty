@@ -118,7 +118,7 @@ namespace CleanArchitecture.Application.SubMerchants
                 subMerchant.IdentityNumber = request.IdentityNumber;
                 subMerchant.Name = request.LegalCompanyTitle;
 
-                if (subMerchant.MerchantType == MerchantType.Anonim)
+                if (subMerchant.MerchantType == MerchantType.LimitedOrAnonim)
                 {
                     if (request.TaxOffice == "" || request.TaxOffice == null || request.LegalCompanyTitle == "" || request.TaxOffice == "")
                         throw new Exception("Problem creating subMerchant -- tax office and/or legal company title not be null");
@@ -126,7 +126,7 @@ namespace CleanArchitecture.Application.SubMerchants
                     subMerchant.TaxOffice = request.TaxOffice;
                     subMerchant.LegalCompanyTitle = request.LegalCompanyTitle;
                 }
-                else if (subMerchant.MerchantType == MerchantType.Limited)
+                else if (subMerchant.MerchantType == MerchantType.Private)
                 {
                     if (request.TaxOffice == "" || request.TaxOffice == null || request.LegalCompanyTitle == "" || request.TaxOffice == ""
                         || request.TaxNumber == "" || request.TaxNumber == null)

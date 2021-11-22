@@ -44,13 +44,13 @@ namespace Infrastructure.Payment
 
             if (subMerchantDomain.MerchantType == MerchantType.Personal)
                 request.SubMerchantType = SubMerchantType.PERSONAL.ToString();
-            else if (subMerchantDomain.MerchantType == MerchantType.Anonim)
+            else if (subMerchantDomain.MerchantType == MerchantType.LimitedOrAnonim)
             {
                 request.SubMerchantType = SubMerchantType.PRIVATE_COMPANY.ToString();
                 request.TaxOffice = subMerchantDomain.TaxOffice;
                 request.LegalCompanyTitle = subMerchantDomain.LegalCompanyTitle;
             }
-            else if (subMerchantDomain.MerchantType == MerchantType.Limited)
+            else if (subMerchantDomain.MerchantType == MerchantType.Private)
             {
                 request.SubMerchantType = SubMerchantType.LIMITED_OR_JOINT_STOCK_COMPANY.ToString();
                 request.TaxOffice = subMerchantDomain.TaxOffice;
@@ -87,12 +87,12 @@ namespace Infrastructure.Payment
             request.IdentityNumber = subMerchantDomain.IdentityNumber;
             request.Currency = Currency.TRY.ToString();
 
-            if (subMerchantDomain.MerchantType == MerchantType.Anonim)
+            if (subMerchantDomain.MerchantType == MerchantType.LimitedOrAnonim)
             {
                 request.TaxOffice = subMerchantDomain.TaxOffice;
                 request.LegalCompanyTitle = subMerchantDomain.LegalCompanyTitle;
             }
-            else if (subMerchantDomain.MerchantType == MerchantType.Limited)
+            else if (subMerchantDomain.MerchantType == MerchantType.Private)
             {
                 request.TaxOffice = subMerchantDomain.TaxOffice;
                 request.TaxNumber = subMerchantDomain.TaxNumber;
@@ -329,9 +329,9 @@ namespace Infrastructure.Payment
                 case SubMerchantType.PERSONAL:
                     return MerchantType.Personal;
                 case SubMerchantType.PRIVATE_COMPANY:
-                    return MerchantType.Anonim;
+                    return MerchantType.Private;
                 case SubMerchantType.LIMITED_OR_JOINT_STOCK_COMPANY:
-                    return MerchantType.Limited;
+                    return MerchantType.LimitedOrAnonim;
             }
 
             throw new RestException(HttpStatusCode.BadRequest, new { MerchantType = "Iyzico submerchant type cant be found" });

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
 import { combineValidators, createValidator, isRequired } from 'revalidate';
-import { Accordion, Button, Form, Grid, Header, Icon, Image, Label, List, Message, Modal, Placeholder, Segment } from 'semantic-ui-react';
+import { Accordion, Button, Form, Grid, Header, Icon, Image, Label, List, Message, Modal, Placeholder, Segment, Tab } from 'semantic-ui-react';
 import DropdownInput from '../../app/common/form/DropdownInput';
 import DropdownMultiple from '../../app/common/form/DropdownMultiple';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
@@ -61,7 +61,56 @@ const FormPage2: React.FC<IProps> = ({id}) =>{
 
     const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
+    const panes = [
+      {
+        menuItem: 'Bireysel',
+        render: () => <Tab.Pane attached={false}>
+           <div>
+                    <label className="fieldLabel" id="tcknLabel">TC Kimlik Numarası*</label>
+                    <div className="field" style={{display:"flex", flexDirection:"column"}}>
+                    <Field
+                      labelName="tcknLabel"
+                      name="tcknIdentityNo"
+                      type="number"
+                      placeholder=""
+                      value={trainerForm.tcknIdentityNo}
+                      component={NumberInput}
+                      style={{marginBottom:15}}
+                    />
+                     </div>         
+                        <OnChange name="tcknIdentityNo">
+                    {(value, previous) => {
+                            setTrainerForm({...trainerForm,tcknIdentityNo: value});
+                    }}
+                    </OnChange>
+                    </div>
+           <label className="fieldLabel" id="ibanlabel">IBAN*</label>
+                <Field
+                  name="iban"
+                  labelName="ibanlabel"
+                  placeholder="TR111106200119000006672315"
+                  value={trainerForm.iban}
+                  component={TextInput}
+                  style={{marginBottom:15}}
+                />
+                    <OnChange name="iban">
+                {(value, previous) => {
+                          setTrainerForm({...trainerForm,iban: value});
+                }}
+                </OnChange>
 
+        </Tab.Pane>,
+      },
+      {
+        menuItem: 'Kurumsal',
+        render: () => <Tab.Pane attached={false}>
+
+          
+        </Tab.Pane>,
+      }
+     
+    ]
+    
 useEffect(() => {
   allCategoriesOptionList.filter(x=>x.parentId===null).map(option => (
     setCategoryOptions(categoryOptions => [...categoryOptions, new Category({key: option.key, value: option.value, text: option.text})])
@@ -155,7 +204,7 @@ debugger;
        messages.push("Tecrübe yılı zorunludur.")
 
     }
-    if(values.tcknIdentityNo && String(values.tcknIdentityNo).length !== 11)
+    if(values.tcknIdentityNo === null || (values.tcknIdentityNo && String(values.tcknIdentityNo).length !== 11 ))
     {
       messages.push("Geçersiz TC Kimlik numarası.")
     }
@@ -173,7 +222,7 @@ debugger;
       
       let edittedValues = {
       ...values,
-      certificates: docs,
+      documents: docs,
     }
     debugger;
       registerTrainer(edittedValues)
@@ -388,46 +437,14 @@ debugger;
         className="trainerFormAccordionMessage"
         info
         content={<>
-        <li>Bu bölümde gireceğiniz bilgiler sistem üzerinde kazandığınız paranın size aktarılması için gerekli bilgilerdir.</li>
+        <li>Bu bölümde gireceğiniz bilgiler sistem üzerinde kazandığınız paranın size aktarılması ve fatura işlemleri için gerekli bilgilerdir.</li>
         <li>Ödemeler IYZICO şirketi tarafından otomatik gerçekleştirilmektedir.</li>
         <li>Detaylı bilgi, her türlü soru ve istekleriniz için: admin@afitapp.com hesabına mail atabilirsiniz.</li>
         </>}
       />
-
-<>
-                    <label className="fieldLabel" id="tcknLabel">TC Kimlik Numarası*</label>
-                    <div className="field" style={{display:"flex", flexDirection:"column"}}>
-                    <Field
-                      labelName="tcknLabel"
-                      name="tcknIdentityNo"
-                      type="number"
-                      placeholder=""
-                      value={trainerForm.tcknIdentityNo}
-                      component={NumberInput}
-                      style={{marginBottom:15}}
-                    />
-                     </div>         
-                        <OnChange name="tcknIdentityNo">
-                    {(value, previous) => {
-                            setTrainerForm({...trainerForm,tcknIdentityNo: value});
-                    }}
-                    </OnChange>
-                    <label className="fieldLabel" id="ibanlabel">IBAN*</label>
-                <Field
-                  name="iban"
-                  labelName="ibanlabel"
-                  placeholder="TR111106200119000006672315"
-                  value={trainerForm.iban}
-                  component={TextInput}
-                  style={{marginBottom:15}}
-                />
-                    <OnChange name="iban">
-                {(value, previous) => {
-                          setTrainerForm({...trainerForm,iban: value});
-                }}
-                </OnChange>
-
-                    </>
+             
+                <Tab style={{margin:"20px 0"}} menu={{ pointing: true }} panes={panes} />
+             
       </Accordion.Content>
             </Accordion>
             {submitError && (

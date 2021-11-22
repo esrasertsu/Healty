@@ -219,6 +219,8 @@ const requests = {
          formData.append('password', trainer.password);
          formData.append('experienceYear', trainer.experienceYear.toString());
          formData.append('title', trainer.title);
+         formData.append('iban', trainer.iban);
+         formData.append('tcknIdentityNo', trainer.tcknIdentityNo!.toString());
 
       //   formData.append('photo',trainer.photo!);
          formData.append('description',trainer.description!);

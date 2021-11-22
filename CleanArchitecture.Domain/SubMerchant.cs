@@ -33,8 +33,12 @@ namespace CleanArchitecture.Domain
     public enum MerchantType
     {
         Personal = 0,
-        Limited = 1,
-        Anonim = 2
+        Private = 1,
+        LimitedOrAnonim = 2
+
+        //       Personal = 0,
+        //Limited = 1,
+        //Anonim = 2
     }
 }
 

@@ -23,9 +23,9 @@ import IBAN from "iban";
 
 
 const companyTypeOptions = [
-    { key: '0', value: '0', text: 'Şahıs Şirketi' },
-    { key: '1', value: '1', text: 'Limited Şirket' },
-    { key: '2', value: '2', text: 'Anonim Şirket' },
+    { key: '0', value: '0', text: 'Bireysel' },
+    { key: '1', value: '1', text: 'Şahıs Şirketi' },
+    { key: '2', value: '2', text: 'Lmited/Anonim Şirket' },
 ]
 
 const SubMerchantDetails: React.FC = () => {
@@ -83,14 +83,14 @@ const SubMerchantDetails: React.FC = () => {
     'Geçersiz TCKN'
   )
 
-  const customTcknIsRequired = subMerchantForm.merchantType === "0" ? isRequired({message: 'TCKN zorunlu alandır.'}) : 
+  const customTcknIsRequired = subMerchantForm.merchantType !== "2" ? isRequired({message: 'TCKN zorunlu alandır.'}) : 
   isRequired({message:""})
 
   const customTaxOfficeRequired = subMerchantForm.merchantType !== "0" ? 
   isRequired({message: 'Vergi dairesi zorunlu alandır.'}) : 
   isRequired({message:""})
 
-  const customTaxNumberRequired = subMerchantForm.merchantType === "1" ? 
+  const customTaxNumberRequired = subMerchantForm.merchantType === "2" ? 
   isRequired({message: 'Vergi no zorunlu alandır.'}) : 
   isRequired({message:""})
 
@@ -170,7 +170,6 @@ const SubMerchantDetails: React.FC = () => {
       {
         setTcknMessage("TCKN zorunlu alan.");
         ok = false;
-
       }
     }else if(values.merchantType === "1")
     {
@@ -180,13 +179,13 @@ const SubMerchantDetails: React.FC = () => {
         ok = false;
 
       }
-      if(values.taxNumber === undefined || values.taxNumber === null || values.taxNumber === 0)
+      if(values.identityNumber ==="" || values.identityNumber === null)
       {
-        setTaxNumberMessage("Vergi No zorunlu alan.");
+        setTcknMessage("TCKN zorunlu alan.");
         ok = false;
 
-
       }
+     
       if(values.legalCompanyTitle ==="" || values.taxOffice === null)
       {
         setlegalCompanyTitleMessage("Yasal şirket ünvanı zorunlu alan.");
@@ -196,6 +195,11 @@ const SubMerchantDetails: React.FC = () => {
 
     }else if(values.merchantType ==="2")
     {
+      if(values.taxNumber === undefined || values.taxNumber === null || values.taxNumber === 0)
+      {
+        setTaxNumberMessage("Vergi No zorunlu alan.");
+        ok = false;
+      }
       if(values.taxOffice ==="" || values.taxOffice === null)
       {
         setTaxOfficeMessage("Vergi dairesi zorunlu alan.");
@@ -350,15 +354,13 @@ const SubMerchantDetails: React.FC = () => {
                     }                    
                     else if(value === "1")
                     {
-                      setsubMerchantFormValues({...subMerchantForm,merchantType: value, identityNumber:""});
-                      setTcknMessage("");
+                      setTaxNumberMessage("");
+                      setsubMerchantFormValues({...subMerchantForm,merchantType: value,taxNumber:null});
                     }
-                    
                     else if(value === "2")
                     {
-                      setsubMerchantFormValues({...subMerchantForm,merchantType: value,taxNumber:null, identityNumber:""});
+                      setsubMerchantFormValues({...subMerchantForm,merchantType: value, identityNumber:""});
                       setTcknMessage("");
-                      setTaxNumberMessage("");
                     }
                     
                   
@@ -366,7 +368,7 @@ const SubMerchantDetails: React.FC = () => {
                 }}
                   </OnChange>
                   {
-                    subMerchantForm.merchantType === "0" ? 
+                    subMerchantForm.merchantType !== "2" ? 
                     <>
                     <label className="fieldLabel" id="tcknLabel">TC Kimlik Numarası*</label>
                     <div className="field" style={{display:"flex", flexDirection:"column"}}>
@@ -396,7 +398,6 @@ const SubMerchantDetails: React.FC = () => {
                   name="taxNumber"
                   type="number"
                   placeholder=""
-                  disabled={subMerchantForm.merchantType !== "1"}
                   value={subMerchantForm.taxNumber}
                   component={NumberInput}
                   style={{marginBottom:15}}

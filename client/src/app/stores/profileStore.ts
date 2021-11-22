@@ -408,7 +408,11 @@ export default class ProfileStore{
                     this.profileForm.certificates = this.profileForm.certificates!.filter(e => e.id !== id);
                     this.deletingDocument = false;
                     toast.success('Dokuman silme işleminiz başarılı.');
-
+                }else if(this.rootStore.userStore.user)
+                {
+                    this.rootStore.userStore.trainerForm.certificates = this.rootStore.userStore.trainerForm.certificates!.filter(e => e.id !== id);
+                    this.deletingDocument = false;
+                    toast.success('Dokuman silme işleminiz başarılı.');
                 }
             })
         } catch (error) {

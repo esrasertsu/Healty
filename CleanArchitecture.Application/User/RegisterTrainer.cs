@@ -33,15 +33,13 @@ namespace CleanArchitecture.Application.User
             public string Experience { get; set; }
             public string Title { get; set; }
             public string PhoneNumber { get; set; }
-            public string TCKNIdentityNo { get; set; }
-            public string Iban { get; set; }
             public bool HasSignedContract { get; set; }
             public Guid CityId { get; set; }
             public List<Guid> CategoryIds { get; set; }
             public List<Guid> SubCategoryIds { get; set; }
             public List<Guid> AccessibilityIds { get; set; }
             public List<IFormFile> Certificates { get; set; }
-
+            public bool SendToRegister { get; set; }
         }
 
         //public class CommandValidator : AbstractValidator<Command>
@@ -82,34 +80,31 @@ namespace CleanArchitecture.Application.User
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
 
-                if (await _context.Users.AnyAsync(x => x.Email == request.Email))
-                    throw new RestException(HttpStatusCode.BadRequest, new { Email = "Email already exists." });
+                var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
 
-                if (await _context.Users.AnyAsync(x => x.UserName == request.UserName))
-                    throw new RestException(HttpStatusCode.BadRequest, new { UserName = "UserName already exists." });
-                
+                if (user == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { User = "NotFound" });
+
                 try
                 {
-                    var user = new AppUser
+                    if (request.SendToRegister)
+                        user.Role = Role.UnderConsiTrainer;
+
+                    user.DisplayName = request.DisplayName;
+                    user.Bio = request.Description;
+                    user.Dependency = request.Dependency;
+                    user.ApplicationDate = DateTime.Now;
+                    user.ExperienceYear = Convert.ToDecimal(request.ExperienceYear) > 0 ? Convert.ToDecimal(request.ExperienceYear) : user.ExperienceYear;
+                    user.LastProfileUpdatedDate = DateTime.Now;
+                    user.Title = request.Title;
+                   
+             
+                    var docsUploaded = false;
+
+                    user.Certificates = new List<Certificate>();
+
+                    if (request.Certificates != null)
                     {
-                        DisplayName = request.DisplayName,
-                        Email = request.Email,
-                        Role = Role.WaitingTrainer,
-                        Bio = request.Description,
-                        Dependency = request.Dependency,
-                        ApplicationDate = DateTime.Now,
-                        ExperienceYear = Convert.ToInt32(request.ExperienceYear),
-                        Title = request.Title
-                    };
-
-                    var result = await _context.SaveChangesAsync() > 0;
-
-
-                    if (result)
-                    {
-                        var docsUploaded = false;
-
-                        user.Certificates = new List<Certificate>();
 
                         foreach (var item in request.Certificates)
                         {
@@ -126,6 +121,9 @@ namespace CleanArchitecture.Application.User
                         }
                         docsUploaded = true;
 
+                    }
+                        
+
                         if (request.CityId != null && request.CityId != Guid.Empty)
                         {
                             var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == request.CityId);
@@ -135,7 +133,11 @@ namespace CleanArchitecture.Application.User
                             {
                                 user.City = city;
                             }
-                        }
+                    }
+                    else
+                    {
+                        user.City = null;
+                    }
 
                         if (request.CategoryIds != null)
                         {
@@ -158,7 +160,13 @@ namespace CleanArchitecture.Application.User
                                     _context.UserCategories.Add(userCategory);
                                 }
                             }
-                        }
+                    }
+                    else
+                    {
+                        var userCats = await _context.UserCategories.Where(x => x.AppUserId == user.Id).ToArrayAsync();
+                        _context.UserCategories.RemoveRange(userCats);
+
+                    }
 
 
                         if (request.SubCategoryIds != null)
@@ -182,78 +190,75 @@ namespace CleanArchitecture.Application.User
                                     _context.UserSubCategories.Add(userCategory);
                                 }
                             }
-                        }
-
-
-                        if (request.AccessibilityIds != null)
-                        {
-                            var userAccs = await _context.UserAccessibilities.Where(x => x.AppUserId == user.Id).ToArrayAsync();
-                            _context.UserAccessibilities.RemoveRange(userAccs);
-
-                            foreach (var accId in request.AccessibilityIds)
-                            {
-                                var acc = await _context.Accessibilities.SingleOrDefaultAsync(x => x.Id == accId);
-
-                                if (acc == null)
-                                    throw new RestException(HttpStatusCode.NotFound, new { Accessibility = "NotFound" });
-                                else
-                                {
-                                    var userAccessibility = new UserAccessibility()
-                                    {
-                                        Accessibility = acc,
-                                        AppUser = user
-                                    };
-                                    _context.UserAccessibilities.Add(userAccessibility);
-                                }
-                            }
-                        }
-
-                        var success2 = await _context.SaveChangesAsync() > 0;
-
-
-
-
-
-
-                        if (success2) return Unit.Value;
-                        else
-                        {
-                      
-                            if (docsUploaded)
-                            {
-                                foreach (var item in user.Certificates)
-                                {
-                                    _documentAccessor.DeleteDocument(item.Id,item.ResourceType);
-                                }
-
-                            }
-
-                            _context.Users.Remove(user);
-                            var deletedNewUser = await _context.SaveChangesAsync() > 0;
-
-
-                            if (deletedNewUser)
-                            {
-                                throw new Exception("Problem saving user data");
-
-                            }else
-                                throw new Exception("Problem deleting user data");
-
-
-                        }
+                    }
+                    else
+                    {
+                        var userSubCats = await _context.UserSubCategories.Where(x => x.AppUserId == user.Id).ToArrayAsync();
+                        _context.UserSubCategories.RemoveRange(userSubCats);
 
                     }
 
-                    throw new Exception("Problem saving user main data");
+
+                    if (request.AccessibilityIds != null)
+                    {
+                        var userAccs = await _context.UserAccessibilities.Where(x => x.AppUserId == user.Id).ToArrayAsync();
+                        _context.UserAccessibilities.RemoveRange(userAccs);
+
+                        foreach (var accId in request.AccessibilityIds)
+                        {
+                            var acc = await _context.Accessibilities.SingleOrDefaultAsync(x => x.Id == accId);
+
+                            if (acc == null)
+                                throw new RestException(HttpStatusCode.NotFound, new { Accessibility = "NotFound" });
+                            else
+                            {
+                                var userAccessibility = new UserAccessibility()
+                                {
+                                    Accessibility = acc,
+                                    AppUser = user
+                                };
+                                _context.UserAccessibilities.Add(userAccessibility);
+                            }
+                        }
+                    }else
+                    {
+                        var userAccs = await _context.UserAccessibilities.Where(x => x.AppUserId == user.Id).ToArrayAsync();
+                        _context.UserAccessibilities.RemoveRange(userAccs);
+                    }
+
+                        try
+                        {
+                            var result = await _context.SaveChangesAsync() > 0;
+                            if (result)
+                                return Unit.Value;
+                            else
+                            {
+                                if (docsUploaded)
+                                {
+                                    foreach (var item in user.Certificates)
+                                    {
+                                        _documentAccessor.DeleteDocument(item.Id, item.ResourceType);
+                                    }
+
+                                }
+                                throw new Exception("Problem saving changes");
+
+                            }
+
+
+                        }
+                        catch (Exception e)
+                        {
+                            throw new Exception("Problem saving changes", e);
+                        }
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
 
-                    throw new RestException(HttpStatusCode.BadRequest, new { UserName = "Problem creating user" });
+                    throw new RestException(HttpStatusCode.BadRequest, new { Trainer = ex});
                 }
 
-                throw new RestException(HttpStatusCode.BadRequest, new { UserName = "Problem creating user" });
 
             }
         }

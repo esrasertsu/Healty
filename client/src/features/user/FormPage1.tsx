@@ -33,7 +33,7 @@ import { Category, ICategory } from '../../app/models/category';
 // })
 const FormPage1:React.FC = () =>{
     const rootStore = useContext(RootStoreContext);
-    const { trainerRegistering,trainerRegisteredSuccess, tranierCreationForm,setTrainerCreationForm,userNameAndPhoneCheck,
+    const { trainerRegistering, tranierCreationForm,setTrainerCreationForm,userNameAndPhoneCheck,
     setTrainerFormMessage, trainerFormMessage,errorMessage,setErrorMessage,registerWaitingTrainer } = rootStore.userStore;
    // trainerForm, setTrainerForm,
     const {openModal,closeModal,modal} = rootStore.modalStore;
@@ -236,13 +236,7 @@ const FormPage1:React.FC = () =>{
           Girmiş olduğunuz bilgileri kontrol ediyoruz.
         </Message.Content>
       </Message>
-      </> :
-      trainerRegisteredSuccess ? 
-      <Message
-      success
-      header='Başvuru formunuz iletildi!'
-      content='En yakın zamanda email adresinize bilgilendirme yapılacaktır.'
-    />
+      </>
       :
       <>
      { trainerFormMessage && <Message

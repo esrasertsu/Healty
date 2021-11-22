@@ -36,7 +36,7 @@ import VerifyEmail from '../../features/user/VerifyEmail';
 import ResetPassword from '../../features/user/ResetPassword';
 import { IUser } from '../models/user';
 import SubMerchantDetails from '../../features/subMerchant/SubMerchantDetails';
-import { Settings } from '../../features/user/Settings';
+import Settings from '../../features/user/Settings';
 import PaymentSuccessPage from '../../features/activities/payment/PaymentSuccessPage';
 import PaymentErrorPage from '../../features/activities/payment/PaymentErrorPage';
 import OrderList from '../../features/orders/OrderList';

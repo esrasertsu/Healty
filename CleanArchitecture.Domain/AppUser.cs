@@ -64,7 +64,8 @@ namespace CleanArchitecture.Domain
         Admin = 100,
         User = 110,
         Trainer = 120,
-        WaitingTrainer = 130
+        WaitingTrainer = 130,
+        UnderConsiTrainer=140
     }
 
 }

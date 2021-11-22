@@ -213,14 +213,12 @@ const requests = {
     },
     registerTrainer: async (url: string, trainer: ITrainerFormValues) =>{
         let formData = new FormData();
-         formData.append('displayname', trainer.displayname!);
-         formData.append('username', trainer.username!);
+         formData.append('displayname', trainer.displayName!);
+         formData.append('username', trainer.userName!);
          formData.append('email', trainer.email);
-         formData.append('password', trainer.password);
          formData.append('experienceYear', trainer.experienceYear.toString());
          formData.append('title', trainer.title);
-         formData.append('iban', trainer.iban);
-         formData.append('tcknIdentityNo', trainer.tcknIdentityNo!.toString());
+         formData.append('sendToRegister', trainer.sendToRegister.toString());
 
       //   formData.append('photo',trainer.photo!);
          formData.append('description',trainer.description!);

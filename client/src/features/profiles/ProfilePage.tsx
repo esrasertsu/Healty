@@ -70,6 +70,15 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
                  
            </Grid.Column>
            <Grid.Column width={5} style={{marginTop:"40px"}}>
+           {isCurrentUser && profile.role === "WaitingTrainer" &&
+          <ButtonGroup widths={2}>
+            <Button
+              color={'blue'}
+              content={'Uzman Başvuruma Git'}
+              onClick={()=> history.push(`/trainerRegister/${profile.userName}`)}
+            />
+          </ButtonGroup>
+          }
             {isCurrentUser && profile.role === "Trainer" &&
           <ButtonGroup widths={2}>
             <Button

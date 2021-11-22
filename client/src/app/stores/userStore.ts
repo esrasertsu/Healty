@@ -29,7 +29,6 @@ export default class UserStore {
     @observable tranierCreationForm : ITrainerCreationFormValues = new TrainerCreationFormValues();
     @observable trainerRegistering = false;
     @observable loadingUserInfo = false;
-    @observable trainerRegisteredSuccess = false;
     @observable trainerFormMessage = false;
     @observable resendEmailVeriMessage = false;
     @observable errorMessage = "";
@@ -182,9 +181,9 @@ export default class UserStore {
             const user = await agent.User.registerTrainer(values);
             runInAction(()=>{
                 this.trainerRegistering = false;
-                this.trainerRegisteredSuccess = true;
+               
             })
-           
+           return true
            
 
         } catch (error) {

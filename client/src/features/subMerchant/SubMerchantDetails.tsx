@@ -25,7 +25,7 @@ import IBAN from "iban";
 const companyTypeOptions = [
     { key: '0', value: '0', text: 'Bireysel' },
     { key: '1', value: '1', text: 'Şahıs Şirketi' },
-    { key: '2', value: '2', text: 'Lmited/Anonim Şirket' },
+    { key: '2', value: '2', text: 'Limited/Anonim Şirket' },
 ]
 
 const SubMerchantDetails: React.FC = () => {
@@ -168,7 +168,7 @@ const SubMerchantDetails: React.FC = () => {
     {
       if(values.identityNumber ==="" || values.identityNumber === null)
       {
-        setTcknMessage("TCKN zorunlu alan.");
+        setTcknMessage("TC Kimlik No zorunlu alan.");
         ok = false;
       }
     }else if(values.merchantType === "1")
@@ -181,7 +181,7 @@ const SubMerchantDetails: React.FC = () => {
       }
       if(values.identityNumber ==="" || values.identityNumber === null)
       {
-        setTcknMessage("TCKN zorunlu alan.");
+        setTcknMessage("TC Kimlik No zorunlu alan.");
         ok = false;
 
       }
@@ -331,7 +331,7 @@ const SubMerchantDetails: React.FC = () => {
                 </OnChange>
                 </Form.Group>
                 <Form.Group  widths="equal">
-                <label className="fieldLabel" id="companyTypeLabel">Şirket Türü*</label>
+                <label className="fieldLabel" id="companyTypeLabel">Hesap Türü*</label>
                 <Field
                   emptyError={subMerchantForm!.merchantType}
                   labelName="companyTypeLabel"
@@ -540,8 +540,10 @@ const SubMerchantDetails: React.FC = () => {
                   loading={loading}
                   disabled={loading || invalid }
                   floated="right"
-                  positive
+                  color="blue"
                   type="submit"
+                  labelPosition="right"
+                  icon="save"
                   content="Kaydet"
                 />
                 {/* <Button

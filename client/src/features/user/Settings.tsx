@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Container, Grid, Header, Menu } from 'semantic-ui-react'
 import ActivityCreationPage from '../activities/form/ActivityCreationPage'
 import OrderList from '../orders/OrderList'
 import SubMerchantDetails from '../subMerchant/SubMerchantDetails'
 import { useMediaQuery } from 'react-responsive';
+import { observer } from 'mobx-react-lite'
+import { RootStoreContext } from '../../app/stores/rootStore'
 
-export const Settings = () => {
+ const Settings:React.FC = () => {
+    const rootStore = useContext(RootStoreContext);
+    const {user} = rootStore.userStore;
 
     const [activeItem, setActiveItem] = useState("Rezervasyonlarım")
     const handleMenuItemClick = (e:any,data:any) =>{
@@ -30,13 +34,17 @@ export const Settings = () => {
                     active={activeItem === 'Kullanıcı Bilgilerim'}
                     onClick={handleMenuItemClick}
                     />
-                    <Menu.Item
-                    key="2"
-                    name='Şirket Bilgilerim'
-                    className="settingsMenuItem"
-                    active={activeItem === 'Şirket Bilgilerim'}
-                    onClick={handleMenuItemClick}
-                    />
+                    {
+                        user!.role === "Trainer" &&
+                        <Menu.Item
+                        key="2"
+                        name='Şirket Bilgilerim'
+                        className="settingsMenuItem"
+                        active={activeItem === 'Şirket Bilgilerim'}
+                        onClick={handleMenuItemClick}
+                        />
+                    }
+                   
                     <Menu.Item
                     key="1"
                     className="settingsMenuItem"
@@ -69,3 +77,7 @@ export const Settings = () => {
 </Container>
         )
 }
+
+
+
+export default observer(Settings)

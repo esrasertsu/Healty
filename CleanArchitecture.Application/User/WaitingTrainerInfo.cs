@@ -1,6 +1,8 @@
-﻿using CleanArchitecture.Application.Categories;
+﻿using AutoMapper;
+using CleanArchitecture.Application.Categories;
 using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Application.Location;
 using CleanArchitecture.Application.Profiles;
 using CleanArchitecture.Domain;
 using MediatR;
@@ -27,12 +29,13 @@ namespace CleanArchitecture.Application.User
             private readonly UserManager<AppUser> _userManager;
             private readonly IUserAccessor _userAccessor;
             private readonly IJwtGenerator _jwtGenerator;
-
-            public Handler(UserManager<AppUser> userManager, IJwtGenerator jwtGenerator, IUserAccessor userAccessor)
+            private readonly IMapper _mapper;
+            public Handler(UserManager<AppUser> userManager, IJwtGenerator jwtGenerator, IUserAccessor userAccessor, IMapper mapper)
             {
                 _userAccessor = userAccessor;
                 _userManager = userManager;
                 _jwtGenerator = jwtGenerator;
+                _mapper = mapper;
             }
             public async Task<WaitingTrainerInfoDto> Handle(Query request, CancellationToken cancellationToken)
             {
@@ -56,11 +59,53 @@ namespace CleanArchitecture.Application.User
                     catsToReturn.Add(catDto);
                 }
 
+                var accessDtoToReturn = new List<AccessibilityDto>();
+
+                foreach (var access in user.UserAccessibilities)
+                {
+                    var accDto = new AccessibilityDto
+                    {
+                        Key = access.Accessibility.Id.ToString(),
+                        Text = access.Accessibility.Name,
+                        Value = access.Accessibility.Id.ToString(),
+                    };
+
+                    accessDtoToReturn.Add(accDto);
+                }
+
+                var subcatsToReturn = new List<SubCategoryDto>();
+
+                foreach (var cat in user.UserSubCategories)
+                {
+                    var catDto = new SubCategoryDto
+                    {
+                        Key = cat.SubCategory.Id.ToString(),
+                        Text = cat.SubCategory.Name,
+                        Value = cat.SubCategory.Id.ToString(),
+                    };
+
+                    subcatsToReturn.Add(catDto);
+                }
+
                 return new WaitingTrainerInfoDto()
                 {
+                    SendToRegister = user.Role == Role.UnderConsiTrainer,
+                    SubMerchantKey = user.SubMerchantKey,
                     Categories = catsToReturn,
-                    Displayname= user.DisplayName,
-                    Username= user.UserName
+                    Accessibilities = accessDtoToReturn,
+                    SubCategories = subcatsToReturn,
+                    UserName = user.UserName,
+                    DisplayName = user.DisplayName,
+                    Email = user.Email,
+                    Title = user.Title,
+                    PhoneNumber = user.PhoneNumber,
+                    Description = user.Bio,
+                    Experience = user.Experience,
+                    ExperienceYear = user.ExperienceYear,
+                    Role = user.Role.ToString(),
+                    Dependency = user.Dependency,
+                    City = _mapper.Map<City, CityDto>(user.City),
+                    Certificates = user.Certificates
                 };
             }
         }

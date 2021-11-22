@@ -2484,3 +2484,17 @@ button, input, optgroup, select, textarea {
 .trainerFormAccordionMessage{
   padding-bottom: 0 !important;
 }
+
+.trainerFormAccountingTab .ui.pointing.menu{
+  width: fit-content !important;
+}
+
+.trainerFormAccountingTab .ui.pointing.menu .active.item, .trainerFormAccountingTab .ui.pointing.menu .active.item::after{
+  background: #2791e1 !important;
+  color:#fff !important;
+}
+
+.trainerFormAccountingTab .ui.pointing.menu .item, .trainerFormAccountingTab .ui.pointing.menu .item::after{
+  background: #1ca9a3c9 !important;
+  color:#fff !important;
+}

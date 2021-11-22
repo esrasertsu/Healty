@@ -46,9 +46,9 @@ export class TrainerCreationFormValues implements ITrainerCreationFormValues{
 
 export interface ITrainerFormValues {
     email: string;
-    password: string;
-    displayname?: string;
-    username?: string;
+    subMerchantKey:string;
+    displayName?: string;
+    userName?: string;
     phone: string;
     hasSignedContract: boolean;
     experienceYear:number;
@@ -66,17 +66,17 @@ export interface ITrainerFormValues {
     documents:File[],
     title: string;
     certificates: IDocument[];
-    tcknIdentityNo: number| null;
-    iban : string;
+    sendToRegister:boolean;
 }
 
 export class TrainerFormValues implements ITrainerFormValues{
     email: string = "";
-    password:string = "";
-    displayname:string = "";
-    username:string = "";
+    displayName:string = "";
+    subMerchantKey:string="";
+    userName:string = "";
     phone: string = "";
     hasSignedContract: boolean = false;
+    sendToRegister:boolean= false;
     experienceYear: number = 0;
     experience:string = '';
     certificates:IDocument[]=[];
@@ -93,8 +93,6 @@ export class TrainerFormValues implements ITrainerFormValues{
     accessibilities: IAccessibility[] = [];
     description: string ="";
     title: string="";
-    tcknIdentityNo: number | null = null;
-    iban : string= "";
     constructor(init?: ITrainerFormValues){
         debugger;
 

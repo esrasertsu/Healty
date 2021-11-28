@@ -20,9 +20,6 @@ const meetConfig = {
 	role: 0 // 1 for host; 0 for attendee
 };
 
-const Completionist = () => <span>You are good to go!</span>;
-
-
  const ActivityZoom:React.FC<{activity:IActivity}> = ({activity}) =>  {
 
     const rootStore = useContext(RootStoreContext);
@@ -84,7 +81,7 @@ const Completionist = () => <span>You are good to go!</span>;
         // a.ZoomMtg.setZoomJSLib('https://source.zoom.us/1.9.5/lib', '/av'); 
         // a.ZoomMtg.preLoadWasm();
         // a.ZoomMtg.prepareWebSDK();
-        var url = generateUrl("https://zoom.afitapp.com",{ 
+        var url = generateUrl("http://localhost:9999",{ 
             mid: meetConfig.meetingNumber,
             pwd: meetConfig.passWord,
             role: meetConfig.role,
@@ -94,11 +91,11 @@ const Completionist = () => <span>You are good to go!</span>;
         });
         window.open(url, "_blank");        
 
-        generateZoomToken(meetConfig.meetingNumber,"0")
-        .then(action((response) => {
-           // response !="" && 9999 a gönder
-           // initiateMeeting(ZoomMtg,response);
-        }))
+        // generateZoomToken(meetConfig.meetingNumber,"0")
+        // .then(action((response) => {
+        //    // response !="" && 9999 a gönder
+        //    // initiateMeeting(ZoomMtg,response);
+        // }))
         
     // });
 

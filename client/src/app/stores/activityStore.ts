@@ -577,6 +577,30 @@ export default class ActivityStore {
         }
     }
 
+    @action generateAgoraToken = async (channelName:string) =>{
+debugger;
+        const params = new URLSearchParams();
+        params.append('channelName', channelName);
+        params.append('activityId',   "08d9a35c-0be5-4c83-8b37-f09a3b0fff9a");
+
+        this.generatingToken = true;
+
+        try {
+            const response = await agent.Agora.generateToken(params);
+            runInAction(()=>{
+                this.generatingToken = false;
+            })
+            return response;
+        } catch (error) {
+            runInAction(()=>{
+                this.generatingToken = false;
+            })
+            console.log(error);
+            return "";
+        }
+    }
+
+
     @action updateOnlineJoinInfo = async (form: IActivityOnlineJoinInfo) =>{
         this.submittingJoinInfo = true;
         try {

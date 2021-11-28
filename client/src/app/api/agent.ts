@@ -401,6 +401,12 @@ const Order = {
     deleteOrder:(orderId: string) => requests.del(`/orders/${orderId}`),
 
 } 
+
+const Agora = {
+    generateToken: (params: URLSearchParams): Promise<string> => 
+            axios.get(`/agora`, {params:params}).then(responseBody),
+    
+}
 export default {
     Activities,
     User,
@@ -412,5 +418,6 @@ export default {
     Documents,
     Zoom,
     Payment,
-    Order
+    Order,
+    Agora
 }

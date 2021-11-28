@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite';
 import FormPage1 from './FormPage1';
 import FormPage2 from './FormPage2';
 import { RootStoreContext } from '../../app/stores/rootStore';
+import ReadyOnlyApplication from './ReadyOnlyApplication';
 
 
 interface DetailParams{
@@ -27,7 +28,10 @@ const TrainerRegisterPage : React.FC<RouteComponentProps<DetailParams>> = ({matc
                 <Segment>
                     <Header as="h2" textAlign="center">Uzman Başvurusu</Header>
                     <Header as="h3" textAlign="center">{user!.role === "UnderConsiTrainer" ? "Değerlendirme Aşamasında": "Başvuru Bekleniyor"}</Header>
-
+                    {
+                        user!.role === "UnderConsiTrainer" &&
+                        <ReadyOnlyApplication id={match.params.id} />
+                    }
                     <FormPage2 id={match.params.id} />
                 </Segment>
                 </Grid.Column>

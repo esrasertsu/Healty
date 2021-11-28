@@ -46,6 +46,8 @@ import TrainerOnboardingPage from '../../features/user/TrainerOnboardingPage';
 import TrainerRegisterPage from '../../features/user/TrainerRegisterPage';
 import { AnalyticsWrapper, UseAnalytics } from '../common/util/util';
 import Forbidden from './Forbidden';
+import ReadyOnlyApplication from '../../features/user/ReadyOnlyApplication';
+import MainVideoPage from '../../features/videoCall/MainVideoPage';
 
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
@@ -211,6 +213,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <PrivateRoute exact path="/payment/error" component={PaymentErrorPage} />
                  <Route exact path="/orders" component={OrderList}/>
                  <PrivateRoute exact path="/orders/:id" component={OrderItemDetail}/>
+                 <PrivateRoute exact path="/videoMeeting" component={MainVideoPage}/>
                  <Route exact path="/admin" component={Admin}/>
                  <Route exact path="/forbidden" component={Forbidden}/>
                  <Route component={NotFound}/>
@@ -266,6 +269,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <PrivateRoute exact path="/payment/error" component={PaymentErrorPage} />
                  <Route exact path="/orders" component={OrderList}/>
                  <PrivateRoute exact path="/orders/:id" component={OrderItemDetail}/>
+                 <PrivateRoute exact path="/videoMeeting" component={MainVideoPage}/>
                  <Route exact path="/admin" component={Admin}/>
                  <Route exact path="/forbidden" component={Forbidden}/>
                  <Route component={NotFound}/>

@@ -2498,3 +2498,114 @@ button, input, optgroup, select, textarea {
   background: #1ca9a3c9 !important;
   color:#fff !important;
 }
+
+.welcomeVideoPage{
+  position: relative;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  height: 85vh;
+  justify-content: center;
+}
+
+#videos{
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  margin: auto;
+  border-radius: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+  justify-items: center;
+  align-items: center;
+  min-height: 80vh;
+}
+
+
+.vid{
+  position: relative;
+  background-color:black;
+  height: 95%;
+  width: 95%;
+  border-radius: 30px;
+  box-shadow: var(--shadow);
+}
+
+.controls{
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 20px auto;
+  padding: 10px 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  justify-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  z-index: 1;
+  width: 350px;
+}
+
+.controls p{
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  background: red;
+  color: white;
+  margin: auto;
+}
+
+.controls p.on{
+  background: white;
+  color: black;
+}
+.controls p.off{
+  background: rgba(255, 255, 255, 0.568);
+  color: black;
+}
+
+
+.join{
+  position: relative;
+  z-index: 1;
+  width: 500px;
+  height: fit-content;
+  background-color: #2791e1;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.join  input{
+  padding: 15px;
+  font-size: 1.1rem;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  width: 80%;
+  display: block;
+  margin:  50px auto;
+}
+
+.join  button{
+  display: block;
+  min-width: 200px;
+  padding: 10px 0;
+  text-align: center;
+  border-radius: 10px;
+  background-color: white;
+  outline: none;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 400;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+.agora_video_player{
+  object-fit: contain !important;
+}

@@ -9,6 +9,7 @@ using CleanArchitecture.Application.Validators;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using FluentValidation.AspNetCore;
+using Infrastructure.Agora;
 using Infrastructure.Email;
 using Infrastructure.Payment;
 using Infrastructure.Photos;
@@ -195,6 +196,7 @@ namespace CleanArchitecture.API
             services.AddScoped<IFacebookAccessor, FacebookAccessor>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<ISmsSender, SmsSender>();
+            services.AddScoped<IAgoraAccessor, AgoraAccessor>();
 
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
@@ -203,6 +205,7 @@ namespace CleanArchitecture.API
             services.Configure<FacebookAppSettings>(Configuration.GetSection("Authentication:Facebook"));
             services.Configure<SendGridSettings>(Configuration.GetSection("SendGrid"));
             services.Configure<TwilioSmsSettings>(Configuration.GetSection("Twilio"));
+            services.Configure<AgoraSettings>(Configuration.GetSection("Agora"));
 
         }
 
@@ -226,7 +229,8 @@ namespace CleanArchitecture.API
                     "https://fonts.googleapis.com",
                     "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
                     "sha256-yChqzBduCCi4o4xdbXRXh4U/t1rP4UUUMJt+rB+ylUI=",
-                    "sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs="))
+                    "sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs=",
+                    "sha256-4Su6mBWzEIFnH4pAGMOuaeBrstwJN4Z3pq/s1Kn4/KQ="))
                 .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com","data:"))
                 .FormActions(s => s.Self().CustomSources("https://sandbox-api.iyzipay.com"))
                 .FrameAncestors(s => s.Self().CustomSources("https://sandbox-api.iyzipay.com"))

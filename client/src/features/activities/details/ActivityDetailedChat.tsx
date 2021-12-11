@@ -64,7 +64,7 @@ import { formatDistance } from 'date-fns';
                     placeholder='Add your comment' 
                     />
                     <Button
-                      content='Add Reply'
+                      content='Gönder'
                       labelPosition='left'
                       icon='edit'
                       primary

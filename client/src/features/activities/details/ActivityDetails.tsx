@@ -12,7 +12,7 @@ import ActivityDetailPaymentSegment from './ActivityDetailPaymentSegment';
 import ActivityZoom from './ActivityZoom';
 import ActivityCountDown from './ActivityCountDown';
 import { useMediaQuery } from 'react-responsive'
-
+import ActivityVideoCall from './ActivityVideoCall';
 interface DetailParams{
     id:string
 }
@@ -70,7 +70,7 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
                  }   
                   {
                   (activity.isGoing || activity.isHost) && 
-                 <ActivityZoom activity={activity} />
+                 <ActivityVideoCall activity={activity} />
                  }  
                  {
                   user &&  isMobile &&

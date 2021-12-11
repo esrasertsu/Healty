@@ -189,19 +189,18 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
         <Route path={'/(.+)'} render={()=>(
           <Fragment>
              <Switch>
-
-             <Route path="/profiles" component={ProfileDashboard}/>
-             <Route exact path="/activities" component={ActivityDashboard} />
-             <Route path="/activities/:id" component={ActivityDetails} />
-             <PrivateRoute exact path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
-             <Route exact path="/blog" component={BlogList} />
-             <Route exact path="/blog/:id" component={BlogPage} />
-             <PrivateRoute key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
-             <PrivateRoute key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
-             <Route path="/profile/:username" component={ProfilePage}/>
-             <PrivateRoute path="/messages" component={MessagesPage}/>
-             <Route path="/login" component={LoginForm}/>
-             <Route path="/login-required" component={LoginRequiredPage}/>
+                <Route path="/profiles" component={ProfileDashboard}/>
+                <Route exact path="/activities" component={ActivityDashboard} />
+                <Route path="/activities/:id" component={ActivityDetails} />
+                <PrivateRoute exact path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
+                <Route exact path="/blog" component={BlogList} />
+                <Route exact path="/blog/:id" component={BlogPage} />
+                <PrivateRoute key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
+                <PrivateRoute key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
+                <Route path="/profile/:username" component={ProfilePage}/>
+                <PrivateRoute path="/messages" component={MessagesPage}/>
+                <Route path="/login" component={LoginForm}/>
+                <Route path="/login-required" component={LoginRequiredPage}/>
                  {/* <Route exact path="/activitysearch" component={ActivitySearchPage}/> */}
                  <Route path="/user/registerSuccess" component={RegisterSuccess}/>
                  <Route path="/user/verifyEmail" component={VerifyEmail}/>

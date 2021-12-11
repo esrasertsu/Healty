@@ -9,7 +9,6 @@ const MainVideoPage :React.FC<RouteComponentProps>= () => {
     const [inCall, setInCall] = useState(false);
     const [channelName, setChannelName] = useState("");
 
-    //Yularıdaki ikili store'dan gelcek
     return (
       <Container className="pageContainer">
         <div className="welcomeVideoPage">

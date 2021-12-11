@@ -34,6 +34,8 @@ const VideoCall  = (props: {
     const { ready, tracks } = useMicrophoneAndCameraTracks();
     const rootStore = useContext(RootStoreContext);
     const { generateAgoraToken } = rootStore.activityStore;
+    const footer = document.getElementById("footer");
+    if(footer) footer.hidden = true;
 
     useEffect(() => {
         // function to initialise the SDK
@@ -122,6 +124,7 @@ const VideoCall  = (props: {
 
 
             client.on("token-privilege-will-expire", async () => {
+              debugger;
                 generateAgoraToken(name)
                 .then(async(response) => {
                  const data =  JSON.parse(response);
@@ -136,6 +139,11 @@ const VideoCall  = (props: {
         if (ready && tracks) {
           console.log("init ready");
           init(channelName);
+        }
+
+        return() =>{
+          const footer = document.getElementById("footer");
+         if(footer) footer.hidden = false;
         }
     
       }, [channelName, client, ready, tracks]);

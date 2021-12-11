@@ -192,6 +192,9 @@ body {
   color: #263a5e 
 }
 
+.ui.comments{
+  display: contents !important;
+}
 .ellipsis {
   display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -211,6 +214,10 @@ body {
 }
 .ui.secondary.menu .header.item {
   margin-bottom: -2px !important;
+}
+
+.ui.items>.item {
+  font-size: 14px !important;
 }
 .ui.items>.item>.content>a.header{
   font-family: AssistantMedium, Arial, sans-serif !important;
@@ -541,10 +548,11 @@ label{
 }
 .activityDetails_Countdown_Segment{
   background-color: #f64f00  !important;
-  background-image:linear-gradient(#fc6901 ,#b23e49,#272666)  !important;
+  background-image: linear-gradient(#fc6901 ,#b23e49) !important;
    /* linear-gradient(#fc6901 ,#d34451,#d5107d)  !important; */
   color:#fff !important;
   padding:3em !important;
+  border: none !important;
  
 }
 .activityDetail_Countdown{
@@ -1212,8 +1220,9 @@ max-width: 95%;
 /*home page styles*/
 
 @media (min-width: 769px){
-  body{
-    font-size: 14px;
+  .ui.search,.ui.input,.ui.form,.ui.dropdown .menu>.item,.ui.card>.content, .ui.cards>.card>.content, input,
+  .ui.large.label,.ui.button, .ui.buttons .button, .ui.buttons .or, .forgotPasswordLink,.modalformFooter{
+    font-size: 14px !important;
   }
   .masthead_page {
     display: flex;
@@ -2506,6 +2515,11 @@ button, input, optgroup, select, textarea {
   align-items: center;
   height: 85vh;
   justify-content: center;
+
+}
+
+.welcomeVideoPage h1, .welcomeVideoPage p{
+  color:#072750 !important;
 }
 
 #videos{
@@ -2571,22 +2585,23 @@ button, input, optgroup, select, textarea {
 .join{
   position: relative;
   z-index: 1;
-  width: 500px;
   height: fit-content;
   background-color: #2791e1;
   padding: 30px;
   border-radius: 10px;
+
 }
 
 .join  input{
   padding: 15px;
-  font-size: 1.1rem;
+  font-size: 16px !important;
   outline: none;
   border: none;
   border-radius: 5px;
   width: 80%;
   display: block;
   margin:  50px auto;
+  font-family: AssistantRegular, Arial, sans-serif !important;
 }
 
 .join  button{
@@ -2595,7 +2610,8 @@ button, input, optgroup, select, textarea {
   padding: 10px 0;
   text-align: center;
   border-radius: 10px;
-  background-color: white;
+  background-color: #263a5e;
+  color: white;
   outline: none;
   border: none;
   font-size: 1.1rem;
@@ -2604,6 +2620,7 @@ button, input, optgroup, select, textarea {
   display: block;
   margin: 0 auto;
   margin-bottom: 20px;
+  font-family: AssistantRegular, Arial, sans-serif !important;
 }
 
 .agora_video_player{

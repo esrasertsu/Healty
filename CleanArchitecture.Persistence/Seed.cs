@@ -1493,6 +1493,14 @@ namespace Persistence
                                 Category = Spor
                             },
                         }
+                     },   
+                    new AppUser
+                     {
+                         Id = "admin1",
+                         DisplayName = "Esra Sertsu",
+                         UserName = "esrasertsu",
+                         Email = "admin@test.com",
+                         Role = Role.Admin
                      },
                 };
 
@@ -1501,7 +1509,7 @@ namespace Persistence
                 {
                  
                     await roleManager.CreateAsync(new IdentityRole(user.Role.ToString()));
-                    var result = await userManager.CreateAsync(user, "Pa$$w0rd");
+                    var result = await userManager.CreateAsync(user, "Password1");
                     if (result.Succeeded)
                     {
                         await userManager.AddToRoleAsync(user, user.Role.ToString());

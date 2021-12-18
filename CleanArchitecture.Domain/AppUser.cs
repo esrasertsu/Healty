@@ -63,9 +63,12 @@ namespace CleanArchitecture.Domain
     {
         Admin = 100,
         User = 110,
-        Trainer = 120,
-        WaitingTrainer = 130,
-        UnderConsiTrainer=140
+        Trainer = 120, 
+        WaitingTrainer = 130, //Baþvuru bekleniyor
+        UnderConsiTrainer=140, // Deðerlendirmeye alýndý
+        Suspend = 200, // Askýya alýndý
+        Freeze = 300 // Askýya alýndý
+
     }
 
 }

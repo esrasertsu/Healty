@@ -6,6 +6,7 @@ using MediatR;
 using CleanArchitecture.Domain;
 using Microsoft.AspNetCore.Authorization;
 using CleanArchitecture.Application.SubMerchants;
+using CleanArchitecture.Application.Admin;
 
 namespace CleanArchitecture.API.Controllers
 {
@@ -22,6 +23,25 @@ namespace CleanArchitecture.API.Controllers
         {
             return await Mediator.Send(new GetSubMerchantFromIyzico.Query { Id = id });
         }
+
+        [HttpGet("trainers")]
+        public async Task<ActionResult<ListTrainers.TrainersEnvelope>> List(int? limit, int? offset, Guid? categoryId, [FromQuery(Name = "subCategoryIds")] List<Guid> subCategoryIds, Guid? accessibilityId, Guid? cityId, string role,string sort)
+        {
+            return await Mediator.Send(new ListTrainers.Query(limit, offset, categoryId, subCategoryIds, accessibilityId, cityId,role, sort));
+        }
+
+        [HttpGet("trainers/{username}")]
+        public async Task<ActionResult<Trainer>> Get(string username)
+        {
+            return await Mediator.Send(new TrainerDetails.Query { UserName = username });
+        }
+
+        //[HttpGet("{username}/details")]
+        //public async Task<ActionResult<Profile>> Get(string username)
+        //{
+        //    return await Mediator.Send(new Details.Query { UserName = username });
+        //}
+
         //[HttpPost]
         //[Authorize(Policy = "CanCreateActivity")]
         //public async Task<ActionResult<ActivityDto>> Create([FromForm] Create.Command command)

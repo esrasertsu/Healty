@@ -27,7 +27,7 @@ const TrainerRegisterPage : React.FC<RouteComponentProps<DetailParams>> = ({matc
                 <Grid.Column>
                 <Segment>
                     <Header as="h2" textAlign="center">Uzman Başvurusu</Header>
-                    <Header as="h3" textAlign="center">{user!.role === "UnderConsiTrainer" ? "Değerlendirme Aşamasında": "Başvuru Bekleniyor"}</Header>
+                    <Header as="h3" textAlign="center">{user!.role === "UnderConsiTrainer" ? "Değerlendirme Aşamasında": "- Başvuru Bekleniyor -"}</Header>
                     {
                         user!.role === "UnderConsiTrainer" &&
                         <ReadyOnlyApplication id={match.params.id} />

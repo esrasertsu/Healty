@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Domain;
+﻿using CleanArchitecture.Application.Location;
+using CleanArchitecture.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +13,7 @@ namespace CleanArchitecture.Application.Admin
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Address { get; set; }
+        public CityDto City { get; set; }
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
         public bool PhoneConfirmed { get; set; }

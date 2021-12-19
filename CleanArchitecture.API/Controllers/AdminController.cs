@@ -61,6 +61,14 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new ListAdmins.Query(limit, offset));
         }
 
+        [HttpPost("newAdmin")]
+        [Authorize(Policy = "CanCreateActivity")]
+        public async Task<ActionResult<Admin>> Create([FromForm] CreateAdmin.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
+
         //[HttpGet("{username}/details")]
         //public async Task<ActionResult<Profile>> Get(string username)
         //{

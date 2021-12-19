@@ -366,7 +366,8 @@ namespace CleanArchitecture.Application.Profiles
                 InteractionCount = user.ChatRooms.Where(x => x.ChatRoom.StarterId != user.Id).Count(),
                 IyzicoContractSignedDate = user.IyzicoContractSignedDate,
                 LastLoginDate = user.LastLoginDate,
-                LastProfileUpdatedDate = user.LastProfileUpdatedDate
+                LastProfileUpdatedDate = user.LastProfileUpdatedDate,
+                City = _mapper.Map<City, CityDto>(user.City)
 
             };
           
@@ -397,7 +398,7 @@ namespace CleanArchitecture.Application.Profiles
                 RegDate = user.RegistrationDate,
                 LastLoginDate = user.LastLoginDate,
                 Bio = user.Bio,
-                BlogCount = user.Blogs.Count,
+                BlogCount = user.Blogs != null ? user.Blogs.Count: 0,
                 Title= user.Title
 
 

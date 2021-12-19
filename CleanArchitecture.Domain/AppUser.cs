@@ -66,8 +66,10 @@ namespace CleanArchitecture.Domain
         Trainer = 120, 
         WaitingTrainer = 130, //Baþvuru bekleniyor
         UnderConsiTrainer=140, // Deðerlendirmeye alýndý
-        Suspend = 200, // Askýya alýndý
-        Freeze = 300 // Askýya alýndý
+        Suspend = 200,
+        SuspendUser = 210, // Askýya alýndý
+        Freeze = 300, // Dondurdu
+        FreezeUser = 310
 
     }
 

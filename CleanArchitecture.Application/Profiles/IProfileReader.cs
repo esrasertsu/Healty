@@ -11,6 +11,8 @@ namespace CleanArchitecture.Application.Profiles
         Task<Profile> ReadProfile(string username);
         Task<Profile> ReadProfileCard(string username);
         Task<Trainer> ReadTrainerInfo(string username);
+        Task<NormalUser> ReadUserInfo(string username);
+        Task<Admin.Admin> ReadAdminInfo(string username);
 
     }
 }

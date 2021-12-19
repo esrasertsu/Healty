@@ -336,7 +336,75 @@ namespace CleanArchitecture.Application.Profiles
             return trainer;
         }
 
+        public async Task<NormalUser> ReadUserInfo(string username)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == username);
 
+            if (user == null)
+                throw new RestException(HttpStatusCode.NotFound, new { User = "Not Found" });
+
+            var profile = new NormalUser
+            {
+                Id = user.Id,
+                DisplayName = user.DisplayName,
+                Name = user.Name,
+                Surname = user.Surname,
+                Email = user.Email,
+                EmailConfirmed = user.EmailConfirmed,
+                PhoneConfirmed = user.PhoneNumberConfirmed,
+                Address = user.Address,
+                PhoneNumber = user.PhoneNumber,
+                UserName = user.UserName,
+                Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
+                CoverImage = user.Photos.FirstOrDefault(x => x.IsCoverPic)?.Url,
+                Photos = user.Photos,
+                Role = user.Role.ToString(),
+                FollowerCount = user.Followers.Count(),
+                FollowingCount = user.Followings.Count(),
+                IsOnline = user.IsOnline,
+                RegDate = user.RegistrationDate,
+                InteractionCount = user.ChatRooms.Where(x => x.ChatRoom.StarterId != user.Id).Count(),
+                IyzicoContractSignedDate = user.IyzicoContractSignedDate,
+                LastLoginDate = user.LastLoginDate,
+                LastProfileUpdatedDate = user.LastProfileUpdatedDate
+
+            };
+          
+            return profile;
+        }
+
+        public async Task<Admin.Admin> ReadAdminInfo(string username)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == username);
+
+            if (user == null)
+                throw new RestException(HttpStatusCode.NotFound, new { User = "Not Found" });
+
+            var profile = new Admin.Admin
+            {
+                Id = user.Id,
+                DisplayName = user.DisplayName,
+                Name = user.Name,
+                Surname = user.Surname,
+                Email = user.Email,
+                EmailConfirmed = user.EmailConfirmed,
+                PhoneConfirmed = user.PhoneNumberConfirmed,
+                Address = user.Address,
+                PhoneNumber = user.PhoneNumber,
+                UserName = user.UserName,
+                Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
+                Role = user.Role.ToString(),
+                RegDate = user.RegistrationDate,
+                LastLoginDate = user.LastLoginDate,
+                Bio = user.Bio,
+                BlogCount = user.Blogs.Count,
+                Title= user.Title
+
+
+            };
+
+            return profile;
+        }
         //private int GetStarCount(AppUser user)
         //{
         //    return  Convert.ToInt32(user.ReceivedComments.Count() >0 ? user.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Count() : 0);

@@ -74,7 +74,8 @@ namespace CleanArchitecture.Application.Admin
                 var queryableUsers = _context.Users
                     .AsQueryable();
 
-                queryableUsers = queryableUsers.Where(x => x.Role != Role.Admin && x.Role != Role.User);
+                queryableUsers = queryableUsers.Where(x => x.Role == Role.Trainer || x.Role == Role.Suspend || x.Role == Role.UnderConsiTrainer || 
+                x.Role == Role.Freeze || x.Role == Role.WaitingTrainer);
 
                 #region Filters
                 if (!string.IsNullOrEmpty(request.Role))

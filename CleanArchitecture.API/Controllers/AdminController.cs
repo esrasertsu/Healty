@@ -36,6 +36,31 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new TrainerDetails.Query { UserName = username });
         }
 
+        [HttpPut("trainers/status")]
+        public async Task<ActionResult<Unit>> UpdateTrainerStatus (string username, string status)
+        {
+            UpdateTrainerStatus.Command command = new UpdateTrainerStatus.Command { Username= username, Status = status };
+            return await Mediator.Send(command);
+        }
+
+        [HttpDelete("trainers/{username}")]
+        public async Task<ActionResult<Unit>> Delete(string username)
+        {
+            return await Mediator.Send(new DeleteTrainer.Command { Username = username });
+        }
+
+        [HttpGet("users")]
+        public async Task<ActionResult<ListUsers.UsersEnvelope>> ListUsers(int? limit, int? offset, string role, string sort)
+        {
+            return await Mediator.Send(new ListUsers.Query(limit, offset, role, sort));
+        }
+
+        [HttpGet("admins")]
+        public async Task<ActionResult<ListAdmins.AdminsEnvelope>> ListAdmins(int? limit, int? offset)
+        {
+            return await Mediator.Send(new ListAdmins.Query(limit, offset));
+        }
+
         //[HttpGet("{username}/details")]
         //public async Task<ActionResult<Profile>> Get(string username)
         //{
@@ -57,12 +82,7 @@ namespace CleanArchitecture.API.Controllers
         //    return await Mediator.Send(command);
         //}
 
-        //[HttpDelete("{id}")]
-        //[Authorize(Policy = "IsActivityHost")]
-        //public async Task<ActionResult<Unit>> Delete(Guid Id)
-        //{
-        //    return await Mediator.Send(new Delete.Command { Id = Id });
-        //}
+
 
         //[HttpPost("{id}/attend")]
         //public async Task<ActionResult<Unit>> Attend(Guid id, bool showName)

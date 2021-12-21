@@ -1,4 +1,4 @@
-import { action, observable } from "mobx";
+import { action, makeObservable, observable } from "mobx";
 import { RootStore } from "./rootStore";
 import { history } from '../../index';
 
@@ -6,6 +6,8 @@ export default class ModalStore {
     rootStore : RootStore;
     constructor(rootStore: RootStore){
         this.rootStore = rootStore;
+        makeObservable(this);
+
     }
 
     @observable.shallow modal = {

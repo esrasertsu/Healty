@@ -54,7 +54,7 @@ const SubMerchantDetails: React.FC = () => {
     e.stopPropagation();
     if(modal.open) closeModal();
   
-        openModal("Uzman Başvuru Formu", <>
+        openModal("Iyzico pazaryeri satıcı anlaşma", <>
         <Modal.Description>
         <iframe style={{width:"100%", border:"none"}} src="https://www.iyzico.com/pazaryeri-satici-anlasma/" />
         </Modal.Description>

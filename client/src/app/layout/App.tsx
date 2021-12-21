@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { Container, Icon, Image, Menu, Modal, Segment, Sidebar } from 'semantic-ui-react';
 import NavBar from '../../features/nav/NavBar';
 import { observer } from 'mobx-react-lite';
-import { Route , RouteComponentProps, Switch, withRouter} from 'react-router-dom';
+import { Route , RouteComponentProps,Switch, withRouter} from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
 import ActivityForm from '../../features/activities/form/ActivityForm';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
@@ -23,7 +23,7 @@ import MessagesPage from '../../features/messages/MessagesPage';
 // import { LoadScriptUrlOptions } from "@react-google-maps/api/dist/utils/make-load-script-url";
 import { runInAction } from 'mobx';
 import PrivateRoute from './PrivateRoute';
-import { LoginRequiredPage } from './LoginRequiredPage';
+import  LoginRequiredPage  from './LoginRequiredPage';
 import  Admin  from '../../features/admin/Admin';
 import { useMediaQuery } from 'react-responsive'
 import MobileNavBar from '../../features/nav/MobileNavBar';
@@ -48,7 +48,15 @@ import { AnalyticsWrapper, UseAnalytics } from '../common/util/util';
 import Forbidden from './Forbidden';
 import ReadyOnlyApplication from '../../features/user/ReadyOnlyApplication';
 import MainVideoPage from '../../features/videoCall/MainVideoPage';
-
+// import {
+//   Grid,
+//   Typography,
+//   CardContent,
+//   Card,
+//   Box,
+//   Divider,
+//   Button
+// } from '@mui/material';
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
@@ -90,18 +98,19 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
  }
 
 
- const handleLoginClick = () => {
-  if(modal.open) closeModal();
-      openModal("Giriş Yap", <>
-      <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.png' wrapped />
-      <Modal.Description className="loginreg">
-      <LoginForm location={location.pathname} />
-      </Modal.Description>
-      </>,true,
-     "","",false) 
-  }
+//  const handleLoginClick = () => {
+//   if(modal.open) closeModal();
+//       openModal("Giriş Yap", <>
+//       <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
+//       <Modal.Description className="loginreg">
+//       <LoginForm location={location.pathname} />
+//       </Modal.Description>
+//       </>,true,
+//      "","",false) 
+//   }
 
   useEffect(() => {
+    debugger;
       if(token)
       {
         getUser().then((res) => {
@@ -192,7 +201,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                 <Route path="/profiles" component={ProfileDashboard}/>
                 <Route exact path="/activities" component={ActivityDashboard} />
                 <Route path="/activities/:id" component={ActivityDetails} />
-                <PrivateRoute exact path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
+                <PrivateRoute  path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
                 <Route exact path="/blog" component={BlogList} />
                 <Route exact path="/blog/:id" component={BlogPage} />
                 <PrivateRoute key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />

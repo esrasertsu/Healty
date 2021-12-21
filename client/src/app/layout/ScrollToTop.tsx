@@ -1,10 +1,11 @@
 import { useEffect } from "react"
 import { withRouter } from "react-router-dom";
 
-const ScrollToTop =({children, location:{pathname}}: any) =>{
+
+const ScrollToTop =({children}: any) =>{
     useEffect(()=>{
         document.querySelector('body')!.scrollTo(0,0)
-    }, [pathname]);
+    }, [window.location.pathname]);
 
     return children;
 };

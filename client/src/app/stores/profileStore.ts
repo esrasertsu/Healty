@@ -1,4 +1,4 @@
-import { action, observable, runInAction, computed, reaction } from "mobx";
+import { action, observable, runInAction, computed, reaction, makeObservable } from "mobx";
 import { toast } from "react-toastify";
 import agent from "../api/agent";
 import { IAccessibility, IPhoto, IProfile, IProfileBlog, IProfileComment, IProfileFilterFormValues, IProfileFormValues, IRefencePic, IUserActivity, ProfileFilterFormValues, ProfileFormValues } from "../models/profile";
@@ -10,7 +10,9 @@ const LIMIT = 10; //axios'u düzeltmeyi unutma
 export default class ProfileStore{
     rootStore: RootStore
     constructor(rootStore: RootStore){
-        this.rootStore = rootStore
+        this.rootStore = rootStore;
+        makeObservable(this);
+
 
         reaction(
             () => this.activeTab,
@@ -179,12 +181,12 @@ export default class ProfileStore{
         this.submittingComment = true;
         try {
             var newComment = await agent.Profiles.createComment(comment);
-            runInAction('Creating comment', () => {
+            runInAction(() => {
                 this.commentRegistery.set(newComment.id, newComment);
                 this.submittingComment = false;
             });
         } catch (error) {
-            runInAction('Creating post error', () => {
+            runInAction( () => {
                 this.submittingComment = false;
             });
             toast.error('Problem submitting data');
@@ -318,7 +320,7 @@ export default class ProfileStore{
         try {
             var params = this.axiosParams;
             const popularProfiles= await agent.Profiles.popularlist(this.axiosParams);
-            runInAction('Loading profiles',()=>{
+            runInAction(()=>{
                 popularProfiles.forEach((profile) =>{
                     this.popularProfileRegistery.set(profile.userName, profile);
                 });
@@ -348,7 +350,7 @@ export default class ProfileStore{
             const profilesEnvelope= await agent.Profiles.list(params ? params : this.axiosParams);
             const {profileList, profileCount } = profilesEnvelope;
 
-            runInAction('Loading profiles',()=>{
+            runInAction(()=>{
                 profileList.forEach((profile) =>{
                     this.profileRegistery.set(profile.userName, profile);
                 });
@@ -536,12 +538,12 @@ export default class ProfileStore{
         this.submittingVideo = true;
         try {
             var result = await agent.Profiles.uploadProfileVideo(url);
-            runInAction('Uploading video', () => {
+            runInAction( () => {
                 this.profile!.videoUrl =url;
                 this.submittingVideo = false;
             });
         } catch (error) {
-            runInAction('Uploading video error', () => {
+            runInAction( () => {
                 this.submittingVideo = false;
             });
             toast.error('Problem submitting data');
@@ -631,7 +633,7 @@ export default class ProfileStore{
         this.submittingMessage = true;
         try {
             const newMessage = await agent.Profiles.sendMessage(message);
-            runInAction('Sending message', () => {
+            runInAction(() => {
                 this.submittingMessage = false;
                 this.profile!.hasConversation = true;
 
@@ -654,7 +656,7 @@ export default class ProfileStore{
 
             });
         } catch (error) {
-            runInAction('Sending message error', () => {
+            runInAction(() => {
                 this.submittingMessage = false;
             });
             toast.error('Problem sending message');

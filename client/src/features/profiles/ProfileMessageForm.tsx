@@ -4,9 +4,9 @@ import { Button, Form, Grid,Image,Modal } from 'semantic-ui-react';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { IMessageForm } from '../../app/models/message';
-import { RegisterForm } from '../user/RegisterForm';
 import LoginForm from '../user/LoginForm';
 import { observer } from 'mobx-react-lite';
+import { useMediaQuery } from 'react-responsive';
 
 // interface IProps{
 //     sendMessage:() => void;
@@ -21,33 +21,20 @@ import { observer } from 'mobx-react-lite';
     const {isLoggedIn}= rootStore.userStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;
 
-
-    
-  const handleRegisterClick = (e:any,str:string) => {
-    
-    e && e.stopPropagation();
-    if(modal.open) closeModal();
-
-        openModal("Üye Kaydı", <>
-        <Image size='large' src='/assets/Login1.png' wrapped />
-        <Modal.Description>
-        <RegisterForm location={str} />
-        </Modal.Description>
-        </>,true,
-        <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={() => handleLoginClick(e,str)}>Giriş</span></p>) 
-    }
-
+    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
+  
     const handleLoginClick = (e:any,str:string) => {
-      e && e.stopPropagation();
+    
       if(modal.open) closeModal();
-
+  
           openModal("Giriş Yap", <>
-          <Image size='large' src='/assets/Login1.png' wrapped />
-          <Modal.Description>
+          <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
+          <Modal.Description className="loginreg">
           <LoginForm location={str} />
           </Modal.Description>
           </>,true,
-           <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={() => handleRegisterClick(e,str)}>tıklayınız</span></p>) 
+          "","blurring",true) 
       }
 
     const handleFinalFormSubmit = async (values: IMessageForm) => {

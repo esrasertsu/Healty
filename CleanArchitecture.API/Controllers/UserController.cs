@@ -97,9 +97,9 @@ namespace CleanArchitecture.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("userNameAndPhoneCheck")]
-        public async Task<ActionResult<bool>> UserNameAndPhoneCheck(string username, string email, string phone)
+        public async Task<ActionResult<bool>> UserNameAndPhoneCheck(string username, string email, string phone, string token)
         {
-            return await Mediator.Send(new IsUserNameAvailable.Query { UserName = username, Email = email, Phone = phone });
+            return await Mediator.Send(new IsUserNameAvailable.Query { UserName = username, Email = email, Phone = phone, ReCaptcha = token });
         }
 
         [AllowAnonymous]
@@ -119,6 +119,15 @@ namespace CleanArchitecture.API.Controllers
         [AllowAnonymous]
         [HttpPost("facebook")]
         public async Task<ActionResult<User>> FacebookLogin(ExternalLogin.Query query)
+        {
+            var user = await Mediator.Send(query);
+            SetTokenCookie(user.RefreshToken);
+            return user;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("google")]
+        public async Task<ActionResult<User>> GoogleLogin(GoogleLogin.Query query)
         {
             var user = await Mediator.Send(query);
             SetTokenCookie(user.RefreshToken);
@@ -159,6 +168,7 @@ namespace CleanArchitecture.API.Controllers
         [HttpPost("resetPswRequest")]
         public async Task<ActionResult<bool>> ResetPasswordRequest([FromQuery]ResetPasswordRequest.Query query)
         {
+
             query.Origin = Request.Headers["origin"];
             var res = await Mediator.Send(query);
 

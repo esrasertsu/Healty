@@ -11,6 +11,9 @@ import TextInput from '../../app/common/form/TextInput';
 import { IUserFormValues } from '../../app/models/user';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import SocialLogin from './SocialLogin';
+import  RegisterForm  from './RegisterForm';
+import { action, runInAction } from 'mobx';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 
 
@@ -32,31 +35,43 @@ const validate = combineValidators({
 })
 
 const ForgotPassword = () => {
-    const rootStore = useContext(RootStoreContext);
-   const { openModal, closeModal} = rootStore.modalStore;
    const [showErrorMessage, setshowErrorMessage] = useState(false);
    const [showSuccessMessage, setshowSuccessMessage] = useState(false);
+   const [submitErr, setSubmitErr] = useState()
+
+   const recaptchaRef = React.createRef<any>();
+
 
    
+const handleSubmit = async(values:IUserFormValues) =>{
+  debugger;
+    recaptchaRef.current.executeAsync().then((token:string) =>
+    {
+      setshowErrorMessage(false);
+      setshowSuccessMessage(false);
+
+
+      values.reCaptcha = token;
+      agent.User.resetPasswordRequest(values.email, values.reCaptcha).then(action((res:boolean) => {
+        debugger;
+        if(res === true)
+        {
+            setshowErrorMessage(false);
+           setshowSuccessMessage(true);
+        }else{
+            setshowSuccessMessage(false);
+           setshowErrorMessage(true);
+        }
+    }))  .catch((error) => 
+    setSubmitErr(error)
+    )
+    })
+  
+}
 
    return (
       <FinalForm
-        onSubmit={(values: IUserFormValues) =>
-            agent.User.resetPasswordRequest(values.email as string).then((res:boolean) => {
-                debugger;
-                if(res === true)
-                {
-                    setshowErrorMessage(false);
-                   setshowSuccessMessage(true);
-                }else{
-                    setshowSuccessMessage(false);
-                   setshowErrorMessage(true);
-                }
-            })
-          .catch((error) => ({
-            [FORM_ERROR]: error,
-          }))
-        }
+        onSubmit={handleSubmit}
         validate={validate}
         render={({
           handleSubmit,
@@ -75,8 +90,8 @@ const ForgotPassword = () => {
             />
             <p>Sistemde kayıtlı olan email adresinize bir şifre yenileme linki göndereceğiz. Lütfen sistemde kayıtlı email adresinizi giriniz.</p>
             <Field type="email" name="email" placeholder="Email" component={TextInput}/>
-            {submitError && !dirtySinceLastSubmit && (
-             <ErrorMessage error={submitError} text='Geçersiz email adresi' />
+            {submitErr && !dirtySinceLastSubmit && (
+             <ErrorMessage error={submitErr} text='Geçersiz email adresi' />
             )}
             {
                 showErrorMessage && (
@@ -88,7 +103,7 @@ const ForgotPassword = () => {
             {
                 showSuccessMessage && (
                     <Message positive>
-                        <p>Sistemde email adresinizi bulduk ve şifre yenileme linki gönderdik - Lütfen epostanızı kontrol edin</p>
+                        <p>Şifre yenileme linki gönderdik - Lütfen epostanızı kontrol edin</p>
                     </Message>
                 )
             }
@@ -102,7 +117,11 @@ const ForgotPassword = () => {
                     fluid
                     />
             }
-            
+              <ReCAPTCHA
+              ref={recaptchaRef}
+              size="invisible"
+              sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_KEY!}
+            />
            
           </Form>
         )}

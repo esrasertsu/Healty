@@ -21,6 +21,7 @@ namespace CleanArchitecture.Application.User
             public string UserName { get; set; }
             public string Email { get; set; }
             public string Phone { get; set; }
+            public string ReCaptcha { get; set; }
 
         }
 
@@ -28,16 +29,26 @@ namespace CleanArchitecture.Application.User
         {
             private readonly DataContext _context;
             private readonly ISmsSender _smsSender;
+            private readonly IGoogleReCAPTCHAAccessor _reCAPTCHAAccessor;
 
 
-            public Handler(DataContext context, ISmsSender smsSender)
+            public Handler(DataContext context, ISmsSender smsSender, IGoogleReCAPTCHAAccessor reCAPTCHAAccessor)
             {
                 _context = context;
                 _smsSender = smsSender;
-             
+                _reCAPTCHAAccessor = reCAPTCHAAccessor;
+
+
             }
             public async Task<bool> Handle(Query request, CancellationToken cancellationToken)
             {
+                var _googleReCAPTHA = await _reCAPTCHAAccessor.VerificateRecaptcha(request.ReCaptcha);
+
+                if (!_googleReCAPTHA.Success && _googleReCAPTHA.Score <= 0.5)
+                {
+                    throw new RestException(HttpStatusCode.BadRequest, new { Email = "Geçersiz giriş." });
+                }
+
                 if (await _context.Users.AnyAsync(x => x.Email == request.Email))
                     throw new RestException(HttpStatusCode.BadRequest, new { Email = "Bu email başka bir hesapla ilişkili." });
 

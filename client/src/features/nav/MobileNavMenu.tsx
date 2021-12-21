@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import LoginForm from '../user/LoginForm';
-import { RegisterForm } from '../user/RegisterForm';
+import  RegisterForm from '../user/RegisterForm';
 import TrainerForm from '../user/TrainerRegisterModal';
 import { useMediaQuery } from 'react-responsive'
 
@@ -25,25 +25,24 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     const handleLoginClick = (e:any) => {
-        e.stopPropagation();
-        if(modal.open) closeModal();
-  
-            openModal("Giriş Yap", <>
-            <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.png' wrapped />
-            <Modal.Description className="loginreg">
-            <LoginForm location={"/"} />
-            </Modal.Description>
-            </>,true,
-             <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={handleRegisterClick}>tıklayınız</span></p>) 
-        }
-  
+      e.stopPropagation();
+      if(modal.open) closeModal();
+
+          openModal("Giriş Yap", <>
+          <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
+          <Modal.Description className="loginreg">
+          <LoginForm location={"/"} />
+          </Modal.Description>
+          </>,true,
+          "","blurring",true) 
+      }
         const handleRegisterClick = (e:any) => {
       
           e.stopPropagation();
           if(modal.open) closeModal();
   
               openModal("Üye Kaydı", <>
-              <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.png' wrapped />
+              <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
               <Modal.Description className="loginreg">
               <RegisterForm location={"/"} />
               </Modal.Description>
@@ -60,7 +59,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
             if(modal.open) closeModal();
   
                 openModal("Uzman Başvuru Formu", <>
-                <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/welcome1.png' wrapped />
+                <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/contactus.jpg' wrapped />
                 <Modal.Description>
                 <TrainerForm />
                 </Modal.Description>

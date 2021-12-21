@@ -1,14 +1,19 @@
 import { FORM_ERROR } from 'final-form';
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
 import { useMediaQuery } from 'react-responsive';
 import { combineValidators, composeValidators, createValidator, isRequired } from 'revalidate';
-import { Button, Divider, Form, Header } from 'semantic-ui-react';
+import { Button, Divider, Form, Header,Icon, Image, Modal } from 'semantic-ui-react';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
 import { IUserFormValues } from '../../app/models/user';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import SocialLogin from './SocialLogin';
+import GoogleLogin from 'react-google-login';
+import { observer } from 'mobx-react';
+import TrainerForm from '../user/TrainerRegisterModal';
+import ReCAPTCHA from "react-google-recaptcha";
+import { runInAction } from 'mobx';
 
 const isValidEmail = createValidator(
   message => value => {
@@ -29,22 +34,65 @@ const validate = combineValidators({
 interface IProps {
   location: string;
 }
-export const RegisterForm:React.FC<IProps> = ({location}) =>{
+const RegisterForm:React.FC<IProps> = ({location}) =>{
     const rootStore = useContext(RootStoreContext);
-    const { register,fbLogin,loadingFbLogin } = rootStore.userStore;
+    const { register,fbLogin,loadingFbLogin,googleLogin,loadingGoogleLogin } = rootStore.userStore;
+
     const isDesktop =  useMediaQuery({ query: '(min-width: 920px)' })
     const isTablet = useMediaQuery({ query: '(max-width: 919px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
+    const { closeModal, openModal, modal } = rootStore.modalStore;
+    const recaptchaRef = React.createRef<any>();
+    const [submitErr, setSubmitErr] = useState()
+
+    const responseGoogle = (response:any) => {
+      googleLogin(response.tokenId, location).catch((error) => 
+        {   
+          error.data.errors="Geçersiz giriş";   
+          setSubmitErr(error)
+        }      
+        )
+    };
+
+
+
+
+    const handleTrainerFormClick= (e:any) => {
+    
+      e.stopPropagation();
+      if(modal.open) closeModal();
+
+          openModal("Uzman Başvuru Formu", <>
+          <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/contactus.jpg' wrapped />
+          <Modal.Description>
+          <TrainerForm />
+          </Modal.Description>
+          </>,true,
+          "","blurring",true
+          ) 
+         
+      }
+
+
+
+      
+const handleRegister = async(values:IUserFormValues) =>{
+
+  recaptchaRef.current.executeAsync().then((token:string) => {
+     values.reCaptcha = token;
+           
+     register(values,location)
+     .catch((error) => 
+     setSubmitErr(error)
+     )
+   })
+}
 
 
     return (
       <FinalForm
-        onSubmit={(values: IUserFormValues) =>
-            register(values,location)
-            .catch((error) => ({
-            [FORM_ERROR]: error,
-          }))
-        }
+      onSubmit={handleRegister}
+
         validate={validate}
         render={({
           handleSubmit,
@@ -60,7 +108,7 @@ export const RegisterForm:React.FC<IProps> = ({location}) =>{
               content="Yeni Üye"
               textAlign="center"
             />
-            <Field name="username" placeholder="*Kullanıcı Adı" component={TextInput}/>
+            <p>Uzman başvuru için <span className="registerLoginAnchor" onClick={handleTrainerFormClick}>tıkla!</span></p>            <Field name="username" placeholder="*Kullanıcı Adı" component={TextInput}/>
             <Field name="displayname" placeholder="Ad Soyad" component={TextInput} />
             <Field name="email" type="email" placeholder="*Email" component={TextInput} />
             <Field
@@ -69,9 +117,8 @@ export const RegisterForm:React.FC<IProps> = ({location}) =>{
               type="password"
               component={TextInput}
             />
-            {submitError && !dirtySinceLastSubmit && (
-             <ErrorMessage error={submitError}
-             text={JSON.stringify(submitError.data.errors)} />
+            {submitErr && !dirtySinceLastSubmit && (
+             <ErrorMessage error={submitErr} text='Geçersiz email adresi / şifre' />
             )}
             <div style={
               isMobile ? {maxWidth:"100%", marginBottom:"10px", textAlign:"right"} :
@@ -87,9 +134,28 @@ export const RegisterForm:React.FC<IProps> = ({location}) =>{
             />
               <Divider horizontal>veya</Divider>
             <SocialLogin loading={loadingFbLogin} fbCallback={(resonse:any) => fbLogin(resonse,location)} />
-
+            <br></br>
+            <GoogleLogin
+              clientId="1086747484183-2avit5lboliou5c8nt90tjf2ueu5f8bk.apps.googleusercontent.com"
+              render={renderProps => (
+                <Button loading={loadingGoogleLogin} fluid color="google plus" onClick={renderProps.onClick} disabled={renderProps.disabled}>
+                  <Icon name="google" />{" "} Google ile giriş yap
+                </Button>
+              )}
+              buttonText="Login with Google"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy="single_host_origin"
+            />
+              <ReCAPTCHA
+              ref={recaptchaRef}
+              size="invisible"
+              sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_KEY!}
+            />
           </Form>
         )}
       />
     );
 }
+
+export default observer(RegisterForm)

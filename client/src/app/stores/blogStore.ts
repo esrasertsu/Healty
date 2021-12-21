@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction, runInAction } from "mobx";
+import { action, computed, observable, reaction, runInAction,makeObservable } from "mobx";
 import { toast } from "react-toastify";
 import agent from "../api/agent";
 import { BlogUpdateFormValues, IBlog, IBlogUpdateFormValues, IPostFormValues } from "../models/blog";
@@ -13,6 +13,8 @@ export default class BlogStore{
     rootStore: RootStore;
     constructor(rootStore: RootStore){
         this.rootStore = rootStore;
+        makeObservable(this);
+
         
         reaction(
             () => this.predicate.keys() ,
@@ -148,7 +150,7 @@ export default class BlogStore{
         try {
             const blogsEnvelope = await agent.Blogs.list(this.axiosParams);
             const {blogs, blogCount } = blogsEnvelope;
-            runInAction('Loading blogs',()=>{
+            runInAction(()=>{
                 blogs.forEach((blog) =>{
                   //  setActivityProps(activity,this.rootStore.userStore.user!)
                     this.blogRegistery.set(blog.id, blog);
@@ -190,7 +192,7 @@ export default class BlogStore{
             this.loadingPost = true;
             try {
                 let post = await agent.Blogs.details(id);
-                runInAction('Getting post',() => {
+                runInAction(() => {
                     this.post = post;
                     this.loadUserBlogs(post.username);
                     this.loadSameCategoryBlogs(post.subCategoryIds);
@@ -199,7 +201,7 @@ export default class BlogStore{
                 })
                 return post;
                 } catch (error) {
-                    runInAction('Getting post error',() => {
+                    runInAction(() => {
                       this.loadingPost = false
                     });
                     console.log(error);
@@ -221,7 +223,7 @@ export default class BlogStore{
             })
             const blogsEnvelope = await agent.Blogs.list(params);
             const {blogs, blogCount } = blogsEnvelope;
-            runInAction('Loading blogs',()=>{
+            runInAction(()=>{
                 this.sameCategoryBlogs =blogs;
                 this.sameCatBlogCount = blogCount;
                 this.loadingPost = false;
@@ -238,7 +240,7 @@ export default class BlogStore{
         this.submitting = true;
         try {
             const blog = await agent.Blogs.create(post);
-            runInAction('Creating post', () => {
+            runInAction( () => {
                 this.submitting = false;
                 this.updatedBlog = false;
                 this.blogRegistery.set(blog.id, blog);
@@ -247,7 +249,7 @@ export default class BlogStore{
             });
 
         } catch (error) {
-            runInAction('Creating post error', () => {
+            runInAction( () => {
                 this.submitting = false;
             });
             toast.error('Problem submitting data');
@@ -265,7 +267,7 @@ export default class BlogStore{
         this.submitting = true;
         try {
             var blogReturned = await agent.Blogs.update(post);
-            runInAction('Editing post', () => {
+            runInAction(() => {
                 this.blogRegistery.delete(post.id);
                 this.blogRegistery.set(post.id, blogReturned);
                 this.post = blogReturned;
@@ -274,7 +276,7 @@ export default class BlogStore{
                 history.push(`/blog/${post.id}`);
             });
         } catch (error) {
-            runInAction('Editing blog error', () => {
+            runInAction( () => {
                 this.submitting = false;
 
                 if((error as any).status === 400)
@@ -290,13 +292,13 @@ export default class BlogStore{
 
         try {
             var imageUrl = await agent.Blogs.updateImage(id,image);
-            runInAction('Editing post', () => {
+            runInAction( () => {
                 this.post!.photo = imageUrl;
                 setImageChange(false);
                 this.submittingPhoto = false;
             });
         } catch (error) {
-            runInAction('Editing blog error', () => {
+            runInAction(() => {
                 this.submittingPhoto = false;
 
                 if((error as any).status === 400)
@@ -312,14 +314,14 @@ export default class BlogStore{
         this.target = event.currentTarget.name;
         try {
             await agent.Blogs.delete(id);
-            runInAction('Deleting post', () => {
+            runInAction( () => {
                 this.blogRegistery.delete(id);
                 this.submitting = false;
                 this.target = '';
                 history.push(`/blog`);
             });
         } catch (error) {
-            runInAction('Deleting post error', () => {
+            runInAction( () => {
                 this.submitting = false;
                 this.target = '';
             });

@@ -8,7 +8,6 @@ import { history } from '../../index'
 import dompurify from 'dompurify';
 import PostUpdateForm from '../posts/PostUpdateForm';
 import LoginForm from '../user/LoginForm';
-import { RegisterForm } from '../user/RegisterForm';
 import { useMediaQuery } from 'react-responsive'
 import tr  from 'date-fns/locale/tr'
 
@@ -32,31 +31,23 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
   const {openModal,closeModal,modal} = rootStore.modalStore;
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
 
+  
+  const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+  const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
+
   const handleLoginClick = (e:any,str:string) => {
     e.stopPropagation();
     if(modal.open) closeModal();
 
         openModal("Giriş Yap", <>
-        <Image size='large' src='/assets/Login1.png' wrapped />
-        <Modal.Description>
+        <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
+        <Modal.Description className="loginreg">
         <LoginForm location={str} />
         </Modal.Description>
         </>,true,
-        <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={() => openRegisterModal(e,str)}>tıklayınız</span></p>) 
+        "","blurring",true) 
     }
 
-    const openRegisterModal = (e:any,str:string) => {
-        e.stopPropagation();
-        if(modal.open) closeModal();
-
-        openModal("Üye Kaydı", <>
-        <Image size='large' src='/assets/Login1.png' wrapped />
-        <Modal.Description>
-        <RegisterForm location={str} />
-        </Modal.Description>
-        </>,true,
-        <p className="modalformFooter">Zaten üye misin? <span className="registerLoginAnchor" onClick={() => handleLoginClick(e,str)}>Giriş</span></p>) 
-    }
 
  const handleShowProfileClick = (e:any) => {
   if(isLoggedIn){

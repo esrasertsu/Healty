@@ -1,38 +1,35 @@
+import { observer } from 'mobx-react';
 import React, { useContext } from 'react'
+import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom'
 import { Button, Container, Header, Icon, Image, Modal, Segment } from 'semantic-ui-react'
 import LoginForm from '../../features/user/LoginForm';
-import { RegisterForm } from '../../features/user/RegisterForm';
 import { RootStoreContext } from '../stores/rootStore';
 
-export const LoginRequiredPage = () => {
+ const LoginRequiredPage = () => {
 
     const rootStore = useContext(RootStoreContext);
     const {openModal,closeModal,modal} = rootStore.modalStore;
 
-   const handleLoginClick = (e:any) => {
-    e.stopPropagation();
-    if(modal.open) closeModal();
-    openModal("Giriş Yap", <>
-        <Image size='large' src='/assets/placeholder.png' wrapped />
-        <Modal.Description>
-        <LoginForm location={"/"} />
-        </Modal.Description>
-        </>,true,
-        <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={openRegisterModal}>tıklayınız</span></p>) 
-    }
+    
+    
+    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
-    const openRegisterModal = (e:any) => {
+    const handleLoginClick = (e:any) => {
         e.stopPropagation();
         if(modal.open) closeModal();
-        openModal("Üye Kaydı", <>
-        <Image size='large' src='/assets/placeholder.png' wrapped />
-        <Modal.Description>
-        <RegisterForm location={"/"} />
-        </Modal.Description>
-        </>,true,
-        <p className="modalformFooter">Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
-    }
+  
+            openModal("Giriş Yap", <>
+            <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
+            <Modal.Description className="loginreg">
+            <LoginForm location={"/"} />
+            </Modal.Description>
+            </>,true,
+            "","blurring",true) 
+        }
+
+ 
 
     
     return (
@@ -55,3 +52,6 @@ export const LoginRequiredPage = () => {
     </Container>
     )
 }
+
+
+export default observer(LoginRequiredPage);

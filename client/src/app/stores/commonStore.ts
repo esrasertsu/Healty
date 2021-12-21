@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction, runInAction } from "mobx";
+import { action, computed, observable, reaction, runInAction,makeObservable } from "mobx";
 import agent from "../api/agent";
 import { ICity } from "../models/location";
 import { RootStore } from "./rootStore";
@@ -8,6 +8,7 @@ export default class CommonStore {
 
     constructor(rootStore: RootStore) {
         this.rootStore = rootStore;
+        makeObservable(this);
 
         reaction(
             () => this.token,
@@ -166,28 +167,28 @@ function success(pos:any,setUserCity:any,cityRegistery:Map<any,any>,setUserCityP
         var latlng = new window.google.maps.LatLng(crd.latitude, crd.longitude);
         
     
-        geocoder!.geocode(
-          {'location': latlng}, 
-        function(results, status) {
-            if (status === "OK") {
-                var addressComponentLength =results.filter(x => x.types.includes("postal_code"))[0].address_components.length;
-                var cityName = results.filter(x => x.types.includes("postal_code"))[0].address_components[addressComponentLength-2].long_name;
-                //setUserCity(cityName);
+        // geocoder!.geocode(
+        //   {'location': latlng}, 
+        // function(results, status) {
+        //     if (status === "OK") {
+        //         var addressComponentLength =results.filter(x => x.types.includes("postal_code"))[0].address_components.length;
+        //         var cityName = results.filter(x => x.types.includes("postal_code"))[0].address_components[addressComponentLength-2].long_name;
+        //         //setUserCity(cityName);
     
-               // alert("city name is: " + cityName); 
-                     var userCity = Array.from(cityRegistery.values()).filter(x => x.text === cityName);
-                    if (cityName && userCity.length > 0) {
-                        //setUserCity(userCity[0].key); BURAYI AÇARSAN ŞEHİR OTO SEÇİLİ GELİR
-                    }
-                    else  {
-                        alert("address not found");
-                    }
-                    setUserCityPlaced(true);
-            }
-             else {
-                alert("Geocoder failed due to: " + status);
-            }
-        })
+        //        // alert("city name is: " + cityName); 
+        //              var userCity = Array.from(cityRegistery.values()).filter(x => x.text === cityName);
+        //             if (cityName && userCity.length > 0) {
+        //                 //setUserCity(userCity[0].key); BURAYI AÇARSAN ŞEHİR OTO SEÇİLİ GELİR
+        //             }
+        //             else  {
+        //                 alert("address not found");
+        //             }
+        //             setUserCityPlaced(true);
+        //     }
+        //      else {
+        //         alert("Geocoder failed due to: " + status);
+        //     }
+        // })
     
    
 

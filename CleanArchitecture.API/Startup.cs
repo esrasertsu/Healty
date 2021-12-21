@@ -198,6 +198,8 @@ namespace CleanArchitecture.API
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<ISmsSender, SmsSender>();
             services.AddScoped<IAgoraAccessor, AgoraAccessor>();
+            services.AddScoped<IGoogleReCAPTCHAAccessor, GoogleReCAPTHAAccessor>();
+            services.AddScoped<IGoogleAccessor, GoogleAccessor>();
 
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
@@ -207,6 +209,8 @@ namespace CleanArchitecture.API
             services.Configure<SendGridSettings>(Configuration.GetSection("SendGrid"));
             services.Configure<TwilioSmsSettings>(Configuration.GetSection("Twilio"));
             services.Configure<AgoraSettings>(Configuration.GetSection("Agora"));
+            services.Configure<ReCAPTCHASettingsModel>(Configuration.GetSection("Authentication:ReCAPTCHA"));
+            services.Configure<GoogleLoginAppSettings>(Configuration.GetSection("Authentication:Google"));
 
         }
 

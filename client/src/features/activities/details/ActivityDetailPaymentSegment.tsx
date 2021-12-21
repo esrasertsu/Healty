@@ -5,14 +5,13 @@ import { RootStoreContext } from '../../../app/stores/rootStore'
 import { Form as FinalForm, Field} from 'react-final-form';
 import { history } from '../../../index'
 import { observer } from 'mobx-react-lite';
-import { RegisterForm } from '../../user/RegisterForm';
-import NumberInput from '../../../app/common/form/NumberInput';
 import SelectInput from '../../../app/common/form/SelectInput';
 import { IActivity } from '../../../app/models/activity';
 import { OnChange } from 'react-final-form-listeners';
 import tr  from 'date-fns/locale/tr'
 import { format } from 'date-fns';
 import LoginForm from '../../user/LoginForm';
+import { useMediaQuery } from 'react-responsive';
 
 const numberOptions = [
     { key: '1', value: 1, text: '1' },
@@ -37,31 +36,23 @@ const numberOptions = [
   // }
 
 
+  const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+  const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
+
   const handleLoginClick = (e:any,str:string) => {
     e.stopPropagation();
     if(modal.open) closeModal();
 
         openModal("Giriş Yap", <>
-        <Image size='large' src='/assets/Login1.png' wrapped />
-        <Modal.Description>
+        <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
+        <Modal.Description className="loginreg">
         <LoginForm location={str} />
         </Modal.Description>
         </>,true,
-        <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={() => openRegisterModal(e,str)}>tıklayınız</span></p>) 
+        "","blurring",true) 
     }
 
-    const openRegisterModal = (e:any,str:string) => {
-        e.stopPropagation();
-        if(modal.open) closeModal();
-        openModal("Üye Kaydı", <>
-        <Image size='large' src='/assets/Login1.png' wrapped />
-        <Modal.Description>
-        <RegisterForm location={str} />
-        </Modal.Description>
-        </>,true,
-        <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={() => handleLoginClick(e,str)}>Giriş</span></p>) 
-    }
-
+   
 const handleCardClick = (e:any) => {
     debugger;
     // if(!isLoggedIn)

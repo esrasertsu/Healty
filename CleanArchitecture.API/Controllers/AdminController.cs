@@ -68,6 +68,12 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(command);
         }
 
+        [HttpGet("comments")]
+        public async Task<ActionResult<ListAdmins.AdminsEnvelope>> ListComments(string status, int? limit, int? offset)
+        {
+            return await Mediator.Send(new ListAdmins.Query(limit, offset));
+        }
+
 
         //[HttpGet("{username}/details")]
         //public async Task<ActionResult<Profile>> Get(string username)

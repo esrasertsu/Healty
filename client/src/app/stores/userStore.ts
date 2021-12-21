@@ -1,4 +1,4 @@
-import { action, computed, observable, runInAction } from "mobx";
+import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { HttpTransportType, HubConnection, HubConnectionBuilder, JsonHubProtocol, LogLevel } from '@microsoft/signalr';
 import { history } from "../..";
 import agent from "../api/agent";
@@ -15,6 +15,8 @@ export default class UserStore {
     rootStore:RootStore;
     constructor(rootStore: RootStore){
         this.rootStore = rootStore;
+        makeObservable(this);
+
     }
 
     @observable user: IUser | null = null;
@@ -33,6 +35,8 @@ export default class UserStore {
     @observable resendEmailVeriMessage = false;
     @observable errorMessage = "";
     @observable loadingFbLogin = false;
+    @observable loadingGoogleLogin = false;
+
     @observable loggingOut = false;
 
     @observable subMerchantForm: ISubMerchantInfo = new SubMerchantInfo();
@@ -52,6 +56,10 @@ export default class UserStore {
 
     @action setLoadingFbLogin = (value: boolean) => {
         this.loadingFbLogin = value;
+    }
+
+    @action setLoadingGoogleLogin = (value: boolean) => {
+        this.loadingGoogleLogin = value;
     }
     @action setLoggingOut = (value: boolean) => {
         this.loggingOut = value;
@@ -141,11 +149,11 @@ export default class UserStore {
         }
     }
 
-    @action userNameAndPhoneCheck = async (username: string, email: string, phone: string) =>{
+    @action userNameAndPhoneCheck = async (username: string, email: string, phone: string,token:string) =>{
         try {
             this.trainerRegistering = true;
             
-            const response = await agent.User.userNameAndPhoneCheck(username,email,phone);
+            const response = await agent.User.userNameAndPhoneCheck(username,email,phone,token);
             runInAction(()=>{
                 this.trainerRegistering = false;
             })
@@ -489,6 +497,30 @@ export default class UserStore {
               window.location.reload();
         }catch(error){
             this.setLoadingFbLogin(false);
+            throw error;
+        }
+    }
+
+    @action googleLogin = async (token:any,location:string) => {
+        this.loadingGoogleLogin = true;
+        try{
+            const user = await agent.User.googleLogin(token);
+            console.log(user);
+            runInAction(() => {
+                this.user = user;
+                this.hubConnection === null && this.createHubConnection(false);
+                this.rootStore.commonStore.setToken(user.token);
+                this.startRefreshTokenTimer(user);
+                this.rootStore.modalStore.closeModal();
+                this.setLoadingGoogleLogin(false);
+            });
+       
+            if(location!==null && location !=="")
+              history.push(location);
+            else
+              window.location.reload();
+        }catch(error){
+            this.setLoadingGoogleLogin(false);
             throw error;
         }
     }

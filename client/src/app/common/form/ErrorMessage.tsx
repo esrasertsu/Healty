@@ -11,7 +11,7 @@ export const ErrorMessage: React.FC<IProps> = ({ error, text }) => {
   debugger;
   return (
     <Message error>
-      <Message.Header>{error.statusText === "Bad Request" ? "" : error.statusText}</Message.Header>
+      <Message.Header>{error.statusText === "Bad Request" || error.statusText === "Internal Server Error" ? "" : error.statusText}</Message.Header>
       {error.data && Object.keys(error.data.errors).length > 0 && (
           <Message.List>
             {

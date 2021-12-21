@@ -6,8 +6,6 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { StarRating } from '../../app/common/form/StarRating';
 import { colors } from '../../app/models/category';
 import { observer } from 'mobx-react-lite';
-import LoginForm from '../user/LoginForm';
-import { RegisterForm } from '../user/RegisterForm';
 
 interface IProps {
     profile: IProfile,
@@ -27,46 +25,14 @@ interface IProps {
     return colors[index].value;
   }
 
-  const handleRegisterClick = (e:any,str:string) => {
-    
-    e.stopPropagation();
-    if(modal.open) closeModal();
-
-        openModal("Üye Kaydı", <>
-        <Image size='large' src='/assets/Login1.png' wrapped />
-        <Modal.Description>
-        <RegisterForm location={str} />
-        </Modal.Description>
-        </>,true,
-        <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={() => handleLoginClick(e,str)}>Giriş</span></p>) 
-    }
-
-    const handleLoginClick = (e:any,str:string) => {
-      e.stopPropagation();
-      if(modal.open) closeModal();
-
-          openModal("Giriş Yap", <>
-          <Image size='large' src='/assets/Login1.png' wrapped />
-          <Modal.Description>
-          <LoginForm location={str} />
-          </Modal.Description>
-          </>,true,
-           <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={() => handleRegisterClick(e,str)}>tıklayınız</span></p>) 
-      }
 
 
   const handleCardClick = (e:any) => {
     debugger;
     e.stopPropagation() ;
-    //     if(!isLoggedIn)
-    // {    var str = `/profile/${profile.userName}`;
-    //      handleLoginClick(e,str);
-    // }
-    // else
-    // {
+  
       setLoadingProfile(true);
       history.push(`/profile/${profile.userName}`)
-   // }
       
 }
   return (

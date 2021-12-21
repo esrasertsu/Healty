@@ -19,21 +19,33 @@ namespace CleanArchitecture.Application.User
         {
             public string Email { get; set; }
             public string Origin { get; set; }
+            public string ReCaptcha { get; set; }
+
         }
 
         public class Handler : IRequestHandler<Query,bool>
         {
             private readonly UserManager<AppUser> _userManager;
             private readonly IEmailSender _emailSender;
+            private readonly IGoogleReCAPTCHAAccessor _reCAPTCHAAccessor;
 
-            public Handler(UserManager<AppUser> userManager, IEmailSender emailSender)
+            public Handler(UserManager<AppUser> userManager, IEmailSender emailSender, IGoogleReCAPTCHAAccessor reCAPTCHAAccessor)
             {
                 _userManager = userManager;
                 _emailSender = emailSender;
+                _reCAPTCHAAccessor = reCAPTCHAAccessor;
+
             }
 
             public async Task<bool> Handle(Query request, CancellationToken cancellationToken)
             {
+                var _googleReCAPTHA = await _reCAPTCHAAccessor.VerificateRecaptcha(request.ReCaptcha);
+
+                if (!_googleReCAPTHA.Success && _googleReCAPTHA.Score <= 0.5)
+                {
+                    throw new RestException(HttpStatusCode.BadRequest, new { Email = "Geçersiz giriş." });
+                }
+
                 var user = await _userManager.FindByEmailAsync(request.Email);
 
                 if (user == null)

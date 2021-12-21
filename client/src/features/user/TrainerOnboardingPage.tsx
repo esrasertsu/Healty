@@ -1,20 +1,16 @@
 import React from 'react';
 import {RouteComponentProps} from 'react-router-dom';
-import queryString from 'query-string';
-import { Button, Container, Grid, Header, Icon, Image, Segment } from 'semantic-ui-react';
-import agent from '../../app/api/agent';
-import { toast } from 'react-toastify';
+import { Container, Grid, Header, Image, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import FormPage1 from './FormPage1';
 import { useMediaQuery } from 'react-responsive'
 
 const TrainerOnboardingPage : React.FC<RouteComponentProps> = ({location}) =>{
-    const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
-
     return(
+        <>
         <Container className="pageContainer">
 
-         <Segment className="trainer_onboarding_announcement">
+         {/* <Segment className="trainer_onboarding_announcement">
              <div style={{display:"flex",  alignItems:"center", justifyContent:"center"}}>
              <Image src="/icons/megaphone.png"  />   
              <span>İlk üyelere özel %30 indirimli komisyon fırsatını kaçırmayın!</span>
@@ -22,7 +18,7 @@ const TrainerOnboardingPage : React.FC<RouteComponentProps> = ({location}) =>{
              <div>
                  <Button content="Detaylı Bilgi" style={{background:"#ef8139fc", color:"white"}}  />
              </div>
-         </Segment>
+         </Segment> */}
         <Grid style={{marginTop:"20px"}} stackable>
             <Grid.Row>
                 <Grid.Column width="8">
@@ -36,9 +32,12 @@ const TrainerOnboardingPage : React.FC<RouteComponentProps> = ({location}) =>{
                 </Grid.Column>
                 
             </Grid.Row>
-
+           
         </Grid>
+       
        </Container> 
+        
+        </>
     )
 };
 

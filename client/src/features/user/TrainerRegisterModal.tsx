@@ -8,7 +8,7 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import FormPage1 from './FormPage1';
 import { history } from '../..';
 
-const TrainerForm:React.FC = () =>{
+const TrainerForm = () =>{
     const rootStore = useContext(RootStoreContext);
     const {openModal,closeModal,modal} = rootStore.modalStore;
     const {trainerForm, setTrainerForm} = rootStore.userStore;

@@ -37,15 +37,14 @@ const VerifyEmail : React.FC<RouteComponentProps> = ({location}) =>{
     }, [Status.Failed, Status.Success, token, email])
 
     const handleLoginClick = (e:any) => {
-        e.stopPropagation();
-  
+        
             openModal("Giriş Yap", <>
-            <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.png' wrapped />
+            <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
             <Modal.Description className="loginreg">
             <LoginForm location={"/"} />
             </Modal.Description>
             </>,true,
-             "") 
+            "","blurring",true) 
         }
 
         const handleConfiedEmailResend = () => {

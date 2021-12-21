@@ -17,6 +17,7 @@ export interface IUserFormValues {
     password: string;
     displayName?: string;
     userName?: string;
+    reCaptcha:string;
 }
 
 export interface ITrainerCreationFormValues {

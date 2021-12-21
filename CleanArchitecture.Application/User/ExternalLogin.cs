@@ -62,7 +62,9 @@ namespace CleanArchitecture.Application.User
                     Email = userInfo.Email,
                     UserName = "fb_" + userInfo.Id,
                     Role = Role.User,
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    Issuer = "Facebook"
+
                     // Token = _jwtGenerator.CreateToken(user),
                     // Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
                     //   Role = 

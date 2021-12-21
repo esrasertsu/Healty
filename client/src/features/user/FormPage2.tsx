@@ -19,6 +19,7 @@ import agent from '../../app/api/agent';
 import { action } from 'mobx';
 import IBAN from 'iban';
 import SubMerchantDetails from '../subMerchant/SubMerchantDetails';
+import Documents from '../profiles/Documents';
 
 interface IProps{
   id:string;
@@ -156,7 +157,8 @@ useEffect(() => {
      if(values.subCategoryIds.length === 0){
       messages.push("Branş / Alt kategori seçimi zorunludur.");
     }
-     if(docs.length === 0){
+     if(docs.length === 0 ){
+       if(trainerForm.certificates.length === 0)
       messages.push("Belge yüklemek zorunludur.")
 
     }
@@ -256,9 +258,7 @@ useEffect(() => {
           submitting,
           submitError
         }) => (
-          <Form onSubmit={handleSubmit} error>
-           
-           {/* <Label content="<< Geri" color="orange" onClick={handlePreviousButtonClick} style={{cursor:"pointer", marginBottom:"20px"}}/> */}
+          <Form className='trainerRegisterForm' onSubmit={handleSubmit} error>
            <Accordion fluid styled>
            <Accordion.Title
           active={activeIndex === 0}
@@ -337,21 +337,24 @@ useEffect(() => {
 
                  <label>Yeterlilik Belgesi (Diploma/Sertifika)*</label>
                  {trainerForm.certificates && trainerForm.certificates.length !== 0 &&
-                 <Segment>
-                 <List>
-                  {trainerForm.certificates.map((f, index)=> 
-                    <List.Item key={"cert_"+index} style={{display:"flex"}}>
-                    <List.Icon name='file' />
-                    <List.Content style={{display:"flex"}}>
-                      <List.Header as='a'>{f.name}</List.Header> 
-                      <Button color="red" size="mini" disabled={deletingDocument} onClick={() => handleDeleteDoc(f.id)} style={{marginLeft:"10px", cursor:"pointer"}} content={"Sil"} icon="trash"></Button>
-                    </List.Content>
-                  </List.Item>
-                  )}
-                 </List>
-                 </Segment>
+                 <div style={{margin:"10px 0 30px  0"}}>
+                 <Documents docs={trainerForm.certificates} setDocuments={setDocs} setFiles={setFileDocs} setUpdateEnabled={setUpdateEnabled}/>
+                 </div>
+                //  <Segment>
+                //  <List>
+                //   {trainerForm.certificates.map((f, index)=> 
+                //     <List.Item key={"cert_"+index} style={{display:"flex"}}>
+                //     <List.Icon name='file' />
+                //     <List.Content style={{display:"flex"}}>
+                //       <List.Header as='a'>{f.name}</List.Header> 
+                //       <Button color="red" size="mini" disabled={deletingDocument} onClick={() => handleDeleteDoc(f.id)} style={{marginLeft:"10px", cursor:"pointer"}} content={"Sil"} icon="trash"></Button>
+                //     </List.Content>
+                //   </List.Item>
+                //   )}
+                //  </List>
+                //  </Segment>
                  }      
-                 {docs.length === 0 && <FileUploadDropzone setDocuments={setDocs} setFiles={setFileDocs} setUpdateEnabled={setUpdateEnabled} /> }
+                 {/* {docs.length === 0 && <FileUploadDropzone setDocuments={setDocs} setFiles={setFileDocs} setUpdateEnabled={setUpdateEnabled} /> } */}
                  {docs.length !== 0 &&
                  <Segment>
                  <List>

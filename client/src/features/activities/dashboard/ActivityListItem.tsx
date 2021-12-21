@@ -3,62 +3,29 @@ import { Item, Segment, Icon, Label, Card, Popup, Image, Modal } from 'semantic-
 import { IActivity } from '../../../app/models/activity';
 import { format } from 'date-fns';
 import {ActivityListItemAttendees } from './ActivityListItemAttendees';
-import { history } from '../../../index'
 import { StarRating } from '../../../app/common/form/StarRating';
 import { colors } from '../../../app/models/category';
-import LoginForm from '../../user/LoginForm';
 import { RootStoreContext } from '../../../app/stores/rootStore';
-import { RegisterForm } from '../../user/RegisterForm';
 import { useMediaQuery } from 'react-responsive'
 import tr  from 'date-fns/locale/tr'
+import { useHistory } from 'react-router-dom';
 
 export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
     const rootStore = useContext(RootStoreContext);
     const {isLoggedIn,user} = rootStore.userStore;
-    const {openModal,closeModal,modal} = rootStore.modalStore;
 
     const isTabletOrMobile = useMediaQuery({ query: '(max-width: 767px)' })
-
+    const history = useHistory();
     const host = activity.attendees.filter(x => x.isHost === true)[0];
     const index = activity.categories && activity.categories.length>0 ? colors.findIndex(x => x.key === activity.categories[0].text): 0;
     const color = colors[index].value;
 
-    const handleLoginClick = (e:any,str:string) => {
-        e.stopPropagation();
-        if(modal.open) closeModal();
-
-            openModal("Giriş Yap", <>
-            <Image size='large' src='/assets/Login1.png' wrapped />
-            <Modal.Description>
-            <LoginForm location={str} />
-            </Modal.Description>
-            </>,true,
-            <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={() => openRegisterModal(e,str)}>tıklayınız</span></p>) 
-        }
     
-        const openRegisterModal = (e:any,str:string) => {
-            e.stopPropagation();
-            if(modal.open) closeModal();
-            openModal("Üye Kaydı", <>
-            <Image size='large' src='/assets/Login1.png' wrapped />
-            <Modal.Description>
-            <RegisterForm location={str} />
-            </Modal.Description>
-            </>,true,
-            <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={() => handleLoginClick(e,str)}>Giriş</span></p>) 
-        }
 
     const handleCardClick = (e:any) => {
         debugger;
-        // if(!isLoggedIn)
-        // {    var str = `/activities/${activity.id}`;
-        //     handleLoginClick(e,str); 
-        // }
-        // else
-        // {
+       
             history.push(`/activities/${activity.id}`);
-        //}
-          
     }
 
     return (

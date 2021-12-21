@@ -18,6 +18,7 @@ namespace CleanArchitecture.Domain
         public string DisplayName { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string Issuer { get; set; }
         public string Title { get; set; }
         public decimal ExperienceYear { get; set; }
         public string Experience { get; set; }

@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from 'react'
 import {  Button, Comment } from 'semantic-ui-react'
-import { observer } from 'mobx-react-lite';
+import { observer } from 'mobx-react';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { formatDistance } from 'date-fns';
 import { Link } from 'react-router-dom';

@@ -4,7 +4,6 @@ import { Form as FinalForm , Field } from 'react-final-form';
 import { Accordion, Button, Confirm, Form,  Icon, List, Message,Segment, Tab } from 'semantic-ui-react';
 import DropdownInput from '../../app/common/form/DropdownInput';
 import DropdownMultiple from '../../app/common/form/DropdownMultiple';
-import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
 import TextInput from '../../app/common/form/TextInput';
 import FileUploadDropzone from '../../app/common/util/FileUploadDropzone';

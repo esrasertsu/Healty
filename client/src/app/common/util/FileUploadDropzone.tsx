@@ -1,7 +1,12 @@
 import React, {useCallback, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
 import { Header, Icon } from 'semantic-ui-react'
+import { AddTwoTone } from '@material-ui/icons';
+import {
+ 
+  Avatar,
 
+} from '@material-ui/core';
 interface IProps{
     setFiles: (files: object[]) => void;
     setDocuments: (files: object[]) => void;
@@ -9,12 +14,12 @@ interface IProps{
 }
 
 const dropzoneStyles ={
-    border: 'dashed 3px',
+    border: 'dashed 1px',
     borderColor: '#eee',
     borderRadius: '5px',
-    paddingTop: '30px',
+    display: 'flex',
     textAlign: 'center' as 'center',
-    height: '200px'
+    height: '100%'
 }
 
 const dropzoneActive = {
@@ -26,7 +31,7 @@ const FileUploadDropzone: React.FC<IProps> = ({setFiles,setDocuments, setUpdateE
   const onDrop = useCallback(acceptedFiles => {
     setDocuments(acceptedFiles);
     setUpdateEnabled(true);
-    setFiles(acceptedFiles.map((file:object) => Object.assign(file, 
+    setFiles(acceptedFiles.map((file:any) => Object.assign(file, 
         {
             preview : URL.createObjectURL(file)
         })
@@ -40,9 +45,12 @@ const FileUploadDropzone: React.FC<IProps> = ({setFiles,setDocuments, setUpdateE
     
     <div {...getRootProps()} style={isDragActive ? {...dropzoneStyles, ...dropzoneActive}: dropzoneStyles}>
       <input {...getInputProps()} />
-      <Icon name='upload' size='huge'/>
-      <Header content='Dosyaları buraya sürükleyin ya da tıklayın.' />
+      <Avatar className="docAvatarAddWrapper">
+            <AddTwoTone className='addTwoTone' fontSize="large" />
+       </Avatar>
     </div>
+
+    
   )
 }
 

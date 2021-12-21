@@ -12,7 +12,6 @@ import App from './app/layout/App';
 import * as serviceWorker from './serviceWorker';
 import ScrollToTop from './app/layout/ScrollToTop';
 import dateFnsLocalizer from 'react-widgets-date-fns';
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import format from "date-fns/format";
 import getDay from "date-fns/getDay";
 import { tr } from "date-fns/locale";

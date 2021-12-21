@@ -1,5 +1,5 @@
 import { HttpTransportType, HubConnection, HubConnectionBuilder, JsonHubProtocol, LogLevel } from '@microsoft/signalr';
-import {observable, action, computed, runInAction, reaction, toJS} from 'mobx';
+import {observable, action, computed, runInAction, reaction, toJS,makeObservable} from 'mobx';
 import { SyntheticEvent } from 'react';
 import { toast } from 'react-toastify';
 import { history } from '../..';
@@ -16,6 +16,8 @@ export default class ActivityStore {
     rootStore:RootStore;
     constructor(rootStore: RootStore){
         this.rootStore = rootStore;
+        makeObservable(this);
+
 
         reaction(
             () => this.predicate.keys(),
@@ -316,7 +318,7 @@ export default class ActivityStore {
         try {
             const activitiesEnvelope = await agent.Activities.list(this.axiosParams);
             const {activities, activityCount } = activitiesEnvelope;
-            runInAction('Loading activities',() => {
+            runInAction(() => {
                 activities.forEach((activity) =>{
                     setActivityProps(activity,this.rootStore.userStore.user!)
                     this.activityRegistery.set(activity.id, activity);
@@ -327,7 +329,7 @@ export default class ActivityStore {
             })
             } catch (error) {
                 console.log(error);
-                runInAction('Loading activities error',() => {
+                runInAction(() => {
                   this.loadingInitial = false
                 });
             }
@@ -339,7 +341,7 @@ export default class ActivityStore {
         try {
             const ordersEnvelope = await agent.Order.list(5, this.orderPage ? this.orderPage * 5 : 0);
             const {orderList, orderCount } = ordersEnvelope;
-            runInAction('Loading activities',() => {
+            runInAction(() => {
                 orderList.forEach((order) =>{
                     this.orderRegistery.set(order.id, order);
                 });
@@ -348,7 +350,7 @@ export default class ActivityStore {
             })
             } catch (error) {
                 console.log(error);
-                runInAction('Loading orders error',() => {
+                runInAction(() => {
                   this.loadingOrders = false
                 });
             }
@@ -366,7 +368,7 @@ export default class ActivityStore {
             this.loadingActivity = true;
             try {
                 let activity = await agent.Activities.details(id);
-                runInAction('Getting activity',() => {
+                runInAction(() => {
                     setActivityProps(activity,this.rootStore.userStore.user!)
                     this.rootStore.categoryStore.loadAllCategoryList();
                     this.activity = activity;
@@ -374,7 +376,7 @@ export default class ActivityStore {
                 })
                 return activity;
                 } catch (error) {
-                    runInAction('Getting activity error',() => {
+                    runInAction(() => {
                       this.loadingActivity = false
                     });
                     console.log(error);
@@ -388,13 +390,13 @@ export default class ActivityStore {
             this.loadingOrder = true;
             try {
                 let order = await agent.Order.details(id);
-                runInAction('Getting activity',() => {
+                runInAction(() => {
                     this.order = order;
                     this.loadingOrder = false;
                 })
                 return order;
                 } catch (error) {
-                    runInAction('Getting activity error',() => {
+                    runInAction(() => {
                       this.loadingOrder = false
                     });
                     console.log(error);
@@ -427,7 +429,7 @@ export default class ActivityStore {
             // activity.attendees = attendees;
             // activity.comments = [];
             // activity.isHost = true;            
-            runInAction('Creating activity', () => {
+            runInAction( () => {
                 setActivityProps(newAct,this.rootStore.userStore.user!)
                 this.activityRegistery.set(newAct.id, newAct);
                 this.activity = newAct;
@@ -435,7 +437,7 @@ export default class ActivityStore {
                 history.push(`/activities/${newAct.id}`);
             });
         } catch (error) {
-            runInAction('Creating activity error', () => {
+            runInAction(() => {
                 this.submitting = false;
             });
             toast.error('Problem submitting data');
@@ -447,7 +449,7 @@ export default class ActivityStore {
         this.submitting = true;
         try {
             var activityReturned = await agent.Activities.update(activity);
-            runInAction('Editing activity', () => {
+            runInAction(() => {
             setActivityProps(activityReturned,this.rootStore.userStore.user!)
             this.activityRegistery.delete(activity.id);
             this.activityRegistery.set(activity.id, activityReturned);
@@ -457,7 +459,7 @@ export default class ActivityStore {
 
             });
         } catch (error) {
-            runInAction('Editing activity error', () => {
+            runInAction(() => {
                 this.submitting = false;
             });
             
@@ -471,14 +473,14 @@ export default class ActivityStore {
         this.target = event.currentTarget.name;
         try {
             await agent.Activities.delete(id);
-            runInAction('Deleting activitiy', () => {
+            runInAction( () => {
                 this.activityRegistery.delete(id);
                 this.submitting = false;
                 this.target = '';
                 history.push(`/activities`);
             });
         } catch (error) {
-            runInAction('Deleting activitiy error', () => {
+            runInAction( () => {
                 this.submitting = false;
                 this.target = '';
             });
@@ -502,7 +504,7 @@ export default class ActivityStore {
 
 
        }catch(err){
-        runInAction('Deleting activitiy error', () => {
+        runInAction(() => {
             this.loading = false;
         });
         toast.error('Problem signing up to activities');
@@ -525,7 +527,7 @@ export default class ActivityStore {
                 }
             })
         } catch (error) {
-            runInAction('Deleting activitiy error', () => {
+            runInAction( () => {
                 this.loading = false;
             });
             toast.error('Problem cancelling attendance');
@@ -606,7 +608,7 @@ debugger;
         try {
             form.id = this.activity!.id;
             const result = await agent.Activities.editOnlineJoinInfo(form);
-            runInAction('Updating join details', () => {
+            runInAction(() => {
                 this.submittingJoinInfo = false;
                 this.activity!.activityJoinDetails = new ActivityOnlineJoinInfo();
                 this.activity!.activityJoinDetails.activityUrl = form.activityUrl;
@@ -617,7 +619,7 @@ debugger;
 
        });
         } catch (error) {
-            runInAction('Updating join details error', () => {
+            runInAction(() => {
                 this.submittingJoinInfo = false;
             });
             toast.error('Problem updating join details');
@@ -631,14 +633,14 @@ debugger;
 
         try {
             const result = await agent.Payment.getActivityPaymentPage(count,activityId);
-            runInAction('Opening payment content', () => {
+            runInAction(() => {
                 this.loadingPaymentPage = false;
                console.log(result);
             });
             return result;
 
         } catch (error) {
-            runInAction('Opening payment content error', () => {
+            runInAction( () => {
                 this.loadingPaymentPage = false;
             });
             toast.error('Problem opening payment content');
@@ -650,14 +652,14 @@ debugger;
         this.loadingPaymentPage = true;
         try {
             const res = await agent.Payment.getUserPaymentDetailedInfo(details);
-            runInAction('Opening payment content', () => {
+            runInAction(() => {
                 this.loadingPaymentPage = false;
             });
 
             return res;
 
         } catch (error) {
-            runInAction('Opening payment content error', () => {
+            runInAction(() => {
                 this.loadingPaymentPage = false;
             });
             toast.error('Problem opening payment content');
@@ -669,13 +671,13 @@ debugger;
         this.loadingPaymentPage = true;
         try {
             const res = await agent.Payment.processPayment(details);
-            runInAction('Processing payment', () => {
+            runInAction(() => {
                 this.loadingPaymentPage = false;
             });
             return res;
 
         } catch (error) {
-            runInAction('Processing payment error', () => {
+            runInAction(() => {
                 this.loadingPaymentPage = false;
             });
             toast.error('Problem Processing payment');
@@ -687,12 +689,12 @@ debugger;
         this.loadingRefundPaymentPage = true;
         try {
             const res = await agent.Payment.refundPayment(paymentTransactionId, activityId, orderId);
-            runInAction('Processing refund payment', async() => {
+            runInAction(async() => {
                 this.loadingRefundPaymentPage = false;
                 if(res.status === "success")
                 {
                     let activity = await this.loadActivity(activityId);                    
-                    runInAction('Processing refund payment', () => {
+                    runInAction(() => {
                         activity.isGoing = false;
                         this.deleteActivityRegisteryItem(activity.id);
                         this.activityRegistery.set(activity.id, res);
@@ -707,7 +709,7 @@ debugger;
             return res;
 
         } catch (error) {
-            runInAction('Processing refund payment error', () => {
+            runInAction( () => {
                 this.loadingRefundPaymentPage = false;
             });
             toast.error('Problem Processing refund payment');
@@ -720,7 +722,7 @@ debugger;
         this.loadingRefundPaymentPage = true;
         try {
            await agent.Order.deleteOrder(orderId);
-            runInAction('Processing deleting order', async() => {
+            runInAction(async() => {
                 this.deleteOrderRegisteryItem(orderId);
                 this.loadingRefundPaymentPage = false;
                // this.target = '';
@@ -728,7 +730,7 @@ debugger;
             });
 
         } catch (error) {
-            runInAction('Processing refund payment error', () => {
+            runInAction(() => {
                 this.loadingRefundPaymentPage = false;
             });
             toast.error('Problem Processing refund payment');

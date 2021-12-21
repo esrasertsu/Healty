@@ -1,4 +1,4 @@
-import {observable, action, computed, runInAction, reaction} from 'mobx';
+import {observable, action, computed, runInAction, reaction,makeObservable} from 'mobx';
 import { toast } from 'react-toastify';
 import agent from '../api/agent';
 import { setMessageProps } from '../common/util/util';
@@ -12,7 +12,7 @@ export default class MessageStore {
     rootStore:RootStore;
     constructor(rootStore: RootStore){
         this.rootStore = rootStore;
-
+        makeObservable(this);
         reaction(
             () => this.chatRoomId,
             () => {
@@ -89,7 +89,7 @@ export default class MessageStore {
         this.loadingChatRooms = true;
         try {
             const chatRooms = await agent.Messages.list();
-            runInAction('Loading chat rooms',() => {
+            runInAction(() => {
                 
                 this.chatRooms = chatRooms;
                 this.loadingChatRooms = false;
@@ -101,7 +101,7 @@ export default class MessageStore {
             })
             } catch (error) {
                 console.log(error);
-                runInAction('Loading chat rooms error',() => {
+                runInAction(() => {
                   this.loadingChatRooms = false
                 });
             }
@@ -114,7 +114,7 @@ export default class MessageStore {
             // runInAction('Seen message', () => {
             // });
         } catch (error) {
-            runInAction('Seen message error', () => {
+            runInAction( () => {
               message.seen=false;
             });
             console.log(error);
@@ -156,7 +156,7 @@ export default class MessageStore {
             try {
                 const messagesEnvelope = await agent.Messages.listMessages(id,LIMIT,this.page);
                 const {messages, messageCount } = messagesEnvelope;
-                runInAction('Loading messages',() => {
+                runInAction(() => {
                     messages.forEach(async(message) =>{
                         setMessageProps(message,this.rootStore.userStore.user!);
                         messageList.push(message);
@@ -189,7 +189,7 @@ export default class MessageStore {
                 })
                 } catch (error) {
                     console.log(error);
-                    runInAction('Loading messages error',() => {
+                    runInAction(() => {
                       this.loadingMessages = false
                     });
                 }

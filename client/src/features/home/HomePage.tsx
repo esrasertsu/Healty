@@ -2,13 +2,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Button, Container, Header, Segment, Image, Grid, Card, Icon, Form, GridColumn, Label, Modal, Loader } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import LoginForm from '../user/LoginForm';
-import { RegisterForm } from '../user/RegisterForm';
-import TextInput from '../../app/common/form/TextInput';
-import { Form as FinalForm, Field } from "react-final-form";
-import SearchArea from './SearchArea';
 import { history } from '../../index'
-import TrainerForm from '../user/TrainerRegisterModal';
-import Statistics from './Statistics';
 import { useMediaQuery } from 'react-responsive'
 import ActivitySearchArea from './ActivitySearchArea';
 import { observer } from 'mobx-react-lite';
@@ -73,51 +67,35 @@ const HomePage = () => {
 
     const handleFinalFormSubmit = (values: any) => {
     }
-
+  
     const handleLoginClick = (e:any) => {
       e.stopPropagation();
       if(modal.open) closeModal();
-
+  
           openModal("Giriş Yap", <>
-          <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.png' wrapped />
+          <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
           <Modal.Description className="loginreg">
           <LoginForm location={"/"} />
           </Modal.Description>
           </>,true,
-           <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={handleRegisterClick}>tıklayınız</span></p>) 
+          "","blurring",true) 
       }
+  
 
-      const handleRegisterClick = (e:any) => {
+        // const handleTrainerFormClick= (e:any) => {
     
-        e.stopPropagation();
-        if(modal.open) closeModal();
+        //   e.stopPropagation();
+        //   if(modal.open) closeModal();
 
-            openModal("Üye Kaydı", <>
-            <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.png' wrapped />
-            <Modal.Description className="loginreg">
-            <RegisterForm location={"/"} />
-            </Modal.Description>
-            </>,true,
-            <div className="modalformFooter">
-            <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>
-            <p>Uzman başvuru için <span className="registerLoginAnchor" onClick={handleTrainerFormClick}>tıkla!</span></p>
-            </div>) 
-        }
-
-        const handleTrainerFormClick= (e:any) => {
-    
-          e.stopPropagation();
-          if(modal.open) closeModal();
-
-              openModal("Uzman Başvuru Formu", <>
-              <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/welcome1.png' wrapped />
-              <Modal.Description>
-              <TrainerForm />
-              </Modal.Description>
-              </>,true,
-              <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
+        //       openModal("Uzman Başvuru Formu", <>
+        //       <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/welcome1.png' wrapped />
+        //       <Modal.Description>
+        //       <TrainerForm />
+        //       </Modal.Description>
+        //       </>,true,
+        //       <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
              
-          }
+        //   }
   
     return (
       <>

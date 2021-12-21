@@ -10,8 +10,8 @@ import { ITrainerCreationFormValues, ITrainerFormValues, TrainerFormValues } fro
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { OnChange } from 'react-final-form-listeners';
 import { useMediaQuery } from 'react-responsive'
-import { action } from 'mobx';
-import FormPage2 from './FormPage2';
+import { action, runInAction } from 'mobx';
+import ReCAPTCHA from "react-google-recaptcha";
 import PhoneNumberInput from '../../app/common/form/PhoneNumberInput';
 import { history } from '../..';
 import agent from '../../app/api/agent';
@@ -53,6 +53,7 @@ const FormPage1:React.FC = () =>{
     const [categoryOptions, setCategoryOptions] = useState<ICategory[]>([]);
     const {allCategoriesOptionList} = rootStore.categoryStore;
 
+    const recaptchaRef = React.createRef<any>();
 
     useEffect(() => {
       allCategoriesOptionList.filter(x=>x.parentId===null).map(option => (
@@ -60,26 +61,31 @@ const FormPage1:React.FC = () =>{
     ));
     }, [allCategoriesOptionList])
 
-   const handleSubmitTrainerForm = (values:ITrainerCreationFormValues) =>{
+   const handleSubmitTrainerForm = async(values:ITrainerCreationFormValues) =>{
     
     if(!values.hasSignedContract)
     {
       setcontractErrorMessage("Aydınlatma metni'ni okuyup onaylamanız gerekmektedir.")
     }else{
-      userNameAndPhoneCheck(tranierCreationForm.username, tranierCreationForm.email, tranierCreationForm.phone).then(action((response) => {
-        if(response)
-        {
-            if(modal.open) closeModal();
-            setoptInputDisabled(false);
-            setCountDownDate(Date.now() +180000);
-            setshowPasswordModal(true);
+      const token = await recaptchaRef.current.executeAsync();
+      runInAction(() =>{
+        userNameAndPhoneCheck(tranierCreationForm.username, tranierCreationForm.email, tranierCreationForm.phone,token)
+        .then(action((response) => {
+          if(response)
+          {
+              if(modal.open) closeModal();
+              setoptInputDisabled(false);
+              setCountDownDate(Date.now() +180000);
+              setshowPasswordModal(true);
+          }
         }
-      }
-      )).catch((error) => 
-        (
-        {
-        [FORM_ERROR]: error,
-      }))
+        )).catch((error) => 
+          (
+          {
+          [FORM_ERROR]: error,
+        }))
+      })
+     
     }
    }
 
@@ -503,7 +509,11 @@ const FormPage1:React.FC = () =>{
               style={{width:"150px"}}
             />
           </div>
-
+          <ReCAPTCHA
+          ref={recaptchaRef}
+          size="invisible"
+          sitekey={process.env.REACT_APP_GOOGLE_RECAPTCHA_KEY!}
+        />
           </Form>
         )}
       />

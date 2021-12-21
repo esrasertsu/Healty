@@ -1,4 +1,4 @@
-import { action, observable, runInAction } from "mobx";
+import { action, observable, runInAction,makeObservable } from "mobx";
 import agent from "../api/agent";
 import { RootStore } from "./rootStore";
 import { IAllCategoryList, IAllCategoryOption, ICategory, IPredicate, ISubCategory } from "../models/category";
@@ -6,7 +6,9 @@ import { IAllCategoryList, IAllCategoryOption, ICategory, IPredicate, ISubCatego
 export default class CategoryStore{
     rootStore: RootStore
     constructor(rootStore: RootStore){
-        this.rootStore = rootStore
+        this.rootStore = rootStore;
+        makeObservable(this);
+
     }
 
     @observable category: ICategory | null = null;

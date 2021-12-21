@@ -101,6 +101,9 @@ body {
   ;
 }
 
+.ui.error.message{
+  max-width: fit-content !important;
+}
 
 @keyframes slideBg {
    
@@ -264,6 +267,10 @@ h1, h2, h3, h4, h5 {
   font-family:  AssistantRegular, Arial,  sans-serif !important;
   /* font-family:  "Inter","Helvetica Neue","Segoe UI","Fira Sans",Roboto,Oxygen,Ubuntu,"Droid Sans","Arial",sans-serif!important */
 
+}
+
+.ui.modal{
+  overflow: hidden !important;
 }
 
 .defaultButtonColor{
@@ -870,6 +877,13 @@ a.ui.card:hover {
     margin-right: auto!important;
 }
 
+.ui.text.container {
+  margin: 40px 0 41px 70px !important;
+  text-align: left;
+    font-family: AssistantRegular, Arial, sans-serif;
+    max-width: 500px !important;
+}
+
 .ui.grid.container {
   width: calc(1250px + 2rem)!important;
 }
@@ -906,6 +920,13 @@ a.ui.card:hover {
    animation-fill-mode: both;
    background-position-y: -260px !important;
  }
+
+ .ui.text.container {
+  margin: 40px 0 41px 150px !important;
+  text-align: left;
+    font-family: AssistantRegular, Arial, sans-serif;
+    max-width: 500px !important;
+}
 }
 
 @media (min-width: 1200px){
@@ -962,8 +983,17 @@ a.ui.card:hover {
    background-size: cover !important;
    backface-visibility: hidden !important;
    background-image: url("../layout/img/profiles.jpg") !important;
-   background-position-y: -285px !important; 
+   background-position-y: -65px !important; 
 }
+}
+
+@media (min-width: 769px) and (max-width:1199px){
+  .ui.text.container{
+    margin: 40px 0 40px 150px !important;
+    text-align: left;
+    font-family: AssistantRegular, Arial, sans-serif;
+    max-width: 500px !important;
+  }
 }
 
 @media (min-width: 769px){
@@ -974,12 +1004,7 @@ a.ui.card:hover {
     padding-left: 32px;
     padding-right: 32px;
 }
-.ui.text.container{
-  margin-left: 150px !important;
-  text-align: left;
-  font-family: AssistantRegular, Arial, sans-serif;
-  max-width: 500px !important;
-}
+
 .ui.top.fixed.menu{
   padding: 0 96px;
 
@@ -1156,7 +1181,6 @@ max-width: 95%;
    background-size: cover !important;
    backface-visibility: hidden !important;
    background-image: url("../layout/img/profiles.jpg") !important;
-   background-position-y: -80px !important; 
 }
 
   .ui.grid>[class*="twelve wide"].column.profieHeader_segment_column,
@@ -2009,10 +2033,11 @@ button, input, optgroup, select, textarea {
     width: 100%;
     display: flex;
     align-items: center;
-     background-position: left top !important;
+     background-position: right top !important;
      background-repeat: no-repeat !important;
      backface-visibility: hidden !important;
      background-image: url("../layout/img/profiles.jpg") !important;
+     background-size: cover !important;
   }
   .masthead_page.profileDashboard
   {
@@ -2625,4 +2650,60 @@ button, input, optgroup, select, textarea {
 
 .agora_video_player{
   object-fit: contain !important;
+}
+
+
+
+.docCardAddAction{
+             height: 100%;
+             color: black; 
+            
+}
+
+.docCardAddAction .MuiCardContent-root{
+  padding: 0 !important;
+  height: 100%;
+}
+
+.docCardAddAction .MuiCardActionArea-root{
+  height: 100%;
+}
+
+.docCardAddAction .MuiTouchRipple-root{
+  opacity: .2;
+}
+
+.docCardAddAction:hover {
+  border: dashed 1px rgb(48, 120, 179);
+    background: aliceblue;
+}
+
+.MuiAvatar-colorDefault {
+  color: #fafafa;
+  background-color: #5569ff;
+}
+
+
+.docAvatarAddWrapper{
+  background: rgb(48, 120, 179);
+  margin:auto;
+    color: #5569ff;
+}
+
+.addTwoTone{
+  font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    width: 64px;
+    height: 64px;
+}
+
+
+.trainerRegisterForm .field{
+  margin-bottom: 2.2rem !important;
+  margin-top:10px !important;
+}
+
+.grecaptcha-badge{
+  bottom: 45px !important;
 }

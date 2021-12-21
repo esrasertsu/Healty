@@ -6,7 +6,7 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import {history} from '../../index';
 import NavSearchArea from './NavSearchArea';
 import LoginForm from '../user/LoginForm';
-import { RegisterForm } from '../user/RegisterForm';
+import  RegisterForm from '../user/RegisterForm';
 import TrainerForm from '../user/TrainerRegisterModal';
 import { useMediaQuery } from 'react-responsive'
 
@@ -28,12 +28,12 @@ const NavBar: React.FC = () => {
         if(modal.open) closeModal();
   
             openModal("Giriş Yap", <>
-            <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.png' wrapped />
+            <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
             <Modal.Description className="loginreg">
             <LoginForm location={"/"} />
             </Modal.Description>
             </>,true,
-             <p className="modalformFooter">Üye olmak için <span className="registerLoginAnchor" onClick={handleRegisterClick}>tıklayınız</span></p>) 
+            "","blurring",true) 
         }
   
         const handleRegisterClick = (e:any) => {
@@ -42,15 +42,14 @@ const NavBar: React.FC = () => {
           if(modal.open) closeModal();
   
               openModal("Üye Kaydı", <>
-              <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.png' wrapped />
+              <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
               <Modal.Description className="loginreg">
               <RegisterForm location={"/"} />
               </Modal.Description>
               </>,true,
               <>
               <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>
-              <p>Uzman başvuru için <span className="registerLoginAnchor" onClick={handleTrainerFormClick}>tıkla!</span></p>
-              </>) 
+              </>,"blurring",true) 
           }
   
           const handleTrainerFormClick= (e:any) => {
@@ -59,12 +58,12 @@ const NavBar: React.FC = () => {
             if(modal.open) closeModal();
   
                 openModal("Uzman Başvuru Formu", <>
-                <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/welcome1.png' wrapped />
+                <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/contactus.jpg' wrapped />
                 <Modal.Description>
                 <TrainerForm />
                 </Modal.Description>
                 </>,true,
-                <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>,"", false
+                <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>,"blurring",true
                 ) 
                
             }

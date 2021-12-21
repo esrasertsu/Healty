@@ -233,6 +233,9 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<bool>("IsOnline")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("Issuer")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<DateTime?>("IyzicoContractSignedDate")
                         .HasColumnType("datetime(6)");
 

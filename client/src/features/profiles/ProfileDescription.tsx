@@ -5,6 +5,7 @@ import ProfileEditForm from './ProfileUpdateForm';
 import { observer } from 'mobx-react-lite';
 import { toast } from 'react-toastify';
 import { Category, ICategory } from '../../app/models/category';
+import Documents from './Documents';
 
 const ProfileDescription = () => {
   const rootStore = useContext(RootStoreContext);
@@ -39,37 +40,7 @@ const ProfileDescription = () => {
   
   }, [allCategoriesOptionList])
 
-  const ref = React.useRef<any>();
-  const [height, setHeight] = React.useState("100px");
-  const onLoad = () => {
-    setHeight(ref.current.contentWindow.document.body.scrollHeight + "px");
-  };
 
-  const handleOpenDoc = (url:string) =>{
-    if(modal.open) closeModal();
-    openModal("Giriş Yap", <>
-    <Modal.Description className="loginreg">
-    <iframe
-        ref={ref}
-         onLoad={onLoad}
-        id="myFrame"
-        src={url}
-        width="100%"
-        height={height}
-        scrolling="no"
-        frameBorder="0"
-        style={{
-          maxWidth: 640,
-          width: "100%",
-          overflow: "auto",
-        }}
-      ></iframe>
-    </Modal.Description>
-    </>,false,
-    "",
-    "inverted") 
-
-  }
 
   return (
     <Tab.Pane style={{ borderRadius: "12px"}}>
@@ -163,15 +134,17 @@ const ProfileDescription = () => {
                   </Grid.Column>
                  
                 </Grid.Row>
-                <Grid.Row>
+               
+                                    {/* <Grid.Row>
                   <Grid.Column>
                   <Header
                     as='h3'
                     icon='graduation cap'
                     content={`Eğitim`}
                     className="profileContent_icons"
-                  />
-                  <List  className="profile_desc_list_item">
+                  /> <Documents docs={profile!.certificates} /> */}
+
+                  {/* <List  className="profile_desc_list_item">
                     {
                      profile!.certificates.length >0 ? profile!.certificates.map((acc) =>(
                       <List.Item style={{textDecoration:"underline", cursor:"pointer"}} onClick={()=>{handleOpenDoc(acc.url)}} key={"desc" + acc.id}>
@@ -179,9 +152,9 @@ const ProfileDescription = () => {
                        {acc.name}</List.Item>                   
                     )) : "Bilgi yok"
                     } 
-                    </List>
-                  </Grid.Column>
-                </Grid.Row>
+                    </List>  </Grid.Column>
+                </Grid.Row>*/}
+                 
               </Grid>
             )}
         </Grid.Column>

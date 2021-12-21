@@ -21,6 +21,8 @@ namespace CleanArchitecture.Application.User
         public class Query : IRequest<User> {
             public string Email { get; set; }
             public string Password { get; set; }
+            public string ReCaptcha { get; set; }
+
         }
 
         public class QueryValidator : AbstractValidator<Query>
@@ -29,6 +31,8 @@ namespace CleanArchitecture.Application.User
             {
                 RuleFor(x => x.Email).NotEmpty();
                 RuleFor(x => x.Password).NotEmpty();
+                RuleFor(x => x.ReCaptcha).NotEmpty();
+
             }
         }
 
@@ -38,16 +42,26 @@ namespace CleanArchitecture.Application.User
             private readonly SignInManager<AppUser> _signInManager;
             private readonly IJwtGenerator _jwtGenerator;
             private readonly DataContext _context;
+            private readonly IGoogleReCAPTCHAAccessor _reCAPTCHAAccessor;
 
-            public Handler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IJwtGenerator jwtGenerator, DataContext context)
+
+            public Handler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IJwtGenerator jwtGenerator, DataContext context, IGoogleReCAPTCHAAccessor reCAPTCHAAccessor)
             {
                 _signInManager = signInManager;
                 _userManager = userManager;
                 _jwtGenerator = jwtGenerator;
                 _context = context;
+                _reCAPTCHAAccessor = reCAPTCHAAccessor;
             }
             public async Task<User> Handle(Query request, CancellationToken cancellationToken)
             {
+                var _googleReCAPTHA = await _reCAPTCHAAccessor.VerificateRecaptcha(request.ReCaptcha);
+
+                if (!_googleReCAPTHA.Success && _googleReCAPTHA.Score <= 0.5)
+                {
+                    throw new RestException(HttpStatusCode.BadRequest, new { Email = "Geçersiz giriş." });
+                }
+
                 var user = await _userManager.FindByEmailAsync(request.Email);
 
                 if (user == null)

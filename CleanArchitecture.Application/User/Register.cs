@@ -27,6 +27,7 @@ namespace CleanArchitecture.Application.User
             public string Email { get; set; }
             public string Password { get; set; }
             public string Origin { get; set; }
+            public string ReCaptcha { get; set; }
 
 
         }
@@ -39,6 +40,8 @@ namespace CleanArchitecture.Application.User
                 RuleFor(x => x.UserName).NotEmpty();
                 RuleFor(x => x.Email).NotEmpty().EmailAddress();
                 RuleFor(x => x.Password).Password();
+                RuleFor(x => x.ReCaptcha).NotEmpty();
+
             }
         }
         public class Handler : IRequestHandler<Command>
@@ -46,16 +49,25 @@ namespace CleanArchitecture.Application.User
             private readonly DataContext _context;
             private readonly UserManager<AppUser> _userManager;
             private readonly IEmailSender _emailSender;
+            private readonly IGoogleReCAPTCHAAccessor _reCAPTCHAAccessor;
 
-            public Handler(DataContext context, UserManager<AppUser> userManager, IEmailSender emailSender)
+            public Handler(DataContext context, UserManager<AppUser> userManager, IEmailSender emailSender, IGoogleReCAPTCHAAccessor reCAPTCHAAccessor)
             {
                 _context = context;
                 _userManager = userManager;
                 _emailSender = emailSender;
+                _reCAPTCHAAccessor = reCAPTCHAAccessor;
+
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
+                var _googleReCAPTHA = await _reCAPTCHAAccessor.VerificateRecaptcha(request.ReCaptcha);
+
+                if (!_googleReCAPTHA.Success && _googleReCAPTHA.Score <= 0.5)
+                {
+                    throw new RestException(HttpStatusCode.BadRequest, new { Email = "Geçersiz giriş." });
+                }
 
                 if (await _context.Users.AnyAsync(x => x.Email == request.Email))
                     throw new RestException(HttpStatusCode.BadRequest, new { Email = "Email already exists."});

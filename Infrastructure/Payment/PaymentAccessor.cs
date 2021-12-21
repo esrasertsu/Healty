@@ -11,6 +11,7 @@ using System.Net;
 using System.Linq;
 using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Payment;
+using CleanArchitecture.Application.SubMerchants;
 
 namespace Infrastructure.Payment
 {
@@ -25,7 +26,7 @@ namespace Infrastructure.Payment
             _options.BaseUrl = config.Value.BaseUrl;
         }
 
-        public string CreateSubMerchantIyzico(CleanArchitecture.Domain.SubMerchant subMerchantDomain)
+        public IyziSubMerchantResponse CreateSubMerchantIyzico(CleanArchitecture.Domain.SubMerchant subMerchantDomain)
         {
             var conversaitonId = Guid.NewGuid().ToString(); 
             CreateSubMerchantRequest request = new CreateSubMerchantRequest();
@@ -57,19 +58,34 @@ namespace Infrastructure.Payment
                 request.TaxNumber = subMerchantDomain.TaxNumber;
                 request.LegalCompanyTitle = subMerchantDomain.LegalCompanyTitle;
             }
-            else return "false";
+            else return new IyziSubMerchantResponse()
+            {
+                ErrorMessage = "Alt üye iş yeri seçimi hatalı",
+                Status = false,
+                SubMerchantKey = null
+            };
 
 
             IyzipayCore.Model.SubMerchant subMerchant = IyzipayCore.Model.SubMerchant.Create(request, _options);
 
             if (subMerchant.ConversationId == conversaitonId && subMerchant.Status == "success")
             {
-               return subMerchant.SubMerchantKey;
+               return new IyziSubMerchantResponse()
+               {
+                   ErrorMessage = null,
+                   Status = true,
+                   SubMerchantKey = subMerchant.SubMerchantKey
+               };
             }
-            else return "false";
+            else return new IyziSubMerchantResponse()
+            {
+                ErrorMessage = subMerchant.ErrorMessage,
+                Status = false,
+                SubMerchantKey = null
+            };
         }
 
-        public string UpdateSubMerchantIyzico(CleanArchitecture.Domain.SubMerchant subMerchantDomain)
+        public IyziSubMerchantResponse UpdateSubMerchantIyzico(CleanArchitecture.Domain.SubMerchant subMerchantDomain)
         {
             var conversaitonId = Guid.NewGuid().ToString();
 
@@ -101,9 +117,19 @@ namespace Infrastructure.Payment
 
             IyzipayCore.Model.SubMerchant subMerchant = IyzipayCore.Model.SubMerchant.Update(request, _options);
 
-            if (subMerchant.ConversationId == conversaitonId)
-                return subMerchant.SubMerchantKey;
-            else return "false";
+            if (subMerchant.ConversationId == conversaitonId && subMerchant.Status == "success")
+                return new IyziSubMerchantResponse()
+                {
+                    ErrorMessage = null,
+                    Status = true,
+                    SubMerchantKey = subMerchant.SubMerchantKey
+                };
+            else return new IyziSubMerchantResponse()
+            {
+                ErrorMessage = subMerchant.ErrorMessage,
+                Status = false,
+                SubMerchantKey = null
+            };
         }
 
 

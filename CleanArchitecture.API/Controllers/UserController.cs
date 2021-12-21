@@ -58,13 +58,13 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPost("createSubMerchant")]
-        public async Task<ActionResult<bool>> CreateSubMerchant(CreateSubMerchant.Query query)
+        public async Task<ActionResult<IyziSubMerchantResponse>> CreateSubMerchant(CreateSubMerchant.Query query)
         {
             return await Mediator.Send(query);
         }
 
         [HttpPut("editSubMerchant")]
-        public async Task<ActionResult<bool>> EditSubMerchant(UpdateSubMerchant.Command command)
+        public async Task<ActionResult<IyziSubMerchantResponse>> EditSubMerchant(UpdateSubMerchant.Command command)
         {
             return await Mediator.Send(command);
         }

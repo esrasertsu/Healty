@@ -28,7 +28,11 @@ const companyTypeOptions = [
     { key: '2', value: '2', text: 'Limited/Anonim Şirket' },
 ]
 
-const SubMerchantDetails: React.FC = () => {
+interface IProps{
+  setIsSubMerchant?:(val:boolean) => void;
+}
+
+const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant}) => {
   const rootStore = useContext(RootStoreContext);
 
   const {
@@ -114,11 +118,11 @@ const SubMerchantDetails: React.FC = () => {
     taxOffice:customTaxOfficeRequired,
     taxNumber: customTaxNumberRequired,
     legalCompanyTitle: customlegalNameRequired,
-    address: isRequired({message:'Adres zorunlu alandır.'}),
+  //  address:customAddressRequired,
     //contactName: isRequired({message: 'Ad zorunlu alandır.'}),
-    // description: composeValidators(
-    //   hasLengthGreaterThan(50)({message: 'Açıklama en az 50 karakter uzunluğunda olmalıdır.'})
-    // )(),
+    address: composeValidators(
+      hasLengthGreaterThan(6)({message: 'Adres en az 6 karakter uzunluğunda olmalıdır.'})
+    )(),
   })
   useEffect(() => {
     if(isLoggedIn)
@@ -126,9 +130,11 @@ const SubMerchantDetails: React.FC = () => {
       setLoading(true);
       getSubMerchantInfo()
         .then(action((res) => {
+          debugger;
             if(res)
             {
               setsubMerchantFormValues(new SubMerchantInfo(res));
+              setIsSubMerchant && setIsSubMerchant(true);
               if(res && res.hasSignedContract)
               {
                 setShowIyzicoContract(false);
@@ -217,6 +223,7 @@ const SubMerchantDetails: React.FC = () => {
 
       if(ok)
       {
+        debugger;
         setLoading(true);
         if (!values.id) {
           let subMerchant = {
@@ -227,7 +234,15 @@ const SubMerchantDetails: React.FC = () => {
           createSubMerchant(subMerchant).then((res) =>{
             setLoading(false);
             if(res)
-            toast.success("Bilgileriniz başarıyla kaydedilmiştir.");
+             { 
+               if(res.status) 
+                {
+                  setIsSubMerchant && setIsSubMerchant(true);
+                toast.success("Bilgileriniz başarıyla kaydedilmiştir.");
+              }else {
+                toast.error(res.errorMessage);
+              }
+            }
             else toast.error("Bilgileriniz kaydedilemedi. Sorun devam ederse bize ulaşın.");
   
           })
@@ -240,7 +255,15 @@ const SubMerchantDetails: React.FC = () => {
                 setLoading(false);
 
                 if(res)
-                toast.success("Bilgileriniz başarıyla kaydedilmiştir.");
+                { 
+                  if(res.status) 
+                   {
+                     setIsSubMerchant && setIsSubMerchant(true);
+                   toast.success("Bilgileriniz başarıyla kaydedilmiştir.");
+                 }else {
+                   toast.error(res.errorMessage);
+                 }
+               }
                 else toast.error("Bilgileriniz kaydedilemedi. Sorun devam ederse bize ulaşın.");
       
               });

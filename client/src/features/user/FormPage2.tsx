@@ -52,7 +52,7 @@ const FormPage2: React.FC<IProps> = ({id}) =>{
     const [trainerForm2Message, setTrainerForm2Message] = useState(false);
     const [error2Message, setError2Message] = useState<string[]>([]);
     const [userConfirmOpen, setUserConfirmOpen] = useState(false);
-
+    const [userSubmerchant,setUserSubmerchant] = useState(false);
     const [subCategoryOptions, setSubCategoryOptions] = useState<ICategory[]>([]);
     const [categoryOptions, setCategoryOptions] = useState<ICategory[]>([]);
     const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
@@ -71,7 +71,7 @@ useEffect(() => {
   agent.User.loadNewTrainer()
   .then(action((newTrainer) =>
   {
-    setTrainerForm(new TrainerFormValues(newTrainer!));
+    setTrainerForm(new TrainerFormValues(newTrainer));
   })).catch((error) => 
      console.log(error)
       
@@ -89,12 +89,10 @@ useEffect(() => {
 
     const handleCategoryChanged = (e: any, data: string[]) => {
         setTrainerForm({...trainerForm,categoryIds: [...data]});
-        setCategory(data);  
      }
     
      const handleSubCategoryChanged = (e: any, data: string[]) => {  
          setTrainerForm({...trainerForm,subCategoryIds: [...data]});
-        setSubCats(data);
        }
 
        const handleAccessChanged = (e: any, data: any) => {  
@@ -106,8 +104,8 @@ useEffect(() => {
             subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
         ))
         setSubCategoryOptions(subCategoryOptionFilteredList);
-        const renewedSubIds = subCat.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
-        setSubCats(renewedSubIds);
+        const renewedSubIds = trainerForm.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
+        setTrainerForm({...trainerForm,subCategoryIds: [...renewedSubIds]});
      }
 
      const handleCityChanged = (e: any, data: string) => {  
@@ -115,8 +113,9 @@ useEffect(() => {
             setTrainerForm({...trainerForm,cityId: data});
      }    
     useEffect(() => {
+      debugger;
         loadSubCatOptions();
-    }, [category,allCategoriesOptionList]);
+    }, [allCategoriesOptionList,trainerForm.categoryIds]);
 
 
     const handleSendToConfirm = (e:any) =>{
@@ -177,7 +176,7 @@ useEffect(() => {
 
     }
 
-    if(user!.isSubMerchant === false)
+    if(userSubmerchant === false)
     {
       messages.push("Alt üye iş yeri bilgilerinizi lütfen kaydedin.")
     }
@@ -230,8 +229,8 @@ useEffect(() => {
         <Message icon>
         <Icon name='circle notched' loading />
         <Message.Content>
-          <Message.Header>Sadece 1 dakika</Message.Header>
-          Başvurunuzu değerlendirmek üzere yüklüyoruz.
+          <Message.Header>Kaydediliyor..</Message.Header>
+          Başvuru formunuzu güncelliyoruz.
         </Message.Content>
       </Message>
       </> :
@@ -454,7 +453,7 @@ useEffect(() => {
       />
              
       {/* <Tab className="trainerFormAccountingTab" style={{margin:"20px 0"}} menu={{ pointing: true }} panes={panes} /> */}
-    <SubMerchantDetails />
+    <SubMerchantDetails setIsSubMerchant={setUserSubmerchant} />
      
    
       </Accordion.Content>

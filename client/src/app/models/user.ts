@@ -20,6 +20,11 @@ export interface IUserFormValues {
     reCaptcha:string;
 }
 
+export interface IyziSubMerchantResponse{
+    status: string;
+    errorMessage:string;
+    subMerchantKey:string;
+}
 export interface ITrainerCreationFormValues {
     email: string;
     password: string;
@@ -95,7 +100,6 @@ export class TrainerFormValues implements ITrainerFormValues{
     description: string ="";
     title: string="";
     constructor(init?: ITrainerFormValues){
-        debugger;
 
         if(init)
         {    

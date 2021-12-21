@@ -20,7 +20,7 @@ namespace CleanArchitecture.Application.SubMerchants
 {
     public class UpdateSubMerchant
     {
-        public class Command : IRequest<bool>
+        public class Command : IRequest<IyziSubMerchantResponse>
         {
             public string Id { get; set; }
             public string SubMerchantKey { get; set; }
@@ -53,7 +53,7 @@ namespace CleanArchitecture.Application.SubMerchants
             }
         }
 
-        public class Handler : IRequestHandler<Command, bool>
+        public class Handler : IRequestHandler<Command, IyziSubMerchantResponse>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -71,7 +71,7 @@ namespace CleanArchitecture.Application.SubMerchants
                 _httpContextAccessor = httpContextAccessor;
                 _userManager = userManager;
             }
-            public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<IyziSubMerchantResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.SingleOrDefaultAsync(x =>
                            x.UserName == _userAccessor.GetCurrentUsername());
@@ -101,7 +101,6 @@ namespace CleanArchitecture.Application.SubMerchants
                 subMerchant.GsmNumber = request.GsmNumber;
                 subMerchant.Iban = request.Iban;
                 subMerchant.Name = request.LegalCompanyTitle;
-                subMerchant.LastEditDate = DateTime.Now;
 
                 if (subMerchant.MerchantType == MerchantType.LimitedOrAnonim)
                 {
@@ -128,27 +127,26 @@ namespace CleanArchitecture.Application.SubMerchants
                         throw new Exception("Problem creating subMerchant -- TCKN not be null");
                 }
 
-
-                var updatedSubMerchant = await _context.SaveChangesAsync() > 0;
-                if (updatedSubMerchant)
-                {
                     try
                     {
                         if (request.SubMerchantKey == "" || request.SubMerchantKey == null)
                         {
-                            var subMerchantKey = _paymentAccessor.CreateSubMerchantIyzico(subMerchant);
-                            if (subMerchantKey != "false")
+                            var result = _paymentAccessor.CreateSubMerchantIyzico(subMerchant);
+                            if (result.Status)
                             {
-                                subMerchant.SubMerchantKey = subMerchantKey;
+                                subMerchant.SubMerchantKey = result.SubMerchantKey;
                                 subMerchant.Status = true;
+                                subMerchant.ApplicationDate = DateTime.Now;
+                                subMerchant.LastEditDate = DateTime.Now;
                                 var editedSubMerchant = await _context.SaveChangesAsync() > 0;
 
                                 if (editedSubMerchant)
                                 {
-                                    user.SubMerchantKey = subMerchantKey;
+                                    user.SubMerchantKey = result.SubMerchantKey;
+                                    user.LastProfileUpdatedDate = DateTime.Now;
                                     await _userManager.UpdateAsync(user);
 
-                                    return true;
+                                    return result;
                                 }
                                 else
                                 {
@@ -158,21 +156,33 @@ namespace CleanArchitecture.Application.SubMerchants
                             }
                             else
                             {
-                                throw new Exception("Problem creating subMerchant on Iyzico");
+                                return result;
                             }
                         }
                         else
                         {
                             var response = _paymentAccessor.UpdateSubMerchantIyzico(subMerchant);
-                            if (response != "false")
+                            if(response.Status)
                             {
-                                return true;
-                            }
-                            else
-                            {
-                                throw new Exception("Problem updating subMerchant on Iyzico");
-                            }
+                                subMerchant.LastEditDate = DateTime.Now;
+                                var editedSubMerchant = await _context.SaveChangesAsync() > 0;
+
+                                if (editedSubMerchant)
+                                {
+                                    user.LastProfileUpdatedDate = DateTime.Now;
+                                    await _userManager.UpdateAsync(user);
+
+                                    return response;
+                                }
+                                else
+                                {
+                                    throw new Exception("Problem editing subMerchant Key on DB");
+                                }
+
                         }
+                            else
+                                return response;
+                            }
 
                        
 
@@ -183,11 +193,7 @@ namespace CleanArchitecture.Application.SubMerchants
 
                         throw new Exception(ex.Message);
                     }
-                }
-                else
-                {
-                    throw new Exception("Problem updating subMerchant on DB");
-                }
+                
                
 
                 throw new Exception("Problem creating subMerchant");

@@ -51,8 +51,7 @@ namespace CleanArchitecture.Application.SubMerchants
 
                 try
                 {
-                    if (!string.IsNullOrEmpty(user.SubMerchantKey))
-                    {
+                   
                         if (user.SubMerchantDetails != null)
                         {
                             var IyzicoMerchant = _paymentAccessor.GetSubMerchantFromIyzico(user.SubMerchantDetails.Id.ToString());
@@ -83,8 +82,7 @@ namespace CleanArchitecture.Application.SubMerchants
                             return null;
                         }
 
-                    }
-                    else return null;
+                   
 
                 }
                 catch (Exception e)

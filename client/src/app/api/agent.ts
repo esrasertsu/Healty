@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IRefundPayment, PaymentThreeDResult } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
-import { ISubMerchantInfo, ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues } from '../models/user';
+import { ISubMerchantInfo, ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues, IyziSubMerchantResponse } from '../models/user';
 import { IAccessibility, IDocument, IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope, IProfileEnvelope, IProfileFormValues, IRefencePic } from '../models/profile';
 import { IBlogsEnvelope, IBlog, IPostFormValues, IBlogUpdateFormValues } from '../models/blog';
 import { IAllCategoryList, ICategory, ISubCategory } from '../models/category';
@@ -311,8 +311,8 @@ const User ={
     resetPasswordRequest:(email:string, token:string): Promise<boolean> => requests.post(`/user/resetPswRequest?email=${email}&reCaptcha=${token}`,{}),
     resetPassword:(token:string, email:string,password:string): Promise<any> => requests.get(`/user/resetPassword?token=${token}&email=${email}&password=${password}`),
     getSubMerchantInfo: () : Promise<ISubMerchantInfo> => requests.get('/user/submerchantInfo'),
-    createSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<boolean> => requests.post('/user/createSubMerchant', subMerchant),
-    editSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<boolean> => requests.put('/user/editSubMerchant', subMerchant),
+    createSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<IyziSubMerchantResponse> => requests.post('/user/createSubMerchant', subMerchant),
+    editSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<IyziSubMerchantResponse> => requests.put('/user/editSubMerchant', subMerchant),
     checkCallbackandStartPayment: (id:string, count:string, status:string, paymentId:string, conversationData:string, conversationId:string, mdStatus:string): Promise<Boolean> => 
         requests.post(`/payment/callback`,{id, count, status, paymentId, conversationData, conversationId, mdStatus}),
   

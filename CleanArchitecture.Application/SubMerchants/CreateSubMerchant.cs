@@ -20,7 +20,7 @@ namespace CleanArchitecture.Application.SubMerchants
 {
     public class CreateSubMerchant
     {
-        public class Query : IRequest<bool>
+        public class Query : IRequest<IyziSubMerchantResponse>
         {
             public string Id { get; set; }
             public string MerchantType { get; set; }
@@ -54,7 +54,7 @@ namespace CleanArchitecture.Application.SubMerchants
         }
 
 
-        public class Handler : IRequestHandler<Query, bool>
+        public class Handler : IRequestHandler<Query, IyziSubMerchantResponse>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -74,7 +74,7 @@ namespace CleanArchitecture.Application.SubMerchants
                 _userManager = userManager;
 
             }
-            public async Task<bool> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<IyziSubMerchantResponse> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.SingleOrDefaultAsync(x =>
                            x.UserName == _userAccessor.GetCurrentUsername());
@@ -109,7 +109,6 @@ namespace CleanArchitecture.Application.SubMerchants
                 subMerchant.UserId = user.Id;
                 subMerchant.MerchantType = (MerchantType)merchantType;
                 subMerchant.Address = request.Address;
-                subMerchant.ApplicationDate = DateTime.Now;
                 subMerchant.ContactName = request.ContactName;
                 subMerchant.ContactSurname = request.ContactSurname;
                 subMerchant.Email = request.Email;
@@ -151,21 +150,24 @@ namespace CleanArchitecture.Application.SubMerchants
                 {
                     if (createdSubMerchant)
                     {
-                        var subMerchantKey = _paymentAccessor.CreateSubMerchantIyzico(subMerchant);
+                        IyziSubMerchantResponse result = _paymentAccessor.CreateSubMerchantIyzico(subMerchant);
 
-                        if (subMerchantKey != "false")
+                        if (result.Status)
                         {
 
-                            subMerchant.SubMerchantKey = subMerchantKey;
+                            subMerchant.SubMerchantKey = result.SubMerchantKey;
                             subMerchant.Status = true;
+                            subMerchant.ApplicationDate = DateTime.Now;
+                            subMerchant.LastEditDate = DateTime.Now;
                             var editedSubMerchant = await _context.SaveChangesAsync() > 0;
 
                             if (editedSubMerchant)
                             {
-                                user.SubMerchantKey = subMerchantKey;
+                                user.SubMerchantKey = result.SubMerchantKey;
+                                user.LastProfileUpdatedDate = DateTime.Now;
                                 await _userManager.UpdateAsync(user);
 
-                                return true;
+                                return result;
                             }
                             else
                             {
@@ -174,8 +176,11 @@ namespace CleanArchitecture.Application.SubMerchants
                         }
                         else
                         {
-                            throw new Exception("Problem creating subMerchant on Iyzico");
-
+                            _context.SubMerchants.Remove(user.SubMerchantDetails);
+                            user.SubMerchantKey = "";
+                            user.LastProfileUpdatedDate = DateTime.Now;
+                            await _context.SaveChangesAsync();
+                            return result;
                         }
                     }
                     else

@@ -178,7 +178,7 @@ const ActivityDashboard: React.FC = () => {
                   fluid={isMobile} 
                   size="large" disabled={loadingNext || (page +1 >= totalPages)} 
                   onClick={()=> handleGetNext()} 
-                  style={{background:"dodgerblue", color:"white",margin:"20px 0"}}
+                  style={{background:"#2185d0", color:"white",margin:"20px 0"}}
                 > Daha Fazla Göster </Button>
                 </div>
                 }
@@ -320,7 +320,7 @@ const ActivityDashboard: React.FC = () => {
                  fluid={isMobile} 
                  size="large" disabled={loadingNext || (page +1 >= totalPages)} 
                  onClick={()=> handleGetNext()} 
-                 style={{background:"dodgerblue", color:"white",margin:"20px 0"}}
+                 style={{background:"#2185d0", color:"white",margin:"20px 0"}}
                > Daha Fazla Göster </Button>
                </div>
                 }

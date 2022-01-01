@@ -231,7 +231,7 @@ const sixItem:SemanticWIDTHS = 6;
                   fluid={isMobile} 
                   size="large" disabled={loadingNext || (page +1 >= totalProfileListPages)} 
                   onClick={()=> handleGetNext()} 
-                  style={{background:"dodgerblue", color:"white",margin:"20px 0"}}
+                  style={{background:"#2185d0", color:"white",margin:"20px 0"}}
                 > Daha Fazla Göster </Button>
         </div>
           

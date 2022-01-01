@@ -65,7 +65,7 @@ import { RootStoreContext } from '../../app/stores/rootStore'
                 <Grid.Column style={{paddingRight:0}} width={13}>
                     {
                         activeItem === "Şirket Bilgilerim" ?
-                        <SubMerchantDetails />
+                        <SubMerchantDetails id={user!.userName} />
                         : activeItem === "Rezervasyonlarım" ? 
                         <OrderList settings={true}/>
                         :<ActivityCreationPage />

@@ -69,7 +69,8 @@ const MessageChat: React.FC<IProps> = ({setshowChatRoomList}) => {
           chatRooms &&
           <Item.Group key={"seeUserProfile_itemGroup"} className="chat_messageitems">
             <Item style={{alignItems:"center"}} key="seeUserProfile" onClick={() => history.push(`/profile/${chatRooms.filter(x => x.id === chatRoomId)[0].userName}`)}>
-                <Item.Image className="chat_images" size="mini" circular src={chatRooms.filter(x => x.id === chatRoomId)[0].userImage || '/assets/user.png'} />
+                <Item.Image className="chat_images" size="mini" circular src={chatRooms.filter(x => x.id === chatRoomId)[0].userImage || '/assets/user.png'} 
+                 onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}/>
           
                 <Item.Content>
                   <Item.Header>{chatRooms.filter(x => x.id === chatRoomId)[0].displayName} profilini görmek için tıkla</Item.Header>
@@ -117,7 +118,8 @@ const MessageChat: React.FC<IProps> = ({setshowChatRoomList}) => {
                        <Item.Group key={group + "_message"} >
                        {messages.map((message) => (
                            <Item key={message.id} className={message.username === user!.userName ? "currentUserMessage": "otherUserMessage" }>
-                               <Item.Image size='mini' className="chat_images" style={{height: "100%"}} circular src={message.image  || '/assets/user.png'} />
+                               <Item.Image size='mini' className="chat_images" style={{height: "100%"}} circular src={message.image  || '/assets/user.png'} 
+                                onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}/>
                                <Item.Content className={message.username === user!.userName ? "currentUserMessage_content": "otherUserMessage_content" } verticalAlign='middle'>
                                    {message.body}
                                    <Item.Extra>

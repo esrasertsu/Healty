@@ -56,7 +56,8 @@ interface IProps{
                     Düzenleyen
                   </Label> 
                   }
-                  <Image className="activityAttendees_Image" src={attendee.image  || '/assets/user.png'} />
+                  <Image className="activityAttendees_Image" src={attendee.image  || '/assets/user.png'} 
+                   onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}/>
                   <Item.Content verticalAlign='middle'>
                     <Item.Header as='h3'>
                       <Link to={`/profile/${attendee.userName}`}>{attendee.displayName}</Link>
@@ -76,7 +77,8 @@ interface IProps{
                  >
                    Düzenleyen
                  </Label> 
-                 <Image className="activityAttendees_Image" src={attendees.filter(x => x.isHost === true)[0].image  || '/assets/user.png'} />
+                 <Image className="activityAttendees_Image" src={attendees.filter(x => x.isHost === true)[0].image  || '/assets/user.png'}
+                  onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}} />
                  <Item.Content verticalAlign='middle'>
                    <Item.Header as='h3'>
                      <Link to={`/profile/${attendees.filter(x => x.isHost === true)[0].userName}`}>{attendees.filter(x => x.isHost === true)[0].displayName}</Link>

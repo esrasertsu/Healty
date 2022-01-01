@@ -185,7 +185,7 @@ export default class UserStore {
     @action registerTrainer = async (values: ITrainerFormValues) =>{
         try {
             this.trainerRegistering = true;
-            
+            debugger;
             const user = await agent.User.registerTrainer(values);
             runInAction(()=>{
                 this.trainerRegistering = false;
@@ -407,9 +407,9 @@ export default class UserStore {
         }
     }
 
-    @action getSubMerchantInfo = async () =>{
+    @action getSubMerchantInfo = async (username:string) =>{
         try{
-            const subMerchant = await agent.User.getSubMerchantInfo();
+            const subMerchant = await agent.User.getSubMerchantInfo(username);
             return subMerchant;
 
         }catch(error){
@@ -476,6 +476,10 @@ export default class UserStore {
             
           
     }
+
+    // @action facebookLogin = () => {
+    //     window.FB.login()
+    // }
 
     @action fbLogin = async (response:any,location:string) => {
         this.loadingFbLogin = true;

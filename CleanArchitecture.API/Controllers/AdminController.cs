@@ -7,16 +7,17 @@ using CleanArchitecture.Domain;
 using Microsoft.AspNetCore.Authorization;
 using CleanArchitecture.Application.SubMerchants;
 using CleanArchitecture.Application.Admin;
+using CleanArchitecture.Application.Categories;
 
 namespace CleanArchitecture.API.Controllers
 {
     public class AdminController : BaseController
     {
-        [HttpGet]
-        public async Task<ActionResult<List.SubMerchantListEnvelope>> List(int? limit, int? offset)
-        {
-            return await Mediator.Send(new List.Query(limit, offset));
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<List.SubMerchantListEnvelope>> List(int? limit, int? offset)
+        //{
+        //    return await Mediator.Send(new List.Query(limit, offset));
+        //}
 
         [HttpGet("{id}")]
         public async Task<ActionResult<SubMerchantDto>> Details(Guid id)
@@ -72,6 +73,18 @@ namespace CleanArchitecture.API.Controllers
         public async Task<ActionResult<ListAdmins.AdminsEnvelope>> ListComments(string status, int? limit, int? offset)
         {
             return await Mediator.Send(new ListAdmins.Query(limit, offset));
+        }
+
+        [HttpPost("subCategory")]
+        public async Task<ActionResult<Unit>> CreateSubCategory(string name, string categoryId)
+        {
+            return await Mediator.Send(new CreateSubCategory.Command{ Name = name, CategoryId = categoryId });
+        }
+
+        [HttpDelete("subCategory/{id}")]
+        public async Task<ActionResult<Unit>> Delete(Guid Id)
+        {
+            return await Mediator.Send(new DeleteSubCategory.Command { Id = Id });
         }
 
 

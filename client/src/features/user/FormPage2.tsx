@@ -45,7 +45,7 @@ const FormPage2: React.FC<IProps> = ({id}) =>{
 
   let subCategoryOptionFilteredList: ICategory[] = [];
 
-    const [category, setCategory] = useState<string[]>([]);
+    const [categoryIds, setCategoryIds] = useState<string[]>([]);
     const [subCat, setSubCats] = useState<string[]>([]);
     const [cityId, setCityId] = useState<string>();
     const [showM, setShowM] = useState(false);
@@ -68,7 +68,7 @@ useEffect(() => {
   
 useEffect(() => {
 
-  agent.User.loadNewTrainer()
+  agent.User.loadNewTrainer(id)
   .then(action((newTrainer) =>
   {
     setTrainerForm(new TrainerFormValues(newTrainer));
@@ -89,6 +89,7 @@ useEffect(() => {
 
     const handleCategoryChanged = (e: any, data: string[]) => {
         setTrainerForm({...trainerForm,categoryIds: [...data]});
+        setCategoryIds([...data]);
      }
     
      const handleSubCategoryChanged = (e: any, data: string[]) => {  
@@ -115,7 +116,7 @@ useEffect(() => {
     useEffect(() => {
       debugger;
         loadSubCatOptions();
-    }, [allCategoriesOptionList,trainerForm.categoryIds]);
+    }, [allCategoriesOptionList,categoryIds]);
 
 
     const handleSendToConfirm = (e:any) =>{
@@ -153,7 +154,7 @@ useEffect(() => {
     {
       messages.push("Kategori alanı seçimi zorunludur.");
     }
-     if(values.subCategoryIds.length === 0){
+     if(values.subCategoryIds.length === 0 && (values.suggestedSubCategory === "" || values.suggestedSubCategory === null)){
       messages.push("Branş / Alt kategori seçimi zorunludur.");
     }
      if(docs.length === 0 ){
@@ -301,6 +302,22 @@ useEffect(() => {
                     {
                       handleSubCategoryChanged(e,data)}}
                 />  
+                 <label>Aradığınız alt kategoriyi bulamadınız mı?</label>
+                 <Field
+                  name='suggestedSubCategory'
+                  component={TextInput}
+                  placeholder='Alt kategori / branş ismi'
+                  value={trainerForm.suggestedSubCategory}
+                />  
+                 <OnChange name="suggestedSubCategory">
+           {(value, previous) => {
+             debugger;
+                        if(value !== trainerForm.suggestedSubCategory)
+                        {
+                            setTrainerForm({...trainerForm,suggestedSubCategory: value});
+                        }
+                    }}
+            </OnChange>
                  <label>Ünvan*</label>
           <Field
             name='title'
@@ -335,7 +352,7 @@ useEffect(() => {
             </OnChange>
 
                  <label>Yeterlilik Belgesi (Diploma/Sertifika)*</label>
-                 {trainerForm.certificates && trainerForm.certificates.length !== 0 &&
+                 {
                  <div style={{margin:"10px 0 30px  0"}}>
                  <Documents docs={trainerForm.certificates} setDocuments={setDocs} setFiles={setFileDocs} setUpdateEnabled={setUpdateEnabled}/>
                  </div>
@@ -453,7 +470,7 @@ useEffect(() => {
       />
              
       {/* <Tab className="trainerFormAccountingTab" style={{margin:"20px 0"}} menu={{ pointing: true }} panes={panes} /> */}
-    <SubMerchantDetails setIsSubMerchant={setUserSubmerchant} />
+    <SubMerchantDetails id={id} setIsSubMerchant={setUserSubmerchant} />
      
    
       </Accordion.Content>

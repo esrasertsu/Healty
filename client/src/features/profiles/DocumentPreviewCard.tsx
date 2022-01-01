@@ -56,8 +56,11 @@ const DocumentPreviewCard:React.FC<IProps> = ({document}) => {
 const [openIframe, setopenIframe] = useState(false);
 const [openDelete, setOpenDelete] = useState(false);
 
-    const handleShowDoc =() => {
-        window.open(document.url);
+    const handleShowDoc =(url:string) => {
+      const link = window.document.createElement("a");
+      link.download = "blabal.pdf";
+      link.href =url;
+      link.click();
     }
 
     const handleShowDocInIframe=() => {
@@ -131,31 +134,29 @@ const [openDelete, setOpenDelete] = useState(false);
                     <Card key={document.id + "_card"} 
                     // sx={{ px: 1 }}
                     >
-                    <CardActionArea key={document.id + "_cardActionArea"}  onClick={handleShowDoc}
+                    <CardActionArea key={document.id + "_cardActionArea"}  onClick={() =>handleShowDoc(document.url)}
                     // href = {Pdf} target = "_blank"
                     >
                     <CardMedia key={document.id + "_cardMedia"}
                         component="img"
-                        alt={document.name}
                         height="140"
                         image={document.url}
+                        onError={(e:any) => {
+                          debugger
+                          /** 
+                           * Any code. For instance, changing the `src` prop with a fallback url.
+                           * In our code, I've added `e.target.className = fallback_className` for instance.
+                           */
+                          e.target.src = "/assets/empty-image.png";
+                        }}
                     />
-                    {/* <CardContent key={document.id + "_cardContent"}>
-                        <Typography variant="h5" noWrap>
-                        {document.id}
-                        </Typography>
-                        <Typography variant="subtitle1" noWrap>
+                     <CardContent key={document.id + "_cardContent"}>
+                      
+                        <p>
                         {document.name}
-                        </Typography>
-                        <Box sx={{ pt: 3 }}>
-                        {/* <Typography variant="h3" gutterBottom noWrap>
-                        {document.resourceType}
-                        </Typography> 
-                        <Typography variant="subtitle2" noWrap>
-                        {document.url}
-                        </Typography>
-                        </Box>
-                    </CardContent> */}
+                        </p>
+                       
+                    </CardContent> 
                     </CardActionArea>
 
                     <CardActions disableSpacing key={document.url + "_cardActions"}>

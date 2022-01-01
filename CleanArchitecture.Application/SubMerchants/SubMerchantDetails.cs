@@ -22,6 +22,7 @@ namespace CleanArchitecture.Application.SubMerchants
 
         public class Query : IRequest<SubMerchantDto>
         {
+            public string Username { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, SubMerchantDto>
@@ -48,6 +49,13 @@ namespace CleanArchitecture.Application.SubMerchants
 
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
+
+                if(user.Role != Role.Admin && user.UserName != request.Username)
+                    throw new RestException(HttpStatusCode.Forbidden);
+
+                if(user.UserName != request.Username)
+                    user = await _context.Users.SingleOrDefaultAsync(x =>
+                            x.UserName == request.Username);
 
                 try
                 {

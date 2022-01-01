@@ -548,10 +548,11 @@ font-size: 17px;
 label{
   color:#1a2b49
 }
-.ui.form .field>label{
+.ui.form>label,.ui.form .field>label{
   color:#1a2b49;
   font-size: 1rem;
   font-weight: 500;
+  display: block;
 }
 .activityDetails_Countdown_Segment{
   background-color: #f64f00  !important;
@@ -1077,7 +1078,7 @@ max-width: 95%;
   .ui.large.label,.ui.button, .ui.buttons .button, .ui.buttons .or, .forgotPasswordLink,.modalformFooter{
     font-size: 16px !important;
   }
-  
+ 
   .modals .content{
     margin-top: 30px;
   }
@@ -1263,12 +1264,44 @@ max-width: 95%;
     flex-direction: row !important;
   }
 
+  .date_equal_fields{
+     justify-content: space-between;
+  }
+
+  .durationItems .field input{
+    width: 70px !important;
+  }
  
   
 }
+.date_equal_fields{
+  margin: 0 0 1em !important
+}
 
+.durationItems{
+  display: flex;
+  flex-direction: column;
+}
+
+.durationItems .field{
+   margin-right: 20px !important;
+}
 
 @media (max-width: 768px){
+
+  
+  .active-spinner{
+    margin:auto;
+   height: 100vh;
+    width: 100% !important;
+    text-align: center;
+    position: relative;
+  }
+  .active-spinner img{
+    width: 100% !important;
+    position: absolute !important;
+    top: 50%;
+  }
   
 
   .masthead_page {
@@ -2505,7 +2538,10 @@ button, input, optgroup, select, textarea {
 }
 
 .swiper-button-prev, .swiper-button-next{
-  color:orange !important;
+  color: #38527a !important;
+  font-weight: 700 !important;
+  top: 41% !important;
+  background:#f9f9f95d;
 }
 
 .trainerFormAccordionTitle{
@@ -2657,6 +2693,7 @@ button, input, optgroup, select, textarea {
 .docCardAddAction{
              height: 100%;
              color: black; 
+             min-height: 180px;
             
 }
 

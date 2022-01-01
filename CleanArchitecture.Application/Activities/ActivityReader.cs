@@ -88,6 +88,8 @@ namespace CleanArchitecture.Application.Activities
                 AttendanceCount = activity.AttendanceCount,
                 AttendancyLimit = activity.AttendancyLimit,
                 Date = activity.Date,
+                EndDate = activity.EndDate,
+                Duration = activity.Duration,
                 Online = activity.Online,
                 Description = activity.Description,
                 Price = activity.Price,

@@ -139,7 +139,7 @@ const OrderList: React.FC<IProps> = ({settings}) => {
        fluid={isMobile} 
        size="large" disabled={loadingNext || (orderPage +1 >= totalOrderPages)} 
        onClick={()=> handleGetNext()} 
-       style={{background:"dodgerblue", color:"white",margin:"20px 0"}}
+       style={{background:"#2185d0", color:"white",margin:"20px 0"}}
      > Daha Fazla Göster </Button>
      </div>
      </>

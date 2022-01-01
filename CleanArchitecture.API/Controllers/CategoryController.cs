@@ -38,7 +38,7 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new ListSubCategories.Query { CategoryId = categoryId });
         }
 
-        [HttpPost("sub")]  
+        [HttpPost("subCategory")]  
         public async Task<ActionResult<Unit>> CreateSubCategory(CreateSubCategory.Command command)
         {
             return await Mediator.Send(command);

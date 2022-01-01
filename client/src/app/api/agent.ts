@@ -112,16 +112,20 @@ const requests = {
         }).then(responseBody)
     },
     editActivity: async (url:string,title: string, description:string, categoryIds: string[]| null,subCategoryIds: string[]| null, levelIds: string[]| null,
-        date:Date, cityId:string,venue:string,online:boolean, attendancyLimit:number,price:number,photo:Blob,address:string ) =>{
+        date:Date,enddate:Date, cityId:string,venue:string,online:boolean, attendancyLimit:number,price:number,
+        photo:Blob,address:string,duration:number ) =>{
+            debugger;
         let formData = new FormData();
         formData.append('photo',photo);
         formData.append('Title', title);
         formData.append('Date', date.toISOString());
+        formData.append('EndDate', enddate.toISOString());
         formData.append('description', description);
         formData.append('cityId', cityId);
         formData.append('venue', venue);
         formData.append('address', address);
         formData.append('online', String(online));
+        formData.append('duration', duration ? duration.toString() : "0");
         formData.append('attendancyLimit', attendancyLimit ? attendancyLimit.toString(): "0");
         formData.append('price', price ? price.toString(): "0");
 
@@ -140,16 +144,19 @@ const requests = {
         }).then(responseBody)
     },
     createActivity: async (url:string,title: string, description:string, categoryIds: string[]| null,subCategoryIds: string[]| null, levelIds: string[]| null,
-        date:Date, cityId:string,venue:string,online:boolean, attendancyLimit:number,price:number,photo:Blob, address:string ) =>{
+        date:Date, enddate:Date,cityId:string,venue:string,online:boolean, attendancyLimit:number,price:number,photo:Blob, address:string,
+        duration:number ) =>{
         let formData = new FormData();
         formData.append('photo',photo);
         formData.append('Title', title);
         formData.append('Date', date.toISOString());
+        formData.append('EndDate', enddate.toISOString());
         formData.append('description', description);
         formData.append('cityId', cityId);
-        formData.append('venue', venue);
-        formData.append('address', address);
+        formData.append('venue', venue ? venue :"");
+        formData.append('address', address ? address :"");
         formData.append('online', String(online));
+        formData.append('duration', duration ? duration.toString() : "0");
         formData.append('attendancyLimit', attendancyLimit ? attendancyLimit.toString(): "0");
         formData.append('price', price ? price.toString(): "0");
 
@@ -219,6 +226,8 @@ const requests = {
          formData.append('experienceYear', trainer.experienceYear.toString());
          formData.append('title', trainer.title);
          formData.append('sendToRegister', trainer.sendToRegister.toString());
+         formData.append('suggestedSubCategory', trainer.suggestedSubCategory);
+
 
       //   formData.append('photo',trainer.photo!);
          formData.append('description',trainer.description!);
@@ -282,11 +291,13 @@ const Activities = {
     unattend: (id: string) => requests.del(`/activities/${id}/attend`),
     listLevels: (): Promise<ILevel[]> => requests.get('/activities/levels'),
     update: (activity: IActivityFormValues): Promise<IActivity> => requests.editActivity(`/activities/${activity.id}`,activity.title!, activity.description!,
-    activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,
-    activity.cityId!,activity.venue!, activity.online!, activity.attendancyLimit!,activity.price!,activity.photo!, activity.address!),
-    create: (activity: IActivityFormValues): Promise<IActivity> => requests.createActivity(`/activities/`,activity.title!, activity.description!,
-    activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,
-    activity.cityId!,activity.venue!, activity.online!, activity.attendancyLimit!,activity.price!,activity.photo!,activity.address!),
+    activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,activity.endDate!,
+    activity.cityId!,activity.venue!, activity.online!, activity.attendancyLimit!,activity.price!,activity.photo!,
+     activity.address!,activity.duration!),
+    create: (activity: IActivityFormValues): Promise<IActivity> => requests.createActivity(`/activities/`,activity.title!,
+     activity.description!,activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,activity.endDate!,
+    activity.cityId!,activity.venue!, activity.online!, activity.attendancyLimit!,activity.price!,activity.photo!,
+    activity.address!, activity.duration!),
     editOnlineJoinInfo: ( form : IActivityOnlineJoinInfo) => requests.put(`/activities/${form.id}/joindetails`, form),
 
 
@@ -297,7 +308,7 @@ const User ={
     login: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/login', user),
     register: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/register', user),
     registerWaitingTrainer: ( trainer : ITrainerCreationFormValues) : Promise<IUser>=> requests.registerWaitingTrainer('/user/registerWaitingTrainer', trainer),
-    loadNewTrainer: () : Promise<ITrainerFormValues> => requests.get('/user/newTrainerInfo'),
+    loadNewTrainer: (username:string) : Promise<ITrainerFormValues> => requests.get(`/user/newTrainerInfo?username=${username}`),
     sendSms: ( phoneNumber : string) : Promise<Boolean> => requests.post(`/user/sendSms?phoneNumber=${phoneNumber}`, {}),
     sendSmsVerification: (phone: string, code : string) : Promise<Boolean> => requests.post(`/user/sendSmsVerification?phoneNumber=${phone}&code=${code}`, {}),
     update: (status:boolean) => requests.put(`/user?status=${status}`,{}),
@@ -310,7 +321,7 @@ const User ={
     resendVerifyEmailConfirm:(email:string): Promise<void> => requests.post(`/user/resendEmailVerification?email=${email}`,{}),
     resetPasswordRequest:(email:string, token:string): Promise<boolean> => requests.post(`/user/resetPswRequest?email=${email}&reCaptcha=${token}`,{}),
     resetPassword:(token:string, email:string,password:string): Promise<any> => requests.get(`/user/resetPassword?token=${token}&email=${email}&password=${password}`),
-    getSubMerchantInfo: () : Promise<ISubMerchantInfo> => requests.get('/user/submerchantInfo'),
+    getSubMerchantInfo: (username:string) : Promise<ISubMerchantInfo> => requests.get(`/user/submerchantInfo?username=${username}`),
     createSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<IyziSubMerchantResponse> => requests.post('/user/createSubMerchant', subMerchant),
     editSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<IyziSubMerchantResponse> => requests.put('/user/editSubMerchant', subMerchant),
     checkCallbackandStartPayment: (id:string, count:string, status:string, paymentId:string, conversationData:string, conversationId:string, mdStatus:string): Promise<Boolean> => 

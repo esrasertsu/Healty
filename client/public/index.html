@@ -43,9 +43,38 @@
 </head>
   <body>
     <style>
-      .active-spinner{
-        display: flex !important;
+      @media (min-width:768px) {
+        .active-spinner{
+        margin:auto;
+       height: 100vh;
+        width: 30% !important;
+        text-align: center;
+        position: relative;
       }
+      .active-spinner img{
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      }
+      @media (max-width:767px) {
+        .active-spinner{
+        margin:auto;
+       height: 100vh;
+        width: 100% !important;
+        text-align: center;
+        position: relative;
+      }
+      .active-spinner img{
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+      }
+    
     </style>
     <!-- Google Tag Manager (noscript) -->
 <!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NJXXFX2"
@@ -53,10 +82,23 @@
   <!-- End Google Tag Manager (noscript) -->
    
    <noscript>Noscript</noscript>
+   <script>
+    window.fbAsyncInit = function() {
+      window.FB.init({
+        appId            : '372698491064171',
+        autoLogAppEvents : true,
+        xfbml            : true,
+        version          : 'v12.0'
+      });
+    };
+  </script>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+      
+
     <div id="root">
     <div class="ui active transition visible inverted dimmer active-spinner">
      <div class="content">
-        <div class="ui text loader">Loading</div>
+      <img  src='/assets/animated.gif' id='selector'/>
      </div>
     </div>
   </div>

@@ -43,8 +43,8 @@ namespace CleanArchitecture.Application.Admin
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound, new { user = "Not Found" });
 
-                if (user.Role != Role.Admin)
-                    throw new RestException(HttpStatusCode.Forbidden, new { user = "Not Authorized" });
+                //if (user.Role != Role.Admin)
+                //    throw new RestException(HttpStatusCode.Forbidden, new { user = "Not Authorized" });
              
                 var trainer = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.Username);
 

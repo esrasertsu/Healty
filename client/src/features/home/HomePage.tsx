@@ -219,15 +219,17 @@ const HomePage = () => {
                </Container>
            </Segment>
            <Container className="pageContainer home">
-           <div className="spacingContainer__small" />
-           
-           <Header as='h1'  style={{fontSize: '34px',  textAlign:'center', width:"100%" }}>
-                Yeni etkinlikler yeni insanlar keşfet
+           <div style={{height:"20px"}} className="spacingContainer__small" />
+           {/* <Header as='h3'  style={{fontSize: '30px',  textAlign:'center', width:"100%" }}>
+                Hoşgeldin!
+                </Header> */}
+           <Header as='h2'  style={{fontSize: '30px',  textAlign:'center', width:"100%" , textShadow: "1.5px 1.5px #f2f2f2"}}>
+                Yeni aktiviteler yeni insanlar keşfetme zamanı!
                 </Header>
-                <p style={{ fontSize: '1.3rem', color: "#263a5e" }}>
+                {/* <p style={{ fontSize: '1.3rem', color: "#263a5e" }}>
                 Spor koçundan diyetisyene, meditasyon eğitmeninden psikoloğa ihtiyacın olan en doğru uzmanı en kolay şekilde bulabileceğin yerdesin. 
                 Üstelik istediğin lokasyonda ya da online olarak aktivitelere katılabilir, eğitmenlerin paylaştıkları blogları okuyarak ilgilendiğin alanda bilgi sahibi olabilirsin. 
-                </p>
+                </p> */}
               <Grid className="activityListGrid">
               <Grid.Row>
               <Grid.Column width={16}>

@@ -110,7 +110,6 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
 //   }
 
   useEffect(() => {
-    debugger;
       if(token)
       {
         getUser().then((res) => {

@@ -21,6 +21,7 @@ namespace CleanArchitecture.Application.User
     {
         public class Query : IRequest<WaitingTrainerInfoDto>
         {
+            public string Username { get; set; }
 
         }
 
@@ -39,74 +40,81 @@ namespace CleanArchitecture.Application.User
             }
             public async Task<WaitingTrainerInfoDto> Handle(Query request, CancellationToken cancellationToken)
             {
-                var user = await _userManager.FindByNameAsync(_userAccessor.GetCurrentUsername());
+                var currentUser = await _userManager.FindByNameAsync(_userAccessor.GetCurrentUsername());
 
-                if (user == null) throw new RestException(HttpStatusCode.Unauthorized);
-                if (user.Role != Role.WaitingTrainer && user.Role != Role.Admin) throw new RestException(HttpStatusCode.Forbidden);
+                if (currentUser == null) throw new RestException(HttpStatusCode.Unauthorized);
+                
+                var user = await _userManager.FindByNameAsync(request.Username);
 
-
-                var catsToReturn = new List<CategoryDto>();
-
-                foreach (var cat in user.UserCategories)
+                if (currentUser.UserName == user.UserName ||  currentUser.Role == Role.Admin)
                 {
-                    var catDto = new CategoryDto
+                    var catsToReturn = new List<CategoryDto>();
+
+                    foreach (var cat in user.UserCategories)
                     {
-                        Key = cat.Category.Id.ToString(),
-                        Text = cat.Category.Name,
-                        Value = cat.Category.Id.ToString(),
+                        var catDto = new CategoryDto
+                        {
+                            Key = cat.Category.Id.ToString(),
+                            Text = cat.Category.Name,
+                            Value = cat.Category.Id.ToString(),
+                        };
+
+                        catsToReturn.Add(catDto);
+                    }
+
+                    var accessDtoToReturn = new List<AccessibilityDto>();
+
+                    foreach (var access in user.UserAccessibilities)
+                    {
+                        var accDto = new AccessibilityDto
+                        {
+                            Key = access.Accessibility.Id.ToString(),
+                            Text = access.Accessibility.Name,
+                            Value = access.Accessibility.Id.ToString(),
+                        };
+
+                        accessDtoToReturn.Add(accDto);
+                    }
+
+                    var subcatsToReturn = new List<SubCategoryDto>();
+
+                    foreach (var cat in user.UserSubCategories)
+                    {
+                        var catDto = new SubCategoryDto
+                        {
+                            Key = cat.SubCategory.Id.ToString(),
+                            Text = cat.SubCategory.Name,
+                            Value = cat.SubCategory.Id.ToString(),
+                        };
+
+                        subcatsToReturn.Add(catDto);
+                    }
+
+                    return new WaitingTrainerInfoDto()
+                    {
+                        SendToRegister = user.Role == Role.UnderConsiTrainer,
+                        SubMerchantKey = user.SubMerchantKey,
+                        Categories = catsToReturn,
+                        Accessibilities = accessDtoToReturn,
+                        SubCategories = subcatsToReturn,
+                        UserName = user.UserName,
+                        DisplayName = user.DisplayName,
+                        Email = user.Email,
+                        Title = user.Title,
+                        PhoneNumber = user.PhoneNumber,
+                        Description = user.Bio,
+                        Experience = user.Experience,
+                        ExperienceYear = user.ExperienceYear,
+                        Role = user.Role.ToString(),
+                        Dependency = user.Dependency,
+                        City = _mapper.Map<City, CityDto>(user.City),
+                        Certificates = user.Certificates,
+                        SuggestedSubCategory = user.SuggestedSubCategory
                     };
 
-                    catsToReturn.Add(catDto);
                 }
-
-                var accessDtoToReturn = new List<AccessibilityDto>();
-
-                foreach (var access in user.UserAccessibilities)
-                {
-                    var accDto = new AccessibilityDto
-                    {
-                        Key = access.Accessibility.Id.ToString(),
-                        Text = access.Accessibility.Name,
-                        Value = access.Accessibility.Id.ToString(),
-                    };
-
-                    accessDtoToReturn.Add(accDto);
-                }
-
-                var subcatsToReturn = new List<SubCategoryDto>();
-
-                foreach (var cat in user.UserSubCategories)
-                {
-                    var catDto = new SubCategoryDto
-                    {
-                        Key = cat.SubCategory.Id.ToString(),
-                        Text = cat.SubCategory.Name,
-                        Value = cat.SubCategory.Id.ToString(),
-                    };
-
-                    subcatsToReturn.Add(catDto);
-                }
-
-                return new WaitingTrainerInfoDto()
-                {
-                    SendToRegister = user.Role == Role.UnderConsiTrainer,
-                    SubMerchantKey = user.SubMerchantKey,
-                    Categories = catsToReturn,
-                    Accessibilities = accessDtoToReturn,
-                    SubCategories = subcatsToReturn,
-                    UserName = user.UserName,
-                    DisplayName = user.DisplayName,
-                    Email = user.Email,
-                    Title = user.Title,
-                    PhoneNumber = user.PhoneNumber,
-                    Description = user.Bio,
-                    Experience = user.Experience,
-                    ExperienceYear = user.ExperienceYear,
-                    Role = user.Role.ToString(),
-                    Dependency = user.Dependency,
-                    City = _mapper.Map<City, CityDto>(user.City),
-                    Certificates = user.Certificates
-                };
+                else { throw new RestException(HttpStatusCode.Forbidden); }
+               
             }
         }
     

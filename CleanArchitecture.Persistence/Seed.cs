@@ -837,8 +837,21 @@ namespace Persistence
                                 AppUserId = "a",
                                 Category = Spor
                             },
-                        }
-                       
+                        },
+                         UserSubCategories = new List<UserSubCategories>
+                        {
+                            new UserSubCategories
+                            {
+                                AppUserId = "a",
+                                SubCategory = Swim
+                            },
+                             new UserSubCategories
+                            {
+                                AppUserId = "a",
+                                SubCategory = Yoga
+                            },
+                        },
+
                     },
                     new AppUser
                     {
@@ -878,7 +891,20 @@ namespace Persistence
                                 AppUserId = "b",
                                 Category = Spor
                             },
-                        }                         
+                        },
+                           UserSubCategories = new List<UserSubCategories>
+                        {
+                            new UserSubCategories
+                            {
+                                AppUserId = "b",
+                                SubCategory = Swim
+                            },
+                             new UserSubCategories
+                            {
+                                AppUserId = "b",
+                                SubCategory = Yoga
+                            },
+                        }
                     },
                     new AppUser
                     {
@@ -918,6 +944,19 @@ namespace Persistence
                                 AppUserId = "c",
                                 Category = Spor
                             },
+                        },
+                           UserSubCategories = new List<UserSubCategories>
+                        {
+                            new UserSubCategories
+                            {
+                                AppUserId = "c",
+                                SubCategory = Swim
+                            },
+                             new UserSubCategories
+                            {
+                                AppUserId = "c",
+                                SubCategory = Yoga
+                            },
                         }
 
                     },
@@ -946,6 +985,19 @@ namespace Persistence
                                 AppUserId = "d",
                                 Category = Spor
                             },
+                        },
+                        UserSubCategories = new List<UserSubCategories>
+                        {
+                            new UserSubCategories
+                            {
+                                AppUserId = "d",
+                                SubCategory = Swim
+                            },
+                             new UserSubCategories
+                            {
+                                AppUserId = "d",
+                                SubCategory = Yoga
+                            },
                         }
 
                     },
@@ -971,6 +1023,19 @@ namespace Persistence
                                 AppUserId = "e",
                                 Category = Spor
                             },
+                        },
+                          UserSubCategories = new List<UserSubCategories>
+                        {
+                            new UserSubCategories
+                            {
+                                AppUserId = "e",
+                                SubCategory = Swim
+                            },
+                             new UserSubCategories
+                            {
+                                AppUserId = "e",
+                                SubCategory = Yoga
+                            },
                         }
 
                     },
@@ -981,6 +1046,7 @@ namespace Persistence
                         UserName = "ahmet",
                         Email = "ahmet@test.com",
                         Role=Role.Trainer,
+                        Title= "Spor Hocası",
                         ExperienceYear=3,
                        ApplicationDate = DateTime.Now,
                         RegistrationDate = DateTime.Now,
@@ -996,6 +1062,19 @@ namespace Persistence
                                 AppUserId = "f",
                                 Category = Spor
                             },
+                        },
+                            UserSubCategories = new List<UserSubCategories>
+                        {
+                            new UserSubCategories
+                            {
+                                AppUserId = "f",
+                                SubCategory = Swim
+                            },
+                             new UserSubCategories
+                            {
+                                AppUserId = "f",
+                                SubCategory = Yoga
+                            },
                         }
                     },
                     new AppUser
@@ -1006,6 +1085,7 @@ namespace Persistence
                         Email = "semih@test.com",
                         Role=Role.Trainer,
                         Title="Tenis Antrenorü",
+                        ExperienceYear=3,
                        ApplicationDate = DateTime.Now,
                         RegistrationDate = DateTime.Now,
                         UserAccessibilities = new List<UserAccessibility>
@@ -1033,6 +1113,19 @@ namespace Persistence
                                 AppUserId = "g",
                                 Category = Spor
                             },
+                        },
+                           UserSubCategories = new List<UserSubCategories>
+                        {
+                            new UserSubCategories
+                            {
+                                AppUserId = "g",
+                                SubCategory = Swim
+                            },
+                             new UserSubCategories
+                            {
+                                AppUserId = "g",
+                                SubCategory = Yoga
+                            },
                         }
                     },
                      new AppUser
@@ -1042,6 +1135,8 @@ namespace Persistence
                         UserName = "jack",
                         Email = "jack@test.com",
                         Role=Role.Trainer,
+                        ExperienceYear=3,
+                         Title="Yoga Uzmanı",
                         ApplicationDate = DateTime.Now,
                         RegistrationDate = DateTime.Now,
                       UserCategories = new List<UserCategories>
@@ -1056,7 +1151,20 @@ namespace Persistence
                                 AppUserId = "h",
                                 Category = Spor
                             },
-                        }
+                        },
+                        UserSubCategories = new List<UserSubCategories>
+                        {
+                            new UserSubCategories
+                            {
+                                AppUserId = "h",
+                                SubCategory = Swim
+                            },
+                             new UserSubCategories
+                            {
+                                AppUserId = "h",
+                                SubCategory = Yoga
+                            },
+                        },
 
                     },
                      new AppUser
@@ -1065,6 +1173,7 @@ namespace Persistence
                         DisplayName = "Johny",
                         UserName = "johny",
                         Email = "johny@test.com",
+                         ExperienceYear = 5,
                         Role=Role.Trainer,
                         ApplicationDate = DateTime.Now,
                         RegistrationDate = DateTime.Now,
@@ -1500,16 +1609,36 @@ namespace Persistence
                          DisplayName = "Esra Sertsu",
                          UserName = "esrasertsu",
                          Email = "admin@test.com",
-                         Role = Role.Admin
+                         Role = Role.Admin,
+                         EmailConfirmed = true,
+                         PhoneNumberConfirmed = true,
+                         PhoneNumber = "05308602910"
+                     },
+                     new AppUser
+                     {
+                         Id = "admin2",
+                         DisplayName = "Ulvi Sertsu",
+                         UserName = "usertsu",
+                         Email = "usertsu@test.com",
+                         Role = Role.Admin,
+                         EmailConfirmed = true,
+                         PhoneNumberConfirmed = true,
+                         PhoneNumber = "05308602910"
                      },
                 };
 
+                //await roleManager.CreateAsync(new IdentityRole(Role.Trainer.ToString()));
+                //await roleManager.CreateAsync(new IdentityRole(Role.Admin.ToString()));
+                //await roleManager.CreateAsync(new IdentityRole(Role.User.ToString()));
 
-            foreach (var user in users)
+                foreach (var user in users)
                 {
-                 
-                    await roleManager.CreateAsync(new IdentityRole(user.Role.ToString()));
-                    var result = await userManager.CreateAsync(user, "Password1");
+                    var role = await roleManager.FindByNameAsync(user.Role.ToString());
+
+                    if(role== null)
+                       await roleManager.CreateAsync(new IdentityRole(user.Role.ToString()));
+
+                    var result = await userManager.CreateAsync(user, "Es2248845");
                     if (result.Succeeded)
                     {
                         await userManager.AddToRoleAsync(user, user.Role.ToString());
@@ -1525,6 +1654,8 @@ namespace Persistence
                     {
                         Title = "Past Activity 1",
                         Date = DateTime.Now.AddMonths(-2),
+                        EndDate = DateTime.Now.AddMonths(-2).AddDays(1),
+                        Duration=130,
                         Description = "Activity 2 months ago",
                         Venue = "Pub",
                         Online= true,
@@ -1566,6 +1697,8 @@ namespace Persistence
                     {
                         Title = "Past Activity 2",
                         Date = DateTime.Now.AddMonths(-1),
+                        EndDate = DateTime.Now.AddMonths(-1).AddDays(1),
+                        Duration=2*60,
                         Description = "Activity 1 month ago",
                         Categories  = new List<ActivityCategories>
                         {
@@ -1613,6 +1746,8 @@ namespace Persistence
                     {
                         Title = "Future Activity 1",
                         Date = DateTime.Now.AddMonths(1),
+                        EndDate = DateTime.Now.AddMonths(1).AddDays(2),
+                        Duration=48*60,
                         Description = "Activity 1 month in future",
                         Venue = "Wembly Stadium",
                         Price= Convert.ToDecimal("200"),
@@ -1658,6 +1793,8 @@ namespace Persistence
                     {
                         Title = "Future Activity 2",
                         Date = DateTime.Now.AddMonths(3),
+                         EndDate = DateTime.Now.AddMonths(3).AddDays(2),
+                        Duration=48*60,
                         Description = "The header spscroll, which smooth scrolls some link clicks, was globally targeting any element with data-scroll… a shared attribute that your plugin also uses. I updated the specificity on this to target the header data-scroll elements only, and all is right in the universe.Thanks for the quick response.Close this puppy up as resolved",
                         Venue = "Pub",
                          Online= true,
@@ -1704,6 +1841,8 @@ namespace Persistence
                     {
                         Title = "Future Activity 4",
                         Date = DateTime.Now.AddMonths(4),
+                         EndDate = DateTime.Now.AddMonths(4).AddDays(1),
+                        Duration=24*60,
                         Description = "Activity 4 months in future",
                         Venue = "British Museum",
                         Price= Convert.ToDecimal("100"),
@@ -1744,6 +1883,8 @@ namespace Persistence
                     {
                         Title = "Future Activity 5",
                         Date = DateTime.Now.AddMonths(5),
+                         EndDate = DateTime.Now.AddMonths(5).AddDays(1),
+                        Duration=3*60,
                         Description = "Activity 5 months in future",
                         Venue = "Punch and Judy",
                         Price= Convert.ToDecimal("200"),
@@ -1790,6 +1931,8 @@ namespace Persistence
                     {
                         Title = "Future Activity 6",
                         Date = DateTime.Now.AddMonths(6),
+                         EndDate = DateTime.Now.AddMonths(6).AddDays(1),
+                        Duration=5*60,
                         Description = "Activity 6 months in future",
                         Price= Convert.ToDecimal("300"),
                         Venue = "O2 Arena",
@@ -1835,6 +1978,8 @@ namespace Persistence
                     {
                         Title = "Future Activity 7",
                         Date = DateTime.Now.AddMonths(7),
+                         EndDate = DateTime.Now.AddMonths(7).AddDays(1),
+                        Duration=8*60,
                         Description = "Activity 7 months in future",
                         Venue = "All",
                         Price= Convert.ToDecimal("150"),
@@ -1881,6 +2026,8 @@ namespace Persistence
                     {
                         Title = "Future Activity 8",
                         Date = DateTime.Now.AddMonths(8),
+                         EndDate = DateTime.Now.AddMonths(8).AddDays(1),
+                        Duration=16*60,
                         Description = "Activity 8 months in future",
                         Venue = "Pub",
                          Online= true,

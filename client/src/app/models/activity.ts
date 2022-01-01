@@ -13,6 +13,8 @@ export interface IActivity {
     categories: ICategory[];
     subCategories: ISubCategory[];
     date: Date;
+    endDate: Date;
+    duration:number;
     city: ICity,
     venue: string;
     address:string;
@@ -60,11 +62,15 @@ export interface IActivitySelectedFilter {
 
 export interface IActivityFormValues extends Partial<IActivity>{
     time?: Date,
+    endTime?: Date,
     subCategoryIds: string[],
     categoryIds: string[],
     cityId:string,
     levelIds: string[],
     photo?: Blob;
+    durationDay: number;
+    durationMin: number;
+    durationHour:number;
 
 }
 
@@ -76,6 +82,8 @@ export class ActivityFormValues implements IActivityFormValues {
     description:string = '';
     date?: Date = undefined;
     time?: Date = undefined;
+    endDate?: Date = undefined;
+    endTime?: Date = undefined;
     cityId:string = "";
     venue:string = '';
     address:string = '';
@@ -85,15 +93,31 @@ export class ActivityFormValues implements IActivityFormValues {
     categoryIds: string[] =[];
     levelIds: string[] =[];
     price?: number;
+    duration: number = 0;
     attendancyLimit?: number;
     photo?: Blob=undefined;
     mainImage?: IPhoto = undefined;
+    durationDay: number =0;
+    durationMin: number=0;
+    durationHour:number=0;
     constructor(init?: IActivityFormValues){
+        debugger;
         if(init && init.date)
         {
             init.time = init.date
         }
+        if(init && init.endDate)
+        {
+            init.endTime = init.endDate
+        }
 
+        if(init && init.duration)
+        {
+            init.durationDay = Math.floor(init.duration / (24*60)); 
+            init.durationHour = Math.floor((init.duration % (60*24) )/ 60); 
+            init.durationMin = Math.floor((init.duration % (60*24)) % 60); 
+
+        }
 
         if(init)
         {   
@@ -101,6 +125,8 @@ export class ActivityFormValues implements IActivityFormValues {
         init.subCategoryIds=[];
         init.levelIds =[];
         init.cityId = init.city ? init.city.value : "";
+        init.venue = init.venue ? init.venue : "";
+        init.address = init.address ? init.address : "";
                             init.categories!.forEach(s=>
                         {
                             init.categoryIds.push(s.value.toString())

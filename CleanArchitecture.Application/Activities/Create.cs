@@ -28,6 +28,8 @@ namespace CleanArchitecture.Application.Activities
             public List<Guid> SubCategoryIds { get; set; }
             public List<Guid> LevelIds { get; set; }
             public string Date { get; set; }
+            public string EndDate { get; set; }
+            public string Duration { get; set; }
             public string CityId { get; set; }
             public string Venue { get; set; }
             public bool Online { get; set; }
@@ -45,6 +47,7 @@ namespace CleanArchitecture.Application.Activities
                 RuleFor(x => x.Description).NotEmpty();
                 RuleFor(x => x.CategoryIds).NotEmpty();
                 RuleFor(x => x.Date).NotEmpty();
+                RuleFor(x => x.EndDate).NotEmpty();
 
             }
         }
@@ -69,6 +72,9 @@ namespace CleanArchitecture.Application.Activities
 
             public async Task<ActivityDto> Handle(Command request, CancellationToken cancellationToken)
             {
+
+                //ekleyen kişi var mı yok mu
+
                 var image = new Photo();
 
                 var activity = new Activity
@@ -78,6 +84,8 @@ namespace CleanArchitecture.Application.Activities
                     Description = request.Description,
                     Address = request.Address,
                     Date = DateTime.Parse(request.Date),
+                    EndDate = DateTime.Parse(request.EndDate),
+                    Duration = string.IsNullOrEmpty(request.Duration) ? 0 : Convert.ToInt32(request.Duration),
                     Venue = request.Venue,
                     AttendancyLimit = string.IsNullOrEmpty(request.AttendancyLimit) ? 0 : Convert.ToInt32(request.AttendancyLimit),
                     AttendanceCount = 0,
@@ -95,6 +103,7 @@ namespace CleanArchitecture.Application.Activities
 
                 if (request.CategoryIds != null)
                 {
+                    // category user'ın categorisi mi
                     activity.Categories = new List<ActivityCategories>();
 
                     foreach (var catId in request.CategoryIds)

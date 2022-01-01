@@ -30,9 +30,10 @@ const companyTypeOptions = [
 
 interface IProps{
   setIsSubMerchant?:(val:boolean) => void;
+  id:string
 }
 
-const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant}) => {
+const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant,id}) => {
   const rootStore = useContext(RootStoreContext);
 
   const {
@@ -128,7 +129,7 @@ const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant}) => {
     if(isLoggedIn)
      {
       setLoading(true);
-      getSubMerchantInfo()
+      getSubMerchantInfo(id)
         .then(action((res) => {
           debugger;
             if(res)
@@ -230,6 +231,7 @@ const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant}) => {
             ...values,
             iban:values.iban.trim(),
             id: uuid(),
+            username: id
           };
           createSubMerchant(subMerchant).then((res) =>{
             setLoading(false);
@@ -249,7 +251,8 @@ const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant}) => {
         } else {
               let editedMerchant = {
                 ...values,
-                iban:values.iban.trim()
+                iban:values.iban.trim(),
+                username: id
               }
               editSubMerchant(editedMerchant).then((res) =>{
                 setLoading(false);

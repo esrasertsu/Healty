@@ -25,6 +25,7 @@ namespace CleanArchitecture.Application.SubMerchants
             public string Id { get; set; }
             public string SubMerchantKey { get; set; }
             public string MerchantType { get; set; }
+            public string Username { get; set; }
             public string Address { get; set; }
             public string TaxOffice { get; set; } //private,ltd
             public string TaxNumber { get; set; } //ltd
@@ -49,6 +50,7 @@ namespace CleanArchitecture.Application.SubMerchants
                 RuleFor(x => x.Email).NotEmpty();
                 RuleFor(x => x.GsmNumber).NotEmpty();
                 RuleFor(x => x.Iban).NotEmpty();
+                RuleFor(x => x.Username).NotEmpty();
 
             }
         }
@@ -78,6 +80,12 @@ namespace CleanArchitecture.Application.SubMerchants
 
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
+
+                if(user.Role != Role.Admin && user.UserName != request.Username)
+                    throw new RestException(HttpStatusCode.Unauthorized);
+
+                if (user.UserName != request.Username) //current user requestteki trainer değilse
+                    user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.Username);
 
                 Enum.TryParse(typeof(MerchantType), request.MerchantType, out var merchantType);
                 if (merchantType == null)

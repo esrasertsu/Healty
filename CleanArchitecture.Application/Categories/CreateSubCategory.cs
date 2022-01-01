@@ -18,7 +18,7 @@ namespace CleanArchitecture.Application.Categories
         public class Command : IRequest
         {
             public string Name { get; set; }
-            public Guid CategoryId { get; set; }
+            public string CategoryId { get; set; }
      
         }
 
@@ -44,7 +44,7 @@ namespace CleanArchitecture.Application.Categories
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
 
-                var category = await _context.Categories.SingleOrDefaultAsync(x => x.Id == request.CategoryId);
+                var category = await _context.Categories.SingleOrDefaultAsync(x => x.Id.ToString() == request.CategoryId);
                 if (category == null)
                     throw new RestException(HttpStatusCode.NotFound, new { category = "Not Found" });
 

@@ -328,7 +328,8 @@ namespace CleanArchitecture.Application.Profiles
                 ApplicationDate = user.ApplicationDate,
                 LastLoginDate = user.LastLoginDate,
                 LastProfileUpdatedDate = user.LastProfileUpdatedDate,
-                Iban = user.SubMerchantDetails?.Iban
+                Iban = user.SubMerchantDetails?.Iban,
+                SuggestedSubCategory = user.SuggestedSubCategory
             };
            
 

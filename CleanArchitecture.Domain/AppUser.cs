@@ -30,6 +30,7 @@ namespace CleanArchitecture.Domain
         public DateTime LastLoginDate { get; set; }
         public DateTime? ApplicationDate { get; set; }
         public virtual City City { get; set; }
+        public string SuggestedSubCategory { get; set; }
         public string Bio { get; set; }
         public string VideoUrl { get; set; }
         public bool IsOnline { get; set; }
@@ -42,6 +43,7 @@ namespace CleanArchitecture.Domain
         public virtual SubMerchant SubMerchantDetails { get; set; }
         public DateTime LastProfileUpdatedDate { get; set; }
         public virtual ICollection<ActivityComment> ActivityComments { get; set; }
+        public virtual ICollection<ActivityReview> ActivityReviews { get; set; }
         public virtual ICollection<UserActivity> UserActivities { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
         public virtual ICollection<UserFollowing> Followings { get; set; }

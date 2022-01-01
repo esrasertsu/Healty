@@ -30,6 +30,8 @@ namespace CleanArchitecture.Application.User
         public CityDto City { get; set; }
         public ICollection<Certificate> Certificates { get; set; }
         public bool SendToRegister { get; set; }
+        public string SuggestedSubCategory { get; set; }
+
 
     }
 }

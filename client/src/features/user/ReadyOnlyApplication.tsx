@@ -58,7 +58,7 @@ useEffect(() => {
   
 useEffect(() => {
 
-  agent.User.loadNewTrainer()
+  agent.User.loadNewTrainer(id)
   .then(action((newTrainer) =>
   {
     setTrainerForm(new TrainerFormValues(newTrainer!));
@@ -238,7 +238,7 @@ useEffect(() => {
       />
              
       {/* <Tab className="trainerFormAccountingTab" style={{margin:"20px 0"}} menu={{ pointing: true }} panes={panes} /> */}
-    <SubMerchantDetails />
+       <SubMerchantDetails id={id} />
      
    
       </Accordion.Content>

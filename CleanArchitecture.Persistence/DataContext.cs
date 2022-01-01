@@ -47,6 +47,7 @@ namespace CleanArchitecture.Persistence
         public DbSet<ActivityLevels> ActivityLevels { get; set; }
         public DbSet<ActivityCategories> ActivityCategories { get; set; }
         public DbSet<ActivitySubCategories> ActivitySubCategories { get; set; }
+        public DbSet<ActivityReview> ActivityReviews { get; set; }
         public DbSet<ReferencePic> ReferencePics { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Level> Levels { get; set; }
@@ -84,14 +85,23 @@ namespace CleanArchitecture.Persistence
             builder.Entity<ActivityComment>()
                .HasOne(comment => comment.Activity)
                .WithMany(acivity => acivity.Comments)
-               .HasForeignKey(comment => comment.ActivityId)
-               .OnDelete(DeleteBehavior.Cascade);
+               .HasForeignKey(comment => comment.ActivityId);
+             
 
             builder.Entity<ActivityComment>()
                 .HasOne(comment => comment.Author)
                 .WithMany(appUser => appUser.ActivityComments)
-                .HasForeignKey(comment => comment.AppUserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(comment => comment.AppUserId);
+
+            builder.Entity<ActivityReview>()
+              .HasOne(comment => comment.Activity)
+              .WithMany(acivity => acivity.Reviews)
+              .HasForeignKey(comment => comment.ActivityId);
+
+            builder.Entity<ActivityReview>()
+                .HasOne(comment => comment.Author)
+                .WithMany(appUser => appUser.ActivityReviews)
+                .HasForeignKey(comment => comment.AuthorId);
 
             builder.Entity<UserFollowing>(b =>
             {
@@ -100,12 +110,12 @@ namespace CleanArchitecture.Persistence
                 b.HasOne(o => o.Observer)
                     .WithMany(f => f.Followings)
                     .HasForeignKey(o => o.ObserverId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 b.HasOne(o => o.Target)
                   .WithMany(f => f.Followers)
                   .HasForeignKey(o => o.TargetId)
-                  .OnDelete(DeleteBehavior.Restrict);
+                  .OnDelete(DeleteBehavior.Cascade);
             });
 
 
@@ -255,6 +265,11 @@ namespace CleanArchitecture.Persistence
                .HasOne<SubMerchant>(s => s.SubMerchantDetails)
                .WithOne(ad => ad.User)
                .HasForeignKey<SubMerchant>(ad => ad.UserId);
+
+            builder.Entity<RefreshToken>()
+               .HasOne(a => a.AppUser)
+               .WithMany(u => u.RefreshTokens)
+               .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

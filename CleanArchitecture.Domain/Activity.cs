@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CleanArchitecture.Domain
@@ -15,7 +16,10 @@ namespace CleanArchitecture.Domain
         public int? AttendancyLimit { get; set; }
         public int AttendanceCount { get; set; }
         public decimal? Price { get; set; }
+        public int Duration { get; set; }
         public DateTime Date { get; set; }
+        public DateTime EndDate { get; set; }
+        public string CallRoomId { get; set; }
         public virtual City City { get; set; }
         public string Venue { get; set; }
         public string Address { get; set; }
@@ -27,6 +31,15 @@ namespace CleanArchitecture.Domain
         public virtual ICollection<Video> Videos { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastUpdateDate { get; set; }
+
+        public bool TrainerApproved { get; set; }
+        public DateTime TrainerApprovedDate { get; set; }
+        public bool AdminApproved { get; set; }
+        public DateTime AdminApprovedDate { get; set; }
+
+        public virtual ICollection<ActivityReview> Reviews { get; set; }
+        public int Star { get { return Convert.ToInt32(this.Reviews.Count() > 0 ? this.Reviews.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Average() : 0); } } //rating
+        public int StarCount { get { return Convert.ToInt32(this.Reviews.Count() > 0 ? this.Reviews.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Count() : 0); } } //total rate votes ( bigger than zero) 
 
     }
 }

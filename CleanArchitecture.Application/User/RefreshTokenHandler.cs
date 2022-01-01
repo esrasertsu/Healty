@@ -54,20 +54,23 @@ namespace CleanArchitecture.Application.User
 
                 if (oldToken != null && !oldToken.IsActive)
                     throw new RestException(HttpStatusCode.Unauthorized);
-
-                var inactiveTokens = user.RefreshTokens.Where(t => !t.Token.Equals(oldToken.Token)).ToList();
-                foreach (var token in inactiveTokens)
+                if(oldToken != null)
                 {
-                    if(DateTime.UtcNow - token.LastRefreshed > TimeSpan.FromMinutes(9))
+                    var inactiveTokens = user.RefreshTokens.Where(t => !t.Token.Equals(oldToken.Token)).ToList();
+                    foreach (var token in inactiveTokens)
                     {
-                        _context.RefreshTokens.Remove(token);
+                        if (DateTime.UtcNow - token.LastRefreshed > TimeSpan.FromMinutes(9))
+                        {
+                            _context.RefreshTokens.Remove(token);
+                        }
+                    }
+
+                    if (oldToken != null)
+                    {
+                        oldToken.Revoked = DateTime.UtcNow;
                     }
                 }
-
-                if (oldToken != null)
-                {
-                    oldToken.Revoked = DateTime.UtcNow;
-                }
+              
 
                 var newRefreshToken = _jwtGenerator.GenerateRefreshToken();
                 user.RefreshTokens.Add(newRefreshToken);

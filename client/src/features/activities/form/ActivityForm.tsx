@@ -23,6 +23,7 @@ import PhotoWidgetDropzone from "../../../app/common/photoUpload/PhotoWidgetDrop
 import PhotoWidgetCropper from "../../../app/common/photoUpload/PhotoWidgetCropper";
 import { action } from "mobx";
 import { toast } from "react-toastify";
+import { useMediaQuery } from "react-responsive";
 
 
 interface DetailParams {
@@ -49,11 +50,12 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
     cities
   } = rootStore.commonStore;
 
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' })
 
 
   const customCityRequired = activityForm.online ? 
   isRequired({message:""}):
-  isRequired({message: 'Şehir zorunlu alandır.'}) 
+  isRequired({message: 'Online olmayan aktiviteler için zorunlu alandır.'}) 
 
 const validate = combineValidators({
   title: isRequired({message: 'Aktivite başlığı zorunlu alandır.'}),
@@ -62,10 +64,14 @@ const validate = combineValidators({
     isRequired({message: 'Açıklama zorunlu alandır.'}),
     hasLengthGreaterThan(50)({message: 'Açıklama en az 50 karakter uzunluğunda olmalıdır.'})
   )(),
-  date: isRequired({message: 'Tarih zorunlu alandır.'}),
-  time:isRequired({message: 'Saat zorunlu alandır.'}),
+  date: isRequired({message: 'Başlangıç Tarihi zorunlu alandır.'}),
+  time:isRequired({message: 'Başlangıç Saati zorunlu alandır.'}),
+  endDate: isRequired({message: 'Bitiş Tarihi zorunlu alandır.'}),
+  endTime:isRequired({message: 'Bitiş Saati zorunlu alandır.'}),
   price:isRequired('price'),
-  cityId: customCityRequired
+  cityId: customCityRequired,
+  venue:customCityRequired,
+  address: customCityRequired
 })
 
 
@@ -82,6 +88,7 @@ const validate = combineValidators({
 
    const [files, setFiles] = useState<any[]>([]);
    const [originalImage, setOriginalImage] = useState<Blob | null>(null);
+   const [durationMessage, setDurationMessage] = useState("");
 
    const [image, setImage] = useState<Blob | null>(null);
    const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
@@ -155,16 +162,42 @@ const handleDateChange = (date:any) =>{
 }
 
 const handleTimeChange = (time:any) =>{
-  const dateAndTime = activityForm.date ? combineDateAndTime(activityForm.date!, time) : combineDateAndTime(new Date(), time);
+  const dateAndTime = activityForm.date ? combineDateAndTime(activityForm.date, time) : combineDateAndTime(new Date(), time);
   setActivityForm({...activityForm, time: dateAndTime});
 }
 
+const handleEndDateChange = (endDate:any) =>{
+
+  const dateAndTime = activityForm.endTime ? combineDateAndTime(endDate, activityForm.endTime): combineDateAndTime(endDate, new Date());
+  setActivityForm({...activityForm, endDate: dateAndTime});
+}
+
+const handleEndTimeChange = (endTime:any) =>{
+  const dateAndTime = activityForm.endDate ? combineDateAndTime(activityForm.endDate, endTime) : combineDateAndTime(new Date(), endTime);
+  setActivityForm({...activityForm, endTime: dateAndTime});
+}
+
   const handleFinalFormSubmit = (values: any) => {
+    let error = false;
+    debugger;
     const dateAndTime = combineDateAndTime(values.date, values.time);
-    const { date, time, ...activity } = values;
+    const enddateAndTime = combineDateAndTime(values.endDate, values.endTime);
+
+    const { date, time, endDate, endTime,durationHour,durationDay, durationMin, ...activity } = values;
     activity.date = dateAndTime;
-
-
+    activity.endDate = enddateAndTime;
+debugger;
+   const totalDuration = +((durationDay ? durationDay : 0) *24 *60) + +((durationHour ? durationHour : 0) * 60) + +(durationMin ? durationMin : 0);
+   if(totalDuration === 0) {
+     setDurationMessage("Lütfen aktivitenin süresini belirtiniz.");
+     error = true;
+    }
+   else {
+     setDurationMessage("");
+     error = false;
+    }
+      if(!error)
+      {
         if (!activity.id) {
           debugger;
             if(image == null)
@@ -175,6 +208,7 @@ const handleTimeChange = (time:any) =>{
                 ...activity,
                 photo: image,
                 id: uuid(),
+                duration:totalDuration
               };
               createActivity(newActivity);
             }
@@ -186,13 +220,15 @@ const handleTimeChange = (time:any) =>{
             if(!imageChange)
             {
               let editedActivity = {
-                ...activity
+                ...activity,
+                duration:totalDuration
               }
               editActivity(editedActivity);
             }else {
               let editedActivity = {
                 ...activity,
-                photo: image
+                photo: image,
+                duration:totalDuration
               }
               editActivity(editedActivity);
             }
@@ -203,7 +239,9 @@ const handleTimeChange = (time:any) =>{
           }
         
 
-}
+        }
+      }
+    
     
   };
 
@@ -395,7 +433,7 @@ const handleTimeChange = (time:any) =>{
                   placeholder=""
                   component={NumberInput}
                   value={activityForm.attendancyLimit}
-                  width={4}
+                  width={isMobile ? 6 :3}
                 />
                  <OnChange name="attendancyLimit">
                 {(value, previous) => {
@@ -438,13 +476,13 @@ const handleTimeChange = (time:any) =>{
                 }}
                 </OnChange>
                 </div>
-              
+                <Form.Group className="date_equal_fields" widths="equal">
                 <Form.Group widths="equal">
                   <Field
-                    label="Tarih*"
+                    label="Başlangıç Tarihi*"
                     name="date"
                     date={true}
-                    placeholder="Tarih"
+                    placeholder="Seçiniz"
                     value={activityForm.date}
                     component={DateInput}
                     messages={{
@@ -454,10 +492,10 @@ const handleTimeChange = (time:any) =>{
                     onChange={handleDateChange}
                   />
                   <Field
-                    label="Saat*"
+                    label="Başlangıç Saati*"
                     name="time"
                     time={true}
-                    placeholder="Saat"
+                    placeholder="Seçiniz"
                     value={activityForm.time}
                     component={DateInput}
                     messages={{
@@ -468,6 +506,123 @@ const handleTimeChange = (time:any) =>{
 
                   />
                 </Form.Group>
+
+                
+                <Form.Group widths="equal">
+                  <Field
+                    label="Bitiş Tarihi*"
+                    name="endDate"
+                    date={true}
+                    placeholder="Seçiniz"
+                    value={activityForm.endDate}
+                    component={DateInput}
+                    messages={{
+                      dateButton: "",
+                      timeButton: "",
+                    }}
+                    onChange={handleEndDateChange}
+                  />
+                  <Field
+                    label="Bitiş Saati*"
+                    name="endTime"
+                    time={true}
+                    placeholder="Seçiniz"
+                    value={activityForm.endTime}
+                    component={DateInput}
+                    messages={{
+                      dateButton: "",
+                      timeButton: "",
+                    }}
+                    onChange={handleEndTimeChange}
+
+                  />
+                </Form.Group>
+                </Form.Group>
+
+
+                <label id="durationLabel" className={durationMessage !== "" ? "customErrorLabel fieldLabel" :"fieldLabel"} >Etkinlik Süresi* 
+                <Popup 
+                    hoverable
+                    on={['hover', 'click']}
+                    positionFixed 
+                    size='large' 
+                    trigger={<Icon style={{cursor:"pointer", marginLeft:"5px"}} 
+                    name="info circle" />}>
+                      <Popup.Content>
+                        <div style={{fontSize:"14px"}}>Etkinliğin toplam süresi.</div>
+                      </Popup.Content>
+                    </Popup>
+                    </label>
+                    <div style={{display:"flex", flexDirection:"row", marginBottom:"15px", }}>
+                      <div className="durationItems">
+                      <span>Gün:</span>
+                        <Field
+                      name="durationDay"
+                      component={NumberInput}
+                      value={activityForm.durationDay}
+                      placeholder="00"
+                      labelName="durationLabel"
+                      // width={isMobile? 4 : 5}
+                      type="number"
+                    />
+                    <OnChange name="durationDay">
+                    {(value, previous) => {
+                        if(value !== activityForm.durationDay)
+                        {
+                            setUpdateEnabled(true);
+                            setActivityForm({...activityForm,durationDay: value});
+                        }
+                    }}
+                    </OnChange>
+                      </div>
+                   <div className="durationItems">
+                   <span> Saat:</span>
+                   <Field
+                  name="durationHour"
+                  component={NumberInput}
+                  value={activityForm.durationHour}
+                  placeholder="00"
+                  labelName="durationLabel"
+                 // width={isMobile? 4 : 5}
+                  type="number"
+                   style={{marginBottom:15}}
+                />
+                 <OnChange name="durationHour">
+                {(value, previous) => {
+                    if(value !== activityForm.durationHour)
+                    {
+                        setUpdateEnabled(true);
+                        setActivityForm({...activityForm,durationHour: value});
+                    }
+                }}
+                </OnChange>
+                   </div>
+                   <div className="durationItems">
+                   <span> Dakika:</span>
+                    <Field
+                      name="durationMin"
+                      component={NumberInput}
+                      value={activityForm.durationMin}
+                      placeholder="00"
+                      labelName="durationLabel"
+                      // width={isMobile? 4 : 5}
+                      type="number"
+                      
+                    />
+                    <OnChange name="durationMin">
+                    {(value, previous) => {
+                        if(value !== activityForm.durationMin)
+                        {
+                            setUpdateEnabled(true);
+                            setActivityForm({...activityForm,durationMin: value});
+                        }
+                    }}
+                    </OnChange>
+                   </div>
+                  
+                    </div>
+                    {durationMessage!=="" && <label style={{color:"red"}}>*{durationMessage}</label>}            
+
                 <label id="priceLabel" className={activityForm.price === undefined ? "customErrorLabel fieldLabel" :"fieldLabel"} >Fiyat(TL)* 
                 <Popup 
                     hoverable
@@ -487,6 +642,7 @@ const handleTimeChange = (time:any) =>{
                   value={activityForm.price}
                   placeholder="500TL"
                   labelName="priceLabel"
+                  width={isMobile ? 6 :3}
                   type="number"
                   style={{marginBottom:15}}
                 />
@@ -505,6 +661,7 @@ const handleTimeChange = (time:any) =>{
                     on={['hover', 'click']}
                     positionFixed 
                     size='large' 
+                    width={isMobile ? 6 :3}
                     trigger={<Icon style={{cursor:"pointer", marginLeft:"5px"}} 
                     name="info circle" />}>
                       <Popup.Content>
@@ -518,6 +675,7 @@ const handleTimeChange = (time:any) =>{
                   placeholder="Şehir"
                   component={DropdownInput}
                   options={cities}
+                  width={isMobile ? 6 :3}
                   value={activityForm.cityId}
                   emptyError={activityForm.cityId}
                   clearable={true}

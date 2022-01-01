@@ -45,16 +45,16 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet("newTrainerInfo")]
-        public async Task<ActionResult<WaitingTrainerInfoDto>> LoadWaitingTrainerInfo()
+        public async Task<ActionResult<WaitingTrainerInfoDto>> LoadWaitingTrainerInfo(string username)
         {
-            return await Mediator.Send(new WaitingTrainerInfo.Query());
+            return await Mediator.Send(new WaitingTrainerInfo.Query{ Username = username});
            
         }
 
         [HttpGet("submerchantInfo")]
-        public async Task<ActionResult<SubMerchantDto>> GetSubmerchantnfo()
+        public async Task<ActionResult<SubMerchantDto>> GetSubmerchantnfo(string username)
         {
-           return await Mediator.Send(new SubMerchantDetails.Query());
+           return await Mediator.Send(new SubMerchantDetails.Query { Username = username });
         }
 
         [HttpPost("createSubMerchant")]

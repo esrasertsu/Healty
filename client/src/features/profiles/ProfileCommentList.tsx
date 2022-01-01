@@ -34,7 +34,7 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
                  {getCommentsByDate.map((comment) => (
                      <Fragment key={comment.id}>
                       <Comment key={comment.id}>
-                      <Comment.Avatar circular="true" src={comment.image || '/assets/user.png'} />
+                      <Comment.Avatar circular="true" src={comment.image || '/assets/user.png'}  onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}/>
                       <Comment.Content>
                         <Comment.Author as={Link} to={`/profile/${comment.authorName}`} 
                          style={!comment.allowDisplayName ? {pointerEvents: "none", color:"black"} : {color:"#263a5e"}}

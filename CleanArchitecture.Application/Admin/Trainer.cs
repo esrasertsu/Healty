@@ -57,7 +57,7 @@ namespace CleanArchitecture.Application.Admin
         public DateTime? IyzicoContractSignedDate { get; set; }
         public DateTime LastProfileUpdatedDate { get; set; }
         public int ReceivedCommentCount { get; set; }
-
+        public string SuggestedSubCategory { get; set; }
 
     }
 }

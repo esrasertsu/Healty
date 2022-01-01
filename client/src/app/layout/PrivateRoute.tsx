@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useState } from 'react'
 import { Route, RouteComponentProps, RouteProps } from 'react-router-dom'
-import { Image, Modal, Segment } from 'semantic-ui-react';
+import { Container, Image, Modal, Segment } from 'semantic-ui-react';
 import { history } from '../../index';
 import  LoginForm from '../../features/user/LoginForm';
 import {RootStoreContext} from '../stores/rootStore';
@@ -22,9 +22,12 @@ interface IProps extends RouteProps{
         render={(props) => isLoggedIn ?
              <Component {...props} />
              : 
-             <Segment className="login-page-segment">
+              <Container className="pageContainer">
+                 <Segment className="login-page-segment">
                <LoginForm location={history.location.pathname} />
-             </Segment>
+                </Segment>
+             </Container>
+            
                   //   <Modal
                   //   closeIcon
                   //   dimmer='blurring'

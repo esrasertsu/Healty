@@ -66,6 +66,7 @@ export interface ITrainerFormValues {
     photo?: Blob|null;
     subCategoryIds: string[],
     categoryIds: string[],
+    suggestedSubCategory:string,
     accessibilityIds: string[],
     cityId:string,
     description: string,
@@ -89,6 +90,7 @@ export class TrainerFormValues implements ITrainerFormValues{
     documents:File[] =[];
     dependency:string = '';
     subCategoryIds: string[] =[];
+    suggestedSubCategory: string = '';
     categoryIds: string[]  =[];
     accessibilityIds: string[] =[];
     categories: ICategory[] = [];
@@ -151,7 +153,7 @@ export interface ISubMerchantInfo {
     identityNumber: string;
     legalCompanyTitle: string;
     hasSignedContract: boolean;
-
+    username:string;
 }
 
 
@@ -173,6 +175,7 @@ export class SubMerchantInfo implements ISubMerchantInfo {
     legalCompanyTitle: string = "";
     hasSignedContract: boolean = false;
 
+    username:string = "";
 
     constructor(init?: ISubMerchantInfo){
         if(init)

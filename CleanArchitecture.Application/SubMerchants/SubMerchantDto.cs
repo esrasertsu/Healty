@@ -8,6 +8,7 @@ namespace CleanArchitecture.Application.SubMerchants
     public class SubMerchantDto
     {
         public Guid Id { get; set; }
+        public string Username { get; set; }
         public string UserId { get; set; }
         public string SubMerchantKey { get; set; }
         public string MerchantType { get; set; }

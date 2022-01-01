@@ -42,9 +42,10 @@ const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
       <Image style={{margin:"auto"}} src={url}  />
     </Modal.Description>
     </>,false,
-    "") 
+    "","blurring",true) 
 
   }
+
 
   return (
     <>
@@ -52,6 +53,7 @@ const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
       size="large"
       dimmer="blurring"
       closeIcon
+      closeOnDimmerClick={true}
       onClose={() => {setOpen(false);setFiles([]);}}
       onOpen={() => setOpen(true)}
       open={open}
@@ -102,7 +104,7 @@ const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
             style={{fontSize:"16px"}}
             content="Fotoğraflar"
           /> }
-          {isCurrentUser && (
+          {isCurrentUser && profile && profile.photos && profile.photos.length <6 && (
             <Button
               floated="right"
               basic
@@ -146,7 +148,8 @@ const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
               {profile &&
                 profile.photos.filter(x => x.isCoverPic === false).map((photo) => (
                   <Card key={photo.id}>
-                    <Image onClick={() => handlePhotoClick(photo.url)} src={photo.url} />
+                    <Image onClick={() => handlePhotoClick(photo.url)} src={photo.url} 
+                     onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}/>
                     {isCurrentUser && (
                       <Button.Group fluid widths={2}>
                         <Button

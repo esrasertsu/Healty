@@ -27,6 +27,8 @@ namespace CleanArchitecture.Application.Activities
             public List<Guid> SubCategoryIds { get; set; }
             public List<Guid> LevelIds { get; set; }
             public string Date { get; set; }
+            public string EndDate { get; set; }
+            public string Duration { get; set; }
             public string CityId { get; set; }
             public string Venue { get; set; }
             public bool Online { get; set; }
@@ -46,7 +48,7 @@ namespace CleanArchitecture.Application.Activities
                 RuleFor(x => x.Description).NotEmpty();
                 RuleFor(x => x.CategoryIds).NotEmpty();
                 RuleFor(x => x.Date).NotEmpty();
-                RuleFor(x => x.Venue).NotEmpty();
+                RuleFor(x => x.EndDate).NotEmpty();
 
             }
         }
@@ -181,8 +183,10 @@ namespace CleanArchitecture.Application.Activities
                 activity.Title = request.Title ?? activity.Title;
                 activity.Description = request.Description ?? activity.Description;
                 activity.Date = DateTime.Parse(request.Date);
-                activity.Address = request.Address ?? activity.Address;
-                activity.Venue = request.Venue ?? activity.Venue;
+                activity.EndDate = DateTime.Parse(request.EndDate);
+                activity.Duration = String.IsNullOrEmpty(request.Duration) ? 0 : Convert.ToInt32(request.Duration);
+                activity.Address = request.Address;
+                activity.Venue = request.Venue;
                 activity.AttendancyLimit = String.IsNullOrEmpty(request.AttendancyLimit) ? 0 : Convert.ToInt32(request.AttendancyLimit);
                 activity.Price = String.IsNullOrEmpty(request.Price) ? 0 : Convert.ToDecimal(request.Price);
                 activity.Online = Convert.ToBoolean(request.Online);

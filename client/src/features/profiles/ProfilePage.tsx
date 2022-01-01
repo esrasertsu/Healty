@@ -48,12 +48,12 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
 
 
     if(loadingProfile && profile === null) 
-    return <LoadingComponent content='Loading profile...' />
+    return <LoadingComponent content='Uzman yükleniyor...' />
 
     return (
       <Container className="pageContainer">
 
-        {profile===null || profile!.userName !== match.params.username ? (<LoadingComponent content='Loading profile...' />) :
+        {profile===null || profile!.userName !== match.params.username ? (<LoadingComponent content='Uzman yükleniyor...' />) :
        (
          <>
         <Grid stackable>
@@ -141,7 +141,8 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
                 <Grid container className="profileMessageGrid" stackable>
                     <Grid.Row columns={2}>
                         <Grid.Column width={5}>
-                            <Image circular size={'tiny'} src={profile.image || '/assets/user.png'}></Image>
+                            <Image circular size={'tiny'} src={profile.image || '/assets/user.png'}
+                            onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}></Image>
                         </Grid.Column>
                         <Grid.Column width={11}>
                             <Header>{profile.displayName}</Header>

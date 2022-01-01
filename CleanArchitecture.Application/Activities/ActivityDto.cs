@@ -22,6 +22,8 @@ namespace CleanArchitecture.Application.Activities
         public int? AttendancyLimit { get; set; }
         public decimal? Price { get; set; }
         public DateTime Date { get; set; }
+        public DateTime EndDate { get; set; }
+        public int Duration { get; set; }
         public CityDto City { get; set; }
         public string Venue { get; set; }
         public string Address { get; set; }

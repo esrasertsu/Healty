@@ -15,7 +15,8 @@ const ProfileMessage: React.FC<IProps> = ({profile}) => {
                 <Grid container className="profileMessageGrid" stackable>
                     <Grid.Row columns={2}>
                         <Grid.Column width={5}>
-                            <Image circular size={'tiny'} src={profile.image || '/assets/user.png'}></Image>
+                            <Image circular size={'tiny'} src={profile.image || '/assets/user.png'}
+                            onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}></Image>
                         </Grid.Column>
                         <Grid.Column width={11}>
                             <Header>{profile.displayName}</Header>

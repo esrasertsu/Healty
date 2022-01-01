@@ -111,6 +111,7 @@ export const combineDateAndTime = (date: Date, time: Date) => {
 
 export const setActivityProps = (activity: IActivity, user:IUser) =>{
     activity.date = new Date(activity.date);
+    activity.endDate = new Date(activity.endDate);
     activity.isGoing = activity.attendees !==null && user !==null ? activity.attendees.some( a => a.userName === user.userName) : false;
     activity.isHost = activity.attendees !==null && user !==null ? activity.attendees.some( a =>
         (a.userName === user.userName && a.isHost === true )

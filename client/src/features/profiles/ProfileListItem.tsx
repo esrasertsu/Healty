@@ -39,7 +39,9 @@ interface IProps {
     <Card onClick={handleCardClick}
       style={{height:"100%", marginBottom:"10px", minHeight:"450px"}}
       key={profile.userName+Math.random()} >
-      <Image circular src={profile.image || '/assets/user.png'} />
+      <Image circular src={profile.image || '/assets/user.png'} 
+      onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}
+      />
       <div className="profileListItem_badges">   
       {(profile.categories && profile.categories.map((cat) => (
           <Label key={profile.userName+Math.random()+cat.text} className="profileCard_Label" style={{background:getColor(cat.text)}} horizontal>{profile.categories.length<3 ? cat.text: cat.text.charAt(0).toUpperCase()}</Label>

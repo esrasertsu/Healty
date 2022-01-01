@@ -26,6 +26,7 @@ export const ActivityListItemAttendees: React.FC<IProps> = ({attendees}) => {
                   src={attendee.image || "/assets/user.png"}
                   bordered
                   style ={attendee.isFollowing ? styles : null}
+                  onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}
                 />
               }
             />

@@ -37,10 +37,12 @@ namespace CleanArchitecture.Application.User
             public Guid CityId { get; set; }
             public List<Guid> CategoryIds { get; set; }
             public List<Guid> SubCategoryIds { get; set; }
+            public string SuggestedSubCategory { get; set; }
             public List<Guid> AccessibilityIds { get; set; }
             public List<IFormFile> Certificates { get; set; }
             public bool SendToRegister { get; set; }
         }
+
 
         //public class CommandValidator : AbstractValidator<Command>
         //{
@@ -85,6 +87,12 @@ namespace CleanArchitecture.Application.User
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound, new { User = "NotFound" });
 
+
+                if (user.Role != Role.Admin && user.UserName != request.UserName)
+                    throw new RestException(HttpStatusCode.Unauthorized);
+
+                if (user.UserName != request.UserName) //current user requestteki trainer değilse
+                    user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.UserName);
                 try
                 {
                     if (request.SendToRegister)
@@ -97,8 +105,8 @@ namespace CleanArchitecture.Application.User
                     user.ExperienceYear = Convert.ToDecimal(request.ExperienceYear) > 0 ? Convert.ToDecimal(request.ExperienceYear) : user.ExperienceYear;
                     user.LastProfileUpdatedDate = DateTime.Now;
                     user.Title = request.Title;
-                   
-             
+                    user.SuggestedSubCategory = request.SuggestedSubCategory;
+
                     var docsUploaded = false;
 
                     user.Certificates = new List<Certificate>();

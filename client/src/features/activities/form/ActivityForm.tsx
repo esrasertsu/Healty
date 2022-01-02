@@ -1,5 +1,5 @@
 ﻿import React, { useContext, useEffect, useState } from "react";
-import { Segment, Form, Button, Grid, Label, Header, Image, Icon, Popup, Container } from "semantic-ui-react";
+import { Segment, Form, Button, Grid, Icon, Popup, Container } from "semantic-ui-react";
 import {
   ActivityFormValues
 } from "../../../app/models/activity";
@@ -19,11 +19,11 @@ import DropdownInput from "../../../app/common/form/DropdownInput";
 import NumberInput from "../../../app/common/form/NumberInput";
 import { OnChange } from "react-final-form-listeners";
 import WYSIWYGEditor from "../../../app/common/form/WYSIWYGEditor";
-import PhotoWidgetDropzone from "../../../app/common/photoUpload/PhotoWidgetDropzone";
-import PhotoWidgetCropper from "../../../app/common/photoUpload/PhotoWidgetCropper";
 import { action } from "mobx";
 import { toast } from "react-toastify";
 import { useMediaQuery } from "react-responsive";
+import PhotoGallery from "./PhotoGallery";
+import { ActivityPhoto, IPhoto } from "../../../app/models/profile";
 
 
 interface DetailParams {
@@ -79,6 +79,9 @@ const validate = combineValidators({
   let categoryOptions: ICategory[] = [];
   let subCategoryOptionFilteredList: ICategory[] = [];
 
+  const [docs, setDocs] = useState<any[]>([]);
+  const [filedocs, setFileDocs] = useState<any[]>([]);
+
   const [updateEnabled, setUpdateEnabled] = useState<boolean>(false);
 
   const [loading, setLoading] = useState(false);
@@ -86,14 +89,12 @@ const validate = combineValidators({
    const [category, setCategory] = useState<string[]>([]);
    const [subCategoryOptions, setSubCategoryOptions] = useState<ICategory[]>([]);
 
-   const [files, setFiles] = useState<any[]>([]);
-   const [originalImage, setOriginalImage] = useState<Blob | null>(null);
    const [durationMessage, setDurationMessage] = useState("");
 
    const [image, setImage] = useState<Blob | null>(null);
-   const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
-   const [imageChange, setImageChange] = useState(false);
    const [imageDeleted, setImageDeleted] = useState(false);
+   const [newMainId, setNewMainId] = useState("");
+
 
   useEffect(() => {
     if (match.params.id) {
@@ -177,7 +178,76 @@ const handleEndTimeChange = (endTime:any) =>{
   setActivityForm({...activityForm, endTime: dateAndTime});
 }
 
+
+useEffect(() => {
+  if(docs.length > 0)
+  docs.forEach(doc => {
+    uploadedNewImage(doc)
+  });
+ 
+  
+}, [docs])
+
+
+const deleteActivityPhoto = (photo:IPhoto) =>{
+
+  if(photo.id !== "")
+  { 
+    let deleteds = activityForm.deletedPhotos;
+    deleteds.push(photo.id);
+      setActivityForm({...activityForm, deletedPhotos:deleteds});
+      //galery görünümde gösterdiklerimiz
+      
+      let restPhotos = activityForm.photos!.filter(x => x.id !== photo.id);
+      setActivityForm({...activityForm, photos:restPhotos});
+
+  }else{
+    debugger;
+    let restNews =  activityForm.newphotos.filter(x => x.url !== photo.url );
+    setActivityForm({...activityForm, newphotos:restNews});
+
+    let restPhotos = activityForm.photos!.filter(x => x.url !== photo.url);
+      setActivityForm({...activityForm, photos:restPhotos});
+  }
+}
+
+const makeCoverPic = (photo:IPhoto) =>{
+  if(photo.id === "")
+  { 
+     toast.error("Önce değişiklikleri kaydetmelisiniz.")
+  }else{
+    setNewMainId(photo.id);
+    setActivityForm({...activityForm, mainPhotoId:photo.id});
+  }
+}
+
+const uploadedNewImage = (file:any) =>{
+  debugger;
+
+  var reader = new FileReader();
+  var url = reader.readAsDataURL(file);//original blob data dönüyor
+
+   reader.onloadend = function (e:any) { //okuma işlemi bitince file update ediliyor preview data ile.
+      console.log(reader.result)//blob var
+
+      //yeni eklenen fotolar backend'e giden
+      let photos = activityForm.newphotos;
+      photos.push(file);
+      setActivityForm({...activityForm, newphotos:photos});
+
+      //galery görünümde gösterdiklerimiz
+      let existingPhotos = activityForm.photos;
+      existingPhotos!.push(new ActivityPhoto(file))
+      setActivityForm({...activityForm, photos:existingPhotos});
+
+    }; 
+}
+
   const handleFinalFormSubmit = (values: any) => {
+debugger;
+    console.log(docs);
+    console.log(filedocs)
+
     let error = false;
     debugger;
     const dateAndTime = combineDateAndTime(values.date, values.time);
@@ -186,7 +256,7 @@ const handleEndTimeChange = (endTime:any) =>{
     const { date, time, endDate, endTime,durationHour,durationDay, durationMin, ...activity } = values;
     activity.date = dateAndTime;
     activity.endDate = enddateAndTime;
-debugger;
+
    const totalDuration = +((durationDay ? durationDay : 0) *24 *60) + +((durationHour ? durationHour : 0) * 60) + +(durationMin ? durationMin : 0);
    if(totalDuration === 0) {
      setDurationMessage("Lütfen aktivitenin süresini belirtiniz.");
@@ -199,14 +269,15 @@ debugger;
       if(!error)
       {
         if (!activity.id) {
-          debugger;
-            if(image == null)
+          
+            if(activityForm.photos!.length === 0)
             {
               setImageDeleted(true);
+              toast.warning("Resim silinemez/ boş geçilemez.")
+
             }else{
               let newActivity = {
                 ...activity,
-                photo: image,
                 id: uuid(),
                 duration:totalDuration
               };
@@ -215,26 +286,17 @@ debugger;
           //
         } else {
           debugger;
-          if(!imageDeleted)
+          if(activityForm.photos!.length !== 0)
           {
-            if(!imageChange)
-            {
-              let editedActivity = {
-                ...activity,
-                duration:totalDuration
-              }
-              editActivity(editedActivity);
-            }else {
-              let editedActivity = {
-                ...activity,
-                photo: image,
-                duration:totalDuration
-              }
-              editActivity(editedActivity);
+            let editedActivity = {
+              ...activity,
+              duration:totalDuration
             }
+            editActivity(editedActivity);
           
           }else 
           {
+            setImageDeleted(true);
               toast.warning("Resim silinemez/ boş geçilemez.")
           }
         
@@ -276,40 +338,12 @@ debugger;
                  </OnChange>
                  <label className={ activityForm.mainImage === null || imageDeleted ? "errorLabel" : ""}>Aktivite Liste Fotoğrafı*</label>
                  {
-                   activityForm.mainImage && !imageChange ?
-                   <Segment>
-                    <Image src={activityForm.mainImage.url} style={{width:'50%', height:"auto", marginBottom:"20px", overflow:'hidden'}}/>
-                    <Label color="red" style={{marginBottom:"20px", marginRight:"20px", cursor:"pointer"}} 
-                 onClick={()=>{setImageDeleted(true); setImageChange(true)}}>Değiştir/Sil <Icon name="trash"></Icon></Label>
-                  </Segment>
-                :
-                files.length === 0 ? 
-                <div style={{marginBottom:15}}>
-                <PhotoWidgetDropzone setFiles={setFiles} />
-                </div>
-                :
-               (
-                <Grid style={{marginTop:"10px"}}>
-                  <Grid.Column width="eight">
-                  <Header sub content='*Boyutlandır' />
-                  <PhotoWidgetCropper  setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={278/174} maxHeight={174}/>
-                  </Grid.Column>
-                  <Grid.Column width="eight">
-                    <Header sub content='*Önizleme' />
-                    <Image src={croppedImageUrl} style={{minHeight:'200px', overflow:'hidden'}}/>
-                  </Grid.Column>
+                    <div style={{margin:"10px 0 30px  0"}}>
+                    <PhotoGallery docs={activityForm.photos} setDocuments={setDocs} setFiles={setFileDocs} setUpdateEnabled={setUpdateEnabled}
+                    deleteActivityPhoto={deleteActivityPhoto} makeCoverPic={makeCoverPic} newMainId={newMainId}/>
+                    </div>
+                 }
 
-                  <Grid.Column width="eight">
-                  <div style={{display:"flex"}}>
-                  <Label style={{marginBottom:"20px", marginRight:"20px", cursor:"pointer"}} 
-                  onClick={()=> {setFiles([]);setImageDeleted(true); setImage(null)}}>Sil  <Icon name="trash"></Icon></Label>
-                  {/* <Label style={{marginBottom:"20px", cursor:"pointer"}} onClick={()=> {
-                  setImageChange(false); setImageDeleted(false); setFiles([])}}>Değişiklikleri geri al <Icon name="backward"></Icon> </Label>    */}
-                  </div>             
-                  </Grid.Column>
-               </Grid>
-               )
-         }    
                   <label  className={activityForm.description === "" ? "customErrorLabel" :""} id="activityDesc">Açıklama* 
                   <Popup 
                     hoverable

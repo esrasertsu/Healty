@@ -68,6 +68,9 @@ export interface IActivityFormValues extends Partial<IActivity>{
     cityId:string,
     levelIds: string[],
     photo?: Blob;
+    newphotos: any[];
+    deletedPhotos: string[];
+    mainPhotoId: string;
     durationDay: number;
     durationMin: number;
     durationHour:number;
@@ -96,7 +99,10 @@ export class ActivityFormValues implements IActivityFormValues {
     duration: number = 0;
     attendancyLimit?: number;
     photo?: Blob=undefined;
+    newphotos: any[]=[];
+    deletedPhotos: string[] = [];
     mainImage?: IPhoto = undefined;
+    mainPhotoId: string =  "";
     durationDay: number =0;
     durationMin: number=0;
     durationHour:number=0;

@@ -35,8 +35,12 @@ namespace CleanArchitecture.Application.Activities
             public string AttendancyLimit { get; set; }
             public string Price { get; set; }
             public string Address { get; set; }
-            public virtual IFormFile Photo { get; set; }
+            public IFormFile Photo { get; set; }
+            public List<IFormFile> Photos { get; set; }
+            public List<string> DeletedPhotos { get; set; }
+            public string MainPhotoId { get; set; }
 
+            
         }
 
 
@@ -79,6 +83,52 @@ namespace CleanArchitecture.Application.Activities
 
                 if (activity == null)
                     throw new RestException(HttpStatusCode.NotFound, new { activity = "Not Found" });
+
+                if (request.Photos != null) //yeni eklenenler
+                {
+                    foreach (var item in request.Photos)
+                    {
+                        var photoUploadResults = _photoAccessor.AddActivityImage(item);
+
+                        var image = new Photo
+                        {
+                            Url = photoUploadResults.Url,
+                            Id = photoUploadResults.PublicId,
+                            IsMain = false
+                        };
+                        activity.Photos.Add(image);
+                    }
+                }
+
+                if (request.DeletedPhotos != null) //silinenler
+                {
+                    foreach (var item in request.DeletedPhotos)
+                    {
+                        var photo = activity.Photos.Where(x => x.Id == item).FirstOrDefault();
+                        if (photo != null)
+                        {
+                            var result = _photoAccessor.DeletePhoto(photo.Id);
+                            if (result != null)
+                                activity.Photos.Remove(photo);
+                        }
+                    }
+                    
+                }
+
+                if(!string.IsNullOrEmpty(request.MainPhotoId))
+                {
+                    var mainPhoto = activity.Photos.Where(x => x.IsMain).FirstOrDefault();
+                    if (mainPhoto != null)
+                    {
+                        mainPhoto.IsMain = false;
+                    }
+                    var photo = activity.Photos.Where(x => x.Id == request.MainPhotoId).FirstOrDefault();
+                    if (photo != null)
+                    {
+                        photo.IsMain = true;
+                    }
+                }
+
 
                 if (request.CategoryIds != null)
                 {
@@ -156,27 +206,27 @@ namespace CleanArchitecture.Application.Activities
                     activity.City = city ?? activity.City;
                 }
 
-                if (request.Photo!=null)
-                {
-                    var mainPhoto = activity.Photos.Where(x => x.IsMain).FirstOrDefault();
-                    if (mainPhoto != null)
-                    {
-                        var result = _photoAccessor.DeletePhoto(mainPhoto.Id);
-                        if (result != null)
-                            activity.Photos.Remove(mainPhoto);
-                    }
+                //if (request.Photo!=null)
+                //{
+                //    var mainPhoto = activity.Photos.Where(x => x.IsMain).FirstOrDefault();
+                //    if (mainPhoto != null)
+                //    {
+                //        var result = _photoAccessor.DeletePhoto(mainPhoto.Id);
+                //        if (result != null)
+                //            activity.Photos.Remove(mainPhoto);
+                //    }
 
-                    var photoUploadResults = _photoAccessor.AddActivityImage(request.Photo);
+                //    var photoUploadResults = _photoAccessor.AddActivityImage(request.Photo);
 
-                    var image = new Photo
-                    {
-                        Url = photoUploadResults.Url,
-                        Id = photoUploadResults.PublicId,
-                        IsMain = true
-                    };
-                    activity.Photos.Add(image);
+                //    var image = new Photo
+                //    {
+                //        Url = photoUploadResults.Url,
+                //        Id = photoUploadResults.PublicId,
+                //        IsMain = true
+                //    };
+                //    activity.Photos.Add(image);
 
-                }
+                //}
 
 
 

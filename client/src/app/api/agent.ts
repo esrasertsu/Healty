@@ -113,7 +113,7 @@ const requests = {
     },
     editActivity: async (url:string,title: string, description:string, categoryIds: string[]| null,subCategoryIds: string[]| null, levelIds: string[]| null,
         date:Date,enddate:Date, cityId:string,venue:string,online:boolean, attendancyLimit:number,price:number,
-        photo:Blob,address:string,duration:number ) =>{
+        photo:Blob,photos:any[],deletedPhotos:string[],address:string,duration:number, mainPhotoId:string ) =>{
             debugger;
         let formData = new FormData();
         formData.append('photo',photo);
@@ -128,8 +128,16 @@ const requests = {
         formData.append('duration', duration ? duration.toString() : "0");
         formData.append('attendancyLimit', attendancyLimit ? attendancyLimit.toString(): "0");
         formData.append('price', price ? price.toString(): "0");
+        formData.append('mainPhotoId', mainPhotoId);
 
+        photos && photos.map((photo:any)=>(
+            formData.append('photos',photo)
+            ));
 
+         deletedPhotos && deletedPhotos.map((photo:any)=>(
+            formData.append('deletedPhotos',photo)
+            ));
+    
         categoryIds && categoryIds.map((categoryId:string)=>(
             formData.append('categoryIds', categoryId)
         ));
@@ -144,8 +152,9 @@ const requests = {
         }).then(responseBody)
     },
     createActivity: async (url:string,title: string, description:string, categoryIds: string[]| null,subCategoryIds: string[]| null, levelIds: string[]| null,
-        date:Date, enddate:Date,cityId:string,venue:string,online:boolean, attendancyLimit:number,price:number,photo:Blob, address:string,
-        duration:number ) =>{
+        date:Date, enddate:Date,cityId:string,venue:string,online:boolean, attendancyLimit:number,price:number,photo:Blob, 
+        photos:Blob[], address:string,duration:number ) =>{
+
         let formData = new FormData();
         formData.append('photo',photo);
         formData.append('Title', title);
@@ -160,6 +169,9 @@ const requests = {
         formData.append('attendancyLimit', attendancyLimit ? attendancyLimit.toString(): "0");
         formData.append('price', price ? price.toString(): "0");
 
+        photos && photos.map((photo:Blob)=>(
+            formData.append('photos',photo)
+            ));
 
         categoryIds && categoryIds.map((categoryId:string)=>(
             formData.append('categoryIds', categoryId)
@@ -292,11 +304,11 @@ const Activities = {
     listLevels: (): Promise<ILevel[]> => requests.get('/activities/levels'),
     update: (activity: IActivityFormValues): Promise<IActivity> => requests.editActivity(`/activities/${activity.id}`,activity.title!, activity.description!,
     activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,activity.endDate!,
-    activity.cityId!,activity.venue!, activity.online!, activity.attendancyLimit!,activity.price!,activity.photo!,
-     activity.address!,activity.duration!),
+    activity.cityId!,activity.venue!, activity.online!, activity.attendancyLimit!,activity.price!,activity.photo!,activity.newphotos!,
+    activity.deletedPhotos, activity.address!,activity.duration!, activity.mainPhotoId),
     create: (activity: IActivityFormValues): Promise<IActivity> => requests.createActivity(`/activities/`,activity.title!,
      activity.description!,activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,activity.endDate!,
-    activity.cityId!,activity.venue!, activity.online!, activity.attendancyLimit!,activity.price!,activity.photo!,
+    activity.cityId!,activity.venue!, activity.online!, activity.attendancyLimit!,activity.price!,activity.photo!,activity.newphotos!,
     activity.address!, activity.duration!),
     editOnlineJoinInfo: ( form : IActivityOnlineJoinInfo) => requests.put(`/activities/${form.id}/joindetails`, form),
 

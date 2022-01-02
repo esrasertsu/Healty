@@ -37,6 +37,8 @@ namespace CleanArchitecture.Application.Activities
             public string Price { get; set; }
             public string Address { get; set; }
             public virtual IFormFile Photo { get; set; }
+            public List<IFormFile> Photos { get; set; }
+
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -74,8 +76,6 @@ namespace CleanArchitecture.Application.Activities
             {
 
                 //ekleyen kişi var mı yok mu
-
-                var image = new Photo();
 
                 var activity = new Activity
                 {
@@ -181,20 +181,24 @@ namespace CleanArchitecture.Application.Activities
 
                 activity.Photos = new List<Photo>();
 
-                if (request.Photo != null)
+                if (request.Photos != null)
                 {
-                    var photoUploadResults = _photoAccessor.AddActivityImage(request.Photo);
+                    for (int i = 0; i < request.Photos.Count; i++)
+                    {
+                        var photoUploadResults = _photoAccessor.AddActivityImage(request.Photos[i]);
 
-                    activity.Photos.Add(
-                         new Photo
-                         {
-                             Url = photoUploadResults.Url,
-                             Id = photoUploadResults.PublicId,
-                             IsMain = true
-                         }
-                        );
-                    
+                        var image = new Photo
+                        {
+                            Url = photoUploadResults.Url,
+                            Id = photoUploadResults.PublicId,
+                            IsMain = false
+                        };
+                        if (i == 0)
+                            image.IsMain = true;
+                        activity.Photos.Add(image);
+                    }
                 }
+               
 
                 await _context.Activities.AddAsync(activity); //addsync is just for special creators
 

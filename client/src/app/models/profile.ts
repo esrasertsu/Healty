@@ -127,6 +127,24 @@ export interface IProfileFilterFormValues{
 }
 
 
+export class ActivityPhoto implements IPhoto{
+    id: string = "";
+    url: string = "";
+    isMain: boolean = false;
+    isCoverPic: boolean = false;
+
+    constructor(init?: any){
+
+         if(init)
+        {    
+            debugger;
+            init.url = init.preview;
+        }
+        Object.assign(this, init);
+    }
+}
+
+
 export class ProfileFilterFormValues implements IProfileFilterFormValues{
     cityId:string = "";
     subCategoryIds: string[] =[];

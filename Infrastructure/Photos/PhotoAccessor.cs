@@ -115,7 +115,7 @@ namespace Infrastructure.Photos
                     var uploadParams = new ImageUploadParams
                     {
                         File = new FileDescription(file.FileName, stream),
-                        Transformation = new Transformation().Height(174).Width(278).Crop("fill")
+                        Transformation = new Transformation().Height(174).Width(278).Crop("fill").Gravity("face")
                     };
                     uploadResult = _cloudinary.Upload(uploadParams);
                 }

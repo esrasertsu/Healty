@@ -24,6 +24,7 @@ namespace CleanArchitecture.Application.Activities
             public Guid Id { get; set; }
             public string Title { get; set; }
             public string Description { get; set; }
+            public string TrainerUserName { get; set; }
             public List<Guid> CategoryIds { get; set; }
             public List<Guid> SubCategoryIds { get; set; }
             public List<Guid> LevelIds { get; set; }
@@ -168,6 +169,10 @@ namespace CleanArchitecture.Application.Activities
 
                 var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
 
+                if(user.Role == Role.Admin)
+                {
+                    user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.TrainerUserName);
+                }
                 var attendee = new UserActivity
                 {
                     AppUser = user,

@@ -74,6 +74,7 @@ export interface IActivityFormValues extends Partial<IActivity>{
     durationDay: number;
     durationMin: number;
     durationHour:number;
+    trainerUserName: string;
 
 }
 
@@ -106,6 +107,8 @@ export class ActivityFormValues implements IActivityFormValues {
     durationDay: number =0;
     durationMin: number=0;
     durationHour:number=0;
+    trainerUserName: string = "";
+
     constructor(init?: IActivityFormValues){
         debugger;
         if(init && init.date)

@@ -38,8 +38,10 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
       <Container className="pageContainer">
 
       <Grid  stackable style={{marginBottom:"50px"}}>
-          <Grid.Column width={11}>
+      <Grid.Column width={16}>
             <ActivityDetailedHeader activity={activity}/>
+          </Grid.Column>
+          <Grid.Column width={11}>
             {
                   (activity.isGoing || activity.isHost) && isMobile &&
                  <ActivityCountDown activity={activity} />
@@ -54,6 +56,10 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
           </Grid.Column>
 
           <Grid.Column width={5}>
+          {
+                  (activity.isGoing || activity.isHost) && !isMobile &&
+                 <ActivityCountDown activity={activity} />
+                 }   
               <ActivityDetailedSideBar attendees={activity.attendees} date={activity.date}/>
               {/* <ActivityDetailsMap centerLocation={center} /> */}
                 {
@@ -64,10 +70,7 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
                   (activity.attendancyLimit && (activity.attendancyLimit > activity.attendanceCount))) &&
                  <ActivityDetailPaymentSegment activity={activity} />
                  }  
-                   {
-                  (activity.isGoing || activity.isHost) && !isMobile &&
-                 <ActivityCountDown activity={activity} />
-                 }   
+                   
                   {
                   (activity.isGoing || activity.isHost) && 
                  <ActivityVideoCall activity={activity} />

@@ -30,7 +30,7 @@ namespace Infrastructure.Security
             var currenUserRole = _httpContextAccessor.HttpContext.User?.Claims?
                 .SingleOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
 
-            if (currenUserRole != "User")
+            if (currenUserRole == "Admin" || currenUserRole == "Trainer")
                 context.Succeed(requirement);
 
             return Task.CompletedTask;

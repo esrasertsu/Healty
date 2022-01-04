@@ -2,12 +2,23 @@ import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom';
-import { Segment, Item, Header, Button, Image, Modal, Icon, Confirm } from 'semantic-ui-react'
+import { Segment, Item, Header, Button, Image, Modal, Icon, Confirm, Container, Grid } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import tr  from 'date-fns/locale/tr'
 import { history } from '../../..';
 import { toast } from 'react-toastify';
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
+import 'swiper/swiper.scss'; // core Swiper
+import 'swiper/modules/navigation/navigation.scss'; // Navigation module
+import 'swiper/modules/pagination/pagination.scss'; // Pagination module
+import SwiperCore, {
+  Pagination,Navigation,Mousewheel,Keyboard
+} from 'swiper';
+import { IPhoto } from '../../../app/models/profile';
+import { useMediaQuery } from 'react-responsive';
+
+SwiperCore.use([Navigation,Pagination,Mousewheel,Keyboard]);
 
 const activityImageStyle = {
   filter: 'brightness(50%)',
@@ -15,21 +26,17 @@ const activityImageStyle = {
   objectFit: 'cover'
 };
 
-const activityImageTextStyle = {
-  position: 'absolute',
-  bottom: '5%',
-  paddingLeft: '5%',
-  width: '100%',
-  height: 'auto',
-  color: 'white',
-  paddingRight: '5%',
-};
+
 const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
+
+  const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
+
   const host = activity.attendees && activity.attendees.filter(x => x.isHost === true)[0];
 
   const rootStore = useContext(RootStoreContext);
   const { attendActivity, cancelAttendance, loading, deleteActivity} = rootStore.activityStore;
   const { getOrders, orderList } = rootStore.activityStore;
+  const { user } = rootStore.userStore;
 
   const [open, setOpen] = React.useState(false);
   const [cancellationUserOpen, setcancellationUserOpen] = React.useState(false);
@@ -82,17 +89,16 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
           onConfirm={handleSendUserToOrders}
         />
         <div>
-                <Segment.Group>
-                  <Segment basic attached='top' style={{ padding: '0' }}>
-                    <Image src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} fluid style={activityImageStyle}/>
-                    <Segment basic style={activityImageTextStyle}>
+          {
+            !isMobile &&
+                 <Container className='activityHeader'>
                       <Item.Group>
                         <Item>
                           <Item.Content>
                             <Header
-                              size='huge'
+                              as="h1"
+                              style={{color:"#263a5e"}}
                               content={activity.title}
-                              style={{ color: 'white' }}
                             />
                             <p>{activity.date && format(activity.date,'dd MMMM yyyy, eeee',{locale: tr})}</p>
                             <p>
@@ -101,12 +107,47 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                           </Item.Content>
                         </Item>
                       </Item.Group>
-                    </Segment>
+                    </Container>
+                  }
+                  <Segment basic className='activityGallery'  style={{ padding: '0' }}>
+                    { isMobile ?
+                    <Swiper cssMode={true} navigation={true} pagination={true} mousewheel={true} keyboard={true} className="activitySwiper">
+                    {
+                      activity.photos.map((photo:IPhoto) =>
+                      <SwiperSlide key={photo.id}>
+                        <img key={photo.id} src={photo.url} />
+                      </SwiperSlide>
+                      )
+                    }  
+                    </Swiper>
+                    :
+                    <Grid>
+                      <Grid.Row>
+                          <Grid.Column width={11}>
+                             <img className='activityFirstCol_Img' key={activity.photos[0].id} src={activity.photos[0].url} />
+                          </Grid.Column>
+                          <Grid.Column width={5}>
+                              <Grid.Row>
+                              <img className='activitySecondCol_FirstRow_Img' key={activity.photos[1].id} src={activity.photos[1].url} />
+                              </Grid.Row>
+                              <Grid.Row style={{display:"flex"}}>
+                              <Grid.Column>
+                                <img style={{paddingRight:"5px"}} className='activitySecondCol_SecondRow_Img' key={activity.photos[0].id} src={activity.photos[0].url} />
+                              </Grid.Column>
+                              <Grid.Column>
+                              <img style={{paddingLeft:"5px"}} className='activitySecondCol_SecondRow_Img' key={activity.photos[0].id} src={activity.photos[0].url} />
+                              </Grid.Column>
+                          </Grid.Row>
+                          </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
+                    }
+                
+                    {/* <Image src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} fluid style={activityImageStyle}/> */}
                   </Segment>
-                <Segment clearing attached='bottom'>
-                    {activity.isHost && host && host.userRole!=="User" ? (
+                    {(activity.isHost && host && host.userRole==="Trainer") || (user && user.role==="Admin") ? (
                       <>
-                      <Button as={Link} to={`/manage/${activity.id}`} color='orange' floated='right'
+                      <Button as={Link} to={`/manage/${activity.id}`} color='green' floated='right'
                       content='Düzenle'
                       labelPosition='right'
                       icon='edit'>
@@ -155,8 +196,27 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                       
                       </>
                     )}
-                  </Segment>
-                </Segment.Group>
+
+          {
+            isMobile &&
+                 <Container>
+                      <Item.Group>
+                        <Item>
+                          <Item.Content>
+                            <Header
+                              size='huge'
+                              content={activity.title}
+                              style={{ color: 'white' }}
+                            />
+                            <p>{activity.date && format(activity.date,'dd MMMM yyyy, eeee',{locale: tr})}</p>
+                            <p>
+                              Düzenleyen: <Link to={`/profile/${host && host.userName}`} ><strong>{host && host.displayName}</strong></Link> 
+                            </p>
+                          </Item.Content>
+                        </Item>
+                      </Item.Group>
+                    </Container>
+                  }
         </div>
     </>
     )

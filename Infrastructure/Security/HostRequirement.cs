@@ -37,7 +37,9 @@ namespace Infrastructure.Security
 
             var host = activity.UserActivities.FirstOrDefault(x => x.IsHost);
 
-            if (host?.AppUser?.UserName == currenUserName)
+            var user =  _context.Users.FirstOrDefault(x => x.UserName == currenUserName);
+
+            if (host?.AppUser?.UserName == currenUserName || user.Role == CleanArchitecture.Domain.Role.Admin)
                 context.Succeed(requirement);
 
             return Task.CompletedTask;

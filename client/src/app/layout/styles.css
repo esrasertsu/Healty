@@ -574,15 +574,13 @@ label{
 .activityDetail_Countdown_Header{
   color: #fff ;
   font-size: 25px ;
-  text-align: left ;
+  text-align: center ;
   font-family: AssistantMedium, Arial, sans-serif !important;
   line-height: 30px;
   width: 96% !important;
-  margin: auto;
+  margin: 10px auto 0;
 }
-.activityDetail_Countdown_Statistic.day{
-  margin:1em !important
-}
+
 .activityDetail_Countdown_Statistic{
   margin:1em 0.5em !important
 }
@@ -865,11 +863,11 @@ a.ui.card:hover {
 
 
 @media (min-width: 1200px){
-.pageContainer.ui.container {
+/* .pageContainer.ui.container {
     width: 1350px;
     margin: auto!important;
     max-width: 1400px;
-  }
+  } */
 
  
   .ui.container {
@@ -900,8 +898,9 @@ a.ui.card:hover {
 
 @media (min-width: 1440px){
   .page-header__content {
-    padding-left: 96px;
-    padding-right: 96px;
+    padding-left: 150px;
+    padding-right: 150px;
+    max-width: 1400px;
 }
 #slideImages.masthead {
   height: 25vw;
@@ -1006,8 +1005,13 @@ a.ui.card:hover {
     padding-right: 32px;
 }
 
-.ui.top.fixed.menu{
-  padding: 0 96px;
+.ui.top.fixed.menu, .pageContainer.ui.container{
+  padding: 0 150px;
+  max-width: 1400px;
+
+}
+.pageContainer.ui.container{
+  width: 100% !important;
 
 }
 
@@ -1070,6 +1074,30 @@ width: 95% !important;
 }
 .otherUserMessage_content{
 max-width: 95%;
+}
+}
+
+
+
+.ui.statistic.activityDetail_Countdown_Statistic .value {
+  background: #fff !important;
+  border-radius: 1.285714rem !important;
+  color: #e25134 !important;
+  font-size: 25px !important;
+  padding: 4px 7px !important;
+  margin-bottom: 10px;
+  width: 50px !important;
+}
+
+
+@media (min-width: 450px) and (max-width: 768px){
+
+.activityDetail_Countdown_Statistic.day {
+  margin: 1em !important;
+  width: 100%;
+  display: flex !important;
+  align-items: center;
+  margin-bottom: -5px !important;
 }
 }
 
@@ -1507,6 +1535,25 @@ max-width: 80%;
 
   .profileHeaderImageCrop .ReactCrop__crop-selection{
     height: 300px !important;
+  }
+
+
+  img.activityFirstCol_Img{
+    object-fit: cover;
+    width: 100%;
+    height: 380px;
+  }
+
+  img.activitySecondCol_FirstRow_Img{
+    object-fit: cover;
+    width: 100%;
+    height: 190px;
+  }
+
+  img.activitySecondCol_SecondRow_Img{
+    object-fit: cover;
+    width: 100%;
+    height: 190px;
   }
   
 }
@@ -2113,6 +2160,11 @@ button, input, optgroup, select, textarea {
 .ui.selection.dropdown .menu {
   max-height: 12.11428571rem !important;
 }
+
+.ui.segment.activityGallery{
+  margin: 16px -16px 0;
+}
+
 }
 
 @media only screen and (min-width: 768px){
@@ -2543,6 +2595,52 @@ button, input, optgroup, select, textarea {
   top: 41% !important;
   background:#f9f9f95d;
 }
+
+
+.activityHeader{
+  margin-top: 20px;
+}
+
+
+.activitySwiper.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.activitySwiper .swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.activitySwiper .swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+}
+
+.activitySwiper .swiper-button-prev,.activitySwiper .swiper-button-next{
+  color: #fff !important;
+  font-weight: 500 !important;
+  top: 41% !important;
+  background: none !important;
+}
+
 
 .trainerFormAccordionTitle{
   font-family: AssistantMedium, Arial, sans-serif !important;

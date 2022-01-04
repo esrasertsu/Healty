@@ -153,7 +153,7 @@ const requests = {
     },
     createActivity: async (url:string,title: string, description:string, categoryIds: string[]| null,subCategoryIds: string[]| null, levelIds: string[]| null,
         date:Date, enddate:Date,cityId:string,venue:string,online:boolean, attendancyLimit:number,price:number,photo:Blob, 
-        photos:Blob[], address:string,duration:number ) =>{
+        photos:Blob[], address:string,duration:number, trainerUserName:string ) =>{
 
         let formData = new FormData();
         formData.append('photo',photo);
@@ -168,6 +168,7 @@ const requests = {
         formData.append('duration', duration ? duration.toString() : "0");
         formData.append('attendancyLimit', attendancyLimit ? attendancyLimit.toString(): "0");
         formData.append('price', price ? price.toString(): "0");
+        formData.append('trainerUserName', trainerUserName);
 
         photos && photos.map((photo:Blob)=>(
             formData.append('photos',photo)
@@ -309,7 +310,7 @@ const Activities = {
     create: (activity: IActivityFormValues): Promise<IActivity> => requests.createActivity(`/activities/`,activity.title!,
      activity.description!,activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,activity.endDate!,
     activity.cityId!,activity.venue!, activity.online!, activity.attendancyLimit!,activity.price!,activity.photo!,activity.newphotos!,
-    activity.address!, activity.duration!),
+    activity.address!, activity.duration!, activity.trainerUserName),
     editOnlineJoinInfo: ( form : IActivityOnlineJoinInfo) => requests.put(`/activities/${form.id}/joindetails`, form),
 
 

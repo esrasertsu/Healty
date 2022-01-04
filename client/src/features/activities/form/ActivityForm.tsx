@@ -76,6 +76,10 @@ const validate = combineValidators({
 
 
   const {allCategoriesOptionList} = rootStore.categoryStore;
+
+  const {user} = rootStore.userStore;
+
+
   let categoryOptions: ICategory[] = [];
   let subCategoryOptionFilteredList: ICategory[] = [];
 
@@ -237,7 +241,12 @@ const uploadedNewImage = (file:any) =>{
 
       //galery görünümde gösterdiklerimiz
       let existingPhotos = activityForm.photos;
-      existingPhotos!.push(new ActivityPhoto(file))
+      const actPhoto = new ActivityPhoto(file);
+      existingPhotos ? 
+      existingPhotos.push(actPhoto)
+      :
+      existingPhotos = [actPhoto];
+
       setActivityForm({...activityForm, photos:existingPhotos});
 
     }; 
@@ -320,13 +329,35 @@ debugger;
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit, invalid }) => (
               <Form onSubmit={handleSubmit} loading={loading}>
+
+              {
+                user && user.role === "Admin" && !activityForm.id &&
+                <>
+                  <label id="activityTrainer" 
+                  //  className={activityForm.title === "" ? "customErrorLabel" :""}
+                    >Aktivite Uzmanı*</label>
+                    <Field
+                      labelName="activityTrainer"
+                      name="TrainerUserName"
+                      placeholder="Uzman"
+                      value={activityForm.trainerUserName}
+                      component={TextInput}
+                    />
+                      <OnChange name="TrainerUserName">
+                    {(value, previous) => {
+                      debugger;
+                          setActivityForm({...activityForm,trainerUserName: value});
+                    }}
+                     </OnChange>
+                     </>
+              }
                 <label id="activityName" 
               //  className={activityForm.title === "" ? "customErrorLabel" :""}
                 >Aktivite Başlığı*</label>
                 <Field
                   labelName="activityName"
                   name="title"
-                  placeholder="Title"
+                  placeholder="Başlık"
                   value={activityForm.title}
                   component={TextInput}
                 />

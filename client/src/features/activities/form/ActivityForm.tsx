@@ -194,7 +194,7 @@ useEffect(() => {
 
 
 const deleteActivityPhoto = (photo:IPhoto) =>{
-
+debugger;
   if(photo.id !== "")
   { 
     let deleteds = activityForm.deletedPhotos;
@@ -367,7 +367,7 @@ debugger;
                       setActivityForm({...activityForm,title: value});
                 }}
                  </OnChange>
-                 <label className={ activityForm.mainImage === null || imageDeleted ? "errorLabel" : ""}>Aktivite Liste Fotoğrafı*</label>
+                 <label className={ activityForm.mainImage === null || imageDeleted ? "errorLabel" : ""}>Aktivite Görselleri*</label>
                  {
                     <div style={{margin:"10px 0 30px  0"}}>
                     <PhotoGallery docs={activityForm.photos} setDocuments={setDocs} setFiles={setFileDocs} setUpdateEnabled={setUpdateEnabled}

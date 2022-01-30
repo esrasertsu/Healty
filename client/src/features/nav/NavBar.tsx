@@ -128,19 +128,22 @@ const NavBar: React.FC = () => {
               <Image avatar spaced="right" src={user.image || "/assets/user.png"}
                onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}} />
               <Dropdown pointing="top left" text={user.displayName}>
-                <Dropdown.Menu>
+                <Dropdown.Menu className='mobileMenu'>
                   <Dropdown.Item
                     key="profil"
                     as={Link}
                     to={`/profile/${user.userName}`}
                     text="Profilim"
                     icon="user"
+                    className='border'
                     onClick={()=>{setActiveMenu(-1);}}
                   ></Dropdown.Item>
                   <Dropdown.Item
                     key="mesaj"
                     as={Link}
                     to={`/messages`}
+                    className='border'
+
                     onClick={()=>{setActiveMenu(-1);}}
                   >  <Icon name='mail' />
                        Mesajlar
@@ -152,6 +155,7 @@ const NavBar: React.FC = () => {
                     key="order"
                     as={Link}
                     to={`/orders`}
+                    className='border'
                     onClick={()=>{setActiveMenu(-1);}}
                   >  <Icon name='unordered list' />
                        Rezervasyonlarım

@@ -116,6 +116,7 @@ export const setActivityProps = (activity: IActivity, user:IUser) =>{
     activity.isHost = activity.attendees !==null && user !==null ? activity.attendees.some( a =>
         (a.userName === user.userName && a.isHost === true )
     ) : false;
+
     return activity;
 } 
 

@@ -132,38 +132,23 @@ const sixItem:SemanticWIDTHS = 6;
 
     return (
       <Fragment>
-         <Segment textAlign='center' vertical className='masthead profileDashboard'>
+         {/* <Segment textAlign='center' vertical className='masthead profileDashboard'>
                <Container text>
                    <Header as='h1' inverted style={{margin:"20px 0 20px 0"}}>
-                       {/* <Image size='massive' src='/assets/logo.png' alt='logo' style={{marginBottom: 12}}/> */}
                        Dilediğin kategoride sağlıklı yaşam uzmanını ara
                    </Header>
-                   {/* {isLoggedIn && user && token ? (  */}
                    <Fragment>
                         <SearchArea/>
-                   </Fragment>
-                   {/* ): (
-                       <Fragment>
-                            <Header as='h2' inverted content={`Afitapp'a Hoşgeldin!`} />
-                            <Button onClick={handleLoginClick} size='huge' inverted>
-                                Üye Girişi
-                             </Button>
-                             <Button onClick={handleRegisterClick}  size='huge' inverted>
-                                Yeni Kullanıcı
-                             </Button>
-                       </Fragment>
-                   ) } */}
-                  
-                  
+                   </Fragment> 
                </Container>
-           </Segment>
+           </Segment> */}
          <Container className="profileList_WelcomeMessage" style={{textAlign:"center"}}>
          <Header as='h1'  style={{fontSize: '34px',  textAlign:'center', width:"100%",color:"rgb(38, 58, 94)" }}>
                 {/* Doğru uzmanı tam yerinde keşfet */}
                 Kullanıcıların Tavsiye Ettikleri ve Çok Daha Fazlası
                 </Header>
                 <p style={{ fontSize: '1.3rem', color: "rgb(38, 58, 94)" }}>
-                Spor koçundan diyetisyene, meditasyon eğitmeninden psikoloğa ihtiyacın olan en doğru uzmanı en kolay şekilde bulabileceğin yerdesin. 
+                Spor koçundan diyetisyene, meditasyon eğitmeninden psikoloğa ihtiyacın olan uzmanı en kolay şekilde bulabileceğin yerdesin. 
                 Üstelik uzmanlarla direk iletişime geçebilir, düzenledikleri aktivitelere katılabilir veya paylaştıkları blogları okuyarak ilgilendiğin alanda bilgi sahibi olabilirsin. 
                 </p>
 
@@ -195,7 +180,9 @@ const sixItem:SemanticWIDTHS = 6;
         <Grid.Row style={{marginTop:"20px"}}>
           <Grid.Column width={16} className="profileList_headerAndSorting">
           <div>
-          <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff",fontSize: '17px'}}> Tümü ({profilePageCount}) </Label>
+          <Header size="medium" style={{color:"#263a5e"}}> Tümü ({profilePageCount})</Header>
+
+          {/* <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff",fontSize: '17px'}}> Tümü ({profilePageCount}) </Label> */}
           </div>
           <div>
           <Select 
@@ -230,8 +217,11 @@ const sixItem:SemanticWIDTHS = 6;
                   floated="right"
                   fluid={isMobile} 
                   size="large" disabled={loadingNext || (page +1 >= totalProfileListPages)} 
+                  basic
                   onClick={()=> handleGetNext()} 
-                  style={{background:"#2185d0", color:"white",margin:"20px 0"}}
+                  style={{margin:"20px 0"}}
+                  color='blue'
+                  circular
                 > Daha Fazla Göster </Button>
         </div>
           

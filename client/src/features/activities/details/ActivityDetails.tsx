@@ -44,9 +44,16 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
           <Grid.Column width={11}>
             {
                   (activity.isGoing || activity.isHost) && isMobile &&
-                 <ActivityCountDown activity={activity} />
+                  <>
+                  <ActivityCountDown activity={activity} /> 
+                  <ActivityVideoCall activity={activity} />
+                  </>
+                 
                  }   
             <ActivityDetailedInfo activity={activity} />
+            
+            <ActivityDetailedSideBar atCount={activity.attendanceCount} attendees={activity.attendees} date={activity.date}/>
+
             {
               user && !isMobile &&
               activity.attendees.filter(x => x.userName === user.userName).length>0 &&
@@ -60,7 +67,6 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
                   (activity.isGoing || activity.isHost) && !isMobile &&
                  <ActivityCountDown activity={activity} />
                  }   
-              <ActivityDetailedSideBar attendees={activity.attendees} date={activity.date}/>
               {/* <ActivityDetailsMap centerLocation={center} /> */}
                 {
                   !activity.isGoing && 
@@ -72,7 +78,7 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
                  }  
                    
                   {
-                  (activity.isGoing || activity.isHost) && 
+                  (activity.isGoing || activity.isHost) && !isMobile &&
                  <ActivityVideoCall activity={activity} />
                  }  
                  {

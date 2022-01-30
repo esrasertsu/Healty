@@ -7,10 +7,11 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import { RootStoreContext } from '../../../app/stores/rootStore'
 
 interface IProps{
+  atCount:number;
   attendees: IAttendee[];
   date: Date;
 }
- const ActivityDetailedSideBar: React.FC<IProps> = ({attendees,date}) => {
+ const ActivityDetailedSideBar: React.FC<IProps> = ({atCount, attendees,date}) => {
 
   const rootStore = useContext(RootStoreContext);
 
@@ -20,14 +21,18 @@ interface IProps{
           <Fragment>
             <Segment
               textAlign='center'
-              style={{ border: 'none' }}
+              style={{ border: 'none' , marginTop:"40px"}}
               attached='top'
               inverted
               className="segmentHeader"
 
             >
-             <Header>{attendees && attendees.length} Kişi  
-            { (new Date(date).getTime() > new Date().getTime()) ? " Katılıyor" : " Katıldı" } </Header>
+             <Header> {atCount>0 ? 
+            <span>
+               { atCount }  Kişi  { (new Date(date).getTime() > new Date().getTime()) ? " Katılıyor" : " Katıldı" }
+            </span>   :
+            "İlk katılan sen ol!" }
+             </Header>
 
             </Segment>
             <Segment attached style={{  padding:"1em 0"}}>
@@ -35,7 +40,8 @@ interface IProps{
              frameBorder="2px" 
              style={{ 
                backgroundColor:"white", 
-               height: "340px", 
+               maxHeight: "340px", 
+               minHeight:"122px"
              //  width: "calc(100% - (-1px * 2))", 
               // maxWidth: "calc(100% - (-1px * 2))",
                }}
@@ -63,7 +69,7 @@ interface IProps{
                       <Link to={`/profile/${attendee.userName}`}>{attendee.displayName}</Link>
                     </Item.Header>
                     {attendee.isFollowing &&
-                     <Item.Extra style={{ color: 'orange' }}>Following</Item.Extra>
+                     <Item.Extra style={{ color: 'orange' }}>Takip Ettiğin</Item.Extra>
                     }
                   </Item.Content>
                 </Item>

@@ -1,40 +1,48 @@
-import React, { useContext, useState } from 'react'
-import { Gallery, Item } from 'react-photoswipe-gallery'
+import React, { useContext, useEffect, useState } from 'react'
 import 'photoswipe/dist/photoswipe.css'
 import 'photoswipe/dist/default-skin/default-skin.css'
-import { Button, Form, Grid, Header, Image, Modal, Popup, TextArea } from 'semantic-ui-react'
+import { Button, Grid, Header, Icon,  Modal,Segment } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore'
-import { IRefencePic } from '../../app/models/profile'
-import PhotoWidgetDropzone from '../../app/common/photoUpload/PhotoWidgetDropzone'
-import PhotoWidgetCropper from '../../app/common/photoUpload/PhotoWidgetCropper'
+import { IPhoto, ReferancePhoto } from '../../app/models/profile'
 import { observer } from 'mobx-react-lite'
 import { useMediaQuery } from 'react-responsive'
 
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
+import 'swiper/swiper.scss'; // core Swiper
+import 'swiper/modules/navigation/navigation.scss'; // Navigation module
+import 'swiper/modules/pagination/pagination.scss'; // Pagination module
+import SwiperCore, {
+  Pagination,Navigation,Mousewheel,Keyboard
+} from 'swiper';
+import ActivityGalleryModal from '../activities/details/ActivityGalleryModal'
+import PhotoGallery from '../activities/form/PhotoGallery'
 
 
+SwiperCore.use([Navigation,Pagination,Mousewheel,Keyboard]);
 
-const ProfileReferances = () => {
+interface IProps{
+  referencePics:IPhoto[]
+}
+
+const ProfileReferances:React.FC<IProps> = ({referencePics}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const {referencePics, uploadReferencePic, deletingReferencePic,uploadingReferencePics, deleteReferencePic , isCurrentUser } = rootStore.profileStore;
+  const { saveReferencePics,uploadingReferencePics , isCurrentUser } = rootStore.profileStore;
 
-const [files, setFiles] = useState<any[]>([]);
-const [image, setImage] = useState<Blob | null>(null);
-const [originalImage, setOriginalImage] = useState<Blob | null>(null);
-
-const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
-const [imageChange, setImageChange] = useState(false);
-const [imageDeleted, setImageDeleted] = useState(false);
 const [open, setOpen] = React.useState(false)
 const [title, setTitle] = useState("");
+const [galleryModal, setGalleryModal] = useState(false);
+const [imageIndex, setImageIndex] = useState(0)
 
-  const handleUploadImage = (photo: Blob) => {
-    debugger;
-    uploadReferencePic(originalImage!,photo,title).then(() => {
-      setOpen(false);
-      setFiles([]);}
-     )
-  }
+const [docs, setDocs] = useState<any[]>([]);
+const [filedocs, setFileDocs] = useState<any[]>([]);
+const [newMainId, setNewMainId] = useState("");
+const [refPics, setRefPics] =  useState<IPhoto[]>([]);
+const [newRefPics, setNewRefPics] =  useState<IPhoto[]>([]);
+const [deletedRefPics, setDeletedRefPics] =  useState<string[]>([]);
+
+const [updateEnabled, setUpdateEnabled] = useState<boolean>(false);
+
 
   const isWideMobileOrSmaller = useMediaQuery({ query: '(max-width: 430px)' })
 
@@ -45,234 +53,143 @@ const [title, setTitle] = useState("");
       maxHeight: '100%',
       height:"100%"
     }
+
+
+    const onGalleryModalClose = () => {
+      setGalleryModal(false);
+    }
+  
+    const openGalleryModal = (index:number) => {
+        setImageIndex(index);
+        setGalleryModal(true);
+
+    }
+
+    useEffect(() => {
+      debugger;
+
+      setRefPics([...referencePics]);
+      
+    }, [referencePics])
+
+
+    
+useEffect(() => {
+  if(docs.length > 0)
+  docs.forEach(doc => {
+    uploadedNewImage(doc)
+  });
+ 
+  
+}, [docs])
+
+
+const deleteActivityPhoto = (photo:IPhoto) =>{
+
+  if(photo.id !== "")
+  { 
+    setDeletedRefPics([...deletedRefPics, photo.id])
+      
+      let restPhotos = refPics!.filter(x => x.id !== photo.id);
+      setRefPics(restPhotos);
+
+  }else{
+    let restNews =  newRefPics.filter(x => x.url !== photo.url );
+    setNewRefPics(restNews);
+    let restPhotos =  refPics.filter(x => x.url !== photo.url );
+    setRefPics(restPhotos);
+  }
+}
+
+
+const uploadedNewImage = (file:any) =>{
+  debugger;
+
+  var reader = new FileReader();
+  var url = reader.readAsDataURL(file);//original blob data dönüyor
+
+   reader.onloadend = function (e:any) { //okuma işlemi bitince file update ediliyor preview data ile.
+      console.log(reader.result)//blob var
+
+      const newPic = new ReferancePhoto(file);
+
+      setRefPics([...refPics,newPic]);
+      setNewRefPics([...newRefPics,file]);
+    }; 
+}
+
+const handleSaveRef = () =>{
+  saveReferencePics(newRefPics,deletedRefPics).then(() => {
+    setOpen(false);
+  }
+   )
+}
+
+
+
     return (
 <>
+{galleryModal && 
+         <ActivityGalleryModal currentImageIndex={imageIndex} onClose={onGalleryModalClose} images={referencePics} /> 
+        }
       <Modal 
       size="large"
-      dimmer="blurring"
       closeIcon
-      onClose={() => {setOpen(false);setFiles([]);}}
-      onOpen={() => setOpen(true)}
+      onClose={() => {setOpen(false);setRefPics([...referencePics]);setDeletedRefPics([]);setNewRefPics([])}}
+      onOpen={() => {setOpen(true);setRefPics([...referencePics]);}}
       open={open}
     >
-      {/* <Modal.Header></Modal.Header> */}
+      <Modal.Header> <h3>Referans İşler Galerisi</h3></Modal.Header> 
       <Modal.Content>
       { 
-      files.length === 0 ? 
-        <Modal.Description>
-             <div style={{marginBottom:15}}>
-             <PhotoWidgetDropzone setFiles={setFiles} />
-             </div> 
-             </Modal.Description>
-             :    
-            (
-              <Modal.Description>
-             <Grid style={{marginTop:"10px"}}>
-               <Grid.Column width="16">
-               <Header sub content='*Resmin küçük görselini ayarlayın' />
-               <PhotoWidgetCropper setOriginalImage={setOriginalImage} setImageDeleted={setImageDeleted} setImageChanged={setImageChange} setImage={setImage} imagePreview={files[0].preview} setCroppedImageUrl={setCroppedImageUrl} aspect={referencePics.length=== 0 ? 240/240: 171/114} maxHeight={referencePics.length=== 0 ? 240: 114}/>
-               </Grid.Column>
-               <Grid.Column width="16">
-                 <Header sub content='*Önizleme' />
-                 <Image src={croppedImageUrl} style={{minHeight:'200px'}}/>
-               </Grid.Column>
-               <Grid.Column width="16">
-               <Header sub content='Açıklama' />
-                 <Form>
-                    <TextArea placeholder="Referans göstermek istediğiniz görsel ile ilgili yorum bırakabilirsiniz." value={title} onChange={(e,data) => setTitle(data.value!.toString())} />
-                 </Form>
-              </Grid.Column>
-               <Grid.Column width="eight">
-               <div style={{display:"flex"}}>
-               <Button.Group widths={2}>
-                      <Button positive icon='check' loading={uploadingReferencePics} onClick={()=> handleUploadImage(image!)}></Button>
-                      <Button icon='close' disabled={uploadingReferencePics} onClick={()=> setFiles([])}></Button>
-                  </Button.Group> 
-               </div>             
-               </Grid.Column>
-            </Grid>
-            </Modal.Description>
-            )
+     <PhotoGallery docs={refPics} setDocuments={setDocs} setFiles={setFileDocs} setUpdateEnabled={setUpdateEnabled}
+     deleteActivityPhoto={deleteActivityPhoto} newMainId={newMainId}/>
           
           }
       </Modal.Content>
+      <Modal.Actions>
+        <Button primary content="Kaydet" loading={uploadingReferencePics} onClick={handleSaveRef} disabled={newRefPics.length===0 && deletedRefPics.length===0}></Button>
+      </Modal.Actions>
     </Modal>
         <Header>Referans İşler
-    </Header>
-    {!isCurrentUser && referencePics.length === 0 ? "Henüz paylaştığı bir referans görsel bulunmamaktadır." :
-
-    <Grid>
-      <Grid.Column width="16">
-      {isCurrentUser && referencePics.length < 7 && (
+        {isCurrentUser && referencePics.length < 7 && (
             <Button
               floated='right'
-              basic
-              content={'Yükle' }
+              color='blue'
+              content={'Düzenle' }
+              loading={uploadingReferencePics}
               onClick={() => 
                 { setOpen(!open);
                 }}
             />
           )}
-      </Grid.Column>
-      <Grid.Column width="16">
-     {referencePics.length !== 0 ?      
-      <Gallery id="simple-gallery">
-        <div
-          style={!isWideMobileOrSmaller ? {
-            display: 'grid',
-            gridTemplateColumns: '25% 25% 25% 25%',
-            gridTemplateRows: '114px 114px',
-            gridGap: 12,
-          }:{
-            display: 'grid',
-            gridTemplateColumns: '50% 50%',
-            gridTemplateRows: '114px 114px',
-            gridGap: 12,
-          }
-          
-        }
-        >
-         {referencePics.map((image: IRefencePic,index:number) => (
-          <Item
-            key={image.originalPublicId}
-            id={image.originalPublicId}
-            original={image.originalUrl}
-            thumbnail={image.thumbnailUrl}
-            width={image.width}
-            height={image.height}
-            title={image.title}
-          >
-            {({ ref, open }) => (
-              <>
-              <Popup key={image.thumbnailPublicId+"popup"} trigger={
-                <img
-                key={image.thumbnailPublicId}
-                style={
-                   index === 4 ?
-                    { ...smallItemStyles, gridColumnStart: 1 } : 
-                    smallItemStyles} //transform: `${hovered ? 'scale(1.5,1.5)' : 'scale(1, 1)'}`
-                src={image.thumbnailUrl}
-                ref={ref as React.MutableRefObject<HTMLImageElement>}
-                onClick={open}
-              />
+    </Header>
 
-              } hoverable>
-                <Grid centered divided columns={1}>
-                <Grid.Column textAlign='center'>
-                  <Button key={image.thumbnailPublicId+"button"} color="red" loading={deletingReferencePic} onClick={() => deleteReferencePic(image.originalPublicId)}>Sil</Button>
-                </Grid.Column>
-              </Grid>
-            </Popup>
-              
-              </>
-            )}
-          </Item> 
-         ))}
-         <br></br>
-          {/* <Item
-            original="https://farm6.staticflickr.com/5591/15008867125_b61960af01_h.jpg"
-            thumbnail="https://farm6.staticflickr.com/5591/15008867125_68a8ed88cc_m.jpg"
-            width="1600"
-            height="1068"
-            title="Author: Samuel Rohl"
-          >
-            {({ ref, open }) => (
-              <img
-                style={smallItemStyles}
-                src="https://farm6.staticflickr.com/5591/15008867125_68a8ed88cc_m.jpg"
-                ref={ref as React.MutableRefObject<HTMLImageElement>}
-                onClick={open}
-              />
-            )}
-          </Item>
-          <Item
-            original="https://farm4.staticflickr.com/3902/14985871946_86abb8c56f_b.jpg"
-            thumbnail="https://farm4.staticflickr.com/3902/14985871946_86abb8c56f_m.jpg"
-            width="1600"
-            height="1066"
-            title="Author: Ales Krivec"
-          >
-            {({ ref, open }) => (
-              <img
-                style={smallItemStyles}
-                src="https://farm4.staticflickr.com/3902/14985871946_86abb8c56f_m.jpg"
-                ref={ref as React.MutableRefObject<HTMLImageElement>}
-                onClick={open}
-              />
-            )}
-          </Item>
-          <Item
-            original="https://farm6.staticflickr.com/5584/14985868676_b51baa4071_h.jpg"
-            thumbnail="https://farm6.staticflickr.com/5584/14985868676_4b802b932a_m.jpg"
-            width="1600"
-            height="1066"
-            title="Author: Michael Hull"
-          >
-            {({ ref, open }) => (
-              <img
-                style={ smallItemStyles }
-                src="https://farm6.staticflickr.com/5584/14985868676_4b802b932a_m.jpg"
-                ref={ref as React.MutableRefObject<HTMLImageElement>}
-                onClick={open}
-              />
-            )}
-          </Item>
-          <Item
-            original="https://farm6.staticflickr.com/5584/14985868676_b51baa4071_h.jpg"
-            thumbnail="https://farm6.staticflickr.com/5584/14985868676_4b802b932a_m.jpg"
-            width="1600"
-            height="1066"
-            title="Author: Michael Hull"
-          >
-              
-            {({ ref, open }) => (
-              <img
-                style={{ ...smallItemStyles, gridColumnStart: 2 }}
-                src="https://farm6.staticflickr.com/5584/14985868676_4b802b932a_m.jpg"
-                ref={ref as React.MutableRefObject<HTMLImageElement>}
-                onClick={open}
-              />
-            )}
-          </Item>
-          <Item
-            original="https://farm4.staticflickr.com/3920/15008465772_d50c8f0531_h.jpg"
-            thumbnail="https://farm4.staticflickr.com/3920/15008465772_383e697089_m.jpg"
-            width="1600"
-            height="1066"
-            title="Author: Thomas Lefebvre"
-          >
-            {({ ref, open }) => (
-              <img
-                style={smallItemStyles}
-                src="https://farm4.staticflickr.com/3920/15008465772_383e697089_m.jpg"
-                ref={ref as React.MutableRefObject<HTMLImageElement>}
-                onClick={open}
-              />
-            )}
-          </Item>
-          <Item
-            original="https://farm4.staticflickr.com/3920/15008465772_d50c8f0531_h.jpg"
-            thumbnail="https://farm4.staticflickr.com/3920/15008465772_383e697089_m.jpg"
-            width="1600"
-            height="1066"
-            title="Author: Thomas Lefebvre"
-          >
-            {({ ref, open }) => (
-              <img
-                style={smallItemStyles}
-                src="https://farm4.staticflickr.com/3920/15008465772_383e697089_m.jpg"
-                ref={ref as React.MutableRefObject<HTMLImageElement>}
-                onClick={open}
-              />
-            )}
-          </Item> */}
-        </div>
-      </Gallery>
-    :   "Henüz paylaşılan bir referans görsel bulunmamaktadır." 
+      <Segment className="profileMessageSegment">
+                <Grid container className="profileMessageGrid" stackable>
+                    
+                    <Grid.Row>
+                        <Grid.Column width={16}>
+     {referencePics.length !== 0 ?      
+      <>
+      <Swiper cssMode={true} navigation={true} pagination={true} mousewheel={true} keyboard={true} className="activitySwiper">
+                    {
+                      referencePics.map((photo:IPhoto) =>
+                      <SwiperSlide key={photo.id}>
+                        <img style={smallItemStyles} key={photo.id} src={photo.url}  onClick={() => openGalleryModal(0)}  />
+                      </SwiperSlide>
+                      )
+                    }  
+                    </Swiper>
+      </>
+    :  <span><Icon name="meh outline" />Henüz paylaşılan bir referans görsel bulunmamaktadır.</span> 
     }
-     </Grid.Column>
-    </Grid>
-}
+       </Grid.Column>
+       </Grid.Row>
+     </Grid>
+     </Segment>
+  
+
       </>
     )
   }

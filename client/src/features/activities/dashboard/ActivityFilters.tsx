@@ -258,6 +258,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
      
        />
        <Button 
+       circular
        inverted 
        content="Temizle" 
        style={{marginTop:"10px"}}
@@ -490,6 +491,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
                             positive
                             type="submit"
                             content="Ara"
+                            circular
                             style={{marginRight:"10px"}}
                             onClick={handleSearch}
                             disabled={loadingInitial}
@@ -499,6 +501,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
                           // disabled={loading || buttonDisabled}
                           //  floated="right"
                             negative
+                            circular
                             content="Temizle"
                             style={{marginRight:"10px"}}
                             disabled={loadingInitial}

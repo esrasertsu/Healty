@@ -48,15 +48,7 @@ import { AnalyticsWrapper, UseAnalytics } from '../common/util/util';
 import Forbidden from './Forbidden';
 import ReadyOnlyApplication from '../../features/user/ReadyOnlyApplication';
 import MainVideoPage from '../../features/videoCall/MainVideoPage';
-// import {
-//   Grid,
-//   Typography,
-//   CardContent,
-//   Card,
-//   Box,
-//   Divider,
-//   Button
-// } from '@mui/material';
+
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 

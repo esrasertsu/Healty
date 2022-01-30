@@ -34,7 +34,7 @@ const ProfileFollowings = () => {
             followings.map((profile) => (
               <ProfileCard key={profile.userName} profile={profile} />
             )):
-            <div style={{marginLeft:"10px", marginBottom:"10px"}}>Uzmanın takip ettiklerini ya da takipçilerini görebilmek için online olmalısın.</div>
+            <div style={{margin:"10px"}}>Uzmanın takip ettiklerini ya da takipçilerini görebilmek için giriş yapmalısın.</div>
             }
              
           </Card.Group>

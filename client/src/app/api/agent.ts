@@ -95,15 +95,15 @@ const requests = {
         profile.dependency && profile.dependency !== "" && formData.append('Dependency', profile.dependency);
         profile.cityId && profile.cityId !== "" && formData.append('CityId', profile.cityId);
 
-        profile.documents!.length>0 && profile.documents!.map((acc:File)=>(
-            formData.append('certificates', acc)
-        ));
-        profile.subCategoryIds!.length>0 && profile.subCategoryIds!.map((subCategoryId:string)=>(
-            formData.append('SubCategoryIds', subCategoryId)
-        ));
-        profile.categoryIds!.length>0 && profile.categoryIds!.map((category:string)=>(
-            formData.append('CategoryIds', category)
-        ));
+        // profile.documents!.length>0 && profile.documents!.map((acc:File)=>(
+        //     formData.append('certificates', acc)
+        // ));
+        // profile.subCategoryIds!.length>0 && profile.subCategoryIds!.map((subCategoryId:string)=>(
+        //     formData.append('SubCategoryIds', subCategoryId)
+        // ));
+        // profile.categoryIds!.length>0 && profile.categoryIds!.map((category:string)=>(
+        //     formData.append('CategoryIds', category)
+        // ));
         profile.accessibilityIds!.length>0 && profile.accessibilityIds!.map((acc:string)=>(
             formData.append('Accessibilities', acc)
         ));
@@ -210,11 +210,15 @@ const requests = {
             headers: {'Content-type': 'application/json'}
         }).then(responseBody)
     },
-    postReferencePic: async (url: string, original: Blob, thumbnail: Blob, title: string) =>{
+    postReferencePic: async (url: string, photos: any[],deletedPhotos:any[]) =>{
         let formData = new FormData();
-        formData.append('Original',original);
-        formData.append('Thumbnail',thumbnail);
-        formData.append('Title',title);
+        photos && photos.map((photo:Blob)=>(
+            formData.append('photos',photo)
+            ));
+
+         deletedPhotos && deletedPhotos.map((photo:string)=>(
+            formData.append('deletedPhotos',photo)
+            ));
 
         return axios.post(url, formData, {
             headers: {'Content-type': 'multipart/form-data'}
@@ -257,9 +261,13 @@ const requests = {
          trainer.accessibilityIds!.length>0 && trainer.accessibilityIds!.map((acc:string)=>(
             formData.append('AccessibilityIds', acc)
         ));
-         trainer.documents!.length>0 && trainer.documents!.map((acc:File)=>(
-             formData.append('certificates', acc)
+         trainer.newDocuments!.length>0 && trainer.newDocuments!.map((acc:any)=>(
+             formData.append('NewCertificates', acc)
          ));
+         trainer.deletedDocuments!.length>0 && trainer.deletedDocuments!.map((acc:string)=>(
+            formData.append('DeletedCerts', acc)
+        ));
+
          return axios.post(url, formData, {
             headers: {'Content-type': 'application/json'}
          }).then(responseBody)
@@ -362,9 +370,9 @@ const Profiles = {
     sendMessage:(message:IMessageForm):Promise<IMessage> => requests.post(`/profiles/message`, message),
     updateProfile: (profile: Partial<IProfile>):Promise<IProfile> => requests.editProfile(`/profiles`,profile),
     getAccessibilities : (): Promise<IAccessibility[]>  => requests.get(`/profiles/accessibilities`),
-    getReferencePics : (username:string): Promise<IRefencePic[]>  => requests.get(`/profiles/${username}/referencepics`),
-    addReferencePics: ( original: Blob, thumbnail: Blob, title:string): Promise<IRefencePic> => requests.postReferencePic(`/profiles/referencepic`, original,thumbnail, title),
-    deleteReferencePic: ( id1:string): Promise<IRefencePic> => requests.del(`/profiles/referencepic/${id1}`),
+    getReferencePics : (username:string): Promise<IPhoto[]>  => requests.get(`/profiles/${username}/referencepics`),
+    updateReferencePics: ( photos: Blob[], deletedPhotos: Blob[]): Promise<IPhoto[]> => requests.postReferencePic(`/profiles/referencepic`, photos, deletedPhotos),
+    deleteReferencePic: ( id1:string): Promise<IPhoto> => requests.del(`/profiles/referencepic/${id1}`),
     deleteDocument: ( id:string) => requests.del(`/profiles/documents/${id}`),
     uploadCoverPic: ( photo: Blob): Promise<IPhoto> => requests.postForm(`/profiles/coverpic`, photo),
     uploadProfileVideo: ( url: string)  => requests.put(`/profiles/videoUrl?url=${url}`, {})

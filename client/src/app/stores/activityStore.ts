@@ -261,6 +261,7 @@ export default class ActivityStore {
         this.hubConnection.on('ReceiveComment', comment => {
             runInAction(() => {
                 this.activity!.comments.push(comment);
+                
             })
         })
 

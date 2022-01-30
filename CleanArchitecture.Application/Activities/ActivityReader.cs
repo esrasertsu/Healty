@@ -38,7 +38,7 @@ namespace CleanArchitecture.Application.Activities
                 if (activity == null)
                     throw new RestException(HttpStatusCode.NotFound, new { Activity = "Not Found" });
 
-               // var currentUser = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
+                var currentUser = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
 
                 var levelsDto = new List<LevelDto>();
 
@@ -98,8 +98,8 @@ namespace CleanArchitecture.Application.Activities
                 MainImage = activity.Photos.Where(x => x.IsMain == true).FirstOrDefault(),
                 Levels = levelsDto,
                 Categories = catsToReturn,
-                SubCategories = subcatsToReturn,
-                UserActivities = _mapper.Map<ICollection<UserActivity>, ICollection<AttendeeDto>>(activity.UserActivities),
+                UserActivities = _mapper.Map<ICollection<UserActivity>, ICollection<AttendeeDto>>(activity.UserActivities.Where(x => x.IsHost == true).ToList()),
+                 SubCategories = subcatsToReturn,
                 Address= activity.Address,
                 City = _mapper.Map<City, CityDto>(activity.City),
                 Venue = activity.Venue,
@@ -107,6 +107,10 @@ namespace CleanArchitecture.Application.Activities
                 Videos = activity.Videos,
                 ActivityJoinDetails = activity.ActivityJoinDetails
             };
+
+            if (currentUser != null)
+                activityDto.UserActivities = _mapper.Map<ICollection<UserActivity>, ICollection<AttendeeDto>>(activity.UserActivities.Where(x => x.IsHost || x.AppUser == currentUser || currentUser.Followings.Any(y => y.TargetId == x.AppUser.Id)).ToList());
+
 
                 return activityDto;
             }

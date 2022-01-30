@@ -90,7 +90,7 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPost("referencepic")]
-        public async Task<ActionResult<ReferencePic>> AddReferencePic([FromForm] AddReferencePic.Command command)
+        public async Task<ActionResult<ReferencePic[]>> AddReferencePic([FromForm] AddReferencePic.Command command)
         {
             return await Mediator.Send(command);
         }

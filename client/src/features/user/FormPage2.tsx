@@ -1,13 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
-import { Accordion, Button, Confirm, Form,  Icon, List, Message,Segment, Tab } from 'semantic-ui-react';
+import { Accordion, Button, Confirm, Form,  Icon, Message } from 'semantic-ui-react';
 import DropdownInput from '../../app/common/form/DropdownInput';
 import DropdownMultiple from '../../app/common/form/DropdownMultiple';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
 import TextInput from '../../app/common/form/TextInput';
-import FileUploadDropzone from '../../app/common/util/FileUploadDropzone';
 import { Category, ICategory } from '../../app/models/category';
 import { ITrainerFormValues, TrainerFormValues } from '../../app/models/user';
 import { RootStoreContext } from '../../app/stores/rootStore';
@@ -17,9 +16,9 @@ import { useMediaQuery } from 'react-responsive'
 import NumberInput from '../../app/common/form/NumberInput';
 import agent from '../../app/api/agent';
 import { action } from 'mobx';
-import IBAN from 'iban';
 import SubMerchantDetails from '../subMerchant/SubMerchantDetails';
 import Documents from '../profiles/Documents';
+import { Document, IDocument } from '../../app/models/profile';
 
 interface IProps{
   id:string;
@@ -114,7 +113,6 @@ useEffect(() => {
             setTrainerForm({...trainerForm,cityId: data});
      }    
     useEffect(() => {
-      debugger;
         loadSubCatOptions();
     }, [allCategoriesOptionList,categoryIds]);
 
@@ -125,15 +123,61 @@ useEffect(() => {
 
     }
 
+    const handleDeleteDocument = (document:IDocument) =>{
+
+      let previewDocs:IDocument[] =[];
+      let restUnsaved:File[] =[];
+
+
+      if(document.id !== "")
+      {
+        previewDocs = trainerForm.certificates!.filter(x => x.id !== document.id);
+
+        setTrainerForm({...trainerForm,certificates: previewDocs, deletedDocuments: [...trainerForm.deletedDocuments, document.id] });
+
+      }else{
+        previewDocs = trainerForm.certificates!.filter(x => x.url !== document.url);
+        restUnsaved = trainerForm.newDocuments!.filter(x => x.name !== document.name);
+
+        setTrainerForm({...trainerForm, certificates: previewDocs, newDocuments:restUnsaved});
+
+      }
+
+    }
+
+
+    useEffect(() => {
+      if(docs.length > 0)
+      docs.forEach(doc => {
+        uploadedNewDoc(doc)
+      });
+     
+      
+    }, [docs])
+
+
+    
+  const uploadedNewDoc = (file:any) =>{
+    var reader = new FileReader();
+    var url = reader.readAsDataURL(file);//original blob data dönüyor
+
+    reader.onloadend = function (e:any) { //okuma işlemi bitince file update ediliyor preview data ile.
+        console.log(reader.result)//blob var
+
+        const newDoc = new Document(file);
+      //Kaydedilen Dokumanlar Blob olmalı yani File or Blob ama geri gelen data IDocument
+
+        setTrainerForm({...trainerForm,certificates:[...trainerForm.certificates,newDoc], newDocuments:[...trainerForm.newDocuments,file]});
+      }; 
+  }
+
     const handleSaveTrainerForm = (e:any,values:ITrainerFormValues) =>{
       setTrainerForm2Message(false);
       debugger;
       e && e.preventDefault();
-      let edittedValues = {
-        ...values,
-        documents: docs,
-      }
-        registerTrainer(edittedValues).then((res) => 
+      
+
+        registerTrainer(values).then((res) => 
         {
           if(res)
             toast.success("Bilgileriniz kaydedildi. En yakın zamanda başvurunuzu bekliyoruz.")
@@ -208,10 +252,6 @@ useEffect(() => {
 
     }
    }
-
-   const handleDeleteDoc = (id:string) => {
-    deleteDocument(id);
-}
 
 
     return (
@@ -354,41 +394,11 @@ useEffect(() => {
                  <label>Yeterlilik Belgesi (Diploma/Sertifika)*</label>
                  {
                  <div style={{margin:"10px 0 30px  0"}}>
-                 <Documents docs={trainerForm.certificates} setDocuments={setDocs} setFiles={setFileDocs} setUpdateEnabled={setUpdateEnabled}/>
-                 </div>
-                //  <Segment>
-                //  <List>
-                //   {trainerForm.certificates.map((f, index)=> 
-                //     <List.Item key={"cert_"+index} style={{display:"flex"}}>
-                //     <List.Icon name='file' />
-                //     <List.Content style={{display:"flex"}}>
-                //       <List.Header as='a'>{f.name}</List.Header> 
-                //       <Button color="red" size="mini" disabled={deletingDocument} onClick={() => handleDeleteDoc(f.id)} style={{marginLeft:"10px", cursor:"pointer"}} content={"Sil"} icon="trash"></Button>
-                //     </List.Content>
-                //   </List.Item>
-                //   )}
-                //  </List>
-                //  </Segment>
+                 <Documents docs={trainerForm.certificates} setDocuments={setDocs} setFiles={setFileDocs}
+                  setUpdateEnabled={setUpdateEnabled} deleteDocument={handleDeleteDocument}/>
+                </div>
                  }      
-                 {/* {docs.length === 0 && <FileUploadDropzone setDocuments={setDocs} setFiles={setFileDocs} setUpdateEnabled={setUpdateEnabled} /> } */}
-                 {docs.length !== 0 &&
-                 <Segment>
-                 <List>
-                  {docs.map((f, index)=> 
-                    <List.Item key={"docs_"+index}>
-                    <List.Icon name='file' />
-                    <List.Content>
-                      <List.Header as='a'>{f.name}</List.Header>
-                      <List.Description>
-                        {f.size}
-                      </List.Description>
-                    </List.Content>
-                  </List.Item>
-                  )}
-                 </List>
-                 <Button color="red" content="Dosyaları sil X" onClick={() => setDocs([])}></Button>
-                 </Segment>
-                  }
+               
                <label>Şehir*</label>
                 <Field 
                   name="cityId"

@@ -66,7 +66,7 @@ import { useMediaQuery } from 'react-responsive';
                   name="body"
                   placeholder={
                     profile!.hasConversation ? "Bu eğitmenle daha önce bir chat başlattın. Mesajlarına git." :
-                    !isLoggedIn ? "Eğitmene mesaj atabilmek için üye olmalısın.":
+                    !isLoggedIn ? "Eğitmene mesaj atabilmek için giriş yapmalısın.":
                      "Eğitmene iletmek istediğiniz mesajınızı bırakın.."}
                   component={TextAreaInput}
                   rows={6}

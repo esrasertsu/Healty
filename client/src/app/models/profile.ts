@@ -145,6 +145,44 @@ export class ActivityPhoto implements IPhoto{
 }
 
 
+export class ReferancePhoto implements IPhoto{
+    id: string = "";
+    url: string = "";
+    isMain: boolean = false;
+    isCoverPic: boolean = false;
+
+    constructor(init?: any){
+
+         if(init)
+        {    
+            this.url = init.preview;
+        }
+        Object.assign(this, init);
+    }
+}
+
+
+
+
+export class Document implements IDocument{
+    id: string = "";
+    url: string = "";
+    name: string = "";
+    resourceType: string = "";
+    constructor(init?: any){
+
+         if(init)
+        {    
+            debugger;
+            this.url = init.preview;
+            this.name = init.name;
+
+        }
+        Object.assign(this, init);
+    }
+}
+
+
 export class ProfileFilterFormValues implements IProfileFilterFormValues{
     cityId:string = "";
     subCategoryIds: string[] =[];

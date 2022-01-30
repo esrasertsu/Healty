@@ -132,7 +132,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
       </Segment.Group>
     <Segment className="profieHeader_segment" style={{marginTop:0}}>
       <Grid stackable>
-        <Grid.Column width={12} className="profieHeader_segment_column">
+        <Grid.Column width={11} className="profieHeader_segment_column">
           <Item.Group>
             <Item className="profieHeader_segment_item" style={{marginTop:"-112px"}}>
               <Image
@@ -166,7 +166,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
             </Item>
           </Item.Group>
         </Grid.Column>
-        <Grid.Column width={4} className="profieHeader_segment_column">
+        <Grid.Column width={5} className="profieHeader_segment_column">
         <Statistic.Group widths={3} size='tiny'>
           <Statistic>
             <Statistic.Value>{profile.activityCount}</Statistic.Value>

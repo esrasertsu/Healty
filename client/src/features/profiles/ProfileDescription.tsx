@@ -9,7 +9,7 @@ import Documents from './Documents';
 
 const ProfileDescription = () => {
   const rootStore = useContext(RootStoreContext);
-  const { updateProfile, profile, isCurrentUser ,setUpdatedProfile, updatedProfile,deleteDocument} = rootStore.profileStore;
+  const { updateProfile, profile, isCurrentUser ,setUpdatedProfile, updatedProfile,deleteDocument,updatingProfile} = rootStore.profileStore;
   const [editMode, setEditMode] = useState(false);
   const {openModal,closeModal,modal} = rootStore.modalStore;
   const {allCategoriesOptionList,loadAllCategoryList} = rootStore.categoryStore;
@@ -48,15 +48,15 @@ const ProfileDescription = () => {
         <Grid.Column width={16}>
           {isCurrentUser && (
             <Button
+              color={editMode ? 'red': 'blue'}
               floated='right'
-              basic
               content={editMode ? 'İptal' : 'Düzenle' }
               onClick={() => 
                 { 
                   setEditMode(!editMode);
                  setUpdatedProfile(false);
                 }}
-            />
+            ></Button>
           )}
         </Grid.Column>
         <Grid.Column width={16}>

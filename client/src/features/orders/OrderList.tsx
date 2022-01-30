@@ -54,7 +54,7 @@ const OrderList: React.FC<IProps> = ({settings}) => {
     )
 
   return (
-    <Container className="pageContainer">
+    <Container className={!settings ? "pageContainer" : ""}>
 
     <Fragment>
      {loadingOrders && orderPage === 0 ? <ActivityListItemPlaceholder/> :
@@ -138,8 +138,11 @@ const OrderList: React.FC<IProps> = ({settings}) => {
        floated="right"
        fluid={isMobile} 
        size="large" disabled={loadingNext || (orderPage +1 >= totalOrderPages)} 
+       basic
+       color="blue"
        onClick={()=> handleGetNext()} 
-       style={{background:"#2185d0", color:"white",margin:"20px 0"}}
+       style={{margin:"20px 0"}}
+       circular
      > Daha Fazla Göster </Button>
      </div>
      </>

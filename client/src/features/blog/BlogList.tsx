@@ -148,10 +148,13 @@ const BlogList: React.FC = () => {
               <div style={{display:"flex", justifyContent:"center"}}>
               <Button  
                floated="right"
+               basic
+               color="blue"
                fluid={isMobile} 
                size="large" disabled={loadingNext || (page +1 >= totalPages)} 
                onClick={()=> handleGetNext()} 
-               style={{background:"#2185d0", color:"white",margin:"20px 0"}}
+               style={{margin:"20px 0"}}
+               circular
              > Daha Fazla Göster </Button>
              </div>
                </>

@@ -249,9 +249,6 @@ namespace CleanArchitecture.Persistence
                 .WithMany(a => a.Activities)
                 .HasForeignKey(u => u.LevelId);
 
-            builder.Entity<ReferencePic>(x => x.HasKey(ua =>
-             new { ua.OriginalPublicId, ua.ThumbnailPublicId }));
-
 
             builder.Entity<Order>()
             .HasIndex(p => p.OrderNumber)

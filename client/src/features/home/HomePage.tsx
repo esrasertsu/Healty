@@ -116,11 +116,11 @@ const HomePage = () => {
           <p>
             <span style={{fontSize:"15px"}}>{title}</span> alanında dilediğin kategoride uzman eğitmenler keşfetmek için
           </p>
-          <p><Button color='blue' style={{display:'flex',  alignItems:"flex-end"}} onClick={() => {
+          <p><Button basic color='blue' style={{display:'flex',  alignItems:"flex-end"}} circular onClick={() => {
             setOpen(false);
-            setPage(0);
-            setProfileFilterForm({...profileFilterForm, categoryId:allCatId});
-            clearProfileRegistery();
+          //  setPage(0);
+            //setProfileFilterForm({...profileFilterForm, categoryId:allCatId});
+          //  clearProfileRegistery();
             history.push('/profiles');
             }}>
           <Icon style={{opacity:"1"}} name='users' size="large"/> Ara
@@ -132,7 +132,7 @@ const HomePage = () => {
           <p>
             {title} alanında uzman eğitmenler tarafından düzenlenen aktivitelere katılmak için
           </p>
-          <p><Button color='blue' style={{display:'flex',  alignItems:"flex-end"}} onClick={() => {
+          <p><Button basic circular color='blue' style={{display:'flex',  alignItems:"flex-end"}} onClick={() => {
               setClearPredicateBeforeSearch(true); 
               clearUserPredicates();
               clearKeyPredicate("subCategoryIds");
@@ -146,8 +146,8 @@ const HomePage = () => {
               setPage(0);
               clearActivityRegistery();
               setOpen(false);
-              setCategoryIds([allCatId]);
-              setPredicate("categoryIds",allCatId);
+            //  setCategoryIds([allCatId]);
+            //  setPredicate("categoryIds",allCatId);
               setClearPredicateBeforeSearch(false);
               setActiveIndex(0);
               history.push('/activities');
@@ -162,11 +162,11 @@ const HomePage = () => {
           <p>
              {title} alanında uzman eğitmenlerin yazdığı blogları okuyarak bilgi sahibi ol
            </p>
-          <p> <Button style={{display:'flex',  alignItems:"flex-end"}} color='blue'  onClick={() => {
+          <p> <Button basic circular style={{display:'flex',  alignItems:"flex-end"}} color='blue'  onClick={() => {
             setOpen(false);
             setClearedBeforeNewPredicateComing(true);
             clearPredicates(null);
-            rootStore.blogStore.setPredicate('categoryId', allCatId);
+           // rootStore.blogStore.setPredicate('categoryId', allCatId);
             setClearedBeforeNewPredicateComing(false);
             history.push('/blog')
             }}>
@@ -196,7 +196,6 @@ const HomePage = () => {
            <Segment textAlign='center' vertical className='masthead' id="slideImages">
                <Container text>
                    <Header as='h1' inverted>
-                       {/* <Image size='massive' src='/assets/logo.png' alt='logo' style={{marginBottom: 12}}/> */}
                        Dilediğin kategoride aktivite ara, sağlıklı sosyalleşmenin tadını çıkar!
                    </Header>
                    {/* {isLoggedIn && user && token ? (  */}
@@ -248,8 +247,11 @@ const HomePage = () => {
                  floated="right"
                  fluid={isMobile} 
                  size="large" 
+                 circular
+                 color='blue'
+                 basic
                  onClick={()=> history.push("/activities")} 
-                 style={{background:"dodgerblue", color:"white",margin:"20px 0"}}
+                 style={{margin:"20px 0"}}
                > Daha Fazla Aktivite </Button>
                </div>
                 }

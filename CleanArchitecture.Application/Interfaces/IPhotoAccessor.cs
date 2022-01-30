@@ -12,9 +12,8 @@ namespace CleanArchitecture.Application.Interfaces
         PhotoUploadResult AddBlogPhoto(IFormFile file);
         PhotoUploadResult AddUserCoverPhoto(IFormFile file);
         PhotoUploadResult AddActivityImage(IFormFile file);
-        ReferencePicUploadResult AddReferencePic(IFormFile file, IFormFile file2, bool isFirst);
+        PhotoUploadResult AddReferencePic(IFormFile file);
         string DeletePhoto(string publicId);
-        string DeleteReferencePic(string publicId1, string publicId2);
 
     }
 }

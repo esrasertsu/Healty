@@ -41,10 +41,10 @@ import { RootStoreContext } from '../stores/rootStore';
             Bu ve daha bir çok uzman/aktivite keşfetmek için giriş yapmanız gerekmektedir.
         </Header>
         <Segment.Inline>
-            <Button as={Link} to='/' primary>
+            <Button as={Link} to='/' primary circular>
                 Ana Sayfa
             </Button>
-            <Button onClick={handleLoginClick} color="green">
+            <Button onClick={handleLoginClick} color="green" circular>
                 Giriş
             </Button>
         </Segment.Inline>

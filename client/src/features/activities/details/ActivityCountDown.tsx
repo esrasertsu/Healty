@@ -1,12 +1,9 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { Segment, Header, Button, Icon, Statistic, StatisticGroup } from 'semantic-ui-react'
+import React, { Fragment, useContext } from 'react'
+import { Segment, Header, Statistic } from 'semantic-ui-react'
 import { RootStoreContext } from '../../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
 import { IActivity } from '../../../app/models/activity';
-import tr  from 'date-fns/locale/tr'
-import { format } from 'date-fns';
 import Countdown from 'react-countdown';
-import { action } from 'mobx';
 
 
 

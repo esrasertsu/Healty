@@ -28,7 +28,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
 
     const rootStore = useContext(RootStoreContext);
     const {setProfileNull,loadingProfile, loadProfile, loadingBlogs, loadingComments, loadingReferencePics, profile, follow,
-         unfollow, isCurrentUser, loading,setActiveTab, setProfileForm} = rootStore.profileStore;
+         unfollow, isCurrentUser, loading,setActiveTab, setProfileForm, referencePics} = rootStore.profileStore;
     const {isLoggedIn } = rootStore.userStore;
     useEffect(() => {
        
@@ -64,7 +64,6 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
             <Grid stackable className="profilePage_Container_Grid_mobile">
             <Grid.Column width={11} style={{marginTop:"40px"}}>
                   <ProfileContent profile={profile!} setActiveTab={setActiveTab}/>   
-                  {(loadingReferencePics || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileRefPlaceholder />: ( profile!.role === "Trainer" && <ProfileReferances /> )}
                 {(loadingBlogs || profile!.userName !== match.params.username) && profile!.role === "Trainer"  ?   <ProfileBlogPlaceHolder />: ( profile!.role === "Trainer" && <ProfileBlogs />)}
                 {(loadingComments || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileCommentPlaceHolder />: ( profile!.role === "Trainer" && <ProfileComments /> )}
                  
@@ -146,7 +145,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
                         </Grid.Column>
                         <Grid.Column width={11}>
                             <Header>{profile.displayName}</Header>
-                            <Label><Icon name="mail outline"></Icon> Cevap verme oranı: %{profile.responseRate}&nbsp;
+                            <Label><Icon name="mail outline"></Icon> Yanıtlama oranı %{profile.responseRate}&nbsp;
                                 {/* <Icon size="large" name="question circle" className="questionmarkicon"></Icon> */}
                             </Label>
                         </Grid.Column>
@@ -154,6 +153,10 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
                 </Grid>
        </Segment>
             }
+
+
+{(loadingReferencePics || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileRefPlaceholder />: ( profile!.role === "Trainer" && <ProfileReferances referencePics={referencePics}/> )}
+
             
             </Grid.Column>
             </Grid>

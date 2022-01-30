@@ -174,11 +174,14 @@ const ActivityDashboard: React.FC = () => {
                 {activityRegistery.size > 0 && 
                 <div style={{display:"flex", justifyContent:"center"}}>
                  <Button  
+                 basic
+                 color='blue'
                   floated="right"
                   fluid={isMobile} 
                   size="large" disabled={loadingNext || (page +1 >= totalPages)} 
                   onClick={()=> handleGetNext()} 
-                  style={{background:"#2185d0", color:"white",margin:"20px 0"}}
+                  style={{margin:"20px 0"}}
+                  circular
                 > Daha Fazla Göster </Button>
                 </div>
                 }
@@ -270,7 +273,7 @@ const ActivityDashboard: React.FC = () => {
           </Segment>
           
           <div className="activityDashboard_mobile_filterdiv">
-          <Button basic color="grey" onClick={() => setVisible(!visible)}>Filtreler <Icon style={{marginLeft:"5px"}} name="sliders horizontal" /></Button>
+          <Button basic color="grey" onClick={() => setVisible(!visible)} circular>Filtreler <Icon style={{marginLeft:"5px"}} name="sliders horizontal" /></Button>
             <div>
             <div className="mobileRadioToggle">
               <div>Online </div> 
@@ -316,11 +319,14 @@ const ActivityDashboard: React.FC = () => {
                 {activityRegistery.size > 0 && 
                 <div style={{display:"flex", justifyContent:"center"}}>
                 <Button  
+                basic
+                color='blue'
                  floated="right"
                  fluid={isMobile} 
                  size="large" disabled={loadingNext || (page +1 >= totalPages)} 
                  onClick={()=> handleGetNext()} 
-                 style={{background:"#2185d0", color:"white",margin:"20px 0"}}
+                 style={{margin:"20px 0"}}
+                 circular
                > Daha Fazla Göster </Button>
                </div>
                 }

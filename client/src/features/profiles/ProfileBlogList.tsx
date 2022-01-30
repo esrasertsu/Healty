@@ -47,7 +47,7 @@ const ProfileBlogList: React.FC<IProps> = ({profileBlogs,profileUserName,display
               ))}
           </Card.Group>
           <Button
-            content="Tümünü Gör" 
+            content="Tüm Blogları" 
             positive
             onClick={()=>
               {

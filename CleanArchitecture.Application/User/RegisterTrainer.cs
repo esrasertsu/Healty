@@ -39,7 +39,9 @@ namespace CleanArchitecture.Application.User
             public List<Guid> SubCategoryIds { get; set; }
             public string SuggestedSubCategory { get; set; }
             public List<Guid> AccessibilityIds { get; set; }
-            public List<IFormFile> Certificates { get; set; }
+            public List<IFormFile> NewCertificates { get; set; }
+            public List<string> DeletedCerts { get; set; }
+
             public bool SendToRegister { get; set; }
         }
 
@@ -111,10 +113,10 @@ namespace CleanArchitecture.Application.User
 
                     user.Certificates = new List<Certificate>();
 
-                    if (request.Certificates != null)
-                    {
 
-                        foreach (var item in request.Certificates)
+                    if (request.NewCertificates != null) //yeni eklenenler
+                    {
+                        foreach (var item in request.NewCertificates)
                         {
                             var documentUploadResult = _documentAccessor.AddDocument(item);
 
@@ -128,7 +130,21 @@ namespace CleanArchitecture.Application.User
                             user.Certificates.Add(doc);
                         }
                         docsUploaded = true;
+                    }
 
+                    if (request.DeletedCerts != null) //silinenler
+                    {
+
+                        foreach (var item in request.DeletedCerts)
+                        {
+                            var photo = user.Certificates.Where(x => x.Id == item).FirstOrDefault();
+                            if (photo != null)
+                            {
+                                var result = _documentAccessor.DeleteDocument(photo.Id, photo.ResourceType);
+                                if (result != null)
+                                    user.Certificates.Remove(photo);
+                            }
+                        }
                     }
                         
 

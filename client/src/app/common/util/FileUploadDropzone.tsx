@@ -1,16 +1,13 @@
-import React, {useCallback, useState} from 'react'
+import React, {useCallback} from 'react'
 import {useDropzone} from 'react-dropzone'
-import { Header, Icon } from 'semantic-ui-react'
-import { AddTwoTone } from '@material-ui/icons';
-import {
- 
-  Avatar,
+import {  Icon } from 'semantic-ui-react'
+import { IDocument } from '../../models/profile'
 
-} from '@material-ui/core';
 interface IProps{
     setFiles: (files: object[]) => void;
     setDocuments: (files: object[]) => void;
     setUpdateEnabled: (enable: boolean) => void;
+
 }
 
 const dropzoneStyles ={
@@ -45,9 +42,9 @@ const FileUploadDropzone: React.FC<IProps> = ({setFiles,setDocuments, setUpdateE
     
     <div {...getRootProps()} style={isDragActive ? {...dropzoneStyles, ...dropzoneActive}: dropzoneStyles}>
       <input {...getInputProps()} />
-      <Avatar className="docAvatarAddWrapper">
-            <AddTwoTone className='addTwoTone' fontSize="large" />
-       </Avatar>
+      <div className="docAvatarAddWrapper circleAvatar">
+            <Icon name="add circle" className='addTwoTone' />
+       </div>
     </div>
 
     

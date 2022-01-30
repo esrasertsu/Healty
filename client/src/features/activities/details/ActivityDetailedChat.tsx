@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Segment, Header, Form, Button,Comment } from 'semantic-ui-react'
 import { RootStoreContext } from '../../../app/stores/rootStore'
 import { Form as FinalForm, Field} from 'react-final-form';
@@ -6,10 +6,13 @@ import { Link } from 'react-router-dom';
 import TextAreaInput from '../../../app/common/form/TextAreaInput';
 import { observer } from 'mobx-react-lite';
 import { formatDistance } from 'date-fns';
+import { IComment } from '../../../app/models/activity';
 
  const ActivityDetailedChat = () => {
 
   const rootStore = useContext(RootStoreContext);
+
+  const [sortedMessages, setSortedMessages] = useState<IComment[]>([])
 
   const {
     createHubConnection,
@@ -25,20 +28,33 @@ import { formatDistance } from 'date-fns';
     }
   }, [createHubConnection, stopHubConnection,activity])
 
+
+  useEffect(() => {
+    debugger;
+
+    if(activity && activity.comments)
+    {
+       setSortedMessages(activity.comments.slice().sort(
+      (a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  ))}
+   
+  }, [activity,activity!.comments.length])
+ 
+
     return (
            <Fragment>
              <Segment
                textAlign='center'
                attached='top'
                inverted
-               style={{ border: 'none' }}
+               style={{ border: 'none',marginTop:"40px" }}
                className="segmentHeader"
              >
                <Header>Grup Mesajları</Header>
              </Segment>
-             <Segment attached>
+             <Segment attached style={{maxHeight:"300px", overflowY:"scroll", display:"flex", flexDirection:"column-reverse"}}>
                <Comment.Group>
-                 {activity && activity.comments && activity.comments.map((comment) => (
+                 {sortedMessages.map((comment) => (
                       <Comment key={comment.id}>
                       <Comment.Avatar src={comment.image || '/assets/user.png'}  onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}} />
                       <Comment.Content>
@@ -53,6 +69,11 @@ import { formatDistance } from 'date-fns';
                       </Comment.Content>
                       </Comment>
                  ))}
+                    </Comment.Group>
+             </Segment>
+                 <Segment attached>
+
+                
                 <FinalForm 
                   onSubmit ={addComment}
                   render={({handleSubmit, submitting, form}) => (
@@ -64,6 +85,7 @@ import { formatDistance } from 'date-fns';
                     placeholder='Add your comment' 
                     />
                     <Button
+                    
                       content='Gönder'
                       labelPosition='left'
                       icon='edit'
@@ -74,10 +96,9 @@ import { formatDistance } from 'date-fns';
                   )}
                 />
        
-       
+       </Segment>
                  
-               </Comment.Group>
-             </Segment>
+            
            </Fragment>
     )
 }

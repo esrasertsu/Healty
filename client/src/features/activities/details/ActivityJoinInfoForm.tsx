@@ -130,6 +130,7 @@ const validate = combineValidators({
           style={{marginTop: 12}}
           disabled={invalid}
           floated="right"
+          circular
             content='Ekle'
             labelPosition='right'
             icon="check"

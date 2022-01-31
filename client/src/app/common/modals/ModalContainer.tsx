@@ -5,13 +5,14 @@ import { RootStoreContext } from "../../stores/rootStore";
 
 const ModalContainer = () => {
   const rootStore = useContext(RootStoreContext);
-  const { modal: {open, body, image,footer,dimmer,closeOnDimmerClick }, closeModal } = rootStore.modalStore;
+  const { modal: {open, body, image,footer,dimmer,closeOnDimmerClick, className }, closeModal } = rootStore.modalStore;
 
   return (
     <Modal
      open={open} 
       onClose={closeModal}
       closeIcon
+      className={className}
       dimmer={dimmer === "inverted" ? 'inverted' : "blurring"}
       closeOnEscape={true}
       closeOnDimmerClick={closeOnDimmerClick}>

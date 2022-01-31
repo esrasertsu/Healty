@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useRef, useState } from 'react';
-import { Segment, Item, Header, Button, Grid, Statistic, Divider, ButtonGroup, Label, Icon, Dimmer, Loader, Image } from 'semantic-ui-react';
+import { Segment, Item, Header, Button, Grid, Statistic, Divider, ButtonGroup, Label, Icon, Dimmer, Loader, Image, Reveal } from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { StarRating } from '../../app/common/form/StarRating';
 import { colors } from '../../app/models/category';
@@ -10,6 +10,7 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { useMediaQuery } from 'react-responsive'
 import * as _screenfull from "screenfull";
 import ReactPlayer from 'react-player/youtube'
+import { history } from '../../';
 
 interface IProps{
     profile: IProfile,
@@ -46,6 +47,8 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
   const rootStore = useContext(RootStoreContext);
   const { uploadCoverPic,uploadingCoverImage } = rootStore.profileStore;
   const {openModal,closeModal,modal} = rootStore.modalStore;
+  const {isLoggedIn } = rootStore.userStore;
+
   const [imageChange, setImageChange] = useState(false);
   const [imageDeleted, setImageDeleted] = useState(false);
   const [originalImage, setOriginalImage] = useState<Blob | null>(null);
@@ -124,8 +127,9 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
           !imageChange && isCurrentUser && profile.coverImage !== null &&
           <Segment basic style={activityImageTextStyle}>
           <Label floating color="blue" style={{cursor:"pointer", left:"80%"}} 
+          circular className='blue-gradientBtn'
            size={isTabletOrMobile ? "small" :"medium"}
-          onClick={()=>{setImageDeleted(true); setImageChange(true)}}>Kapak Resmini Değiştir <Icon name="edit"></Icon></Label>
+          onClick={()=>{setImageDeleted(true); setImageChange(true)}}>Kapak Resmini Değiştir <Icon name="picture"></Icon></Label>
           </Segment>
         } 
         </Dimmer.Dimmable>
@@ -140,7 +144,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                 size='small'
                 src={profile.image || '/assets/user.png'}
                 className="profieHeader_userImage"
-                style={{border: "4px solid #fff", height:"150px"}}
+                style={{border: "4px solid #fff", height:"150px", boxShadow: "0 7px 10px 0 #d4d4d5"}}
                 onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}
               />
               <Item.Content verticalAlign='middle' className="profileHeader_content">
@@ -189,6 +193,63 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
           </Statistic.Group>
           <Divider/>
          
+          {!isCurrentUser && 
+          <>         
+           <Button 
+            floated='right'
+            loading={loading}
+            fluid
+            circular
+            className='orange-gradientBtn'
+            // className={profile.isFollowing ? 'followingButtonOut_redClassName' : 'followingButtonOut_greenClassName'}
+              onClick={profile.isFollowing ? () => unfollow(profile.userName): () => follow(profile.userName)}
+              //disabled={!isLoggedIn} 
+              >
+                {profile.isFollowing ? 'Favorilerimden Çıkar' : 'Favorilere Ekle'}
+                <Icon name='star' />
+            </Button>
+              </>
+
+          // <Reveal animated='move' style={{width:"100%"}}>
+          //   <Reveal.Content visible style={{ width: '100%' }}>
+          //     <Button
+          //       fluid
+          //       className="followingButtonOut"
+          //       content={profile.isFollowing ? 'Takip Ediliyor' : 'Takip Edilmiyor'}
+          //       icon="hand pointer"
+          //     />
+          //   </Reveal.Content>
+          //   <Reveal.Content hidden>
+          //     <Button
+          //       loading={loading}
+          //       fluid
+          //       className={profile.isFollowing ? 'followingButtonOut_redClassName' : 'followingButtonOut_greenClassName'}
+          //       content={profile.isFollowing ? 'Takipten Çık' : 'Takip Et'}
+          //       disabled={!isLoggedIn}
+          //       onClick={profile.isFollowing ? () => unfollow(profile.userName): () => follow(profile.userName)}
+          //     />
+          //   </Reveal.Content>
+          // </Reveal>
+          }
+          {isCurrentUser && profile.role === "Trainer" &&
+            <>
+            <Button
+              circular
+              className='gradientBtn'
+              content={'Blog Yaz'}
+              style={{width:"47%"}}
+              onClick={()=> history.push('/createPost')}
+            />
+            <Button
+            className='orange-gradientBtn'
+            circular
+            color={'blue'}
+            content={'Aktivite Aç'}
+            style={{width:"50%"}}
+            onClick={()=> history.push('/createActivity')}
+          />
+          </>
+          }
         </Grid.Column>
       </Grid>
     </Segment>

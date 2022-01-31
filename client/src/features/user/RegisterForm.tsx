@@ -128,14 +128,16 @@ const handleRegister = async(values:IUserFormValues) =>{
             <Button
               disabled={(invalid && !dirtySinceLastSubmit) || pristine}
               loading={submitting}
-              color='teal'
+              color='blue'
               content="Kayıt Ol"
+              circular
+              basic
               fluid
             />
               <Divider horizontal>veya</Divider>
             <SocialLogin loading={loadingFbLogin} fbCallback={(resonse:any) => fbLogin(resonse,location)} />
             <br></br>
-            <GoogleLogin
+            {/* <GoogleLogin
               clientId="1086747484183-2avit5lboliou5c8nt90tjf2ueu5f8bk.apps.googleusercontent.com"
               render={renderProps => (
                 <Button loading={loadingGoogleLogin} fluid color="google plus" onClick={renderProps.onClick} disabled={renderProps.disabled}>
@@ -146,7 +148,7 @@ const handleRegister = async(values:IUserFormValues) =>{
               onSuccess={responseGoogle}
               onFailure={responseGoogle}
               cookiePolicy="single_host_origin"
-            />
+            /> */}
               <ReCAPTCHA
               ref={recaptchaRef}
               size="invisible"

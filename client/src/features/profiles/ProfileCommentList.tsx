@@ -59,6 +59,7 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
                  floated="right"
                  content="Daha fazla yorum..." 
                  positive
+                 circular
                  onClick={handleGetNext}
                  style={totalPages === 0 ? {display:"none"}: {display:"inline"}}
                  disabled={totalPages === commentPage + 1 || totalPages === 0}
@@ -70,7 +71,9 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
                       content='Yorum yaz'
                       labelPosition='left'
                       icon='edit'
+                      className='blue-gradientBtn'
                       primary
+                      circular
                       onClick={()=>openModal("Leave a comment",<ProfileCommentForm closeModal={closeModal} />,false,null)}
                     />)
                 }

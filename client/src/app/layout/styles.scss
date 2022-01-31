@@ -1,15 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand:400,500,700&subset=latin-ext');
 @font-face {
   font-family: "AssistantRegular";
   src: local("AssistantRegular"),
     url("./fonts/GT-Eesti-Pro-Display-Regular.woff2") format("woff");
-  font-weight: normal;
+  font-weight: 500;
 }
 
 @font-face {
   font-family: "AssistantMedium";
   src: local("AssistantMedium"),
     url("./fonts/GT-Eesti-Pro-Display-Medium.woff2") format("woff");
-  font-weight: normal;
+  font-weight: 500;
 }
 
 
@@ -17,7 +18,7 @@
   font-family: "AssistantBold";
   src: local("AssistantBold"),
     url("./fonts/GT-Eesti-Pro-Display-Bold.woff2") format("woff");
-  font-weight: normal;
+  font-weight: 500;
 }
 
 @font-face {
@@ -38,9 +39,11 @@
 
 body {
   background-color: #f8f7f791  !important;
-  font-family: AssistantRegular, Arial, sans-serif !important;
+  font-family: AssistantRegular, sans-serif !important;
   font-size: 16px;
-  
+  font-weight: 500;
+ // font-family: 'Quicksand', sans-serif;
+  color: #324e63;
 }
 html, body {
   overflow-x: hidden;
@@ -295,6 +298,126 @@ h1, h2, h3, h4, h5 {
   overflow: hidden !important;
 }
 
+.ui.segment{
+  box-shadow: 0 7px 10px 0 #d4d4d5 !important;
+}
+
+.ui.button.gradientBtn, .gradientBtn{
+  --tw-text-opacity: 1;
+    color: rgb(255 255 255/var(--tw-text-opacity)) !important;
+  --tw-gradient-to: #3f83f8 !important;
+  --tw-gradient-from: #7e3af2  !important;
+  --tw-gradient-stops: var(--tw-gradient-from),var(--tw-gradient-to,rgba(126,58,242,0))  !important;
+  background-image: linear-gradient(to bottom right,var(--tw-gradient-stops)) !important;
+
+  &:hover {
+    box-shadow:0px 7px 30px rgb(80 112 246 / 60%) !important;
+  }
+  @media screen and (min-width: 768px){
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+   .icon{
+    opacity: 1 !important;
+    margin-left: 8px !important;
+  }
+  &.disabled, &:disabled{
+    opacity: .8 !important;
+    --tw-gradient-to: #3f83f8 !important;
+    --tw-gradient-from: #7e3af2  !important;
+    --tw-gradient-stops: var(--tw-gradient-from),var(--tw-gradient-to,rgba(126,58,242,0))  !important;
+    background-image: linear-gradient(to bottom right,var(--tw-gradient-stops)) !important;
+  }
+}
+
+.blue-gradientBtn{
+  background: linear-gradient(45deg, #1da1f2, #0e71c8)  !important;
+  box-shadow: 0px 4px 30px rgba(19, 127, 212, 0.4)  !important;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255/var(--tw-text-opacity)) !important;
+  &:hover {
+    box-shadow: 0px 7px 30px rgba(19, 127, 212, 0.75)  !important;
+  }
+}
+
+.ui.button.green-gradientBtn, .green-gradientBtn{
+  background: linear-gradient(
+    45deg
+    , #279107, #30c622) !important;
+       
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255/var(--tw-text-opacity)) !important;
+  &:hover {
+    box-shadow: 0px 7px 30px rgb(188 255 161 / 81%) !important;
+    }
+
+  @media screen and (min-width: 768px){
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+   .icon{
+    opacity: 1 !important;
+    margin-left: 8px !important;
+  }
+  &.disabled, &:disabled{
+    opacity: .5 !important;
+    background-image: linear-gradient(
+      45deg
+      , #279107, #30c622) !important;
+          box-shadow: 0px 4px 30px rgb(188 255 161 / 81%) !important;
+      --tw-text-opacity: 1;
+  }
+}
+
+.orange-gradientBtn {
+  background: linear-gradient(45deg, #d5135a, #f05924) !important;
+  box-shadow: 0px 4px 30px rgba(223, 45, 70, 0.35) !important;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255/var(--tw-text-opacity)) !important;
+  &:hover {
+    box-shadow: 0px 7px 10px rgba(230, 61, 84, 0.75)  !important;
+  }
+  .icon{
+    opacity: 1 !important;
+    margin-left: 8px !important;
+  }
+  .disabled{
+    opacity: .8 !important;
+  }
+  @media screen and (min-width: 768px){
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  
+}
+
+.gray-gradientBtn {
+  box-shadow: none;
+  background: #dcdcdc;
+  color: #142029;
+}
+
+.gray_label{
+  background-color: #f7f7f7 !important;
+  color: #263a5e !important;
+}
+
+.facebook_btn{
+  background: linear-gradient(45deg, #3b5998, #0078d7) !important;
+  box-shadow: 0px 4px 30px rgba(43, 98, 169, 0.5) !important;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255/var(--tw-text-opacity)) !important;
+
+  @media screen and (min-width: 768px){
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
 .defaultButtonColor{
   background-color:#335084 !important;
 }
@@ -310,6 +433,7 @@ h1, h2, h3, h4, h5 {
 .greenButtonColor{
   background-color:rgb(58, 121, 73) !important;
 }
+
 .ui.card, .ui.cards>.card {
   max-width: 100%;
   position: relative;
@@ -368,7 +492,13 @@ h1, h2, h3, h4, h5 {
     font-size: 1rem !important;
     line-height: 1rem !important;
 }
-
+.trainerwelcome{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
 .dtPicker_Style{
   box-shadow: 0 1px 2px 0 rgb(34 36 38 / 15%);
         border-radius: .28571429rem;
@@ -462,6 +592,15 @@ p.baseline-pricing__value{
 }
 .activityListItem{
     width: 100% !important;
+    i.icon{
+      font-size: 18px !important;
+    }
+    i.heartbeat.icon{
+      background: -webkit-gradient(linear, left top, left bottom, from(#7e3af2), to(#3f83f8));
+      background-clip: text;
+	    -webkit-text-fill-color: transparent;
+      font-size: 22px !important;
+    }
 }
 .activityDetails_GridSegment .segment.attached{
   font-size: 14px;
@@ -965,12 +1104,13 @@ a.ui.card:hover {
 }
 
 @media (min-width: 1200px){
-  .profieHeader_segment{
+  .ui.segment.profieHeader_segment{
     box-shadow: none !important;
     border: none !important;
     margin-left: -150px !important;
     padding: 0 150px !important;
     margin-right: -150px !important;
+    box-shadow: none !important;
   }
   .page-header__content {
     padding-left: 40px;
@@ -1489,6 +1629,12 @@ max-width: 80%;
 }
 
 @media (min-width:768px){
+  
+.ui.modal.loginModal .image.content{
+  background: url(/assets/login-background.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+}
   .orderItem_BuyerDetails_Header{
     padding: 0 20px !important;
   }
@@ -2009,9 +2155,35 @@ button, input, optgroup, select, textarea {
     border-radius: 12px !important;
 }
 .profileMessageGrid{
-  background: #efefef  !important;
-    border: 1px solid #bebebe;
+  background: #ffffff  !important;
+    border: 1px solid #d4d4d5;
     border-radius: 12px !important;
+
+.profileImage{
+  width: 75px;
+  height: 75px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  z-index: 4;
+  box-shadow: 0px 5px 30px 0px rgb(108, 68, 252), 0px 0px 0px 7px rgba(69, 34, 224, 0.5);
+
+  @media screen and (max-width: 576px) {
+    width: 120px;
+    height: 120px;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+   
 }
 .questionmarkicon{
   margin-right: 0 !important;
@@ -2019,8 +2191,6 @@ button, input, optgroup, select, textarea {
 }
 .sendMessageButton, .showNumberButton {
   width: 100% !important;
-  height: 45px !important;
-  border-radius: 0.5rem !important;
 }
 .sendMessageButton{
     display: flex;
@@ -2035,10 +2205,7 @@ button, input, optgroup, select, textarea {
     font-size: 1rem !important;
     font-weight: 600 !important;
     line-height: 1.5rem !important;
-    border: 0.0625rem solid rgb(0, 105, 119) !important;
-    background-color: #263a5e  !important;
     color: rgb(255, 255, 255)  !important;
-    border-radius: 8px  !important;
     padding: calc(0.6875rem) 1.5rem  !important;
     cursor: pointer;
     margin-bottom: 10px !important;
@@ -2074,10 +2241,7 @@ button, input, optgroup, select, textarea {
 .followingButtonOut i{
   opacity: 1 !important
 }
-.sendMessageButton:hover {
-  background-color: #f2711c !important;
-  border: 0.0625rem solid #f2711c !important
-}
+
 .followingButtonOut_redClassName{
   border: 0.0625rem solid rgb(218, 35, 35) !important;
   color: rgb(218, 35, 35) !important;
@@ -2178,6 +2342,7 @@ button, input, optgroup, select, textarea {
   .masthead_page.profileDashboard
   {
     margin-top: 20px !important;
+    box-shadow: none !important;
   }
 
   .ui.grid .ui.stackable.grid {
@@ -2248,6 +2413,8 @@ button, input, optgroup, select, textarea {
 .masthead_page.profileDashboard
   {
     margin-top: 50px !important;
+    box-shadow: none !important;
+
   }
   .trainerForm_ConfirmContent{
     padding:20px 40px !important;
@@ -2462,6 +2629,7 @@ button, input, optgroup, select, textarea {
 
 .profile_desc_grid_rows{
   margin-bottom: 15px;
+ 
 }
 
 .readMore{

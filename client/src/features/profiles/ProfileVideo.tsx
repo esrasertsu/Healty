@@ -47,6 +47,7 @@ const ProfileVideo: React.FC<IProps> = ({videoUrl}) => {
                                     loading={submittingVideo}
                                     basic
                                     positive
+                                    circular
                                     content="Değiştir"
                                     />
                                     <Button
@@ -55,6 +56,7 @@ const ProfileVideo: React.FC<IProps> = ({videoUrl}) => {
                                     loading={submittingVideo}
                                     onClick={handleDelete}
                                     basic
+                                    circular
                                     negative
                                     icon="trash"
                                     />
@@ -63,8 +65,10 @@ const ProfileVideo: React.FC<IProps> = ({videoUrl}) => {
                               }
                               </>
                             :
-                            isCurrentUser ? <Button icon="plus" content="Video Ekle" 
-                            onClick={()=>openModal("Video Yükleme",<ProfileVideoUploadForm  url="" closeModal={closeModal} />,false,null)}
+                            isCurrentUser ? <Button circular color='red' content="Video Ekle" 
+                            onClick={()=>
+                                openModal("Video Yükleme",
+                                <ProfileVideoUploadForm  url="" closeModal={closeModal} />,false,null, undefined, true)}
                             ></Button>
                             : 
                             <span><Icon name="meh outline" />Henüz bu uzmana ait bir tanıtım videosu bulunmamaktadır.</span>

@@ -19,9 +19,10 @@ export default class ModalStore {
         dimmer:"blurring",
         closeOnDimmerClick:true,
         redirectPage:"",
+        className:""
     }
 
-    @action openModal = (header:any, content: any, image:any, footer:any, dimmer?:string,closeOnDimmerClick?:boolean
+    @action openModal = (header:any, content: any, image:any, footer:any, dimmer?:string,closeOnDimmerClick?:boolean,className?:string
       //  redirectPage?:string
         ) =>{
         this.modal.open = true;
@@ -31,6 +32,7 @@ export default class ModalStore {
         this.modal.footer = footer;
         this.modal.dimmer = dimmer === "inverted" ? "inverted" : "blurring";
         this.modal.closeOnDimmerClick = closeOnDimmerClick === true ? true :false;
+        this.modal.className = className || "";
        // this.modal.redirectPage=redirectPage ? redirectPage : "";
     }
 

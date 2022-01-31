@@ -248,8 +248,7 @@ const HomePage = () => {
                  fluid={isMobile} 
                  size="large" 
                  circular
-                 color='blue'
-                 basic
+                 className='blue-gradientBtn'
                  onClick={()=> history.push("/activities")} 
                  style={{margin:"20px 0"}}
                > Daha Fazla Aktivite </Button>
@@ -276,7 +275,7 @@ const HomePage = () => {
 <Grid.Row >
   <Grid.Column width={isMobile ? "16": "5"}>
     <Header as='h3' icon>
-        <Icon style={{fontSize:"1.5rem",marginBottom:"15px"}} size="small" circular inverted color='orange' name='calendar check outline' />     
+        <Icon style={{fontSize:"1.5rem",marginBottom:"15px"}} size="small" circular inverted className='orange-gradientBtn' name='calendar check outline' />     
         <Header.Content>
             Aktivite Planla
             <Header.Subheader className="homepage_subheader">
@@ -288,7 +287,7 @@ const HomePage = () => {
   </Grid.Column>
   <Grid.Column width={isMobile ? "16": "5"} >
     <Header as='h3' icon>
-        <Icon style={{fontSize:"1.5rem",marginBottom:"15px"}} circular inverted color='orange' flipped='horizontally' name='history' />
+        <Icon style={{fontSize:"1.5rem",marginBottom:"15px"}} circular inverted className='orange-gradientBtn' flipped='horizontally' name='history' />
         <Header.Content>
             Hızlı Erişim
             <Header.Subheader className="homepage_subheader">
@@ -301,7 +300,7 @@ const HomePage = () => {
   
   <Grid.Column width={isMobile ? "16": "5"}>
     <Header as='h3' icon>
-        <Icon style={{fontSize:"1.5rem", marginBottom:"15px"}} size="small" circular inverted color='orange' name='heart' />
+        <Icon style={{fontSize:"1.5rem", marginBottom:"15px"}} size="small" circular inverted className='orange-gradientBtn' name='heart' />
         <Header.Content>
             Online Destek 
             <Header.Subheader className="homepage_subheader">

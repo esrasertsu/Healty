@@ -253,6 +253,7 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
             floated='right'
             disabled={!updateEnabled || updatingProfile}
             positive
+            circular
             content='Güncelle'
           />
         </Form>

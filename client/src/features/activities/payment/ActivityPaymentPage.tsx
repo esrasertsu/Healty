@@ -278,6 +278,7 @@ if(loadingActivity) return <LoadingComponent content='Loading...'/>
                   disabled={loading || invalid }
                   floated="right"
                   positive
+                  circular
                   fluid={isMobile}
                   type="submit"
                   style={{margin:"20px 0"}}

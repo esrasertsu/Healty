@@ -48,8 +48,9 @@ const ProfileDescription = () => {
         <Grid.Column width={16}>
           {isCurrentUser && (
             <Button
-              color={editMode ? 'red': 'blue'}
-              floated='right'
+              floated='left'
+              circular
+              className={editMode ? 'red': 'blue-gradientBtn'}
               content={editMode ? 'İptal' : 'Düzenle' }
               onClick={() => 
                 { 
@@ -82,7 +83,7 @@ const ProfileDescription = () => {
                     </List>
                   </Grid.Column>
                   <Grid.Column className="profile_desc_iconandtext">
-                  <Icon className="profileContent_icons" size="big" name="bolt"></Icon> 
+                  <Icon className="profileContent_icons" size="big" name="handshake outline"></Icon> 
                   <List as='ul' className="profile_desc_list_item">
                   <Header
                     as='h3'

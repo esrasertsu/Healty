@@ -78,23 +78,8 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
             />
           </ButtonGroup>
           }
-            {isCurrentUser && profile.role === "Trainer" &&
-          <ButtonGroup widths={2}>
-            <Button
-              basic
-              color={'green'}
-              content={'Blog Yaz'}
-              onClick={()=> history.push('/createPost')}
-            />
-            <Button
-            basic
-            color={'blue'}
-            content={'Aktivite Oluştur'}
-            onClick={()=> history.push('/createActivity')}
-          />
-          </ButtonGroup>
-          }
-          {!isCurrentUser && 
+            
+          {/* {!isCurrentUser && 
           <div className="ui pointing secondary menu" style={{height:"75px", alignItems:"center"}}>
           <Reveal animated='move' style={{width:"100%"}}>
             <Reveal.Content visible style={{ width: '100%' }}>
@@ -117,7 +102,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
             </Reveal.Content>
           </Reveal>
           </div> }
-          
+           */}
             {!isCurrentUser && profile!.role === "Trainer" &&
                 <ProfileMessage profile={profile!}/> 
             }
@@ -133,25 +118,6 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
                           </>
 
               )
-            }
-
-{isCurrentUser && profile!.role === "Trainer" &&
-                <Segment className="profileMessageSegment">
-                <Grid container className="profileMessageGrid" stackable>
-                    <Grid.Row columns={2}>
-                        <Grid.Column width={5}>
-                            <Image circular size={'tiny'} src={profile.image || '/assets/user.png'}
-                            onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}></Image>
-                        </Grid.Column>
-                        <Grid.Column width={11}>
-                            <Header>{profile.displayName}</Header>
-                            <Label><Icon name="mail outline"></Icon> Yanıtlama oranı %{profile.responseRate}&nbsp;
-                                {/* <Icon size="large" name="question circle" className="questionmarkicon"></Icon> */}
-                            </Label>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-       </Segment>
             }
 
 

@@ -451,9 +451,10 @@ useEffect(() => {
                   loading={submitting}
                   disabled={submitting }
                   floated="right"
-                  color="blue"
+                  className="blue-gradientBtn"
                   labelPosition="right"
                   icon="save"
+                  circular
                   content="Kaydet"
                   onClick={(e,data)=> {e.preventDefault();handleSaveTrainerForm(e,trainerForm)}}
                 />
@@ -500,7 +501,9 @@ useEffect(() => {
               content="Başvuruyu Gönder"
               floated="right"
               icon="send"
+              className="green-gradientBtn"
               labelPosition='right'
+              circular
               style={{marginTop:"30px"}}
               onClick={(e,data)=>{  e.preventDefault(); handleSendToConfirm(e)}}
             />

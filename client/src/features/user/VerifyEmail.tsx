@@ -63,7 +63,7 @@ const VerifyEmail : React.FC<RouteComponentProps> = ({location}) =>{
                     return (
                         <div className="center">
                             <p>Doğrulama başarısız - tekrar doğrulama linki gönderilmesini talep edebilirsin.</p>
-                            <Button onClick={handleConfiedEmailResend} primary content="Yeniden Gönder" size="huge"/>
+                            <Button onClick={handleConfiedEmailResend} circular primary content="Yeniden Gönder" size="huge"/>
                         </div>
                     )
                    
@@ -71,7 +71,7 @@ const VerifyEmail : React.FC<RouteComponentProps> = ({location}) =>{
                         return (
                             <div className="center">
                                 <p>Eposta adresi doğrulandı. Giriş yapmak için tıklayın.</p>
-                                <Button onClick={handleLoginClick} primary content="Giriş Yap" size="large"/>
+                                <Button onClick={handleLoginClick} circular primary content="Giriş Yap" size="large"/>
                             </div>
                         )
                        

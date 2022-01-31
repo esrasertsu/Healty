@@ -11,13 +11,7 @@ const activityImageStyle = {
     width:"100%"
 };
 
-const activityImageTextStyle = {
-  position: 'absolute',
-  top: '10%',
-  width: '100%',
-  height: 'auto',
-  color: 'white',
-};
+
 const BlogPageHeader:React.FC<{blog:IBlog}> = ({blog}) => {
 
   const rootStore = useContext(RootStoreContext);
@@ -84,11 +78,15 @@ const BlogPageHeader:React.FC<{blog:IBlog}> = ({blog}) => {
          }  
         {
           !imageChange && isCurrentUserAuthor &&
-          <Segment basic style={activityImageTextStyle}>
+          <div style={{position: 'absolute',
+          top: '10%',
+          width: '100%',
+          height: 'auto',
+          color: 'white'}}>
           <Label floating color="blue" style={{cursor:"pointer", left:"80%"}} 
            size={isTabletOrMobile ? "small" :"medium"}
           onClick={()=>{setImageDeleted(true); setImageChange(true)}}>Blog Resmini Değiştir <Icon name="edit"></Icon></Label>
-          </Segment>
+          </div>
         } 
         </Dimmer.Dimmable>
       </Segment.Group>

@@ -183,6 +183,7 @@ const FormPage1:React.FC = () =>{
               style={{ marginTop:"20px"}} 
               positive 
               fluid 
+              circular
               onClick={handleSubmitOtpCode}
               content="Kodu Onayla"></Button>
             </Grid.Column>
@@ -503,6 +504,7 @@ const FormPage1:React.FC = () =>{
             <Button
               disabled={(invalid)}
               loading={submitting}
+              circular
               content="Devam"
               positive
               fluid={isMobile}

@@ -115,9 +115,10 @@ const ProfileListFilters: React.FC = () => {
                  // loading={submitting}
                   disabled={buttonDisabled}
                   floated="right"
-                  positive
                   type="submit"
                   content="Ara"
+                  circular
+                  className='green-gradientBtn'
                   style={{marginRight:"10px"}}
                   onClick={() => {
                     clearPopularProfileRegistery();
@@ -130,7 +131,7 @@ const ProfileListFilters: React.FC = () => {
                   floated="left"
                   type="cancel"
                   content="Temizle"
-
+                  circular
                   onClick={() =>{
                     setProfileFilterForm(new ProfileFilterFormValues( {categoryId:"", subCategoryIds:[], cityId:"", accessibilityId:"", followingTrainers:false}));
                     setButtonDisabled(false);

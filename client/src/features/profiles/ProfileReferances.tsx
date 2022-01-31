@@ -138,6 +138,7 @@ const handleSaveRef = () =>{
       onClose={() => {setOpen(false);setRefPics([...referencePics]);setDeletedRefPics([]);setNewRefPics([])}}
       onOpen={() => {setOpen(true);setRefPics([...referencePics]);}}
       open={open}
+      dimmer="blurring"
     >
       <Modal.Header> <h3>Referans İşler Galerisi</h3></Modal.Header> 
       <Modal.Content>
@@ -155,7 +156,8 @@ const handleSaveRef = () =>{
         {isCurrentUser && referencePics.length < 7 && (
             <Button
               floated='right'
-              color='blue'
+              circular
+              className={'blue-gradientBtn'}
               content={'Düzenle' }
               loading={uploadingReferencePics}
               onClick={() => 

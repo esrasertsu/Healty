@@ -48,7 +48,7 @@ export const ActivityVideoCall:React.FC<{activity:IActivity}> = ({activity}) => 
             </Segment>
             <Segment clearing attached='bottom' style={{backgroundColor:"#e8e8e8d1", display:"flex", justifyContent:"flex-end"}}>
             {activity.activityJoinDetails && activity.activityJoinDetails.zoom && !isTablet &&
-               <Button color="green" onClick={handleJoinMeeting} content={"Katıl"} icon="video" labelPosition="right"></Button>
+               <Button circular className='green-gradientBtn' onClick={handleJoinMeeting} content={"Katıl"} icon="video" labelPosition="right"></Button>
             }
                </Segment>
             </>

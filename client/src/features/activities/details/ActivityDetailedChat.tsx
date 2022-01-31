@@ -85,7 +85,7 @@ import { IComment } from '../../../app/models/activity';
                     placeholder='Add your comment' 
                     />
                     <Button
-                    
+                      circular
                       content='Gönder'
                       labelPosition='left'
                       icon='edit'

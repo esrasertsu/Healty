@@ -74,8 +74,9 @@ import { useMediaQuery } from 'react-responsive';
                 />  
           <br/>
           <Button
-           className="sendMessageButton"
+           className="sendMessageButton gradientBtn"
             content='Gönder'
+            circular
             labelPosition='right'
             icon="send"
             disabled={profile!.hasConversation }

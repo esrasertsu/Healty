@@ -129,7 +129,8 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                       <Button as={Link} to={`/manage/${activity.id}`} color='green' floated='right'
                       content='Düzenle'
                       labelPosition='right'
-                      icon='edit'>
+                      icon='edit'
+                      circular>
                       </Button>
                       <Modal
                         basic
@@ -137,7 +138,8 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                         onOpen={() => setOpen(true)}
                         open={open}
                         size='small'
-                        trigger={<Button color='red' floated='right' content='Sil'
+                        trigger={<Button circular
+                          color='red' floated='right' content='Sil'
                         labelPosition='right'
                         icon='trash'></Button>}
                       >
@@ -151,17 +153,17 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                           </p>
                         </Modal.Content>
                         <Modal.Actions>
-                          <Button basic color='grey'  onClick={() => setOpen(false)}>
+                          <Button circular basic color='grey'  onClick={() => setOpen(false)}>
                             <Icon name='backward' /> İptal
                           </Button>
-                          <Button basic color='red' onClick={(e:any) => {handleDeleteActivity(e);setOpen(false)}}>
+                          <Button circular basic color='red' onClick={(e:any) => {handleDeleteActivity(e);setOpen(false)}}>
                             <Icon name='trash' /> Sil
                           </Button>
                         </Modal.Actions>
                       </Modal>
                     </>                   
                     ): activity.isGoing ? (
-                      <Button loading={loading} onClick={()=>setcancellationUserOpen(true)}>Katılımı iptal et</Button>
+                      <Button circular loading={loading} onClick={()=>setcancellationUserOpen(true)}>Katılımı iptal et</Button>
                     ): (
                       <>
                       { 
@@ -258,13 +260,14 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                     </Container>
                    { (activity.isHost && host && host.userRole==="Trainer") || (user && user.role==="Admin") ? (
                       <>
-                      <Button as={Link} to={`/manage/${activity.id}`} color='green' floated='right' style={{marginTop:"20px"}}
+                      <Button circular as={Link} to={`/manage/${activity.id}`} color='green' floated='right' style={{marginTop:"20px"}}
                       content='Düzenle'
                       labelPosition='right'
                       icon='edit'>
                       </Button>
                       <Modal
                         basic
+                        circular
                         onClose={() => setOpen(false)}
                         onOpen={() => setOpen(true)}
                         open={open}
@@ -283,17 +286,17 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                           </p>
                         </Modal.Content>
                         <Modal.Actions>
-                          <Button basic color='grey' onClick={() => setOpen(false)}>
+                          <Button circular basic color='grey' onClick={() => setOpen(false)}>
                             <Icon name='backward' /> İptal
                           </Button>
-                          <Button basic color='red' onClick={(e:any) => {handleDeleteActivity(e);setOpen(false)}}>
+                          <Button circular basic color='red' onClick={(e:any) => {handleDeleteActivity(e);setOpen(false)}}>
                             <Icon name='trash' /> Sil
                           </Button>
                         </Modal.Actions>
                       </Modal>
                     </>                   
                     ): activity.isGoing ? (
-                      <Button style={{marginTop:"20px"}} loading={loading} onClick={()=>setcancellationUserOpen(true)}>Katılımı iptal et</Button>
+                      <Button circular style={{marginTop:"20px"}} loading={loading} onClick={()=>setcancellationUserOpen(true)}>Katılımı iptal et</Button>
                     ): (
                       <>
                       { 

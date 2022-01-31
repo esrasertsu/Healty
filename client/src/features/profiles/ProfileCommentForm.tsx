@@ -88,6 +88,7 @@ interface IProps{
             labelPosition='right'
             icon="send"
             positive
+            circular
             loading={submitting}
             disabled={!isLoggedIn}
           />

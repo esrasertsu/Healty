@@ -260,8 +260,9 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
        <Button 
        circular
        inverted 
+       fluid
        content="Temizle" 
-       style={{marginTop:"10px"}}
+       style={{marginTop:"15px"}}
        onClick={() =>{
         clearKeyPredicate("startDate");
         clearKeyPredicate("endDate");
@@ -280,11 +281,12 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
 <Segment id="activityFilter_Banner" className="activityFilter_Banner"
  style={{textAlign:"center"}}>
    <Icon style={{marginTop:"-15px", position:"absolute", width:"85%"}} name="cancel" onClick={handleCloseBanner} />
-   <p style={{fontSize: "21px"}}>24 saat öncesine kadar yapılan iptal işlemlerinde %100 para iadesi</p>
-   <div style={{fontSize: "25px"}}>
-     <Icon name="thumbs up" />
+   <div style={{fontSize: "30px"}}>
+     <Icon name="calendar times outline" />
    </div>
-
+   <p style={{fontSize: "18px"}}>
+     <div>Planlarınız mı değişti?</div>
+     <div>24 saat öncesine kadar yapılan iptal işlemlerinde %100 para iadesi</div></p>
 </Segment>
 }
     
@@ -412,6 +414,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
                             negative
                             content="Temizle"
                             style={{marginRight:"10px"}}
+                            circular
                             onClick={() =>{
                               setCategoryIds([]);
                               setSubCategoryIds([]);
@@ -488,11 +491,11 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
                           // loading={submitting}
                           // disabled={loading || buttonDisabled}
                           //  floated="right"
-                            positive
                             type="submit"
                             content="Ara"
                             circular
-                            style={{marginRight:"10px"}}
+                            className='green-gradientBtn'
+                            style={{ width:"47%"}}
                             onClick={handleSearch}
                             disabled={loadingInitial}
                           />
@@ -503,7 +506,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
                             negative
                             circular
                             content="Temizle"
-                            style={{marginRight:"10px"}}
+                            style={{ width:"50%"}}
                             disabled={loadingInitial}
                             onClick={() =>{
                               setCategoryIds([]);

@@ -217,10 +217,9 @@ const sixItem:SemanticWIDTHS = 6;
                   floated="right"
                   fluid={isMobile} 
                   size="large" disabled={loadingNext || (page +1 >= totalProfileListPages)} 
-                  basic
                   onClick={()=> handleGetNext()} 
                   style={{margin:"20px 0"}}
-                  color='blue'
+                  className='blue-gradientBtn'
                   circular
                 > Daha Fazla Göster </Button>
         </div>

@@ -152,7 +152,7 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
                   </Grid.Column>
 
                   <Grid.Column width="eight">
-                  <Button type="danger" icon='close' disabled={loading} onClick={()=> {setFiles([]);setImageDeleted(true); setImage(null)}}>Değiştir/Sil</Button>
+                  <Button circular type="danger" icon='close' disabled={loading} onClick={()=> {setFiles([]);setImageDeleted(true); setImage(null)}}>Değiştir/Sil</Button>
                   </Grid.Column>
                </Grid>
                )
@@ -199,6 +199,7 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
                 //  disabled={loading || invalid || pristine}
                   floated="right"
                   positive
+                  circular
                   type="submit"
                   content="Submit"
                 />

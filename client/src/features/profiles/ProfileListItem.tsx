@@ -50,7 +50,8 @@ interface IProps {
      
       <Card.Content className="profileCard_Content">
         <Card.Header className="profileHeader_Name" style={{textAlign:"center"}}>{profile.displayName}</Card.Header>
-       {profile.title &&  <div className="ellipsis" style={{textAlign:"center", marginBottom:"5px"}}>{profile.title}</div>}
+       {profile.title ? <div className="ellipsis" style={{textAlign:"center", marginBottom:"5px"}}>{profile.title}</div>
+       : <div style={{textAlign:"center", marginBottom:"5px"}}>...</div>}
         {/* <div style={{textAlign:"center", marginBottom:"15px"}}>
           {profile.hasPhoneNumber && <Icon name="phone" color="green" /> }
           <Icon name="envelope" style={{color:"#263a5e"}} />
@@ -73,8 +74,10 @@ interface IProps {
       }
         </div>}
       />
-         
-            <Popup
+          {profile.city ?  <div style={{textAlign:"center", marginBottom:"5px"}}>
+            <Icon name="map marker alternate" />{profile.city.text}, Türkiye</div> :
+         <div style={{textAlign:"center", marginBottom:"5px"}}>Şehir belirtilmemiş</div> }
+            {/* <Popup
              hoverable
              position="top center"
              on={['hover', 'click']}
@@ -102,7 +105,7 @@ interface IProps {
         }
       />
             
-            <div className="profileListItem_subCats"> <Icon name="spinner" /> {profile.experienceYear > 0 ? profile.experienceYear +"yıl tecrübe" : "" } </div> 
+            <div className="profileListItem_subCats"> <Icon name="spinner" /> {profile.experienceYear > 0 ? profile.experienceYear +"yıl tecrübe" : "" } </div>  */}
 
         </Card.Description>
       </Card.Content>

@@ -806,12 +806,15 @@ debugger;
                   positive
                   type="submit"
                   content="Kaydet"
+                  circular
+                  className="green-gradientBtn"
                 />
                 <Button
                   floated="left"
                   disabled={loading}
                   type="cancel"
                   content="İptal"
+                  circular
                   onClick={
                     activityForm.id
                       ? () => history.push(`/activities/${activityForm.id}`)

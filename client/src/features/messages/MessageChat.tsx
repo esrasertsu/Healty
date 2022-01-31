@@ -169,6 +169,7 @@ const MessageChat: React.FC<IProps> = ({setshowChatRoomList}) => {
                     <div>
                     <Button
                       content='Send'
+                      circular
                       primary
                       loading={submitting}
                       disabled={chatRoomId === null}
@@ -180,7 +181,7 @@ const MessageChat: React.FC<IProps> = ({setshowChatRoomList}) => {
                 />
 
                 </div>
-                {isMobile &&  <Button fluid onClick={() => setshowChatRoomList(true)} content="Mesajlara dön.."/>} 
+                {isMobile &&  <Button fluid circular onClick={() => setshowChatRoomList(true)} content="Mesajlara dön.."/>} 
 
             </div>
         </Fragment>

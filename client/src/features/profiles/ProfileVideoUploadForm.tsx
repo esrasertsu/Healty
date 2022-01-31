@@ -75,6 +75,7 @@ if(video!.url)
             labelPosition='right'
             icon="check"
             color="red"
+            circular
             loading={submitting}
           />
         </Form>

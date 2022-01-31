@@ -110,7 +110,7 @@ const BlogList: React.FC = () => {
                 ))}
              { predicate.has('username') && predicate.get('username') !== "" ?
               <>
-              <Button key={predicate.get('username')} labelPosition="right" icon='cancel' content={predicateDisplayName} style={{backgroundColor:"#335084", color:"#fff", marginBottom:"20px"}}
+              <Button circular key={predicate.get('username')} labelPosition="right" icon='cancel' content={predicateDisplayName} style={{backgroundColor:"#335084", color:"#fff", marginBottom:"20px"}}
                 onClick={()=>
                   {
                     removeOnePredicate("username")
@@ -148,8 +148,7 @@ const BlogList: React.FC = () => {
               <div style={{display:"flex", justifyContent:"center"}}>
               <Button  
                floated="right"
-               basic
-               color="blue"
+               className='blue-gradientBtn'
                fluid={isMobile} 
                size="large" disabled={loadingNext || (page +1 >= totalPages)} 
                onClick={()=> handleGetNext()} 

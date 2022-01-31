@@ -28,12 +28,12 @@ const NavBar: React.FC = () => {
         if(modal.open) closeModal();
   
             openModal("Giriş Yap", <>
-            <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
+            <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  wrapped />
             <Modal.Description className="loginreg">
             <LoginForm location={"/"} />
             </Modal.Description>
             </>,true,
-            "","blurring",true) 
+            "","blurring",true, "loginModal") 
         }
   
         const handleRegisterClick = (e:any) => {
@@ -171,6 +171,7 @@ const NavBar: React.FC = () => {
                   <Dropdown.Item>
                   <Button
                   icon
+                  circular
                   size="mini"
                   labelPosition="right"
                   loading={loggingOut}
@@ -189,7 +190,7 @@ const NavBar: React.FC = () => {
             <>
             <Menu.Item>
               <Button.Group>
-              <Button icon="hand point up" content="Uzman Başvurusu" labelPosition="right" key={"trainer-nav"} color="orange" style={{borderRadius: ".28571429rem", marginRight:"10px"}}
+              <Button circular icon="hand point up" content="Uzman Başvurusu" labelPosition="right" key={"trainer-nav"} color="orange" style={{  borderRadius: "5rem", marginRight:"10px"}}
           
           onClick={(e:any)=>
             {
@@ -198,7 +199,7 @@ const NavBar: React.FC = () => {
             
             }>
             </Button>
-              <Button key={"login-nav"} color="blue" content={"Giriş Yap"} style={{color:"#fff",borderRadius: ".28571429rem"}}
+              <Button key={"login-nav"} color="blue"  content={"Giriş Yap"} style={{color:"#fff",borderRadius: "5rem"}}
                
                onClick={(e:any)=>
                  {
@@ -206,7 +207,7 @@ const NavBar: React.FC = () => {
                  }
                  
                  }></Button>
-                  <Button key={"reg-nav"} basic color="blue" content={"Kaydol"} style={{borderRadius: ".28571429rem"}}
+                  <Button key={"reg-nav"} basic color="blue" content={"Kaydol"} style={{borderRadius: "5rem"}}
           
           onClick={(e:any)=>
             {

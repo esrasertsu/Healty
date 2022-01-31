@@ -80,6 +80,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                <h2 style={{fontWeight:500}}>Hoşgeldin!</h2>
                <p style={{ fontSize: '16px', fontWeight:500 }}>Uzmanlarla iletişime geçebilmek, aktivitelere katılabilmek ve çok daha fazlası için:</p>
                 <Button
+                circular
                    onClick={(e:any) => 
                     { 
                     handleRegisterClick(e);
@@ -210,6 +211,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                     </Menu.Item>
                     <Menu.Item>
                 <Button
+                circular
                 loading={loggingOut}
                   onClick={() => 
                    { logout();

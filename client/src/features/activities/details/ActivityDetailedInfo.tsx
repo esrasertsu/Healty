@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
 import { observer } from 'mobx-react-lite'
 import React, { useState } from 'react'
-import { Segment, Grid, Icon } from 'semantic-ui-react'
+import { Segment, Grid, Icon, Image } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity'
 import dompurify from 'dompurify';
 import tr  from 'date-fns/locale/tr'
@@ -132,10 +132,11 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              <Segment attached>
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
-                   <Icon name='wifi' size='large'  style={{color:"#263a5e"}} />
+                 {activity.online ? <Image style={{height:"22px"}} src="/icons/wifi-ok.png"/> : <Image style={{height:"22px"}} src="/icons/wifi-nok.png"/> }
                  </Grid.Column>
                  <Grid.Column width={11}>
-                  {activity.online ?  <span> Online katılıma açık <Icon name='check' size='small' color='green' /> </span>: <span>Online katılıma kapalı</span>}
+                  {activity.online ?  
+                  <span> Online katılıma açık  </span>: <span>Online katılıma kapalı</span>}
                  </Grid.Column>
                </Grid>
              </Segment>

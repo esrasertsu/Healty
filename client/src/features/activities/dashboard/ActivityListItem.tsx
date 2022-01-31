@@ -107,7 +107,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                                     activity.levels.map<React.ReactNode>(s => <span key={s.value}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
                                     : " Bilgi yok"
                                 }
-                               {activity.online ?  <div style={{marginTop:".6em"}}> <Icon name='wifi' color="green" />  Online katılıma açık <Icon name='check' size='small' color='green' /> </div>: <div style={{marginTop:".6em"}}><Icon name='wifi' color="grey"/>Online katılıma kapalı</div>}
+                               {activity.online ?  <div style={{marginTop:".6em"}}> <Image style={{height:"25px", marginRight:"5px"}} src="/icons/wifi-ok.png"/>  Online katılıma açık </div>: <div style={{marginTop:".6em",marginRight:"5px"}}><Image style={{height:"25px"}} src="/icons/wifi-nok.png"/>Online katılıma kapalı</div>}
                                 </div>
                         </Item.Description> 
                         <Item.Description style={{marginTop: "15px"}}>

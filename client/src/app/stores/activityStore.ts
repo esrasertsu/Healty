@@ -385,7 +385,21 @@ export default class ActivityStore {
             }
     };
 
-    
+    @action setAcitivityChannel = (channel:string) =>{
+        this.activity!.channelName = channel;
+    }
+
+    @action updateActivityChannel = async (id:string,channelName:string) => {
+        try {
+            let response = await agent.Activities.editOnlineJoinInfo(id,channelName)
+            runInAction(() => {
+                this.activity && 
+                this.setAcitivityChannel(channelName);
+            })
+            } catch (error) {
+                console.log(error);
+            }
+    }
     @action getOrderDetails = async (id:string) => {
       
             this.loadingOrder = true;
@@ -580,11 +594,11 @@ export default class ActivityStore {
         }
     }
 
-    @action generateAgoraToken = async (channelName:string) =>{
-debugger;
+    @action generateAgoraToken = async (channelName:string,activityId:string) =>{
+
         const params = new URLSearchParams();
         params.append('channelName', channelName);
-        params.append('activityId',   "08d9a35c-0be5-4c83-8b37-f09a3b0fff9a");
+        params.append('activityId',  activityId);
 
         this.generatingToken = true;
 
@@ -605,27 +619,27 @@ debugger;
 
 
     @action updateOnlineJoinInfo = async (form: IActivityOnlineJoinInfo) =>{
-        this.submittingJoinInfo = true;
-        try {
-            form.id = this.activity!.id;
-            const result = await agent.Activities.editOnlineJoinInfo(form);
-            runInAction(() => {
-                this.submittingJoinInfo = false;
-                this.activity!.activityJoinDetails = new ActivityOnlineJoinInfo();
-                this.activity!.activityJoinDetails.activityUrl = form.activityUrl;
-                this.activity!.activityJoinDetails.meetingId = form.meetingId;
-                this.activity!.activityJoinDetails.meetingPsw = form.meetingPsw;
-                this.activity!.activityJoinDetails.zoom = form.zoom;
+    //     this.submittingJoinInfo = true;
+    //     try {
+    //         form.id = this.activity!.id;
+    //         const result = await agent.Activities.editOnlineJoinInfo(form);
+    //         runInAction(() => {
+    //             this.submittingJoinInfo = false;
+    //             this.activity!.activityJoinDetails = new ActivityOnlineJoinInfo();
+    //             this.activity!.activityJoinDetails.activityUrl = form.activityUrl;
+    //             this.activity!.activityJoinDetails.meetingId = form.meetingId;
+    //             this.activity!.activityJoinDetails.meetingPsw = form.meetingPsw;
+    //             this.activity!.activityJoinDetails.zoom = form.zoom;
 
 
-       });
-        } catch (error) {
-            runInAction(() => {
-                this.submittingJoinInfo = false;
-            });
-            toast.error('Problem updating join details');
-            console.log(error);
-        }
+    //    });
+    //     } catch (error) {
+    //         runInAction(() => {
+    //             this.submittingJoinInfo = false;
+    //         });
+    //         toast.error('Problem updating join details');
+    //         console.log(error);
+    //     }
     };
 
 

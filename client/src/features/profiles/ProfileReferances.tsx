@@ -66,8 +66,6 @@ const [updateEnabled, setUpdateEnabled] = useState<boolean>(false);
     }
 
     useEffect(() => {
-      debugger;
-
       setRefPics([...referencePics]);
       
     }, [referencePics])
@@ -103,8 +101,6 @@ const deleteActivityPhoto = (photo:IPhoto) =>{
 
 
 const uploadedNewImage = (file:any) =>{
-  debugger;
-
   var reader = new FileReader();
   var url = reader.readAsDataURL(file);//original blob data dönüyor
 
@@ -152,24 +148,24 @@ const handleSaveRef = () =>{
         <Button primary content="Kaydet" loading={uploadingReferencePics} onClick={handleSaveRef} disabled={newRefPics.length===0 && deletedRefPics.length===0}></Button>
       </Modal.Actions>
     </Modal>
-        <Header>Referans İşler
-        {isCurrentUser && referencePics.length < 7 && (
+        <Header>Referans İşler </Header>
+
+      <Segment>
+      {isCurrentUser && referencePics.length < 7 && (
             <Button
               floated='right'
               circular
+              size='mini'
               className={'blue-gradientBtn'}
-              content={'Düzenle' }
+              content={<span>Düzenle <Icon name='edit'></Icon></span>}
               loading={uploadingReferencePics}
               onClick={() => 
                 { setOpen(!open);
                 }}
             />
           )}
-    </Header>
-
-      <Segment className="profileMessageSegment">
-                <Grid container className="profileMessageGrid" stackable>
-                    
+                <Grid stackable style={{width:"100%"}} >
+                   
                     <Grid.Row>
                         <Grid.Column width={16}>
      {referencePics.length !== 0 ?      

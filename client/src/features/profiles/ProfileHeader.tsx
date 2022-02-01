@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useRef, useState } from 'react';
-import { Segment, Item, Header, Button, Grid, Statistic, Divider, ButtonGroup, Label, Icon, Dimmer, Loader, Image, Reveal } from 'semantic-ui-react';
+import { Segment, Item, Header, Button, Grid, Statistic, Divider, ButtonGroup, Label, Icon, Dimmer, Loader, Image, Reveal, Modal } from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { StarRating } from '../../app/common/form/StarRating';
 import { colors } from '../../app/models/category';
@@ -11,6 +11,7 @@ import { useMediaQuery } from 'react-responsive'
 import * as _screenfull from "screenfull";
 import ReactPlayer from 'react-player/youtube'
 import { history } from '../../';
+import LoginForm from '../user/LoginForm';
 
 interface IProps{
     profile: IProfile,
@@ -25,9 +26,9 @@ const activityImageStyle = {
   height:"300px"
 };
 
-const activityImageTextStyle = {
+const activityImageTextStyle:any = {
 position: 'absolute',
-top: '10%',
+top: '15%',
 width: '100%',
 height: 'auto',
 color: 'white',
@@ -59,18 +60,44 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
   const [files, setFiles] = useState<any[]>([]);
   const [image, setImage] = useState<Blob | null>(null);
   const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
+  
+
+  const handleLoginClick = (e:any,str:string) => {
+    
+    if(modal.open) closeModal();
+
+        openModal("Giriş Yap", <>
+        <Image  size={isMobile ? 'big': isTabletOrMobile ? 'medium' :'large'}  wrapped />
+        <Modal.Description className="loginreg">
+        <LoginForm location={`/profile/${profile.userName}`} />
+        </Modal.Description>
+        </>,true,
+        "","blurring",true, "loginModal") 
+    }
 
  
+  const handleFollowClick =(name:string) =>{
+    if(isLoggedIn)
+    {
+      follow(name);
+    }else{
+      var str = `/profile/${profile!.userName}`;
+      handleLoginClick(null,str);
+    }
+  }
   const handleVideoPlay = () => {
     if(modal.open) closeModal();
 
     openModal("",
+    <>
+  {!isTabletOrMobile && <span style={{float:"right", marginTop:"-5px", cursor:"pointer"}} onClick={closeModal}>Kapat <Icon  name="close" /></span>}
     <ReactPlayer
     config={{ playerVars:{controls:1}}}
     width="auto" 
     height="500px" 
     controls={true}
     url={profile.videoUrl} />
+    </>
     ,false,null)
   }
 
@@ -125,12 +152,12 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
          }  
         {
           !imageChange && isCurrentUser && profile.coverImage !== null &&
-          <Segment basic style={activityImageTextStyle}>
+          <div style={activityImageTextStyle}>
           <Label floating color="blue" style={{cursor:"pointer", left:"80%"}} 
           circular className='blue-gradientBtn'
            size={isTabletOrMobile ? "small" :"medium"}
           onClick={()=>{setImageDeleted(true); setImageChange(true)}}>Kapak Resmini Değiştir <Icon name="picture"></Icon></Label>
-          </Segment>
+          </div>
         } 
         </Dimmer.Dimmable>
       </Segment.Group>
@@ -162,7 +189,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                   {
                      (profile.videoUrl!=="" && profile.videoUrl !== null) &&
                      <div onClick={handleVideoPlay} className="profileHeader_videoPlay">
-                       <Image style={{width:"35px", marginRight:"10px"}} src={'/assets/videoPlayer.png'} />Tanıtım videosu <Icon name="hand point up"></Icon></div> 
+                       <Icon size="big" color='red' name="youtube play" /> Tanıtım videosu <Icon name="hand point up"></Icon></div> 
                 
                   }
                 </Grid.Row>
@@ -202,7 +229,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
             circular
             className='orange-gradientBtn'
             // className={profile.isFollowing ? 'followingButtonOut_redClassName' : 'followingButtonOut_greenClassName'}
-              onClick={profile.isFollowing ? () => unfollow(profile.userName): () => follow(profile.userName)}
+              onClick={profile.isFollowing ? () => unfollow(profile.userName): () => handleFollowClick(profile.userName)}
               //disabled={!isLoggedIn} 
               >
                 {profile.isFollowing ? 'Favorilerimden Çıkar' : 'Favorilere Ekle'}

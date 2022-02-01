@@ -560,16 +560,20 @@ export default class ProfileStore{
         try {
             await agent.Profiles.follow(username);
             runInAction(() =>{
-                this.profile!.isFollowing = true;
-                this.profile!.followerCount++;
-                // this.followings = [...this.followings, this.profile!];
                 this.loading = false;
-                const predicate = this.activeTab ===4 ? 'followers' : this.activeTab === 3 ? 'following' : null ;
-                if(predicate)
-                 this.loadFollowings(predicate);
+
+                if(this.profile && this.profile.userName === username)
+                {
+                    this.profile!.isFollowing = true;
+                    this.profile!.followerCount++;
+                    // this.followings = [...this.followings, this.profile!];
+                    const predicate = this.activeTab ===4 ? 'followers' : this.activeTab === 3 ? 'following' : null ;
+                    if(predicate)
+                    this.loadFollowings(predicate);
+                }
             })
         } catch (error) {
-            toast.error('Problem following user');
+            toast.error('Favorilere eklenemedi.');
             runInAction(() => {
                 this.loading = false;
             })
@@ -581,16 +585,21 @@ export default class ProfileStore{
         try {
             await agent.Profiles.unfollow(username);
             runInAction(() =>{
-                this.profile!.isFollowing = false;
-                this.profile!.followerCount--;
-                // this.followings = this.followings.filter(x => x.userName === username);
                 this.loading = false;
-                const predicate = this.activeTab ===4 ? 'followers' : this.activeTab === 3 ? 'following' : null ;
-                if(predicate)
-                 this.loadFollowings(predicate);
+
+                if(this.profile && this.profile.userName === username)
+                {
+                    this.profile.isFollowing = false;
+                    this.profile!.followerCount--;
+                    // this.followings = this.followings.filter(x => x.userName === username);
+                    const predicate = this.activeTab ===4 ? 'followers' : this.activeTab === 3 ? 'following' : null ;
+                    if(predicate)
+                     this.loadFollowings(predicate);
+                }
+               
             })
         } catch (error) {
-            toast.error('Problem unfollowing user');
+            toast.error('Favorilerden çıkarılamadı.');
             runInAction(() => {
                 this.loading = false;
             })

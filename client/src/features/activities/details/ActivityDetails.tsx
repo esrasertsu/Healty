@@ -9,7 +9,6 @@ import ActivityDetailedSideBar  from './ActivityDetailedSideBar';
 import ActivityDetailedInfo from './ActivityDetailedInfo';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import ActivityDetailPaymentSegment from './ActivityDetailPaymentSegment';
-import ActivityZoom from './ActivityZoom';
 import ActivityCountDown from './ActivityCountDown';
 import { useMediaQuery } from 'react-responsive'
 import ActivityVideoCall from './ActivityVideoCall';
@@ -17,7 +16,7 @@ interface DetailParams{
     id:string
 }
 
-const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, history}) => {
+const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, history}) => {
 
     const rootStore = useContext(RootStoreContext);
     const { activity, loadActivity, loadingActivity } = rootStore.activityStore;
@@ -95,4 +94,4 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
     )
 }
 
-export default observer(ActivtyDetails)
+export default observer(ActivityDetails)

@@ -16,7 +16,7 @@ const ProfileMessage: React.FC<IProps> = ({profile}) => {
                     <Grid.Row columns={2}>
                         <Grid.Column width={5}>
                             <div className='profileImage'>
-                            <Image circular size={'tiny'} src={profile.image || '/assets/user.png'}
+                            <Image circular src={profile.image || '/assets/user.png'}
                             onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}></Image>
                             </div>
                             

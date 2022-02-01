@@ -29,12 +29,12 @@ import { useMediaQuery } from 'react-responsive';
       if(modal.open) closeModal();
   
           openModal("Giriş Yap", <>
-          <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
+          <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  wrapped />
           <Modal.Description className="loginreg">
-          <LoginForm location={str} />
+          <LoginForm location={"/"} />
           </Modal.Description>
           </>,true,
-          "","blurring",true) 
+          "","blurring",true, "loginModal") 
       }
 
     const handleFinalFormSubmit = async (values: IMessageForm) => {

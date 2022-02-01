@@ -30,7 +30,7 @@ export interface IActivity {
     photos: IPhoto[],
     videos: IPhoto[],
     mainImage: IPhoto,
-    activityJoinDetails: IActivityOnlineJoinInfo
+    channelName: string
 
 }
 export interface ILevel {

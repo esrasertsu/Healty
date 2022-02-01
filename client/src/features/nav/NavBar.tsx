@@ -128,7 +128,7 @@ const NavBar: React.FC = () => {
               <Image avatar spaced="right" src={user.image || "/assets/user.png"}
                onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}} />
               <Dropdown pointing="top left" text={user.displayName}>
-                <Dropdown.Menu className='mobileMenu'>
+                <Dropdown.Menu className='mobileMenu' style={{padding:"10px"}}>
                   <Dropdown.Item
                     key="profil"
                     as={Link}

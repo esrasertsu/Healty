@@ -36,7 +36,7 @@ const ProfileListFilters: React.FC = () => {
     if(data !== profileFilterForm!.categoryId)
     {
      setProfileFilterForm({...profileFilterForm,categoryId: data,subCategoryIds:[]});
-     loadSubCategories(data);
+     data !== "" && loadSubCategories(data);
      setButtonDisabled(false);
     }
   }
@@ -46,13 +46,23 @@ const ProfileListFilters: React.FC = () => {
     setButtonDisabled(false);
    }
    const handleCityChanged = (e: any, data: string) => {  
-     debugger;
+
     if(data !== profileFilterForm!.cityId)
     {
       setProfileFilterForm({...profileFilterForm,cityId: data});
       setButtonDisabled(false);
     }
  }
+
+
+ const handleAccessibilityChange =(e: any, data: string) => {  
+
+  if(data !== profileFilterForm!.accessibilityId)
+  {
+    setProfileFilterForm({...profileFilterForm,accessibilityId: data});
+    setButtonDisabled(false);
+  }
+}
   return (
    
    
@@ -70,6 +80,7 @@ const ProfileListFilters: React.FC = () => {
                   options={categoryList}
                   loading={loadingCategories}
                   value={profileFilterForm!.categoryId}
+                  clearable={true}
                   onChange={(e: any,data: any)=>handleCategoryChanged(e,data)}
                 />
                  <Field
@@ -94,22 +105,16 @@ const ProfileListFilters: React.FC = () => {
                   onChange={(e: any,data: any)=>handleCityChanged(e,data)}
                 />
                 	<Field
+                   width={3}
                   name="accessibilityId"
                   placeholder="Erişilebilirlik"
                   value={profileFilterForm!.accessibilityId}
-                  component={SelectInput}
+                  component={DropdownInput}
                   options={accessibilities}
+                  clearable={true}
+                  onChange={(e: any,data: any)=>handleAccessibilityChange(e,data)}
 
                 />
-                 <OnChange name="accessibilityId">
-                {(value, previous) => {
-                    if(value !== profileFilterForm!.accessibilityId)
-                    {
-                      setProfileFilterForm({...profileFilterForm,accessibilityId: value});
-                      setButtonDisabled(false);
-                    }
-                }}
-            </OnChange>
                <div className="profileFilterButtons" >
                <Button
                  // loading={submitting}
@@ -125,6 +130,11 @@ const ProfileListFilters: React.FC = () => {
                     clearProfileRegistery();
                     setPage(0);
                     loadPopularProfiles();
+                    document.querySelector('body')!.scrollTo({
+                      top:220,
+                      behavior: 'smooth'
+                    })
+
                   }}
                 />
                 <Button
@@ -141,6 +151,10 @@ const ProfileListFilters: React.FC = () => {
                     loadPopularProfiles();
                     setNavSearchValue("");
                     setprofileSearchAreaValue("");
+                    document.querySelector('body')!.scrollTo({
+                      top:220,
+                      behavior: 'smooth'
+                    })
 
                   }
                   }

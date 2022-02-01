@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { Fragment, useContext, useEffect,useState } from 'react'
-import {Button, Container, Grid, Header, Icon, Image, Label, Message, Segment, Select } from 'semantic-ui-react'
+import {Button, Container, Grid, Header, Icon, Image, Label, Message, Segment, Select, Sticky } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileListFilters from './ProfileListFilters';
 import { profileSortingOptions } from "../../app/common/options/profileSortingOptions";
@@ -48,17 +48,17 @@ const sixItem:SemanticWIDTHS = 6;
     profilePageCount, clearProfileRegistery,loadingOnlyProfiles,sortingInput,setSortingInput,loadAccessibilities,
   accessibilities} = rootStore.profileStore;
   const {categoryList,loadCategories} = rootStore.categoryStore;
+  const {user} = rootStore.userStore;
+  const {appLoaded} = rootStore.commonStore;
+  var contextRef = React.createRef<any>();
+
     const [isToggleVisible, setIsToggleVisible] = useState(false);
     const [loadingNext, setLoadingNext] = useState(false);
 
     const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
-    const list = [
-      'Hata olduğunu düşünüyorsanız site yöneticisiyle iletişime geçebilir,',
-      'Talepte bulunmak için bize mail atabilir,',
-      'Ya da bir eğitmen olarak başvurabilirsiniz'
-    ]
+  
     useEffect(() => {
       if(Array.from(popularProfileRegistery.values()).length === 0) // && userCityPlaced
       loadPopularProfiles();
@@ -70,7 +70,16 @@ const sixItem:SemanticWIDTHS = 6;
 
        
     }, [])// && userCityPlaced
-  
+    useEffect(() => {
+      loadPopularProfiles();
+
+      if(accessibilities.length === 0) 
+        loadAccessibilities();
+      if(categoryList.length===0)
+         loadCategories();
+
+       
+    }, [appLoaded])
     // Show button when page is scorlled upto given distance
 
     function getWindowDimensions() {
@@ -154,15 +163,25 @@ const sixItem:SemanticWIDTHS = 6;
 
          </Container>
          <Container className="pageContainer">
-        {
-          //  !isTablet &&
-          <Segment inverted textAlign='center' vertical className='masthead_page profileDashboard'>
-               <Container>
-               <ProfileListFilters />
-               </Container>
-      </Segment>
 
+         {  isMobile &&
+                <Segment textAlign='center' vertical className='masthead_page profileDashboard'>
+                  <Container>
+                  <ProfileListFilters />
+                  </Container>
+                </Segment>
         }
+
+           <div ref={contextRef}>
+        {  !isMobile &&
+            <Sticky context={contextRef}>
+                <Segment textAlign='center' vertical className='masthead_page profileDashboard'>
+                  <Container>
+                  <ProfileListFilters />
+                  </Container>
+                </Segment>
+              </Sticky>}
+      
     
       {Array.from(popularProfileRegistery.values()).length === 0 && !loadingPopularProfiles && !loadingNext?
        <>
@@ -240,6 +259,7 @@ const sixItem:SemanticWIDTHS = 6;
       <br></br>
       </>
       }
+      </div>
       </Container>
       </Fragment>
     )

@@ -266,7 +266,13 @@ body {
 }
 
 
-
+.agoraPage{
+  position: fixed;
+  top:0;
+  bottom: 0;
+left: 0;
+right: 0;
+}
 
 .blogFilterPlaceholder{
   background: #f3f4f5;
@@ -1435,10 +1441,9 @@ max-width: 95%;
 .profileHeader_videoPlay:hover{
   cursor: pointer;
   z-index: 5;
-  background: #fff;
-  border: none !important;
-  box-shadow:12px 14px 5px 0px #bcbdbdcc, 0 0 0 1px #d4d4d557;
-  transform: translateY(-3px);
+  transform: scale(1.05);
+
+  
 }
 
 
@@ -1452,10 +1457,7 @@ max-width: 95%;
 /*home page styles*/
 
 @media (min-width: 769px){
-  .ui.search,.ui.input,.ui.form,.ui.dropdown .menu>.item,.ui.card>.content, .ui.cards>.card>.content, input,
-  .ui.large.label,.ui.button, .ui.buttons .button, .ui.buttons .or, .forgotPasswordLink,.modalformFooter{
-    font-size: 14px !important;
-  }
+ 
   .masthead_page {
     display: flex;
     align-items: center;
@@ -2073,6 +2075,21 @@ button, input, optgroup, select, textarea {
   text-overflow: ellipsis;
 }
 
+.profileListItem_CardDescription{
+   display: flex;
+   justify-content: center;
+   flex-direction: column;
+}
+
+.profileListItem_addToFav{
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  height: 40px;
+  z-index: 5;
+  font-size: 20px !important
+}
 .starRating{
   display: flex;
   align-items: center;
@@ -2412,9 +2429,11 @@ button, input, optgroup, select, textarea {
 }
 .masthead_page.profileDashboard
   {
-    margin-top: 50px !important;
     box-shadow: none !important;
-
+   background-color: #f8f7f7 !important; 
+   margin-top: 0 !important;
+   padding-top: 40px !important;
+   padding-bottom: 30px !important;
   }
   .trainerForm_ConfirmContent{
     padding:20px 40px !important;

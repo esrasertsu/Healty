@@ -105,7 +105,7 @@ namespace CleanArchitecture.Application.Activities
                 Venue = activity.Venue,
                 Comments = _mapper.Map<ICollection<ActivityComment>, ICollection<ActivityCommentDto>>(activity.Comments),
                 Videos = activity.Videos,
-                ActivityJoinDetails = activity.ActivityJoinDetails
+                ChannelName = activity.CallRoomId
             };
 
             if (currentUser != null)

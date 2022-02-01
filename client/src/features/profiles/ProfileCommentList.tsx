@@ -57,7 +57,7 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
 <div>
 <Button
                  floated="right"
-                 content="Daha fazla yorum..." 
+                 content="Daha fazlasını gör..." 
                  positive
                  circular
                  onClick={handleGetNext}

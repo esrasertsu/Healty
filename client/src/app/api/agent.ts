@@ -319,7 +319,7 @@ const Activities = {
      activity.description!,activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,activity.endDate!,
     activity.cityId!,activity.venue!, activity.online!, activity.attendancyLimit!,activity.price!,activity.photo!,activity.newphotos!,
     activity.address!, activity.duration!, activity.trainerUserName),
-    editOnlineJoinInfo: ( form : IActivityOnlineJoinInfo) => requests.put(`/activities/${form.id}/joindetails`, form),
+    editOnlineJoinInfo: ( id:string, name : string) => requests.put(`/activities/${id}/joindetails`, name),
 
 
 }

@@ -183,7 +183,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
     activitySelectedFilterList.push({key:"isHost",value:"isHost", text:"Düzenlediklerim"}) 
     else if(predicate.get("isGoing") === "true")
     activitySelectedFilterList.push({key:"isGoing",value:"isGoing", text:"Gidiyorum"}) 
-    else if(predicate.get("isGoing") === "true")
+    else if(predicate.get("isFollowed") === "true")
     activitySelectedFilterList.push({key:"isFollowed",value:"isFollowed", text:"Takip ettiğim eğitmenlerin"}) 
 
     setActivitySelectedFilters([...activitySelectedFilterList])
@@ -261,6 +261,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
        circular
        inverted 
        fluid
+       size='mini'
        content="Temizle" 
        style={{marginTop:"15px"}}
        onClick={() =>{
@@ -415,6 +416,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
                             content="Temizle"
                             style={{marginRight:"10px"}}
                             circular
+                            size='mini'
                             onClick={() =>{
                               setCategoryIds([]);
                               setSubCategoryIds([]);
@@ -494,8 +496,9 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
                             type="submit"
                             content="Ara"
                             circular
+                            size='mini'
+                            fluid
                             className='green-gradientBtn'
-                            style={{ width:"47%"}}
                             onClick={handleSearch}
                             disabled={loadingInitial}
                           />
@@ -503,10 +506,13 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
                           // loading={submitting}
                           // disabled={loading || buttonDisabled}
                           //  floated="right"
-                            negative
+                            basic
+                            primary
                             circular
-                            content="Temizle"
-                            style={{ width:"50%"}}
+                            size='mini'
+                            fluid
+                            style={{marginTop:"10px"}}
+                            content="Tüm Filtreleri Kaldır"
                             disabled={loadingInitial}
                             onClick={() =>{
                               setCategoryIds([]);

@@ -48,10 +48,11 @@ const ProfileDescription = () => {
         <Grid.Column width={16}>
           {isCurrentUser && (
             <Button
-              floated='left'
+              floated='right'
               circular
+              size='mini'
               className={editMode ? 'red': 'blue-gradientBtn'}
-              content={editMode ? 'İptal' : 'Düzenle' }
+              content={editMode ? 'İptal' : <span>Düzenle <Icon name='edit'></Icon></span>  }
               onClick={() => 
                 { 
                   setEditMode(!editMode);

@@ -464,6 +464,7 @@ export default class UserStore {
                 this.rootStore.activityStore.clearActivityRegistery();
                 this.rootStore.profileStore.setPage(0);
                 this.rootStore.profileStore.clearProfileRegistery();
+                this.rootStore.profileStore.clearPopularProfileRegistery();
                 this.rootStore.activityStore.setOrderPage(0);
                 this.rootStore.activityStore.clearOrderRegistery();
                 this.clearCurrentUser();

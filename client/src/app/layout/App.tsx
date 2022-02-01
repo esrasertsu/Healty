@@ -212,7 +212,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <PrivateRoute exact path="/payment/error" component={PaymentErrorPage} />
                  <Route exact path="/orders" component={OrderList}/>
                  <PrivateRoute exact path="/orders/:id" component={OrderItemDetail}/>
-                 <PrivateRoute exact path="/videoMeeting" component={MainVideoPage}/>
+                 <PrivateRoute exact path="/videoMeeting/:id" component={MainVideoPage}/>
                  <Route exact path="/admin" component={Admin}/>
                  <Route exact path="/forbidden" component={Forbidden}/>
                  <Route component={NotFound}/>
@@ -268,7 +268,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <PrivateRoute exact path="/payment/error" component={PaymentErrorPage} />
                  <Route exact path="/orders" component={OrderList}/>
                  <PrivateRoute exact path="/orders/:id" component={OrderItemDetail}/>
-                 <PrivateRoute exact path="/videoMeeting" component={MainVideoPage}/>
+                 <PrivateRoute exact path="/videoMeeting/:id" component={MainVideoPage}/>
                  <Route exact path="/admin" component={Admin}/>
                  <Route exact path="/forbidden" component={Forbidden}/>
                  <Route component={NotFound}/>

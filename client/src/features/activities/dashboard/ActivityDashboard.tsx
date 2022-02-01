@@ -23,7 +23,7 @@ const ActivityDashboard: React.FC = () => {
 
   const { loadCategories,categoryRegistery } = rootStore.categoryStore;
 
-  const { cities } = rootStore.commonStore;
+  const { cities,appLoaded } = rootStore.commonStore;
 
   const [loadingNext, setLoadingNext] = useState(false);
   const [isToggleVisible, setIsToggleVisible] = useState(false);
@@ -54,6 +54,13 @@ const ActivityDashboard: React.FC = () => {
     }
   },[activityRegistery.size,categoryRegistery.size,levelList,loadActivities,loadCategories,loadLevels]); //[] provides the same functionality with componentDidMounth..   dependency array
 
+  useEffect(() => {
+
+    loadActivities();
+    loadCategories();
+    loadLevels();
+     
+  }, [appLoaded])
   useEffect(() => {
     window.addEventListener("scroll", toggleVisibility);
     

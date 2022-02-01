@@ -24,7 +24,7 @@ const ChannelForm = (props: {
                 <form className="join">
                     {process.env.REACT_APP_AGORA_APP_ID === '' && <p style={{color: 'red'}}>Bu bir Agora App ID problemidir, lütfen en yakın zamanda bize bildirin.</p>}
                     <input type="text"
-                    placeholder="Akitivite Odanızın İsmi"
+                    placeholder="Best Activity Ever"
                     onChange={(e) => setChannelName(e.target.value)}
                     />
                     <button onClick={(e) => {

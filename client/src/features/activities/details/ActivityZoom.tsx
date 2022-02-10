@@ -26,7 +26,7 @@ const meetConfig = {
     const { generateZoomToken } = rootStore.activityStore;
     const { user } = rootStore.userStore;
     const {openModal, closeModal} = rootStore.modalStore;
-    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
 
   //const initiateMeeting = (ZoomMtg: any,signature:string) => {
 

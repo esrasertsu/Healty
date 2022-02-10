@@ -40,7 +40,7 @@ const ProfileEvents = () => {
     loadingActivities,
     userActivities
   } = rootStore.profileStore!;
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
 
   useEffect(() => {
     loadUserActivities(profile!.userName);
@@ -82,7 +82,7 @@ const ProfileEvents = () => {
             onTabChange={(e, data) => handleTabChange(e, data)}
           />
           <br />
-          <Card.Group itemsPerRow={!isTabletOrMobile ? 4 : 2}>
+          <Card.Group itemsPerRow={!isTabletOrMobile ? 4 : 2} style={{ maxHeight: "260px", overflow: "hidden",overflowY: "scroll"}}>
             {userActivities.map((activity: IUserActivity) => (
               <Card
                 as={Link}
@@ -91,7 +91,7 @@ const ProfileEvents = () => {
               >
                 <Image
                   src={activity.photo}
-                  style={{ minHeight: 100, objectFit: 'cover' }}
+                  style={{ height: 100, objectFit: 'cover' }}
                 />
                 <Card.Content>
                   <Card.Header className="profile_activity_card_header" textAlign='center'>{activity.title}</Card.Header>

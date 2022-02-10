@@ -19,7 +19,7 @@ const BlogPageHeader:React.FC<{blog:IBlog}> = ({blog}) => {
   const [imageChange, setImageChange] = useState(false);
   const [imageDeleted, setImageDeleted] = useState(false);
   const [originalImage, setOriginalImage] = useState<Blob | null>(null);
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
 
   const [files, setFiles] = useState<any[]>([]);
   const [image, setImage] = useState<Blob | null>(null);

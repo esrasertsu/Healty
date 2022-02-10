@@ -18,6 +18,7 @@ import PhotoPreviewCard from './PhotoPreviewCard';
 
 
   const PhotoGallery:React.FC<IProps> = ({ docs,setFiles,setDocuments, setUpdateEnabled,deleteActivityPhoto,makeCoverPic,newMainId }) => {
+   debugger;
     return (
       <>
          <Grid stackable columns={4}>
@@ -26,7 +27,7 @@ import PhotoPreviewCard from './PhotoPreviewCard';
                 newMainId={newMainId}/>)
              )}
             <Grid.Column >
-            <Popup 
+          { (docs == undefined || (docs && docs.length <6)) && <Popup 
                 hoverable
                 on={['hover', 'click']}
                 positionFixed 
@@ -43,7 +44,7 @@ import PhotoPreviewCard from './PhotoPreviewCard';
                   <Popup.Content>
                     <div style={{fontSize:"14px"}}>Görsel eklemek için tıklayın.</div>
                   </Popup.Content>
-                </Popup>
+                </Popup>}
             
           </Grid.Column>
         </Grid>

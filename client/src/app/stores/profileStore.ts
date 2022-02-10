@@ -23,7 +23,7 @@ export default class ProfileStore{
                     const predicate = activeIndex ===4 ? 'followers' : 'following';
                     if(rootStore.userStore.isLoggedIn)
                      this.loadFollowings(predicate);
-                }if(this.profile && this.profile.role == "Trainer" && (activeIndex ===2 || activeIndex===3))
+                }if(this.profile && this.profile.role !== "Trainer" && (activeIndex ===2 || activeIndex===3))
                 {
                     const predicate = activeIndex ===3 ? 'followers' : 'following';
                     if(rootStore.userStore.isLoggedIn)
@@ -760,5 +760,23 @@ export default class ProfileStore{
         
     }
 }
+
+@action getSavedProfiles = async () => {
+    this.loading = true;
+    try {
+        const profiles = await agent.Profiles.listFollowings(this.rootStore.userStore.user!.userName, 'following');
+        runInAction(() =>{
+            this.followings = profiles;
+            this.loading = false;
+        })
+    } catch (error) {
+        toast.error('Problem loading following users');
+        runInAction(() => {
+            this.loading = false;
+        })
+    }
+}
+
+
 
 }

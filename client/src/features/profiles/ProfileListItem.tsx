@@ -20,7 +20,7 @@ interface IProps {
   const {setLoadingProfile,follow,unfollow} = rootStore.profileStore;
   const {isLoggedIn,user} = rootStore.userStore;
   const {openModal,closeModal,modal} = rootStore.modalStore;
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 375px)' })
 
   const getColor = (catName:string) =>{
@@ -75,7 +75,7 @@ interface IProps {
 }
   return (
     <Card
-      style={{height:"100%", marginBottom:"10px", minHeight:"450px"}}
+      style={{height:"100%", marginBottom:"10px", minHeight:"470px"}}
       key={profile.userName+Math.random()} >
         {
          (!isLoggedIn || (user && profile.userName !== user.userName)) && 
@@ -92,13 +92,13 @@ interface IProps {
       />
       <div className="profileListItem_badges">   
       {(profile.categories && profile.categories.map((cat) => (
-          <Label key={profile.userName+Math.random()+cat.text} className="profileCard_Label" style={{background:getColor(cat.text)}} horizontal>{profile.categories.length<3 ? cat.text: cat.text.charAt(0).toUpperCase()}</Label>
+          <Label key={profile.userName+Math.random()+cat.text} className="profileCard_Label" style={{background:getColor(cat.text)}} horizontal>{profile.categories.length<3 ? cat.text: cat.text.substring(0,2)}</Label>
         )))}
       </div>
      
       <Card.Content className="profileCard_Content">
         <Card.Header className="profileHeader_Name" style={{textAlign:"center"}}>{profile.displayName}</Card.Header>
-       {profile.title ? <div className="ellipsis" style={{textAlign:"center", marginBottom:"5px"}}>{profile.title}</div>
+       {profile.title ? <div className="ellipsis" style={{textAlign:"center", marginBottom:"5px", fontSize:"16px"}}>{profile.title}</div>
        : <div style={{textAlign:"center", marginBottom:"5px"}}>...</div>}
         {/* <div style={{textAlign:"center", marginBottom:"15px"}}>
           {profile.hasPhoneNumber && <Icon name="phone" color="green" /> }
@@ -125,7 +125,6 @@ interface IProps {
           {profile.city ?  <div style={{textAlign:"center", marginBottom:"5px"}}>
             <Icon name="map marker alternate" />{profile.city.text}, Türkiye</div> :
          <div style={{textAlign:"center", marginBottom:"5px"}}>Şehir belirtilmemiş</div> }
-         <Button  onClick={handleCardClick} size="small" className='gradientBtn' circular content="Profili Gör" />
             {/* <Popup
              hoverable
              position="top center"
@@ -157,6 +156,8 @@ interface IProps {
             <div className="profileListItem_subCats"> <Icon name="spinner" /> {profile.experienceYear > 0 ? profile.experienceYear +"yıl tecrübe" : "" } </div>  */}
 
         </Card.Description>
+        <Button  onClick={handleCardClick} size="small" className='gradientBtn' circular content="Profili Gör" />
+
       </Card.Content>
       <Card.Content extra>
         <Grid>

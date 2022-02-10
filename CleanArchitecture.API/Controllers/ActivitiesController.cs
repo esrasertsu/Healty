@@ -65,6 +65,20 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new Unattend.Command { Id = id });
         }
 
+        [HttpPost("{id}/save")]
+        [Authorize]
+        public async Task<ActionResult<Unit>> SaveActivity(Guid id)
+        {
+            return await Mediator.Send(new SaveActivity.Command { Id = id });
+        }
+
+        [HttpDelete("{id}/unsave")]
+        [Authorize]
+        public async Task<ActionResult<Unit>> UnSaveActivity(Guid id)
+        {
+            return await Mediator.Send(new UnSaveActivity.Command { Id = id });
+        }
+
 
         [HttpGet("levels")]
         [AllowAnonymous]
@@ -80,6 +94,13 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(command);
         }
 
-      
+        [HttpGet("saved")]
+        [Authorize]
+        public async Task<ActionResult<List<ActivityDto>>> ListSavedActivities()
+        {
+            return await Mediator.Send(new ListSavedActivities.Query());
+        }
+
+
     }
 }

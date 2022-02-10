@@ -29,7 +29,7 @@ const RegisterSuccess : React.FC<RouteComponentProps> = ({location}) =>{
                     {email &&
                     <>
                          <p>Eposta'nız size ulaşmadı mı? Aşağıdaki butuna tıklayarak yeniden gönderilmesini talep edebilirsiniz.</p>
-                        <Button onClick={handleConfiedEmailResend} primary content="Yeniden Gönder" circular size="huge"/>
+                        <Button onClick={handleConfiedEmailResend} primary content="Yeniden Gönder" circular/>
                     </>
 
                     }

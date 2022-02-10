@@ -99,7 +99,8 @@ namespace CleanArchitecture.Application.Activities
                 Levels = levelsDto,
                 Categories = catsToReturn,
                 UserActivities = _mapper.Map<ICollection<UserActivity>, ICollection<AttendeeDto>>(activity.UserActivities.Where(x => x.IsHost == true).ToList()),
-                 SubCategories = subcatsToReturn,
+                SavedCount = activity.UserSavedActivities.Count,
+                SubCategories = subcatsToReturn,
                 Address= activity.Address,
                 City = _mapper.Map<City, CityDto>(activity.City),
                 Venue = activity.Venue,
@@ -110,7 +111,7 @@ namespace CleanArchitecture.Application.Activities
 
             if (currentUser != null)
                 activityDto.UserActivities = _mapper.Map<ICollection<UserActivity>, ICollection<AttendeeDto>>(activity.UserActivities.Where(x => x.IsHost || x.AppUser == currentUser || currentUser.Followings.Any(y => y.TargetId == x.AppUser.Id)).ToList());
-
+                activityDto.IsSaved = activity.UserSavedActivities.Any(x => x.AppUser == currentUser);
 
                 return activityDto;
             }

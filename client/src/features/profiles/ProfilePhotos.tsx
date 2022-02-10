@@ -25,7 +25,7 @@ const [imageChange, setImageChange] = useState(false);
 const [imageDeleted, setImageDeleted] = useState(false);
 const [open, setOpen] = React.useState(false)
 
-const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
 
 
   const handleUploadImage = (photo: Blob) => {

@@ -9,6 +9,6 @@ namespace CleanArchitecture.Application.Interfaces
     {
         string CreateToken(AppUser user);
         RefreshToken GenerateRefreshToken();
-
+        string ReadToken(string token);
     }
 }

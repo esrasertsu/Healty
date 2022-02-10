@@ -320,8 +320,9 @@ const Activities = {
     activity.cityId!,activity.venue!, activity.online!, activity.attendancyLimit!,activity.price!,activity.photo!,activity.newphotos!,
     activity.address!, activity.duration!, activity.trainerUserName),
     editOnlineJoinInfo: ( id:string, name : string) => requests.put(`/activities/${id}/joindetails`, name),
-
-
+    save: (id:string) => requests.post(`/activities/${id}/save`, {}),
+    unsave:  (id:string) => requests.del(`/activities/${id}/unsave`),
+    getSavedActivities: () : Promise<IActivity[]>=>  requests.get(`/activities/saved`)
 }
 
 const User ={
@@ -375,7 +376,8 @@ const Profiles = {
     deleteReferencePic: ( id1:string): Promise<IPhoto> => requests.del(`/profiles/referencepic/${id1}`),
     deleteDocument: ( id:string) => requests.del(`/profiles/documents/${id}`),
     uploadCoverPic: ( photo: Blob): Promise<IPhoto> => requests.postForm(`/profiles/coverpic`, photo),
-    uploadProfileVideo: ( url: string)  => requests.put(`/profiles/videoUrl?url=${url}`, {})
+    uploadProfileVideo: ( url: string)  => requests.put(`/profiles/videoUrl?url=${url}`, {}),
+
 }
 
 const Blogs = {

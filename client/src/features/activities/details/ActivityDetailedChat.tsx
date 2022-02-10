@@ -42,17 +42,10 @@ import { IComment } from '../../../app/models/activity';
  
 
     return (
-           <Fragment>
-             <Segment
-               textAlign='center'
-               attached='top'
-               inverted
-               style={{ border: 'none',marginTop:"40px" }}
-               className="segmentHeader"
-             >
-               <Header>Grup Mesajları</Header>
-             </Segment>
-             <Segment attached style={{maxHeight:"300px", overflowY:"scroll", display:"flex", flexDirection:"column-reverse"}}>
+           <div style={{marginTop:"50px"}}>
+            <Header>Grup Mesajları</Header>
+           
+             <Segment attached style={{maxHeight:"400px", overflowY:"scroll", display:"flex", flexDirection:"column-reverse"}}>
                <Comment.Group>
                  {sortedMessages.map((comment) => (
                       <Comment key={comment.id}>
@@ -99,7 +92,7 @@ import { IComment } from '../../../app/models/activity';
        </Segment>
                  
             
-           </Fragment>
+           </div>
     )
 }
 

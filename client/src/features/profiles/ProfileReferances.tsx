@@ -150,8 +150,9 @@ const handleSaveRef = () =>{
     </Modal>
         <Header>Referans İşler </Header>
 
-      <Segment>
+      <Segment style={{display:"flex", flexDirection:"column"}}>
       {isCurrentUser && referencePics.length < 7 && (
+        <div>
             <Button
               floated='right'
               circular
@@ -163,8 +164,10 @@ const handleSaveRef = () =>{
                 { setOpen(!open);
                 }}
             />
+        </div>
+            
           )}
-                <Grid stackable style={{width:"100%"}} >
+                <Grid stackable style={{width:"100%", margin:"0"}} >
                    
                     <Grid.Row>
                         <Grid.Column width={16}>

@@ -85,7 +85,7 @@ namespace CleanArchitecture.API
                     .AllowAnyMethod()
                      .WithExposedHeaders("WWW-Authenticate")
                      .WithOrigins("http://localhost:3000", "http://localhost:3001", "https://sandbox-api.iyzipay.com", "https://afitapp.com",
-                    "https://admin.afitapp.com")
+                    "https://admin.afitapp.com", "http://localhost:9000", "https://meet.afitapp.com")
                     .AllowCredentials();
                 });
             });

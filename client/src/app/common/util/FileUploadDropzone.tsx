@@ -36,7 +36,7 @@ const FileUploadDropzone: React.FC<IProps> = ({setFiles,setDocuments, setUpdateE
 
   }, [setFiles,setDocuments])
 
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, multiple: true})
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, multiple: false})
 
   return (
     

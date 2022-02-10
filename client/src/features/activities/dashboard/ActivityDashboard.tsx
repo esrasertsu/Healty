@@ -27,7 +27,7 @@ const ActivityDashboard: React.FC = () => {
 
   const [loadingNext, setLoadingNext] = useState(false);
   const [isToggleVisible, setIsToggleVisible] = useState(false);
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   const [visible, setVisible] = useState(false);

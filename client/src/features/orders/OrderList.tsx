@@ -23,7 +23,7 @@ const OrderList: React.FC<IProps> = ({settings}) => {
   const {isLoggedIn} = rootStore.userStore;
   const [loadingNext, setLoadingNext] = useState(false);
 
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   const handleGetNext = () => {

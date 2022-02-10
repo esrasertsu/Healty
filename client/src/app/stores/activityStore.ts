@@ -36,6 +36,7 @@ export default class ActivityStore {
     @observable orderRegistery = new Map<string,IOrder>();
     @observable activity: IActivity | null = null;
     @observable order: IOrder | null = null;
+    @observable savedActivities: IActivity[] = [];
     @observable loadingInitial = false;
     @observable loadingActivity = false;
     @observable loadingOrders = false;
@@ -692,10 +693,11 @@ export default class ActivityStore {
             return res;
 
         } catch (error) {
+            debugger;
             runInAction(() => {
                 this.loadingPaymentPage = false;
             });
-            toast.error('Problem Processing payment');
+            toast.error(error.data.errors);//uyarı pop up'ı gösterilecek
             console.log(error);
         }
     };
@@ -752,4 +754,55 @@ export default class ActivityStore {
             console.log(error);
         }
     };
+
+
+    @action save = async (id: string) => {
+        this.loading = true;
+        try {
+            await agent.Activities.save(id);
+            runInAction(() =>{
+                this.loading = false;
+
+            })
+        } catch (error) {
+            toast.error('Favorilere eklenemedi.');
+            runInAction(() => {
+                this.loading = false;
+            })
+        }
+    }
+
+    @action unsave = async (id: string) => {
+        this.loading = true;
+        try {
+            await agent.Activities.unsave(id);
+            runInAction(() =>{
+                this.loading = false;
+               
+            })
+        } catch (error) {
+            toast.error('Favorilerden çıkarılamadı.');
+            runInAction(() => {
+                this.loading = false;
+            })
+        }
+    }
+
+
+    @action getSavedActivities = async () => {
+        this.loading = true;
+        try {
+            const savedList = await agent.Activities.getSavedActivities();
+            runInAction(() =>{
+                this.savedActivities = savedList;
+                this.loading = false;
+               
+            })
+        } catch (error) {
+            toast.error('Kaydettiğin aktiviteler getirilemedi.');
+            runInAction(() => {
+                this.loading = false;
+            })
+        }
+    }
 }

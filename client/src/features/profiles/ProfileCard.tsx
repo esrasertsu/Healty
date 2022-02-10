@@ -28,10 +28,10 @@ const ProfileCard: React.FC<IProps> = ({profile}) => {
 }
 
   return (
-    <Card onClick={handleCardClick} >
+    <Card onClick={handleCardClick}>
       <Image src={profile.image || '/assets/user.png'} 
       onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}/>
-      <Card.Content>
+      <Card.Content style={{paddingBottom:"0"}}>
         <Card.Header>{profile.displayName}</Card.Header>
       </Card.Content>
       <Card.Content extra>

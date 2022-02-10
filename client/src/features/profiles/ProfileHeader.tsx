@@ -54,7 +54,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
   const [imageDeleted, setImageDeleted] = useState(false);
   const [originalImage, setOriginalImage] = useState<Blob | null>(null);
 
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 375px)' })
 
   const [files, setFiles] = useState<any[]>([]);

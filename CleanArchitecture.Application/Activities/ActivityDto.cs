@@ -20,6 +20,7 @@ namespace CleanArchitecture.Application.Activities
         public string ChannelName { get; set; }
         public int AttendanceCount { get; set; }
         public int? AttendancyLimit { get; set; }
+        public int SavedCount { get; set; }
         public decimal? Price { get; set; }
         public DateTime Date { get; set; }
         public DateTime EndDate { get; set; }
@@ -28,6 +29,7 @@ namespace CleanArchitecture.Application.Activities
         public string Venue { get; set; }
         public string Address { get; set; }
         public Photo MainImage { get; set; }
+        public bool IsSaved { get; set; }
 
         [JsonPropertyName("attendees")]
         public ICollection<AttendeeDto> UserActivities { get; set; }

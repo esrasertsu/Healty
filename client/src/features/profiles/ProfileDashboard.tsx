@@ -55,7 +55,7 @@ const sixItem:SemanticWIDTHS = 6;
     const [isToggleVisible, setIsToggleVisible] = useState(false);
     const [loadingNext, setLoadingNext] = useState(false);
 
-    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   

@@ -34,7 +34,7 @@ namespace Infrastructure.Photos
                     var uploadParams = new ImageUploadParams
                     {
                         File = new FileDescription(file.FileName, stream),
-                        Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face")
+                        Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face").Quality("auto")
                     };
                     uploadResult = _cloudinary.Upload(uploadParams);
                 }
@@ -61,7 +61,7 @@ namespace Infrastructure.Photos
                     var uploadParams = new ImageUploadParams
                     {
                         File = new FileDescription(file.FileName, stream),
-                        Transformation = new Transformation().Height(300).Width(1350).Crop("fill").Gravity("face")
+                        Transformation = new Transformation().Height(300).Width(1350).Crop("fill").Gravity("face").Quality("auto")
                     };
                     uploadResult = _cloudinary.Upload(uploadParams);
                 }
@@ -88,7 +88,7 @@ namespace Infrastructure.Photos
                     var uploadParams = new ImageUploadParams
                     {
                         File = new FileDescription(file.FileName, stream),
-                        Transformation = new Transformation().Height(500).Width(1485).Crop("fill").Gravity("face")
+                        Transformation = new Transformation().Height(500).Width(1485).Crop("fill").Gravity("face").Quality("auto")
                     };
                     uploadResult = _cloudinary.Upload(uploadParams);
                 }
@@ -115,7 +115,7 @@ namespace Infrastructure.Photos
                     var uploadParams = new ImageUploadParams
                     {
                         File = new FileDescription(file.FileName, stream),
-                        Transformation = new Transformation()
+                        Transformation = new Transformation().Quality("auto")
                     };
                     uploadResult = _cloudinary.Upload(uploadParams);
                 }
@@ -142,7 +142,7 @@ namespace Infrastructure.Photos
                     var uploadParams = new ImageUploadParams
                     {
                         File = new FileDescription(file.FileName, stream),
-                        Transformation = new Transformation()
+                        Transformation = new Transformation().Quality("auto")
                     };
                     uploadResult = _cloudinary.Upload(uploadParams);
                 }

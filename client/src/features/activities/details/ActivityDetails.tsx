@@ -21,7 +21,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
     const rootStore = useContext(RootStoreContext);
     const { activity, loadActivity, loadingActivity } = rootStore.activityStore;
     const { user } = rootStore.userStore;
- const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     useEffect(() => {
@@ -50,8 +50,11 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
                  
                  }   
             <ActivityDetailedInfo activity={activity} />
-            
-            <ActivityDetailedSideBar atCount={activity.attendanceCount} attendees={activity.attendees} date={activity.date}/>
+            {
+              activity.attendanceCount > 0 &&
+              <ActivityDetailedSideBar atCount={activity.attendanceCount} attendees={activity.attendees} date={activity.date}/>
+
+            }
 
             {
               user && !isMobile &&

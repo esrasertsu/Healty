@@ -180,11 +180,6 @@ namespace CleanArchitecture.Application.Payment
                     throw new Exception(ex.Message);
                 }
 
-
-                _context.Orders.Remove(order);
-                await _context.SaveChangesAsync();
-                throw new Exception("Problem getting 3D page");
-
             }
         }
     }

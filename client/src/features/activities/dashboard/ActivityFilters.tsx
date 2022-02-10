@@ -28,7 +28,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
 
       const { cities } = rootStore.commonStore;
       const {isLoggedIn} = rootStore.userStore;
-      const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+      const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
      const [cityName, setcityName] = useState("")
 
 
@@ -184,7 +184,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
     else if(predicate.get("isGoing") === "true")
     activitySelectedFilterList.push({key:"isGoing",value:"isGoing", text:"Gidiyorum"}) 
     else if(predicate.get("isFollowed") === "true")
-    activitySelectedFilterList.push({key:"isFollowed",value:"isFollowed", text:"Takip ettiğim eğitmenlerin"}) 
+    activitySelectedFilterList.push({key:"isFollowed",value:"isFollowed", text:"Fovori Eğitmenlerim"}) 
 
     setActivitySelectedFilters([...activitySelectedFilterList])
 
@@ -349,12 +349,12 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
           clearUserPredicates();
           setClearPredicateBeforeSearch(false);
           const deletedUserPreds = activitySelectedFilters.filter(x => x.value !== "isGoing" && x.value !== "isHost" && x.value !== "isFollowed");
-          deletedUserPreds.push({key:"isFollowed",value:"isFollowed", text:"Takip ettiğim eğitmenlerin"});
+          deletedUserPreds.push({key:"isFollowed",value:"isFollowed", text:"Fovori Eğitmenlerim"});
           setActivitySelectedFilters([...deletedUserPreds]);
 
           setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
           setPredicate('isFollowed', 'true')}}
-         name={'follow'} content={"Takip Ettiğim Eğitmenlerin"} />
+         name={'follow'} content={"Fovori Eğitmenlerim"} />
       </Menu>}
 
       <Accordion className="activityAccMenu" key={"Category_acc"} as={Menu} vertical style={{ width: '100%'}}>
@@ -496,7 +496,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
                             type="submit"
                             content="Ara"
                             circular
-                            size='mini'
+                            size='small'
                             fluid
                             className='green-gradientBtn'
                             onClick={handleSearch}

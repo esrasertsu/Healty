@@ -51,7 +51,7 @@ const validate = combineValidators({
   } = rootStore.modalStore;
 
   const [loading, setLoading] = useState(false);
-  const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
     const [stepNo, setStepNo] = useState(0);  
 
@@ -107,6 +107,7 @@ if(loadingActivity) return <LoadingComponent content='Loading...'/>
 
     setLoading(true);
     processPayment(values).then((res) => {
+      debugger;
   if(res)
   {
     if(res.status === false)

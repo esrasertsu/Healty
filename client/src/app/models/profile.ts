@@ -78,7 +78,8 @@ export interface IUserActivity {
     title: string,
     category: string,
     date: Date,
-    photo: string
+    photo: string,
+    isHost:boolean
 }
 
 export interface IProfileCommentEnvelope {

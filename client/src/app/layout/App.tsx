@@ -48,6 +48,7 @@ import { AnalyticsWrapper, UseAnalytics } from '../common/util/util';
 import Forbidden from './Forbidden';
 import ReadyOnlyApplication from '../../features/user/ReadyOnlyApplication';
 import MainVideoPage from '../../features/videoCall/MainVideoPage';
+import SavedPage from '../../features/savedItems/SavedPage';
 
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
@@ -65,9 +66,9 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   //     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
   //     libraries
   // });
-  const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
   const [visible, setVisible] = useState(false);
   // useEffect(() => {
   //   return history.listen((location) => { 
@@ -215,6 +216,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <PrivateRoute exact path="/videoMeeting/:id" component={MainVideoPage}/>
                  <Route exact path="/admin" component={Admin}/>
                  <Route exact path="/forbidden" component={Forbidden}/>
+                 <PrivateRoute path="/saved" component={SavedPage}/>
                  <Route component={NotFound}/>
               </Switch>
           </Fragment>
@@ -271,6 +273,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <PrivateRoute exact path="/videoMeeting/:id" component={MainVideoPage}/>
                  <Route exact path="/admin" component={Admin}/>
                  <Route exact path="/forbidden" component={Forbidden}/>
+                 <PrivateRoute path="/saved" component={SavedPage}/>
                  <Route component={NotFound}/>
            </Switch>
            </Fragment>

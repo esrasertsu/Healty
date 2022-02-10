@@ -22,7 +22,7 @@ const BlogFilters: React.FC<IProps> = ({setisAccOpen}) => {
 
   const [activeIndex, setActiveIndex] = useState("")
   const [subActiveIndex, setSubActiveIndex] = useState("")
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
 
   const handleClick = (e:any, titleProps:any) => {
       

@@ -50,7 +50,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
     cities
   } = rootStore.commonStore;
 
-  const isMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isMobile = useMediaQuery({ query: '(max-width: 820px)' })
 
 
   const customCityRequired = activityForm.online ? 

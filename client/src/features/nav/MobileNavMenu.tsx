@@ -21,7 +21,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
 
 
     
-    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     const handleLoginClick = (e:any) => {
@@ -170,11 +170,11 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                                 }} >
                                     
                                 <h3 className="mobileNavMenu_container_item">
-                                <Icon name="user" style={{marginRight:"10px"}} ></Icon>
+                                <Icon name="user outline" style={{marginRight:"10px"}} ></Icon>
                                     Profilim
                                     </h3>
                     </Menu.Item>
-                    <Menu.Item as={Link} to={`/messages`}
+                    <Menu.Item as={Link} to={`/saved`}
                     active={activeMenu === 5}
                     className="mobileNavMenu_container_item"
 
@@ -186,14 +186,11 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                                 }} >
                                     
                                 <h3 className="mobileNavMenu_container_item">
-                                <Icon name="mail" style={{marginRight:"10px"}} ></Icon>
-                                    Mesajlar
-                                    <Label style={{margin:"0 0 0 10px"}} className="messageNotificationCount">
-                                    {notificationCount}
-                                    </Label>
+                                <Icon name="bookmark outline" style={{marginRight:"10px"}} ></Icon>
+                                    Kaydettiklerim
                                     </h3>
                     </Menu.Item>
-                    <Menu.Item as={Link} to={`/settings`}
+                    <Menu.Item as={Link} to={`/orders`}
                     active={activeMenu === 6}
                     className="mobileNavMenu_container_item"
 
@@ -201,6 +198,41 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                             //  setLoadingPosts(true);
                             // history.push(`/blog`);
                                 setActiveMenu(6)
+                                setVisibleMobileNav(false);
+                                }} >
+                                    
+                                <h3 className="mobileNavMenu_container_item">
+                                <Icon name="unordered list" style={{marginRight:"10px"}} ></Icon>
+                                    Rezervasyonlarım
+                                    </h3>
+                    </Menu.Item>
+                    <Menu.Item as={Link} to={`/messages`}
+                    active={activeMenu === 7}
+                    className="mobileNavMenu_container_item"
+
+                        onClick={() => {
+                            //  setLoadingPosts(true);
+                            // history.push(`/blog`);
+                                setActiveMenu(7)
+                                setVisibleMobileNav(false);
+                                }} >
+                                    
+                                <h3 className="mobileNavMenu_container_item">
+                                <Icon name="mail outline" style={{marginRight:"10px"}} ></Icon>
+                                    Mesajlar
+                                    <Label style={{margin:"0 0 0 10px"}} className="messageNotificationCount">
+                                    {notificationCount}
+                                    </Label>
+                                    </h3>
+                    </Menu.Item>
+                    <Menu.Item as={Link} to={`/settings`}
+                    active={activeMenu === 8}
+                    className="mobileNavMenu_container_item"
+
+                        onClick={() => {
+                            //  setLoadingPosts(true);
+                            // history.push(`/blog`);
+                                setActiveMenu(8)
                                 setVisibleMobileNav(false);
                                 }} >
                                     

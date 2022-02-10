@@ -14,7 +14,7 @@ import tr  from 'date-fns/locale/tr'
 const PaymentSuccessPage : React.FC<RouteComponentProps> = ({location}) =>{
     const {status,activityId,count, paidPrice, paymentTransactionId, paymentId} = queryString.parse(location.search);
     const [activityName, setActivityName] = useState("");
-    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
     const rootStore = useContext(RootStoreContext);
     const { activity, loadActivity, loadingActivity } = rootStore.activityStore;
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })

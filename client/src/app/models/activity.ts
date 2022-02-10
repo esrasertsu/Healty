@@ -25,6 +25,8 @@ export interface IActivity {
     levels: ILevel[];
     isGoing:boolean;
     isHost: boolean;
+    isSaved: boolean;
+    savedCount:number;
     comments: IComment[];
     online: boolean,
     photos: IPhoto[],
@@ -110,7 +112,7 @@ export class ActivityFormValues implements IActivityFormValues {
     trainerUserName: string = "";
 
     constructor(init?: IActivityFormValues){
-        debugger;
+     
         if(init && init.date)
         {
             init.time = init.date

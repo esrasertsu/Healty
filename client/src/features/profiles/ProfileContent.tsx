@@ -45,7 +45,7 @@ const getPanes = (profile:IProfile,isTabletOrMobile:boolean) => {
             {menuItem: (
                 <Menu.Item key='following'>
                   <Icon size="large" name="users"></Icon>
-                  {!isTabletOrMobile && <div> Takip Ettikleri <Label>{profile.followingCount}</Label> </div> }
+                  {!isTabletOrMobile && <div> Favorileri <Label>{profile.followingCount}</Label> </div> }
                 </Menu.Item>
               ) , render:() => <ProfileFollowings />},
            
@@ -74,7 +74,7 @@ const getPanes = (profile:IProfile,isTabletOrMobile:boolean) => {
         {menuItem: (
             <Menu.Item key='following'>
               <Icon size="large" name="users"></Icon>
-              {!isTabletOrMobile &&  <div> Takip Ettikleri<Label>{profile.followingCount}</Label></div> }
+              {!isTabletOrMobile &&  <div> Favorileri<Label>{profile.followingCount}</Label></div> }
             </Menu.Item>
           ) , render:() => <ProfileFollowings />},
        
@@ -91,7 +91,7 @@ const getPanes = (profile:IProfile,isTabletOrMobile:boolean) => {
 const ProfileContent: React.FC<IProps> = ({setActiveTab, profile}) => {
     const rootStore = useContext(RootStoreContext);
 
-        const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+        const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
 
     return (
         <>

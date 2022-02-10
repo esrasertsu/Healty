@@ -19,8 +19,8 @@ const NavBar: React.FC = () => {
     const {openModal,closeModal,modal} = rootStore.modalStore;
 
 
-    
-    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const smallDesktop  = useMediaQuery({ query: '(max-width: 1024px)' })
+    const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     const handleLoginClick = (e:any) => {
@@ -96,45 +96,45 @@ const NavBar: React.FC = () => {
                 </div>
                   
                   </Menu.Item>
-                  <Menu.Item>
+                 <Menu.Item>
                     <NavSearchArea />
                   </Menu.Item>
-                  <Menu.Item position="right" as={Link} to="/profiles"  name="Eğitmenler" 
+                  <Menu.Item position="right" as={Link} to="/profiles" className='desktopMenu'
                   active={activeMenu === 0}
                 onClick={() => {
                    //setLoadingProfiles(true);
                    setActiveMenu(0);
                   //  history.push(`/profiles`);
-                    }} /> 
-               <Menu.Item as={Link} to="/activities" name="Aktiviteler"
+                    }} > <Icon name="graduation cap"></Icon> <span>Uzman</span></Menu.Item> 
+               <Menu.Item as={Link} to="/activities" className='desktopMenu'
                 active={activeMenu === 1}
                   onClick={() => {
                  //   setLoadingInitial(true);
                     setActiveMenu(1)
                    // history.push(`/activities`);
-                    }} />
+                    }} ><Icon name="heartbeat"></Icon> <span>Aktivite</span></Menu.Item>
 
                 
-          <Menu.Item as={Link} to="/blog" name="Blog" 
+          <Menu.Item as={Link} to="/blog" className='desktopMenu'
            active={activeMenu === 2}
              onClick={() => {
                  //  setLoadingPosts(true);
                    // history.push(`/blog`);
                     setActiveMenu(2)
-                    }} />
+                    }} ><Icon name="newspaper outline"></Icon> <span>Blog</span></Menu.Item>
 
           {user && (
             <Menu.Item>
               <Image avatar spaced="right" src={user.image || "/assets/user.png"}
                onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}} />
-              <Dropdown pointing="top left" text={user.displayName}>
+              <Dropdown pointing={smallDesktop ? "top right": "top left"} text={user.displayName}>
                 <Dropdown.Menu className='mobileMenu' style={{padding:"10px"}}>
                   <Dropdown.Item
                     key="profil"
                     as={Link}
                     to={`/profile/${user.userName}`}
                     text="Profilim"
-                    icon="user"
+                    icon="user outline"
                     className='border'
                     onClick={()=>{setActiveMenu(-1);}}
                   ></Dropdown.Item>
@@ -145,7 +145,7 @@ const NavBar: React.FC = () => {
                     className='border'
 
                     onClick={()=>{setActiveMenu(-1);}}
-                  >  <Icon name='mail' />
+                  >  <Icon name="mail outline" />
                        Mesajlar
                     <Label style={{margin:"0 0 0 10px"}} color='green'>
                     {notificationCount}
@@ -159,6 +159,15 @@ const NavBar: React.FC = () => {
                     onClick={()=>{setActiveMenu(-1);}}
                   >  <Icon name='unordered list' />
                        Rezervasyonlarım
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    key="saved"
+                    as={Link}
+                    to={`/saved`}
+                    className='border'
+                    onClick={()=>{setActiveMenu(-1);}}
+                  >  <Icon name="bookmark outline" />
+                       Kaydettiklerim
                   </Dropdown.Item>
                   <Dropdown.Item
                     key="settings"

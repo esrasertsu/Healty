@@ -9,12 +9,15 @@ import { RootStoreContext } from '../../../app/stores/rootStore';
 
 export const ActivityVideoCall:React.FC<{activity:IActivity}> = ({activity}) => {
     const rootStore = useContext(RootStoreContext);
-
-    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const {token} = rootStore.commonStore;
+    const {user} = rootStore.userStore;
+    const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
 
 
     const handleJoinMeeting = () => {
-        const win = window.open(`/videoMeeting/${activity.id}`, "_blank");
+      debugger;
+      //  const win = window.open(`/videoMeeting/${activity.id}`, "_blank");
+      const win = window.open(`https://meet.afitapp.com/create/${activity.id}/${token}/${user!.userName}`, "_blank");
         win!.focus()
       }
 

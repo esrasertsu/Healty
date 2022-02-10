@@ -18,30 +18,25 @@ interface IProps{
   const { isLoggedIn } = rootStore.userStore;
 
     return (
-          <Fragment>
-            <Segment
-              textAlign='center'
-              style={{ border: 'none' , marginTop:"40px"}}
-              attached='top'
-              inverted
-              className="segmentHeader"
-
-            >
-             <Header> {atCount>0 ? 
-            <span>
+      
+          <div style={{marginTop:"50px"}}>
+          
+             <Header>  
+            <><span>
                { atCount }  Kişi  { (new Date(date).getTime() > new Date().getTime()) ? " Katılıyor" : " Katıldı" }
-            </span>   :
-            "İlk katılan sen ol!" }
+            </span> 
+            <br></br>
+            <span style={{fontSize:"12px"}}>* Sadece takip ettiğin kullanıcılar listelenmektedir.</span> </>
              </Header>
+             
 
-            </Segment>
             <Segment attached style={{  padding:"1em 0"}}>
             <Scrollbars
              frameBorder="2px" 
              style={{ 
                backgroundColor:"white", 
                maxHeight: "340px", 
-               minHeight:"122px"
+               minHeight:"130px"
              //  width: "calc(100% - (-1px * 2))", 
               // maxWidth: "calc(100% - (-1px * 2))",
                }}
@@ -49,11 +44,11 @@ interface IProps{
             autoHideTimeout={1000}
             autoHideDuration={200}
              >
-            <List relaxed divided style={{margin: "0px 29px 14px 14px"}}>
+            <List relaxed divided style={{margin: "0px 31px 14px 14px"}}>
                 {isLoggedIn ?
-                attendees.map((attendee) => (
+                attendees.filter(x => x.isHost === false).map((attendee) => (
                   <Item key={attendee.userName} style={{ position: 'relative' }}>
-                 {attendee.isHost &&
+                 {/* {attendee.isHost &&
                   <Label
                     style={{ position: 'absolute' }}
                     color='orange'
@@ -61,7 +56,7 @@ interface IProps{
                   >
                     Düzenleyen
                   </Label> 
-                  }
+                  } */}
                   <Image className="activityAttendees_Image" src={attendee.image  || '/assets/user.png'} 
                    onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}/>
                   <Item.Content verticalAlign='middle'>
@@ -125,7 +120,8 @@ interface IProps{
               </List>
             </Segment>  */}
             
-          </Fragment>
+          </div>
+        
     )
 }
 

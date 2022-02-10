@@ -20,7 +20,7 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
 
     const rootStore = useContext(RootStoreContext);
     const { getOrderDetails,order,loadingOrder,loadingRefundPaymentPage,refundPayment ,deleteOrder} = rootStore.activityStore;
-    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
     const [open, setOpen] = useState(false);
     const [removeItemOpen, setRemoveItemOpen] = useState(false);

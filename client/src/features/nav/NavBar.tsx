@@ -19,7 +19,7 @@ const NavBar: React.FC = () => {
     const {openModal,closeModal,modal} = rootStore.modalStore;
 
 
-    const smallDesktop  = useMediaQuery({ query: '(max-width: 1024px)' })
+    const smallDesktop  = useMediaQuery({ query: '(max-width: 1300px)' })
     const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 

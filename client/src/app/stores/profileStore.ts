@@ -197,8 +197,9 @@ export default class ProfileStore{
         try {
             var newComment = await agent.Profiles.createComment(comment);
             runInAction(() => {
-                this.commentRegistery.set(newComment.id, newComment);
+              //  this.commentRegistery.set(newComment.id, newComment);
                 this.submittingComment = false;
+                toast.success('Uzman hakkındaki yorumunuz en yakın zamanda değerlendirilip yayınlanmak üzere tarafımıza iletildi.');
             });
         } catch (error) {
             runInAction( () => {
@@ -428,6 +429,40 @@ export default class ProfileStore{
                 this.deletingDocument = false;
             })
             
+        }
+    }
+
+    @action deleteComment = async (id:string) =>{
+        this.submittingComment = true;
+        try {
+            await agent.Profiles.deleteComment(id);
+            runInAction(() => {
+                this.commentRegistery.delete(id);
+                this.submittingComment = false;
+            });
+        } catch (error) {
+            runInAction( () => {
+                this.submittingComment = false;
+            });
+            toast.error('Problem submitting data');
+            console.log(error);
+        }
+    }
+
+    @action reportComment = async (id:string) =>{
+        this.submittingComment = true;
+        try {
+            await agent.Profiles.reportComment(id);
+            runInAction(() => {
+                toast.success('En yakın zamanda değerlendirilmek üzere şikayetiniz tarafımıza iletildi.');
+                this.submittingComment = false;
+            });
+        } catch (error) {
+            runInAction( () => {
+                this.submittingComment = false;
+            });
+            toast.error('Problem submitting data');
+            console.log(error);
         }
     }
 

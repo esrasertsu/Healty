@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using CleanArchitecture.Application.SubMerchants;
 using CleanArchitecture.Application.Admin;
 using CleanArchitecture.Application.Categories;
+using CleanArchitecture.Application.Admin.Comments;
 
 namespace CleanArchitecture.API.Controllers
 {
@@ -69,11 +70,12 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(command);
         }
 
-        [HttpGet("comments")]
-        public async Task<ActionResult<ListAdmins.AdminsEnvelope>> ListComments(string status, int? limit, int? offset)
+        [HttpGet("{username}/comments")]
+        public async Task<ActionResult<ListComments.UserProfileCommentsEnvelope>> GetUserComments(string username, int? limit, int? offset)
         {
-            return await Mediator.Send(new ListAdmins.Query(limit, offset));
+            return await Mediator.Send(new ListComments.Query { Username = username, Limit = limit, Offset = offset });
         }
+
 
         [HttpPost("subCategory")]
         public async Task<ActionResult<Unit>> CreateSubCategory(string name, string categoryId)

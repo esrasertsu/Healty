@@ -114,6 +114,19 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new DeleteDocument.Command { Id = id });
         }
 
+        [HttpDelete("comments/{id}")]
+        public async Task<ActionResult<Unit>> DeleteComment(Guid Id)
+        {
+            return await Mediator.Send(new DeleteComment.Command { Id = Id });
+        }
+
+        [HttpPost("comments/{id}/report")]
+        public async Task<ActionResult<Unit>> ReportComment(Guid Id)
+        {
+            return await Mediator.Send(new ReportComment.Command { Id = Id });
+        }
+
+
         [HttpPut("videoUrl")]
         public async Task<ActionResult<Unit>> AddVideoUrl(string url)
         {

@@ -12,6 +12,8 @@ import ActivityDetailPaymentSegment from './ActivityDetailPaymentSegment';
 import ActivityCountDown from './ActivityCountDown';
 import { useMediaQuery } from 'react-responsive'
 import ActivityVideoCall from './ActivityVideoCall';
+import ActivityReview from './ActivityReview';
+
 interface DetailParams{
     id:string
 }
@@ -65,9 +67,12 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
           </Grid.Column>
 
           <Grid.Column width={5}>
-          {
+                 {
                   (activity.isGoing || activity.isHost) && !isMobile &&
                  <ActivityCountDown activity={activity} />
+                 }
+                 {
+                   <ActivityReview activity={activity} />
                  }   
               {/* <ActivityDetailsMap centerLocation={center} /> */}
                 {

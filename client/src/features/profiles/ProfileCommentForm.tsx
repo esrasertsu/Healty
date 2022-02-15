@@ -44,8 +44,7 @@ interface IProps{
             </div>
             <Header
               as="h4"
-              content="Eğitmen hakkında yorumunuzu yazın, değerlendirelim.."
-              color="orange"
+              content="Eğitmen hakkındaki görüşleriniz bizim ve sizler gibi diğer kullanıcılarımız için çok değerli.."
               textAlign="left"
               style={{marginTop:"0"}}
             />

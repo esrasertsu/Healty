@@ -24,15 +24,8 @@ export const ActivityVideoCall:React.FC<{activity:IActivity}> = ({activity}) => 
     return (<>
         {
            <>
-            <Segment
-              textAlign='center'
-              attached='top'
-              inverted
-              style={{ border: 'none' }}
-              className="segmentHeader"
-            >
-              <Header>Online Aktivite  </Header>
-            </Segment>
+           
+            <Header>Online Aktivite  </Header>
             <Segment attached>
                 
                 

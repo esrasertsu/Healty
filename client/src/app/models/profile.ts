@@ -96,6 +96,7 @@ export interface IProfileComment {
     displayName : string;
     starCount: number;
     allowDisplayName: boolean;
+    status: boolean;
 }
 
 

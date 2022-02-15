@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from 'react'
-import {  Button, Comment } from 'semantic-ui-react'
+import {  Button, Comment, Icon } from 'semantic-ui-react'
 import { observer } from 'mobx-react';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { formatDistance } from 'date-fns';
@@ -20,9 +20,16 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
 
   const rootStore = useContext(RootStoreContext);
   const {openModal, closeModal} = rootStore.modalStore;
-  const {profile} = rootStore.profileStore;
-  const {user} = rootStore.userStore;
+  const {profile, deleteComment,reportComment} = rootStore.profileStore;
+  const {user,isLoggedIn} = rootStore.userStore;
 
+  const handleDeleteComment = (id:string) =>{
+    deleteComment(id)
+  }
+
+  const handleReportComment = (id:string) =>{
+    reportComment(id)
+  }
 
   return (
 <Fragment>
@@ -42,19 +49,33 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
                         <Comment.Metadata>
                           <div>{formatDistance(new Date(comment.createdAt), new Date(),{locale: tr})}</div>
                         </Comment.Metadata>
-                        <Comment.Metadata style={{display:"flex", justifyContent:"flex-end"}}>
+                        <Comment.Metadata style={{float:"right"}} >
                         {
                           (comment.star > 0) &&  <StarRating rating={comment.star} editing={false} key={comment.id} size="small" count={comment.starCount} showCount={false}/>
                         }
                         </Comment.Metadata>
                         <Comment.Text>{comment.body}</Comment.Text>
+                        <Comment.Actions>
+
+                        {isLoggedIn && user!.userName === comment.authorName && 
+                        <Comment.Action onClick={() => handleDeleteComment(comment.id)}>
+                          <Icon name="trash alternate outline" />
+                          Sil
+                        </Comment.Action>}
+                        {isLoggedIn && user!.userName !== comment.authorName && 
+                        <Comment.Action onClick={() => handleReportComment(comment.id)}>
+                          <Icon name="info circle" />
+                          Şikayet Et
+                        </Comment.Action>
+                        }
+                        </Comment.Actions>
                       </Comment.Content>
                       </Comment>
                       </Fragment>
                  ))}
                </Comment.Group>
 }
-<div>
+<div style={{marginTop:"30px"}}>
 <Button
                  floated="right"
                  content="Daha fazlasını gör..." 
@@ -74,7 +95,9 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
                       className='blue-gradientBtn'
                       primary
                       circular
-                      onClick={()=>openModal("Leave a comment",<ProfileCommentForm closeModal={closeModal} />,false,null)}
+                      onClick={()=>
+                        openModal("Leave a comment",
+                        <ProfileCommentForm closeModal={closeModal} />,false,null,undefined, true)}
                     />)
                 }
 </div>

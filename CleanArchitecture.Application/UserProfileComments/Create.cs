@@ -57,10 +57,21 @@ namespace CleanArchitecture.Application.UserProfileComments
                     StarCount = request.StarCount,
                     AllowDisplayName = request.AllowDisplayName,
                     Body = request.Body,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    Status = false
                 };
+
+                var existingComment = await _context.UserProfileComments.SingleOrDefaultAsync(x => x.AuthorId == author.Id && x.TargetId == trainer.Id);
+
+                if (existingComment != null)
+                {
+
+                    _context.UserProfileComments.Remove(existingComment);
+                }
+
+
                 _context.UserProfileComments.Add(comment);
-                trainer.ReceivedComments.Add(comment);
+//                trainer.ReceivedComments.Add(comment);
 
                 var success = await _context.SaveChangesAsync() > 0;
 

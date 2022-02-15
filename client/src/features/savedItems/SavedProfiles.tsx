@@ -107,7 +107,7 @@ const SavedProfiles = () => {
                             </div>
                        
                        {!isMobile && <Button size='tiny' circular content="İncele" className='gradientBtn'
-                          onClick={()=> history.push(`/profiles/${pro.userName}`)} />}
+                          onClick={()=> history.push(`/profile/${pro.userName}`)} />}
                         </div>
                         </Grid.Column>
                         </Grid.Row>
@@ -119,7 +119,7 @@ const SavedProfiles = () => {
                                      <Button
                                      style={{padding:"8px"}}
                                      fluid size='mini' circular content="İncele" className='gradientBtn'
-                                     onClick={()=> history.push(`/profiles/${pro.userName}`)} />
+                                     onClick={()=> history.push(`/profile/${pro.userName}`)} />
                            </Grid.Column>
                         </Grid.Row>}
                      </Grid>  

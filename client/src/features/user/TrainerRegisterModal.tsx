@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect } from 'react'
-import { Container, Header, Icon, Image, List, Modal } from 'semantic-ui-react';
+import { Button, Container, Header, Icon, Image, List, Modal } from 'semantic-ui-react';
 import { ITrainerFormValues, TrainerFormValues } from '../../app/models/user';
 import { useMediaQuery } from 'react-responsive'
 
@@ -13,7 +13,7 @@ const TrainerForm = () =>{
     const {openModal,closeModal,modal} = rootStore.modalStore;
     const {trainerForm, setTrainerForm} = rootStore.userStore;
 
-    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     useEffect(() => {
@@ -32,7 +32,7 @@ const TrainerForm = () =>{
 
     return (
       <> 
-      <div>
+      <div className='trainerwelcome'>
       <Header as="h3">
         Başvuru Şartları
       </Header>  
@@ -46,9 +46,8 @@ const TrainerForm = () =>{
         <p className="applicationConditions">
         Hazırsan haydi başvur <Icon style={{marginLeft:"5px"}} name="thumbs up outline"></Icon>
         </p> 
-        <Header as="h3" className="applyButton" onClick={handleApplyButtonClick}>
-        Başvur &gt;&gt;
-      </Header>  
+        <Button className='gradientBtn' fluid circular content="Başvur" onClick={handleApplyButtonClick} />
+
       </div>
         
      </>

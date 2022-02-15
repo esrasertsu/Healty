@@ -38,7 +38,7 @@ const FormPage1:React.FC = () =>{
    // trainerForm, setTrainerForm,
     const {openModal,closeModal,modal} = rootStore.modalStore;
 
-    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     const [passwordErrorMessage, setPasswordErrorMessage]= useState("")  
@@ -183,6 +183,7 @@ const FormPage1:React.FC = () =>{
               style={{ marginTop:"20px"}} 
               positive 
               fluid 
+              circular
               onClick={handleSubmitOtpCode}
               content="Kodu Onayla"></Button>
             </Grid.Column>
@@ -503,6 +504,7 @@ const FormPage1:React.FC = () =>{
             <Button
               disabled={(invalid)}
               loading={submitting}
+              circular
               content="Devam"
               positive
               fluid={isMobile}

@@ -248,7 +248,7 @@ const ProfileSettings: React.FC<IProps> = ({ updateProfile, profile,deleteDocume
                     <List.Icon name='file' />
                     <List.Content style={{display:"flex"}}>
                       <List.Header as='a'>{f.name}</List.Header> 
-                      <Button color="red" size="mini" disabled={deletingDocument} onClick={() => handleDeleteDoc(f.id)} style={{marginLeft:"10px", cursor:"pointer"}} content={"Sil"} icon="trash"></Button>
+                      <Button circular color="red" size="mini" disabled={deletingDocument} onClick={() => handleDeleteDoc(f.id)} style={{marginLeft:"10px", cursor:"pointer"}} content={"Sil"} icon="trash"></Button>
                     </List.Content>
                   </List.Item>
                   )}
@@ -271,7 +271,7 @@ const ProfileSettings: React.FC<IProps> = ({ updateProfile, profile,deleteDocume
                   </List.Item>
                   )}
                  </List>
-                 <Button color="red" content="Dosyaları sil X" onClick={() => setDocs([])}></Button>
+                 <Button circular color="red" content="Dosyaları sil X" onClick={() => setDocs([])}></Button>
                  </Segment>
                  }
           
@@ -298,6 +298,7 @@ const ProfileSettings: React.FC<IProps> = ({ updateProfile, profile,deleteDocume
             floated='right'
             disabled={!updateEnabled}
             positive
+            circular
             content='Güncelle'
           />
         </Form>

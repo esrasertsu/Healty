@@ -9,7 +9,6 @@ import ActivityDetailedSideBar  from './ActivityDetailedSideBar';
 import ActivityDetailedInfo from './ActivityDetailedInfo';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import ActivityDetailPaymentSegment from './ActivityDetailPaymentSegment';
-import ActivityZoom from './ActivityZoom';
 import ActivityCountDown from './ActivityCountDown';
 import { useMediaQuery } from 'react-responsive'
 import ActivityVideoCall from './ActivityVideoCall';
@@ -17,12 +16,12 @@ interface DetailParams{
     id:string
 }
 
-const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, history}) => {
+const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, history}) => {
 
     const rootStore = useContext(RootStoreContext);
     const { activity, loadActivity, loadingActivity } = rootStore.activityStore;
     const { user } = rootStore.userStore;
- const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     useEffect(() => {
@@ -44,9 +43,19 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
           <Grid.Column width={11}>
             {
                   (activity.isGoing || activity.isHost) && isMobile &&
-                 <ActivityCountDown activity={activity} />
+                  <>
+                  <ActivityCountDown activity={activity} /> 
+                  <ActivityVideoCall activity={activity} />
+                  </>
+                 
                  }   
             <ActivityDetailedInfo activity={activity} />
+            {
+              activity.attendanceCount > 0 &&
+              <ActivityDetailedSideBar atCount={activity.attendanceCount} attendees={activity.attendees} date={activity.date}/>
+
+            }
+
             {
               user && !isMobile &&
               activity.attendees.filter(x => x.userName === user.userName).length>0 &&
@@ -60,7 +69,6 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
                   (activity.isGoing || activity.isHost) && !isMobile &&
                  <ActivityCountDown activity={activity} />
                  }   
-              <ActivityDetailedSideBar attendees={activity.attendees} date={activity.date}/>
               {/* <ActivityDetailsMap centerLocation={center} /> */}
                 {
                   !activity.isGoing && 
@@ -72,7 +80,7 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
                  }  
                    
                   {
-                  (activity.isGoing || activity.isHost) && 
+                  (activity.isGoing || activity.isHost) && !isMobile &&
                  <ActivityVideoCall activity={activity} />
                  }  
                  {
@@ -89,4 +97,4 @@ const ActivtyDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, his
     )
 }
 
-export default observer(ActivtyDetails)
+export default observer(ActivityDetails)

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {Link, RouteComponentProps} from 'react-router-dom';
 import queryString from 'query-string';
-import { Button, Container, Header, Icon, Item, Segment } from 'semantic-ui-react';
+import { Button, Container, Header, Icon, Image, Item, Segment } from 'semantic-ui-react';
 import agent from '../../../app/api/agent';
 import { toast } from 'react-toastify';
 import { observer } from 'mobx-react-lite';
@@ -14,7 +14,7 @@ import tr  from 'date-fns/locale/tr'
 const PaymentSuccessPage : React.FC<RouteComponentProps> = ({location}) =>{
     const {status,activityId,count, paidPrice, paymentTransactionId, paymentId} = queryString.parse(location.search);
     const [activityName, setActivityName] = useState("");
-    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
     const rootStore = useContext(RootStoreContext);
     const { activity, loadActivity, loadingActivity } = rootStore.activityStore;
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
@@ -77,10 +77,11 @@ const PaymentSuccessPage : React.FC<RouteComponentProps> = ({location}) =>{
              <Item.Header>{activity.title}</Item.Header>
              <Item.Description>
                  <div>
+
                 {
                     activity.online ?  
                     <div style={{marginTop:".6em"}}> 
-                    <Icon name='wifi' color="green" />
+                   <Image style={{height:"25px", marginRight:"5px"}} src="/icons/wifi-ok.png"/>
                     Online katılım </div>
                      :
                    <span>{activity.city ? activity.city.text : "Şehir Belirtilmemiş"} - {activity.venue? activity.venue : "Lokasyon Belirtilmemiş"}</span> 
@@ -122,6 +123,7 @@ const PaymentSuccessPage : React.FC<RouteComponentProps> = ({location}) =>{
                  content="Aktivite sayfasına git"
                  color="blue"
                  className="orderListButton"
+                 circular
                  /> 
          </Item.Description>
          </Item.Content>

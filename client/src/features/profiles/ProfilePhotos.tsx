@@ -25,7 +25,7 @@ const [imageChange, setImageChange] = useState(false);
 const [imageDeleted, setImageDeleted] = useState(false);
 const [open, setOpen] = React.useState(false)
 
-const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
 
 
   const handleUploadImage = (photo: Blob) => {
@@ -82,8 +82,8 @@ const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
                <Grid.Column width="eight">
                <div style={{display:"flex"}}>
                <Button.Group widths={2}>
-                      <Button positive icon='check' loading={uploadingPhoto} onClick={()=> handleUploadImage(image!)}></Button>
-                      <Button icon='close' disabled={uploadingPhoto} onClick={()=> setFiles([])}></Button>
+                      <Button positive circular icon='check' loading={uploadingPhoto} onClick={()=> handleUploadImage(image!)}></Button>
+                      <Button icon='close' circular disabled={uploadingPhoto} onClick={()=> setFiles([])}></Button>
                   </Button.Group> 
                </div>             
                </Grid.Column>
@@ -106,9 +106,11 @@ const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
           /> }
           {isCurrentUser && profile && profile.photos && profile.photos.length <6 && (
             <Button
-              floated="right"
+              floated="left"
               basic
-              content={addPhotoMode ? "Cancel" : "Add Photo"}
+              circular
+              color="blue"
+              content={addPhotoMode ? "Geri" : "Resim Ekle"}
               onClick={() => setOpen(true)}
             />
           )}
@@ -134,8 +136,8 @@ const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
                <Grid.Column width="eight">
                <div style={{display:"flex"}}>
                <Button.Group widths={2}>
-                      <Button positive icon='check' loading={uploadingPhoto} onClick={()=> handleUploadImage(image!)}></Button>
-                      <Button icon='close' disabled={uploadingPhoto} onClick={()=> setFiles([])}></Button>
+                      <Button circular positive icon='check' loading={uploadingPhoto} onClick={()=> handleUploadImage(image!)}></Button>
+                      <Button circular icon='close' disabled={uploadingPhoto} onClick={()=> setFiles([])}></Button>
                   </Button.Group> 
                </div>             
                </Grid.Column>
@@ -162,11 +164,13 @@ const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
                           loading={loadingForPhotoDeleteMain && target === photo.id}
                           basic
                           positive
-                          content="Main"
+                          content="Profil"
+                          circular
                         />
                         <Button
                           name={photo.id}
                           disabled={photo.isMain}
+                          circular
                           onClick={(e) => {
                             deletePhoto(photo);
                             setDeleteTarget(e.currentTarget.name);

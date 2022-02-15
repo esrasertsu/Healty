@@ -1,7 +1,7 @@
 import React, { Fragment, useContext } from 'react'
 import { Header, Image, Item, Label, Message } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
-import { ActivityListItem } from './ActivityListItem';
+import ActivityListItem  from './ActivityListItem';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import { format } from 'date-fns';
 import tr  from 'date-fns/locale/tr'
@@ -16,7 +16,7 @@ const ActivityList: React.FC = () => {
     'Talepte bulunmak için bize mail atabilir,',
     'Ya da bir eğitmen olarak kriterlere uygun bir aktivite açabilirsiniz :)'
   ]
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   return (

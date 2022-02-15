@@ -112,8 +112,9 @@ const handleSubmit = async(values:IUserFormValues) =>{
                 <Button
                     disabled={(invalid && !dirtySinceLastSubmit) || pristine}
                     loading={submitting}
-                    color='teal'
+                    className='blue-gradientBtn'
                     content="Gönder"
+                    circular
                     fluid
                     />
             }

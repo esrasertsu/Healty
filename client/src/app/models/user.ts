@@ -70,7 +70,8 @@ export interface ITrainerFormValues {
     accessibilityIds: string[],
     cityId:string,
     description: string,
-    documents:File[],
+    newDocuments:File[],
+    deletedDocuments:string[],
     title: string;
     certificates: IDocument[];
     sendToRegister:boolean;
@@ -87,7 +88,8 @@ export class TrainerFormValues implements ITrainerFormValues{
     experienceYear: number = 0;
     experience:string = '';
     certificates:IDocument[]=[];
-    documents:File[] =[];
+    newDocuments:File[] =[];
+    deletedDocuments:string[] =[];
     dependency:string = '';
     subCategoryIds: string[] =[];
     suggestedSubCategory: string = '';

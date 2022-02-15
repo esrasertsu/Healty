@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -54,7 +55,21 @@ namespace Infrastructure.Security
                 Token = Convert.ToBase64String(randomNumber)
             };
 
-        } 
+        }
+
+        public string ReadToken(string token)
+        {
+     
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var result = tokenHandler.ReadJwtToken(token);
+
+            return result.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.NameId).Value;
 
         }
+
+
+    }
+
+
 }

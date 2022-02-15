@@ -18,7 +18,6 @@ const ProfileVideo: React.FC<IProps> = ({videoUrl}) => {
 
 
     const handleDelete = () => {
-        debugger;
              uploadProfileVideo("");
             };
 
@@ -42,11 +41,12 @@ const ProfileVideo: React.FC<IProps> = ({videoUrl}) => {
                                 <Button.Group fluid widths={2}>
                                     <Button
                                     name="upload"
-                                    onClick={()=>openModal("Video Yükleme",<ProfileVideoUploadForm url={profile!.videoUrl} closeModal={closeModal} />,false,null)}
+                                    onClick={()=>openModal("Video Yükleme",<ProfileVideoUploadForm url={profile!.videoUrl} closeModal={closeModal} />,false,null,undefined,true)}
                                     disabled={submittingVideo}
                                     loading={submittingVideo}
                                     basic
                                     positive
+                                    circular
                                     content="Değiştir"
                                     />
                                     <Button
@@ -55,6 +55,7 @@ const ProfileVideo: React.FC<IProps> = ({videoUrl}) => {
                                     loading={submittingVideo}
                                     onClick={handleDelete}
                                     basic
+                                    circular
                                     negative
                                     icon="trash"
                                     />
@@ -63,8 +64,10 @@ const ProfileVideo: React.FC<IProps> = ({videoUrl}) => {
                               }
                               </>
                             :
-                            isCurrentUser ? <Button icon="plus" content="Video Ekle" 
-                            onClick={()=>openModal("Video Yükleme",<ProfileVideoUploadForm  url="" closeModal={closeModal} />,false,null)}
+                            isCurrentUser ? <Button circular color='red' content={<span>Video Ekle <Icon name='youtube'></Icon></span>}  size='mini'
+                            onClick={()=>
+                                openModal("Video Yükleme",
+                                <ProfileVideoUploadForm  url="" closeModal={closeModal} />,false,null, undefined, true)}
                             ></Button>
                             : 
                             <span><Icon name="meh outline" />Henüz bu uzmana ait bir tanıtım videosu bulunmamaktadır.</span>

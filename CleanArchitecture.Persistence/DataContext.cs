@@ -27,6 +27,7 @@ namespace CleanArchitecture.Persistence
 
         public DbSet<Domain.Activity> Activities { get; set; }
         public DbSet<UserActivity> UserActivities { get; set; }
+        public DbSet<UserSavedActivity> UserSavedActivities { get; set; }
         public DbSet<Video> Videos { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<ActivityComment> Comments { get; set; }
@@ -80,6 +81,19 @@ namespace CleanArchitecture.Persistence
             builder.Entity<UserActivity>()
                 .HasOne(a => a.Activity)
                 .WithMany(u => u.UserActivities)
+                .HasForeignKey(a => a.ActivityId);
+
+            builder.Entity<UserSavedActivity>(x => x.HasKey(ua =>
+              new { ua.AppUserId, ua.ActivityId }));
+
+            builder.Entity<UserSavedActivity>()
+                .HasOne(u => u.AppUser)
+                .WithMany(a => a.UserSavedActivities)
+                .HasForeignKey(u => u.AppUserId);
+
+            builder.Entity<UserSavedActivity>()
+                .HasOne(a => a.Activity)
+                .WithMany(u => u.UserSavedActivities)
                 .HasForeignKey(a => a.ActivityId);
 
             builder.Entity<ActivityComment>()
@@ -248,9 +262,6 @@ namespace CleanArchitecture.Persistence
                 .HasOne(u => u.Level)
                 .WithMany(a => a.Activities)
                 .HasForeignKey(u => u.LevelId);
-
-            builder.Entity<ReferencePic>(x => x.HasKey(ua =>
-             new { ua.OriginalPublicId, ua.ThumbnailPublicId }));
 
 
             builder.Entity<Order>()

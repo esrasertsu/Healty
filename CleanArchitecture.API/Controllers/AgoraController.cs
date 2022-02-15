@@ -16,5 +16,13 @@ namespace CleanArchitecture.API.Controllers
         {
             return await Mediator.Send(new GenerateAgoraToken.Query { ChannelName = channelName, ActivityId= activityId });
         }
+
+        [AllowAnonymous]
+        [HttpGet("authorize")]
+        public async Task<ActionResult<bool>> CanCreateMeeting(Guid activityId, string userName, string token)
+        {
+            return await Mediator.Send(new CanCreateAgoraMeeting.Query { ActivityId = activityId, UserName = userName , Token = token});
+        }
+
     }
 }

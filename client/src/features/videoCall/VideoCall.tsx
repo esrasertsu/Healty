@@ -26,8 +26,9 @@ const useMicrophoneAndCameraTracks = createMicrophoneAndCameraTracks();
 const VideoCall  = (props: {
     setInCall: React.Dispatch<React.SetStateAction<boolean>>;
     channelName: string;
+    activityId:string;
   }) => {
-    const { setInCall, channelName } = props;
+    const { setInCall, channelName,activityId } = props;
     const [users, setUsers] = useState<IAgoraRTCRemoteUser[]>([]);
     const [start, setStart] = useState<boolean>(false);
     const client = useClient();
@@ -79,7 +80,7 @@ const VideoCall  = (props: {
             
           });
            
-          generateAgoraToken(name)
+          generateAgoraToken(name,activityId)
             .then(async(response) => {
                 debugger;
                 if(response!== "")
@@ -107,7 +108,7 @@ const VideoCall  = (props: {
                    
                 }else{
                     await client.leave();
-                    client.removeAllListeners();
+                  //  client.removeAllListeners();
                     if (tracks){
                         tracks[0].close();
                         tracks[1].close();
@@ -125,7 +126,7 @@ const VideoCall  = (props: {
 
             client.on("token-privilege-will-expire", async () => {
               debugger;
-                generateAgoraToken(name)
+                generateAgoraToken(name,activityId)
                 .then(async(response) => {
                  const data =  JSON.parse(response);
                         client.renewToken(data.token);
@@ -142,6 +143,7 @@ const VideoCall  = (props: {
         }
 
         return() =>{
+          debugger;
           const footer = document.getElementById("footer");
          if(footer) footer.hidden = false;
         }
@@ -150,7 +152,7 @@ const VideoCall  = (props: {
 
 
       return (
-        <div className="App">
+        <div className="agoraPage">
           {/* {ready && tracks && (
             <Controls tracks={tracks} setStart={setStart} setInCall={setInCall} />
           )}

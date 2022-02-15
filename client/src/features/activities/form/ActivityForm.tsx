@@ -50,7 +50,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
     cities
   } = rootStore.commonStore;
 
-  const isMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isMobile = useMediaQuery({ query: '(max-width: 820px)' })
 
 
   const customCityRequired = activityForm.online ? 
@@ -194,7 +194,7 @@ useEffect(() => {
 
 
 const deleteActivityPhoto = (photo:IPhoto) =>{
-
+debugger;
   if(photo.id !== "")
   { 
     let deleteds = activityForm.deletedPhotos;
@@ -367,7 +367,7 @@ debugger;
                       setActivityForm({...activityForm,title: value});
                 }}
                  </OnChange>
-                 <label className={ activityForm.mainImage === null || imageDeleted ? "errorLabel" : ""}>Aktivite Liste Fotoğrafı*</label>
+                 <label className={ activityForm.mainImage === null || imageDeleted ? "errorLabel" : ""}>Aktivite Görselleri*</label>
                  {
                     <div style={{margin:"10px 0 30px  0"}}>
                     <PhotoGallery docs={activityForm.photos} setDocuments={setDocs} setFiles={setFileDocs} setUpdateEnabled={setUpdateEnabled}
@@ -806,12 +806,15 @@ debugger;
                   positive
                   type="submit"
                   content="Kaydet"
+                  circular
+                  className="green-gradientBtn"
                 />
                 <Button
                   floated="left"
                   disabled={loading}
                   type="cancel"
                   content="İptal"
+                  circular
                   onClick={
                     activityForm.id
                       ? () => history.push(`/activities/${activityForm.id}`)

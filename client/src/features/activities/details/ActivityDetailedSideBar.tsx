@@ -7,35 +7,36 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import { RootStoreContext } from '../../../app/stores/rootStore'
 
 interface IProps{
+  atCount:number;
   attendees: IAttendee[];
   date: Date;
 }
- const ActivityDetailedSideBar: React.FC<IProps> = ({attendees,date}) => {
+ const ActivityDetailedSideBar: React.FC<IProps> = ({atCount, attendees,date}) => {
 
   const rootStore = useContext(RootStoreContext);
 
   const { isLoggedIn } = rootStore.userStore;
 
     return (
-          <Fragment>
-            <Segment
-              textAlign='center'
-              style={{ border: 'none' }}
-              attached='top'
-              inverted
-              className="segmentHeader"
+      
+          <div style={{marginTop:"50px"}}>
+          
+             <Header>  
+            <><span>
+               { atCount }  Kişi  { (new Date(date).getTime() > new Date().getTime()) ? " Katılıyor" : " Katıldı" }
+            </span> 
+            <br></br>
+            <span style={{fontSize:"12px"}}>* Sadece takip ettiğin kullanıcılar listelenmektedir.</span> </>
+             </Header>
+             
 
-            >
-             <Header>{attendees && attendees.length} Kişi  
-            { (new Date(date).getTime() > new Date().getTime()) ? " Katılıyor" : " Katıldı" } </Header>
-
-            </Segment>
             <Segment attached style={{  padding:"1em 0"}}>
             <Scrollbars
              frameBorder="2px" 
              style={{ 
                backgroundColor:"white", 
-               height: "340px", 
+               maxHeight: "340px", 
+               minHeight:"130px"
              //  width: "calc(100% - (-1px * 2))", 
               // maxWidth: "calc(100% - (-1px * 2))",
                }}
@@ -43,11 +44,11 @@ interface IProps{
             autoHideTimeout={1000}
             autoHideDuration={200}
              >
-            <List relaxed divided style={{margin: "0px 29px 14px 14px"}}>
+            <List relaxed divided style={{margin: "0px 31px 14px 14px"}}>
                 {isLoggedIn ?
-                attendees.map((attendee) => (
+                attendees.filter(x => x.isHost === false).map((attendee) => (
                   <Item key={attendee.userName} style={{ position: 'relative' }}>
-                 {attendee.isHost &&
+                 {/* {attendee.isHost &&
                   <Label
                     style={{ position: 'absolute' }}
                     color='orange'
@@ -55,7 +56,7 @@ interface IProps{
                   >
                     Düzenleyen
                   </Label> 
-                  }
+                  } */}
                   <Image className="activityAttendees_Image" src={attendee.image  || '/assets/user.png'} 
                    onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}/>
                   <Item.Content verticalAlign='middle'>
@@ -63,7 +64,7 @@ interface IProps{
                       <Link to={`/profile/${attendee.userName}`}>{attendee.displayName}</Link>
                     </Item.Header>
                     {attendee.isFollowing &&
-                     <Item.Extra style={{ color: 'orange' }}>Following</Item.Extra>
+                     <Item.Extra style={{ color: 'orange' }}>Takip Ettiğin</Item.Extra>
                     }
                   </Item.Content>
                 </Item>
@@ -85,7 +86,7 @@ interface IProps{
                    </Item.Header>
                  </Item.Content>
                </Item>
-                <Divider />
+                <Divider style={{marginTop:"5px",marginBottom:"5px"}}/>
                 <div style={{color:"#263a5e", textAlign:"center"}}>Tüm aktivite katılımcılarını görebilmek için giriş yapmalısın.</div>
                 </>
               }
@@ -119,7 +120,8 @@ interface IProps{
               </List>
             </Segment>  */}
             
-          </Fragment>
+          </div>
+        
     )
 }
 

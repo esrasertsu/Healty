@@ -17,10 +17,7 @@ namespace CleanArchitecture.Application.Activities
         public class Command : IRequest
         {
             public Guid Id { get; set; }
-            public bool Zoom { get; set; }
-            public string ActivityUrl { get; set; }
-            public string MeetingId { get; set; }
-            public string MeetingPsw { get; set; }
+            public string ChannelName { get; set; }
         }
 
 
@@ -48,11 +45,7 @@ namespace CleanArchitecture.Application.Activities
                 if (activity == null)
                     throw new RestException(HttpStatusCode.NotFound, new { activity = "Not Found" });
 
-                activity.ActivityJoinDetails = new ActivityJoinDetails();
-                activity.ActivityJoinDetails.ActivityUrl = request.ActivityUrl ?? activity.ActivityJoinDetails.ActivityUrl;
-                activity.ActivityJoinDetails.MeetingId = request.MeetingId ?? activity.ActivityJoinDetails.MeetingId;
-                activity.ActivityJoinDetails.MeetingPsw = request.ActivityUrl ?? activity.ActivityJoinDetails.MeetingPsw;
-                activity.ActivityJoinDetails.Zoom = request.Zoom;
+                activity.CallRoomId = request.ChannelName;
 
                 var success = await _context.SaveChangesAsync() > 0;
 

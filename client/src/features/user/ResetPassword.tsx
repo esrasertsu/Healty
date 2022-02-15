@@ -25,7 +25,7 @@ const ResetPassword : React.FC<RouteComponentProps> = ({location}) =>{
     const {token, email} = queryString.parse(location.search);
 
     const [samePassword, setsamePassword] = useState(true)
-    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     const [submitting, setSubmitting] = useState(false)
@@ -112,7 +112,7 @@ const ResetPassword : React.FC<RouteComponentProps> = ({location}) =>{
                   showSuccessMessage && (
                     <Message positive>
                          <p>Eposta adresi doğrulandı. Giriş yapmak için tıklayın.</p>
-                        <Button onClick={handleLoginClick} primary content="Giriş Yap" size="large"/>
+                        <Button onClick={handleLoginClick} primary content="Giriş Yap" circular className='gradientBtn' size="large"/>
                      </Message>
                 )
             } {

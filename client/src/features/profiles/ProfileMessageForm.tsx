@@ -21,7 +21,7 @@ import { useMediaQuery } from 'react-responsive';
     const {isLoggedIn}= rootStore.userStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;
 
-    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
   
     const handleLoginClick = (e:any,str:string) => {
@@ -29,12 +29,12 @@ import { useMediaQuery } from 'react-responsive';
       if(modal.open) closeModal();
   
           openModal("Giriş Yap", <>
-          <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
+          <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  wrapped />
           <Modal.Description className="loginreg">
-          <LoginForm location={str} />
+          <LoginForm location={"/"} />
           </Modal.Description>
           </>,true,
-          "","blurring",true) 
+          "","blurring",true, "loginModal") 
       }
 
     const handleFinalFormSubmit = async (values: IMessageForm) => {
@@ -66,7 +66,7 @@ import { useMediaQuery } from 'react-responsive';
                   name="body"
                   placeholder={
                     profile!.hasConversation ? "Bu eğitmenle daha önce bir chat başlattın. Mesajlarına git." :
-                    !isLoggedIn ? "Eğitmene mesaj atabilmek için üye olmalısın.":
+                    !isLoggedIn ? "Eğitmene mesaj atabilmek için giriş yapmalısın.":
                      "Eğitmene iletmek istediğiniz mesajınızı bırakın.."}
                   component={TextAreaInput}
                   rows={6}
@@ -74,8 +74,9 @@ import { useMediaQuery } from 'react-responsive';
                 />  
           <br/>
           <Button
-           className="sendMessageButton"
+           className="sendMessageButton gradientBtn"
             content='Gönder'
+            circular
             labelPosition='right'
             icon="send"
             disabled={profile!.hasConversation }

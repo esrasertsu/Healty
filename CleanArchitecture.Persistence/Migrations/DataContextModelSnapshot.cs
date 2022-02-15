@@ -86,6 +86,9 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<decimal?>("Price")
                         .HasColumnType("decimal(18,4)");
 
+                    b.Property<int>("SavedCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -671,31 +674,19 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.ReferencePic", b =>
                 {
-                    b.Property<string>("OriginalPublicId")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
-                    b.Property<string>("ThumbnailPublicId")
+                    b.Property<string>("Id")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("AppUserId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<int>("Height")
-                        .HasColumnType("int");
-
-                    b.Property<string>("OriginalUrl")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("ThumbnailUrl")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<string>("Title")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("Width")
-                        .HasColumnType("int");
+                    b.Property<string>("Url")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.HasKey("OriginalPublicId", "ThumbnailPublicId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
 
@@ -963,6 +954,24 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.HasIndex("TargetId");
 
                     b.ToTable("UserProfileComments");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Domain.UserSavedActivity", b =>
+                {
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.Property<Guid>("ActivityId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("SaveDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("AppUserId", "ActivityId");
+
+                    b.HasIndex("ActivityId");
+
+                    b.ToTable("UserSavedActivities");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.UserSubCategories", b =>
@@ -1414,6 +1423,21 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.HasOne("CleanArchitecture.Domain.AppUser", "Target")
                         .WithMany("ReceivedComments")
                         .HasForeignKey("TargetId");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Domain.UserSavedActivity", b =>
+                {
+                    b.HasOne("CleanArchitecture.Domain.Activity", "Activity")
+                        .WithMany("UserSavedActivities")
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchitecture.Domain.AppUser", "AppUser")
+                        .WithMany("UserSavedActivities")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.UserSubCategories", b =>

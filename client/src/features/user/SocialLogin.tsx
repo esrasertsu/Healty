@@ -20,7 +20,7 @@ const SocialLogin: React.FC<IProps> = ({fbCallback, loading}) => {
              cssClass="fbtn"
              disableMobileRedirect={true}
              render={(renderProps:any) =>(
-                 <Button loading={loading} onClick={renderProps.onClick} type="button" fluid color="facebook">
+                 <Button loading={loading} onClick={renderProps.onClick} type="button" fluid circular className='facebook_btn'>
                      <Icon name="facebook"/>
                      Facebook ile giriş yap
                  </Button>

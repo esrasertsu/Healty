@@ -15,12 +15,15 @@ const ProfileMessage: React.FC<IProps> = ({profile}) => {
                 <Grid container className="profileMessageGrid" stackable>
                     <Grid.Row columns={2}>
                         <Grid.Column width={5}>
-                            <Image circular size={'tiny'} src={profile.image || '/assets/user.png'}
+                            <div className='profileImage'>
+                            <Image circular src={profile.image || '/assets/user.png'}
                             onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}></Image>
+                            </div>
+                            
                         </Grid.Column>
                         <Grid.Column width={11}>
                             <Header>{profile.displayName}</Header>
-                            <Label size="large">Cevap verme %{profile.responseRate}&nbsp;
+                            <Label className='gray_label' size="large">Yanıtlama oranı %{profile.responseRate}&nbsp;
                                 {/* <Icon size="large" name="question circle" className="questionmarkicon"></Icon> */}
                             </Label>
                         </Grid.Column>

@@ -54,3 +54,12 @@ export interface IAllCategoryOption{
         { key:"Diyet", value: "#3a7949"}
     
       ];
+
+
+      export const borderColors = [
+        { key:"Psikoloji", value: "#9e7272"},
+        { key:"Meditasyon", value: "#b69800" },
+        { key:"Spor", value: "#195e92"},
+        { key:"Diyet", value: "#32523a"}
+    
+      ];

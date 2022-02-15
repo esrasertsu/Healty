@@ -12,11 +12,10 @@ import DropdownMultiple from '../../app/common/form/DropdownMultiple';
 import { RootStoreContext } from '../../app/stores/rootStore'
 import DropdownInput from '../../app/common/form/DropdownInput';
 import { OnChange } from 'react-final-form-listeners';
-import FileUploadDropzone from '../../app/common/util/FileUploadDropzone';
 
 const validate = combineValidators({
-  displayName: isRequired('displayName'),
-  title: isRequired('title')
+  displayName: isRequired({message: 'Profil adınız zorunlu alandır.'}),
+  title: isRequired({message: 'Uzmanlık ünvanınız zorunlu alandır.'}),
 });
 
 interface IProps {
@@ -27,44 +26,34 @@ interface IProps {
 }
 
 
-const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocument,categoryOptions }) => {
+const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => { 
    
     const rootStore = useContext(RootStoreContext);
-    const {accessibilities, profileForm, setProfileForm, deletingDocument} = rootStore.profileStore;
-    const {allCategoriesOptionList} = rootStore.categoryStore;
+    const {accessibilities, profileForm, setProfileForm, updatingProfile} = rootStore.profileStore;
     const {cities} = rootStore.commonStore;
-    const subCategoryOptionFilteredList: ICategory[] = [];
 
     const [updateEnabled, setUpdateEnabled] = useState<boolean>(false);
-
-    
-   const [docs, setDocs] = useState<any[]>([]);
-   const [filedocs, setFileDocs] = useState<any[]>([]);
-
-
-     const [category, setCategory] = useState<string[]>([]);
-     const [subCategoryOptions, setSubCategoryOptions] = useState<ICategory[]>([]);
 
      const handleAccessChanged = (e: any, data: any) => {  
          setProfileForm({...profileForm,accessibilityIds: [...data]});
          setUpdateEnabled(true);
         }
 
-       const handleCategoryChanged = (e: any, data: string[]) => {
-        setProfileForm({...profileForm,categoryIds: [...data]});
-        setCategory(data);  
-        if((profile.categories.filter(x => data.findIndex(y => y !== x.key) === -1).length > 0) ||
-        (data.filter(x => profile.categories.findIndex(y => y.key !== x) === -1).length > 0))
-           setUpdateEnabled(true);
-     }
+    //    const handleCategoryChanged = (e: any, data: string[]) => {
+    //     setProfileForm({...profileForm,categoryIds: [...data]});
+    //     setCategory(data);  
+    //     if((profile.categories.filter(x => data.findIndex(y => y !== x.key) === -1).length > 0) ||
+    //     (data.filter(x => profile.categories.findIndex(y => y.key !== x) === -1).length > 0))
+    //        setUpdateEnabled(true);
+    //  }
 
-     const handleSubCategoryChanged = (e: any, data: string[]) => {  
-          setProfileForm({...profileForm,subCategoryIds: [...data]});
+    //  const handleSubCategoryChanged = (e: any, data: string[]) => {  
+    //       setProfileForm({...profileForm,subCategoryIds: [...data]});
 
-          if((profile.subCategories.filter(x => data.findIndex(y => y !== x.key) === -1).length > 0) ||
-            (data.filter(x => profile.subCategories.findIndex(y => y.key !== x) === -1).length > 0))
-            setUpdateEnabled(true);
-       }
+    //       if((profile.subCategories.filter(x => data.findIndex(y => y !== x.key) === -1).length > 0) ||
+    //         (data.filter(x => profile.subCategories.findIndex(y => y.key !== x) === -1).length > 0))
+    //         setUpdateEnabled(true);
+    //    }
 
        const handleCityChanged = (e: any, data: string) => {  
         setProfileForm({...profileForm,cityId: data});
@@ -74,27 +63,23 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocu
 
    
 
-     const loadSubCatOptions = () =>{
-      allCategoriesOptionList.filter(x=> profileForm!.categoryIds.findIndex(y=> y === x.parentId!) > -1).map(option => (
-          subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
-      ))
-      setSubCategoryOptions(subCategoryOptionFilteredList);
-      debugger;
-      const renewedSubIds = profileForm!.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
-      setProfileForm({...profileForm,subCategoryIds: [...renewedSubIds]});
-   }
+  //    const loadSubCatOptions = () =>{
+  //     allCategoriesOptionList.filter(x=> profileForm!.categoryIds.findIndex(y=> y === x.parentId!) > -1).map(option => (
+  //         subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
+  //     ))
+  //     setSubCategoryOptions(subCategoryOptionFilteredList);
+  //     debugger;
+  //     const renewedSubIds = profileForm!.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
+  //     setProfileForm({...profileForm,subCategoryIds: [...renewedSubIds]});
+  //  }
 
-   const handleDeleteDoc = (id:string) => {
-       deleteDocument(id);
-   }
-        useEffect(() => {
-            loadSubCatOptions();
-        }, [category])
+  //       useEffect(() => {
+  //           loadSubCatOptions();
+  //       }, [category])
 
         const handleSubmitTrainerForm = (values:IProfileFormValues) =>{
           let edittedValues = {
-            ...values,
-            documents: docs
+            ...values
           }
             updateProfile(edittedValues);
             
@@ -112,7 +97,7 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocu
             labelName="nameLabel"
             name='displayName'
             component={TextInput}
-            placeholder='Display Name'
+            placeholder='Profil Adı'
             value={profileForm!.displayName}
           />
            <OnChange name="displayName">
@@ -216,7 +201,7 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocu
                     {
                       handleAccessChanged(e,data)}}
                 /> 
-                 <label id="categoryLabel">Kategori*</label>
+                 {/* <label id="categoryLabel">Kategori*</label>
                  <Field
                   name="categoryIds"
                   placeholder="Kategori"
@@ -243,43 +228,8 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocu
                     {
                       debugger;
                       handleSubCategoryChanged(e,data)}}
-                />  
-            <label>Eğitim Bilgileri (Diploma/Sertifika)</label>    
-            {profileForm.certificates && profileForm.certificates.length !== 0 &&
-                 <Segment>
-                 <List>
-                  {profileForm.certificates.map((f, index)=> 
-                    <List.Item style={{display:"flex"}}>
-                    <List.Icon name='file' />
-                    <List.Content style={{display:"flex"}}>
-                      <List.Header as='a'>{f.name}</List.Header> 
-                      <Button color="red" size="mini" disabled={deletingDocument} onClick={() => handleDeleteDoc(f.id)} style={{marginLeft:"10px", cursor:"pointer"}} content={"Sil"} icon="trash"></Button>
-                    </List.Content>
-                  </List.Item>
-                  )}
-                 </List>
-                 </Segment>
-                 }      
-            {profileForm.documents.length === 0 && <FileUploadDropzone setDocuments={setDocs} setFiles={setFileDocs} setUpdateEnabled={setUpdateEnabled} /> }
-                 {docs.length !== 0 &&
-                 <Segment>
-                 <List>
-                  {docs.map((f, index)=> 
-                    <List.Item>
-                    <List.Icon name='file' />
-                    <List.Content>
-                      <List.Header as='a'>{f.name}</List.Header>
-                      <List.Description>
-                        {f.size}
-                      </List.Description>
-                    </List.Content>
-                  </List.Item>
-                  )}
-                 </List>
-                 <Button color="red" content="Dosyaları sil X" onClick={() => setDocs([])}></Button>
-                 </Segment>
-                 }
-          
+                />   */}
+              
            <label>Çalıştığınız Kurum/Freelance</label>        
           <Field
             name='dependency'
@@ -299,10 +249,11 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile,deleteDocu
             }}
             </OnChange>
           <Button 
-            loading={submitting}
+            loading={submitting|| updatingProfile}
             floated='right'
-            disabled={!updateEnabled}
+            disabled={!updateEnabled || updatingProfile}
             positive
+            circular
             content='Güncelle'
           />
         </Form>

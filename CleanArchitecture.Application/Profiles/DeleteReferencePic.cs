@@ -38,13 +38,13 @@ namespace CleanArchitecture.Application.Profiles
             {
                 var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
 
-                var photo = user.ReferencePics.FirstOrDefault(x => x.OriginalPublicId == request.OriginalId);
+                var photo = user.ReferencePics.FirstOrDefault(x => x.Id == request.OriginalId);
 
                 if (photo == null)
                     throw new RestException(HttpStatusCode.NotFound, new { Photo = "Not found" });
 
               
-                var result = _photoAccessor.DeleteReferencePic(photo.OriginalPublicId, photo.ThumbnailPublicId);
+                var result = _photoAccessor.DeletePhoto(photo.Id);
 
                 if (result == null)
                     throw new Exception("Problem deleting photo");

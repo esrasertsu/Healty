@@ -15,6 +15,7 @@ namespace CleanArchitecture.Domain
         public bool Online { get; set; }
         public int? AttendancyLimit { get; set; }
         public int AttendanceCount { get; set; }
+        public int SavedCount { get; set; }
         public decimal? Price { get; set; }
         public int Duration { get; set; }
         public DateTime Date { get; set; }
@@ -26,6 +27,7 @@ namespace CleanArchitecture.Domain
         public virtual ActivityJoinDetails ActivityJoinDetails { get; set; }
         public virtual ICollection<ActivityLevels> Levels { get; set; }
         public virtual ICollection<UserActivity> UserActivities { get; set; }
+        public virtual ICollection<UserSavedActivity> UserSavedActivities { get; set; }
         public virtual ICollection<ActivityComment> Comments { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
         public virtual ICollection<Video> Videos { get; set; }

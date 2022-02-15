@@ -47,8 +47,10 @@ const ProfileBlogList: React.FC<IProps> = ({profileBlogs,profileUserName,display
               ))}
           </Card.Group>
           <Button
-            content="Tümünü Gör" 
+            content="Tüm Blogları" 
             positive
+            circular
+            className='green-gradientBtn'
             onClick={()=>
               {
                 setPredicateDisplayName(displayName);

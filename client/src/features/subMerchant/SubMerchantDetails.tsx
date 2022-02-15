@@ -570,6 +570,7 @@ const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant,id}) => {
                   type="submit"
                   labelPosition="right"
                   icon="save"
+                  circular
                   content="Kaydet"
                 />
                 {/* <Button

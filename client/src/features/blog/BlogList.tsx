@@ -20,7 +20,7 @@ const BlogList: React.FC = () => {
   const [isAccOpen, setisAccOpen] = useState(false);
 
   const [loadingNext, setLoadingNext] = useState(false);
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   const handleGetNext = () => {
@@ -110,7 +110,7 @@ const BlogList: React.FC = () => {
                 ))}
              { predicate.has('username') && predicate.get('username') !== "" ?
               <>
-              <Button key={predicate.get('username')} labelPosition="right" icon='cancel' content={predicateDisplayName} style={{backgroundColor:"#335084", color:"#fff", marginBottom:"20px"}}
+              <Button circular key={predicate.get('username')} labelPosition="right" icon='cancel' content={predicateDisplayName} style={{backgroundColor:"#335084", color:"#fff", marginBottom:"20px"}}
                 onClick={()=>
                   {
                     removeOnePredicate("username")
@@ -148,10 +148,12 @@ const BlogList: React.FC = () => {
               <div style={{display:"flex", justifyContent:"center"}}>
               <Button  
                floated="right"
+               className='blue-gradientBtn'
                fluid={isMobile} 
                size="large" disabled={loadingNext || (page +1 >= totalPages)} 
                onClick={()=> handleGetNext()} 
-               style={{background:"#2185d0", color:"white",margin:"20px 0"}}
+               style={{margin:"20px 0"}}
+               circular
              > Daha Fazla Göster </Button>
              </div>
                </>

@@ -28,7 +28,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
 
       const { cities } = rootStore.commonStore;
       const {isLoggedIn} = rootStore.userStore;
-      const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+      const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
      const [cityName, setcityName] = useState("")
 
 
@@ -183,8 +183,8 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
     activitySelectedFilterList.push({key:"isHost",value:"isHost", text:"Düzenlediklerim"}) 
     else if(predicate.get("isGoing") === "true")
     activitySelectedFilterList.push({key:"isGoing",value:"isGoing", text:"Gidiyorum"}) 
-    else if(predicate.get("isGoing") === "true")
-    activitySelectedFilterList.push({key:"isFollowed",value:"isFollowed", text:"Takip ettiğim eğitmenlerin"}) 
+    else if(predicate.get("isFollowed") === "true")
+    activitySelectedFilterList.push({key:"isFollowed",value:"isFollowed", text:"Fovori Eğitmenlerim"}) 
 
     setActivitySelectedFilters([...activitySelectedFilterList])
 
@@ -258,9 +258,12 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
      
        />
        <Button 
+       circular
        inverted 
+       fluid
+       size='mini'
        content="Temizle" 
-       style={{marginTop:"10px"}}
+       style={{marginTop:"15px"}}
        onClick={() =>{
         clearKeyPredicate("startDate");
         clearKeyPredicate("endDate");
@@ -279,11 +282,12 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
 <Segment id="activityFilter_Banner" className="activityFilter_Banner"
  style={{textAlign:"center"}}>
    <Icon style={{marginTop:"-15px", position:"absolute", width:"85%"}} name="cancel" onClick={handleCloseBanner} />
-   <p style={{fontSize: "21px"}}>24 saat öncesine kadar yapılan iptal işlemlerinde %100 para iadesi</p>
-   <div style={{fontSize: "25px"}}>
-     <Icon name="thumbs up" />
+   <div style={{fontSize: "30px"}}>
+     <Icon name="calendar times outline" />
    </div>
-
+   <p style={{fontSize: "18px"}}>
+     <div>Planlarınız mı değişti?</div>
+     <div>24 saat öncesine kadar yapılan iptal işlemlerinde %100 para iadesi</div></p>
 </Segment>
 }
     
@@ -345,12 +349,12 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
           clearUserPredicates();
           setClearPredicateBeforeSearch(false);
           const deletedUserPreds = activitySelectedFilters.filter(x => x.value !== "isGoing" && x.value !== "isHost" && x.value !== "isFollowed");
-          deletedUserPreds.push({key:"isFollowed",value:"isFollowed", text:"Takip ettiğim eğitmenlerin"});
+          deletedUserPreds.push({key:"isFollowed",value:"isFollowed", text:"Fovori Eğitmenlerim"});
           setActivitySelectedFilters([...deletedUserPreds]);
 
           setVisibleMobileFilterBar && setVisibleMobileFilterBar(false);
           setPredicate('isFollowed', 'true')}}
-         name={'follow'} content={"Takip Ettiğim Eğitmenlerin"} />
+         name={'follow'} content={"Fovori Eğitmenlerim"} />
       </Menu>}
 
       <Accordion className="activityAccMenu" key={"Category_acc"} as={Menu} vertical style={{ width: '100%'}}>
@@ -411,6 +415,8 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
                             negative
                             content="Temizle"
                             style={{marginRight:"10px"}}
+                            circular
+                            size='mini'
                             onClick={() =>{
                               setCategoryIds([]);
                               setSubCategoryIds([]);
@@ -487,10 +493,12 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
                           // loading={submitting}
                           // disabled={loading || buttonDisabled}
                           //  floated="right"
-                            positive
                             type="submit"
                             content="Ara"
-                            style={{marginRight:"10px"}}
+                            circular
+                            size='small'
+                            fluid
+                            className='green-gradientBtn'
                             onClick={handleSearch}
                             disabled={loadingInitial}
                           />
@@ -498,9 +506,13 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
                           // loading={submitting}
                           // disabled={loading || buttonDisabled}
                           //  floated="right"
-                            negative
-                            content="Temizle"
-                            style={{marginRight:"10px"}}
+                            basic
+                            primary
+                            circular
+                            size='mini'
+                            fluid
+                            style={{marginTop:"10px"}}
+                            content="Tüm Filtreleri Kaldır"
                             disabled={loadingInitial}
                             onClick={() =>{
                               setCategoryIds([]);

@@ -14,7 +14,7 @@ const twoItems:SemanticWIDTHS = 2;
 const ProfileList: React.FC = () => {
 
   
-  const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   const rootStore = useContext(RootStoreContext);

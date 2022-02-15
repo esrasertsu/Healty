@@ -36,7 +36,7 @@ const numberOptions = [
   // }
 
 
-  const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   const handleLoginClick = (e:any,str:string) => {
@@ -90,15 +90,15 @@ const handleCardClick = (e:any) => {
 
     return (
            <Fragment>
-             <Segment
+             {/* <Segment
                textAlign='center'
                attached='top'
                inverted
                style={{ border: 'none' }}
-               className="segmentHeader"
+               className="segmentHeader gradientSegment"
              >
                <Header>Aktiviteye Katıl</Header>
-             </Segment>
+             </Segment> */}
              <Segment attached>
                  <div className="activityDetail_payment_title">
                  <h4 className="activityDetail_title">{activity.title}</h4>
@@ -158,7 +158,7 @@ const handleCardClick = (e:any) => {
                                 <div>Toplam </div> 
                                 <div className="price">{activity.price! * count} TL</div>
                      </div>
-                      <Button  floated='right' onClick ={handlePaySubmit} color='orange' disabled={count === 0}
+                      <Button circular className='green-gradientBtn'  floated='right' onClick ={handlePaySubmit} disabled={count === 0}
                        content={activity.price && activity.price > 0 ? 'Ödemeye geç': 'Rezervasyonu Tamamla'}></Button>
 
                     </div>

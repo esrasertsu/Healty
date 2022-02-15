@@ -29,10 +29,10 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
   const [open, setOpen] = React.useState(false);
 
   const {openModal,closeModal,modal} = rootStore.modalStore;
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
 
   
-  const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   const handleLoginClick = (e:any,str:string) => {
@@ -70,7 +70,8 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
                       <div>
                       {
                         !editMode ? 
-                        <Button color='orange' floated='right'
+                        <Button color='blue' floated='right'
+                        circular
                         size={isTabletOrMobile ? "small" :"medium"}
                         content={'Düzenle' }
                         labelPosition='right'
@@ -82,6 +83,7 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
                         >
                       </Button> :
                         <Button color='grey' floated='right'
+                        circular
                         size={isTabletOrMobile ? "small" :"medium"}
                         content={'İptal' }
                         labelPosition='right'
@@ -102,8 +104,8 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
                         onOpen={() => setOpen(true)}
                         open={open}
                         size='small'
-                        trigger={<Button color='red' floated='right' content='Sil' 
-                        size={isTabletOrMobile ? "small" :"medium"}
+                        trigger={<Button color='red' circular floated='right' content='Sil' 
+                        size={isTabletOrMobile ? "small" :"medium" }
                         labelPosition='right'
                         icon='trash'></Button>}
                       >
@@ -117,10 +119,10 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
                           </p>
                         </Modal.Content>
                         <Modal.Actions>
-                          <Button basic color='grey' onClick={() => setOpen(false)}>
+                          <Button basic circular color='grey' onClick={() => setOpen(false)}>
                             <Icon name='backward' /> İptal
                           </Button>
-                          <Button basic color='red' onClick={(e:any) => {handleDeleteBlog(e);setOpen(false)}}>
+                          <Button basic circular color='red' onClick={(e:any) => {handleDeleteBlog(e);setOpen(false)}}>
                             <Icon name='trash' /> Sil
                           </Button>
                         </Modal.Actions>

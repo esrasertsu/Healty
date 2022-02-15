@@ -23,7 +23,7 @@ const OrderList: React.FC<IProps> = ({settings}) => {
   const {isLoggedIn} = rootStore.userStore;
   const [loadingNext, setLoadingNext] = useState(false);
 
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   const handleGetNext = () => {
@@ -54,7 +54,7 @@ const OrderList: React.FC<IProps> = ({settings}) => {
     )
 
   return (
-    <Container className="pageContainer">
+    <Container className={!settings ? "pageContainer" : ""}>
 
     <Fragment>
      {loadingOrders && orderPage === 0 ? <ActivityListItemPlaceholder/> :
@@ -121,6 +121,7 @@ const OrderList: React.FC<IProps> = ({settings}) => {
                  color="blue"
                  size={isTabletOrMobile ?"mini" :"medium"}
                  className="orderListButton"
+                 circular
                  /> 
          </Item.Description>
          </Item.Content>
@@ -136,10 +137,12 @@ const OrderList: React.FC<IProps> = ({settings}) => {
       <div style={{display:"flex", justifyContent:"center"}}>
       <Button  
        floated="right"
+       className='blue-gradientBtn'
        fluid={isMobile} 
        size="large" disabled={loadingNext || (orderPage +1 >= totalOrderPages)} 
        onClick={()=> handleGetNext()} 
-       style={{background:"#2185d0", color:"white",margin:"20px 0"}}
+       style={{margin:"20px 0"}}
+       circular
      > Daha Fazla Göster </Button>
      </div>
      </>
@@ -155,7 +158,7 @@ const OrderList: React.FC<IProps> = ({settings}) => {
                 <div className="center">
                     <p style={{color:"#1a2b49", fontSize:"16px"}}>Henüz ödeme aşamasına geldiğiniz bir aktivite bulunmamaktadır.</p>
                     <p>
-                    <Button onClick={() => history.push("/activities")} positive content="Aktivitelere göz at"></Button> 
+                    <Button onClick={() => history.push("/activities")} circular positive content="Aktivitelere göz at"></Button> 
 
                     </p>
                 </div>

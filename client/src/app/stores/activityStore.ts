@@ -36,6 +36,7 @@ export default class ActivityStore {
     @observable orderRegistery = new Map<string,IOrder>();
     @observable activity: IActivity | null = null;
     @observable order: IOrder | null = null;
+    @observable savedActivities: IActivity[] = [];
     @observable loadingInitial = false;
     @observable loadingActivity = false;
     @observable loadingOrders = false;
@@ -261,6 +262,7 @@ export default class ActivityStore {
         this.hubConnection.on('ReceiveComment', comment => {
             runInAction(() => {
                 this.activity!.comments.push(comment);
+                
             })
         })
 
@@ -384,7 +386,21 @@ export default class ActivityStore {
             }
     };
 
-    
+    @action setAcitivityChannel = (channel:string) =>{
+        this.activity!.channelName = channel;
+    }
+
+    @action updateActivityChannel = async (id:string,channelName:string) => {
+        try {
+            let response = await agent.Activities.editOnlineJoinInfo(id,channelName)
+            runInAction(() => {
+                this.activity && 
+                this.setAcitivityChannel(channelName);
+            })
+            } catch (error) {
+                console.log(error);
+            }
+    }
     @action getOrderDetails = async (id:string) => {
       
             this.loadingOrder = true;
@@ -579,11 +595,11 @@ export default class ActivityStore {
         }
     }
 
-    @action generateAgoraToken = async (channelName:string) =>{
-debugger;
+    @action generateAgoraToken = async (channelName:string,activityId:string) =>{
+
         const params = new URLSearchParams();
         params.append('channelName', channelName);
-        params.append('activityId',   "08d9a35c-0be5-4c83-8b37-f09a3b0fff9a");
+        params.append('activityId',  activityId);
 
         this.generatingToken = true;
 
@@ -604,27 +620,27 @@ debugger;
 
 
     @action updateOnlineJoinInfo = async (form: IActivityOnlineJoinInfo) =>{
-        this.submittingJoinInfo = true;
-        try {
-            form.id = this.activity!.id;
-            const result = await agent.Activities.editOnlineJoinInfo(form);
-            runInAction(() => {
-                this.submittingJoinInfo = false;
-                this.activity!.activityJoinDetails = new ActivityOnlineJoinInfo();
-                this.activity!.activityJoinDetails.activityUrl = form.activityUrl;
-                this.activity!.activityJoinDetails.meetingId = form.meetingId;
-                this.activity!.activityJoinDetails.meetingPsw = form.meetingPsw;
-                this.activity!.activityJoinDetails.zoom = form.zoom;
+    //     this.submittingJoinInfo = true;
+    //     try {
+    //         form.id = this.activity!.id;
+    //         const result = await agent.Activities.editOnlineJoinInfo(form);
+    //         runInAction(() => {
+    //             this.submittingJoinInfo = false;
+    //             this.activity!.activityJoinDetails = new ActivityOnlineJoinInfo();
+    //             this.activity!.activityJoinDetails.activityUrl = form.activityUrl;
+    //             this.activity!.activityJoinDetails.meetingId = form.meetingId;
+    //             this.activity!.activityJoinDetails.meetingPsw = form.meetingPsw;
+    //             this.activity!.activityJoinDetails.zoom = form.zoom;
 
 
-       });
-        } catch (error) {
-            runInAction(() => {
-                this.submittingJoinInfo = false;
-            });
-            toast.error('Problem updating join details');
-            console.log(error);
-        }
+    //    });
+    //     } catch (error) {
+    //         runInAction(() => {
+    //             this.submittingJoinInfo = false;
+    //         });
+    //         toast.error('Problem updating join details');
+    //         console.log(error);
+    //     }
     };
 
 
@@ -677,10 +693,11 @@ debugger;
             return res;
 
         } catch (error) {
+            debugger;
             runInAction(() => {
                 this.loadingPaymentPage = false;
             });
-            toast.error('Problem Processing payment');
+            toast.error(error.data.errors);//uyarı pop up'ı gösterilecek
             console.log(error);
         }
     };
@@ -737,4 +754,55 @@ debugger;
             console.log(error);
         }
     };
+
+
+    @action save = async (id: string) => {
+        this.loading = true;
+        try {
+            await agent.Activities.save(id);
+            runInAction(() =>{
+                this.loading = false;
+
+            })
+        } catch (error) {
+            toast.error('Favorilere eklenemedi.');
+            runInAction(() => {
+                this.loading = false;
+            })
+        }
+    }
+
+    @action unsave = async (id: string) => {
+        this.loading = true;
+        try {
+            await agent.Activities.unsave(id);
+            runInAction(() =>{
+                this.loading = false;
+               
+            })
+        } catch (error) {
+            toast.error('Favorilerden çıkarılamadı.');
+            runInAction(() => {
+                this.loading = false;
+            })
+        }
+    }
+
+
+    @action getSavedActivities = async () => {
+        this.loading = true;
+        try {
+            const savedList = await agent.Activities.getSavedActivities();
+            runInAction(() =>{
+                this.savedActivities = savedList;
+                this.loading = false;
+               
+            })
+        } catch (error) {
+            toast.error('Kaydettiğin aktiviteler getirilemedi.');
+            runInAction(() => {
+                this.loading = false;
+            })
+        }
+    }
 }

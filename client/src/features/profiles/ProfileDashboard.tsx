@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { Fragment, useContext, useEffect,useState } from 'react'
-import {Button, Container, Grid, Header, Icon, Image, Label, Message, Segment, Select } from 'semantic-ui-react'
+import {Button, Container, Grid, Header, Icon, Image, Label, Message, Segment, Select, Sticky } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileListFilters from './ProfileListFilters';
 import { profileSortingOptions } from "../../app/common/options/profileSortingOptions";
@@ -48,17 +48,17 @@ const sixItem:SemanticWIDTHS = 6;
     profilePageCount, clearProfileRegistery,loadingOnlyProfiles,sortingInput,setSortingInput,loadAccessibilities,
   accessibilities} = rootStore.profileStore;
   const {categoryList,loadCategories} = rootStore.categoryStore;
+  const {user} = rootStore.userStore;
+  const {appLoaded} = rootStore.commonStore;
+  var contextRef = React.createRef<any>();
+
     const [isToggleVisible, setIsToggleVisible] = useState(false);
     const [loadingNext, setLoadingNext] = useState(false);
 
-    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
-    const list = [
-      'Hata olduğunu düşünüyorsanız site yöneticisiyle iletişime geçebilir,',
-      'Talepte bulunmak için bize mail atabilir,',
-      'Ya da bir eğitmen olarak başvurabilirsiniz'
-    ]
+  
     useEffect(() => {
       if(Array.from(popularProfileRegistery.values()).length === 0) // && userCityPlaced
       loadPopularProfiles();
@@ -70,7 +70,16 @@ const sixItem:SemanticWIDTHS = 6;
 
        
     }, [])// && userCityPlaced
-  
+    useEffect(() => {
+      loadPopularProfiles();
+
+      if(accessibilities.length === 0) 
+        loadAccessibilities();
+      if(categoryList.length===0)
+         loadCategories();
+
+       
+    }, [appLoaded])
     // Show button when page is scorlled upto given distance
 
     function getWindowDimensions() {
@@ -132,52 +141,47 @@ const sixItem:SemanticWIDTHS = 6;
 
     return (
       <Fragment>
-         <Segment textAlign='center' vertical className='masthead profileDashboard'>
+         {/* <Segment textAlign='center' vertical className='masthead profileDashboard'>
                <Container text>
                    <Header as='h1' inverted style={{margin:"20px 0 20px 0"}}>
-                       {/* <Image size='massive' src='/assets/logo.png' alt='logo' style={{marginBottom: 12}}/> */}
                        Dilediğin kategoride sağlıklı yaşam uzmanını ara
                    </Header>
-                   {/* {isLoggedIn && user && token ? (  */}
                    <Fragment>
                         <SearchArea/>
-                   </Fragment>
-                   {/* ): (
-                       <Fragment>
-                            <Header as='h2' inverted content={`Afitapp'a Hoşgeldin!`} />
-                            <Button onClick={handleLoginClick} size='huge' inverted>
-                                Üye Girişi
-                             </Button>
-                             <Button onClick={handleRegisterClick}  size='huge' inverted>
-                                Yeni Kullanıcı
-                             </Button>
-                       </Fragment>
-                   ) } */}
-                  
-                  
+                   </Fragment> 
                </Container>
-           </Segment>
+           </Segment> */}
          <Container className="profileList_WelcomeMessage" style={{textAlign:"center"}}>
          <Header as='h1'  style={{fontSize: '34px',  textAlign:'center', width:"100%",color:"rgb(38, 58, 94)" }}>
                 {/* Doğru uzmanı tam yerinde keşfet */}
                 Kullanıcıların Tavsiye Ettikleri ve Çok Daha Fazlası
                 </Header>
                 <p style={{ fontSize: '1.3rem', color: "rgb(38, 58, 94)" }}>
-                Spor koçundan diyetisyene, meditasyon eğitmeninden psikoloğa ihtiyacın olan en doğru uzmanı en kolay şekilde bulabileceğin yerdesin. 
+                Spor koçundan diyetisyene, meditasyon eğitmeninden psikoloğa ihtiyacın olan uzmanı en kolay şekilde bulabileceğin yerdesin. 
                 Üstelik uzmanlarla direk iletişime geçebilir, düzenledikleri aktivitelere katılabilir veya paylaştıkları blogları okuyarak ilgilendiğin alanda bilgi sahibi olabilirsin. 
                 </p>
 
          </Container>
          <Container className="pageContainer">
-        {
-          //  !isTablet &&
-          <Segment inverted textAlign='center' vertical className='masthead_page profileDashboard'>
-               <Container>
-               <ProfileListFilters />
-               </Container>
-      </Segment>
 
+         {  isMobile &&
+                <Segment textAlign='center' vertical className='masthead_page profileDashboard'>
+                  <Container>
+                  <ProfileListFilters />
+                  </Container>
+                </Segment>
         }
+
+           <div ref={contextRef}>
+        {  !isMobile &&
+            <Sticky context={contextRef}>
+                <Segment textAlign='center' vertical className='masthead_page profileDashboard'>
+                  <Container>
+                  <ProfileListFilters />
+                  </Container>
+                </Segment>
+              </Sticky>}
+      
     
       {Array.from(popularProfileRegistery.values()).length === 0 && !loadingPopularProfiles && !loadingNext?
        <>
@@ -195,7 +199,9 @@ const sixItem:SemanticWIDTHS = 6;
         <Grid.Row style={{marginTop:"20px"}}>
           <Grid.Column width={16} className="profileList_headerAndSorting">
           <div>
-          <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff",fontSize: '17px'}}> Tümü ({profilePageCount}) </Label>
+          <Header size="medium" style={{color:"#263a5e"}}> Tümü ({profilePageCount})</Header>
+
+          {/* <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff",fontSize: '17px'}}> Tümü ({profilePageCount}) </Label> */}
           </div>
           <div>
           <Select 
@@ -231,7 +237,9 @@ const sixItem:SemanticWIDTHS = 6;
                   fluid={isMobile} 
                   size="large" disabled={loadingNext || (page +1 >= totalProfileListPages)} 
                   onClick={()=> handleGetNext()} 
-                  style={{background:"#2185d0", color:"white",margin:"20px 0"}}
+                  style={{margin:"20px 0"}}
+                  className='blue-gradientBtn'
+                  circular
                 > Daha Fazla Göster </Button>
         </div>
           
@@ -251,6 +259,7 @@ const sixItem:SemanticWIDTHS = 6;
       <br></br>
       </>
       }
+      </div>
       </Container>
       </Fragment>
     )

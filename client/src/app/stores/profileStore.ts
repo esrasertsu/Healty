@@ -23,7 +23,7 @@ export default class ProfileStore{
                     const predicate = activeIndex ===4 ? 'followers' : 'following';
                     if(rootStore.userStore.isLoggedIn)
                      this.loadFollowings(predicate);
-                }if(this.profile && this.profile.role == "Trainer" && (activeIndex ===2 || activeIndex===3))
+                }if(this.profile && this.profile.role !== "Trainer" && (activeIndex ===2 || activeIndex===3))
                 {
                     const predicate = activeIndex ===3 ? 'followers' : 'following';
                     if(rootStore.userStore.isLoggedIn)
@@ -43,6 +43,7 @@ export default class ProfileStore{
     @observable popularProfileList: IProfile[] = [];
     @observable blogRegistery = new Map();
     @observable loadingProfile = true;
+    @observable updatingProfile = false;
     @observable loadingPopularProfiles = true;
     @observable loadingOnlyProfiles = false;
     
@@ -80,7 +81,7 @@ export default class ProfileStore{
 
     @observable loadingReferencePics = false;
     @observable uploadingReferencePics = false;
-    @observable referencePics: IRefencePic[] = [];
+    @observable referencePics: IPhoto[] = [];
     @observable deletingReferencePic = false;
     @observable navSearchValue = "";
     @observable profileSearchAreaValue ="";
@@ -166,6 +167,15 @@ export default class ProfileStore{
     @action setLoadingProfile = (lp : boolean) =>{
         this.loadingProfile = lp;
     }
+    @action setuploadingReferencePics = (lp : boolean) =>{
+        this.uploadingReferencePics = lp;
+    }
+
+    @action setupdatingProfile = (lp : boolean) =>{
+        this.updatingProfile = lp;
+    }
+
+    
 
     
     @action setLoadingPopularProfiles = (lp : boolean) =>{
@@ -174,6 +184,11 @@ export default class ProfileStore{
 
     @action setUpdatedProfile = (up: boolean) =>{
         this.updatedProfile = up;
+    }
+
+
+    @action setReferencePics = (refPics:IPhoto[]) =>{
+        this.referencePics = refPics;
     }
 
     @action sendTrainerComment = async (comment: IProfileComment) =>{
@@ -367,20 +382,7 @@ export default class ProfileStore{
     }
 
     @action updateProfile = async (profileDto: Partial<IProfileFormValues>) =>{
-
-       
-            if(profileDto.categoryIds && profileDto.categoryIds.length === 0)
-              {
-                toast.warning("Kategori boş seçilemez!")
-                return;
-              }  
-            if(profileDto.subCategoryIds && profileDto.subCategoryIds.length === 0)
-            {
-                toast.warning("Branş boş seçilemez!")
-                return;
-            }  
-      
-
+        this.setupdatingProfile(true);
                     try {
                     const pro = await agent.Profiles.updateProfile(profileDto);
                     runInAction(()=>{
@@ -389,10 +391,12 @@ export default class ProfileStore{
                             this.rootStore.userStore.user!.displayName = pro.displayName!;
                         }
                         this.profile = pro;  
-                        this.profileForm.certificates!.push(...pro.certificates);
-                        this.updatedProfile = true;  
+                        this.updatedProfile = true; 
+                        this.setupdatingProfile(false);
+ 
                     })
                 } catch (error) {
+                    this.setupdatingProfile(false);
                     toast.error('Problem saving changes');
                 }
                // }
@@ -556,16 +560,20 @@ export default class ProfileStore{
         try {
             await agent.Profiles.follow(username);
             runInAction(() =>{
-                this.profile!.isFollowing = true;
-                this.profile!.followerCount++;
-                // this.followings = [...this.followings, this.profile!];
                 this.loading = false;
-                const predicate = this.activeTab ===4 ? 'followers' : this.activeTab === 3 ? 'following' : null ;
-                if(predicate)
-                 this.loadFollowings(predicate);
+
+                if(this.profile && this.profile.userName === username)
+                {
+                    this.profile!.isFollowing = true;
+                    this.profile!.followerCount++;
+                    // this.followings = [...this.followings, this.profile!];
+                    const predicate = this.activeTab ===4 ? 'followers' : this.activeTab === 3 ? 'following' : null ;
+                    if(predicate)
+                    this.loadFollowings(predicate);
+                }
             })
         } catch (error) {
-            toast.error('Problem following user');
+            toast.error('Favorilere eklenemedi.');
             runInAction(() => {
                 this.loading = false;
             })
@@ -577,16 +585,21 @@ export default class ProfileStore{
         try {
             await agent.Profiles.unfollow(username);
             runInAction(() =>{
-                this.profile!.isFollowing = false;
-                this.profile!.followerCount--;
-                // this.followings = this.followings.filter(x => x.userName === username);
                 this.loading = false;
-                const predicate = this.activeTab ===4 ? 'followers' : this.activeTab === 3 ? 'following' : null ;
-                if(predicate)
-                 this.loadFollowings(predicate);
+
+                if(this.profile && this.profile.userName === username)
+                {
+                    this.profile.isFollowing = false;
+                    this.profile!.followerCount--;
+                    // this.followings = this.followings.filter(x => x.userName === username);
+                    const predicate = this.activeTab ===4 ? 'followers' : this.activeTab === 3 ? 'following' : null ;
+                    if(predicate)
+                     this.loadFollowings(predicate);
+                }
+               
             })
         } catch (error) {
-            toast.error('Problem unfollowing user');
+            toast.error('Favorilerden çıkarılamadı.');
             runInAction(() => {
                 this.loading = false;
             })
@@ -684,24 +697,26 @@ export default class ProfileStore{
      }
 
 
-     @action uploadReferencePic = async (original: Blob, thumbnail: Blob, title: string) => {
-        this.uploadingReferencePics = true;
+     @action saveReferencePics = async (photos: any[], deletedPhotos: any[]) => {
+        this.setuploadingReferencePics(true);
 
         try {
-            const pic = await agent.Profiles.addReferencePics(original, thumbnail,title);
+            const pics = await agent.Profiles.updateReferencePics(photos,deletedPhotos);
+            debugger;
             runInAction(() => {
                 if(this.profile)
                 {
-                    this.referencePics.push(pic);
+                    this.setReferencePics(pics);
+                    this.setuploadingReferencePics(false);
+
                 }
 
-                this.uploadingReferencePics = false;
             })
         } catch (error) {
             console.log(error);
-            toast.error('Problem uploading pic');
+            toast.error('Problem uploading');
             runInAction(() => {
-                this.uploadingReferencePics = false;
+                this.setuploadingReferencePics(false);
             })
             
         }
@@ -732,7 +747,7 @@ export default class ProfileStore{
         await agent.Profiles.deleteReferencePic(id);
         runInAction(() => {
             
-                this.referencePics = this.referencePics.filter(e => e.originalPublicId !== id);
+                this.referencePics = this.referencePics.filter(e => e.id !== id);
                this.deletingReferencePic = false;
 
         })
@@ -745,5 +760,23 @@ export default class ProfileStore{
         
     }
 }
+
+@action getSavedProfiles = async () => {
+    this.loading = true;
+    try {
+        const profiles = await agent.Profiles.listFollowings(this.rootStore.userStore.user!.userName, 'following');
+        runInAction(() =>{
+            this.followings = profiles;
+            this.loading = false;
+        })
+    } catch (error) {
+        toast.error('Problem loading following users');
+        runInAction(() => {
+            this.loading = false;
+        })
+    }
+}
+
+
 
 }

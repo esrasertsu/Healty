@@ -50,7 +50,7 @@ import { useMediaQuery } from 'react-responsive'
 const [paymentContract, setPaymentContract] = useState(false);
 const [iyzicoContract, setIyzicoContract] = useState(false);
 const [loading3DPage, setLoading3DPage] = useState(false);
-const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
 
     const { user } = rootStore.userStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;
@@ -356,7 +356,7 @@ const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
                 <div className="price">{activity.price! * Number(count)} TL</div>
             </div>
             <div>
-            <Button size="large" positive fluid  floated="right" style={{marginTop:"20px"}}
+            <Button circular positive fluid  floated="right" style={{marginTop:"20px"}}
                   type="submit" onClick={onSubmit} disabled={!paymentContract || !iyzicoContract}>
                 Ödemeyi Tamamla <Icon style={{opacity:"1", marginLeft:"5px"}} name="thumbs up"></Icon>
               </Button>

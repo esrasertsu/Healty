@@ -10,7 +10,7 @@ const ProfileFollowings = () => {
   const {  followings, loading,activeTab } = rootStore.profileStore;
   const {  isLoggedIn } = rootStore.userStore;
 
-  const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   return (
@@ -24,17 +24,17 @@ const ProfileFollowings = () => {
             content={
               activeTab === 4
                 ? `Takipçileri`
-                : `Takip Ettikleri`
+                : `Favorileri`
             }
           /> 
         </Grid.Column>}
         <Grid.Column width={16}>
-          <Card.Group itemsPerRow={isMobile ? 2 : isTablet ? 3 :6}>
+          <Card.Group itemsPerRow={isMobile ? 2 : isTablet ? 3 :5}  style={{ maxHeight: "260px", overflow: "hidden",overflowY: "scroll"}}>
             {isLoggedIn?
             followings.map((profile) => (
               <ProfileCard key={profile.userName} profile={profile} />
             )):
-            <div style={{marginLeft:"10px", marginBottom:"10px"}}>Uzmanın takip ettiklerini ya da takipçilerini görebilmek için online olmalısın.</div>
+            <div style={{margin:"10px"}}>Kişinin favorilerini görebilmek için giriş yapmalısın.</div>
             }
              
           </Card.Group>

@@ -85,7 +85,7 @@ namespace CleanArchitecture.API
                     .AllowAnyMethod()
                      .WithExposedHeaders("WWW-Authenticate")
                      .WithOrigins("http://localhost:3000", "http://localhost:3001", "https://sandbox-api.iyzipay.com", "https://afitapp.com",
-                    "https://admin.afitapp.com")
+                    "https://admin.afitapp.com", "http://localhost:9000", "https://meet.afitapp.com")
                     .AllowCredentials();
                 });
             });
@@ -235,10 +235,12 @@ namespace CleanArchitecture.API
                     "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
                     "sha256-yChqzBduCCi4o4xdbXRXh4U/t1rP4UUUMJt+rB+ylUI=",
                     "sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs=",
-                    "sha256-4Su6mBWzEIFnH4pAGMOuaeBrstwJN4Z3pq/s1Kn4/KQ="))
+                    "sha256-4Su6mBWzEIFnH4pAGMOuaeBrstwJN4Z3pq/s1Kn4/KQ=",
+                    "sha256-l/kITchrl9q5dw4BYXZI0P1FWNEEwjMlHnE32kyiX30="))
                 .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com","data:"))
                 .FormActions(s => s.Self().CustomSources("https://sandbox-api.iyzipay.com"))
                 .FrameAncestors(s => s.Self().CustomSources("https://sandbox-api.iyzipay.com"))
+                //.FrameSources(s => s.Self().CustomSources("https://www.google.com/recaptcha/"))
                 .ImageSources(s => s.Self().CustomSources(
                     "https://res.cloudinary.com",
                     "https://www.facebook.com",
@@ -252,9 +254,13 @@ namespace CleanArchitecture.API
                 .ScriptSources(s => s.Self().CustomSources(
                     "https://www.youtube.com",
                     "https://connect.facebook.net",
+                    "https://apis.google.com/",
+                    "https://www.google.com/recaptcha/",
+                    "https://www.gstatic.com/recaptcha/",
                     "sha256-eE1k/Cs1U0Li9/ihPPQ7jKIGDvR8fYw65VJw+txfifw=",
                     "sha256-rQPGpX1K43jebTtYXBT+mlyP+LK8/XEaJ2xTV7ZzY6E=",
                     "sha256-HFNclDLj6iSv9QbDzx+r/dbp6qGgueQHe+zFYPyTAdg=",
+                    "sha256-FGCiQnbAwKl2SmXDefilnApiPGF+sIfXLAyEb9WGDUg=",
                     "https://www.googletagmanager.com/gtm.js",
                     "https://www.google-analytics.com/analytics.js"))
                 );

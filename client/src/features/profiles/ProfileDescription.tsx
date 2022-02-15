@@ -9,7 +9,7 @@ import Documents from './Documents';
 
 const ProfileDescription = () => {
   const rootStore = useContext(RootStoreContext);
-  const { updateProfile, profile, isCurrentUser ,setUpdatedProfile, updatedProfile,deleteDocument} = rootStore.profileStore;
+  const { updateProfile, profile, isCurrentUser ,setUpdatedProfile, updatedProfile,deleteDocument,updatingProfile} = rootStore.profileStore;
   const [editMode, setEditMode] = useState(false);
   const {openModal,closeModal,modal} = rootStore.modalStore;
   const {allCategoriesOptionList,loadAllCategoryList} = rootStore.categoryStore;
@@ -49,14 +49,16 @@ const ProfileDescription = () => {
           {isCurrentUser && (
             <Button
               floated='right'
-              basic
-              content={editMode ? 'İptal' : 'Düzenle' }
+              circular
+              size='mini'
+              className={editMode ? 'red': 'blue-gradientBtn'}
+              content={editMode ? 'İptal' : <span>Düzenle <Icon name='edit'></Icon></span>  }
               onClick={() => 
                 { 
                   setEditMode(!editMode);
                  setUpdatedProfile(false);
                 }}
-            />
+            ></Button>
           )}
         </Grid.Column>
         <Grid.Column width={16}>
@@ -82,7 +84,7 @@ const ProfileDescription = () => {
                     </List>
                   </Grid.Column>
                   <Grid.Column className="profile_desc_iconandtext">
-                  <Icon className="profileContent_icons" size="big" name="bolt"></Icon> 
+                  <Icon className="profileContent_icons" size="big" name="handshake outline"></Icon> 
                   <List as='ul' className="profile_desc_list_item">
                   <Header
                     as='h3'

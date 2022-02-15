@@ -21,7 +21,8 @@ const Videos:React.FC<IProps> = ({ users, tracks}) => {
                   <AgoraVideoPlayer className='vid' videoTrack={user.videoTrack} style={{height: '100%', width: '100%'}} key={user.uid} />
                 );
               } else return null;
-            })}
+            })
+            }
         </div>
       </div>
     );

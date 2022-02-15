@@ -28,7 +28,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
 
     const rootStore = useContext(RootStoreContext);
     const {setProfileNull,loadingProfile, loadProfile, loadingBlogs, loadingComments, loadingReferencePics, profile, follow,
-         unfollow, isCurrentUser, loading,setActiveTab, setProfileForm} = rootStore.profileStore;
+         unfollow, isCurrentUser, loading,setActiveTab, setProfileForm, referencePics} = rootStore.profileStore;
     const {isLoggedIn } = rootStore.userStore;
     useEffect(() => {
        
@@ -64,7 +64,6 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
             <Grid stackable className="profilePage_Container_Grid_mobile">
             <Grid.Column width={11} style={{marginTop:"40px"}}>
                   <ProfileContent profile={profile!} setActiveTab={setActiveTab}/>   
-                  {(loadingReferencePics || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileRefPlaceholder />: ( profile!.role === "Trainer" && <ProfileReferances /> )}
                 {(loadingBlogs || profile!.userName !== match.params.username) && profile!.role === "Trainer"  ?   <ProfileBlogPlaceHolder />: ( profile!.role === "Trainer" && <ProfileBlogs />)}
                 {(loadingComments || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileCommentPlaceHolder />: ( profile!.role === "Trainer" && <ProfileComments /> )}
                  
@@ -79,23 +78,8 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
             />
           </ButtonGroup>
           }
-            {isCurrentUser && profile.role === "Trainer" &&
-          <ButtonGroup widths={2}>
-            <Button
-              basic
-              color={'green'}
-              content={'Blog Yaz'}
-              onClick={()=> history.push('/createPost')}
-            />
-            <Button
-            basic
-            color={'blue'}
-            content={'Aktivite Oluştur'}
-            onClick={()=> history.push('/createActivity')}
-          />
-          </ButtonGroup>
-          }
-          {!isCurrentUser && 
+            
+          {/* {!isCurrentUser && 
           <div className="ui pointing secondary menu" style={{height:"75px", alignItems:"center"}}>
           <Reveal animated='move' style={{width:"100%"}}>
             <Reveal.Content visible style={{ width: '100%' }}>
@@ -118,7 +102,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
             </Reveal.Content>
           </Reveal>
           </div> }
-          
+           */}
             {!isCurrentUser && profile!.role === "Trainer" &&
                 <ProfileMessage profile={profile!}/> 
             }
@@ -136,24 +120,9 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
               )
             }
 
-{isCurrentUser && profile!.role === "Trainer" &&
-                <Segment className="profileMessageSegment">
-                <Grid container className="profileMessageGrid" stackable>
-                    <Grid.Row columns={2}>
-                        <Grid.Column width={5}>
-                            <Image circular size={'tiny'} src={profile.image || '/assets/user.png'}
-                            onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}></Image>
-                        </Grid.Column>
-                        <Grid.Column width={11}>
-                            <Header>{profile.displayName}</Header>
-                            <Label><Icon name="mail outline"></Icon> Cevap verme oranı: %{profile.responseRate}&nbsp;
-                                {/* <Icon size="large" name="question circle" className="questionmarkicon"></Icon> */}
-                            </Label>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-       </Segment>
-            }
+
+{(loadingReferencePics || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileRefPlaceholder />: ( profile!.role === "Trainer" && <ProfileReferances referencePics={referencePics}/> )}
+
             
             </Grid.Column>
             </Grid>

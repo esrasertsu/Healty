@@ -20,7 +20,7 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
 
     const rootStore = useContext(RootStoreContext);
     const { getOrderDetails,order,loadingOrder,loadingRefundPaymentPage,refundPayment ,deleteOrder} = rootStore.activityStore;
-    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
     const [open, setOpen] = useState(false);
     const [removeItemOpen, setRemoveItemOpen] = useState(false);
@@ -128,6 +128,7 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
                                     content="İptal Et"
                                     color="red"
                                     className="orderListButton"
+                                    circular
 
                                     /> 
                    }
@@ -141,7 +142,7 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
                                     content="Sil"
                                     color="red"
                                     className="orderListButton"
-
+                                    circular
                                     /> 
                            <Button
                            onClick={()=> handlePayOrderItem()}
@@ -149,7 +150,7 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
                            content="Şimdi Öde"
                            color="green"
                            className="orderListButton"
-
+                           circular
                            /> 
                            </>
                        }
@@ -318,7 +319,7 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
                         </Item.Content>
                         <Item.Content className={isMobile ? "order_listItem_extraContent_mobile":"order_listItem_extraContent"}>
                         <Item.Description>
-                        {order.activityOnline ?  <div> <Icon name='wifi' color="green" />  Online katılım <Icon name='check' size='small' color='green' /> </div>:
+                        {order.activityOnline ?  <div>  <Image style={{height:"25px", marginRight:"5px"}} src="/icons/wifi-nok.png"/>  Online katılım <Icon name='check' size='small' color='green' /> </div>:
                          <div><Icon name='map marker alternate' color="red"/>Online katılıma kapalı</div>}
                             </Item.Description>
                         </Item.Content>
@@ -331,6 +332,7 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
                                 content="İncele"
                                 color="blue"
                                 className="orderListButton"
+                                circular
                                 /> 
                         </Item.Description>
                         </Item.Content>

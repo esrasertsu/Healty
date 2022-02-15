@@ -1,15 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand:400,500,700&subset=latin-ext');
 @font-face {
   font-family: "AssistantRegular";
   src: local("AssistantRegular"),
     url("./fonts/GT-Eesti-Pro-Display-Regular.woff2") format("woff");
-  font-weight: normal;
+  font-weight: 500;
 }
 
 @font-face {
   font-family: "AssistantMedium";
   src: local("AssistantMedium"),
     url("./fonts/GT-Eesti-Pro-Display-Medium.woff2") format("woff");
-  font-weight: normal;
+  font-weight: 500;
 }
 
 
@@ -17,7 +18,7 @@
   font-family: "AssistantBold";
   src: local("AssistantBold"),
     url("./fonts/GT-Eesti-Pro-Display-Bold.woff2") format("woff");
-  font-weight: normal;
+  font-weight: 500;
 }
 
 @font-face {
@@ -38,9 +39,11 @@
 
 body {
   background-color: #f8f7f791  !important;
-  font-family: AssistantRegular, Arial, sans-serif !important;
+  font-family: AssistantRegular, sans-serif !important;
   font-size: 16px;
-  
+  font-weight: 500;
+ // font-family: 'Quicksand', sans-serif;
+  color: #324e63;
 }
 html, body {
   overflow-x: hidden;
@@ -73,6 +76,63 @@ body {
   background: #fff;
 
 }
+
+.ui.secondary.pointing.menu .desktopMenu.item{
+  border: none;
+ line-height: 1rem;
+ height: 55px;
+ i.icon{
+    font-size: 17px;
+ }
+}
+
+.ui.secondary.pointing.menu .desktopMenu.item.active:after{
+  bottom: 7px;
+  visibility: visible;
+  width: 90%;
+}
+.ui.secondary.pointing.menu .desktopMenu.item:hover:after{
+  width: 90%;
+  visibility: visible;
+
+}
+.ui.secondary.pointing.menu .desktopMenu.item:after{
+  background-color: #263a5e;
+    bottom: 7px;
+    content: "";
+    display: block;
+    height: 2.5px;
+    left: 50%;
+    pointer-events: none;
+    position: absolute;
+    transform: translateX(-50%);
+    transition: width .1s ease-in;
+    width: 0;
+    will-change: width;
+    visibility: hidden;
+    top: auto;
+}
+.menu.mobileMenu{
+  z-index: 200 !important;
+  border: 0.5px solid #ebeef1 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 0 2px rgb(0 0 0 / 12%), 0 4px 24px rgb(0 0 0 / 16%) !important;
+}
+.ui.menu .ui.dropdown .menu.mobileMenu>.item{
+  line-height: 1.4rem;
+    padding: 10px 12px !important;
+    font-family: AssistantRegular, Arial, sans-serif !important;
+    color: #24385a !important
+}
+
+.ui.menu .ui.dropdown .menu.mobileMenu>.item.border{
+  border-bottom: 1px solid #dcdfe4;
+
+}
+.ui.menu .ui.dropdown .menu.mobileMenu>.item:hover{
+  background: none !important;
+}
+
 .settingsVerticalMenu{
   width: 100% !important;
 }
@@ -241,7 +301,13 @@ body {
 }
 
 
-
+.agoraPage{
+  position: fixed;
+  top:0;
+  bottom: 0;
+left: 0;
+right: 0;
+}
 
 .blogFilterPlaceholder{
   background: #f3f4f5;
@@ -273,6 +339,135 @@ h1, h2, h3, h4, h5 {
   overflow: hidden !important;
 }
 
+.ui.segment{
+  box-shadow: 0 7px 10px 0 #d4d4d5 !important;
+}
+
+.ui.button.gradientBtn, .gradientBtn{
+  --tw-text-opacity: 1;
+    color: rgb(255 255 255/var(--tw-text-opacity)) !important;
+  --tw-gradient-to: #3f83f8 !important;
+  --tw-gradient-from: #7e3af2  !important;
+  --tw-gradient-stops: var(--tw-gradient-from),var(--tw-gradient-to,rgba(126,58,242,0))  !important;
+  background-image: linear-gradient(to bottom right,var(--tw-gradient-stops)) !important;
+
+  &:hover {
+    box-shadow:0px 7px 30px rgb(80 112 246 / 60%) !important;
+  }
+  @media screen and (min-width: 820px){
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+   .icon{
+    opacity: 1 !important;
+    margin-left: 8px !important;
+  }
+  &.disabled, &:disabled{
+    opacity: .8 !important;
+    --tw-gradient-to: #3f83f8 !important;
+    --tw-gradient-from: #7e3af2  !important;
+    --tw-gradient-stops: var(--tw-gradient-from),var(--tw-gradient-to,rgba(126,58,242,0))  !important;
+    background-image: linear-gradient(to bottom right,var(--tw-gradient-stops)) !important;
+  }
+}
+
+.gradientSegment{
+  --tw-text-opacity: 1;
+    color: rgb(255 255 255/var(--tw-text-opacity)) !important;
+    --tw-gradient-to: #3f83f8 !important;
+    --tw-gradient-from: #00063e !important;
+    --tw-gradient-stops: var(--tw-gradient-from),var(--tw-gradient-to,rgba(126,58,242,0)) !important;
+    background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)) !important;
+}
+
+.blue-gradientBtn{
+  background: linear-gradient(45deg, #1da1f2, #0e71c8)  !important;
+  box-shadow: 0px 4px 30px rgba(19, 127, 212, 0.4)  !important;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255/var(--tw-text-opacity)) !important;
+  &:hover {
+    box-shadow: 0px 7px 30px rgba(19, 127, 212, 0.75)  !important;
+  }
+}
+
+.ui.button.green-gradientBtn, .green-gradientBtn{
+  background: linear-gradient(
+    45deg
+    , #279107, #30c622) !important;
+       
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255/var(--tw-text-opacity)) !important;
+  &:hover {
+    box-shadow: 0px 7px 30px rgb(188 255 161 / 81%) !important;
+    }
+
+  @media screen and (min-width: 820px){
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+   .icon{
+    opacity: 1 !important;
+    margin-left: 8px !important;
+  }
+  &.disabled, &:disabled{
+    opacity: .5 !important;
+    background-image: linear-gradient(
+      45deg
+      , #279107, #30c622) !important;
+          box-shadow: 0px 4px 30px rgb(188 255 161 / 81%) !important;
+      --tw-text-opacity: 1;
+  }
+}
+
+.orange-gradientBtn {
+  background: linear-gradient(45deg, #d5135a, #f05924) !important;
+  box-shadow: 0px 4px 30px rgba(223, 45, 70, 0.35) !important;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255/var(--tw-text-opacity)) !important;
+  &:hover {
+    box-shadow: 0px 7px 10px rgba(230, 61, 84, 0.75)  !important;
+  }
+  .icon{
+    opacity: 1 !important;
+    margin-left: 8px !important;
+  }
+  .disabled{
+    opacity: .8 !important;
+  }
+  @media screen and (min-width: 820px){
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  
+}
+
+.gray-gradientBtn {
+  box-shadow: none;
+  background: #dcdcdc;
+  color: #142029;
+}
+
+.gray_label{
+  background-color: #f7f7f7 !important;
+  color: #263a5e !important;
+}
+
+.facebook_btn{
+  background: linear-gradient(45deg, #3b5998, #0078d7) !important;
+  box-shadow: 0px 4px 30px rgba(43, 98, 169, 0.5) !important;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255/var(--tw-text-opacity)) !important;
+
+  @media screen and (min-width: 820px){
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
 .defaultButtonColor{
   background-color:#335084 !important;
 }
@@ -288,6 +483,7 @@ h1, h2, h3, h4, h5 {
 .greenButtonColor{
   background-color:rgb(58, 121, 73) !important;
 }
+
 .ui.card, .ui.cards>.card {
   max-width: 100%;
   position: relative;
@@ -347,6 +543,37 @@ h1, h2, h3, h4, h5 {
     line-height: 1rem !important;
 }
 
+
+.savedPage_tab{
+  .ui.menu{
+    border-bottom: 1px solid rgba(34,36,38,.15) !important
+  }
+  .ui.menu .active.item{
+    border-color: #ff6902 !important;
+    border-bottom-width: 3px;
+    color: #263a5e !important;
+  }
+  .ui.segment.active.tab{
+    background: initial;
+    border: none;
+    box-shadow: unset !important;
+    padding: 0;
+  }
+  
+}
+.nav_SearchArea{
+  input{
+    height: 35px;
+  }
+}
+
+.trainerwelcome{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
 .dtPicker_Style{
   box-shadow: 0 1px 2px 0 rgb(34 36 38 / 15%);
         border-radius: .28571429rem;
@@ -423,7 +650,8 @@ h1, h2, h3, h4, h5 {
 }
 
 .activityListItem_footer{
-  color:rgb(38, 58, 94) !important
+  color:rgb(38, 58, 94) !important;
+  padding:10px !important;
 }
 p.baseline-pricing__value{
   font-size: 18px !important;
@@ -440,6 +668,36 @@ p.baseline-pricing__value{
 }
 .activityListItem{
     width: 100% !important;
+    .description i.icon{
+      font-size: 18px !important;
+    }
+    i.heartbeat.icon{
+      background: -webkit-gradient(linear, left top, left bottom, from(#7e3af2), to(#3f83f8));
+      background-clip: text;
+	    -webkit-text-fill-color: transparent;
+      font-size: 22px !important;
+    }
+    i.activity_addToFav.icon{
+      font-size: 30px !important;
+      cursor: pointer;
+      margin-top: -9px;
+    }
+    i.activity_addToFav.icon.bookmark.outline{
+      font-size: 30px;
+      cursor: pointer;
+      background: -webkit-gradient(linear, left top, left bottom, from(#7e3af2), to(#3f83f8)) !important;
+      -webkit-background-clip: text !important;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      height: 40px !important;
+    padding-top: 5px;
+    margin-top: -15px;
+    }
+    i.activity_addToFav.icon:hover{
+      transform: scale(1.20);
+      cursor: pointer;
+    }
+    
 }
 .activityDetails_GridSegment .segment.attached{
   font-size: 14px;
@@ -555,9 +813,9 @@ label{
   display: block;
 }
 .activityDetails_Countdown_Segment{
-  background-color: #f64f00  !important;
-  background-image: linear-gradient(#fc6901 ,#b23e49) !important;
-   /* linear-gradient(#fc6901 ,#d34451,#d5107d)  !important; */
+  background: linear-gradient(
+    45deg
+    , #5c2774, #335cc5, #33c58e) !important;
   color:#fff !important;
   padding:3em !important;
   border: none !important;
@@ -587,7 +845,7 @@ label{
 .ui.statistic.activityDetail_Countdown_Statistic .value{
   background: #fff !important;
   border-radius: 1.285714rem !important;
-  color: #e25134 !important;
+  color: #3361c3  !important;
   font-size: 27px !important;
   padding: 15px;
   margin-bottom: 10px;
@@ -625,14 +883,33 @@ a.ui.card:hover {
   font-family: system-ui;
   line-height: 1.5rem;
   -webkit-font-smoothing: antialiased;
-  background-color: #fff;
+  background-color: initial;
   -webkit-font-kerning: normal;
   font-kerning: normal;
   font-weight: 600;
 }
 
-@media only screen and (max-width: 767px){
-  
+
+.photoPreview img{
+  height: 200px !important;
+  object-fit: cover !important;
+}
+
+.photoPreview .content{
+  padding: 0 !important;
+}
+
+.photoPreview .content a , .photoPreview .content button{
+ margin:5px !important
+}
+
+.savedProfile.ellipsis{
+  -webkit-line-clamp: 1;
+  text-align: left;
+}
+
+@media only screen and (max-width: 820px){
+ 
 .ui.modal>.actions {
   padding: 1rem 1rem !important;
 }
@@ -652,7 +929,7 @@ a.ui.card:hover {
 }
 .activityListItem_Image_mobile img{
   width: 100%;
-  height: 100px;
+  height: 208px;
   object-fit: cover;
 }
 .activity_listItem_mobile{
@@ -930,13 +1207,13 @@ a.ui.card:hover {
 }
 
 @media (min-width: 1200px){
-  .profieHeader_segment{
-    -webkit-box-shadow: none !important;
+  .ui.segment.profieHeader_segment{
     box-shadow: none !important;
     border: none !important;
-    margin-left: calc(625px - 50vw) !important;
-      width: 100vw;
-      padding: 0 calc(50vw - 625px) !important;
+    margin-left: -150px !important;
+    padding: 0 150px !important;
+    margin-right: -150px !important;
+    box-shadow: none !important;
   }
   .page-header__content {
     padding-left: 40px;
@@ -954,6 +1231,12 @@ a.ui.card:hover {
 }
 .activityListGrid{
   margin:0 80px !important;
+}
+
+.profieHeader_segment_column .statistics{
+  display: grid;
+  grid-template-columns: auto auto auto !important;
+  grid-gap: 0 25px !important;
 }
 }
 @media (min-width: 1025px){
@@ -985,9 +1268,13 @@ a.ui.card:hover {
    background-image: url("../layout/img/profiles.jpg") !important;
    background-position-y: -65px !important; 
 }
+.ui.top.fixed.menu, .pageContainer.ui.container{
+  padding: 0 150px !important
+
+}
 }
 
-@media (min-width: 769px) and (max-width:1199px){
+@media (min-width: 821px) and (max-width:1199px){
   .ui.text.container{
     margin: 40px 0 40px 150px !important;
     text-align: left;
@@ -996,8 +1283,14 @@ a.ui.card:hover {
   }
 }
 
-@media (min-width: 769px){
-  
+@media (min-width: 821px){
+  .savedActivity_img{
+    height: 100px !important;
+  }
+  .savedProfiles_img{
+    width: 150px;
+  }
+ 
 .page-header__content[data-v-0ca1fdc0] {
     margin-left: auto;
     margin-right: auto;
@@ -1006,8 +1299,7 @@ a.ui.card:hover {
 }
 
 .ui.top.fixed.menu, .pageContainer.ui.container{
-  padding: 0 150px;
-  max-width: 1400px;
+  padding: 0 50px;
 
 }
 .pageContainer.ui.container{
@@ -1082,7 +1374,7 @@ max-width: 95%;
 .ui.statistic.activityDetail_Countdown_Statistic .value {
   background: #fff !important;
   border-radius: 1.285714rem !important;
-  color: #e25134 !important;
+  color: #3361c3  !important;
   font-size: 25px !important;
   padding: 4px 7px !important;
   margin-bottom: 10px;
@@ -1090,7 +1382,7 @@ max-width: 95%;
 }
 
 
-@media (min-width: 450px) and (max-width: 768px){
+@media (min-width: 450px) and (max-width: 820px){
 
 .activityDetail_Countdown_Statistic.day {
   margin: 1em !important;
@@ -1101,7 +1393,7 @@ max-width: 95%;
 }
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 820px){
   .ui.search,.ui.input,.ui.form,.ui.dropdown .menu>.item,.ui.card>.content, .ui.cards>.card>.content, input,
   .ui.large.label,.ui.button, .ui.buttons .button, .ui.buttons .or, .forgotPasswordLink,.modalformFooter{
     font-size: 16px !important;
@@ -1181,7 +1473,7 @@ max-width: 95%;
 }
 }
 
-@media (min-width: 768px) and (max-width: 1024px){
+@media (min-width: 820px) and (max-width: 1024px){
  
   
 #slideImages.masthead {
@@ -1212,8 +1504,8 @@ max-width: 95%;
    background-image: url("../layout/img/profiles.jpg") !important;
 }
 
-  .ui.grid>[class*="twelve wide"].column.profieHeader_segment_column,
-  .ui.grid>[class*="four wide"].column.profieHeader_segment_column {
+  .ui.grid>[class*="eleven wide"].column.profieHeader_segment_column,
+  .ui.grid>[class*="five wide"].column.profieHeader_segment_column {
     width: 50% !important;
   }
 
@@ -1256,10 +1548,9 @@ max-width: 95%;
 .profileHeader_videoPlay:hover{
   cursor: pointer;
   z-index: 5;
-  background: #fff;
-  border: none !important;
-  box-shadow:12px 14px 5px 0px #bcbdbdcc, 0 0 0 1px #d4d4d557;
-  transform: translateY(-3px);
+  transform: scale(1.05);
+
+  
 }
 
 
@@ -1272,11 +1563,8 @@ max-width: 95%;
 
 /*home page styles*/
 
-@media (min-width: 769px){
-  .ui.search,.ui.input,.ui.form,.ui.dropdown .menu>.item,.ui.card>.content, .ui.cards>.card>.content, input,
-  .ui.large.label,.ui.button, .ui.buttons .button, .ui.buttons .or, .forgotPasswordLink,.modalformFooter{
-    font-size: 14px !important;
-  }
+@media (min-width: 821px){
+ 
   .masthead_page {
     display: flex;
     align-items: center;
@@ -1315,7 +1603,7 @@ max-width: 95%;
    margin-right: 20px !important;
 }
 
-@media (max-width: 768px){
+@media (max-width: 820px){
 
   
   .active-spinner{
@@ -1449,7 +1737,13 @@ max-width: 80%;
 }
 }
 
-@media (min-width:768px){
+@media (min-width:820px){
+  
+.ui.modal.loginModal .image.content{
+  background: url(/assets/login-background.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+}
   .orderItem_BuyerDetails_Header{
     padding: 0 20px !important;
   }
@@ -1463,8 +1757,9 @@ max-width: 80%;
      position:relative;
   }
   .activityListItemDiv .medium img{
-    height: 100%;
+    height: 200px;
     width: 100%;
+    object-fit: cover;
   }
   .activityListItemDiv .medium {
     height: 100% !important;
@@ -1678,7 +1973,7 @@ i.search.inverted.icon {
   max-width: 100% !important;
 }
 
-@media (max-width: 768px){
+@media (max-width: 820px){
 .ui.modal>.close{
   color:black;
   opacity: 1;
@@ -1687,7 +1982,7 @@ i.search.inverted.icon {
   margin-top: 30px;
 }
 }
-@media (min-width: 769px){
+@media (min-width: 821px){
   .ui.modal>.close{
     color: #fff;
     opacity: 1;
@@ -1700,6 +1995,11 @@ i.search.inverted.icon {
   }
   }
 @media (max-width: 500px){
+  .activityListItem_Image_mobile img{
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+  }
   .homePage-button_Container {
     height: 60px;
 }
@@ -1887,6 +2187,25 @@ button, input, optgroup, select, textarea {
   text-overflow: ellipsis;
 }
 
+.profileListItem_CardDescription{
+   display: flex;
+   justify-content: center;
+   flex-direction: column;
+}
+
+.profileListItem_addToFav{
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  height: 40px;
+  z-index: 5;
+  font-size: 20px !important
+}
+.profileListItem_addToFav:hover{
+  transform: scale(1.20);
+}
+
 .starRating{
   display: flex;
   align-items: center;
@@ -1904,11 +2223,14 @@ button, input, optgroup, select, textarea {
 .profileCard_Label{
   width: fit-content !important;
     position: inherit !important;
-    margin: -12px 0 0 .5em !important
+    margin: -12px 0 5px .5em !important
 }
 .profileCard_Content{
   border-top: none !important;
   padding-bottom: 5px !important;
+  display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .profileHeader_content{
   display: flex !important;
@@ -1939,6 +2261,22 @@ button, input, optgroup, select, textarea {
  height: 75px;
  background: #fff !important;
 }
+
+.profilemenu_tab .item {
+
+ 
+  display: flex !important;
+  flex-direction: column;
+  font-size: 1rem !important;
+  line-height: 1.4rem !important;
+  margin: 0 auto !important
+}
+
+.profilemenu_tab .item .label{
+  font-size: 11px;
+    line-height: 7px;
+    margin-left: 5px !important;
+}
 .statisticLabels{
   display: flex;
   flex-direction: row-reverse;
@@ -1953,9 +2291,35 @@ button, input, optgroup, select, textarea {
     border-radius: 12px !important;
 }
 .profileMessageGrid{
-  background: #efefef  !important;
-    border: 1px solid #bebebe;
+  background: #ffffff  !important;
+    border: 1px solid #d4d4d5;
     border-radius: 12px !important;
+
+.profileImage{
+  width: 75px;
+  height: 75px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  z-index: 4;
+  box-shadow: 0px 5px 30px 0px rgb(108, 68, 252), 0px 0px 0px 7px rgba(69, 34, 224, 0.5);
+
+  @media screen and (max-width: 576px) {
+    width: 120px;
+    height: 120px;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+   
 }
 .questionmarkicon{
   margin-right: 0 !important;
@@ -1963,8 +2327,6 @@ button, input, optgroup, select, textarea {
 }
 .sendMessageButton, .showNumberButton {
   width: 100% !important;
-  height: 45px !important;
-  border-radius: 0.5rem !important;
 }
 .sendMessageButton{
     display: flex;
@@ -1979,10 +2341,7 @@ button, input, optgroup, select, textarea {
     font-size: 1rem !important;
     font-weight: 600 !important;
     line-height: 1.5rem !important;
-    border: 0.0625rem solid rgb(0, 105, 119) !important;
-    background-color: #263a5e  !important;
     color: rgb(255, 255, 255)  !important;
-    border-radius: 8px  !important;
     padding: calc(0.6875rem) 1.5rem  !important;
     cursor: pointer;
     margin-bottom: 10px !important;
@@ -2018,10 +2377,7 @@ button, input, optgroup, select, textarea {
 .followingButtonOut i{
   opacity: 1 !important
 }
-.sendMessageButton:hover {
-  background-color: #f2711c !important;
-  border: 0.0625rem solid #f2711c !important
-}
+
 .followingButtonOut_redClassName{
   border: 0.0625rem solid rgb(218, 35, 35) !important;
   color: rgb(218, 35, 35) !important;
@@ -2122,6 +2478,7 @@ button, input, optgroup, select, textarea {
   .masthead_page.profileDashboard
   {
     margin-top: 20px !important;
+    box-shadow: none !important;
   }
 
   .ui.grid .ui.stackable.grid {
@@ -2162,13 +2519,25 @@ button, input, optgroup, select, textarea {
 }
 
 .ui.segment.activityGallery{
-  margin: 16px -16px 0;
+  margin: 0 -16px 0;
 }
 
 }
 
-@media only screen and (min-width: 768px){
-  
+@media only screen and (min-width: 820px){
+  .savedActivity_lastcolumn{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+ 
+  .savedProfile_lastcolumn{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
   .profieHeader_userImage{
      width: 175px;
      height: 175px;
@@ -2191,7 +2560,11 @@ button, input, optgroup, select, textarea {
 }
 .masthead_page.profileDashboard
   {
-    margin-top: 50px !important;
+    box-shadow: none !important;
+   background-color: #f8f7f7 !important; 
+   margin-top: 0 !important;
+   padding-top: 40px !important;
+   padding-bottom: 30px !important;
   }
   .trainerForm_ConfirmContent{
     padding:20px 40px !important;
@@ -2406,6 +2779,7 @@ button, input, optgroup, select, textarea {
 
 .profile_desc_grid_rows{
   margin-bottom: 15px;
+ 
 }
 
 .readMore{
@@ -2599,8 +2973,17 @@ button, input, optgroup, select, textarea {
 
 .activityHeader{
   margin-top: 20px;
+ 
 }
 
+.activityHeader .ui.items {
+  margin: 1.5em 0;
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center;
+  width: 100% !important;
+}
 
 .activitySwiper.swiper {
   width: 100%;
@@ -2635,10 +3018,10 @@ button, input, optgroup, select, textarea {
 }
 
 .activitySwiper .swiper-button-prev,.activitySwiper .swiper-button-next{
-  color: #fff !important;
-  font-weight: 500 !important;
+  color: #38527a !important;
+  font-weight: 700 !important;
   top: 41% !important;
-  background: none !important;
+  background:#f9f9f95d;
 }
 
 
@@ -2791,31 +3174,46 @@ button, input, optgroup, select, textarea {
 .docCardAddAction{
              height: 100%;
              color: black; 
-             min-height: 180px;
+             min-height: 180px !important;
             
 }
 
-.docCardAddAction .MuiCardContent-root{
+.docCardAddAction .content{
   padding: 0 !important;
   height: 100%;
 }
 
-.docCardAddAction .MuiCardActionArea-root{
+.docCardAddAction .content{
   height: 100%;
 }
 
-.docCardAddAction .MuiTouchRipple-root{
+.docCardAddAction .content{
   opacity: .2;
 }
 
-.docCardAddAction:hover {
+.docCardAddAction:hover .content {
   border: dashed 1px rgb(48, 120, 179);
     background: aliceblue;
+    opacity: 1;
 }
 
-.MuiAvatar-colorDefault {
+.circleAvatar {
   color: #fafafa;
   background-color: #5569ff;
+  opacity: 1;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    font-size: 1.25rem;
+    align-items: center;
+    flex-shrink: 0;
+    line-height: 1;
+    user-select: none;
+    border-radius: 50%;
+    justify-content: center;
+    font-weight: 500;
 }
 
 
@@ -2826,11 +3224,12 @@ button, input, optgroup, select, textarea {
 }
 
 .addTwoTone{
-  font-size: 14px;
     font-weight: bold;
     color: #fff;
-    width: 64px;
-    height: 64px;
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 2.3em !important;
+    margin:0 !important
 }
 
 

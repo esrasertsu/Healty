@@ -14,7 +14,7 @@ const BlogMoreFromUser:React.FC<{blog:IBlog}> = ({blog}) => {
 
   const rootStore = useContext(RootStoreContext);
   const { userBlogs,setPredicateDisplayName ,setClearedBeforeNewPredicateComing,clearPredicates,setPredicate} = rootStore.blogStore;
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
 
   
     return (

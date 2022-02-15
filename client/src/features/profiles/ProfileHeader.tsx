@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useRef, useState } from 'react';
-import { Segment, Item, Header, Button, Grid, Statistic, Divider, ButtonGroup, Label, Icon, Dimmer, Loader, Image } from 'semantic-ui-react';
+import { Segment, Item, Header, Button, Grid, Statistic, Divider, ButtonGroup, Label, Icon, Dimmer, Loader, Image, Reveal, Modal } from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
 import { StarRating } from '../../app/common/form/StarRating';
 import { colors } from '../../app/models/category';
@@ -10,6 +10,8 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { useMediaQuery } from 'react-responsive'
 import * as _screenfull from "screenfull";
 import ReactPlayer from 'react-player/youtube'
+import { history } from '../../';
+import LoginForm from '../user/LoginForm';
 
 interface IProps{
     profile: IProfile,
@@ -24,9 +26,9 @@ const activityImageStyle = {
   height:"300px"
 };
 
-const activityImageTextStyle = {
+const activityImageTextStyle:any = {
 position: 'absolute',
-top: '10%',
+top: '15%',
 width: '100%',
 height: 'auto',
 color: 'white',
@@ -46,28 +48,56 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
   const rootStore = useContext(RootStoreContext);
   const { uploadCoverPic,uploadingCoverImage } = rootStore.profileStore;
   const {openModal,closeModal,modal} = rootStore.modalStore;
+  const {isLoggedIn } = rootStore.userStore;
+
   const [imageChange, setImageChange] = useState(false);
   const [imageDeleted, setImageDeleted] = useState(false);
   const [originalImage, setOriginalImage] = useState<Blob | null>(null);
 
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 375px)' })
 
   const [files, setFiles] = useState<any[]>([]);
   const [image, setImage] = useState<Blob | null>(null);
   const [croppedImageUrl, setCroppedImageUrl] = useState<string>("");
+  
+
+  const handleLoginClick = (e:any,str:string) => {
+    
+    if(modal.open) closeModal();
+
+        openModal("Giriş Yap", <>
+        <Image  size={isMobile ? 'big': isTabletOrMobile ? 'medium' :'large'}  wrapped />
+        <Modal.Description className="loginreg">
+        <LoginForm location={`/profile/${profile.userName}`} />
+        </Modal.Description>
+        </>,true,
+        "","blurring",true, "loginModal") 
+    }
 
  
+  const handleFollowClick =(name:string) =>{
+    if(isLoggedIn)
+    {
+      follow(name);
+    }else{
+      var str = `/profile/${profile!.userName}`;
+      handleLoginClick(null,str);
+    }
+  }
   const handleVideoPlay = () => {
     if(modal.open) closeModal();
 
     openModal("",
+    <>
+  {!isTabletOrMobile && <span style={{float:"right", marginTop:"-5px", cursor:"pointer"}} onClick={closeModal}>Kapat <Icon  name="close" /></span>}
     <ReactPlayer
     config={{ playerVars:{controls:1}}}
     width="auto" 
     height="500px" 
     controls={true}
     url={profile.videoUrl} />
+    </>
     ,false,null)
   }
 
@@ -122,17 +152,18 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
          }  
         {
           !imageChange && isCurrentUser && profile.coverImage !== null &&
-          <Segment basic style={activityImageTextStyle}>
+          <div style={activityImageTextStyle}>
           <Label floating color="blue" style={{cursor:"pointer", left:"80%"}} 
+          circular className='blue-gradientBtn'
            size={isTabletOrMobile ? "small" :"medium"}
-          onClick={()=>{setImageDeleted(true); setImageChange(true)}}>Kapak Resmini Değiştir <Icon name="edit"></Icon></Label>
-          </Segment>
+          onClick={()=>{setImageDeleted(true); setImageChange(true)}}>Kapak Resmini Değiştir <Icon name="picture"></Icon></Label>
+          </div>
         } 
         </Dimmer.Dimmable>
       </Segment.Group>
     <Segment className="profieHeader_segment" style={{marginTop:0}}>
       <Grid stackable>
-        <Grid.Column width={12} className="profieHeader_segment_column">
+        <Grid.Column width={11} className="profieHeader_segment_column">
           <Item.Group>
             <Item className="profieHeader_segment_item" style={{marginTop:"-112px"}}>
               <Image
@@ -140,7 +171,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                 size='small'
                 src={profile.image || '/assets/user.png'}
                 className="profieHeader_userImage"
-                style={{border: "4px solid #fff", height:"150px"}}
+                style={{border: "4px solid #fff", height:"150px", boxShadow: "0 7px 10px 0 #d4d4d5"}}
                 onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}
               />
               <Item.Content verticalAlign='middle' className="profileHeader_content">
@@ -158,7 +189,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                   {
                      (profile.videoUrl!=="" && profile.videoUrl !== null) &&
                      <div onClick={handleVideoPlay} className="profileHeader_videoPlay">
-                       <Image style={{width:"35px", marginRight:"10px"}} src={'/assets/videoPlayer.png'} />Tanıtım videosu <Icon name="hand point up"></Icon></div> 
+                       <Icon size="big" color='red' name="youtube play" /> Tanıtım videosu <Icon name="hand point up"></Icon></div> 
                 
                   }
                 </Grid.Row>
@@ -166,7 +197,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
             </Item>
           </Item.Group>
         </Grid.Column>
-        <Grid.Column width={4} className="profieHeader_segment_column">
+        <Grid.Column width={5} className="profieHeader_segment_column">
         <Statistic.Group widths={3} size='tiny'>
           <Statistic>
             <Statistic.Value>{profile.activityCount}</Statistic.Value>
@@ -189,6 +220,63 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
           </Statistic.Group>
           <Divider/>
          
+          {!isCurrentUser && 
+          <>         
+           <Button 
+            floated='right'
+            loading={loading}
+            fluid
+            circular
+            className='orange-gradientBtn'
+            // className={profile.isFollowing ? 'followingButtonOut_redClassName' : 'followingButtonOut_greenClassName'}
+              onClick={profile.isFollowing ? () => unfollow(profile.userName): () => handleFollowClick(profile.userName)}
+              //disabled={!isLoggedIn} 
+              >
+                {profile.isFollowing ? 'Favorilerimden Çıkar' : 'Favorilere Ekle'}
+                <Icon name='star' />
+            </Button>
+              </>
+
+          // <Reveal animated='move' style={{width:"100%"}}>
+          //   <Reveal.Content visible style={{ width: '100%' }}>
+          //     <Button
+          //       fluid
+          //       className="followingButtonOut"
+          //       content={profile.isFollowing ? 'Takip Ediliyor' : 'Takip Edilmiyor'}
+          //       icon="hand pointer"
+          //     />
+          //   </Reveal.Content>
+          //   <Reveal.Content hidden>
+          //     <Button
+          //       loading={loading}
+          //       fluid
+          //       className={profile.isFollowing ? 'followingButtonOut_redClassName' : 'followingButtonOut_greenClassName'}
+          //       content={profile.isFollowing ? 'Takipten Çık' : 'Takip Et'}
+          //       disabled={!isLoggedIn}
+          //       onClick={profile.isFollowing ? () => unfollow(profile.userName): () => follow(profile.userName)}
+          //     />
+          //   </Reveal.Content>
+          // </Reveal>
+          }
+          {isCurrentUser && profile.role === "Trainer" &&
+            <>
+            <Button
+              circular
+              className='gradientBtn'
+              content={'Blog Yaz'}
+              style={{width:"47%"}}
+              onClick={()=> history.push('/createPost')}
+            />
+            <Button
+            className='orange-gradientBtn'
+            circular
+            color={'blue'}
+            content={'Aktivite Aç'}
+            style={{width:"50%"}}
+            onClick={()=> history.push('/createActivity')}
+          />
+          </>
+          }
         </Grid.Column>
       </Grid>
     </Segment>

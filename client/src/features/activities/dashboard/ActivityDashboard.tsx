@@ -23,11 +23,11 @@ const ActivityDashboard: React.FC = () => {
 
   const { loadCategories,categoryRegistery } = rootStore.categoryStore;
 
-  const { cities } = rootStore.commonStore;
+  const { cities,appLoaded } = rootStore.commonStore;
 
   const [loadingNext, setLoadingNext] = useState(false);
   const [isToggleVisible, setIsToggleVisible] = useState(false);
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   const [visible, setVisible] = useState(false);
@@ -54,6 +54,13 @@ const ActivityDashboard: React.FC = () => {
     }
   },[activityRegistery.size,categoryRegistery.size,levelList,loadActivities,loadCategories,loadLevels]); //[] provides the same functionality with componentDidMounth..   dependency array
 
+  useEffect(() => {
+
+    loadActivities();
+    loadCategories();
+    loadLevels();
+     
+  }, [appLoaded])
   useEffect(() => {
     window.addEventListener("scroll", toggleVisibility);
     
@@ -175,10 +182,12 @@ const ActivityDashboard: React.FC = () => {
                 <div style={{display:"flex", justifyContent:"center"}}>
                  <Button  
                   floated="right"
+                  className='blue-gradientBtn'
                   fluid={isMobile} 
                   size="large" disabled={loadingNext || (page +1 >= totalPages)} 
                   onClick={()=> handleGetNext()} 
-                  style={{background:"#2185d0", color:"white",margin:"20px 0"}}
+                  style={{margin:"20px 0"}}
+                  circular
                 > Daha Fazla Göster </Button>
                 </div>
                 }
@@ -254,7 +263,9 @@ const ActivityDashboard: React.FC = () => {
       <Button 
        inverted 
        content="Temizle" 
-       style={{marginTop:"10px"}}
+       circular
+       fluid
+       style={{marginTop:"15px"}}
        onClick={() =>{
         clearKeyPredicate("startDate");
         clearKeyPredicate("endDate");
@@ -270,7 +281,7 @@ const ActivityDashboard: React.FC = () => {
           </Segment>
           
           <div className="activityDashboard_mobile_filterdiv">
-          <Button basic color="grey" onClick={() => setVisible(!visible)}>Filtreler <Icon style={{marginLeft:"5px"}} name="sliders horizontal" /></Button>
+          <Button basic color="grey" onClick={() => setVisible(!visible)} circular>Filtreler <Icon style={{marginLeft:"5px"}} name="sliders horizontal" /></Button>
             <div>
             <div className="mobileRadioToggle">
               <div>Online </div> 
@@ -316,11 +327,13 @@ const ActivityDashboard: React.FC = () => {
                 {activityRegistery.size > 0 && 
                 <div style={{display:"flex", justifyContent:"center"}}>
                 <Button  
-                 floated="right"
+                  className='blue-gradientBtn'
+                  floated="right"
                  fluid={isMobile} 
                  size="large" disabled={loadingNext || (page +1 >= totalPages)} 
                  onClick={()=> handleGetNext()} 
-                 style={{background:"#2185d0", color:"white",margin:"20px 0"}}
+                 style={{margin:"20px 0"}}
+                 circular
                > Daha Fazla Göster </Button>
                </div>
                 }

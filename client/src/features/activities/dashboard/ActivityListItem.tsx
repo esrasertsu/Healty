@@ -1,25 +1,31 @@
 import React, { useContext } from 'react'
-import { Item, Segment, Icon, Label, Card, Popup, Image, Modal } from 'semantic-ui-react'
+import { Item, Segment, Icon, Label, Card, Popup, Image, Modal, Button } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity';
 import { format } from 'date-fns';
 import {ActivityListItemAttendees } from './ActivityListItemAttendees';
 import { StarRating } from '../../../app/common/form/StarRating';
-import { colors } from '../../../app/models/category';
+import { borderColors, colors } from '../../../app/models/category';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import { useMediaQuery } from 'react-responsive'
 import tr  from 'date-fns/locale/tr'
 import { useHistory } from 'react-router-dom';
+import LoginForm from '../../user/LoginForm';
+import { observer } from 'mobx-react-lite';
 
-export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
+const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
     const rootStore = useContext(RootStoreContext);
     const {isLoggedIn,user} = rootStore.userStore;
+    const {save,unsave} = rootStore.activityStore;
+    const {openModal,closeModal,modal} = rootStore.modalStore;
 
-    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 767px)' })
+    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
+    const isMobile = useMediaQuery({ query: '(max-width: 375px)' })
+
     const history = useHistory();
     const host = activity.attendees.filter(x => x.isHost === true)[0];
     const index = activity.categories && activity.categories.length>0 ? colors.findIndex(x => x.key === activity.categories[0].text): 0;
     const color = colors[index].value;
-
+   const borderColor = borderColors[index].value;
     
 
     const handleCardClick = (e:any) => {
@@ -28,15 +34,55 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
             history.push(`/activities/${activity.id}`);
     }
 
+    const handleLoginClick = (e:any,str:string) => {
+    
+        if(modal.open) closeModal();
+    
+            openModal("Giriş Yap", <>
+            <Image  size={isMobile ? 'big': isTabletOrMobile ? 'medium' :'large'}  wrapped />
+            <Modal.Description className="loginreg">
+            <LoginForm location={str} />
+            </Modal.Description>
+            </>,true,
+            "","blurring",true, "loginModal") 
+        }
+    
+  const handleSave = (id:string) =>{
+    if(isLoggedIn)
+    {
+      save(id).then(() =>{
+        activity.isSaved = true;
+      })
+    }else{
+      var str = `/activities/${id}`;
+      handleLoginClick(null,str);
+    }
+  }
+
+  
+  const handleUnSave = (id:string) =>{
+    if(isLoggedIn)
+    {
+      unsave(id).then(() =>{
+        activity.isSaved = false;
+      })
+    }else{
+        var str = `/activities/${id}`;
+        handleLoginClick(null,str);
+    }
+  }
+
     return (
        
-        <Card className="activityListItem" onClick={(e:any) => handleCardClick(e)} >
+        <Card className="activityListItem"
+        // onClick={(e:any) => handleCardClick(e)}
+          >
                
         <Segment.Group>
             {
                 activity.categories.length>0 && (
                     <Label
-                    style={{ position: 'absolute', zIndex:"1", marginLeft:"13px", marginTop:"10px" , background:color}}
+                    style={{ position: 'absolute', zIndex:"1", marginLeft:"13px", marginTop:"10px" , background:color, borderColor:borderColor}}
                     ribbon
                   >
                     {activity.categories[0].text}
@@ -53,22 +99,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                             src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'}
                             className={isTabletOrMobile ? "activityListItem_Image_mobile":""} >
                         </Item.Image>
-                        {activity.isGoing && !activity.isHost &&
-                         <Popup
-                         header={"Bu etkinliğe gidiyorsun"}
-                         trigger={
-                            <Image src={'/icons/event-accepted.png'} style={{position:"absolute", top:10, right:10, color:"#f2711c",height:"40px"}} />
-                        }
-                       />
-                        }
-                         {activity.isHost && 
-                            <Popup
-                            header={"Bu etkinliğin düzenleyeni sensin."}
-                            trigger={
-                                <Image src={"/icons/edit-calendar.png"} name="edit" style={{position:"absolute", top:10, right:10, color:"#00b5ad",height:"40px"}}/>
-                            }
-                          />
-                    }
+                       
                     </div>
                   <div className="activityListItem_content_div">
 
@@ -107,7 +138,7 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                                     activity.levels.map<React.ReactNode>(s => <span key={s.value}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
                                     : " Bilgi yok"
                                 }
-                               {activity.online ?  <div style={{marginTop:".6em"}}> <Icon name='wifi' color="green" />  Online katılıma açık <Icon name='check' size='small' color='green' /> </div>: <div style={{marginTop:".6em"}}><Icon name='wifi' color="grey"/>Online katılıma kapalı</div>}
+                               {activity.online ?  <div style={{marginTop:".6em"}}> <Image style={{height:"25px", marginRight:"5px"}} src="/icons/wifi-ok.png"/>  Online katılıma açık </div>: <div style={{marginTop:".6em",marginRight:"5px"}}><Image style={{height:"25px"}} src="/icons/wifi-nok.png"/>Online katılıma kapalı</div>}
                                 </div>
                         </Item.Description> 
                         <Item.Description style={{marginTop: "15px"}}>
@@ -117,9 +148,41 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                             </Item.Description>
                     </Item.Content>
                     <Item.Content className={isTabletOrMobile ? "activity_listItem_extraContent_mobile":"activity_listItem_extraContent"} >
-                    <Item.Description style={{textAlign:"right", display: "flex", justifyContent: "flex-end"}}>
-                     <StarRating rating={5} editing={false} size={'small'} showCount={false}/>
+                   
+                    <Item.Description style={{ display: "flex", alignItems: "flex-end", flexDirection:"column", textAlign:"right"}}>
+                     {/* <StarRating rating={5} editing={false} size={'small'} showCount={false}/> */}
+                     {
+                        (!isLoggedIn || (user && !activity.isHost)) && 
+                        <Popup
+                        hoverable
+                        position="top center"
+                        on={['hover', 'click']}
+                        positionFixed 
+                       content="Kaydet"
+                       key={activity.id+Math.random()+"subPopover"}
+                       trigger={ 
+                        <Icon 
+                        className='activity_addToFav' 
+                        name={activity.isSaved?"bookmark" :"bookmark outline"}  
+                        color={"red"}
+                        onClick={() => activity.isSaved ? handleUnSave(activity.id) :handleSave(activity.id) } />
+                       }
+                     />
+                      
+                        
+                    }
+
+                      {activity.isGoing && !activity.isHost &&
+                        <span>Bu etkinliğe katılıyorsun!</span>
+                        }
+
+
+                         {activity.isHost && 
+                            <span>Bu etkinliği sen düzenliyorsun!</span>
+                         
+                    }
                     </Item.Description>
+                  
                     <Item.Description style={{flex:"end"}}>
                         {activity.price === null || activity.price === 0 ? 
                          <div className="baseline-pricing">
@@ -139,10 +202,9 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
                         </p>
                         </div> 
                         <p className="baseline-pricing__category">
-                    'den başlayan fiyatlarla
+                    {/* 'den başlayan fiyatlarla */}
                 </p></div>
                }
-                   
                     </Item.Description>
                     </Item.Content>
                     </div>
@@ -153,10 +215,19 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
             <Segment clearing secondary className="activityListItem_footer">
                 <Icon name='clock' /> Saat: {format(activity.date, 'HH:mm',{locale: tr})}
                 &nbsp;
-                <Icon name='marker' /> {activity.venue}, {activity.city && activity.city.text}
-               {
+               { !activity.online && <><Icon name='marker' /> <span>{activity.venue}, {activity.city && activity.city.text}</span></> }
+               {/* {
                    isLoggedIn && user &&  <ActivityListItemAttendees attendees={activity.attendees}/>
-               }
+               } */}
+              
+             <Button 
+             circular 
+             size='small' 
+             content="Aktivite Detayı" 
+             className='gradientBtn' 
+             floated='right' icon="angle right" labelPosition='right'
+             onClick={(e:any) => handleCardClick(e)}></Button>
+
 
             </Segment>
            {/*  <Segment secondary>
@@ -170,3 +241,4 @@ export const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) =>
         </Card>
     )
 }
+export default observer(ActivityListItem);

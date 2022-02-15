@@ -26,7 +26,7 @@ const meetConfig = {
     const { generateZoomToken } = rootStore.activityStore;
     const { user } = rootStore.userStore;
     const {openModal, closeModal} = rootStore.modalStore;
-    const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+    const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
 
   //const initiateMeeting = (ZoomMtg: any,signature:string) => {
 
@@ -119,7 +119,7 @@ const meetConfig = {
             >
               <Header>Online Aktivite  </Header>
             </Segment>
-            <Segment attached>
+            {/* <Segment attached>
                 
                 
             <div className="activityDetail_zoom_title">
@@ -154,7 +154,7 @@ const meetConfig = {
             {activity.activityJoinDetails && activity.activityJoinDetails.zoom && !isTablet &&
                <Button color="green" onClick={handleJoinMeeting} content={"Katıl"} icon="video" labelPosition="right"></Button>
             }
-               </Segment>
+               </Segment> */}
             </>
           
         }

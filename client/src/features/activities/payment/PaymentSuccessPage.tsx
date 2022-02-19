@@ -81,8 +81,8 @@ const PaymentSuccessPage : React.FC<RouteComponentProps> = ({location}) =>{
                 {
                     activity.online ?  
                     <div style={{marginTop:".6em"}}> 
-                   <Image style={{height:"25px", marginRight:"5px"}} src="/icons/wifi-ok.png"/>
-                    Online katılım </div>
+                   <Image style={{height:"25px", marginRight:"5px",display:"flex", flexDirection:"row", alignItems:"center"}} src="/icons/wifi-ok.png"/>
+                    <span>Online katılım</span> </div>
                      :
                    <span>{activity.city ? activity.city.text : "Şehir Belirtilmemiş"} - {activity.venue? activity.venue : "Lokasyon Belirtilmemiş"}</span> 
                 }

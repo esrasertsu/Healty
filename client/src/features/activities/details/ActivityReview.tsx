@@ -17,62 +17,54 @@ export const ActivityReview:React.FC<{activity:IActivity}> = ({activity}) => {
 
     const [rating, setRating] = useState(0);
 
-    const handleFinalFormSubmit = () => {
+    const handleFinalFormSubmit = async (values: any) => {
       debugger;
     
 
       }
 
-    return (<>
-        {
+    return (
            <>
-           
             <Header>Değerlendirme Formu  </Header>
-            <Segment attached>
+            <Segment>
             <h4 className="activityDetail_title">Aktivite hakkındaki görüşleriniz</h4>
             <FinalForm 
             onSubmit ={handleFinalFormSubmit}
-            initialValues={{ allowDisplayName:false,body:"" }}
-            render={({handleSubmit, form,values,initialValues}) => (
+            initialValues={{ body:"" }}
+            render={({handleSubmit, form,submitting,values,initialValues}) => (
               <Form widths={"equal"} 
               onSubmit={() => handleSubmit()!.then(()=> {form.reset(); setRating(0); })}
               >
                  <StarRating rating={rating} setRating={setRating} editing={true} showCount={false}/>
-           <br/>
-           <Field
-                  name="body"
-                  placeholder="Aktivite hakkındaki düşünceleriniz, tecrübeleriniz..."
-                  component={TextAreaInput}
-                  rows={6}
-                />  
-          <br/>
-          {/* <Rating icon='star' defaultRating={3} maxRating={4} /> */}
-           
-         
-        </Form>
-        
-        )}
-      />
-  
-            </Segment>
-            <Segment clearing attached='bottom' style={{backgroundColor:"#e8e8e8d1", display:"flex", justifyContent:"flex-end"}}>
-            {
-                    <Button
+                <br/>
+                <Field
+                        name="body"
+                        placeholder="Aktivite hakkındaki düşünceleriniz, tecrübeleriniz..."
+                        component={TextAreaInput}
+                        rows={6}
+                      />  
+                <br/>
+                <div>
+                <Button
                     type="submit"
                     style={{marginTop: 12}}
                     floated="right"
                       content='Gönder'
                       circular className='blue-gradientBtn'
-                     // loading={submitting}
-                      disabled={!isLoggedIn}
-                    />            
-                    }
-               </Segment>
+                      loading={submitting}
+                    />  
+                </div>
+               
+                {/* <Rating icon='star' defaultRating={3} maxRating={4} /> */}
+                
+         
+              </Form>
+        
+              )}
+            />
+  
+            </Segment>
             </>
-          
-        }
-        </>
-          
     )
 }
 

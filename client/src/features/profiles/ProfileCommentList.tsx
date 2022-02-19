@@ -44,7 +44,7 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
                       <Comment.Avatar circular="true" src={comment.image || '/assets/user.png'}  onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}/>
                       <Comment.Content>
                         <Comment.Author as={Link} to={`/profile/${comment.authorName}`} 
-                         style={!comment.allowDisplayName ? {pointerEvents: "none", color:"black"} : {color:"#263a5e"}}
+                         style={!comment.allowDisplayName ? {pointerEvents: "none", color:"black"} : {color:"#222E50"}}
                         replace>{!comment.allowDisplayName ? comment.displayName.charAt(0) + comment.displayName.split('').map((char: any) => "*" ).join("") : comment.displayName}</Comment.Author>
                         <Comment.Metadata>
                           <div>{formatDistance(new Date(comment.createdAt), new Date(),{locale: tr})}</div>

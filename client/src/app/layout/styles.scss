@@ -43,7 +43,7 @@ body {
   font-size: 16px;
   font-weight: 500;
  // font-family: 'Quicksand', sans-serif;
-  color: #324e63;
+  color: #222E50;
 }
 html, body {
   overflow-x: hidden;
@@ -69,7 +69,7 @@ body {
   background: #ffffff !important;
 }
 .a {
-  color: #263a5e 
+  color: #222E50 
 }
 .ui.vertical.menu,.ui.accordion.menu .item .title {
   font-family: AssistantRegular, Arial,  sans-serif;
@@ -79,8 +79,10 @@ body {
 
 .ui.secondary.pointing.menu .desktopMenu.item{
   border: none;
- line-height: 1rem;
- height: 55px;
+  line-height: 1rem;
+  height: 55px;
+  padding: 0.85714286em 0.64285714em;
+  font-size: 1rem;
  i.icon{
     font-size: 17px;
  }
@@ -97,7 +99,7 @@ body {
 
 }
 .ui.secondary.pointing.menu .desktopMenu.item:after{
-  background-color: #263a5e;
+  background-color: #222E50;
     bottom: 7px;
     content: "";
     display: block;
@@ -168,22 +170,22 @@ body {
 @keyframes slideBg {
    
   0%{
-    background-image: url("../layout/img/banner-2.jpg"); 
+    background-image: url("../layout/img/homepage.svg"); 
   }
   20%{
-    background-image: url("../layout/img/banner-2.jpg") ; 
+    background-image: url("../layout/img/homepage.svg"); 
   }
   40%{
-    background-image: url("../layout/img/psikolog.jpg") ; 
+    background-image: url("../layout/img/homepage.svg"); 
   }
   60%{
-    background-image: url("../layout/img/dietitian.jpg"); 
+    background-image: url("../layout/img/homepage.svg"); 
   }
   80%{
-    background-image: url("../layout/img/meditation-sitting.jpg") ; 
+    background-image: url("../layout/img/homepage.svg"); 
   }
   100%{
-    background-image: url("../layout/img/psikolog3.png") ; 
+    background-image: url("../layout/img/deneme-1.png") ; 
   }
 }
 
@@ -207,11 +209,11 @@ body {
 .ui.header, .ui.header .content{
   font-family: AssistantMedium, Arial,  sans-serif !important;
   font-weight: normal;
-  color: #263a5e ;
+  color: #222E50 ;
 }
 .ui.statistic>.value, .ui.statistics .statistic>.value, .segmentHeader {
   font-family: AssistantRegular, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
-  color: #263a5e 
+  color: #222E50 
 
 }
 
@@ -252,7 +254,7 @@ body {
   font-size: 1.1rem;
   line-height: 1.25rem;
   font-weight: 500 !important;
-  color: #263a5e 
+  color: #222E50 
 }
 
 .ui.comments{
@@ -314,7 +316,7 @@ right: 0;
   color:#f3f4f5;
 }
 .blogListItem_Header{
-  color: #263a5e !important;
+  color: #222E50 !important;
 }
 .ui.form input:not([type]), .ui.form input[type=date], .ui.form input[type=datetime-local], .ui.form input[type=email], .ui.form input[type=file], .ui.form input[type=number], .ui.form input[type=password], .ui.form input[type=search], .ui.form input[type=tel], .ui.form input[type=text], .ui.form input[type=time], .ui.form input[type=url]{
   font-family: AssistantRegular, Arial,  sans-serif !important;
@@ -444,6 +446,34 @@ h1, h2, h3, h4, h5 {
   
 }
 
+.custom-shape-divider-bottom-1645136318 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1645136318 svg {
+  position: relative;
+  display: block;
+  width: calc(137% + 1.3px);
+  height: 254px;
+}
+
+.custom-shape-divider-bottom-1645136318 .shape-fill {
+  fill: #FFFFFF;
+}
+
+.orange-btn{
+  background: #E36034 !important
+}
+.ui.orange.button, .ui.orange.buttons .button {
+  background-color: #E36034;
+}
+
 .gray-gradientBtn {
   box-shadow: none;
   background: #dcdcdc;
@@ -452,7 +482,7 @@ h1, h2, h3, h4, h5 {
 
 .gray_label{
   background-color: #f7f7f7 !important;
-  color: #263a5e !important;
+  color: #222E50 !important;
 }
 
 .facebook_btn{
@@ -551,7 +581,7 @@ h1, h2, h3, h4, h5 {
   .ui.menu .active.item{
     border-color: #ff6902 !important;
     border-bottom-width: 3px;
-    color: #263a5e !important;
+    color: #222E50 !important;
   }
   .ui.segment.active.tab{
     background: initial;
@@ -564,6 +594,7 @@ h1, h2, h3, h4, h5 {
 .nav_SearchArea{
   input{
     height: 35px;
+    font-size: 14px;
   }
 }
 
@@ -619,7 +650,7 @@ h1, h2, h3, h4, h5 {
   color: #345289;
 }
 .baseline-pricing {
-  color: #263a5e;
+  color: #222E50;
   text-align: right;
 }
 
@@ -645,8 +676,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .activityDateLabels{
-  background-color: "#263a5e";
-  color:"#fff"
+  color:"#222E50"
 }
 
 .activityListItem_footer{
@@ -712,7 +742,7 @@ p.baseline-pricing__value{
     border-bottom: 1px solid rgba(34,36,38,.15);
     padding: 5px 0;
     font-size: 15px;
-    color: #263a5e;
+    color: #222E50;
 }
 
 .activityDetail_zoom_title{
@@ -740,7 +770,7 @@ p.baseline-pricing__value{
 }
 
 .activityDetail_payment_footer .price,.activityDetail_payment_title{
-  color: #263a5e;
+  color: #222E50;
 
 }
 
@@ -750,7 +780,7 @@ p.baseline-pricing__value{
     border-bottom: 1px solid rgba(34,36,38,.15);
     padding: 5px 0;
     font-size: 15px;
-    color: #263a5e;
+    color: #222E50;
 }
 
 
@@ -762,7 +792,7 @@ font-size: 17px;
 .activityDetail_payment_footer .price{
   font-family: AssistantMedium, Arial, sans-serif !important;
   font-weight: normal;
-  color: #263a5e;
+  color: #222E50;
   font-size: 22px;
 }
 
@@ -771,7 +801,7 @@ font-size: 17px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  color: #263a5e;
+  color: #222E50;
   margin-bottom: 10px;
   justify-content: space-between;
 
@@ -781,11 +811,11 @@ font-size: 17px;
   margin: 10px 0 10px 0;
   font-family: AssistantMedium, Arial,  sans-serif !important;
     font-weight: normal;
-    color: #263a5e;
+    color: #222E50;
     font-size: 17px;
 }
 .activityDetail_payment_calenderIcon{
-  color: #263a5e;
+  color: #222E50;
 
 }
 
@@ -879,7 +909,7 @@ a.ui.card:hover {
     border-radius: 4px !important;
 }
 .ui.secondary.menu .item{
-  color: #263a5e;
+  color: #222E50;
   font-family: system-ui;
   line-height: 1.5rem;
   -webkit-font-smoothing: antialiased;
@@ -1154,7 +1184,7 @@ a.ui.card:hover {
 }
 
 .ui.text.container {
-  margin: 40px 0 41px 70px !important;
+  margin: 80px 70px 41px 70px !important;
   text-align: left;
     font-family: AssistantRegular, Arial, sans-serif;
     max-width: 500px !important;
@@ -1188,14 +1218,13 @@ a.ui.card:hover {
    background-size: cover !important;
    background-repeat: no-repeat;
    backface-visibility: hidden;
-   animation-name: slideBg;
-   animation-duration: 30s;
-   animation-iteration-count: infinite;
-   background-image: url("../layout/img/banner-2.jpg"); 
-   animation-delay: 3s;
-   animation-timing-function:step-start;
-   animation-fill-mode: both;
-   background-position-y: -260px !important;
+  //  animation-name: slideBg;
+  //  animation-duration: 30s;
+  //  animation-iteration-count: infinite;
+   background-image: url("../layout/img/homepage.svg"); 
+  //  animation-delay: 3s;
+  //  animation-timing-function:step-start;
+  //  animation-fill-mode: both;
  }
 
  .ui.text.container {
@@ -1254,14 +1283,13 @@ a.ui.card:hover {
    background-size: cover !important;
    background-repeat: no-repeat;
    backface-visibility: hidden;
-   animation-name: slideBg;
-   animation-duration: 30s;
-   animation-iteration-count: infinite;
-   background-image: url("../layout/img/banner-2.jpg"); 
-   animation-delay: 3s;
-   animation-timing-function:step-start;
-   animation-fill-mode: both;
-   background-position-y: -220px !important;
+  //  animation-name: slideBg;
+  //  animation-duration: 30s;
+  //  animation-iteration-count: infinite;
+   background-image: url("../layout/img/homepage-1.svg"); 
+  //  animation-delay: 3s;
+  //  animation-timing-function:step-start;
+  //  animation-fill-mode: both;
  }
  .masthead.profileDashboard{
   width: 100%;
@@ -1281,10 +1309,10 @@ a.ui.card:hover {
 
 @media (min-width: 821px) and (max-width:1199px){
   .ui.text.container{
-    margin: 40px 0 40px 150px !important;
+    margin: 80px 30px 40px 40px !important;
     text-align: left;
     font-family: AssistantRegular, Arial, sans-serif;
-    max-width: 500px !important;
+    max-width: 475px !important;
   }
 }
 
@@ -1478,7 +1506,7 @@ max-width: 95%;
 }
 }
 
-@media (min-width: 820px) and (max-width: 1024px){
+@media (min-width: 768px) and (max-width: 1024px){
  
   
 #slideImages.masthead {
@@ -1490,13 +1518,13 @@ max-width: 95%;
    background-size: cover !important;
    background-repeat: no-repeat;
    backface-visibility: hidden;
-   animation-name: slideBg;
-   animation-duration: 30s;
-   animation-iteration-count: infinite;
-   background-image: url("../layout/img/banner-2.jpg"); 
-   animation-delay: 3s;
-   animation-timing-function:step-start;
-   animation-fill-mode: both;
+  //  animation-name: slideBg;
+  //  animation-duration: 30s;
+  //  animation-iteration-count: infinite;
+  background-image: url("../layout/img/homepage-1.svg"); 
+  //  animation-delay: 3s;
+  //  animation-timing-function:step-start;
+  //  animation-fill-mode: both;
  }
 
  .masthead.profileDashboard{
@@ -1887,11 +1915,11 @@ max-width: 80%;
 }
 
 .mobileNavMenuButton{
-  color: #263a5e !important
+  color: #222E50 !important
 }
 .mobileNavMenuButton.active{
-  border-color: #263a5e !important;
-  color: #263a5e !important
+  border-color: #222E50 !important;
+  color: #222E50 !important
 }
 
 .masthead .ui.menu .ui.button,
@@ -1899,14 +1927,13 @@ max-width: 80%;
   margin-left: 0.5em;
 }
 
-.masthead h1.ui.header {
-  line-height: 2.75rem;
+ h1.ui.header {
+  line-height: 2.5rem;
   font-size: 36px;
-  font-weight: 500;
-    font-family:  AssistantRegular, Arial, sans-serif;
+    font-family:  AssistantBold, Arial, sans-serif !important;
     margin-bottom: 40px;
-    text-shadow: 1.5px 1.5px #263a5e;
-}
+    text-shadow: rgb(242 242 242) 1.5px 1.5px;
+  }
 i.search.inverted.icon {
   opacity: 1 !important;
   font-size: 0.85em  !important;
@@ -1915,11 +1942,13 @@ i.search.inverted.icon {
 .masthead_page h1.ui.header {
   font-size: 1.5em;
   font-weight: 500;
-  color: #263a5e;
+  color: #222E50;
+  text-shadow: rgb(242 242 242) 1.5px 1.5px;
+
 }
 
 .homePage-button_Container{
-  background-color: #263a5e;
+  background-color: #263A5E;
   height: 80px;
   flex-direction: row;
   display: flex !important;
@@ -2149,7 +2178,7 @@ button, input, optgroup, select, textarea {
   font-size: 1.7rem !important;
   line-height: 2rem !important;
   margin-bottom: 10px;
-  text-shadow: 1.5px 1.5px #263a5e;
+  text-shadow: 1.5px 1.5px #222E50;
 }
 
 .homepageCatCard .content .label{
@@ -2259,7 +2288,7 @@ button, input, optgroup, select, textarea {
 }
 
 .profileContent_icons, .profilemenu_tab .active.item{
-  color:#263a5e !important
+  color:#222E50 !important
 }
 
 .profilemenu_tab{
@@ -2365,7 +2394,7 @@ button, input, optgroup, select, textarea {
     font-size: 1rem !important;
     font-weight: 600 !important;
     line-height: 1.5rem !important;
-    border: 0.0625rem solid #263a5e !important;
+    border: 0.0625rem solid #222E50 !important;
     background-color: rgb(255, 255, 255)  !important;
     border-radius: 8px  !important;
     padding: calc(0.6875rem) 1.5rem  !important;
@@ -2373,7 +2402,7 @@ button, input, optgroup, select, textarea {
     margin-bottom: 10px !important;
 }
 .followingButtonOut{
-  background-color: #263a5e  !important;
+  background-color: #222E50  !important;
   color: rgb(255, 255, 255)  !important;
   border-radius: 8px  !important;
   border:0.0625rem solid !important
@@ -2436,13 +2465,13 @@ button, input, optgroup, select, textarea {
      background-size: cover !important;
      background-repeat: no-repeat;
      backface-visibility: hidden;
-     animation-name: slideBg;
-     animation-duration: 30s;
-     animation-iteration-count: infinite;
-     background-image: url("../layout/img/banner-2.jpg"); 
-     animation-delay: 3s;
-     animation-timing-function:step-start;
-     animation-fill-mode: both;
+    //  animation-name: slideBg;
+    //  animation-duration: 30s;
+    //  animation-iteration-count: infinite;
+    background-image: url("../layout/img/homepage.svg"); 
+    //  animation-delay: 3s;
+    //  animation-timing-function:step-start;
+    //  animation-fill-mode: both;
    }
 }
 
@@ -2457,13 +2486,13 @@ button, input, optgroup, select, textarea {
      background-size: cover !important;
      background-repeat: no-repeat;
      backface-visibility: hidden;
-     animation-name: slideBg;
-     animation-duration: 30s;
-     animation-iteration-count: infinite;
-     background-image: url("../layout/img/banner-2.jpg"); 
-     animation-delay: 3s;
-     animation-timing-function:step-start;
-     animation-fill-mode: both;
+    //  animation-name: slideBg;
+    //  animation-duration: 30s;
+    //  animation-iteration-count: infinite;
+    background-image: url("../layout/img/homepage.svg"); 
+    //  animation-delay: 3s;
+    //  animation-timing-function:step-start;
+    //  animation-fill-mode: both;
    }
 
 }
@@ -2549,7 +2578,7 @@ button, input, optgroup, select, textarea {
   }
   .profieHeader_displayName{
     color:#fff !important;
-    text-shadow: 1.5px 1.5px #263a5e;
+    text-shadow: 1.5px 1.5px #222E50;
   }
   .profieHeader_starRating{
     text-shadow: rgb(69 60 38) 1.5px 1.5px
@@ -2584,7 +2613,7 @@ button, input, optgroup, select, textarea {
 .blog_description_header{
   text-align: left;
   width: 100%;
-  color: #263a5e !important
+  color: #222E50 !important
 }
 
 .blog_description_date{
@@ -2601,7 +2630,7 @@ button, input, optgroup, select, textarea {
 }
 
 .blogListItem_Readmore{
-  color: #263a5e   !important;
+  color: #222E50   !important;
   font-style: italic;
   font-family: 'AssistantMedium';
   text-decoration: underline;
@@ -2626,7 +2655,7 @@ button, input, optgroup, select, textarea {
 }
 
 .blog_userdetail .blog_user{
-  color: #263a5e   !important;
+  color: #222E50   !important;
   display: flex !important;
   flex-direction: row;
   align-items: center;
@@ -2638,7 +2667,7 @@ button, input, optgroup, select, textarea {
   font-size: 1.5rem !important;
   width: 100%;
   margin-bottom: 30px !important;
-  color: #263a5e !important
+  color: #222E50 !important
 }
 
 .blog_morefromuser_readmore{
@@ -2887,7 +2916,7 @@ button, input, optgroup, select, textarea {
   line-height: 1.28571429em;
     margin-bottom: 1rem;
     font-weight: 500;
-    color: #263a5e;
+    color: #222E50;
     font-size: 22px;
 }
 
@@ -3033,7 +3062,7 @@ button, input, optgroup, select, textarea {
 .trainerFormAccordionTitle{
   font-family: AssistantMedium, Arial, sans-serif !important;
   font-weight: normal !important;
-  color: #263a5e !important;
+  color: #222E50 !important;
   font-size: 1.31428571rem !important;
   padding: 15px 0 15px 15px !important;
 }
@@ -3157,7 +3186,7 @@ button, input, optgroup, select, textarea {
   padding: 10px 0;
   text-align: center;
   border-radius: 10px;
-  background-color: #263a5e;
+  background-color: #222E50;
   color: white;
   outline: none;
   border: none;

@@ -144,7 +144,7 @@ const meetConfig = {
                   <div><b>Platform</b>:{activity.activityJoinDetails && activity.activityJoinDetails.zoom && "Zoom"}</div>
                     <div>Meeting Id: {activity.activityJoinDetails ? activity.activityJoinDetails.meetingId : "Belirtilmemiş"}</div>
                     <div>Password: {activity.activityJoinDetails ? activity.activityJoinDetails.meetingPsw: "Belirtilmemiş"}</div>
-                    <div>Url: <a href={activity.activityJoinDetails && activity.activityJoinDetails.activityUrl} target="_blank" style={{textDecoration:"underline",color: "#263a5e"}}>{activity.activityJoinDetails ? activity.activityJoinDetails.activityUrl: "Belirtilmemiş"}</a></div>
+                    <div>Url: <a href={activity.activityJoinDetails && activity.activityJoinDetails.activityUrl} target="_blank" style={{textDecoration:"underline",color: "#222E50"}}>{activity.activityJoinDetails ? activity.activityJoinDetails.activityUrl: "Belirtilmemiş"}</a></div>
 
                 </div>
                {activity.isHost &&   <Button className="editJoinInfoBtn" content="Katılım Detaylarını Düzenle" onClick={handleEditJoinInfo} />} 

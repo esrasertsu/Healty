@@ -188,8 +188,8 @@ const sixItem:SemanticWIDTHS = 6;
        <br></br>
        <div style={isMobile? {textAlign:"center", marginBottom:"40px"  } : {display:"flex", justifyContent:"center", alignItems:"center" }}>
         <div>
-        <Header size="large" style={{color:"#263a5e"}} content="Hay aksi!"/>
-        <Header size="medium" style={{color:"#263a5e"}} content="Şimdilik aradığın kriterlerde bir uzman bulamadık ama senin için hergün yüzlerce farklı uzmanla görüşüyor ve en iyilerini arıyoruz. Takipte kal"/>
+        <Header size="large" style={{color:"#222E50"}} content="Hay aksi!"/>
+        <Header size="medium" style={{color:"#222E50"}} content="Şimdilik aradığın kriterlerde bir uzman bulamadık ama senin için hergün yüzlerce farklı uzmanla görüşüyor ve en iyilerini arıyoruz. Takipte kal"/>
           </div>
        <Image src={"/icons/academic.png"} style={isMobile? {width:"100%"} : {width:"50%"}} />
       </div>      </> :
@@ -199,9 +199,9 @@ const sixItem:SemanticWIDTHS = 6;
         <Grid.Row style={{marginTop:"20px"}}>
           <Grid.Column width={16} className="profileList_headerAndSorting">
           <div>
-          <Header size="medium" style={{color:"#263a5e"}}> Tümü ({profilePageCount})</Header>
+          <Header size="medium" style={{color:"#222E50"}}> Tümü ({profilePageCount})</Header>
 
-          {/* <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff",fontSize: '17px'}}> Tümü ({profilePageCount}) </Label> */}
+          {/* <Label size='medium' style={{backgroundColor: "#222E50", color:"#fff",fontSize: '17px'}}> Tümü ({profilePageCount}) </Label> */}
           </div>
           <div>
           <Select 

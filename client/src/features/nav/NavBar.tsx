@@ -199,7 +199,7 @@ const NavBar: React.FC = () => {
             <>
             <Menu.Item>
               <Button.Group>
-              <Button circular icon="hand point up" content="Uzman Başvurusu" labelPosition="right" key={"trainer-nav"} color="orange" style={{  borderRadius: "5rem", marginRight:"10px"}}
+              <Button circular content="Uzman Başvurusu" key={"trainer-nav"} color="orange" style={{  borderRadius: "5rem", marginRight:"10px"}}
           
           onClick={(e:any)=>
             {
@@ -208,7 +208,7 @@ const NavBar: React.FC = () => {
             
             }>
             </Button>
-              <Button key={"login-nav"} color="blue"  content={"Giriş Yap"} style={{color:"#fff",borderRadius: "5rem"}}
+              <Button key={"login-nav"} color="blue"  content={"Giriş Yap"} style={{color:"#fff",borderRadius: "5rem", marginRight:"5px"}}
                
                onClick={(e:any)=>
                  {

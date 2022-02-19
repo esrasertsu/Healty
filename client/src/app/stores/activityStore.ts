@@ -805,4 +805,24 @@ export default class ActivityStore {
             })
         }
     }
+
+
+    // @action sendActivityComment = async (comment: IProfileComment) =>{
+    //     comment.username= this.profile!.userName;
+    //     this.submittingComment = true;
+    //     try {
+    //         var newComment = await agent.Profiles.createComment(comment);
+    //         runInAction(() => {
+    //           //  this.commentRegistery.set(newComment.id, newComment);
+    //             this.submittingComment = false;
+    //             toast.success('Uzman hakkındaki yorumunuz en yakın zamanda değerlendirilip yayınlanmak üzere tarafımıza iletildi.');
+    //         });
+    //     } catch (error) {
+    //         runInAction( () => {
+    //             this.submittingComment = false;
+    //         });
+    //         toast.error('Problem submitting data');
+    //         console.log(error);
+    //     }
+    // };
 }

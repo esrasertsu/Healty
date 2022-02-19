@@ -178,7 +178,7 @@ const handleLogin = async(values:IUserFormValues) =>{
               fluid
               onClick={openRegisterModal}
             >
-               <Icon name="pointing right" />{" "} Kayıt ol
+              Kayıt ol
             </Button>
             <br></br>
             <SocialLogin loading={loadingFbLogin} fbCallback={(resonse:any) => fbLogin(resonse,location)} />

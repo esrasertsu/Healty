@@ -193,39 +193,79 @@ const HomePage = () => {
       </Modal.Actions> */}
     </Modal>
         <Fragment>
-           <Segment textAlign='center' vertical className='masthead' id="slideImages">
-               <Container text>
-                   <Header as='h1' inverted>
-                       Dilediğin kategoride aktivite ara, sağlıklı sosyalleşmenin tadını çıkar!
-                   </Header>
-                   {/* {isLoggedIn && user && token ? (  */}
-                   <Fragment>
-                        <ActivitySearchArea />
-                   </Fragment>
-                   {/* ): (
-                       <Fragment>
-                            <Header as='h2' inverted content={`Afitapp'a Hoşgeldin!`} />
-                            <Button onClick={handleLoginClick} size='huge' inverted>
-                                Üye Girişi
-                             </Button>
-                             <Button onClick={handleRegisterClick}  size='huge' inverted>
-                                Yeni Kullanıcı
-                             </Button>
-                       </Fragment>
-                   ) } */}
-                  
-                  
-               </Container>
-           </Segment>
+          {isTablet ?
+          
+          <Segment textAlign='center' vertical className='masthead' id="slideImages">
+          <Container text>
+              <Header as='h1' inverted>
+                  Dilediğin kategoride aktivite ara, sağlıklı sosyalleşmenin tadını çıkar!
+              </Header>
+              {/* {isLoggedIn && user && token ? (  */}
+              <Fragment>
+                   <ActivitySearchArea />
+              </Fragment>
+              {/* ): (
+                  <Fragment>
+                       <Header as='h2' inverted content={`Afitapp'a Hoşgeldin!`} />
+                       <Button onClick={handleLoginClick} size='huge' inverted>
+                           Üye Girişi
+                        </Button>
+                        <Button onClick={handleRegisterClick}  size='huge' inverted>
+                           Yeni Kullanıcı
+                        </Button>
+                  </Fragment>
+              ) } */}
+             
+             
+          </Container>
+      </Segment>
+      :
+      <div className='masthead' id="slideImages" style={{display:"flex", flexDirection:"row", height:"100vh",marginTop:"-66px"}}>
+         <Container text>
+              <Header as='h1'  style={{fontSize: '33px',  textAlign:'center', width:"100%" , textShadow: "1.5px 1.5px #f2f2f2"}}>
+                  Dilediğin kategoride aktivite ara, sağlıklı sosyalleşmenin tadını çıkar!
+              </Header>
+               <p style={{ fontSize: '1.3rem', color: "#222E50" }}>
+               İhtiyacın olan en doğru uzmanı en kolay şekilde bulabileceğin yerdesin. 
+               Yerinde ya da online olarak aktivitelere katılabilir, eğitmenlerin paylaştıkları blogları okuyarak ilgilendiğin alanda bilgi sahibi olabilirsin. 
+                </p> 
+              {/* {isLoggedIn && user && token ? (  */}
+             {/* <Fragment>
+                   <ActivitySearchArea />
+              </Fragment>
+               ): (
+                  <Fragment>
+                       <Header as='h2' inverted content={`Afitapp'a Hoşgeldin!`} />
+                       <Button onClick={handleLoginClick} size='huge' inverted>
+                           Üye Girişi
+                        </Button>
+                        <Button onClick={handleRegisterClick}  size='huge' inverted>
+                           Yeni Kullanıcı
+                        </Button>
+                  </Fragment>
+              ) } */}
+             
+             
+          </Container>
+          <div 
+          // className='masthead' id="slideImages"
+          > </div>
+      </div>
+     
+
+          }
+           
            <Container className="pageContainer home">
            <div style={{height:"20px"}} className="spacingContainer__small" />
            {/* <Header as='h3'  style={{fontSize: '30px',  textAlign:'center', width:"100%" }}>
                 Hoşgeldin!
                 </Header> */}
-           <Header as='h2'  style={{fontSize: '30px',  textAlign:'center', width:"100%" , textShadow: "1.5px 1.5px #f2f2f2"}}>
+          
+                <Header as='h1'  style={{fontSize: '30px',  textAlign:'center', width:"100%",textShadow: "1.5px 1.5px #f2f2f2" }}>
+                {/* Doğru uzmanı tam yerinde keşfet */}
                 Yeni aktiviteler yeni insanlar keşfetme zamanı!
                 </Header>
-                {/* <p style={{ fontSize: '1.3rem', color: "#263a5e" }}>
+                {/* <p style={{ fontSize: '1.3rem', color: "#222E50" }}>
                 Spor koçundan diyetisyene, meditasyon eğitmeninden psikoloğa ihtiyacın olan en doğru uzmanı en kolay şekilde bulabileceğin yerdesin. 
                 Üstelik istediğin lokasyonda ya da online olarak aktivitelere katılabilir, eğitmenlerin paylaştıkları blogları okuyarak ilgilendiğin alanda bilgi sahibi olabilirsin. 
                 </p> */}

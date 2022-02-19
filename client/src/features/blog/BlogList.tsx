@@ -162,8 +162,8 @@ const BlogList: React.FC = () => {
             {!isTabletOrMobile && <br></br> }
             <div style={isMobile? {textAlign:"center" , marginBottom:"40px"  } : {display:"flex", justifyContent:"center" }}>
               <div>
-              <Header size="large" style={{color:"#263a5e"}} content="Merhaba!"/>
-              <Header size="medium" style={{color:"#263a5e"}} content="Uzmanlarımız her gün bilgilendirici bloglar yazmaya devam ediyor. Takipte kal"/>
+              <Header size="large" style={{color:"#222E50"}} content="Merhaba!"/>
+              <Header size="medium" style={{color:"#222E50"}} content="Uzmanlarımız her gün bilgilendirici bloglar yazmaya devam ediyor. Takipte kal"/>
                 </div>
              <Image src={"/icons/clip-computer-workstation.png"} style={isMobile? {width:"100%"} : {width:"60%"}} />
             </div>

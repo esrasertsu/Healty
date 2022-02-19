@@ -18,7 +18,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
           <Segment attached>
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 : 1}>
-                   <Icon name='bookmark' size='large'  style={{color:"#263a5e"}} />
+                   <Icon name='bookmark' size='large'  style={{color:"#222E50"}} />
                  </Grid.Column>
                  <Grid.Column width={isMobile? 14 :15}>
                    
@@ -34,7 +34,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              <Segment attached>
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
-                   <Icon name='tags' size='large'  style={{color:"#263a5e"}} />
+                   <Icon name='tags' size='large'  style={{color:"#222E50"}} />
                  </Grid.Column>
                  <Grid.Column width={isMobile? 14 :15}>
                  <span className="activityDetailLabel">Branş: </span> 
@@ -49,7 +49,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              <Segment attached>
                <Grid>
                  <Grid.Column width={isMobile? 2 :1}>
-                   <Icon size='large'  style={{color:"#263a5e"}} name='info' />
+                   <Icon size='large'  style={{color:"#222E50"}} name='info' />
                  </Grid.Column>
                  <Grid.Column width={isMobile? 14 :15}>
                 {
@@ -70,7 +70,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              <Segment attached>
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
-                   <Icon name='heartbeat' size='large' style={{color:"#263a5e"}} />
+                   <Icon name='heartbeat' size='large' style={{color:"#222E50"}} />
                  </Grid.Column>
                  <Grid.Column width={11}>
                  <span className="activityDetailLabel">Seviye: </span> 
@@ -87,7 +87,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              <Segment attached>
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
-                   <Icon name='calendar alternate outline' size='large'  style={{color:"#263a5e"}} />
+                   <Icon name='calendar alternate outline' size='large'  style={{color:"#222E50"}} />
                  </Grid.Column>
                  <Grid.Column width={isMobile? 6 :7}>
                  <span className="activityDetailLabel">Tarih: </span> 
@@ -96,7 +96,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    </span>
                  </Grid.Column>
                  <Grid.Column width={isMobile? 2 :1}>
-                   <Icon name='clock outline' size='large'  style={{color:"#263a5e"}} />
+                   <Icon name='clock outline' size='large'  style={{color:"#222E50"}} />
                  </Grid.Column>
                  <Grid.Column width={isMobile? 6 :7}>
                  <span className="activityDetailLabel">Saat: </span> 
@@ -109,7 +109,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              <Segment attached>
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
-                   <Icon name='map outline' size='large'  style={{color:"#263a5e"}} />
+                   <Icon name='map outline' size='large'  style={{color:"#222E50"}} />
                  </Grid.Column>
                  <Grid.Column width={11}>
                  <span className="activityDetailLabel">Şehir: </span> 
@@ -121,7 +121,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              <Segment attached>
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
-                   <Icon name='map pin' size='large'  style={{color:"#263a5e"}} />
+                   <Icon name='map pin' size='large'  style={{color:"#222E50"}} />
                  </Grid.Column>
                  <Grid.Column width={11}>
                  <span className="activityDetailLabel">Lokasyon: </span> 
@@ -143,7 +143,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              <Segment attached>
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
-                   <Icon name='users' size='large'  style={{color:"#263a5e"}} />
+                   <Icon name='users' size='large'  style={{color:"#222E50"}} />
                  </Grid.Column>
                  <Grid.Column width={11}>
                  <span className="activityDetailLabel">Katılımcı sınırı: </span> 
@@ -154,7 +154,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              <Segment attached>
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
-                   <Icon name='money' size='large' style={{color:"#263a5e"}} />
+                   <Icon name='money' size='large' style={{color:"#222E50"}} />
                  </Grid.Column>
                  <Grid.Column width={11}>
                  <span className="activityDetailLabel">Fiyat: </span> 

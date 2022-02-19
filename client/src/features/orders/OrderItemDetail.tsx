@@ -319,8 +319,10 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
                         </Item.Content>
                         <Item.Content className={isMobile ? "order_listItem_extraContent_mobile":"order_listItem_extraContent"}>
                         <Item.Description>
-                        {order.activityOnline ?  <div>  <Image style={{height:"25px", marginRight:"5px"}} src="/icons/wifi-nok.png"/>  Online katılım <Icon name='check' size='small' color='green' /> </div>:
-                         <div><Icon name='map marker alternate' color="red"/>Online katılıma kapalı</div>}
+                        {order.activityOnline ?  <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>  <Image style={{height:"25px", marginRight:"5px"}} src="/icons/wifi-ok.png"/>
+                        <span>Online katılım</span> <Icon name='check' size='small' color='green' /> </div>:
+                         <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>
+                             <Icon name='map marker alternate' color="red"/><span>Online katılıma kapalı</span></div>}
                             </Item.Description>
                         </Item.Content>
                         <Item.Content className={isMobile ? "order_listItem_extraContent_mobile":"order_listItem_extraContent"} >

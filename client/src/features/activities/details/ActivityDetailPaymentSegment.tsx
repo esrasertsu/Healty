@@ -118,7 +118,7 @@ const handleCardClick = (e:any) => {
                   render={({ form}) => (
                     <Form onSubmit={()=> form.reset()}>
                     <div className="activityDetail_payment">
-                    <label style={{fontSize:"15px", color:"#263a5e"}}><Icon name="user" /> Kişi Sayısı</label>
+                    <label style={{fontSize:"15px", color:"#222E50"}}><Icon name="user" /> Kişi Sayısı</label>
                     <Field
                         name="count"
                         placeholder="1"
@@ -139,7 +139,7 @@ const handleCardClick = (e:any) => {
 
                 <div className="activityDetail_payment_calculation">
                     <div className="calculation">
-                         <span style={{textDecoration:"underline",color: "#263a5e"}}>{activity.price || 0} TL * {count} kişi</span>
+                         <span style={{textDecoration:"underline",color: "#222E50"}}>{activity.price || 0} TL * {count} kişi</span>
                     </div>
                     <div>
                                 <div>Toplam </div> 

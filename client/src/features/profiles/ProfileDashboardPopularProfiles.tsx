@@ -28,10 +28,10 @@ SwiperCore.use([Pagination,Navigation]);
 
     return (
         <>
-     {/* <Label size='medium' style={{backgroundColor: "#263a5e", color:"#fff", fontSize:"17px", marginBottom:"10px", marginTop:"30px"}}>
+     {/* <Label size='medium' style={{backgroundColor: "#222E50", color:"#fff", fontSize:"17px", marginBottom:"10px", marginTop:"30px"}}>
                En popüler 10
                </Label> */}
-      <Header size="large" style={{color:"#263a5e", textAlign:"center", marginBottom:"20px", marginTop:"30px"}} content="En Popüler 10"/>
+      <Header size="large" style={{color:"#222E50", textAlign:"center", marginBottom:"20px", marginTop:"30px"}} content="En Popüler 10"/>
 
         <Grid>
           <Grid.Column className="carousel-padding">

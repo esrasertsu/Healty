@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from 'react'
-import { Header, Image, Item, Label, Message } from 'semantic-ui-react'
+import { Header, Icon, Image, Item, Label, Message } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
 import ActivityListItem  from './ActivityListItem';
 import { RootStoreContext } from '../../../app/stores/rootStore';
@@ -24,9 +24,9 @@ const ActivityList: React.FC = () => {
       {activitiesByDate.length > 0 ?
       activitiesByDate.map(([group, activities]) =>(
         <Fragment key={group}>
-           <Label size='large' className={"activityDateLabels "} >
-              {format(new Date(group), 'dd MMMM yyyy, eeee',{locale: tr})}
-           </Label>
+           <h3 className={"activityDateLabels "} >
+             <Icon size='large' name="calendar alternate outline" /> {format(new Date(group), 'dd MMMM yyyy, eeee',{locale: tr})}
+           </h3>
         <Item.Group divided>
           {activities.map((activity) => (
            <ActivityListItem key={activity.id} activity={activity} />
@@ -38,8 +38,8 @@ const ActivityList: React.FC = () => {
       {!isTabletOrMobile && <br></br> }
       <div style={isMobile? {textAlign:"center", marginBottom:"40px" } : {display:"flex", justifyContent:"center" , marginTop:"40px"}}>
         <div>
-        <Header size="large" style={{color:"#263a5e"}} content="Merhaba!"/>
-        <Header size="medium" style={{color:"#263a5e"}} content="Şimdilik arama kriterlerine uygun açılmış bir aktivite bulamadık ama senin için oluşturmaya devam ediyoruz. Takipte kal"/>
+        <Header size="large" style={{color:"#222E50"}} content="Merhaba!"/>
+        <Header size="medium" style={{color:"#222E50"}} content="Şimdilik arama kriterlerine uygun açılmış bir aktivite bulamadık ama senin için oluşturmaya devam ediyoruz. Takipte kal"/>
           </div>
        <Image src={"/icons/clip-searching.png"} style={isMobile? {width:"100%", marginTop:"75px"} : {width:"50%", marginTop:"75px"}} />
       </div>

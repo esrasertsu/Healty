@@ -87,7 +87,7 @@ interface IProps{
                  </Item.Content>
                </Item>
                 <Divider style={{marginTop:"5px",marginBottom:"5px"}}/>
-                <div style={{color:"#263a5e", textAlign:"center"}}>Tüm aktivite katılımcılarını görebilmek için giriş yapmalısın.</div>
+                <div style={{color:"#222E50", textAlign:"center"}}>Tüm aktivite katılımcılarını görebilmek için giriş yapmalısın.</div>
                 </>
               }
               </List>

@@ -113,8 +113,8 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                         <Item>
                           <Item.Content>
                             <Header
-                              as="h1"
-                              style={{color:"#263a5e"}}
+                              as="h2"
+                              style={{color:"#222E50"}}
                               content={activity.title}
                             />
                             <p>{activity.date && format(activity.date,'dd MMMM yyyy, eeee',{locale: tr})}</p>
@@ -247,7 +247,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                           <Item.Content>
                           <Header
                               as="h1"
-                              style={{color:"#263a5e"}}
+                              style={{color:"#222E50"}}
                               content={activity.title}
                             />
                             <p>{activity.date && format(activity.date,'dd MMMM yyyy, eeee',{locale: tr})}</p>

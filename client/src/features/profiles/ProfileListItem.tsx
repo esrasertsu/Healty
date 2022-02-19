@@ -41,7 +41,8 @@ interface IProps {
     }
 
 
-  const handleFollowTrainer = (name:string, profile:IProfile) =>{
+  const handleFollowTrainer = (e:any,name:string, profile:IProfile) =>{
+    e.stopPropagation();
     if(isLoggedIn)
     {
       follow(name).then(() =>{
@@ -54,7 +55,9 @@ interface IProps {
   }
 
   
-  const handleUnfollowTrainer = (name:string,profile:IProfile) =>{
+  const handleUnfollowTrainer = (e:any,name:string,profile:IProfile) =>{
+    e.stopPropagation();
+
     if(isLoggedIn)
     {
       unfollow(name).then(() =>{
@@ -76,6 +79,7 @@ interface IProps {
   return (
     <Card
       style={{height:"100%", marginBottom:"10px", minHeight:"470px"}}
+      onClick={handleCardClick}
       key={profile.userName+Math.random()} >
         {
          (!isLoggedIn || (user && profile.userName !== user.userName)) && 
@@ -83,7 +87,7 @@ interface IProps {
           className='profileListItem_addToFav' 
           name={profile.isFollowing?"heart" :"heart outline"}  
           color={profile.isFollowing?"red" :undefined}
-          onClick={() => profile.isFollowing ? handleUnfollowTrainer(profile.userName,profile) :handleFollowTrainer(profile.userName, profile) } />
+          onClick={(e:any) => profile.isFollowing ? handleUnfollowTrainer(e,profile.userName,profile) :handleFollowTrainer(e,profile.userName, profile) } />
          
         }
     
@@ -102,7 +106,7 @@ interface IProps {
        : <div style={{textAlign:"center", marginBottom:"5px"}}>...</div>}
         {/* <div style={{textAlign:"center", marginBottom:"15px"}}>
           {profile.hasPhoneNumber && <Icon name="phone" color="green" /> }
-          <Icon name="envelope" style={{color:"#263a5e"}} />
+          <Icon name="envelope" style={{color:"#222E50"}} />
         </div> */}
         <Card.Description key={profile.userName+Math.random()+"desc"} className='profileListItem_CardDescription'>
         <Popup
@@ -156,7 +160,7 @@ interface IProps {
             <div className="profileListItem_subCats"> <Icon name="spinner" /> {profile.experienceYear > 0 ? profile.experienceYear +"yıl tecrübe" : "" } </div>  */}
 
         </Card.Description>
-        <Button  onClick={handleCardClick} size="small" className='gradientBtn' circular content="Profili Gör" />
+        {/* <Button  onClick={handleCardClick} size="small" className='gradientBtn' circular content="Profili Gör" /> */}
 
       </Card.Content>
       <Card.Content extra>

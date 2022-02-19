@@ -47,7 +47,8 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
             "","blurring",true, "loginModal") 
         }
     
-  const handleSave = (id:string) =>{
+  const handleSave = (e:any,id:string) =>{
+    e.stopPropagation();
     if(isLoggedIn)
     {
       save(id).then(() =>{
@@ -60,7 +61,8 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
   }
 
   
-  const handleUnSave = (id:string) =>{
+  const handleUnSave = (e:any,id:string) =>{
+    e.stopPropagation();
     if(isLoggedIn)
     {
       unsave(id).then(() =>{
@@ -75,7 +77,7 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
     return (
        
         <Card className="activityListItem"
-        // onClick={(e:any) => handleCardClick(e)}
+         onClick={(e:any) => handleCardClick(e)}
           >
                
         <Segment.Group>
@@ -132,13 +134,18 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                             }
                             </>
                               <div style={{marginTop:".6em"}}>
-                                <Icon style={{color:"#263a5e"}} name='heartbeat' /><span> Seviye: </span>
+                                <Icon style={{color:"#222E50"}} name='heartbeat' /><span> Seviye: </span>
                                 {
                                     activity.levels && activity.levels.length> 0 ? 
                                     activity.levels.map<React.ReactNode>(s => <span key={s.value}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
                                     : " Bilgi yok"
                                 }
-                               {activity.online ?  <div style={{marginTop:".6em"}}> <Image style={{height:"25px", marginRight:"5px"}} src="/icons/wifi-ok.png"/>  Online katılıma açık </div>: <div style={{marginTop:".6em",marginRight:"5px"}}><Image style={{height:"25px"}} src="/icons/wifi-nok.png"/>Online katılıma kapalı</div>}
+                               {activity.online ?  <div style={{marginTop:".6em",display:"flex", flexDirection:"row", alignItems:"center"}}> 
+                               <Image style={{height:"25px", marginRight:"5px"}} src="/icons/wifi-ok.png"/><span> Online katılıma açık</span> 
+                                </div>: 
+                                <div style={{marginTop:".6em",marginRight:"5px",display:"flex", flexDirection:"row", alignItems:"center"}}>
+                                  <Image style={{height:"25px"}} src="/icons/wifi-nok.png"/>
+                                <span>Online katılıma kapalı</span></div>}
                                 </div>
                         </Item.Description> 
                         <Item.Description style={{marginTop: "15px"}}>
@@ -165,7 +172,7 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                         className='activity_addToFav' 
                         name={activity.isSaved?"bookmark" :"bookmark outline"}  
                         color={"red"}
-                        onClick={() => activity.isSaved ? handleUnSave(activity.id) :handleSave(activity.id) } />
+                        onClick={(e:any) => activity.isSaved ? handleUnSave(e,activity.id) :handleSave(e,activity.id) } />
                        }
                      />
                       
@@ -220,13 +227,13 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                    isLoggedIn && user &&  <ActivityListItemAttendees attendees={activity.attendees}/>
                } */}
               
-             <Button 
+             {/* <Button 
              circular 
              size='small' 
              content="Aktivite Detayı" 
              className='gradientBtn' 
              floated='right' icon="angle right" labelPosition='right'
-             onClick={(e:any) => handleCardClick(e)}></Button>
+             onClick={(e:any) => handleCardClick(e)}></Button> */}
 
 
             </Segment>

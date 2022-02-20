@@ -168,9 +168,9 @@ const MessageChat: React.FC<IProps> = ({setshowChatRoomList}) => {
                     />
                     <div>
                     <Button
-                      content='Send'
+                      content='Gönder'
                       circular
-                      primary
+                      className='blueBtn'
                       loading={submitting}
                       disabled={chatRoomId === null}
                     />

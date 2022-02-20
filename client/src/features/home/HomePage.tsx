@@ -62,7 +62,7 @@ const HomePage = () => {
     
     
 
-    const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
+    const isTablet = useMediaQuery({ query: '(max-width: 767px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     const handleFinalFormSubmit = (values: any) => {
@@ -116,7 +116,7 @@ const HomePage = () => {
           <p>
             <span style={{fontSize:"15px"}}>{title}</span> alanında dilediğin kategoride uzman eğitmenler keşfetmek için
           </p>
-          <p><Button basic color='blue' style={{display:'flex',  alignItems:"flex-end"}} circular onClick={() => {
+          <p><Button basic className='blueBtn' style={{display:'flex',  alignItems:"flex-end"}} circular onClick={() => {
             setOpen(false);
           //  setPage(0);
             //setProfileFilterForm({...profileFilterForm, categoryId:allCatId});
@@ -194,33 +194,35 @@ const HomePage = () => {
     </Modal>
         <Fragment>
           {isTablet ?
-          
+          <>   <Container text className='mobile_text_container'>
+                 <Header as='h1'>
+                     Dilediğin kategoride aktivite ara, sağlıklı sosyalleşmenin tadını çıkar!
+                 </Header>
+                 {/* {isLoggedIn && user && token ? (  */}
+                
+                 {/* ): (
+                     <Fragment>
+                          <Header as='h2' inverted content={`Afitapp'a Hoşgeldin!`} />
+                          <Button onClick={handleLoginClick} size='huge' inverted>
+                              Üye Girişi
+                           </Button>
+                           <Button onClick={handleRegisterClick}  size='huge' inverted>
+                              Yeni Kullanıcı
+                           </Button>
+                     </Fragment>
+                 ) } */}
+                
+                
+             </Container>
           <Segment textAlign='center' vertical className='masthead' id="slideImages">
-          <Container text>
-              <Header as='h1' inverted>
-                  Dilediğin kategoride aktivite ara, sağlıklı sosyalleşmenin tadını çıkar!
-              </Header>
-              {/* {isLoggedIn && user && token ? (  */}
-              <Fragment>
-                   <ActivitySearchArea />
-              </Fragment>
-              {/* ): (
-                  <Fragment>
-                       <Header as='h2' inverted content={`Afitapp'a Hoşgeldin!`} />
-                       <Button onClick={handleLoginClick} size='huge' inverted>
-                           Üye Girişi
-                        </Button>
-                        <Button onClick={handleRegisterClick}  size='huge' inverted>
-                           Yeni Kullanıcı
-                        </Button>
-                  </Fragment>
-              ) } */}
-             
-             
-          </Container>
+ 
       </Segment>
+      <Fragment>
+                      <ActivitySearchArea />
+                 </Fragment>
+                   </>
       :
-      <div className='masthead' id="slideImages" style={{display:"flex", flexDirection:"row", height:"100vh",marginTop:"-66px"}}>
+      <div className='masthead' id="slideImages" style={{display:"flex", flexDirection:"row", marginTop:"-66px"}}>
          <Container text>
               <Header as='h1'  style={{fontSize: '33px',  textAlign:'center', width:"100%" , textShadow: "1.5px 1.5px #f2f2f2"}}>
                   Dilediğin kategoride aktivite ara, sağlıklı sosyalleşmenin tadını çıkar!
@@ -288,7 +290,7 @@ const HomePage = () => {
                  fluid={isMobile} 
                  size="large" 
                  circular
-                 className='blue-gradientBtn'
+                 className='orangeBtn'
                  onClick={()=> history.push("/activities")} 
                  style={{margin:"20px 0"}}
                > Daha Fazla Aktivite </Button>
@@ -315,7 +317,7 @@ const HomePage = () => {
 <Grid.Row >
   <Grid.Column width={isMobile ? "16": "5"}>
     <Header as='h3' icon>
-        <Icon style={{fontSize:"1.5rem",marginBottom:"15px"}} size="small" circular inverted className='orange-gradientBtn' name='calendar check outline' />     
+        <Icon style={{fontSize:"1.5rem",marginBottom:"15px"}} size="small" circular className='orangeIcon' name='calendar check outline' />     
         <Header.Content>
             Aktivite Planla
             <Header.Subheader className="homepage_subheader">
@@ -327,7 +329,7 @@ const HomePage = () => {
   </Grid.Column>
   <Grid.Column width={isMobile ? "16": "5"} >
     <Header as='h3' icon>
-        <Icon style={{fontSize:"1.5rem",marginBottom:"15px"}} circular inverted className='orange-gradientBtn' flipped='horizontally' name='history' />
+        <Icon style={{fontSize:"1.5rem",marginBottom:"15px"}} circular className='orangeIcon' flipped='horizontally' name='history' />
         <Header.Content>
             Hızlı Erişim
             <Header.Subheader className="homepage_subheader">
@@ -340,7 +342,7 @@ const HomePage = () => {
   
   <Grid.Column width={isMobile ? "16": "5"}>
     <Header as='h3' icon>
-        <Icon style={{fontSize:"1.5rem", marginBottom:"15px"}} size="small" circular inverted className='orange-gradientBtn' name='heart' />
+        <Icon style={{fontSize:"1.5rem", marginBottom:"15px"}} size="small" circular className='orangeIcon' name='heart' />
         <Header.Content>
             Online Destek 
             <Header.Subheader className="homepage_subheader">
@@ -356,12 +358,10 @@ const HomePage = () => {
 <div style={{display:"flex"}}>
         <div className="spacingContainer__small" />
     </div>
-           <Grid stackable >
+           {/* <Grid stackable >
         <Grid.Column width={16}>
           <Header
             floated='left'
-            // icon='user'
-            // content="Trainers"
           />
         </Grid.Column>
         <Grid.Column width={16}>
@@ -373,7 +373,6 @@ const HomePage = () => {
                 }} >
                 <Card.Content>
                     <Card.Header>Spor</Card.Header>
-                    {/* <Label content="10 Uzman & Aktivite"/> */}
                 </Card.Content>
             </Card>
             <Card className="diyetCard homepageCatCard" onClick={() => {
@@ -383,7 +382,7 @@ const HomePage = () => {
                 }} >
                 <Card.Content>
                     <Card.Header>Diyet</Card.Header>
-                    {/* <Label content="110 Uzman & Aktivite"/> */}
+                     <Label content="110 Uzman & Aktivite"/> 
                 </Card.Content>
             </Card>
             <Card className="meditasyonCard homepageCatCard" onClick={() => {
@@ -393,7 +392,7 @@ const HomePage = () => {
                 }} >
                 <Card.Content>
                     <Card.Header>Meditasyon</Card.Header>
-                    {/* <Label content="Uzman & Aktivite"/> */}
+                    <Label content="Uzman & Aktivite"/> 
                 </Card.Content>
             </Card>
             
@@ -404,12 +403,11 @@ const HomePage = () => {
                 }} >
                 <Card.Content>
                     <Card.Header>Psikoloji</Card.Header>
-                    {/* <Label content="110 Uzman & Aktivite"/> */}
                 </Card.Content>
             </Card>
           </Card.Group>
         </Grid.Column>
-      </Grid>
+      </Grid> */}
       <div className="spacingContainer__small" />
 
 {/* <Segment clearing secondary className="homepage_contactus-form">

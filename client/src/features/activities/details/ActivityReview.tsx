@@ -28,6 +28,7 @@ export const ActivityReview:React.FC<{activity:IActivity}> = ({activity}) => {
             <Header>Değerlendirme Formu  </Header>
             <Segment>
             <h4 className="activityDetail_title">Aktivite hakkındaki görüşleriniz</h4>
+            <>
             <FinalForm 
             onSubmit ={handleFinalFormSubmit}
             initialValues={{ body:"" }}
@@ -35,6 +36,7 @@ export const ActivityReview:React.FC<{activity:IActivity}> = ({activity}) => {
               <Form widths={"equal"} 
               onSubmit={() => handleSubmit()!.then(()=> {form.reset(); setRating(0); })}
               >
+                
                  <StarRating rating={rating} setRating={setRating} editing={true} showCount={false}/>
                 <br/>
                 <Field
@@ -43,18 +45,18 @@ export const ActivityReview:React.FC<{activity:IActivity}> = ({activity}) => {
                         component={TextAreaInput}
                         rows={6}
                       />  
-                <br/>
-                <div>
-                <Button
+                      <div style={{height:"35px"}}> 
+                        <Button
                     type="submit"
-                    style={{marginTop: 12}}
                     floated="right"
                       content='Gönder'
-                      circular className='blue-gradientBtn'
+                      circular className='blueBtn'
                       loading={submitting}
                     />  
-                </div>
+
+                      </div>
                
+          
                 {/* <Rating icon='star' defaultRating={3} maxRating={4} /> */}
                 
          
@@ -62,7 +64,7 @@ export const ActivityReview:React.FC<{activity:IActivity}> = ({activity}) => {
         
               )}
             />
-  
+  </>
             </Segment>
             </>
     )

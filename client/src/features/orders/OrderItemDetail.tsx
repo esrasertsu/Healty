@@ -136,22 +136,23 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
                         
                            order.orderStatus == "Unpaid" &&
                            <>
-                            <Button
-                                    onClick={()=> setRemoveItemOpen(true)}
-                                    floated="right"
-                                    content="Sil"
-                                    color="red"
-                                    className="orderListButton"
-                                    circular
-                                    /> 
+                          
                            <Button
                            onClick={()=> handlePayOrderItem()}
                            floated="right"
                            content="Şimdi Öde"
-                           color="green"
-                           className="orderListButton"
+                           className="orderListButton orangeBtn"
                            circular
                            /> 
+                             <Button
+                                    onClick={()=> setRemoveItemOpen(true)}
+                                    floated="right"
+                                    content="Sil"
+                                    basic
+                                    color="red"
+                                    className="orderListButton"
+                                    circular
+                                    /> 
                            </>
                        }
                    </div>
@@ -332,8 +333,7 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
                                 onClick={()=> history.push(`/activities/${order.productId}`)}
                                 floated="right"
                                 content="İncele"
-                                color="blue"
-                                className="orderListButton"
+                                className="blueBtn orderListButton"
                                 circular
                                 /> 
                         </Item.Description>

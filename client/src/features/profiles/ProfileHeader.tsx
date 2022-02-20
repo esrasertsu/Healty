@@ -67,7 +67,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
     if(modal.open) closeModal();
 
         openModal("Giriş Yap", <>
-        <Image  size={isMobile ? 'big': isTabletOrMobile ? 'medium' :'large'}  wrapped />
+        <Image  size={isMobile ? 'big': isTabletOrMobile ? 'medium' :'large'} src='/assets/Login1.jpg'  wrapped />
         <Modal.Description className="loginreg">
         <LoginForm location={`/profile/${profile.userName}`} />
         </Modal.Description>
@@ -153,8 +153,8 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
         {
           !imageChange && isCurrentUser && profile.coverImage !== null &&
           <div style={activityImageTextStyle}>
-          <Label floating color="blue" style={{cursor:"pointer", left:"80%"}} 
-          circular className='blue-gradientBtn'
+          <Label floating style={{cursor:"pointer", left:"80%"}} 
+          circular className='blueBtn'
            size={isTabletOrMobile ? "small" :"medium"}
           onClick={()=>{setImageDeleted(true); setImageChange(true)}}>Kapak Resmini Değiştir <Icon name="picture"></Icon></Label>
           </div>
@@ -227,12 +227,12 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
             loading={loading}
             fluid
             circular
-            className='orange-gradientBtn'
+            className='orangeBtn'
             // className={profile.isFollowing ? 'followingButtonOut_redClassName' : 'followingButtonOut_greenClassName'}
               onClick={profile.isFollowing ? () => unfollow(profile.userName): () => handleFollowClick(profile.userName)}
               //disabled={!isLoggedIn} 
               >
-                {profile.isFollowing ? 'Favorilerimden Çıkar' : 'Favorilere Ekle'}
+              <span style={{marginRight:"5px"}}>{profile.isFollowing ? 'Favorilerimden Çıkar' : 'Favorilere Ekle'}</span> 
                 <Icon name='star' />
             </Button>
               </>
@@ -262,15 +262,15 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
             <>
             <Button
               circular
-              className='gradientBtn'
+              className='blueBtn'
               content={'Blog Yaz'}
               style={{width:"47%"}}
               onClick={()=> history.push('/createPost')}
             />
             <Button
-            className='orange-gradientBtn'
+             className='orangeBtn'
             circular
-            color={'blue'}
+            
             content={'Aktivite Aç'}
             style={{width:"50%"}}
             onClick={()=> history.push('/createActivity')}

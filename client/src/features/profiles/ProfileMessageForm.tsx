@@ -29,7 +29,7 @@ import { useMediaQuery } from 'react-responsive';
       if(modal.open) closeModal();
   
           openModal("Giriş Yap", <>
-          <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  wrapped />
+          <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'} src='/assets/Login1.jpg'  wrapped />
           <Modal.Description className="loginreg">
           <LoginForm location={"/"} />
           </Modal.Description>
@@ -74,7 +74,7 @@ import { useMediaQuery } from 'react-responsive';
                 />  
           <br/>
           <Button
-           className="sendMessageButton gradientBtn"
+           className="sendMessageButton blueBtn"
             content='Gönder'
             circular
             labelPosition='right'

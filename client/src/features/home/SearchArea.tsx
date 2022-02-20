@@ -72,7 +72,7 @@ import { useMediaQuery } from 'react-responsive'
                         placeholder={loadingAllDetailedList ? "Yükleniyor..." : isMobile ? "Kategori ismi girin" :"Arama yapmak istediğin kategori.." }
                         noResultsMessage="Aradığınız kategori bulunamadı"
                 />
-                      <Button size={isMobile ? 'tiny': 'big'} primary circular onClick={() => {
+                      <Button size={isMobile ? 'tiny': 'big'} className='blueBtn' circular onClick={() => {
                            setPage(0);
                            if(result && result.parentId === null)
                               {

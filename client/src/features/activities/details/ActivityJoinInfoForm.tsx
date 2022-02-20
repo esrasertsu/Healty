@@ -57,7 +57,7 @@ const validate = combineValidators({
             <Header
               as="h4"
               content="Online aktivitenizin katılım bilgilerini giriniz. Eğer zoom kutucuğunu işaretlerseniz, sadece id ve şifre bilgilerini girmeniz yeterli olacaktır ve aktivite içindeki 'katıl' butonu ile toplantıya direk katılım sağlanabilecektir."
-              color="blue"
+              className="blueBtn"
               textAlign="left"
               style={{marginTop:"0"}}
               icon="video"
@@ -134,7 +134,7 @@ const validate = combineValidators({
             content='Ekle'
             labelPosition='right'
             icon="check"
-            color="red"
+            color="orange"
             loading={submitting}
           />
         </Form>

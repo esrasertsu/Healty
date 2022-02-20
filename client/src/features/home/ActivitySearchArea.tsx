@@ -73,7 +73,7 @@ import { useMediaQuery } from 'react-responsive'
                         placeholder={loadingAllDetailedList ? "Yükleniyor..." : isMobile ? "Kategori ismi girin" :"Arama yapmak istediğin kategori.." }
                         noResultsMessage="Aradığınız kategori bulunamadı"
                 />
-                      <Button size={isMobile ? 'tiny': 'big'} color="orange" circular onClick={() => {
+                      <Button size={isMobile ? 'tiny': 'big'}  className='orangeBtn' circular onClick={() => {
                            setClearPredicateBeforeSearch(true); 
                            setPage(0);
                            clearKeyPredicate("subCategoryIds");

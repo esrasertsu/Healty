@@ -166,7 +166,7 @@ const handleLogin = async(values:IUserFormValues) =>{
             <Button
               disabled={(invalid && !dirtySinceLastSubmit) || pristine}
               loading={submitting}
-              className='gradientBtn'
+              className='orangeBtn'
               circular
               content="Giriş"
               fluid
@@ -174,7 +174,8 @@ const handleLogin = async(values:IUserFormValues) =>{
             <Divider horizontal>veya</Divider>
             <Button
               circular
-              className='orange-gradientBtn'
+              basic
+              color="orange"
               fluid
               onClick={openRegisterModal}
             >

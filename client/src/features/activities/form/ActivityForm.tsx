@@ -807,7 +807,7 @@ debugger;
                   type="submit"
                   content="Kaydet"
                   circular
-                  className="green-gradientBtn"
+                  className="blueBtn"
                 />
                 <Button
                   floated="left"

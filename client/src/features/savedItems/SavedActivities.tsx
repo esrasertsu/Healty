@@ -68,7 +68,7 @@ const SavedActivities = () => {
                                 {act.attendees.filter(x => x.isHost === true)[0].displayName}
                                 </div>
                         </div>
-                        <Button size='tiny' circular content="Katıl" className='orange-gradientBtn' fluid={isTablet}
+                        <Button size='tiny' circular content="Katıl" className='orangeBtn' fluid={isTablet}
                         style={isTablet? {marginTop:"15px"}: {}}
                           onClick={()=> history.push(`/activities/${act.id}`)} />
                         </div>

@@ -27,13 +27,14 @@ const NavBar: React.FC = () => {
         e.stopPropagation();
         if(modal.open) closeModal();
   
-            openModal("Giriş Yap", <>
-            <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  wrapped />
-            <Modal.Description className="loginreg">
-            <LoginForm location={"/"} />
-            </Modal.Description>
-            </>,true,
-            "","blurring",true, "loginModal") 
+        openModal("Giriş Yap", <>
+        <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'} src='/assets/Login1.jpg'  wrapped />
+        <Modal.Description className="loginreg">
+        <LoginForm location={"/"} />
+        </Modal.Description>
+        </>,true,
+        "","blurring",true, "loginModal") 
+        
         }
   
         const handleRegisterClick = (e:any) => {
@@ -179,14 +180,14 @@ const NavBar: React.FC = () => {
                   </Dropdown.Item>
                   <Dropdown.Item>
                   <Button
-                  icon
                   circular
                   size="mini"
-                  labelPosition="right"
                   loading={loggingOut}
                   onClick={logout} 
-                  className="logoutWebButton" primary>Çıkış
-                 <Icon name='log out' />
+                  basic
+                  color="orange"
+                  
+                  className="logoutWebButton" >Çıkış
                   </Button>
                   </Dropdown.Item>
                 </Dropdown.Menu>
@@ -199,7 +200,7 @@ const NavBar: React.FC = () => {
             <>
             <Menu.Item>
               <Button.Group>
-              <Button circular content="Uzman Başvurusu" key={"trainer-nav"} color="orange" style={{  borderRadius: "5rem", marginRight:"10px"}}
+              <Button circular content="Uzman Başvurusu" key={"trainer-nav"} className='orangeBtn' style={{  borderRadius: "5rem", marginRight:"10px"}}
           
           onClick={(e:any)=>
             {
@@ -208,7 +209,7 @@ const NavBar: React.FC = () => {
             
             }>
             </Button>
-              <Button key={"login-nav"} color="blue"  content={"Giriş Yap"} style={{color:"#fff",borderRadius: "5rem", marginRight:"5px"}}
+              <Button key={"login-nav"} className='blueBtn'  content={"Giriş Yap"} style={{color:"#fff",borderRadius: "5rem", marginRight:"5px"}}
                
                onClick={(e:any)=>
                  {

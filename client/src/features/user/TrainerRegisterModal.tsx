@@ -46,7 +46,7 @@ const TrainerForm = () =>{
         <p className="applicationConditions">
         Hazırsan haydi başvur <Icon style={{marginLeft:"5px"}} name="thumbs up outline"></Icon>
         </p> 
-        <Button className='gradientBtn' fluid circular content="Başvur" onClick={handleApplyButtonClick} />
+        <Button className='orangeBtn' fluid circular content="Başvur" onClick={handleApplyButtonClick} />
 
       </div>
         

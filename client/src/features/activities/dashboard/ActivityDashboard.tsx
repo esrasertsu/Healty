@@ -182,7 +182,7 @@ const ActivityDashboard: React.FC = () => {
                 <div style={{display:"flex", justifyContent:"center"}}>
                  <Button  
                   floated="right"
-                  className='blue-gradientBtn'
+                 className='orangeBtn'
                   fluid={isMobile} 
                   size="large" disabled={loadingNext || (page +1 >= totalPages)} 
                   onClick={()=> handleGetNext()} 
@@ -265,6 +265,7 @@ const ActivityDashboard: React.FC = () => {
        content="Temizle" 
        circular
        fluid
+       size='small'
        style={{marginTop:"15px"}}
        onClick={() =>{
         clearKeyPredicate("startDate");
@@ -327,7 +328,7 @@ const ActivityDashboard: React.FC = () => {
                 {activityRegistery.size > 0 && 
                 <div style={{display:"flex", justifyContent:"center"}}>
                 <Button  
-                  className='blue-gradientBtn'
+                   className='orangeBtn'
                   floated="right"
                  fluid={isMobile} 
                  size="large" disabled={loadingNext || (page +1 >= totalPages)} 

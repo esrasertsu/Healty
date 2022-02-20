@@ -118,9 +118,8 @@ const OrderList: React.FC<IProps> = ({settings}) => {
                  onClick={()=> history.push(`/orders/${order.id}`)}
                  floated="right"
                  content="Detay"
-                 color="blue"
                  size={isTabletOrMobile ?"mini" :"medium"}
-                 className="orderListButton"
+                 className="orderListButton orangeBtn"
                  circular
                  /> 
          </Item.Description>
@@ -137,7 +136,7 @@ const OrderList: React.FC<IProps> = ({settings}) => {
       <div style={{display:"flex", justifyContent:"center"}}>
       <Button  
        floated="right"
-       className='blue-gradientBtn'
+       className='orangeBtn'
        fluid={isMobile} 
        size="large" disabled={loadingNext || (orderPage +1 >= totalOrderPages)} 
        onClick={()=> handleGetNext()} 

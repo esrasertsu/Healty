@@ -51,7 +51,7 @@ const ProfileDescription = () => {
               floated='right'
               circular
               size='mini'
-              className={editMode ? 'red': 'blue-gradientBtn'}
+              className={editMode ? 'red': 'blueBtn'}
               content={editMode ? 'İptal' : <span>Düzenle <Icon name='edit'></Icon></span>  }
               onClick={() => 
                 { 

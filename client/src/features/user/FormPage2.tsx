@@ -451,7 +451,7 @@ useEffect(() => {
                   loading={submitting}
                   disabled={submitting }
                   floated="right"
-                  className="blue-gradientBtn"
+                  className="blueBtn"
                   labelPosition="right"
                   icon="save"
                   circular
@@ -497,11 +497,10 @@ useEffect(() => {
     />}
             <Button
               loading={submitting}
-              color="green"
               content="Başvuruyu Gönder"
               floated="right"
               icon="send"
-              className="green-gradientBtn"
+              className='orangeBtn'
               labelPosition='right'
               circular
               style={{marginTop:"30px"}}

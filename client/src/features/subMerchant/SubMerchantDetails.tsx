@@ -566,7 +566,7 @@ const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant,id}) => {
                   loading={loading}
                   disabled={loading || invalid }
                   floated="right"
-                  color="blue"
+                  className='blueBtn'
                   type="submit"
                   labelPosition="right"
                   icon="save"

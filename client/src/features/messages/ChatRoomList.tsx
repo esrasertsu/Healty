@@ -92,7 +92,7 @@ const ChatRoomList: React.FC<IProps> = ({setshowChatRoomList}) => {
       : 
       <List.Item active={true} style={{display:"flex", justifyContent:"center", alignItems:"center",textAlign:"center", flexDirection:"column"}}>
         <p style={{ marginTop:"20px"}}>Henüz iletişime geçtiğin bir uzman bulunamadı.</p>
-        <Button style={{ marginBottom:"20px"}} primary circular content="Uzmanları Göster" onClick={()=> history.push('/profiles')} />
+        <Button style={{ marginBottom:"20px"}} className='blueBtn' circular content="Uzmanları Göster" onClick={()=> history.push('/profiles')} />
       </List.Item>
       }
   </List>

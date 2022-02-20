@@ -50,7 +50,7 @@ const ProfileBlogList: React.FC<IProps> = ({profileBlogs,profileUserName,display
             content="Tüm Blogları" 
             positive
             circular
-            className='green-gradientBtn'
+            className='blueBtn'
             onClick={()=>
               {
                 setPredicateDisplayName(displayName);

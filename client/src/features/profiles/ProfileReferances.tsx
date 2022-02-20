@@ -157,7 +157,7 @@ const handleSaveRef = () =>{
               floated='right'
               circular
               size='mini'
-              className={'blue-gradientBtn'}
+              className={'blueBtn'}
               content={<span>Düzenle <Icon name='edit'></Icon></span>}
               loading={uploadingReferencePics}
               onClick={() => 

@@ -148,7 +148,7 @@ const BlogList: React.FC = () => {
               <div style={{display:"flex", justifyContent:"center"}}>
               <Button  
                floated="right"
-               className='blue-gradientBtn'
+               className='blueBtn'
                fluid={isMobile} 
                size="large" disabled={loadingNext || (page +1 >= totalPages)} 
                onClick={()=> handleGetNext()} 

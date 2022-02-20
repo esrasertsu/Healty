@@ -123,7 +123,7 @@ const ProfileListFilters: React.FC = () => {
                   type="submit"
                   content="Ara"
                   circular
-                  className='green-gradientBtn'
+                  className='orangeBtn'
                   style={{marginRight:"10px"}}
                   onClick={() => {
                     clearPopularProfileRegistery();

@@ -121,8 +121,7 @@ const PaymentSuccessPage : React.FC<RouteComponentProps> = ({location}) =>{
                  as={Link} to={`/activities/${activity.id}`}
                  floated="right"
                  content="Aktivite sayfasına git"
-                 color="blue"
-                 className="orderListButton"
+                 className="blueBtn orderListButton"
                  circular
                  /> 
          </Item.Description>

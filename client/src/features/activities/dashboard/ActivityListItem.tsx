@@ -39,7 +39,7 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
         if(modal.open) closeModal();
     
             openModal("Giriş Yap", <>
-            <Image  size={isMobile ? 'big': isTabletOrMobile ? 'medium' :'large'}  wrapped />
+            <Image  size={isMobile ? 'big': isTabletOrMobile ? 'medium' :'large'} src='/assets/Login1.jpg'  wrapped />
             <Modal.Description className="loginreg">
             <LoginForm location={str} />
             </Modal.Description>
@@ -171,7 +171,7 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                         <Icon 
                         className='activity_addToFav' 
                         name={activity.isSaved?"bookmark" :"bookmark outline"}  
-                        color={"red"}
+                        color={"orange"}
                         onClick={(e:any) => activity.isSaved ? handleUnSave(e,activity.id) :handleSave(e,activity.id) } />
                        }
                      />

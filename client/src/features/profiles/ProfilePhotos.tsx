@@ -109,7 +109,7 @@ const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
               floated="left"
               basic
               circular
-              color="blue"
+              className='blueBtn'
               content={addPhotoMode ? "Geri" : "Resim Ekle"}
               onClick={() => setOpen(true)}
             />

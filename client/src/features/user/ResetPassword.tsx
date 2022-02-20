@@ -112,7 +112,7 @@ const ResetPassword : React.FC<RouteComponentProps> = ({location}) =>{
                   showSuccessMessage && (
                     <Message positive>
                          <p>Eposta adresi doğrulandı. Giriş yapmak için tıklayın.</p>
-                        <Button onClick={handleLoginClick} primary content="Giriş Yap" circular className='gradientBtn' size="large"/>
+                        <Button onClick={handleLoginClick} content="Giriş Yap" circular className='orangeBtn' size="large"/>
                      </Message>
                 )
             } {

@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import 'react-widgets/dist/css/react-widgets.css';
 import 'semantic-ui-css/semantic.min.css';
 import './app/layout/styles.scss';
-import App from './app/layout/App';
+
 import * as serviceWorker from './serviceWorker';
 import ScrollToTop from './app/layout/ScrollToTop';
 import dateFnsLocalizer from 'react-widgets-date-fns';
@@ -17,7 +17,7 @@ import getDay from "date-fns/getDay";
 import { tr } from "date-fns/locale";
 import parse from "date-fns/parse";
 import ReactDOMServer from 'react-dom/server';
-
+import App from './app/layout/App';
 const locales = {
   "tr": tr
 };

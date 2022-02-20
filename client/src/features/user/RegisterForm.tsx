@@ -128,7 +128,7 @@ const handleRegister = async(values:IUserFormValues) =>{
             <Button
               disabled={(invalid && !dirtySinceLastSubmit) || pristine}
               loading={submitting}
-              color='blue'
+              color="blue"
               content="Kayıt Ol"
               circular
               basic

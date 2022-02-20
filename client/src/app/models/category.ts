@@ -48,18 +48,18 @@ export interface IAllCategoryOption{
 
 }
     export const colors = [
-        { key:"Psikoloji", value: "#FA9639"},
-        { key:"Meditasyon", value: "#E36034" },
-        { key:"Spor", value: "#2B4CA9"},
-        { key:"Diyet", value: "#38A0BF"}
+        { key:"Psikoloji", value: "#db6173"},
+        { key:"Meditasyon", value: "#6B5ACC" },
+        { key:"Spor", value: "#325AA7"},
+        { key:"Diyet", value: "#05A2A2"}
     
       ];
 
 
       export const borderColors = [
-        { key:"Psikoloji", value: "#FA9639"},
-        { key:"Meditasyon", value: "#E36034" },
-        { key:"Spor", value: "#2B4CA9"},
-        { key:"Diyet", value: "#38A0BF"}
+        { key:"Psikoloji", value: "#e28593"},
+        { key:"Meditasyon", value: "#8170e2" },
+        { key:"Spor", value: "#406bbc"},
+        { key:"Diyet", value: "#00b8b8"}
     
       ];

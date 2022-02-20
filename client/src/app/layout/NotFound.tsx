@@ -12,7 +12,7 @@ const NotFound = () => {
                 Opps! Aradığın sayfayı bulamadık
             </Header>
             <Segment.Inline>
-                <Button as={Link} to='/activities' primary circular>
+                <Button as={Link} to='/activities' className='blueBtn' circular>
                     Aktivitelere dön
                 </Button>
             </Segment.Inline>

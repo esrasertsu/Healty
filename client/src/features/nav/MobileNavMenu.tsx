@@ -87,7 +87,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                      setActiveMenu(-1)
                      setVisibleMobileNav(false);
                  }}
-                 className="loginRegMobileButton" primary>Hesap Oluştur</Button>
+                 className="loginRegMobileButton orangeBtn">Hesap Oluştur</Button>
                   
                   </Menu.Item>
            
@@ -244,6 +244,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                     <Menu.Item>
                 <Button
                 circular
+                basic
                 loading={loggingOut}
                   onClick={() => 
                    { logout();
@@ -251,7 +252,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                     setVisibleMobileNav(false);
                 }
                 } 
-                 className="logoutMobileButton" primary>Çıkış yap</Button>
+                 className="logoutMobileButton" >Çıkış yap</Button>
                   
                   </Menu.Item>
 

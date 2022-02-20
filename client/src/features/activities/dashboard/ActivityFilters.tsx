@@ -279,7 +279,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
 
 {!isTabletOrMobile && 
 
-<Segment id="activityFilter_Banner" className="activityFilter_Banner"
+<Segment id="activityFilter_Banner" className="activityDetails_Countdown_Segment"
  style={{textAlign:"center"}}>
    <Icon style={{marginTop:"-15px", position:"absolute", width:"85%"}} name="cancel" onClick={handleCloseBanner} />
    <div style={{fontSize: "30px"}}>
@@ -498,7 +498,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
                             circular
                             size='small'
                             fluid
-                            className='green-gradientBtn'
+                            className='blueBtn'
                             onClick={handleSearch}
                             disabled={loadingInitial}
                           />
@@ -507,9 +507,9 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
                           // disabled={loading || buttonDisabled}
                           //  floated="right"
                             basic
-                            primary
+                            className='blueBtn'
                             circular
-                            size='mini'
+                            size='small'
                             fluid
                             style={{marginTop:"10px"}}
                             content="Tüm Filtreleri Kaldır"

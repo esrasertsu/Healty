@@ -68,7 +68,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   // });
   const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1023px)' })
   const [visible, setVisible] = useState(false);
   // useEffect(() => {
   //   return history.listen((location) => { 
@@ -243,7 +243,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
               </Sidebar>
 
         <Sidebar.Pusher>
-        <Route exact path="/" component={HomePage} />
+        <Route exact path="/" component={HomePage}/>
          <Route path={'/(.+)'} render={()=>(
            <Fragment>
                 <Switch>

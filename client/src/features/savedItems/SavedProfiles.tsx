@@ -30,7 +30,7 @@ const SavedProfiles = () => {
         if(modal.open) closeModal();
     
             openModal("Giriş Yap", <>
-            <Image  size={isMobile ? 'big': isTabletOrMobile ? 'medium' :'large'}  wrapped />
+            <Image  size={isMobile ? 'big': isTabletOrMobile ? 'medium' :'large'} src='/assets/Login1.jpg'  wrapped />
             <Modal.Description className="loginreg">
             <LoginForm location={str} />
             </Modal.Description>
@@ -106,7 +106,7 @@ const SavedProfiles = () => {
                             onClick={() => pro.isFollowing ? handleUnfollowTrainer(pro.userName,pro) :handleFollowTrainer(pro.userName, pro) } />
                             </div>
                        
-                       {!isMobile && <Button size='tiny' circular content="İncele" className='gradientBtn'
+                       {!isMobile && <Button size='tiny' circular content="İncele" className='orangeBtn'
                           onClick={()=> history.push(`/profile/${pro.userName}`)} />}
                         </div>
                         </Grid.Column>
@@ -118,7 +118,7 @@ const SavedProfiles = () => {
                             <Grid.Column width={12}>
                                      <Button
                                      style={{padding:"8px"}}
-                                     fluid size='mini' circular content="İncele" className='gradientBtn'
+                                     fluid size='mini' circular content="İncele" className='orangeBtn'
                                      onClick={()=> history.push(`/profile/${pro.userName}`)} />
                            </Grid.Column>
                         </Grid.Row>}

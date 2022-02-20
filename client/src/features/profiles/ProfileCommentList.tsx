@@ -92,7 +92,7 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
                       content='Yorum yaz'
                       labelPosition='left'
                       icon='edit'
-                      className='blue-gradientBtn'
+                      className='blueBtn'
                       primary
                       circular
                       onClick={()=>

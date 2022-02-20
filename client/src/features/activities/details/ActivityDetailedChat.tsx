@@ -82,7 +82,7 @@ import { IComment } from '../../../app/models/activity';
                       content='Gönder'
                       labelPosition='left'
                       icon='edit'
-                      primary
+                      className='blueBtn'
                       loading={submitting}
                     />
                   </Form>

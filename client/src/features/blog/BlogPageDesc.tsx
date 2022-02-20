@@ -50,13 +50,8 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
 
 
  const handleShowProfileClick = (e:any) => {
-  if(isLoggedIn){
       history.push(`/profile/${blog.username}`);
-  }else{ 
-    var str = `/profile/${blog.username}`;
-     handleLoginClick(e,str)
-  }
- 
+
   }
 
   const handleDeleteBlog = (e:any) => {
@@ -70,7 +65,7 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
                       <div>
                       {
                         !editMode ? 
-                        <Button color='blue' floated='right'
+                        <Button className='blueBtn' floated='right'
                         circular
                         size={isTabletOrMobile ? "small" :"medium"}
                         content={'Düzenle' }

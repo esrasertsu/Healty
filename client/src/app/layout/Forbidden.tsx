@@ -12,7 +12,7 @@ const Forbidden = () => {
                 Opps! Bu sayfayı görüntüleme iznin yok. 
             </Header>
             <Segment.Inline>
-                <Button  as={Link} to='/' primary circular>
+                <Button  as={Link} to='/' className='blueBtn' circular>
                     Anasayfaya geri dön
                 </Button>
             </Segment.Inline>

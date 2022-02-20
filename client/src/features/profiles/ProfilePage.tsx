@@ -72,7 +72,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
            {isCurrentUser && profile.role === "WaitingTrainer" &&
           <ButtonGroup widths={2}>
             <Button
-              color={'blue'}
+              className='blueBtn'
               content={'Uzman Başvuruma Git'}
               onClick={()=> history.push(`/trainerRegister/${profile.userName}`)}
             />

@@ -201,7 +201,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                     <Grid>
                       <Grid.Row>
                           <Grid.Column width={11}>
-                            <Button style={{position:"absolute", margin:"20px"}} color='blue' content={"Tüm resimler (" + activity.photos.length.toString() + ")"}
+                            <Button style={{position:"absolute", margin:"20px"}} className="blueBtn" content={"Tüm resimler (" + activity.photos.length.toString() + ")"}
                             onClick={() => openGalleryModal(0)}/>
                              <img style={{cursor:"pointer", borderRadius: "0.28571429rem"}} className='activityFirstCol_Img' key={activity.photos[0].id} src={activity.photos[0].url}
                              onClick={() => openGalleryModal(0)} />
@@ -227,7 +227,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                     :
                     activity.photos.length > 0?
                     <div>
-                      <Button style={{position:"absolute", margin:"20px", zIndex:"5"}} color='blue' content={"Tüm resimler (" + activity.photos.length.toString() + ")"}
+                      <Button style={{position:"absolute", margin:"20px", zIndex:"5"}} className="blueBtn" content={"Tüm resimler (" + activity.photos.length.toString() + ")"}
                       onClick={() => openGalleryModal(0)}/>
                       <Image src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} onClick={() => openGalleryModal(0)} fluid style={activityImageStyle}/>
                     </div>

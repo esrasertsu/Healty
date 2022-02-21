@@ -7,6 +7,7 @@ using CleanArchitecture.Domain;
 using CleanArchitecture.Application.Activities;
 using Microsoft.AspNetCore.Authorization;
 using CleanArchitecture.Application.User;
+using CleanArchitecture.Application.Activities.Administration;
 
 namespace CleanArchitecture.API.Controllers
 {
@@ -22,6 +23,12 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new List.Query(limit, offset, isGoing,isHost,isFollowed, isOnline,startDate, endDate,categoryIds, subCategoryIds, levelIds, cityId));
         }
 
+        [HttpGet("personalActivities")]
+        [Authorize(Policy = "CanCreateActivity")]
+        public async Task<ActionResult<ListTrainerActivities.TrainerActivitiesEnvelope>> ListTrainerActivities(int? limit, int? offset, string userName, string status)
+        {
+            return await Mediator.Send(new ListTrainerActivities.Query(limit, offset, userName, status));
+        }
         [HttpGet("{id}")]
         // [Authorize]
         [AllowAnonymous]
@@ -31,7 +38,7 @@ namespace CleanArchitecture.API.Controllers
         }
         [HttpPost]
         [Authorize(Policy = "CanCreateActivity")]
-        public async Task<ActionResult<ActivityDto>> Create([FromForm] Create.Command command)
+        public async Task<ActionResult<Unit>> Create([FromForm] Create.Command command)
         {
             return await Mediator.Send(command);
         }
@@ -101,6 +108,12 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new ListSavedActivities.Query());
         }
 
+        [HttpPost("{id}/review")]
+        [Authorize(Policy = "IsActivityAttendee")]
+        public async Task<ActionResult<Unit>> CreateReview(CreateReview.Command command)
+        {
+            return await Mediator.Send(command);
+        }
 
     }
 }

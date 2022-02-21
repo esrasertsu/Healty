@@ -846,7 +846,7 @@ font-size: 17px;
   font-family: AssistantMedium, Arial,  sans-serif !important;
     font-weight: normal;
     color: #222E50;
-    font-size: 17px;
+    font-size: 16px;
 }
 .activityDetail_payment_calenderIcon{
   color: #222E50;
@@ -1848,8 +1848,8 @@ max-width: 80%;
   .activityListItemDiv{
      position:relative;
   }
-  .activityListItemDiv .medium img{
-    height: 200px;
+  .activityListItemDiv img{
+    height: 100px !important;
     width: 100%;
     object-fit: cover;
   }

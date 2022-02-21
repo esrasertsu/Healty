@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IRefundPayment, PaymentThreeDResult } from '../models/activity';
+import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, IActivityReview, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IRefundPayment, PaymentThreeDResult } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { ISubMerchantInfo, ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues, IyziSubMerchantResponse } from '../models/user';
@@ -315,14 +315,17 @@ const Activities = {
     activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,activity.endDate!,
     activity.cityId!,activity.venue!, activity.online!, activity.attendancyLimit!,activity.price!,activity.photo!,activity.newphotos!,
     activity.deletedPhotos, activity.address!,activity.duration!, activity.mainPhotoId),
-    create: (activity: IActivityFormValues): Promise<IActivity> => requests.createActivity(`/activities/`,activity.title!,
+    create: (activity: IActivityFormValues) => requests.createActivity(`/activities/`,activity.title!,
      activity.description!,activity.categoryIds!,activity.subCategoryIds!,activity.levelIds, activity.date!,activity.endDate!,
     activity.cityId!,activity.venue!, activity.online!, activity.attendancyLimit!,activity.price!,activity.photo!,activity.newphotos!,
     activity.address!, activity.duration!, activity.trainerUserName),
     editOnlineJoinInfo: ( id:string, name : string) => requests.put(`/activities/${id}/joindetails`, name),
     save: (id:string) => requests.post(`/activities/${id}/save`, {}),
     unsave:  (id:string) => requests.del(`/activities/${id}/unsave`),
-    getSavedActivities: () : Promise<IActivity[]>=>  requests.get(`/activities/saved`)
+    getSavedActivities: () : Promise<IActivity[]>=>  requests.get(`/activities/saved`),
+    sendReview: (comment:IActivityReview) => requests.post(`/activities/${comment.activityId}/review`, comment),
+    listPersonalActs: (params: URLSearchParams): Promise<IActivitiesEnvelope> => 
+            axios.get(`/activities/personalActivities`, {params:params}).then(responseBody)
 }
 
 const User ={
@@ -348,7 +351,7 @@ const User ={
     editSubMerchant: ( subMerchant : ISubMerchantInfo) : Promise<IyziSubMerchantResponse> => requests.put('/user/editSubMerchant', subMerchant),
     checkCallbackandStartPayment: (id:string, count:string, status:string, paymentId:string, conversationData:string, conversationId:string, mdStatus:string): Promise<Boolean> => 
         requests.post(`/payment/callback`,{id, count, status, paymentId, conversationData, conversationId, mdStatus}),
-  
+
 }
 
 const Profiles = {

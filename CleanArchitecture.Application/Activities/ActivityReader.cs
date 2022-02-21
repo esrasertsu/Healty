@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CleanArchitecture.Application.Activities.Administration;
 using CleanArchitecture.Application.Categories;
 using CleanArchitecture.Application.Comments;
 using CleanArchitecture.Application.Errors;
@@ -99,7 +100,7 @@ namespace CleanArchitecture.Application.Activities
                 Levels = levelsDto,
                 Categories = catsToReturn,
                 UserActivities = _mapper.Map<ICollection<UserActivity>, ICollection<AttendeeDto>>(activity.UserActivities.Where(x => x.IsHost == true).ToList()),
-                SavedCount = activity.UserSavedActivities.Count,
+                SavedCount = activity.UserSavedActivities != null? activity.UserSavedActivities.Count() : 0,
                 SubCategories = subcatsToReturn,
                 Address= activity.Address,
                 City = _mapper.Map<City, CityDto>(activity.City),
@@ -111,29 +112,67 @@ namespace CleanArchitecture.Application.Activities
 
             if (currentUser != null)
                 activityDto.UserActivities = _mapper.Map<ICollection<UserActivity>, ICollection<AttendeeDto>>(activity.UserActivities.Where(x => x.IsHost || x.AppUser == currentUser || currentUser.Followings.Any(y => y.TargetId == x.AppUser.Id)).ToList());
-                activityDto.IsSaved = activity.UserSavedActivities.Any(x => x.AppUser == currentUser);
+                activityDto.IsSaved = activity.UserSavedActivities !=null ? activity.UserSavedActivities.Any(x => x.AppUser == currentUser) : false;
+                activityDto.HasCommentByUser = activity.Reviews != null ? activity.Reviews.Any(x => x.Author == currentUser) : false;
 
+            return activityDto;
+            }
+
+
+        
+            public async Task<PersonalActivityDto> ReadPersonalActivity(Guid activityId)
+             {
+                var activity = await _context.Activities.SingleOrDefaultAsync(x => x.Id == activityId);
+
+                if (activity == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { Activity = "Not Found" });
+
+                var activityDto = new PersonalActivityDto
+                {
+                    Id = activity.Id,
+                    AttendanceCount = activity.AttendanceCount,
+                    AttendancyLimit = activity.AttendancyLimit,
+                    Date = activity.Date,
+                    EndDate = activity.EndDate,
+                    Duration = activity.Duration,
+                    Online = activity.Online,
+                    Description = activity.Description,
+                    Price = activity.Price,
+                    Title = activity.Title,
+                    MainImage = activity.Photos.Where(x => x.IsMain == true).FirstOrDefault(),
+                    SavedCount = activity.UserSavedActivities != null ? activity.UserSavedActivities.Count() : 0,
+                    City = _mapper.Map<City, CityDto>(activity.City),
+                    TrainerApproved = activity.TrainerApproved,
+                    TrainerApprovedDate = activity.TrainerApprovedDate,
+                    AdminApproved = activity.AdminApproved,
+                    AdminApprovedDate = activity.AdminApprovedDate,
+                    Reviews = activity.Reviews,
+                    Star = activity.Star,
+                    StarCount = activity.StarCount,
+                    Status = activity.Status
+                };
+
+             
                 return activityDto;
             }
 
-         
-            //private int GetStarCount(AppUser user)
-            //{
-            //    return Convert.ToInt32(user.ReceivedComments.Count() > 0 ? user.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Count() : 0);
-            //}
-            //private int CalculateStar(AppUser user)
-            //{
-            //    return Convert.ToInt32(user.ReceivedComments.Count() > 0 ? user.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Average() : 0);
-            //}
-            //private int CalculateResponseRate(AppUser user)
-            //{
-            //    var receivedFirstMessagesCount = user.ChatRooms.Where(x => x.ChatRoom.StarterId != user.Id).Count();
-            //    var respondedMessagesCount = user.ChatRooms.Where(x => x.ChatRoom.Messages.Any(x => x.SenderId == user.Id)).Count();
+        //private int GetStarCount(AppUser user)
+        //{
+        //    return Convert.ToInt32(user.ReceivedComments.Count() > 0 ? user.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Count() : 0);
+        //}
+        //private int CalculateStar(AppUser user)
+        //{
+        //    return Convert.ToInt32(user.ReceivedComments.Count() > 0 ? user.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Average() : 0);
+        //}
+        //private int CalculateResponseRate(AppUser user)
+        //{
+        //    var receivedFirstMessagesCount = user.ChatRooms.Where(x => x.ChatRoom.StarterId != user.Id).Count();
+        //    var respondedMessagesCount = user.ChatRooms.Where(x => x.ChatRoom.Messages.Any(x => x.SenderId == user.Id)).Count();
 
-            //    var rate = 0;
-            //    if (receivedFirstMessagesCount > 0)
-            //        rate = Convert.ToInt32(100 * respondedMessagesCount / receivedFirstMessagesCount);
-            //    return rate;
-            //}
-        }
+        //    var rate = 0;
+        //    if (receivedFirstMessagesCount > 0)
+        //        rate = Convert.ToInt32(100 * respondedMessagesCount / receivedFirstMessagesCount);
+        //    return rate;
+        //}
     }
+}

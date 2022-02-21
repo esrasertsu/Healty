@@ -1,25 +1,25 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Button, Card, Container, Header, Icon, Item, Label, Message, Segment } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
-import { RootStoreContext } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
 import tr  from 'date-fns/locale/tr'
 import { useMediaQuery } from 'react-responsive'
 import { Link } from 'react-router-dom';
-import { history } from '../..';
-import ActivityListItemPlaceholder from '../activities/dashboard/ActivityListItemPlaceHolder';
-import { getStatusTranslate } from '../../app/common/util/util';
 import { SemanticICONS } from 'semantic-ui-react/dist/commonjs/generic';
-import LoginForm from '../user/LoginForm';
+import { RootStoreContext } from '../../../app/stores/rootStore';
+import LoginForm from '../../user/LoginForm';
+import { history } from '../../..';
+import ActivityListItemPlaceholder from '../dashboard/ActivityListItemPlaceHolder';
 
 interface IProps{
     settings?: boolean
 }
 
-const OrderList: React.FC<IProps> = ({settings}) => {
+const TrainerActivityPage: React.FC<IProps> = ({settings}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const { getOrders, orderList, setOrderPage, orderPage,clearOrderRegistery, totalOrderPages, loadingOrders } = rootStore.activityStore;
+  const { getTrainerActivities, personalActivityList, setPersonalActivityPage, personalActivityPage,clearPersonalActRegistery, totalPersonalActPages, loadingActivity,
+    personalActStatus, setPersonalActStatus } = rootStore.activityStore;
   const {isLoggedIn} = rootStore.userStore;
   const [loadingNext, setLoadingNext] = useState(false);
 
@@ -29,19 +29,19 @@ const OrderList: React.FC<IProps> = ({settings}) => {
   const handleGetNext = () => {
       debugger;
     setLoadingNext(true);
-    setOrderPage(orderPage +1);
-    getOrders().then(() => setLoadingNext(false))
+    setPersonalActivityPage(personalActivityPage +1);
+    getTrainerActivities().then(() => setLoadingNext(false))
   }
 
   useEffect(() => {
       if(isLoggedIn)
-         getOrders();
+      getTrainerActivities();
     //   return () => {
     //     setOrderPage(0);
     //     clearOrderRegistery();
     // }
       
-  }, [getOrders,isLoggedIn])
+  }, [getTrainerActivities,isLoggedIn])
 
   if(!isLoggedIn)
     return (
@@ -57,65 +57,59 @@ const OrderList: React.FC<IProps> = ({settings}) => {
     <Container className={!settings ? "pageContainer" : ""}>
 
     <Fragment>
-     {loadingOrders && orderPage === 0 ? <ActivityListItemPlaceholder/> :
-     orderList.length > 0 ?
+     {loadingActivity && personalActivityPage === 0 ? <ActivityListItemPlaceholder/> :
+     personalActivityList.length > 0 ?
       <>
       <Segment className="myOrdersHeader" style={!settings ? {marginTop:"40px"} : {}}>
-        Rezervasyonlarım
+        Aktivitelerim
       </Segment>
       {
-      orderList.map((order) =>(
+      personalActivityList.map((activity) =>(
         
-        <Segment key={order.id + "_segment"} className="orderListItem">
+        <Segment key={activity.id + "_segment"} className="orderListItem">
          <Item.Group divided>
-          <Item key={order.id} style={{ zIndex: '1' }} className={isMobile? "activityListItem_mobile":""} >
+          <Item key={activity.id} style={{ zIndex: '1' }} className={isMobile? "activityListItem_mobile":""} >
          <div className={isMobile? "activityListItemDiv_mobile":"activityListItemDiv"} >
              <Item.Image size={!isMobile ? "small":undefined} style={{ display: "block"}} 
-                 src={(order.photo && order.photo) || '/assets/placeholder.png'}
+                 src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'}
                  className={isMobile ? "activityListItem_Image_mobile":""} >
              </Item.Image>
          </div>
        <div className="orderListItem_content_div">
  
          <Item.Content className={isMobile ? "order_listItem_mobile":"order_listItem"} >
-             <Item.Header>{order.title}</Item.Header>
+             <Item.Header>{activity.title}</Item.Header>
              <Item.Description>
-                 <div> Rez No: #
-                {
-                    order.orderNo
-                }
-                 </div> 
                  <div>
-                    Rez Tarihi: {format(new Date(order.date), 'dd MMMM yyyy, HH:mm',{locale: tr})}
+                 Tarih: {format(new Date(activity.date), 'dd MMMM yyyy, HH:mm',{locale: tr})} - {format(new Date(activity.endDate), 'dd MMMM yyyy, HH:mm',{locale: tr})}
                  </div>
              </Item.Description>
          </Item.Content>
          <Item.Content className={isMobile ? "order_listItem_extraContent_mobile":"order_listItem_extraContent"}>
          <Item.Description>
-             <div style={{color:getStatusTranslate(order.orderStatus).color}}>
+             {/* <div style={{color:getStatusTranslate(order.orderStatus).color}}>
                 <span><Icon name={getStatusTranslate(order.orderStatus).icon as SemanticICONS} /> {getStatusTranslate(order.orderStatus).desc}</span> 
-             </div>
+             </div> */}
 
              </Item.Description>
          </Item.Content>
          <Item.Content className={isMobile ? "order_listItem_extraContent_mobile":"order_listItem_extraContent"}>
          <Item.Description>
          <div>
-                     Kişi sayısı : {order.count}
+                     Katılımcı sayısı : {activity.attendanceCount}
                  </div>
                  <div>
-                     Fiyat : {Number(order.price)}TL
+                     Katılımcı limiti : {activity.attendancyLimit?activity.attendancyLimit : "Sınırsız" }
                  </div>
                  <div>
-                    Toplam Ödenen : {Number(order.paidPrice)}TL
+                    Bilet Fiyatı : {Number(activity.price)}TL
                  </div>
-
              </Item.Description>
          </Item.Content>
          <Item.Content className={isMobile ? "order_listItem_extraContent_mobile":"order_listItem_extraContent"} >
          <Item.Description style={{flex:"end"}}>
          <Button
-                 onClick={()=> history.push(`/orders/${order.id}`)}
+                 onClick={()=> history.push(`/activity/${activity.id}`)}
                  floated="right"
                  content="Detay"
                  size={isTabletOrMobile ?"mini" :"medium"}
@@ -136,9 +130,9 @@ const OrderList: React.FC<IProps> = ({settings}) => {
       <div style={{display:"flex", justifyContent:"center"}}>
       <Button  
        floated="right"
-       className='blueBtn'
+       className='orangeBtn'
        fluid={isMobile} 
-       size="large" disabled={loadingNext || (orderPage +1 >= totalOrderPages)} 
+       size="large" disabled={loadingNext || (personalActivityPage +1 >= totalPersonalActPages)} 
        onClick={()=> handleGetNext()} 
        style={{margin:"20px 0"}}
        circular
@@ -155,7 +149,7 @@ const OrderList: React.FC<IProps> = ({settings}) => {
 
             <Segment.Inline>
                 <div className="center">
-                    <p style={{color:"#1a2b49", fontSize:"16px"}}>Henüz ödeme aşamasına geldiğiniz bir aktivite bulunmamaktadır.</p>
+                    <p style={{color:"#1a2b49", fontSize:"16px"}}>Henüz açmış olduğunuz bir aktivite bulunmamaktadır.</p>
                     <p>
                     <Button onClick={() => history.push("/activities")} circular positive content="Aktivitelere göz at"></Button> 
 
@@ -171,4 +165,4 @@ const OrderList: React.FC<IProps> = ({settings}) => {
   );
 };
 
-export default observer(OrderList)
+export default observer(TrainerActivityPage)

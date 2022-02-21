@@ -48,7 +48,7 @@ export interface IAllCategoryOption{
 
 }
     export const colors = [
-        { key:"Psikoloji", value: "#db6173"},
+        { key:"Psikoloji", value: "#e17e8d"},
         { key:"Meditasyon", value: "#6B5ACC" },
         { key:"Spor", value: "#325AA7"},
         { key:"Diyet", value: "#05A2A2"}
@@ -57,7 +57,7 @@ export interface IAllCategoryOption{
 
 
       export const borderColors = [
-        { key:"Psikoloji", value: "#e28593"},
+        { key:"Psikoloji", value: "#e8a1ac"},
         { key:"Meditasyon", value: "#8170e2" },
         { key:"Spor", value: "#406bbc"},
         { key:"Diyet", value: "#00b8b8"}

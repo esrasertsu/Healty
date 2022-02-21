@@ -24,14 +24,8 @@ export const ActivityVideoCall:React.FC<{activity:IActivity}> = ({activity}) => 
     return (<>
         {
            <>
-           
-            <Header>Online Aktivite  </Header>
             <Segment attached>
-                
-                
-            <div className="activityDetail_zoom_title">
-                 <h4 className="activityDetail_title">{activity.title}</h4>
-                 </div>
+            <Header>Online Aktivite  </Header>
                 <div style={{marginBottom:"10px"}}>
                 <Icon size="big" name="calendar alternate" className="activityDetail_payment_calenderIcon" />
             <span style={{fontSize:"15px"}}>Tarih: {format(new Date(new Date(activity.date).valueOf() - 86400000),'dd MMMM yyyy, eeee',{locale: tr})} </span>

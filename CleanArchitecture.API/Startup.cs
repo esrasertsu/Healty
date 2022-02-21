@@ -136,6 +136,10 @@ namespace CleanArchitecture.API
                 {
                     policy.Requirements.Add(new HostRequirement());
                 });
+                opt.AddPolicy("IsActivityAttendee", policy =>
+                {
+                    policy.Requirements.Add(new AttendeeRequirement());
+                });
                 opt.AddPolicy("CanCreateActivity", policy =>
                 {
                     policy.Requirements.Add(new ActivityRoleRequirement());
@@ -143,6 +147,7 @@ namespace CleanArchitecture.API
             });
             services.AddTransient<IAuthorizationHandler, HostRequirementHandler>();//only available for the liftetime of the operation not the complete request
             services.AddTransient<IAuthorizationHandler, ActivityRoleRequirementHandler>();
+            services.AddTransient<IAuthorizationHandler, AttendeeRequirementHandler>();
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"]));
 

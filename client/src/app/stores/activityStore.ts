@@ -6,7 +6,7 @@ import { history } from '../..';
 import ProfileDashboardPopularProfiles from '../../features/profiles/ProfileDashboardPopularProfiles';
 import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
-import { ActivityFormValues, ActivityOnlineJoinInfo, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, IActivitySelectedFilter, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, PaymentUserInfoDetails } from '../models/activity';
+import { ActivityFormValues, ActivityOnlineJoinInfo, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, IActivityReview, IActivitySelectedFilter, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, PaymentUserInfoDetails } from '../models/activity';
 import { IOrder } from '../models/order';
 import { RootStore } from './rootStore';
 
@@ -33,6 +33,7 @@ export default class ActivityStore {
     }
 
     @observable activityRegistery = new Map();
+    @observable personalActivityRegistery = new Map<string, IActivity>();
     @observable orderRegistery = new Map<string,IOrder>();
     @observable activity: IActivity | null = null;
     @observable order: IOrder | null = null;
@@ -59,13 +60,15 @@ export default class ActivityStore {
     @observable activityCount = 0;
     @observable page = 0;
     @observable orderCount = 0;
+    @observable personalActivityCount = 0;
     @observable orderPage = 0;
 
+    @observable personalActivityPage = 0;
     @observable predicate = new Map();
     @observable activityForm: IActivityFormValues = new ActivityFormValues();
     @observable activityOnlineJoinInfo: IActivityOnlineJoinInfo = new ActivityOnlineJoinInfo();
     @observable activityUserPaymentInfo: IPaymentUserInfoDetails = new PaymentUserInfoDetails();
-
+   @observable personalActStatus:string = "";
 
 
     /* Aktivite Filtre observeleri */
@@ -115,6 +118,13 @@ export default class ActivityStore {
         this.orderPage = index;
     }
 
+    @action setPersonalActivityPage = (index:number) =>{
+        this.personalActivityPage = index;
+    }
+    @action setPersonalActStatus = (status:string) =>{
+        this.personalActStatus = status;
+    }
+
     @action setActivitySelectedFilters = (selectedFilters:IActivitySelectedFilter[]) => {
         this.activitySelectedFilters = selectedFilters;
     }
@@ -129,6 +139,9 @@ export default class ActivityStore {
         return Math.ceil(this.orderCount / 5);
     }
 
+    @computed get totalPersonalActPages(){
+        return Math.ceil(this.personalActivityCount / 5);
+    }
     @action setPage = (page:number) =>{
         this.page = page;
     }
@@ -169,6 +182,10 @@ export default class ActivityStore {
 
     @action clearOrderRegistery = () => {
         this.orderRegistery.clear();
+    }
+
+    @action clearPersonalActRegistery = () => {
+        this.personalActivityRegistery.clear();
     }
     @action setLoadingInitial = (lp : boolean) =>{
         this.loadingInitial = lp;
@@ -223,6 +240,18 @@ export default class ActivityStore {
         return params;
     }
 
+
+    @computed get personalActAxiosParams(){
+        const params = new URLSearchParams();
+        params.append('limit', String(LIMIT));
+        params.append('offset', `${this.personalActivityPage ? this.personalActivityPage * LIMIT : 0}`);
+
+        params.append("userName", this.rootStore.userStore.user!.userName)
+        params.append("status", this.personalActStatus)
+
+      
+        return params;
+    }
  
 
     @action createHubConnection = (activityId: string) => {
@@ -302,6 +331,11 @@ export default class ActivityStore {
           return Array.from(this.orderRegistery.values());
      }
 
+     @computed get personalActivityList(){
+        return Array.from(this.personalActivityRegistery.values());
+   }
+
+
     groupActivitiesByDate(activities: IActivity[]){
         const sortedActivities = activities.sort(
             (a,b) => a.date.getTime() -b.date.getTime()
@@ -336,6 +370,32 @@ export default class ActivityStore {
                 });
             }
     };
+
+
+    @action getTrainerActivities = async () => {
+        debugger;
+        this.loadingActivity = true;
+        try {
+            const activitiesEnvelope = await agent.Activities.listPersonalActs(this.personalActAxiosParams);
+            const {activities, activityCount } = activitiesEnvelope;
+            runInAction(() => {
+                activities.forEach((activity) =>{
+                    setActivityProps(activity,this.rootStore.userStore.user!)
+                    this.personalActivityRegistery.set(activity.id, activity);
+                });
+                this.personalActivityCount = activityCount;
+                this.loadingActivity = false;
+                this.rootStore.categoryStore.allCategoriesOptionList.length === 0 && this.rootStore.categoryStore.loadAllCategoryList();
+            })
+            } catch (error) {
+                console.log(error);
+                runInAction(() => {
+                  this.loadingActivity = false
+                });
+            }
+    };
+
+    
 
 
     @action getOrders = async () => {
@@ -436,8 +496,9 @@ export default class ActivityStore {
 
     @action createActivity = async (activity: IActivityFormValues) =>{
         this.submitting = true;
+        debugger;
         try {
-            var newAct = await agent.Activities.create(activity);
+           await agent.Activities.create(activity);
             //const attendee = createAttendee(this.rootStore.userStore.user!);
             // attendee.isHost = true;
             // let attendees = [];
@@ -446,18 +507,21 @@ export default class ActivityStore {
             // activity.comments = [];
             // activity.isHost = true;            
             runInAction( () => {
-                setActivityProps(newAct,this.rootStore.userStore.user!)
-                this.activityRegistery.set(newAct.id, newAct);
-                this.activity = newAct;
-                this.submitting = false;
-                history.push(`/activities/${newAct.id}`);
+              //  setActivityProps(newAct,this.rootStore.userStore.user!)
+              //  this.activityRegistery.set(newAct.id, newAct);
+              //  this.activity = newAct;
+              this.submitting = false;
             });
+            
+            return true;
+
         } catch (error) {
             runInAction(() => {
                 this.submitting = false;
             });
             toast.error('Problem submitting data');
             console.log(error);
+            return false;
         }
     };
 
@@ -807,22 +871,21 @@ export default class ActivityStore {
     }
 
 
-    // @action sendActivityComment = async (comment: IProfileComment) =>{
-    //     comment.username= this.profile!.userName;
-    //     this.submittingComment = true;
-    //     try {
-    //         var newComment = await agent.Profiles.createComment(comment);
-    //         runInAction(() => {
-    //           //  this.commentRegistery.set(newComment.id, newComment);
-    //             this.submittingComment = false;
-    //             toast.success('Uzman hakkındaki yorumunuz en yakın zamanda değerlendirilip yayınlanmak üzere tarafımıza iletildi.');
-    //         });
-    //     } catch (error) {
-    //         runInAction( () => {
-    //             this.submittingComment = false;
-    //         });
-    //         toast.error('Problem submitting data');
-    //         console.log(error);
-    //     }
-    // };
+    @action sendReview = async (comment: IActivityReview)=>{
+        this.submitting = true;
+        try {
+            var newComment = await agent.Activities.sendReview(comment);
+            runInAction(() => {
+              //  this.commentRegistery.set(newComment.id, newComment);
+                this.submitting = false;
+                toast.success('Aktivite hakkındaki yorumunuz en yakın zamanda değerlendirilip yayınlanmak üzere tarafımıza iletildi.');
+            });
+        } catch (error) {
+            runInAction( () => {
+                this.submitting = false;
+            });
+            toast.error('Problem submitting data');
+            console.log(error);
+        }
+    };
 }

@@ -30,6 +30,7 @@ namespace CleanArchitecture.Application.Activities
         public string Address { get; set; }
         public Photo MainImage { get; set; }
         public bool IsSaved { get; set; }
+        public bool HasCommentByUser { get; set; }
 
         [JsonPropertyName("attendees")]
         public ICollection<AttendeeDto> UserActivities { get; set; }

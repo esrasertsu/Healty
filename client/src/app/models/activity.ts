@@ -25,7 +25,9 @@ export interface IActivity {
     levels: ILevel[];
     isGoing:boolean;
     isHost: boolean;
+    isAttendee: boolean;
     isSaved: boolean;
+    hasCommentByUser:boolean;
     savedCount:number;
     comments: IComment[];
     online: boolean,
@@ -33,6 +35,35 @@ export interface IActivity {
     videos: IPhoto[],
     mainImage: IPhoto,
     channelName: string
+
+}
+
+
+export interface IPersonalActivitiesEnvelope {
+    activities: IPersonalActivity[];
+    activityCount: number;
+}
+export interface IPersonalActivity {
+    id: string;
+    title: string;
+    description: string;
+    date: Date;
+    endDate: Date;
+    duration:number;
+    city: ICity,
+    attendanceCount:number;
+    price?:number;
+    savedCount:number;
+    online: boolean;
+    mainImage: IPhoto;
+    status: boolean;
+    trainerApproved:boolean;
+    trainerApprovedDate:Date;
+    adminApproved:boolean;
+    adminApprovedDate:Date;
+    reviews:any[];
+    star:number;
+    starCount: number;
 
 }
 export interface ILevel {
@@ -324,4 +355,18 @@ export interface IRefundPayment{
     errorMessage: string;
     errorGroup: string;
     
+}
+
+
+export interface IActivityReview {
+    id: string;
+    createdAt: Date;
+    body: string;
+    activityId: string;
+    authorName: string;
+    image: string;
+    displayName : string;
+    starCount: number;
+    allowDisplayName: boolean;
+    status: boolean;
 }

@@ -106,7 +106,7 @@ const SavedProfiles = () => {
                             onClick={() => pro.isFollowing ? handleUnfollowTrainer(pro.userName,pro) :handleFollowTrainer(pro.userName, pro) } />
                             </div>
                        
-                       {!isMobile && <Button size='tiny' circular content="İncele" className='orangeBtn'
+                       {!isMobile && <Button size='tiny' circular content="İncele" className='blueBtn'
                           onClick={()=> history.push(`/profile/${pro.userName}`)} />}
                         </div>
                         </Grid.Column>
@@ -118,7 +118,7 @@ const SavedProfiles = () => {
                             <Grid.Column width={12}>
                                      <Button
                                      style={{padding:"8px"}}
-                                     fluid size='mini' circular content="İncele" className='orangeBtn'
+                                     fluid size='mini' circular content="İncele" className='blueBtn'
                                      onClick={()=> history.push(`/profile/${pro.userName}`)} />
                            </Grid.Column>
                         </Grid.Row>}

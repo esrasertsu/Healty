@@ -14,6 +14,7 @@ namespace CleanArchitecture.Domain
         public Guid ActivityId { get; set; }
         public virtual Activity Activity { get; set; }
         public DateTime CreatedAt { get; set; }
+        public bool Status { get; set; }
         public bool AllowDisplayName { get; set; }
     }
 }

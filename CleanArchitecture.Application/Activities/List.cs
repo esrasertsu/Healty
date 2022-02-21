@@ -74,7 +74,7 @@ namespace CleanArchitecture.Application.Activities
             public async Task<ActivitiesEnvelope> Handle(Query request, CancellationToken cancellationToken)
             {
                 var queryable = _context.Activities
-                    .Where(x => x.Date >= request.StartDate)
+                    .Where(x => x.Date >= request.StartDate && x.Status == true)
                     .OrderBy(x => x.Date)
                     .AsQueryable();
 

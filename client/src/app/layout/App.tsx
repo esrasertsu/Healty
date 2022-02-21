@@ -49,6 +49,8 @@ import Forbidden from './Forbidden';
 import ReadyOnlyApplication from '../../features/user/ReadyOnlyApplication';
 import MainVideoPage from '../../features/videoCall/MainVideoPage';
 import SavedPage from '../../features/savedItems/SavedPage';
+import ActivitySuccessPage from '../../features/activities/form/ActivitySuccessPage';
+import TrainerActivityPage from '../../features/activities/personalDashboard/TrainerActivityPage';
 
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
@@ -204,6 +206,8 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                 <Route path="/login-required" component={LoginRequiredPage}/>
                  {/* <Route exact path="/activitysearch" component={ActivitySearchPage}/> */}
                  <Route path="/user/registerSuccess" component={RegisterSuccess}/>
+                 <Route path="/activitySuccess" component={ActivitySuccessPage}/>
+                 <Route path="/myActivities" component={TrainerActivityPage}/>
                  <Route path="/user/verifyEmail" component={VerifyEmail}/>
                  <Route path="/user/resetPassword" component={ResetPassword}/>
                  <Route path="/TrainerOnboarding" component={TrainerOnboardingPage} />
@@ -261,6 +265,8 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                  <Route path="/login-required" component={LoginRequiredPage}/>
                  {/* <Route exact path="/activitysearch" component={ActivitySearchPage}/> */}
                  <Route path="/user/registerSuccess" component={RegisterSuccess}/>
+                 <PrivateRoute path="/activitySuccess" component={ActivitySuccessPage}/>
+                 <Route path="/myActivities" component={TrainerActivityPage}/>
                  <Route path="/user/verifyEmail" component={VerifyEmail}/>
                  <Route path="/user/resetPassword" component={ResetPassword}/>
                  <Route path="/TrainerOnboarding" component={TrainerOnboardingPage} />

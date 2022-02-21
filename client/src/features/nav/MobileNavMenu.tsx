@@ -206,6 +206,22 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                                     Rezervasyonlarım
                                     </h3>
                     </Menu.Item>
+                    <Menu.Item as={Link} to={`/myActivities`}
+                    active={activeMenu === 9}
+                    className="mobileNavMenu_container_item"
+
+                        onClick={() => {
+                            //  setLoadingPosts(true);
+                            // history.push(`/blog`);
+                                setActiveMenu(9)
+                                setVisibleMobileNav(false);
+                                }} >
+                                    
+                                <h3 className="mobileNavMenu_container_item">
+                                <Icon name="calendar check outline" style={{marginRight:"10px"}} ></Icon>
+                                    Aktivitelerim
+                                    </h3>
+                    </Menu.Item>
                     <Menu.Item as={Link} to={`/messages`}
                     active={activeMenu === 7}
                     className="mobileNavMenu_container_item"

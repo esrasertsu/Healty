@@ -162,6 +162,15 @@ const NavBar: React.FC = () => {
                        Rezervasyonlarım
                   </Dropdown.Item>
                   <Dropdown.Item
+                    key="myActivities"
+                    as={Link}
+                    to={`/myActivities`}
+                    className='border'
+                    onClick={()=>{setActiveMenu(-1);}}
+                  >  <Icon name='calendar check outline' />
+                       Aktivitelerim
+                  </Dropdown.Item>
+                  <Dropdown.Item
                     key="saved"
                     as={Link}
                     to={`/saved`}

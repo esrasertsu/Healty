@@ -19,7 +19,7 @@ namespace CleanArchitecture.Application.Activities
 {
     public class Create
     {
-        public class Command : IRequest<ActivityDto>
+        public class Command : IRequest<Unit>
         {
             public Guid Id { get; set; }
             public string Title { get; set; }
@@ -55,7 +55,7 @@ namespace CleanArchitecture.Application.Activities
             }
         }
 
-        public class Handler : IRequestHandler<Command, ActivityDto>
+        public class Handler : IRequestHandler<Command, Unit>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
@@ -73,7 +73,7 @@ namespace CleanArchitecture.Application.Activities
                 _activityReader = activityReader;
             }
 
-            public async Task<ActivityDto> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
 
                 //ekleyen kişi var mı yok mu
@@ -92,7 +92,8 @@ namespace CleanArchitecture.Application.Activities
                     AttendanceCount = 0,
                     Price = string.IsNullOrEmpty(request.Price) ? 0 : Convert.ToDecimal(request.Price),
                     Online = request.Online,
-                    CreationDate = DateTime.Now
+                    CreationDate = DateTime.Now,
+                    Status = false
                      
                 };
                 if (!string.IsNullOrEmpty(request.CityId))
@@ -203,14 +204,17 @@ namespace CleanArchitecture.Application.Activities
                         activity.Photos.Add(image);
                     }
                 }
-               
+
+                activity.Reviews = new List<ActivityReview>();
+                activity.UserSavedActivities = new List<UserSavedActivity>();
 
                 await _context.Activities.AddAsync(activity); //addsync is just for special creators
 
                 var success = await _context.SaveChangesAsync() > 0;
 
                 if (success)
-                    return await _activityReader.ReadActivity(activity.Id);
+                    return Unit.Value;
+                        //await _activityReader.ReadActivity(activity.Id);
 
                 throw new Exception("Problem saving changes");
             }

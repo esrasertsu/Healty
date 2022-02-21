@@ -62,9 +62,7 @@ const Completionist = () => <span>Aktivite başladı!</span>;
                 <div className="activityDetail_Countdown">
                    <Countdown date={new Date(activity.date)} renderer={renderer}  />
                 </div>
-                
             </Segment>
-           
             </>
             :
             <Fragment>
@@ -83,7 +81,6 @@ const Completionist = () => <span>Aktivite başladı!</span>;
             </div>
             </Segment>
             </Fragment>
-          
         }
         </>
           

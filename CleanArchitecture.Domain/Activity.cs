@@ -33,7 +33,7 @@ namespace CleanArchitecture.Domain
         public virtual ICollection<Video> Videos { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastUpdateDate { get; set; }
-
+        public bool Status { get; set; }
         public bool TrainerApproved { get; set; }
         public DateTime TrainerApprovedDate { get; set; }
         public bool AdminApproved { get; set; }

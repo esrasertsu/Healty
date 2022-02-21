@@ -69,7 +69,7 @@ interface IProps{
           {/* <Rating icon='star' defaultRating={3} maxRating={4} /> */}
            <StarRating rating={rating} setRating={setRating} editing={true} showCount={false}/>
            <br/>
-           <Label>
+           <div>
            <Field
               name="allowDisplayName"
               component="input"
@@ -78,7 +78,7 @@ interface IProps{
               parse={v => (v ? true : false) }
             />&nbsp;&nbsp;
                     Kullanıcı adımın yorumlarda görünmesine izin veriyorum.
-           </Label>
+           </div>
            
           <Button
           style={{marginTop: 12}}

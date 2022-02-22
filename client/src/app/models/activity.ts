@@ -52,6 +52,7 @@ export interface IPersonalActivity {
     duration:number;
     city: ICity,
     attendanceCount:number;
+    attendancyLimit:number;
     price?:number;
     savedCount:number;
     online: boolean;

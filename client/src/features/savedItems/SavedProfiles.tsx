@@ -74,7 +74,7 @@ const SavedProfiles = () => {
 
                     <Grid>
                         <Grid.Row>
-                        <Grid.Column width={4}>
+                        <Grid.Column width={isTabletOrMobile ? 3: 4}>
                             <Image
                             key={"savedProfiles_img_" + pro.id}
                             circular size="tiny"
@@ -96,7 +96,7 @@ const SavedProfiles = () => {
                              <StarRating rating={pro.star} editing={false} size={'small'} count={pro.starCount} showCount/>
                            
                         </Grid.Column>
-                        <Grid.Column width={4}>
+                        <Grid.Column width={isTabletOrMobile ? 5: 4}>
                         <div className='savedProfile_lastcolumn'>
                             <div>
                             <Icon 

@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { Button, Card, Container, Header, Icon, Item, Label, Message, Segment } from 'semantic-ui-react'
+import { Button, Card, Container, Header, Icon, Item, Label, Step, Segment } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
 import { format } from 'date-fns';
 import tr  from 'date-fns/locale/tr'
@@ -65,6 +65,7 @@ const TrainerActivityPage: React.FC<IProps> = ({settings}) => {
       </Segment>
       {
       personalActivityList.map((activity) =>(
+        <>
         
         <Segment key={activity.id + "_segment"} className="orderListItem">
          <Item.Group divided>
@@ -106,6 +107,14 @@ const TrainerActivityPage: React.FC<IProps> = ({settings}) => {
                  </div>
              </Item.Description>
          </Item.Content>
+         <Item.Content className={isMobile ? "order_listItem_extraContent_mobile":"order_listItem_extraContent"}>
+         <Item.Description>
+         <div>
+                    Durum : {String(activity.status)}
+                 </div>
+                 
+             </Item.Description>
+         </Item.Content>
          <Item.Content className={isMobile ? "order_listItem_extraContent_mobile":"order_listItem_extraContent"} >
          <Item.Description style={{flex:"end"}}>
          <Button
@@ -123,6 +132,7 @@ const TrainerActivityPage: React.FC<IProps> = ({settings}) => {
  </Item>
         </Item.Group>
         </Segment>
+        </>
       )
       
       )

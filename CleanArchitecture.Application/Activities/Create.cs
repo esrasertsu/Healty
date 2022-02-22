@@ -75,9 +75,6 @@ namespace CleanArchitecture.Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-
-                //ekleyen kişi var mı yok mu
-
                 var activity = new Activity
                 {
                     Id = request.Id,

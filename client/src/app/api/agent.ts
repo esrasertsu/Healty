@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, IActivityReview, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IRefundPayment, PaymentThreeDResult } from '../models/activity';
+import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, IActivityReview, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IPersonalActivitiesEnvelope, IRefundPayment, PaymentThreeDResult } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { ISubMerchantInfo, ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues, IyziSubMerchantResponse } from '../models/user';
@@ -324,7 +324,7 @@ const Activities = {
     unsave:  (id:string) => requests.del(`/activities/${id}/unsave`),
     getSavedActivities: () : Promise<IActivity[]>=>  requests.get(`/activities/saved`),
     sendReview: (comment:IActivityReview) => requests.post(`/activities/${comment.activityId}/review`, comment),
-    listPersonalActs: (params: URLSearchParams): Promise<IActivitiesEnvelope> => 
+    listPersonalActs: (params: URLSearchParams): Promise<IPersonalActivitiesEnvelope> => 
             axios.get(`/activities/personalActivities`, {params:params}).then(responseBody)
 }
 

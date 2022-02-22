@@ -6,7 +6,7 @@ import { history } from '../..';
 import ProfileDashboardPopularProfiles from '../../features/profiles/ProfileDashboardPopularProfiles';
 import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
-import { ActivityFormValues, ActivityOnlineJoinInfo, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, IActivityReview, IActivitySelectedFilter, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, PaymentUserInfoDetails } from '../models/activity';
+import { ActivityFormValues, ActivityOnlineJoinInfo, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, IActivityReview, IActivitySelectedFilter, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IPersonalActivity, PaymentUserInfoDetails } from '../models/activity';
 import { IOrder } from '../models/order';
 import { RootStore } from './rootStore';
 
@@ -33,7 +33,7 @@ export default class ActivityStore {
     }
 
     @observable activityRegistery = new Map();
-    @observable personalActivityRegistery = new Map<string, IActivity>();
+    @observable personalActivityRegistery = new Map<string, IPersonalActivity>();
     @observable orderRegistery = new Map<string,IOrder>();
     @observable activity: IActivity | null = null;
     @observable order: IOrder | null = null;
@@ -373,14 +373,15 @@ export default class ActivityStore {
 
 
     @action getTrainerActivities = async () => {
-        debugger;
         this.loadingActivity = true;
         try {
             const activitiesEnvelope = await agent.Activities.listPersonalActs(this.personalActAxiosParams);
             const {activities, activityCount } = activitiesEnvelope;
             runInAction(() => {
+                debugger
                 activities.forEach((activity) =>{
-                    setActivityProps(activity,this.rootStore.userStore.user!)
+                    activity.date = new Date(activity.date);
+                    activity.endDate = new Date(activity.endDate);
                     this.personalActivityRegistery.set(activity.id, activity);
                 });
                 this.personalActivityCount = activityCount;

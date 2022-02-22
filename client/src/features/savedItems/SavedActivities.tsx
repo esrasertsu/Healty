@@ -41,7 +41,7 @@ const SavedActivities = () => {
                     className='savedActivity_img'
                     src={act.mainImage ? act.mainImage.url : '/assets/placeholder.png'} />
                     </Grid.Column>
-                    <Grid.Column width={10}>
+                    <Grid.Column width={isTablet ? 9 : 10}>
                     <div>
                        <Header> {act.title}</Header>  
                        <div>
@@ -55,7 +55,7 @@ const SavedActivities = () => {
                         }
                     </div>
                     </Grid.Column>
-                    <Grid.Column width={3}>
+                    <Grid.Column width={isTablet ? 4 : 3}>
                         <div className='savedActivity_lastcolumn'>
                         <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>
                             <Image

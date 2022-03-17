@@ -1661,7 +1661,8 @@ namespace Persistence
                         Online= true,
                         Price= Convert.ToDecimal("100"),
                         AttendancyLimit = 15,
-                         AttendanceCount=0,
+                        AttendanceCount=0,
+                        Status= ActivityStatus.Active,
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -1700,6 +1701,7 @@ namespace Persistence
                         EndDate = DateTime.Now.AddMonths(-1).AddDays(1),
                         Duration=2*60,
                         Description = "Activity 1 month ago",
+                        Status= ActivityStatus.Active,
                         Categories  = new List<ActivityCategories>
                         {
                             new ActivityCategories
@@ -1752,6 +1754,7 @@ namespace Persistence
                         Venue = "Wembly Stadium",
                         Price= Convert.ToDecimal("200"),
                          AttendanceCount=1,
+                        Status= ActivityStatus.UnderReview,
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -1800,6 +1803,7 @@ namespace Persistence
                          Online= true,
                          Price= Convert.ToDecimal("200"),
                          AttendanceCount=1,
+                        Status= ActivityStatus.UnderReview,
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -1848,6 +1852,7 @@ namespace Persistence
                         Price= Convert.ToDecimal("100"),
                          Online= true,
                           AttendanceCount=0,
+                        Status= ActivityStatus.UnderReview,
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -1890,6 +1895,7 @@ namespace Persistence
                         Price= Convert.ToDecimal("200"),
                          Online= true,
                           AttendanceCount=1,
+                        Status= ActivityStatus.UnderReview,
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -1937,6 +1943,7 @@ namespace Persistence
                         Price= Convert.ToDecimal("300"),
                         Venue = "O2 Arena",
                          AttendanceCount=1,
+                        Status= ActivityStatus.UnderReview,
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -1985,6 +1992,7 @@ namespace Persistence
                         Price= Convert.ToDecimal("150"),
                         Online= true,
                          AttendanceCount=1,
+                        Status= ActivityStatus.UnderReview,
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -2033,6 +2041,7 @@ namespace Persistence
                          Online= true,
                          Price= null,
                           AttendanceCount=1,
+                        Status= ActivityStatus.UnderReview,
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity

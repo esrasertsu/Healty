@@ -111,9 +111,11 @@ namespace CleanArchitecture.Application.Activities
             };
 
             if (currentUser != null)
+            {
                 activityDto.UserActivities = _mapper.Map<ICollection<UserActivity>, ICollection<AttendeeDto>>(activity.UserActivities.Where(x => x.IsHost || x.AppUser == currentUser || currentUser.Followings.Any(y => y.TargetId == x.AppUser.Id)).ToList());
-                activityDto.IsSaved = activity.UserSavedActivities !=null ? activity.UserSavedActivities.Any(x => x.AppUser == currentUser) : false;
+                activityDto.IsSaved = activity.UserSavedActivities != null ? activity.UserSavedActivities.Any(x => x.AppUser == currentUser) : false;
                 activityDto.HasCommentByUser = activity.Reviews != null ? activity.Reviews.Any(x => x.Author == currentUser) : false;
+            }
 
             return activityDto;
             }
@@ -142,11 +144,9 @@ namespace CleanArchitecture.Application.Activities
                     MainImage = activity.Photos.Where(x => x.IsMain == true).FirstOrDefault(),
                     SavedCount = activity.UserSavedActivities != null ? activity.UserSavedActivities.Count() : 0,
                     City = _mapper.Map<City, CityDto>(activity.City),
-                    TrainerApproved = activity.TrainerApproved,
                     TrainerApprovedDate = activity.TrainerApprovedDate,
-                    AdminApproved = activity.AdminApproved,
                     AdminApprovedDate = activity.AdminApprovedDate,
-                    Reviews = activity.Reviews,
+                  //  Reviews = activity.Reviews,
                     Star = activity.Star,
                     StarCount = activity.StarCount,
                     Status = activity.Status
@@ -155,6 +155,100 @@ namespace CleanArchitecture.Application.Activities
              
                 return activityDto;
             }
+
+
+
+        public async Task<AdminActivityDto> ReadAdminActivity(Guid activityId)
+        {
+            var activity = await _context.Activities.SingleOrDefaultAsync(x => x.Id == activityId);
+
+            if (activity == null)
+                throw new RestException(HttpStatusCode.NotFound, new { Activity = "Not Found" });
+
+            var currentUser = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
+
+            var levelsDto = new List<LevelDto>();
+
+            foreach (var level in activity.Levels)
+            {
+                var accDto = new LevelDto
+                {
+                    Key = level.Level.Id.ToString(),
+                    Text = level.Level.Name,
+                    Value = level.Level.Id.ToString(),
+                };
+
+                levelsDto.Add(accDto);
+            }
+
+            var catsToReturn = new List<CategoryDto>();
+
+            foreach (var cat in activity.Categories)
+            {
+                var catDto = new CategoryDto
+                {
+                    Key = cat.Category.Id.ToString(),
+                    Text = cat.Category.Name,
+                    Value = cat.Category.Id.ToString(),
+                };
+
+                catsToReturn.Add(catDto);
+            }
+
+            var subcatsToReturn = new List<SubCategoryDto>();
+
+            foreach (var cat in activity.SubCategories)
+            {
+                var catDto = new SubCategoryDto
+                {
+                    Key = cat.SubCategory.Id.ToString(),
+                    Text = cat.SubCategory.Name,
+                    Value = cat.SubCategory.Id.ToString(),
+                };
+
+                subcatsToReturn.Add(catDto);
+            }
+
+            var activityDto = new AdminActivityDto
+            {
+                Id = activity.Id,
+                AttendanceCount = activity.AttendanceCount,
+                AttendancyLimit = activity.AttendancyLimit,
+                Date = activity.Date,
+                EndDate = activity.EndDate,
+                Duration = activity.Duration,
+                Online = activity.Online,
+                Description = activity.Description,
+                Price = activity.Price,
+                Title = activity.Title,
+                Photos = activity.Photos,
+                MainImage = activity.Photos.Where(x => x.IsMain == true).FirstOrDefault(),
+                Levels = levelsDto,
+                Categories = catsToReturn,
+                UserActivities = _mapper.Map<ICollection<UserActivity>, ICollection<AttendeeDto>>(activity.UserActivities.Where(x => x.IsHost == false).ToList()),
+                SavedCount = activity.UserSavedActivities != null ? activity.UserSavedActivities.Count() : 0,
+                SubCategories = subcatsToReturn,
+                Address = activity.Address,
+                City = _mapper.Map<City, CityDto>(activity.City),
+                Venue = activity.Venue,
+                Comments = _mapper.Map<ICollection<ActivityComment>, ICollection<ActivityCommentDto>>(activity.Comments),
+                ChannelName = activity.CallRoomId,
+                TrainerUserName = activity.UserActivities.Where(x => x.IsHost).FirstOrDefault().AppUser.UserName,
+                TrainerApprovedDate = activity.TrainerApprovedDate,
+                TrainerDisplayName = activity.UserActivities.Where(x => x.IsHost).FirstOrDefault().AppUser.DisplayName,
+                AdminApprovedDate = activity.AdminApprovedDate,
+//                Reviews = activity.Reviews, maple
+                Star = activity.Star,
+                StarCount = activity.StarCount,
+                Status = activity.Status
+            };
+
+            
+
+            return activityDto;
+        }
+
+
 
         //private int GetStarCount(AppUser user)
         //{

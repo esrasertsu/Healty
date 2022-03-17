@@ -74,7 +74,7 @@ namespace CleanArchitecture.Application.Activities
             public async Task<ActivitiesEnvelope> Handle(Query request, CancellationToken cancellationToken)
             {
                 var queryable = _context.Activities
-                    .Where(x => x.Date >= request.StartDate && x.Status == true)
+                    .Where(x => x.Date >= request.StartDate)
                     .OrderBy(x => x.Date)
                     .AsQueryable();
 
@@ -154,7 +154,8 @@ namespace CleanArchitecture.Application.Activities
                 var acts = new List<ActivityDto>();
                 foreach (var act in activities)
                 {
-                    acts.Add(await _activityReader.ReadActivity(act.Id));
+                    if(act.Is_Active)
+                        acts.Add(await _activityReader.ReadActivity(act.Id));
                 }
 
 

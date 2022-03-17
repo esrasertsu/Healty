@@ -607,7 +607,10 @@ h1, h2, h3, h4, h5 {
     line-height: 1rem !important;
 }
 
-
+.myActivity_progress.ui.progress .label{
+  font-weight: 500;
+  color: inherit;
+}
 .savedPage_tab{
   .ui.menu{
     border-bottom: 1px solid rgba(34,36,38,.15) !important
@@ -1121,8 +1124,13 @@ a.ui.card:hover {
 
 .orderItemDetails_grid .mainHeader, .myOrdersHeader{
   font-size: 16px !important;
-  font-family: AssistantMedium, Arial,sans-serif !important;
   color: rgb(38, 58, 94) !important;
+}
+
+.myOrdersHeader{
+  .header_info{
+     font-size: 15px;
+  }
 }
 .orderItemDetails_grid .column_header{
   display: flex;
@@ -1271,7 +1279,7 @@ a.ui.card:hover {
     //  animation-name: slideBg;
     //  animation-duration: 30s;
     //  animation-iteration-count: infinite;
-     background-image: url("../layout/img/homepage_banner.svg"); 
+     background-image: url("../layout/img/cubic_afitapp_big.svg"); 
     //  animation-delay: 3s;
     //  animation-timing-function:step-start;
     //  animation-fill-mode: both;
@@ -1305,7 +1313,7 @@ a.ui.card:hover {
     //  animation-name: slideBg;
     //  animation-duration: 30s;
     //  animation-iteration-count: infinite;
-     background-image: url("../layout/img/homepage_banner.svg"); 
+     background-image: url("../layout/img/cubic_afitapp_big.svg"); 
     //  animation-delay: 3s;
     //  animation-timing-function:step-start;
     //  animation-fill-mode: both;
@@ -1556,7 +1564,7 @@ max-width: 95%;
   //  animation-name: slideBg;
   //  animation-duration: 30s;
   //  animation-iteration-count: infinite;
-  background-image: url("../layout/img/homepage_banner.svg"); 
+  background-image: url("../layout/img/cubic_afitapp_big.svg"); 
   //  animation-delay: 3s;
   //  animation-timing-function:step-start;
   //  animation-fill-mode: both;
@@ -1579,7 +1587,7 @@ max-width: 95%;
     //  animation-name: slideBg;
     //  animation-duration: 30s;
     //  animation-iteration-count: infinite;
-    background-image: url("../layout/img/homepage_banner.svg"); 
+    background-image: url("../layout/img/cubic_afitapp_big.svg"); 
     //  animation-delay: 3s;
     //  animation-timing-function:step-start;
     //  animation-fill-mode: both;
@@ -2531,10 +2539,11 @@ button, input, optgroup, select, textarea {
      background-size: cover !important;
      background-repeat: no-repeat;
      backface-visibility: hidden;
+     background-color: #fff;
     //  animation-name: slideBg;
     //  animation-duration: 30s;
     //  animation-iteration-count: infinite;
-    background-image: url("../layout/img/homepage_banner_mobile.svg"); 
+    background-image: url("../layout/img/cubic_afitapp_mobile.svg"); 
     //  animation-delay: 3s;
     //  animation-timing-function:step-start;
     //  animation-fill-mode: both;
@@ -2544,7 +2553,7 @@ button, input, optgroup, select, textarea {
 @media (max-width: 767px){
 
   .ui.container.mobile_text_container{
-    padding:56px 16px 0 16px;
+    padding:50px 16px 40px 16px;
     background:#fff;
     margin:0 !important;
 

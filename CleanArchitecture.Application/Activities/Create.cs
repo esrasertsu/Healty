@@ -90,7 +90,7 @@ namespace CleanArchitecture.Application.Activities
                     Price = string.IsNullOrEmpty(request.Price) ? 0 : Convert.ToDecimal(request.Price),
                     Online = request.Online,
                     CreationDate = DateTime.Now,
-                    Status = false
+                    Status = ActivityStatus.UnderReview
                      
                 };
                 if (!string.IsNullOrEmpty(request.CityId))

@@ -9,17 +9,13 @@ using CleanArchitecture.Application.SubMerchants;
 using CleanArchitecture.Application.Admin;
 using CleanArchitecture.Application.Categories;
 using CleanArchitecture.Application.Admin.Comments;
+using CleanArchitecture.Application.Activities.Administration;
 
 namespace CleanArchitecture.API.Controllers
 {
+    [Authorize(Policy = "IsAdmin")]
     public class AdminController : BaseController
     {
-        //[HttpGet]
-        //public async Task<ActionResult<List.SubMerchantListEnvelope>> List(int? limit, int? offset)
-        //{
-        //    return await Mediator.Send(new List.Query(limit, offset));
-        //}
-
         [HttpGet("{id}")]
         public async Task<ActionResult<SubMerchantDto>> Details(Guid id)
         {
@@ -64,7 +60,6 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPost("newAdmin")]
-        [Authorize(Policy = "CanCreateActivity")]
         public async Task<ActionResult<Admin>> Create([FromForm] CreateAdmin.Command command)
         {
             return await Mediator.Send(command);
@@ -89,7 +84,19 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new DeleteSubCategory.Command { Id = Id });
         }
 
+        [HttpGet("activities")]
+        public async Task<ActionResult<ListAllActivities.AllActivitiesEnvelope>> ListTrainerActivities(int? limit, int? offset, string userName, string status)
+        {
+            return await Mediator.Send(new ListAllActivities.Query(limit, offset, userName, status));
+        }
 
+        [HttpGet("activities/{activityId}")]
+        public async Task<ActionResult<AdminActivityDto>> GetActivity(Guid activityId)
+        {
+            return await Mediator.Send(new ActivityDetails.Query { ActivityId = activityId });
+        }
+
+   
         //[HttpGet("{username}/details")]
         //public async Task<ActionResult<Profile>> Get(string username)
         //{

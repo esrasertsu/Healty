@@ -114,6 +114,12 @@ namespace CleanArchitecture.API.Controllers
         {
             return await Mediator.Send(command);
         }
-
+        [HttpPut("{id}/status")]
+        [Authorize(Policy = "IsActivityHost")]
+        public async Task<ActionResult<Unit>> UpdateActivityStatus(Guid id, string status)
+        {
+            UpdateActivityStatus.Command command = new UpdateActivityStatus.Command { Id = id, Status = status };
+            return await Mediator.Send(command);
+        }
     }
 }

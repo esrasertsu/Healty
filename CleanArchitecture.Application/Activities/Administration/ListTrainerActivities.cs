@@ -73,28 +73,28 @@ namespace CleanArchitecture.Application.Activities.Administration
                     .Where(x => x.UserActivities.Any(
                         a => a.AppUser.UserName == request.UserName && a.IsHost
                     ))
-                    .OrderBy(x => x.Date)
+                    .OrderByDescending(x => x.Date)
                     .AsQueryable();
 
-                if (request.Status == "active")
+                if(request.Status == ActivityStatus.UnderReview.ToString())
                 {
-                    queryable = queryable.Where(x => x.Status == true);
+                    queryable = queryable.Where(x => x.Status == ActivityStatus.UnderReview);
                 }
-                else if(request.Status == "review")
+                else if (request.Status == ActivityStatus.Active.ToString())//onayımı bekleyenler
                 {
-                    queryable = queryable.Where(x => x.Status == false);
+                    queryable = queryable.Where(x => x.Status == ActivityStatus.Active); // tarihi geçen koşulunu ekle
                 }
-                else if (request.Status == "trainerApprove")//onayımı bekleyenler
+                else if (request.Status == ActivityStatus.TrainerCompleteApproved.ToString())
                 {
-                    queryable = queryable.Where(x => x.TrainerApproved == false && x.AdminApproved == false && x.Status == true); // tarihi geçen koşulunu ekle
+                    queryable = queryable.Where(x => x.Status == ActivityStatus.TrainerCompleteApproved);
                 }
-                else if (request.Status == "adminApprove")
+                else if (request.Status == ActivityStatus.AdminPaymentApproved.ToString())
                 {
-                    queryable = queryable.Where(x => x.TrainerApproved == true && x.AdminApproved == false && x.Status == true);
+                    queryable = queryable.Where(x => x.Status == ActivityStatus.AdminPaymentApproved);
                 }
-                else if (request.Status == "allApproved")
+                else if (request.Status == ActivityStatus.CancelRequested.ToString())
                 {
-                    queryable = queryable.Where(x => x.TrainerApproved == true && x.AdminApproved == true && x.Status == true);
+                    queryable = queryable.Where(x => x.Status == ActivityStatus.CancelRequested);
                 }
 
                 //if (request.IsOnline == true)

@@ -383,7 +383,7 @@ namespace Infrastructure.Payment
 
             Refund refund = Refund.Create(request, _options);
 
-            if (refund.ConversationId == conversationId.ToString() && refund.Status == Status.SUCCESS.ToString())
+            if (refund.ConversationId == conversationId.ToString() && refund.Status == IyzipayCore.Model.Status.SUCCESS.ToString())
             {
                 return new RefundDto()
                 {

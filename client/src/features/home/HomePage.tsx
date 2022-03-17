@@ -33,31 +33,11 @@ const HomePage = () => {
 
 
       useEffect(() => {
-        if(activityRegistery.size <= 1)
-        {
-        
-          clearUserPredicates();
-          clearKeyPredicate("subCategoryIds");
-          clearKeyPredicate("categoryIds");
-          clearKeyPredicate("isOnline");
-          clearKeyPredicate("startDate");
-          clearKeyPredicate("endDate");
-          clearKeyPredicate("levelIds");
-          clearKeyPredicate("cityId");
-          setPage(0);
-          clearActivityRegistery();
+      
           loadActivities();
-        }
-        if(categoryRegistery.size <= 1)
-        {
           loadCategories();
-        }
-        if(levelList.length <=1)
-        {
           loadLevels();
-        }
-       
-      },[activityRegistery.size,categoryRegistery.size,levelList,loadActivities,loadCategories,loadLevels]); //[] provides the same functionality with componentDidMounth..   dependency array
+      },[loadActivities,loadCategories,loadLevels]); //[] provides the same functionality with componentDidMounth..   dependency array
     
     
     
@@ -264,8 +244,8 @@ const HomePage = () => {
                 </Header> */}
           
                 <Header as='h1'  style={{fontSize: '30px',  textAlign:'center', width:"100%",textShadow: "1.5px 1.5px #f2f2f2" }}>
-                {/* Doğru uzmanı tam yerinde keşfet */}
-                Yeni aktiviteler yeni insanlar keşfetme zamanı!
+                 Doğru uzmanı doğru aktiviteyi tam yerinde keşfet 
+               {/* Yeni aktiviteler yeni insanlar keşfetme zamanı!*/}
                 </Header>
                 {/* <p style={{ fontSize: '1.3rem', color: "#222E50" }}>
                 Spor koçundan diyetisyene, meditasyon eğitmeninden psikoloğa ihtiyacın olan en doğru uzmanı en kolay şekilde bulabileceğin yerdesin. 

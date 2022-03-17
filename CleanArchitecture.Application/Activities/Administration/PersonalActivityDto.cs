@@ -21,7 +21,7 @@ namespace CleanArchitecture.Application.Activities.Administration
         public int Duration { get; set; }
         public CityDto City { get; set; }
         public Photo MainImage { get; set; }
-        public bool Status { get; set; }
+        public ActivityStatus Status { get; set; }
         public bool TrainerApproved { get; set; }
         public DateTime TrainerApprovedDate { get; set; }
         public bool AdminApproved { get; set; }

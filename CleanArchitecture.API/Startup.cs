@@ -144,10 +144,16 @@ namespace CleanArchitecture.API
                 {
                     policy.Requirements.Add(new ActivityRoleRequirement());
                 });
+                opt.AddPolicy("IsAdmin", policy =>
+                {
+                    policy.Requirements.Add(new AdminRequirement());
+                });
             });
+
             services.AddTransient<IAuthorizationHandler, HostRequirementHandler>();//only available for the liftetime of the operation not the complete request
             services.AddTransient<IAuthorizationHandler, ActivityRoleRequirementHandler>();
             services.AddTransient<IAuthorizationHandler, AttendeeRequirementHandler>();
+            services.AddTransient<IAuthorizationHandler, AdminRequirementHandler>();
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"]));
 

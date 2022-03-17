@@ -33,15 +33,28 @@ namespace CleanArchitecture.Domain
         public virtual ICollection<Video> Videos { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastUpdateDate { get; set; }
-        public bool Status { get; set; }
-        public bool TrainerApproved { get; set; }
+        public ActivityStatus Status { get; set; }
+        public bool Is_Active { get {
+                return Status != ActivityStatus.UnderReview && Status != ActivityStatus.CancelRequested && Status != ActivityStatus.PassiveByAdmin;
+            }
+        }
         public DateTime TrainerApprovedDate { get; set; }
-        public bool AdminApproved { get; set; }
         public DateTime AdminApprovedDate { get; set; }
 
         public virtual ICollection<ActivityReview> Reviews { get; set; }
         public int Star { get { return Convert.ToInt32(this.Reviews.Count() > 0 ? this.Reviews.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Average() : 0); } } //rating
         public int StarCount { get { return Convert.ToInt32(this.Reviews.Count() > 0 ? this.Reviews.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Count() : 0); } } //total rate votes ( bigger than zero) 
 
+    }
+
+
+    public enum ActivityStatus
+    {
+        UnderReview = 100, //listelenmeyecek X
+        Active = 110, //sadece aktifse ödeme alınacak..
+        TrainerCompleteApproved = 111, 
+        AdminPaymentApproved = 112, 
+        CancelRequested = 120, //listelenmeyecek X
+        PassiveByAdmin = 130 //listelenmeyecek X
     }
 }

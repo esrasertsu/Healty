@@ -371,3 +371,14 @@ export interface IActivityReview {
     allowDisplayName: boolean;
     status: boolean;
 }
+
+
+
+export enum ActivityStatus {
+        UnderReview = 100,
+        Active = 110,
+        TrainerCompleteApproved = 111,
+        AdminPaymentApproved = 112,
+        CancelRequested = 120,
+        PassiveByAdmin = 130
+}

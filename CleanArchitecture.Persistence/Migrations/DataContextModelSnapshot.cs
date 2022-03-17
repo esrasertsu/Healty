@@ -19,7 +19,7 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.Accessibility", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(255)")
                         .HasMaxLength(255);
@@ -34,18 +34,15 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.Activity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("ActivityJoinDetailsId")
+                    b.Property<string>("ActivityJoinDetailsId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Address")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<bool>("AdminApproved")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("AdminApprovedDate")
                         .HasColumnType("datetime(6)");
@@ -59,7 +56,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("CallRoomId")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<Guid?>("CityId")
+                    b.Property<string>("CityId")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationDate")
@@ -89,14 +86,11 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<int>("SavedCount")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Status")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<bool>("TrainerApproved")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("TrainerApprovedDate")
                         .HasColumnType("datetime(6)");
@@ -115,10 +109,10 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.ActivityCategories", b =>
                 {
-                    b.Property<Guid>("ActivityId")
+                    b.Property<string>("ActivityId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<string>("CategoryId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("ActivityId", "CategoryId");
@@ -130,11 +124,12 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.ActivityComment", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("ActivityId")
+                    b.Property<string>("ActivityId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("AppUserId")
@@ -157,7 +152,7 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.ActivityJoinDetails", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -180,10 +175,10 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.ActivityLevels", b =>
                 {
-                    b.Property<Guid>("ActivityId")
+                    b.Property<string>("ActivityId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("LevelId")
+                    b.Property<string>("LevelId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("ActivityId", "LevelId");
@@ -195,11 +190,12 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.ActivityReview", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("ActivityId")
+                    b.Property<string>("ActivityId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.Property<bool>("AllowDisplayName")
@@ -231,10 +227,10 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.ActivitySubCategories", b =>
                 {
-                    b.Property<Guid>("ActivityId")
+                    b.Property<string>("ActivityId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("SubCategoryId")
+                    b.Property<string>("SubCategoryId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("ActivityId", "SubCategoryId");
@@ -261,7 +257,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("Bio")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<Guid?>("CityId")
+                    b.Property<string>("CityId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -384,7 +380,7 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.Blog", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -394,7 +390,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("BlogImageId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<Guid?>("CategoryId")
+                    b.Property<string>("CategoryId")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("Date")
@@ -435,7 +431,7 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.Category", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -473,7 +469,7 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.ChatRoom", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -493,7 +489,7 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.City", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -507,7 +503,7 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.Level", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -521,14 +517,15 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.Message", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Body")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<Guid>("ChatRoomId")
+                    b.Property<string>("ChatRoomId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -551,7 +548,7 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.Order", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -621,14 +618,16 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.OrderItem", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("ActivityId")
+                    b.Property<string>("ActivityId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("OrderId")
+                    b.Property<string>("OrderId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("PaymentTransactionId")
@@ -654,7 +653,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<Guid?>("ActivityId")
+                    b.Property<string>("ActivityId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("AppUserId")
@@ -729,10 +728,10 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.SubCatBlogs", b =>
                 {
-                    b.Property<Guid>("SubCategoryId")
+                    b.Property<string>("SubCategoryId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("BlogId")
+                    b.Property<string>("BlogId")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("DateCreated")
@@ -747,11 +746,11 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.SubCategory", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("CategoryId")
+                    b.Property<string>("CategoryId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Name")
@@ -766,7 +765,7 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.SubMerchant", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -843,7 +842,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("AppUserId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<Guid>("AccessibilityId")
+                    b.Property<string>("AccessibilityId")
                         .HasColumnType("char(255)")
                         .HasMaxLength(255);
 
@@ -859,7 +858,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("AppUserId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<Guid>("ActivityId")
+                    b.Property<string>("ActivityId")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("DateJoined")
@@ -883,7 +882,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("AppUserId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<string>("CategoryId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("AppUserId", "CategoryId");
@@ -895,7 +894,7 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.UserChatRooms", b =>
                 {
-                    b.Property<Guid>("ChatRoomId")
+                    b.Property<string>("ChatRoomId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("AppUserId")
@@ -928,7 +927,7 @@ namespace CleanArchitecture.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.UserProfileComment", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -976,7 +975,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("AppUserId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<Guid>("ActivityId")
+                    b.Property<string>("ActivityId")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("SaveDate")
@@ -994,7 +993,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("AppUserId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<Guid>("SubCategoryId")
+                    b.Property<string>("SubCategoryId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("AppUserId", "SubCategoryId");
@@ -1009,7 +1008,7 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<Guid?>("ActivityId")
+                    b.Property<string>("ActivityId")
                         .HasColumnType("char(36)");
 
                     b.Property<bool>("IsMain")

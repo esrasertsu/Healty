@@ -11,6 +11,7 @@ namespace CleanArchitecture.Application.Activities
     {
         Task<ActivityDto> ReadActivity(Guid ActivityId);
         Task<PersonalActivityDto> ReadPersonalActivity(Guid ActivityId);
+        Task<AdminActivityDto> ReadAdminActivity(Guid ActivityId);
 
     }
 }

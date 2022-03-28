@@ -113,7 +113,6 @@ namespace CleanArchitecture.Application.Activities
 
                 if (request.CategoryIds != null && request.CategoryIds.Count > 0)
                 {
-                    // List<Guid> subIds = JsonConvert.DeserializeObject<List<Guid>>(request.SubCategoryIds);
 
                     queryable = queryable.Where(x => x.Categories.Any(
                         a => request.CategoryIds.Contains(a.CategoryId))); //tostring çevirisi sakın qureylerde yapma client side olarak algılıyor
@@ -145,24 +144,24 @@ namespace CleanArchitecture.Application.Activities
                     queryable = queryable.Where(x => x.Online == true);
                 }
 
+                var filteredActivities = await queryable.ToListAsync();
 
-                var activities = await queryable
-                    .Skip(request.Offset ?? 0)
-                    .Take(request.Limit ?? 10).ToListAsync();
+                var activeActivities = filteredActivities.Where(x => x.Is_Active).ToList();
 
-
+                var activities = activeActivities.Skip(request.Offset ?? 0)
+                    .Take(request.Limit ?? 10).ToList();
+                   
                 var acts = new List<ActivityDto>();
                 foreach (var act in activities)
                 {
-                    if(act.Is_Active)
-                        acts.Add(await _activityReader.ReadActivity(act.Id));
+                      acts.Add(await _activityReader.ReadActivity(act.Id));
                 }
 
 
                 return new ActivitiesEnvelope
                 {
                     Activities = acts,
-                    ActivityCount = queryable.Count()
+                    ActivityCount = activeActivities.Count()
                 };
 
             }

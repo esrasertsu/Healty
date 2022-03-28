@@ -22,7 +22,8 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
 
     const rootStore = useContext(RootStoreContext);
     const { activity, loadActivity, loadingActivity } = rootStore.activityStore;
-    const { user } = rootStore.userStore;
+    const { user,isLoggedIn } = rootStore.userStore;
+
  const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
@@ -33,7 +34,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
     if(loadingActivity) return <LoadingComponent content='Loading activity...'/>  
 
     if(!activity)
-    return <h2>Not Found</h2>
+    return <LoadingComponent content='Loading activity...'/>
 
     return (
       <Container className="pageContainer">
@@ -51,6 +52,11 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
                   </>
                  
                  }   
+                 {
+                   (new Date(activity.endDate).getTime() < new Date().getTime()) && isMobile && 
+                    (!activity.hasCommentByUser && isLoggedIn && activity.isAttendee) && 
+                   <ActivityReview activity={activity} />
+                 } 
             <ActivityDetailedInfo activity={activity} />
             {
               activity.attendanceCount > 0 &&
@@ -68,11 +74,13 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
 
           <Grid.Column width={5}>
                  {
-                  (activity.isGoing || activity.isHost) && !isMobile &&
+                  (activity.isGoing || activity.isHost) && !isMobile &&  (new Date(activity.date).getTime() > new Date().getTime()) &&
                  <ActivityCountDown activity={activity} />
                  }
                  {
-                   <ActivityReview activity={activity} />
+                    (new Date(activity.endDate).getTime() < new Date().getTime()) && !isMobile && 
+                    (!activity.hasCommentByUser && isLoggedIn && activity.isAttendee) && 
+                    <ActivityReview activity={activity} />
                  }   
               {/* <ActivityDetailsMap centerLocation={center} /> */}
                 {

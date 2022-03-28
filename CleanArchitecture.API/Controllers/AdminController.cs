@@ -10,6 +10,7 @@ using CleanArchitecture.Application.Admin;
 using CleanArchitecture.Application.Categories;
 using CleanArchitecture.Application.Admin.Comments;
 using CleanArchitecture.Application.Activities.Administration;
+using CleanArchitecture.Application.Admin.Reviews;
 
 namespace CleanArchitecture.API.Controllers
 {
@@ -65,10 +66,10 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(command);
         }
 
-        [HttpGet("{username}/comments")]
-        public async Task<ActionResult<ListComments.UserProfileCommentsEnvelope>> GetUserComments(string username, int? limit, int? offset)
+        [HttpGet("profileComments")]
+        public async Task<ActionResult<ListComments.UserProfileCommentsEnvelope>> GetUserComments(string username, bool status, int? limit, int? offset)
         {
-            return await Mediator.Send(new ListComments.Query { Username = username, Limit = limit, Offset = offset });
+            return await Mediator.Send(new ListComments.Query { Username = username, Limit = limit, Offset = offset, Status = status });
         }
 
 
@@ -96,7 +97,25 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(new ActivityDetails.Query { ActivityId = activityId });
         }
 
-   
+        [HttpGet("activityReviews")]
+        public async Task<ActionResult<ListAllReviews.AllReviewsEnvelope>> GetAllActivityReviews(int? limit, int? offset, string userName, Guid activityId, bool status)
+        {
+            return await Mediator.Send(new ListAllReviews.Query(limit, offset, userName, activityId, status));
+        }
+
+        [HttpPut("activityReviews/{reviewId}")]
+        public async Task<ActionResult<Unit>> UpdateReviewStatus(Guid reviewId, bool status)
+        {
+            UpdateActReviewStatus.Command command = new UpdateActReviewStatus.Command { ReviewId = reviewId, Status = status };
+            return await Mediator.Send(command);
+        }
+
+        [HttpPut("profileComments/{commentId}")]
+        public async Task<ActionResult<Unit>> GetUserComments(Guid commentId, bool status)
+        {
+            UpdateUserReviewStatus.Command command = new UpdateUserReviewStatus.Command { CommentId = commentId, Status = status };
+            return await Mediator.Send(command);
+        }
         //[HttpGet("{username}/details")]
         //public async Task<ActionResult<Profile>> Get(string username)
         //{

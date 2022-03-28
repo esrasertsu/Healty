@@ -214,6 +214,8 @@ namespace CleanArchitecture.Application.Activities
                 Id = activity.Id,
                 AttendanceCount = activity.AttendanceCount,
                 AttendancyLimit = activity.AttendancyLimit,
+                CreatedDate = activity.CreationDate,
+                UpdatedDate = activity.LastUpdateDate,
                 Date = activity.Date,
                 EndDate = activity.EndDate,
                 Duration = activity.Duration,
@@ -236,6 +238,7 @@ namespace CleanArchitecture.Application.Activities
                 TrainerUserName = activity.UserActivities.Where(x => x.IsHost).FirstOrDefault().AppUser.UserName,
                 TrainerApprovedDate = activity.TrainerApprovedDate,
                 TrainerDisplayName = activity.UserActivities.Where(x => x.IsHost).FirstOrDefault().AppUser.DisplayName,
+                TrainerPhoneNumber = activity.UserActivities.Where(x => x.IsHost).FirstOrDefault().AppUser.PhoneNumber,
                 AdminApprovedDate = activity.AdminApprovedDate,
 //                Reviews = activity.Reviews, maple
                 Star = activity.Star,

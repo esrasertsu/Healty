@@ -17,6 +17,7 @@ namespace CleanArchitecture.Application.Activities.Administration
         public string Description { get; set; }
         public string TrainerUserName { get; set; }
         public string TrainerDisplayName { get; set; }
+        public string TrainerPhoneNumber { get; set; }
         public ICollection<CategoryDto> Categories { get; set; }
         public ICollection<SubCategoryDto> SubCategories { get; set; }
         public bool Online { get; set; }
@@ -27,6 +28,8 @@ namespace CleanArchitecture.Application.Activities.Administration
         public decimal? Price { get; set; }
         public DateTime Date { get; set; }
         public DateTime EndDate { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
         public int Duration { get; set; }
         public CityDto City { get; set; }
         public string Venue { get; set; }
@@ -43,7 +46,6 @@ namespace CleanArchitecture.Application.Activities.Administration
         public DateTime TrainerApprovedDate { get; set; }
         public bool AdminApproved { get; set; }
         public DateTime AdminApprovedDate { get; set; }
-
         public ICollection<ActivityReview> Reviews { get; set; }
         public int Star { get; set; }
         public int StarCount { get; set; }

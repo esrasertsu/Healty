@@ -29,6 +29,8 @@ namespace CleanArchitecture.Application.Admin.Comments
             public string Username { get; set; }
             public int? Limit { get; set; }
             public int? Offset { get; set; }
+            public bool Status { get; set; }
+
         }
 
         public class Handler : IRequestHandler<Query, UserProfileCommentsEnvelope>
@@ -43,25 +45,28 @@ namespace CleanArchitecture.Application.Admin.Comments
             }
             public async Task<UserProfileCommentsEnvelope> Handle(Query request, CancellationToken cancellationToken)
             {
-                var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.Username);
+                var queryable = _context.UserProfileComments.OrderByDescending(x => x.CreatedAt).AsQueryable();
 
-                if (user == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
-
-                var queryable = _context.UserProfileComments
-                   .Where(x => x.Target == user && x.Status == true) //approved eklenecek
-                   .OrderBy(x => x.CreatedAt)
-                   .AsQueryable();
-
-                var userComments = await queryable
+                if (!string.IsNullOrEmpty(request.Username))
+                {
+                    queryable = queryable.Where(x => x.Author.UserName == request.Username);
+                }
+                if (request.Status)
+                {
+                    queryable = queryable.Where(x => x.Status == true);
+                }
+               
+                var comments = await queryable
                     .Skip(request.Offset ?? 0)
-                    .Take(request.Limit ?? 5).ToListAsync();
+                    .Take(request.Limit ?? 10).ToListAsync();
+
 
                 return new UserProfileCommentsEnvelope
                 {
-                    ProfileComments = _mapper.Map<List<UserProfileComment>, List<UserProfileCommentDto>>(userComments),
+                    ProfileComments = _mapper.Map<List<UserProfileComment>, List<UserProfileCommentDto>>(comments),
                     ProfileCommentCount = queryable.Count()
                 };
+
             }
         }
     }

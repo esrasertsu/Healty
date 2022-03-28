@@ -4,6 +4,7 @@ import { RootStoreContext } from '../../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
 import { IActivity } from '../../../app/models/activity';
 import Countdown from 'react-countdown';
+import ActivityReview from './ActivityReview';
 
 
 
@@ -52,7 +53,7 @@ const Completionist = () => <span>Aktivite başladı!</span>;
   };
 
     return (<>
-        { (new Date(activity.date).getTime() > new Date().getTime()) ?
+        {
            <>
             <Segment className="activityDetails_Countdown_Segment">
                 <div className="activityDetail_Countdown_Header">
@@ -64,23 +65,7 @@ const Completionist = () => <span>Aktivite başladı!</span>;
                 </div>
             </Segment>
             </>
-            :
-            <Fragment>
-             <Segment
-               textAlign='center'
-               attached='top'
-               inverted
-               style={{ border: 'none' }}
-               className="segmentHeader"
-             >
-               <Header>Değerlendirme</Header>
-             </Segment>
-             <Segment attached>
-             <div className="activityDetail_zoom_info">
-                Aktivite hakkındaki görüşlerin bizler ve gelecekte katılmak isteyen diğer kullanıcılar için çok değerli. 
-            </div>
-            </Segment>
-            </Fragment>
+
         }
         </>
           

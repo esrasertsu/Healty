@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { Form as FinalForm , Field } from 'react-final-form';
 import { observer } from 'mobx-react-lite';
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useMediaQuery } from 'react-responsive';
 import { Button, Form, Header, Icon, Label, Segment } from 'semantic-ui-react';
 import { IActivity, IActivityReview } from '../../../app/models/activity';
@@ -34,12 +34,12 @@ export const ActivityReview:React.FC<{activity:IActivity}> = ({activity}) => {
       
 
       }
-
+      
     return (
            <>
             
             {
-              (!activity.hasCommentByUser && isLoggedIn && activity.isAttendee) && 
+
               <Segment>
               <h4 className="activityDetail_title">Aktivite hakkındaki görüşleriniz</h4>
               <>

@@ -54,7 +54,7 @@ namespace CleanArchitecture.API
                 opt.UseLazyLoadingProxies();
                 //opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
                 opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
-                    mySqlOptionsAction: opt => { opt.EnableRetryOnFailure();
+                    mySqlOptionsAction: opt => { opt.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
                     });
             });
 

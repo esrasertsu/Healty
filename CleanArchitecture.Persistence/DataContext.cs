@@ -17,13 +17,13 @@ namespace CleanArchitecture.Persistence
         }
         public DataContext() { }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseMySql("Server=localhost; Database=afitapp; Uid=esrasertsu; Pwd=Si.9ocak1990");
-            }
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        optionsBuilder.UseMySql("Server=localhost; Database=afitapp; Uid=esrasertsu; Pwd=Si.9ocak1990");
+        //    }
+        //}
 
         public DbSet<Domain.Activity> Activities { get; set; }
         public DbSet<UserActivity> UserActivities { get; set; }
@@ -67,7 +67,6 @@ namespace CleanArchitecture.Persistence
             builder.Entity<OrderItem>().Property(p => p.Price).HasColumnType("decimal(18,4)");
 
             base.OnModelCreating(builder); //pk vermeyi sağlıyor migration sırasında
-
 
             builder.Entity<UserActivity>(x => x.HasKey(ua => 
                 new {ua.AppUserId, ua.ActivityId}));

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using CleanArchitecture.Application.Activities.Administration;
 using CleanArchitecture.Application.Categories;
+using CleanArchitecture.Application.UserProfileComments;
 using CleanArchitecture.Domain;
 using System;
 using System.Collections.Generic;
@@ -40,6 +42,11 @@ namespace CleanArchitecture.Application.Activities
               .ForMember(d => d.Key, o => o.MapFrom(s => s.Id.ToString()))
               .ForMember(d => d.Text, o => o.MapFrom(s => s.Name))
               .ForMember(d => d.Value, o => o.MapFrom(s => s.Id.ToString()));
+
+            CreateMap<ActivityReview, ActivityReviewDto>()
+             .ForMember(d => d.ActivityName, o => o.MapFrom(s => s.Activity.Title))
+             .ForMember(d => d.AuthorName, o => o.MapFrom(s => s.Author.UserName));
+
         }
     }
 }

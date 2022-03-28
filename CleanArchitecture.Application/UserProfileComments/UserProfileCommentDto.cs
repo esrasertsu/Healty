@@ -15,5 +15,9 @@ namespace CleanArchitecture.Application.UserProfileComments
         public string DisplayName { get; set; }
         public string Image { get; set; }
         public bool AllowDisplayName { get; set; }
+        public bool Status { get; set; }
+        public bool Reported { get; set; }
+        public string ReportedBy { get; set; }
+        public DateTime ReportDate { get; set; }
     }
 }

@@ -29,6 +29,7 @@ namespace CleanArchitecture.Application.Admin
         public string Image { get; set; }
         public string Bio { get; set; }
         public string Role { get; set; }
+        public string CommissionStatus { get; set; }
         public decimal ExperienceYear { get; set; }
         public string Experience { get; set; }
         public string Dependency { get; set; }//şirket , freelance vs

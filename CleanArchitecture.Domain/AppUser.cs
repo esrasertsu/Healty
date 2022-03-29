@@ -71,10 +71,10 @@ namespace CleanArchitecture.Domain
         Trainer = 120, 
         WaitingTrainer = 130, //Baþvuru bekleniyor
         UnderConsiTrainer=140, // Deðerlendirmeye alýndý
-        Suspend = 200, // biz askýya aldýk trainer
-        SuspendUser = 210, // biz askýya aldýk
-        Freeze = 300, // Kendi Dondurdu
-        FreezeUser = 310
+        Suspend = 200, // trainer biz askýya aldýk 
+        SuspendUser = 210, // user biz askýya aldýk
+        Freeze = 300, // Trainer Kendi Dondurdu
+        FreezeUser = 310 // Trainer biz askýya aldýk
 
     }
 

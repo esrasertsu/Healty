@@ -27,6 +27,8 @@ namespace CleanArchitecture.Domain
         public DateTime? LastEditDate { get; set; }
         public bool HasSignedContract { get; set; }
         public bool Status { get; set; }
+        public virtual CommissionStatus CommissionStatus { get; set; }
+
     }
 
 

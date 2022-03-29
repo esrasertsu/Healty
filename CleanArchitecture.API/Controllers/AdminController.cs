@@ -11,6 +11,7 @@ using CleanArchitecture.Application.Categories;
 using CleanArchitecture.Application.Admin.Comments;
 using CleanArchitecture.Application.Activities.Administration;
 using CleanArchitecture.Application.Admin.Reviews;
+using CleanArchitecture.Application.Admin.SubMerchants;
 
 namespace CleanArchitecture.API.Controllers
 {
@@ -116,6 +117,37 @@ namespace CleanArchitecture.API.Controllers
             UpdateUserReviewStatus.Command command = new UpdateUserReviewStatus.Command { CommentId = commentId, Status = status };
             return await Mediator.Send(command);
         }
+        [HttpGet("commissionStat")]
+        public async Task<ActionResult<List<CommissionStatusDto>>> ListAllCommissionStatus(string name)
+        {
+            return await Mediator.Send(new ListAllCommissionStatus.Query());
+        }
+
+        [HttpPost("commissionStat")]
+        public async Task<ActionResult<CommissionStatusDto>> CreateCommissionStat(string name, string rate)
+        {
+            return await Mediator.Send(new CreateCommissionStat.Command { Name = name , Rate = rate });
+        }
+
+        [HttpDelete("commissionStat")]
+        public async Task<ActionResult<Unit>> DeleteCommissionStat(Guid id)
+        {
+            return await Mediator.Send(new DeleteCommissionStat.Command { Id = id });
+        }
+
+        [HttpGet("commissionStat/{id}")]
+        public async Task<ActionResult<CommissionStatusDto>> GetCommissionStatus(Guid id)
+        {
+            return await Mediator.Send(new GetCommissionStat.Query { Id = id });
+        }
+        [HttpPut("commissionStat")]
+        public async Task<ActionResult<Unit>> UpdateCommissionStatus(Guid id, string name, string rate)
+        {
+            UpdateCommissionStat.Command command = new UpdateCommissionStat.Command { Id= id, Name= name, Rate=rate };
+            return await Mediator.Send(command);
+        }
+
+
         //[HttpGet("{username}/details")]
         //public async Task<ActionResult<Profile>> Get(string username)
         //{

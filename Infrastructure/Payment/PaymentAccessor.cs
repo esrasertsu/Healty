@@ -290,9 +290,17 @@ namespace Infrastructure.Payment
 
             if (!string.IsNullOrEmpty(subMerchantKey))
             {
-                var comision = 50 / 100;
+                var comision = user.SubMerchantDetails.CommissionStatus.Rate;
                 var KDV = 18 / 100;
-                var submerchantprice = activity.Price * 50 / 100 + activity.Price * 50 / 100 * 18 / 100;
+
+                var submerchantprice = activity.Price - (activity.Price * comision /100);
+
+                if (user.SubMerchantDetails.MerchantType != MerchantType.Personal)
+                   submerchantprice = activity.Price - (activity.Price * comision / 100);
+                else
+                {
+                    submerchantprice = activity.Price - (activity.Price * comision /100) - (activity.Price * KDV);
+                }
                 firstBasketItem.SubMerchantKey = subMerchantKey;
                 firstBasketItem.SubMerchantPrice = RemoveTrailingZeros((submerchantprice * count).ToString().Split(',')[0]);
 

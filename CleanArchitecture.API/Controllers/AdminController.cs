@@ -147,6 +147,18 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(command);
         }
 
+        [HttpPut("commissionStat/addTrainer")]
+        public async Task<ActionResult<Unit>> AddSubMerchantToCommission([FromForm] AddSubMerchantToCommission.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPut("commissionStat/removeTrainer")]
+        public async Task<ActionResult<Unit>> RemoveSubMerchantFromCommission([FromForm] RemoveSubMerchantFromCommission.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
 
         //[HttpGet("{username}/details")]
         //public async Task<ActionResult<Profile>> Get(string username)

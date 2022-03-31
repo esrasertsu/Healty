@@ -304,7 +304,7 @@ namespace CleanArchitecture.Application.Profiles
                 Photos = user.Photos,
                 Bio = user.Bio,
                 Role = user.Role.ToString(),
-                CommissionStatus = user.SubMerchantDetails?.CommissionStatus.Name,
+                CommissionStatus = user.SubMerchantDetails?.CommissionStatus?.Name,
                 Experience = user.Experience,
                 ExperienceYear = user.ExperienceYear,
                 Certificates = user.Certificates,

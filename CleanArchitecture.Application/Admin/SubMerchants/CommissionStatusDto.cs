@@ -19,7 +19,7 @@ namespace CleanArchitecture.Application.Admin.SubMerchants
         public string Username { get; set; }
         public string SubMerchantKey { get; set; }
         public string SubMerchantType { get; set; }
-        public bool Status { get; set; }
+        public string Role { get; set; }
 
 
     }

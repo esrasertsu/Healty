@@ -45,6 +45,7 @@ namespace CleanArchitecture.Application.Admin
             public List<Guid> SubCategoryIds { get; set; }
             public Guid? AccessibilityId { get; set; }
             public Guid? CityId { get; set; }
+            public Guid NotCommId { get; set; }
             public string Role { get; set; }
             public string Sort { get; set; }
         }

@@ -19,7 +19,7 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
     const {openModal,closeModal,modal} = rootStore.modalStore;
 
     const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
-    const isMobile = useMediaQuery({ query: '(max-width: 375px)' })
+    const isMobile = useMediaQuery({ query: '(max-width: 430px)' })
 
     const history = useHistory();
     const host = activity.attendees.filter(x => x.isHost === true)[0];
@@ -79,7 +79,7 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
         <Card className="activityListItem"
          onClick={(e:any) => handleCardClick(e)}
           >
-               
+                 
         <Segment.Group>
             {
                 activity.categories.length>0 && (
@@ -91,12 +91,34 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                   </Label>
                 )
             }
-       
+        
             <div>
             
                 <Item.Group>
+                   
                 <Item style={{ zIndex: '1' }} className={isTabletOrMobile? "activityListItem_mobile":""} >
+               
                     <div className={isTabletOrMobile? "activityListItemDiv_mobile":"activityListItemDiv"} >
+                    {
+                        (!activity.isHost) && isTabletOrMobile &&
+                        <Popup
+                        hoverable
+                        position="top center"
+                        on={['hover', 'click']}
+                        positionFixed 
+                       content="Kaydet"
+                       key={activity.id+Math.random()+"subPopover"}
+                       trigger={ 
+                        <Icon 
+                        className='activity_addToFav_mobile' 
+                        name={activity.isSaved?"bookmark" :"bookmark outline"}  
+                        color={"orange"}
+                        onClick={(e:any) => activity.isSaved ? handleUnSave(e,activity.id) :handleSave(e,activity.id) } />
+                       }
+                     />
+                      
+                        
+                    }
                         <Item.Image size={!isTabletOrMobile ? "medium":undefined} style={{ display: "block"}} 
                             src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'}
                             className={isTabletOrMobile ? "activityListItem_Image_mobile":""} >
@@ -108,13 +130,15 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                 
                     <Item.Content className={isTabletOrMobile ? "activity_listItem_mobile":"activity_listItem"} >
                         <Item.Header>{activity.title}</Item.Header>
+                        <StarRating rating={5} editing={false} size={'small'} showCount={false}/> 
+
                         {/* <Item.Description>
                             <div>{activity.description}</div>
                             <div>
                             {activity.city},{activity.venue}
                             </div> 
                         </Item.Description>*/}
-                    <Item.Description style={{marginTop: "15px"}}>
+                    <Item.Description>
                     {/* <Button
                             as={Link} to={`/activities/${activity.id}`}
                             floated="right"
@@ -133,22 +157,22 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                                  <span>+{activity.subCategories.length-3} </span>
                             }
                             </>
-                              <div style={{marginTop:".6em"}}>
+                              <div style={{marginTop:"10px"}}>
                                 <Icon style={{color:"#222E50"}} name='heartbeat' /><span> Seviye: </span>
                                 {
                                     activity.levels && activity.levels.length> 0 ? 
                                     activity.levels.map<React.ReactNode>(s => <span key={s.value}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
                                     : " Bilgi yok"
                                 }
-                               {activity.online ?  <div style={{marginTop:".6em",display:"flex", flexDirection:"row", alignItems:"center"}}> 
-                               <Image style={{height:"25px", marginRight:"5px"}} src="/icons/wifi-ok.png"/><span> Online katılıma açık</span> 
+                               {activity.online ?  <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}> 
+                               <Image style={{height:"20px", marginRight:"10px"}} src="/icons/wifi-ok.png"/><span> Online katılıma açık</span> 
                                 </div>: 
-                                <div style={{marginTop:".6em",marginRight:"5px",display:"flex", flexDirection:"row", alignItems:"center"}}>
-                                  <Image style={{height:"25px"}} src="/icons/wifi-nok.png"/>
+                                <div style={{marginRight:"10px",display:"flex", flexDirection:"row", alignItems:"center"}}>
+                                  <Image style={{height:"20px"}} src="/icons/wifi-nok.png"/>
                                 <span>Online katılıma kapalı</span></div>}
                                 </div>
                         </Item.Description> 
-                        <Item.Description style={{marginTop: "15px"}}>
+                        <Item.Description style={{marginTop:"10px"}}>
                             <Item.Image key={host.image} size="mini" circular src={host.image || '/assets/user.png'}
                              style={{}}/>
                              &nbsp;<span className="activityHostName">{"Eğitmen:" +" " +host.displayName}</span>
@@ -157,9 +181,8 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                     <Item.Content className={isTabletOrMobile ? "activity_listItem_extraContent_mobile":"activity_listItem_extraContent"} >
                    
                     <Item.Description style={{ display: "flex", alignItems: "flex-end", flexDirection:"column", textAlign:"right"}}>
-                     {/* <StarRating rating={5} editing={false} size={'small'} showCount={false}/> */}
                      {
-                        (!isLoggedIn || (user && !activity.isHost)) && 
+                       !isTabletOrMobile && (!activity.isHost) && 
                         <Popup
                         hoverable
                         position="top center"
@@ -180,7 +203,7 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                     }
 
                       {activity.isGoing && !activity.isHost &&
-                        <span>Bu etkinliğe katılıyorsun!</span>
+                        <span style={{marginTop:"10px"}}>Bu etkinliğe katılıyorsun!</span>
                         }
 
 
@@ -189,7 +212,6 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                          
                     }
                     </Item.Description>
-                  
                     <Item.Description style={{flex:"end"}}>
                         {activity.price === null || activity.price === 0 ? 
                          <div className="baseline-pricing">

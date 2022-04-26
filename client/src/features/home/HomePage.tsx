@@ -173,26 +173,35 @@ const HomePage = () => {
       </Modal.Actions> */}
     </Modal>
         <Fragment>
-          {isTablet ?
+        <Segment textAlign='center' vertical className='masthead' id="slideImages">
+               <Container text>
+                   <Header as='h1' inverted>
+                       Dilediğin kategoride aktivite ara, sağlıklı sosyalleşmenin tadını çıkar!
+                   </Header>
+                   {/* {isLoggedIn && user && token ? (  */}
+                   <Fragment>
+                        <ActivitySearchArea />
+                   </Fragment>
+                   {/* ): (
+                       <Fragment>
+                            <Header as='h2' inverted content={`Afitapp'a Hoşgeldin!`} />
+                            <Button onClick={handleLoginClick} size='huge' inverted>
+                                Üye Girişi
+                             </Button>
+                             <Button onClick={handleRegisterClick}  size='huge' inverted>
+                                Yeni Kullanıcı
+                             </Button>
+                       </Fragment>
+                   ) } */}
+
+
+               </Container>
+           </Segment>
+          {/* {isTablet ?
           <>   <Container text className='mobile_text_container'>
                  <Header as='h1'>
                      Dilediğin kategoride aktivite ara, sağlıklı sosyalleşmenin tadını çıkar!
                  </Header>
-                 {/* {isLoggedIn && user && token ? (  */}
-                
-                 {/* ): (
-                     <Fragment>
-                          <Header as='h2' inverted content={`Afitapp'a Hoşgeldin!`} />
-                          <Button onClick={handleLoginClick} size='huge' inverted>
-                              Üye Girişi
-                           </Button>
-                           <Button onClick={handleRegisterClick}  size='huge' inverted>
-                              Yeni Kullanıcı
-                           </Button>
-                     </Fragment>
-                 ) } */}
-                
-                
              </Container>
           <Segment textAlign='center' vertical className='masthead' id="slideImages">
  
@@ -211,31 +220,11 @@ const HomePage = () => {
                İhtiyacın olan en doğru uzmanı en kolay şekilde bulabileceğin yerdesin. 
                Yerinde ya da online olarak aktivitelere katılabilir, eğitmenlerin paylaştıkları blogları okuyarak ilgilendiğin alanda bilgi sahibi olabilirsin. 
                 </p> 
-              {/* {isLoggedIn && user && token ? (  */}
-             {/* <Fragment>
-                   <ActivitySearchArea />
-              </Fragment>
-               ): (
-                  <Fragment>
-                       <Header as='h2' inverted content={`Afitapp'a Hoşgeldin!`} />
-                       <Button onClick={handleLoginClick} size='huge' inverted>
-                           Üye Girişi
-                        </Button>
-                        <Button onClick={handleRegisterClick}  size='huge' inverted>
-                           Yeni Kullanıcı
-                        </Button>
-                  </Fragment>
-              ) } */}
-             
-             
           </Container>
-          <div 
-          // className='masthead' id="slideImages"
-          > </div>
       </div>
      
 
-          }
+          } */}
            
            <Container className="pageContainer home">
            <div style={{height:"20px"}} className="spacingContainer__small" />

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using FluentValidation;
 using MediatR;
@@ -16,7 +17,7 @@ namespace CleanArchitecture.Application.Admin.SubMerchants
     public class RemoveSubMerchantFromCommission
     {
 
-        public class Command : IRequest<Unit>
+        public class Command : IRequest<SubMerchantInfo>
         {
             public List<string> TrainerIds { get; set; }
             public Guid CommissionId { get; set; }
@@ -29,7 +30,7 @@ namespace CleanArchitecture.Application.Admin.SubMerchants
                 RuleFor(x => x.TrainerIds).NotEmpty();
             }
         }
-        public class Handler : IRequestHandler<Command, Unit>
+        public class Handler : IRequestHandler<Command, SubMerchantInfo>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
@@ -43,7 +44,7 @@ namespace CleanArchitecture.Application.Admin.SubMerchants
                 _userAccessor = userAccessor;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<SubMerchantInfo> Handle(Command request, CancellationToken cancellationToken)
             {
 
                 var stat = await _context.CommissionStatuses.SingleOrDefaultAsync(x => x.Id == request.CommissionId);
@@ -55,9 +56,10 @@ namespace CleanArchitecture.Application.Admin.SubMerchants
                 {
                     if (request.TrainerIds != null && stat.SubMerchants != null)
                     {
+                        var user = new SubMerchant();
                         foreach (var item in request.TrainerIds)
                         {
-                            var user = await _context.SubMerchants.SingleOrDefaultAsync(x => x.UserId == item);
+                             user = await _context.SubMerchants.SingleOrDefaultAsync(x => x.UserId == item);
 
                             if (user == null)
                                 throw new RestException(HttpStatusCode.NotFound, new { SubMerchant = "Not found" });
@@ -70,12 +72,12 @@ namespace CleanArchitecture.Application.Admin.SubMerchants
                         }
                         var result = await _context.SaveChangesAsync() > 0;
 
-                        if (result) return Unit.Value;
+                        if (result) return _mapper.Map<SubMerchant, SubMerchantInfo>(user);
                         else throw new Exception("Problem saving changes");
                     }
                     else
                     {
-                        return Unit.Value;
+                        throw new Exception("Problem saving changes");
                     }
                 }
                 catch (Exception e)

@@ -174,22 +174,22 @@ html, body {
 @keyframes slideBg {
    
   0%{
-    background-image: url("../layout/img/homepage.svg"); 
+    background-image: url("../layout/img/banner-2.jpg"); 
   }
   20%{
-    background-image: url("../layout/img/homepage.svg"); 
+    background-image: url("../layout/img/banner-2.jpg"); 
   }
   40%{
-    background-image: url("../layout/img/homepage.svg"); 
+    background-image: url("../layout/img/psikolog.jpg"); 
   }
   60%{
-    background-image: url("../layout/img/homepage.svg"); 
+    background-image: url("../layout/img/dietitian.jpg"); 
   }
   80%{
-    background-image: url("../layout/img/homepage.svg"); 
+    background-image: url("../layout/img/meditation-sitting.jpg"); 
   }
   100%{
-    background-image: url("../layout/img/deneme-1.png") ; 
+    background-image: url("../layout/img/meditation-sitting.jpg") ; 
   }
 }
 
@@ -587,7 +587,7 @@ h1, h2, h3, h4, h5 {
     padding: 24px !important;
     -webkit-font-smoothing: antialiased;
     margin-top: 30px !important;
-    background-color: #325AA7 !important;
+    background-color: #263a5e!important;
     color: rgb(255, 255, 255) !important;
     font-weight: 500 !important;
     font-size: 1rem !important;
@@ -742,8 +742,18 @@ p.baseline-pricing__value{
       background: -webkit-gradient(linear, left top, left bottom, from(#7e3af2), to(#3f83f8));
       background-clip: text;
 	    -webkit-text-fill-color: transparent;
-      font-size: 22px !important;
+      font-size: 19px !important;
     }
+    i.activity_addToFav_mobile.icon.bookmark{
+      cursor: pointer;
+      height: 40px !important;
+      padding-top: 5px;
+      margin-top: -6px;
+      position: absolute;
+      right: 0;
+      font-size: 30px;
+    }
+    
     i.activity_addToFav.icon{
       font-size: 30px !important;
       cursor: pointer;
@@ -1226,8 +1236,8 @@ a.ui.card:hover {
 }
 
 .ui.text.container {
-  margin: 80px 70px 41px 70px !important;
-  text-align: left;
+  margin: 40px 0 41px 70px !important;
+    text-align: left;
     font-family: AssistantRegular, Arial, sans-serif;
     max-width: 500px !important;
 }
@@ -1268,21 +1278,22 @@ a.ui.card:hover {
 
 @media (min-width: 1200px){
   #slideImages.masthead {
-    height: 100vh;
+    height: 25vw;
     width: 100%;
     display: flex;
     align-items: center;
-     background-position: center center;
-     background-size: cover !important;
-     background-repeat: no-repeat;
-     backface-visibility: hidden;
-    //  animation-name: slideBg;
-    //  animation-duration: 30s;
-    //  animation-iteration-count: infinite;
-     background-image: url("../layout/img/cubic_afitapp_big.svg"); 
-    //  animation-delay: 3s;
-    //  animation-timing-function:step-start;
-    //  animation-fill-mode: both;
+    background-position: center center;
+    background-size: cover !important;
+    background-repeat: no-repeat;
+    backface-visibility: hidden;
+    animation-name: slideBg;
+    animation-duration: 30s;
+    animation-iteration-count: infinite;
+    background-image: url("../layout/img/banner-2.jpg"); 
+    animation-delay: 3s;
+    animation-timing-function:step-start;
+    animation-fill-mode: both;
+    background-position-y: -260px !important;
    }
   .ui.segment.profieHeader_segment{
     box-shadow: none !important;
@@ -1302,7 +1313,7 @@ a.ui.card:hover {
 
 @media (min-width:821px) and (max-width:1199px) {
   #slideImages.masthead {
-    height: 590px;
+    height: 40vw;
     width: 100%;
     display: flex;
     align-items: center;
@@ -1310,13 +1321,13 @@ a.ui.card:hover {
      background-size: cover !important;
      background-repeat: no-repeat;
      backface-visibility: hidden;
-    //  animation-name: slideBg;
-    //  animation-duration: 30s;
-    //  animation-iteration-count: infinite;
-     background-image: url("../layout/img/cubic_afitapp_big.svg"); 
-    //  animation-delay: 3s;
-    //  animation-timing-function:step-start;
-    //  animation-fill-mode: both;
+     animation-name: slideBg;
+     animation-duration: 30s;
+     animation-iteration-count: infinite;
+    background-image: url("../layout/img/banner-2.jpg"); 
+      animation-delay: 3s;
+     animation-timing-function:step-start;
+      animation-fill-mode: both;
    }
 }
 
@@ -1561,13 +1572,13 @@ max-width: 95%;
    background-size: cover !important;
    background-repeat: no-repeat;
    backface-visibility: hidden;
-  //  animation-name: slideBg;
-  //  animation-duration: 30s;
-  //  animation-iteration-count: infinite;
-  background-image: url("../layout/img/cubic_afitapp_big.svg"); 
-  //  animation-delay: 3s;
-  //  animation-timing-function:step-start;
-  //  animation-fill-mode: both;
+    animation-name: slideBg;
+    animation-duration: 30s;
+   animation-iteration-count: infinite;
+   background-image: url("../layout/img/banner-2.jpg"); 
+   animation-delay: 3s;
+   animation-timing-function:step-start;
+    animation-fill-mode: both;
  }
 
 }
@@ -1584,13 +1595,13 @@ max-width: 95%;
      background-size: cover !important;
      background-repeat: no-repeat;
      backface-visibility: hidden;
-    //  animation-name: slideBg;
-    //  animation-duration: 30s;
-    //  animation-iteration-count: infinite;
-    background-image: url("../layout/img/cubic_afitapp_big.svg"); 
-    //  animation-delay: 3s;
-    //  animation-timing-function:step-start;
-    //  animation-fill-mode: both;
+      animation-name: slideBg;
+   animation-duration: 30s;
+    animation-iteration-count: infinite;
+    background-image: url("../layout/img/banner-2.jpg"); 
+     animation-delay: 3s;
+     animation-timing-function:step-start;
+      animation-fill-mode: both;
    }
   
   }
@@ -1750,18 +1761,18 @@ max-width: 95%;
     margin:6px 0 !important
   }
   .dtPicker_Container_Style_mobile {
-    box-shadow: 0 1px 2px 0 rgb(34 36 38 / 15%) !important;
     border-radius: -13.714286rem !important;
     padding: 8px !important;
     -webkit-font-smoothing: antialiased;
-    background-color: #325AA7 !important;
+    background-color: #263a5e !important;
     color: rgb(255, 255, 255) !important;
     font-weight: 500 !important;
     font-size: 1rem !important;
     line-height: 1rem !important;
+    margin-top: 10px !important;
 }
 .dtPicker_accordion{
-  background:#325AA7 !important;
+  background:#263a5e !important;
   box-shadow: none !important;
   -webkit-box-shadow:none !important;
   width: 100% !important;
@@ -1999,7 +2010,6 @@ max-width: 80%;
   font-size: 36px;
     font-family:  AssistantBold, Arial, sans-serif !important;
     margin-bottom: 40px;
-    text-shadow: rgb(242 242 242) 1.5px 1.5px;
   }
 i.search.inverted.icon {
   opacity: 1 !important;
@@ -2015,8 +2025,8 @@ i.search.inverted.icon {
 }
 
 .homePage-button_Container{
-  background-color: #f8f7f7;
-  height: 80px;
+  background-color: #263a5e;
+    height: 80px;
   flex-direction: row;
   display: flex !important;
   justify-content: space-around;
@@ -2540,13 +2550,13 @@ button, input, optgroup, select, textarea {
      background-repeat: no-repeat;
      backface-visibility: hidden;
      background-color: #fff;
-    //  animation-name: slideBg;
-    //  animation-duration: 30s;
-    //  animation-iteration-count: infinite;
-    background-image: url("../layout/img/cubic_afitapp_mobile.svg"); 
-    //  animation-delay: 3s;
-    //  animation-timing-function:step-start;
-    //  animation-fill-mode: both;
+      animation-name: slideBg;
+      animation-duration: 30s;
+      animation-iteration-count: infinite;
+      background-image: url("../layout/img/banner-2.jpg"); 
+      animation-delay: 3s;
+      animation-timing-function:step-start;
+      animation-fill-mode: both;
    }
 }
 

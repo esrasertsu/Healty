@@ -16,6 +16,7 @@ namespace CleanArchitecture.Application.Admin.SubMerchants
             CreateMap<SubMerchant, SubMerchantInfo>()
              .ForMember(d => d.Role, o => o.MapFrom(s => s.User.Role.ToString()))
              .ForMember(d => d.Username, o => o.MapFrom(s => s.User.UserName))
+             .ForMember(d => d.Id, o => o.MapFrom(s => s.User.Id))
              .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.User.DisplayName));
         }
     }

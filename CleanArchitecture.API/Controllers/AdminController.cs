@@ -25,7 +25,7 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpGet("trainers")]
-        public async Task<ActionResult<ListTrainers.TrainersEnvelope>> List(int? limit, int? offset, Guid? categoryId, [FromQuery(Name = "subCategoryIds")] List<Guid> subCategoryIds, Guid? accessibilityId, Guid? cityId, string role,string sort)
+        public async Task<ActionResult<ListTrainers.TrainersEnvelope>> List(int? limit, int? offset, Guid? categoryId, [FromQuery(Name = "subCategoryIds")] List<Guid> subCategoryIds, Guid? accessibilityId, Guid? cityId,  string role,string sort)
         {
             return await Mediator.Send(new ListTrainers.Query(limit, offset, categoryId, subCategoryIds, accessibilityId, cityId,role, sort));
         }
@@ -148,13 +148,13 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPut("commissionStat/addTrainer")]
-        public async Task<ActionResult<Unit>> AddSubMerchantToCommission([FromForm] AddSubMerchantToCommission.Command command)
+        public async Task<ICollection<SubMerchantInfo>> AddSubMerchantToCommission([FromForm] AddSubMerchantToCommission.Command command)
         {
             return await Mediator.Send(command);
         }
 
         [HttpPut("commissionStat/removeTrainer")]
-        public async Task<ActionResult<Unit>> RemoveSubMerchantFromCommission([FromForm] RemoveSubMerchantFromCommission.Command command)
+        public async Task<ActionResult<SubMerchantInfo>> RemoveSubMerchantFromCommission([FromForm] RemoveSubMerchantFromCommission.Command command)
         {
             return await Mediator.Send(command);
         }

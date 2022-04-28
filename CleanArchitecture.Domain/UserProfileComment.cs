@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace CleanArchitecture.Domain
 {
     public class UserProfileComment
     {
+        public UserProfileComment()
+        {
+            Reports = new Collection<ProfileCommentReports>();
+        }
         public Guid Id { get; set; }
         public string Body { get; set; }
         public int StarCount { get; set; }
@@ -17,8 +22,7 @@ namespace CleanArchitecture.Domain
         public bool Status { get; set; }
         public bool AllowDisplayName { get; set; }
         public bool Reported { get; set; }
-        public string ReportedBy { get; set; }
-        public DateTime ReportDate { get; set; }
+        public virtual ICollection<ProfileCommentReports> Reports { get; set; }
 
     }
 }

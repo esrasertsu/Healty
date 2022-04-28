@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,7 @@ namespace CleanArchitecture.Application.UserProfileComments
         public class Command : IRequest
         {
             public Guid Id { get; set; }
-
+            public string Body { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -44,16 +45,30 @@ namespace CleanArchitecture.Application.UserProfileComments
                 if (comment == null)
                     throw new RestException(HttpStatusCode.NotFound, new { comment = "Not Found" });
 
-                comment.ReportedBy = user.UserName;
-                comment.ReportDate = DateTime.Now;
-                comment.Reported = true;
 
-                var success = await _context.SaveChangesAsync() > 0;
+                if(!comment.Reports.Any(x => x.ReportedBy == user.UserName))
+                {
+                    comment.Reported = true;
 
-                if (success)
-                    return Unit.Value;
+                    ProfileCommentReports commentReport = new ProfileCommentReports();
+                    commentReport.Body  = request.Body;
+                    commentReport.UserProfileCommentId = comment.Id;
+                    commentReport.CreatedAt = DateTime.Now;
+                    commentReport.ReportedBy = user.UserName;
 
-                throw new Exception("Problem saving changes");
+                    comment.Reports.Add(commentReport);
+
+                    var success = await _context.SaveChangesAsync() > 0;
+
+                    if (success)
+                        return Unit.Value;
+                    throw new Exception("Problem saving changes");
+
+
+                }
+                return Unit.Value;
+
+
             }
         }
     }

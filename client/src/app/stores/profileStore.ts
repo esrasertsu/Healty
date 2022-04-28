@@ -36,7 +36,7 @@ export default class ProfileStore{
     }
 
     @observable profile: IProfile | null = null;
-    @observable commentRegistery = new Map();
+    @observable commentRegistery = new Map<string,IProfileComment>();
     @observable profileRegistery = new Map();
     @observable popularProfileRegistery = new Map();
 
@@ -78,7 +78,6 @@ export default class ProfileStore{
     @observable profileFilterForm: IProfileFilterFormValues = new ProfileFilterFormValues();
 
     @observable sortingInput ="";
-
     @observable loadingReferencePics = false;
     @observable uploadingReferencePics = false;
     @observable referencePics: IPhoto[] = [];
@@ -138,6 +137,7 @@ export default class ProfileStore{
     @action clearPopularProfileRegistery = () => {
         this.popularProfileRegistery.clear();
     }
+
     @computed get getCommentsByDate(){
         // return this.activities.sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
       //  return Array.from(this.activityRegistery.values()).sort((a,b) => Date.parse(a.date) - Date.parse(b.date))
@@ -449,10 +449,10 @@ export default class ProfileStore{
         }
     }
 
-    @action reportComment = async (id:string) =>{
+    @action reportComment = async (id:string, body:string) =>{
         this.submittingComment = true;
         try {
-            await agent.Profiles.reportComment(id);
+            await agent.Profiles.reportComment(id,body);
             runInAction(() => {
                 toast.success('En yakın zamanda değerlendirilmek üzere şikayetiniz tarafımıza iletildi.');
                 this.submittingComment = false;

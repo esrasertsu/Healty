@@ -381,7 +381,7 @@ const Profiles = {
     uploadCoverPic: ( photo: Blob): Promise<IPhoto> => requests.postForm(`/profiles/coverpic`, photo),
     uploadProfileVideo: ( url: string)  => requests.put(`/profiles/videoUrl?url=${url}`, {}),
     deleteComment: (id:string) => requests.del(`/profiles/comments/${id}`),
-    reportComment: (id:string) => requests.post(`/profiles/comments/${id}/report`,{})
+    reportComment: (id:string,body:string) => requests.post(`/profiles/comments/${id}/report?body=${body}`,{})
 }
 
 const Blogs = {

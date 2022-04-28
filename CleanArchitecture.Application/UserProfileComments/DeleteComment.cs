@@ -37,12 +37,15 @@ namespace CleanArchitecture.Application.UserProfileComments
                 var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
 
                 if(user== null)
-                throw new RestException(HttpStatusCode.BadRequest, new { UserName = "User not found" });
+                    throw new RestException(HttpStatusCode.BadRequest, new { UserName = "User not found" });
 
                 var comment = await _context.UserProfileComments.FindAsync(request.Id);
 
                 if (comment == null)
                     throw new RestException(HttpStatusCode.NotFound, new { comment = "Not Found" });
+
+                if(comment.Author != user && user.Role != Domain.Role.Admin)
+                    throw new RestException(HttpStatusCode.Forbidden, new { user = "Not Authorized" });
 
                 _context.Remove(comment);
 

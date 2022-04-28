@@ -1,10 +1,11 @@
-﻿using System;
+﻿using CleanArchitecture.Domain;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CleanArchitecture.Application.UserProfileComments
+namespace CleanArchitecture.Application.Admin.Comments
 {
-    public class UserProfileCommentDto
+    public class AdminProfileCommentsDto
     {
         public Guid Id { get; set; }
         public string Body { get; set; }
@@ -16,6 +17,7 @@ namespace CleanArchitecture.Application.UserProfileComments
         public string Image { get; set; }
         public bool AllowDisplayName { get; set; }
         public bool Status { get; set; }
-        public bool IsReported { get; set; }
+        public bool Reported { get; set; }
+        public ICollection<ProfileCommentReports> Reports { get; set; }
     }
 }

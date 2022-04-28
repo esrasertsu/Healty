@@ -59,6 +59,7 @@ namespace CleanArchitecture.Persistence
         public DbSet<SubMerchant> SubMerchants { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<CommissionStatus> CommissionStatuses { get; set; }
+        public DbSet<ProfileCommentReports> ProfileCommentReports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

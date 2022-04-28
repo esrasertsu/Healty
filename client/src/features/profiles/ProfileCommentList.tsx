@@ -1,19 +1,21 @@
-import React, { Fragment, useContext } from 'react'
-import {  Button, Comment, Icon } from 'semantic-ui-react'
+import React, { Fragment, useContext, useState } from 'react'
+import {  Button, Comment, Form, Icon, TextArea } from 'semantic-ui-react'
 import { observer } from 'mobx-react';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import { formatDistance } from 'date-fns';
+import { format, formatDistance } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { StarRating } from '../../app/common/form/StarRating';
 import ProfileCommentForm from './ProfileCommentForm';
 import tr  from 'date-fns/locale/tr'
-
+import { IProfileComment } from '../../app/models/profile';
+import TextAreaInput from '../../app/common/form/TextAreaInput';
+import { Form as FinalForm , Field } from 'react-final-form';
 interface IProps {
   handleGetNext: () => void;
   totalPages: number;
   loadingNext: boolean;
   commentPage:number;
-  getCommentsByDate: any[]
+  getCommentsByDate: IProfileComment[]
 }
 
 const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentPage,loadingNext,getCommentsByDate}) => {
@@ -27,9 +29,46 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
     deleteComment(id)
   }
 
+ 
   const handleReportComment = (id:string) =>{
-    reportComment(id)
+
+    openModal("",
+    <FinalForm
+    onSubmit ={handleSendReport}
+    initialValues={{ body:"", id:id }}
+    render={({handleSubmit, submitting, form}) => (
+      <Form widths={"equal"} 
+      onSubmit={() => handleSubmit()!.then(()=> {form.reset(); closeModal();})}
+      >
+       <Field
+              name="body"
+              placeholder="Şikayet sebebinizi belirtiniz"
+              component={TextAreaInput}
+              rows={6}
+            />  
+      <br/>
+
+
+        <Button loading={submitting} floated='right' circular type="submit" color='green'>
+          <Icon name='checkmark' /> Gönder
+        </Button>
+        <Button floated='right' circular color='red' onClick={(e) => {e.preventDefault();closeModal();}}>
+          <Icon name='remove' /> İptal
+        </Button>
+    </Form>
+    
+    )}
+  />
+    ,false,
+    null
+       ,undefined, true, "tiny")
   }
+
+const handleSendReport = async (data:any) =>{
+  debugger;
+  if(data.body!=="" && data.body!==null && data.body.length>5 && data.id !== null)
+     reportComment(data.id,data.body)
+}
 
   return (
 <Fragment>
@@ -63,10 +102,19 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
                           Sil
                         </Comment.Action>}
                         {isLoggedIn && user!.userName !== comment.authorName && 
-                        <Comment.Action onClick={() => handleReportComment(comment.id)}>
-                          <Icon name="info circle" />
-                          Şikayet Et
-                        </Comment.Action>
+
+                        (!comment.isReported  ?
+                          <Comment.Action onClick={() => handleReportComment(comment.id)}>
+                            <Icon name="info circle" />
+                            Şikayet Et
+                          </Comment.Action>
+                          :
+                          <Comment.Action>
+                            <Icon color="red" name="info circle" />
+                           <span>Şikayetiniz iletildi!</span>
+                          </Comment.Action>
+                        )
+                        
                         }
                         </Comment.Actions>
                       </Comment.Content>
@@ -97,7 +145,8 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
                       circular
                       onClick={()=>
                         openModal("Leave a comment",
-                        <ProfileCommentForm closeModal={closeModal} />,false,null,undefined, true)}
+                        <ProfileCommentForm closeModal={closeModal} />,false,null
+                        ,undefined, true, "small")}
                     />)
                 }
 </div>

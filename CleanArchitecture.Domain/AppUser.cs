@@ -34,8 +34,8 @@ namespace CleanArchitecture.Domain
         public string Bio { get; set; }
         public string VideoUrl { get; set; }
         public bool IsOnline { get; set; }
-        public int Star { get { return Convert.ToInt32(this.ReceivedComments.Count() > 0 ? this.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Average() : 0); } } //rating
-        public int StarCount { get { return Convert.ToInt32(this.ReceivedComments.Count() > 0 ? this.ReceivedComments.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Count() : 0); } } //total rate votes ( bigger than zero) 
+        public int Star { get { return Convert.ToInt32(this.ReceivedComments.Count() > 0 ? this.ReceivedComments.Where(x => x.Status== true).Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Average() : 0); } } //rating
+        public int StarCount { get { return Convert.ToInt32(this.ReceivedComments.Count() > 0 ? this.ReceivedComments.Where(x => x.Status== true).Count() : 0); } } //total rate votes ( bigger than zero) 
         public bool HasSignedIyzicoContract { get; set; }
         public DateTime? IyzicoContractSignedDate { get; set; }
         public bool HasSignedPaymentContract { get; set; }

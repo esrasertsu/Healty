@@ -94,9 +94,11 @@ export interface IProfileComment {
     authorName: string;
     image: string;
     displayName : string;
+    star: number;
     starCount: number;
     allowDisplayName: boolean;
     status: boolean;
+    isReported: boolean;
 }
 
 

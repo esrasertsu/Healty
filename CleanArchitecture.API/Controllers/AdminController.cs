@@ -117,6 +117,13 @@ namespace CleanArchitecture.API.Controllers
             UpdateUserReviewStatus.Command command = new UpdateUserReviewStatus.Command { CommentId = commentId, Status = status };
             return await Mediator.Send(command);
         }
+
+        [HttpPut("profileComments/revert")]
+        public async Task<ActionResult<Unit>> RevertProfileComment(Guid commentId)
+        {
+            RevertCommentReport.Command command = new RevertCommentReport.Command { CommentId = commentId };
+            return await Mediator.Send(command);
+        }
         [HttpGet("commissionStat")]
         public async Task<ActionResult<List<CommissionStatusDto>>> ListAllCommissionStatus(string name)
         {

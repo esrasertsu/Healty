@@ -121,9 +121,9 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [HttpPost("comments/{id}/report")]
-        public async Task<ActionResult<Unit>> ReportComment(Guid Id)
+        public async Task<ActionResult<Unit>> ReportComment(Guid Id, string body)
         {
-            return await Mediator.Send(new ReportComment.Command { Id = Id });
+            return await Mediator.Send(new ReportComment.Command { Id = Id , Body = body});
         }
 
 

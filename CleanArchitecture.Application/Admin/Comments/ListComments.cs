@@ -21,7 +21,7 @@ namespace CleanArchitecture.Application.Admin.Comments
     {
         public class UserProfileCommentsEnvelope
         {
-            public List<UserProfileCommentDto> ProfileComments { get; set; }
+            public List<AdminProfileCommentsDto> ProfileComments { get; set; }
             public int ProfileCommentCount { get; set; }
         }
         public class Query : IRequest<UserProfileCommentsEnvelope>
@@ -63,7 +63,7 @@ namespace CleanArchitecture.Application.Admin.Comments
 
                 return new UserProfileCommentsEnvelope
                 {
-                    ProfileComments = _mapper.Map<List<UserProfileComment>, List<UserProfileCommentDto>>(comments),
+                    ProfileComments = _mapper.Map<List<UserProfileComment>, List<AdminProfileCommentsDto>>(comments),
                     ProfileCommentCount = queryable.Count()
                 };
 

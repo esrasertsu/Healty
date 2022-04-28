@@ -73,7 +73,7 @@ const MessageChat: React.FC<IProps> = ({setshowChatRoomList}) => {
                  onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}/>
           
                 <Item.Content>
-                  <Item.Header>{chatRooms.filter(x => x.id === chatRoomId)[0].displayName} profilini görmek için tıkla</Item.Header>
+                  <Item.Header>{chatRooms.filter(x => x.id === chatRoomId)[0].displayName}</Item.Header>
              </Item.Content>
              </Item>
              </Item.Group>

@@ -1416,27 +1416,36 @@ a.ui.card:hover {
 .currentUserMessage{
   display: flex !important;
   flex-direction: row-reverse !important;
-  border-radius: .28571429rem !important;
-  border: 1px solid rgba(34,36,38,.15) !important;
   width: 65% !important;
   margin-left: 35% !important;
   margin-bottom: 15px !important;
   padding: 10px !important;
-  background-color: rgb(149 166 198) !important;
-  color: #fff !important;
   font-size: 1.1em !important;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+  box-shadow: 0px 9px 16px rgb(159 162 191 / 18%), 0px 2px 2px rgb(159 162 191 / 32%)  !important;
+  overflow: hidden;
+  background: #5569ff  !important;
+  color: #fff  !important;
+  border-radius: 18px  !important;
+  border-top-right-radius: 6px  !important;
+ 
 
 }
 
 .otherUserMessage{
-border-radius: .28571429rem !important;
-  border: 1px solid rgba(91, 106, 121, 0.15) !important;
   max-width: 60% !important;
   margin-bottom: 15px !important;
   padding: 10px !important;
-  background-color: #f1f1f1 !important;
-  color: rgb(0 0 0 / 87%) !important;
   font-size: 1.1em !important;
+
+
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+  box-shadow: 0px 9px 16px rgb(159 162 191 / 18%), 0px 2px 2px rgb(159 162 191 / 32%);
+  overflow: hidden;
+  background: rgba(34, 51, 84, 0.1) !important;
+  color: #223354 !important;
+  border-radius: 18px !important;
+  border-top-left-radius: 6px !important;
 }
 
 
@@ -1798,31 +1807,36 @@ max-width: 95%;
 .currentUserMessage{
   display: flex !important;
   flex-direction: row-reverse !important;
-  border-radius: .28571429rem !important;
-  border: 1px solid rgba(34,36,38,.15) !important;
   width: 80% !important;
   margin-left: 20% !important;
   margin-bottom: 15px !important;
   padding: 10px !important;
-  background-color: rgb(149 166 198) !important;
-  color: #fff !important;
   font-size: 1.1em !important;
   align-items: center;
-
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+  box-shadow: 0px 9px 16px rgb(159 162 191 / 18%), 0px 2px 2px rgb(159 162 191 / 32%)  !important;
+  overflow: hidden;
+  background: #5569ff  !important;
+  color: #fff  !important;
+  border-radius: 18px  !important;
+  border-top-right-radius: 6px  !important;
 }
 
 .otherUserMessage{
-border-radius: .28571429rem !important;
-  border: 1px solid rgba(91, 106, 121, 0.15) !important;
   max-width: 80% !important;
   margin-bottom: 15px !important;
   padding: 10px !important;
-  background-color: #f1f1f1 !important;
-  color: rgb(0 0 0 / 87%) !important;
   font-size: 1.1em !important;
   display: flex !important;
     flex-direction: row !important;
     align-items: center;
+    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+  box-shadow: 0px 9px 16px rgb(159 162 191 / 18%), 0px 2px 2px rgb(159 162 191 / 32%);
+  overflow: hidden;
+  background: rgba(34, 51, 84, 0.1) !important;
+  color: #223354 !important;
+  border-radius: 18px !important;
+  border-top-left-radius: 6px !important;
 }
 
 

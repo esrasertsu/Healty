@@ -44,6 +44,19 @@ namespace CleanArchitecture.API.Controllers
             return user;
         }
 
+        [HttpGet("account")]
+        public async Task<ActionResult<AccountDto>> GetAccountSettings()
+        {
+            return await Mediator.Send(new AccountSettings.Query());
+        }
+
+        [HttpPut("account")]
+        public async Task<ActionResult<Unit>> EditAccountInfo([FromForm] UpdateAccountInfo.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
+
         [HttpGet("newTrainerInfo")]
         public async Task<ActionResult<WaitingTrainerInfoDto>> LoadWaitingTrainerInfo(string username)
         {

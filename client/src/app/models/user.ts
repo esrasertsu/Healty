@@ -12,6 +12,38 @@ export interface IUser {
     isSubMerchant:boolean;
 }
 
+export interface IAccountInfo {
+    userName : string;
+    displayName: string;
+    email: string;
+    name:string;
+    surname:string;
+    address: string;
+    phoneNumber:string;
+    city: ICity;
+}
+export interface IAccountInfoValues extends Partial<IAccountInfo>{
+    cityId:string,
+}
+
+
+export class AccountInfoFormValues implements IAccountInfoValues{
+    cityId:string = "";
+    userName: string = '';
+    name:string = '';
+    surname:string = '';
+    phoneNumber:string = '';
+    address:string = '';
+    displayName:string = '';
+
+    constructor(init?: IAccountInfoValues){
+         if(init)
+        {    
+            init.cityId = init.city ? init.city.value : "";
+         }
+        Object.assign(this, init);
+    }
+}
 export interface IUserFormValues {
     email: string;
     password: string;

@@ -2,7 +2,7 @@ import { action, computed, makeObservable, observable, runInAction } from "mobx"
 import { HttpTransportType, HubConnection, HubConnectionBuilder, JsonHubProtocol, LogLevel } from '@microsoft/signalr';
 import { history } from "../..";
 import agent from "../api/agent";
-import { ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues, TrainerCreationFormValues, TrainerFormValues } from "../models/user";
+import { AccountInfoFormValues, IAccountInfo, IAccountInfoValues, ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues, TrainerCreationFormValues, TrainerFormValues } from "../models/user";
 import { RootStore } from "./rootStore";
 import { toast } from 'react-toastify';
 import { IMessage } from "../models/message";
@@ -20,10 +20,13 @@ export default class UserStore {
     }
 
     @observable user: IUser | null = null;
+    @observable accountInfo: IAccountInfo | null = null;
+
     @observable.ref hubConnection : HubConnection | null = null;
     
     @observable initialMessages: IMessage[]  = [];
     @observable onlineUsers: String[]  = [];
+    @observable accountForm: IAccountInfoValues = new AccountInfoFormValues();
 
     @observable notificationCount: number = 0;
     @computed get isLoggedIn() {return !!this.user}
@@ -82,7 +85,12 @@ export default class UserStore {
     @action setInitialMessageNull = () => {
         this.initialMessages = [];
     }
-
+    @action setAccountInfo = (acc:IAccountInfo) => {
+        this.accountInfo = acc;
+    }
+    @action setAccountForm = (acc:IAccountInfoValues) => {
+        this.accountForm = acc;
+    }
     @action clearCurrentUser = () => {
         this.user = null;
     }
@@ -196,6 +204,45 @@ export default class UserStore {
 
         } catch (error) {
             this.trainerRegistering = false;
+            throw error;
+
+        }
+    }
+
+
+    @action getAccountDetails = async () =>{
+        try {
+            this.loadingUserInfo = true;
+            debugger;
+            const user = await agent.User.getAccountInfo();
+            runInAction(()=>{
+                this.loadingUserInfo = false;
+                this.setAccountForm(new AccountInfoFormValues(user))
+
+            })
+           return true
+           
+
+        } catch (error) {
+            this.loadingUserInfo = false;
+            throw error;
+
+        }
+    }
+
+    @action editAccountDetails = async (acc:IAccountInfoValues) =>{
+        try {
+            this.loadingUserInfo = true;
+            debugger;
+            const user = await agent.User.editAccountInfo(acc);
+            runInAction(()=>{
+                this.loadingUserInfo = false;
+            })
+           return true
+           
+
+        } catch (error) {
+            this.loadingUserInfo = false;
             throw error;
 
         }

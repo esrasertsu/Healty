@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, IActivityReview, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IPersonalActivitiesEnvelope, IRefundPayment, PaymentThreeDResult } from '../models/activity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
-import { ISubMerchantInfo, ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues, IyziSubMerchantResponse } from '../models/user';
+import { IAccountInfo, IAccountInfoValues, ISubMerchantInfo, ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues, IyziSubMerchantResponse } from '../models/user';
 import { IAccessibility, IDocument, IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope, IProfileEnvelope, IProfileFormValues, IRefencePic } from '../models/profile';
 import { IBlogsEnvelope, IBlog, IPostFormValues, IBlogUpdateFormValues } from '../models/blog';
 import { IAllCategoryList, ICategory, ISubCategory } from '../models/category';
@@ -235,6 +235,22 @@ const requests = {
             onUploadProgress
         }).then(responseBody)
     },
+    updateAccount: async (url: string, acc:IAccountInfoValues) =>{
+        let formData = new FormData();
+        formData.append('displayName',acc.displayName!);
+        formData.append('userName',acc.userName!);
+        formData.append('phoneNumber',acc.phoneNumber!);
+        formData.append('name',acc.name!);
+        formData.append('surname',acc.surname!);
+        formData.append('address',acc.address!);
+        //formData.append('password',acc.password!);
+        formData.append('email',acc.email!);
+        formData.append('cityId',acc.cityId!);
+
+        return axios.put(url, formData, {
+            headers: {'Content-type': 'application/json'}
+        }).then(responseBody)
+    },
     registerTrainer: async (url: string, trainer: ITrainerFormValues) =>{
         let formData = new FormData();
          formData.append('displayname', trainer.displayName!);
@@ -330,6 +346,8 @@ const Activities = {
 
 const User ={
     current: () : Promise<IUser> => requests.get('/user'),
+    getAccountInfo: () : Promise<IAccountInfoValues> => requests.get('/user/account'),
+    editAccountInfo: (accInfo: IAccountInfoValues) => requests.updateAccount('/user/account',accInfo),
     login: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/login', user),
     register: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/register', user),
     registerWaitingTrainer: ( trainer : ITrainerCreationFormValues) : Promise<IUser>=> requests.registerWaitingTrainer('/user/registerWaitingTrainer', trainer),

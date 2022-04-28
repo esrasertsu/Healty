@@ -1,17 +1,17 @@
 import React, { useContext, useState } from 'react'
 import { Container, Grid, Header, Menu } from 'semantic-ui-react'
-import ActivityCreationPage from '../activities/form/ActivityCreationPage'
 import OrderList from '../orders/OrderList'
 import SubMerchantDetails from '../subMerchant/SubMerchantDetails'
 import { useMediaQuery } from 'react-responsive';
 import { observer } from 'mobx-react-lite'
 import { RootStoreContext } from '../../app/stores/rootStore'
+import AccountSettingsPage from './AccountSettingsPage'
 
  const Settings:React.FC = () => {
     const rootStore = useContext(RootStoreContext);
     const {user} = rootStore.userStore;
 
-    const [activeItem, setActiveItem] = useState("Rezervasyonlarım")
+    const [activeItem, setActiveItem] = useState("Kullanıcı Bilgilerim")
     const handleMenuItemClick = (e:any,data:any) =>{
         setActiveItem(data.name);
     }
@@ -45,13 +45,13 @@ import { RootStoreContext } from '../../app/stores/rootStore'
                         />
                     }
                    
-                    <Menu.Item
+                    {/* <Menu.Item
                     key="1"
                     className="settingsMenuItem"
                     name='Mesajlar'
                     active={activeItem === 'Mesajlar'}
                     onClick={handleMenuItemClick}
-                    />
+                    /> */}
                     <Menu.Item
                     key="3"
                     className="settingsMenuItem"
@@ -68,7 +68,7 @@ import { RootStoreContext } from '../../app/stores/rootStore'
                         <SubMerchantDetails id={user!.userName} />
                         : activeItem === "Rezervasyonlarım" ? 
                         <OrderList settings={true}/>
-                        :<ActivityCreationPage />
+                        :<AccountSettingsPage />
 
                     }
                 </Grid.Column>

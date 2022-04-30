@@ -15,6 +15,10 @@ namespace CleanArchitecture.Application.User
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public CityDto City { get; set; }
+        public string Role { get; set; }
+        public DateTime RegistrationDate { get; set; }
+        public DateTime LastLoginDate { get; set; }
+        public DateTime? ApplicationDate { get; set; }
 
     }
 }

@@ -21,9 +21,15 @@ export interface IAccountInfo {
     address: string;
     phoneNumber:string;
     city: ICity;
+    role:string;
+    registrationDate:Date;
+    lastLoginDate:Date;
+    applicationDate?:Date;
 }
 export interface IAccountInfoValues extends Partial<IAccountInfo>{
-    cityId:string,
+    cityId:string;
+    password: string;
+    repassword: string;
 }
 
 
@@ -35,6 +41,8 @@ export class AccountInfoFormValues implements IAccountInfoValues{
     phoneNumber:string = '';
     address:string = '';
     displayName:string = '';
+    password: string  = '';
+    repassword: string  = '';
 
     constructor(init?: IAccountInfoValues){
          if(init)

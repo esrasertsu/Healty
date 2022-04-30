@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { Segment, Header, Form, Button,Comment, Icon, Grid, Modal, Step, Label, Container } from 'semantic-ui-react'
+import { Segment, Header, Form, Button,Comment, Icon, Grid, Modal, Step, Label, Container, Message } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
 import { useMediaQuery } from 'react-responsive'
 import { RootStoreContext } from '../../app/stores/rootStore';
@@ -11,6 +11,9 @@ import { OnChange } from 'react-final-form-listeners';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
 import PhoneNumberInput from '../../app/common/form/PhoneNumberInput';
 import { IAccountInfoValues } from '../../app/models/user';
+import { format } from 'date-fns';
+import { tr } from 'date-fns/locale';
+import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 
 
  const AccountSettingsPage: React.FC = () => {
@@ -20,22 +23,19 @@ import { IAccountInfoValues } from '../../app/models/user';
     cities
   } = rootStore.commonStore;
   const {
-    getAccountDetails, user, loadingUserInfo,editAccountDetails,accountForm,setAccountForm
+    getAccountDetails, user, loadingUserInfo,editAccountDetails,accountForm,setAccountForm, accountInfo
   } = rootStore.userStore;
 
   const [loading, setLoading] = useState(false);
   const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
-    const [stepNo, setStepNo] = useState(0);  
-
-    const[step1Completed, setStep1Completed] = useState(false);
-    const[step0Completed, setStep0Completed] = useState(false);
-    const[showInfo, setShowInfo] = useState(false);
-    const[showPaymentPage, setShowPaymentPage] = useState(false);
-    const[showUserPaymentInfoPage, setShowUserPaymentInfoPage] = useState(true);
-    const[phoneError, setphoneError] = useState(false);
+    const [passwordErrorMessage, setPasswordErrorMessage]= useState("")  
+    const [errorMessage, setErrorMessage]= useState("")  
+    const [trainerFormMessage, setTrainerFormMessage]= useState(false)  
 
     
+    
+  
 
 
 
@@ -63,15 +63,71 @@ useEffect(() => {
 
     return (
     <Fragment> 
+        <Header>Hesap Bilgileri</Header>
      <Grid stackable style={{marginBottom:"50px"}}>
      
       <Grid.Row>
       <Grid.Column width={!isTablet ? 12 : 11}>
         <Segment clearing>
+        { trainerFormMessage && <Message
+      error
+      header=''
+      content={errorMessage}
+    />}
         <FinalForm
       onSubmit={handleFinalFormSubmit}
+      validate={values => {
+        const errors:any = {};
+
+        if (!values.displayName) {
+          errors.displayName = 'Ad Soyad zorunlu alan'
+        }
+        if (!values.email) {
+          errors.email = 'Email zorunlu alan'
+        }
+
+        if(!values.email || !/.+@.+\.[A-Za-z]+$/.test(values.email))
+        {
+          errors.email = 'Geçersiz email adresi'
+        }
+
+        if (!values.phoneNumber) {
+          errors.phoneNumber = 'Telefon zorunlu alan'
+        }
+        if (!values.password) {
+          errors.password = 'Şifre zorunlu alan'
+        }
+        if (!values.repassword) {
+          errors.repassword = 'Şifre tekrarı zorunlu alan'
+        }
+        if (values.repassword !== values.password) {
+          errors.repassword = 'Zorunlu alan';
+          errors.password = 'Zorunlu alan';
+        }
+    
+       
+        var hasNumeric = false;
+        var hasletter = false;
+
+        if(values.password)
+          for (let index = 0; index < values.password.length; index++) {
+            const element = values.password[index];
+            if(/^\d+$/.test(element))
+              hasNumeric = true;
+            if(element.match(/[a-z]/i))
+              hasletter = true;
+          }
+        if(values.password &&  values.password != "" && (!hasNumeric || !hasletter || values.password.length<6))
+         {  errors.password = 'Geçersiz şifre';
+            setErrorMessage("Şifre en az 6 haneli olmalıdır, bir küçük harf ve bir rakam içermelidir.")
+            setTrainerFormMessage(true);
+        }
+        return errors
+      }}
       initialValues={accountForm!}
-      render={({ handleSubmit, invalid, submitting }) => (
+      render={({ handleSubmit, submitting, submitError,
+        invalid,
+        dirtySinceLastSubmit }) => (
         <Form onSubmit={handleSubmit} error>
           <label id="nameLabel">Profil ismi*</label>
           <Field
@@ -114,6 +170,22 @@ useEffect(() => {
                     setAccountForm({...accountForm,surname: value});
                 }}
             </OnChange>
+            <Field 
+            name="email" 
+            placeholder="Email" 
+            label="Email*" 
+            labelName="emailLabel" 
+            component={TextInput} 
+            value={accountForm.email}
+            />
+            <OnChange name="email">
+                {(value, previous) => {
+                    if(value !== accountForm.email)
+                    {
+                        setAccountForm({...accountForm,email: value});
+                    }
+                }}
+            </OnChange>
           <label>Sistem Kullanıcı Adı</label>
           <Field
             name='userName'
@@ -127,6 +199,78 @@ useEffect(() => {
                     setAccountForm({...accountForm,userName: value});
                 }}
             </OnChange>
+            <Form.Group widths="equal">
+            <Field
+              label="Şifre*"
+              name="password"
+              labelName="passwordLabel"
+              placeholder="*********"
+              type="password"
+              component={TextInput}
+              value={accountForm.password}
+            />
+            <OnChange name="password">
+                {(value, previous) => {
+                   if(value !== accountForm.password)
+                   {
+                    setAccountForm({...accountForm,password: value});
+                   }
+                   var hasNumeric = false;
+                   var hasletter = false;
+         
+                   for (let index = 0; index < value.length; index++) {
+                     const element = value[index];
+                     if(/^\d+$/.test(element))
+                       hasNumeric = true;
+                     if(element.match(/[a-z]/i))
+                       hasletter = true;
+                   }
+                   if(!hasNumeric || !hasletter || value.length<6)
+                    {  
+                       setErrorMessage("Şifre en az 6 haneli olmalıdır, bir küçük harf ve bir rakam içermelidir.")
+                       setTrainerFormMessage(true);
+                   }else{
+                    setTrainerFormMessage(false);
+                    setErrorMessage("");
+                   }
+
+                      if(value !== accountForm.repassword && accountForm.repassword !="")
+                      {
+                        setPasswordErrorMessage("Girmiş olduğunuz iki şifre aynı değil")
+                      }else{
+                        setPasswordErrorMessage("");
+                      }
+                    
+                }}
+            </OnChange>
+
+            <Field
+              label="Şifre Tekrar*"
+              name="repassword"
+              placeholder="*********"
+              labelName="repasswordLabel"
+              type="password"
+              component={TextInput}
+              value={accountForm.repassword}
+            />
+            <OnChange name="repassword">
+                {(value, previous) => {
+                  if(value !== accountForm.repassword)
+                  {
+                    setAccountForm({...accountForm,repassword: value});
+                  }
+                    if(value !== accountForm.password && accountForm.password !="")
+                    {
+                      setPasswordErrorMessage("Girmiş olduğunuz iki şifre aynı değil")
+                    }else{
+                      setPasswordErrorMessage("");
+                    }
+
+                }}
+            </OnChange>
+
+            </Form.Group>
+            {passwordErrorMessage!=="" && <label style={{color:"red"}}>*{passwordErrorMessage}</label>}            
           <label>Adres</label>
           <Field
             name='address'
@@ -140,22 +284,23 @@ useEffect(() => {
                     setAccountForm({...accountForm,address: value});
                 }}
             </OnChange>
-           <label>Telefon Numarası</label>
-           <Field
-                  width={isMobile ? "16" :"4"}
-                  name="phoneNumber"
-                  labelName="gsmNumber_label"
-                  placeholder="Telefon Numarası"
-                  component={PhoneNumberInput}
-                  value={accountForm.phoneNumber}
-                /> 
-                <OnChange name="phoneNumber">
+            <Field
+              name="phoneNumber"
+              label="Telefon Numarası*"
+              labelName="phoneLabel"
+              placeholder="Telefon"
+              component={PhoneNumberInput}
+              value={accountForm.phoneNumber}
+            //  onchange={handlePhoneNumberChange}
+            />
+              <OnChange name="phone">
                 {(value, previous) => {
-                    setAccountForm({...accountForm,phoneNumber: value});
-                      
+                   if(value !== accountForm.phoneNumber)
+                   {
+                      setAccountForm({...accountForm,phoneNumber: value});
+                   }
                 }}
-                </OnChange>
-
+            </OnChange>
                 <label id="citylabel">Şehir*</label>
                 <Field 
                   name="cityId"
@@ -167,7 +312,10 @@ useEffect(() => {
                   emptyError={accountForm.cityId}
                   onChange={(e: any,data: any)=>handleCityChanged(e,data)}
                 />
-               
+                {submitError &&  !dirtySinceLastSubmit && (
+             <ErrorMessage error={submitError}
+             text={JSON.stringify(submitError.data.errors)} />
+            )}
         
           <Button 
             loading={submitting}
@@ -185,8 +333,16 @@ useEffect(() => {
     <Segment>
     <Container>
       {
-       
-      }
+     accountInfo &&  (
+         <>
+     <div className=''>Hesap Türü:{accountInfo.role}</div>
+{     accountInfo.applicationDate && <div className=''>Başvuru tarihi:{format(new Date(accountInfo.applicationDate), 'dd MMMM yyyy - HH:mm',{locale: tr})}</div>
+}
+<div className=''>Üyelik tarihi:{format(new Date(accountInfo.registrationDate), 'dd MMMM yyyy - HH:mm',{locale: tr})}</div>
+
+ </>
+     )}
+     
       
        </Container>
     </Segment>

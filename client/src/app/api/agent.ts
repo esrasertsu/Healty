@@ -243,7 +243,7 @@ const requests = {
         formData.append('name',acc.name!);
         formData.append('surname',acc.surname!);
         formData.append('address',acc.address!);
-        //formData.append('password',acc.password!);
+        formData.append('password',acc.password!);
         formData.append('email',acc.email!);
         formData.append('cityId',acc.cityId!);
 

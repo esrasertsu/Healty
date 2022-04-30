@@ -217,6 +217,7 @@ export default class UserStore {
             const user = await agent.User.getAccountInfo();
             runInAction(()=>{
                 this.loadingUserInfo = false;
+                this.setAccountInfo(user as IAccountInfo);
                 this.setAccountForm(new AccountInfoFormValues(user))
 
             })

@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Application.Validators;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using FluentValidation;
@@ -35,7 +36,8 @@ namespace CleanArchitecture.Application.User
                 {
                     RuleFor(x => x.DisplayName).NotEmpty();
                     RuleFor(x => x.UserName).NotEmpty();
-                    RuleFor(x => x.Email).NotEmpty();
+                    RuleFor(x => x.Email).NotEmpty().EmailAddress();
+                    RuleFor(x => x.Password).Password();
                 }
             }
 
@@ -44,13 +46,16 @@ namespace CleanArchitecture.Application.User
                 private readonly DataContext _context;
                 private readonly IUserAccessor _userAccessor;
                 private readonly IDocumentAccessor _documentAccessor;
+                private readonly UserManager<AppUser> _userManager;
 
 
-                public Handler(DataContext context, IUserAccessor userAccessor, IDocumentAccessor documentAccessor)
+                public Handler(DataContext context, IUserAccessor userAccessor, IDocumentAccessor documentAccessor, UserManager<AppUser> userManager)
                 {
                     _context = context;
                     _userAccessor = userAccessor;
                     _documentAccessor = documentAccessor;
+                    _userManager = userManager;
+
                 }
 
                 public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -65,7 +70,6 @@ namespace CleanArchitecture.Application.User
                     user.Surname = request.Surname;
                     user.Address = request.Address;
                     user.UserName = request.UserName ?? user.UserName;
-                    //password ekle
                     user.PhoneNumber = request.PhoneNumber ?? String.Empty;
                     user.Email = request.Email ?? String.Empty;
                     user.LastProfileUpdatedDate = DateTime.Now;
@@ -80,13 +84,17 @@ namespace CleanArchitecture.Application.User
                             user.City = city;
                         }
                     }
-
-                  
+                   
                     try
                     {
                         var result = await _context.SaveChangesAsync() > 0;
                         if (result)
+                        {
+                            var changedPass = await ChangePasswordAsync(user, request.Password);
+                            if (!changedPass.Succeeded) throw new RestException(HttpStatusCode.BadRequest, new { UserName = "Problem changing user password" });
                             return Unit.Value;
+
+                        }
                         throw new Exception("Problem saving changes");
 
 
@@ -96,6 +104,12 @@ namespace CleanArchitecture.Application.User
                         throw new Exception("Problem saving changes", e);
                     }
 
+                }
+
+                public async Task<IdentityResult> ChangePasswordAsync(AppUser user, string newPassword)
+                {
+                    string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    return await _userManager.ResetPasswordAsync(user, token, newPassword);
                 }
             }
         }

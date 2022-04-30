@@ -9,7 +9,8 @@ namespace CleanArchitecture.Application.User
     {
         public MappingAccountUser()
         {
-            CreateMap<AppUser, AccountDto>(); 
+            CreateMap<AppUser, AccountDto>()
+               .ForMember(d => d.Role, o => o.MapFrom(s => s.Role.ToString()));
         }
     }
 }

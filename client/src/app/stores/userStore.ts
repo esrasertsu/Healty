@@ -34,6 +34,9 @@ export default class UserStore {
     @observable tranierCreationForm : ITrainerCreationFormValues = new TrainerCreationFormValues();
     @observable trainerRegistering = false;
     @observable loadingUserInfo = false;
+    @observable submittingContactDetails = false;
+    @observable submittingAccountInfo = false;
+    @observable submittingPassword = false;
     @observable trainerFormMessage = false;
     @observable resendEmailVeriMessage = false;
     @observable errorMessage = "";
@@ -234,8 +237,7 @@ export default class UserStore {
     @action editAccountDetails = async (acc:IAccountInfoValues) =>{
         try {
             this.loadingUserInfo = true;
-            debugger;
-            const user = await agent.User.editAccountInfo(acc);
+             await agent.User.editAccountInfo(acc);
             runInAction(()=>{
                 this.loadingUserInfo = false;
             })
@@ -249,7 +251,38 @@ export default class UserStore {
         }
     }
 
+    @action editContactDetails = async (acc:IAccountInfoValues) =>{
+        try {
+            this.submittingContactDetails = true;
+               await agent.User.updateContactInfo(acc);
+            runInAction(()=>{
+                this.submittingContactDetails = false;
+            })
+           return true
+           
 
+        } catch (error) {
+            this.submittingContactDetails = false;
+            throw error;
+
+        }
+    }
+    @action refreshPassword = async (psw:string) =>{
+        try {
+            this.submittingContactDetails = true;
+                await agent.User.refreshPassword(psw);
+            runInAction(()=>{
+                this.submittingContactDetails = false;
+            })
+           return true
+           
+
+        } catch (error) {
+            this.submittingContactDetails = false;
+            throw error;
+
+        }
+    }
     @action registerWaitingTrainer = async (values: ITrainerCreationFormValues) =>{
         try {
             this.trainerRegistering = true;

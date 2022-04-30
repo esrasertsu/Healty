@@ -2681,11 +2681,17 @@ button, input, optgroup, select, textarea {
 }
 .masthead_page.profileDashboard
   {
-    box-shadow: none !important;
-   background-color: #f8f7f7 !important; 
-   margin-top: 0 !important;
-   padding-top: 40px !important;
-   padding-bottom: 30px !important;
+    background-color: #f8f7f7 !important;
+    margin-top: 0 !important;
+    padding-top: 40px !important;
+    padding-bottom: 30px !important;
+    margin-bottom: 15px !important;
+    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+    box-shadow: 0px 9px 16px rgb(159 162 191 / 18%), 0px 2px 2px rgb(159 162 191 / 32%) !important;
+    border-radius: 18px !important;
+    border-top-right-radius: 6px !important;
+    border-top-left-radius: 6px !important;
+
   }
   .trainerForm_ConfirmContent{
     padding:20px 40px !important;

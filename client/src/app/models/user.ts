@@ -23,7 +23,7 @@ export interface IAccountInfo {
     city: ICity;
     role:string;
     registrationDate:Date;
-    lastLoginDate:Date;
+    lastProfileUpdatedDate:Date;
     applicationDate?:Date;
 }
 export interface IAccountInfoValues extends Partial<IAccountInfo>{

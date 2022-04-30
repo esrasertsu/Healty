@@ -17,7 +17,7 @@ namespace CleanArchitecture.Application.User
         public CityDto City { get; set; }
         public string Role { get; set; }
         public DateTime RegistrationDate { get; set; }
-        public DateTime LastLoginDate { get; set; }
+        public DateTime LastProfileUpdatedDate { get; set; }
         public DateTime? ApplicationDate { get; set; }
 
     }

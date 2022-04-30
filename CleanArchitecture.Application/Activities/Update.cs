@@ -230,7 +230,7 @@ namespace CleanArchitecture.Application.Activities
 
 
 
-                activity.Title = request.Title ?? activity.Title;
+                activity.Title = request.Title;
                 activity.Description = request.Description ?? activity.Description;
                 activity.Date = DateTime.Parse(request.Date);
                 activity.EndDate = DateTime.Parse(request.EndDate);

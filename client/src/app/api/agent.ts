@@ -251,6 +251,25 @@ const requests = {
             headers: {'Content-type': 'application/json'}
         }).then(responseBody)
     },
+    refreshPassword: async (url: string, password:string) =>{
+        let formData = new FormData();
+        formData.append('password',password);
+        return axios.put(url, formData, {
+            headers: {'Content-type': 'application/json'}
+        }).then(responseBody)
+    },
+    updateContactInfo: async (url: string, acc:IAccountInfoValues) =>{
+        let formData = new FormData();
+        formData.append('phoneNumber',acc.phoneNumber!);
+        formData.append('name',acc.name!);
+        formData.append('surname',acc.surname!);
+        formData.append('address',acc.address!);
+        formData.append('cityId',acc.cityId!);
+
+        return axios.put(url, formData, {
+            headers: {'Content-type': 'application/json'}
+        }).then(responseBody)
+    },
     registerTrainer: async (url: string, trainer: ITrainerFormValues) =>{
         let formData = new FormData();
          formData.append('displayname', trainer.displayName!);
@@ -348,6 +367,8 @@ const User ={
     current: () : Promise<IUser> => requests.get('/user'),
     getAccountInfo: () : Promise<IAccountInfoValues> => requests.get('/user/account'),
     editAccountInfo: (accInfo: IAccountInfoValues) => requests.updateAccount('/user/account',accInfo),
+    refreshPassword: (password: string) => requests.refreshPassword('/user/password',password),
+    updateContactInfo: (accInfo: IAccountInfoValues) => requests.updateContactInfo('/user/contactInfo',accInfo),
     login: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/login', user),
     register: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/register', user),
     registerWaitingTrainer: ( trainer : ITrainerCreationFormValues) : Promise<IUser>=> requests.registerWaitingTrainer('/user/registerWaitingTrainer', trainer),

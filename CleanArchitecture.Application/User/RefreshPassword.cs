@@ -14,21 +14,17 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.User
 {
-    public class UpdateAccountInfo
+    public class RefreshPassword
     {
         public class Command : IRequest
         {
-            public string DisplayName { get; set; }
-            public string UserName { get; set; }
-            public string Email { get; set; }
+            public string Password { get; set; }
 
             public class CommandValidator : AbstractValidator<Command>
             {
                 public CommandValidator()
                 {
-                    RuleFor(x => x.DisplayName).NotEmpty();
-                    RuleFor(x => x.UserName).NotEmpty();
-                    RuleFor(x => x.Email).NotEmpty().EmailAddress();
+                    RuleFor(x => x.Password).Password();
                 }
             }
 
@@ -56,33 +52,34 @@ namespace CleanArchitecture.Application.User
                     if (user == null)
                         throw new RestException(HttpStatusCode.NotFound, new { User = "NotFound" });
 
-                    if(user.UserName != request.UserName && await _context.Users.AnyAsync(x => x.UserName == request.UserName))
-                    {
-                       throw new RestException(HttpStatusCode.BadRequest, new { UserName = "UserName already exists." });
-                    }
-
-                    if (user.Email != request.Email && await _context.Users.AnyAsync(x => x.Email == request.Email))
-                    {
-                        throw new RestException(HttpStatusCode.BadRequest, new { UserName = "Email already exists." });
-                    }
-
-                    user.DisplayName = request.DisplayName;
-                    user.UserName = request.UserName;
-                    user.Email = request.Email;
-                    user.LastProfileUpdatedDate = DateTime.Now;
-
                     try
                     {
-                        var result = await _context.SaveChangesAsync() > 0;
-                        if (result)
-                         return Unit.Value;
-                        throw new Exception("Problem saving changes");
+                        
+                        var changedPass = await ChangePasswordAsync(user, request.Password);
+                        if (!changedPass.Succeeded)
+                            throw new RestException(HttpStatusCode.BadRequest, new { UserName = "Problem changing user password" });
+                        else
+                        {
+                            user.LastProfileUpdatedDate = DateTime.Now;
+                            var result = await _context.SaveChangesAsync() > 0;
+                            if (result)
+                                return Unit.Value;
+                            throw new Exception("Problem saving changes");
+                        }
+                       
+
                     }
                     catch (Exception e)
                     {
                         throw new Exception("Problem saving changes", e);
                     }
 
+                }
+
+                public async Task<IdentityResult> ChangePasswordAsync(AppUser user, string newPassword)
+                {
+                    string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    return await _userManager.ResetPasswordAsync(user, token, newPassword);
                 }
             }
         }

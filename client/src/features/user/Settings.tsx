@@ -1,17 +1,17 @@
 import React, { useContext, useState } from 'react'
-import { Container, Grid, Header, Menu } from 'semantic-ui-react'
+import { Container, Grid, Header, Icon, Menu } from 'semantic-ui-react'
 import OrderList from '../orders/OrderList'
 import SubMerchantDetails from '../subMerchant/SubMerchantDetails'
 import { useMediaQuery } from 'react-responsive';
 import { observer } from 'mobx-react-lite'
 import { RootStoreContext } from '../../app/stores/rootStore'
-import AccountSettingsPage from './AccountSettingsPage'
+import AccountSettingsPage from './accountSettings/AccountSettingsPage'
 
  const Settings:React.FC = () => {
     const rootStore = useContext(RootStoreContext);
     const {user} = rootStore.userStore;
 
-    const [activeItem, setActiveItem] = useState("Kullanıcı Bilgilerim")
+    const [activeItem, setActiveItem] = useState("Hesap Bilgilerim")
     const handleMenuItemClick = (e:any,data:any) =>{
         setActiveItem(data.name);
     }
@@ -25,22 +25,22 @@ import AccountSettingsPage from './AccountSettingsPage'
             <Grid.Row>
                 <Grid.Column width={3}  style={!isMobile ? {paddingTop:"30px"}: {}}>
                     <div>
-                 <Header content="Ayarlar"/>
+                    <Header as='h3' icon='settings' content='Ayarlar' />
                    <Menu pointing vertical className="settingsVerticalMenu">
                     <Menu.Item
                     className="settingsMenuItem"
                     key="0"
-                    name='Kullanıcı Bilgilerim'
-                    active={activeItem === 'Kullanıcı Bilgilerim'}
+                    name='Hesap Ayarları'
+                    active={activeItem === 'Hesap Ayarları'}
                     onClick={handleMenuItemClick}
                     />
                     {
                         user!.role === "Trainer" &&
                         <Menu.Item
                         key="2"
-                        name='Şirket Bilgilerim'
+                        name='Fatura Bilgileri'
                         className="settingsMenuItem"
-                        active={activeItem === 'Şirket Bilgilerim'}
+                        active={activeItem === 'Fatura Bilgileri'}
                         onClick={handleMenuItemClick}
                         />
                     }
@@ -64,7 +64,7 @@ import AccountSettingsPage from './AccountSettingsPage'
                 </Grid.Column>
                 <Grid.Column style={{paddingRight:0}} width={13}>
                     {
-                        activeItem === "Şirket Bilgilerim" ?
+                        activeItem === "Fatura Bilgilerim" ?
                         <SubMerchantDetails id={user!.userName} />
                         : activeItem === "Rezervasyonlarım" ? 
                         <OrderList settings={true}/>

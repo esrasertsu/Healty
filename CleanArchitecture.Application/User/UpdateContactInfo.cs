@@ -14,21 +14,23 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.User
 {
-    public class UpdateAccountInfo
+    public class UpdateContactInfo
     {
         public class Command : IRequest
         {
-            public string DisplayName { get; set; }
-            public string UserName { get; set; }
-            public string Email { get; set; }
+            public string PhoneNumber { get; set; }
+            public string Name { get; set; }
+            public string Surname { get; set; }
+            public string Address { get; set; }
+            public Guid? CityId { get; set; }
 
             public class CommandValidator : AbstractValidator<Command>
             {
                 public CommandValidator()
                 {
-                    RuleFor(x => x.DisplayName).NotEmpty();
-                    RuleFor(x => x.UserName).NotEmpty();
-                    RuleFor(x => x.Email).NotEmpty().EmailAddress();
+                    RuleFor(x => x.PhoneNumber).NotEmpty();
+                    RuleFor(x => x.Name).NotEmpty();
+                    RuleFor(x => x.Surname).NotEmpty();
                 }
             }
 
@@ -56,27 +58,35 @@ namespace CleanArchitecture.Application.User
                     if (user == null)
                         throw new RestException(HttpStatusCode.NotFound, new { User = "NotFound" });
 
-                    if(user.UserName != request.UserName && await _context.Users.AnyAsync(x => x.UserName == request.UserName))
-                    {
-                       throw new RestException(HttpStatusCode.BadRequest, new { UserName = "UserName already exists." });
-                    }
+                    var phone = request.PhoneNumber.Trim();
+                    if (!phone.StartsWith("+"))
+                        phone = "+" + phone;
 
-                    if (user.Email != request.Email && await _context.Users.AnyAsync(x => x.Email == request.Email))
-                    {
-                        throw new RestException(HttpStatusCode.BadRequest, new { UserName = "Email already exists." });
-                    }
-
-                    user.DisplayName = request.DisplayName;
-                    user.UserName = request.UserName;
-                    user.Email = request.Email;
+                    user.Name = request.Name;
+                    user.Surname = request.Surname;
+                    user.Address = request.Address;
+                    user.PhoneNumber =phone;
                     user.LastProfileUpdatedDate = DateTime.Now;
+
+                    if (request.CityId != null && request.CityId != Guid.Empty)
+                    {
+                        var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == request.CityId);
+                        if (city == null)
+                            throw new RestException(HttpStatusCode.NotFound, new { City = "NotFound" });
+                        else
+                        {
+                            user.City = city;
+                        }
+                    }
 
                     try
                     {
                         var result = await _context.SaveChangesAsync() > 0;
                         if (result)
-                         return Unit.Value;
+                            return Unit.Value;
                         throw new Exception("Problem saving changes");
+
+
                     }
                     catch (Exception e)
                     {
@@ -84,6 +94,7 @@ namespace CleanArchitecture.Application.User
                     }
 
                 }
+               
             }
         }
     }

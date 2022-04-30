@@ -55,6 +55,17 @@ namespace CleanArchitecture.API.Controllers
         {
             return await Mediator.Send(command);
         }
+        [HttpPut("contactInfo")]
+        public async Task<ActionResult<Unit>> EditContactInfo([FromForm] UpdateContactInfo.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPut("password")]
+        public async Task<ActionResult<Unit>> RefreshPassword([FromForm] RefreshPassword.Command command)
+        {
+            return await Mediator.Send(command);
+        }
 
 
         [HttpGet("newTrainerInfo")]

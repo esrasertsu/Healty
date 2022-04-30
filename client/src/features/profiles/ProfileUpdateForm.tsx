@@ -92,12 +92,12 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
       initialValues={profileForm!}
       render={({ handleSubmit, invalid, submitting }) => (
         <Form onSubmit={handleSubmit} error>
-          <label id="nameLabel">Ad Soyad*</label>
           <Field
+            label="Profil ismi*"
             labelName="nameLabel"
             name='displayName'
             component={TextInput}
-            placeholder='Profil Adı'
+            placeholder='Profil ismi'
             value={profileForm!.displayName}
           />
            <OnChange name="displayName">
@@ -109,11 +109,12 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
                     }
                 }}
             </OnChange>
-            <label id="titlelabel">Ünvan*</label>
           <Field
+            label="Ünvan*"
             labelName="titlelabel"
             name='title'
             component={TextInput}
+            maxLength={100}
             placeholder='Örn: Kişisel Gelişim Uzmanı / Personal Trainer / Pedagog'
             value={profileForm!.title}
           />
@@ -126,11 +127,13 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
                     }
                 }}
             </OnChange>
-          <label>Özet tanıtım</label>
           <Field
+            label="Özet tanıtım (Bio)"
             name='bio'
+            labelName="bioLabel"
             component={TextAreaInput}
             rows={3}
+            maxLength={500}
             placeholder='Özet'
             value={profileForm!.bio}
           />
@@ -143,8 +146,9 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
                     }
                 }}
             </OnChange>
-          <label>Referans tecrübeler</label>
           <Field
+          label="Referans tecrübeler"
+          labelName="experienceLabel"
             name='experience'
             component={TextAreaInput}
             rows={2}
@@ -160,9 +164,10 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
                     }
                 }}
             </OnChange>
-           <label>Tecrübe (Yıl)</label>
            <Field 
                   width={3}
+                  label="Tecrübe (yıl)"
+                  labelName="experienceYearLabel"
                   name="experienceYear"
                   type="number"
                   placeholder="Tecrübe (Yıl)"
@@ -178,8 +183,8 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
                     }
                 }}
             </OnChange>
-                <label id="citylabel">Şehir*</label>
                 <Field 
+                label="Şehir*"
                   name="cityId"
                   placeholder="City"
                   component={DropdownInput}
@@ -230,11 +235,13 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
                       handleSubCategoryChanged(e,data)}}
                 />   */}
               
-           <label>Çalıştığınız Kurum/Freelance</label>        
           <Field
             name='dependency'
             component={TextInput}
             rows={1}
+            maxLength={200}
+            label="Çalıştığınız Kurum/Freelance"
+            labelName="dependencyLabel"
             allowNull
             placeholder='Çalıştığınız Kurum/Freelance'
             value={profileForm!.dependency}

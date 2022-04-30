@@ -282,7 +282,7 @@ const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant,id}) => {
 
   return (
     <>
-    <Header>Şirket Bilgileri</Header>
+    <Header>Fatura(Firma) Bilgileri</Header>
 
     <Grid stackable>
       <Grid.Row>

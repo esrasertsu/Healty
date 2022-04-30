@@ -11,7 +11,7 @@ import AccountSettingsPage from './accountSettings/AccountSettingsPage'
     const rootStore = useContext(RootStoreContext);
     const {user} = rootStore.userStore;
 
-    const [activeItem, setActiveItem] = useState("Hesap Bilgilerim")
+    const [activeItem, setActiveItem] = useState("Hesap Ayarları")
     const handleMenuItemClick = (e:any,data:any) =>{
         setActiveItem(data.name);
     }
@@ -64,7 +64,7 @@ import AccountSettingsPage from './accountSettings/AccountSettingsPage'
                 </Grid.Column>
                 <Grid.Column style={{paddingRight:0}} width={13}>
                     {
-                        activeItem === "Fatura Bilgilerim" ?
+                        activeItem === "Fatura Bilgileri" ?
                         <SubMerchantDetails id={user!.userName} />
                         : activeItem === "Rezervasyonlarım" ? 
                         <OrderList settings={true}/>

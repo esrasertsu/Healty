@@ -1,4 +1,4 @@
-import React, { FormEvent, Fragment, useContext, useState } from 'react';
+import React, { FormEvent, Fragment, useContext, useEffect, useRef, useState } from 'react';
 import { Menu, Segment, Accordion, Form, CheckboxProps, Button, Label, Icon, Radio, Dropdown } from 'semantic-ui-react';
 import { DateTimePicker} from 'react-widgets';
 import { RootStoreContext } from '../../../app/stores/rootStore';
@@ -11,6 +11,8 @@ interface IProps{
   setActivitySelectedFilters:(selectedFilters:IActivitySelectedFilter[]) => void ;
   activitySelectedFilters: IActivitySelectedFilter[];
 }
+
+
 
 const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivitySelectedFilters,activitySelectedFilters}) => {
   
@@ -31,14 +33,15 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
       const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
      const [cityName, setcityName] = useState("")
 
+     const elRef = useRef<null | HTMLDivElement>(null); 
 
     
-   
-     
   const handleClick = (e:any, titleProps:any) => {
     const { index } = titleProps
     const newIndex = activeIndex === index ? -1 : index
     setActiveIndex(newIndex);
+    elRef.current!.scrollIntoView({ block: 'center', behavior: 'smooth' });
+
   }
 
   const handleOnlineChange = (e:any, data:any) => {
@@ -129,7 +132,6 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
   }
 
   const handleCityChange =  (e:any, data:any) => {
-    debugger;
 
     if(data.value==="")
     {
@@ -147,6 +149,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
     document.querySelector('body')!.scrollTo(0,0)
 
   };
+
 
   const handleSearch = (e:any, data:any) => {
     setActivitySelectedFilters([]);
@@ -364,12 +367,16 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
       <Radio checked={isOnline} toggle={true} onChange={handleOnlineChange} disabled={loadingInitial} /> </div>
      </Menu.Item>
      }
-       <Menu.Item  key={"Category"} className="filterMenuItem_Style">
+           <div ref={elRef}></div>
+
+       <Menu.Item  key={"Category"} className="filterMenuItem_Style" >
           <Accordion.Title
+          
             active={activeIndex === 0}
             content={(categoryIds.length + subCategoryIds.length > 0) ? 'Kategori (' + (subCategoryIds.length + categoryIds.length) +" kriter seçili)": "Kategori" }
             index={0}
             onClick={handleClick}
+           
           />
           <Accordion.Content active={activeIndex === 0}>
                 <Form>

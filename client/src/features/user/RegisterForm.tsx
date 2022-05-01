@@ -108,7 +108,7 @@ const handleRegister = async(values:IUserFormValues) =>{
               content="Yeni Üye"
               textAlign="center"
             />
-            <p>Uzman başvuru için <span className="registerLoginAnchor" onClick={handleTrainerFormClick}>tıkla!</span></p>            <Field name="username" placeholder="*Kullanıcı Adı" component={TextInput}/>
+            <h4>Uzman başvuru için <span className="registerLoginAnchor" onClick={handleTrainerFormClick}>tıkla!</span></h4>            <Field name="username" placeholder="*Kullanıcı Adı" component={TextInput}/>
             <Field name="displayname" placeholder="Ad Soyad" component={TextInput} />
             <Field name="email" type="email" placeholder="*Email" component={TextInput} />
             <Field

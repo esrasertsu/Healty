@@ -91,6 +91,14 @@ html, body {
 .ui.secondary.pointing.menu .desktopMenu.item i.icon{
   font-size: 17px;
 }
+.ui.secondary.pointing.menu .desktopMenu.item i.icon:before{
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+    text-shadow: 0px 9px 16px rgb(159 162 191 / 18%), 0px 2px 2px rgb(159 162 191 / 32%) !important;
+}
+
+.masthead .ui.inverted.header{
+  text-shadow: rgb(80 60 58) 1.5px 1.5px;
+}
 
 .ui.secondary.pointing.menu .desktopMenu.item.active:after{
   bottom: 7px;
@@ -586,7 +594,6 @@ h1, h2, h3, h4, h5 {
   border-radius: .28571429rem !important;
     padding: 24px !important;
     -webkit-font-smoothing: antialiased;
-    margin-top: 30px !important;
     background-color: #263a5e!important;
     color: rgb(255, 255, 255) !important;
     font-weight: 500 !important;
@@ -752,14 +759,20 @@ p.baseline-pricing__value{
       position: absolute;
       right: 0;
       font-size: 30px;
+      color:#bcbdbd !important;
     }
     
     i.activity_addToFav.icon{
       font-size: 30px !important;
       cursor: pointer;
       margin-top: -9px;
+      color:#bcbdbd !important;
     }
-    i.activity_addToFav.icon.bookmark.outline{
+    i.activity_addToFav.saved.icon,i.activity_addToFav_mobile.saved.icon{
+      color: #ff5722!important;
+    }
+   
+    i.activity_addToFav.icon.bookmark{
       font-size: 30px;
       cursor: pointer;
       // background: -webkit-gradient(linear, left top, left bottom, from(#7e3af2), to(#3f83f8)) !important;
@@ -1890,7 +1903,7 @@ max-width: 80%;
     height: 100% !important;
   }
   .activity_listItem{
-    width:60%;
+    width:80%;
     margin:10px 10px 6px 15px !important
   }
   .order_listItem{
@@ -1901,7 +1914,7 @@ max-width: 80%;
     justify-content: space-between;
     flex-direction: column;
     margin: 10px !important;
-    width: 50%;
+    width: 20%;
   }
 
  .content.order_listItem_extraContent{
@@ -2328,6 +2341,12 @@ button, input, optgroup, select, textarea {
   z-index: 5;
   font-size: 20px !important
 }
+i.icon.heart.outline:before,i.icon.bookmark:before{
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+  text-shadow: 0px 9px 16px rgb(159 162 191 / 18%), 0px 2px 2px rgb(159 162 191 / 32%) !important;
+}
+
+
 .profileListItem_addToFav:hover{
   transform: scale(1.20);
 }

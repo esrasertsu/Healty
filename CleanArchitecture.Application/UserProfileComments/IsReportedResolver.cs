@@ -25,6 +25,9 @@ namespace CleanArchitecture.Application.UserProfileComments
         {
             var currentUser = _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername()).Result;
 
+            if(currentUser == null)
+                return false;
+
             if (source.Reports.Any(x => x.ReportedBy == currentUser.UserName))
                 return true;
 

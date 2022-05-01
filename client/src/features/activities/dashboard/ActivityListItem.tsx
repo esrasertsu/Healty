@@ -110,9 +110,9 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                        key={activity.id+Math.random()+"subPopover"}
                        trigger={ 
                         <Icon 
-                        className='activity_addToFav_mobile' 
-                        name={activity.isSaved?"bookmark" :"bookmark outline"}  
-                        color={"orange"}
+                        className={activity.isSaved?'activity_addToFav_mobile saved' :'activity_addToFav_mobile' }
+                        name={"bookmark"}  
+                        color={activity.isSaved?"orange" :"pink"}
                         onClick={(e:any) => activity.isSaved ? handleUnSave(e,activity.id) :handleSave(e,activity.id) } />
                        }
                      />
@@ -167,15 +167,14 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                                {activity.online ?  <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}> 
                                <Image style={{height:"20px", marginRight:"10px"}} src="/icons/wifi-ok.png"/><span> Online katılıma açık</span> 
                                 </div>: 
-                                <div style={{marginRight:"10px",display:"flex", flexDirection:"row", alignItems:"center"}}>
-                                  <Image style={{height:"20px"}} src="/icons/wifi-nok.png"/>
-                                <span>Online katılıma kapalı</span></div>}
+                                <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>
+                                  <Image style={{height:"20px",marginRight:"10px"}} src="/icons/wifi-nok.png"/><span> Online katılıma kapalı</span></div>}
                                 </div>
                         </Item.Description> 
                         <Item.Description style={{marginTop:"10px"}}>
                             <Item.Image key={host.image} size="mini" circular src={host.image || '/assets/user.png'}
                              style={{}}/>
-                             &nbsp;<span className="activityHostName">{"Eğitmen:" +" " +host.displayName}</span>
+                             &nbsp;<span className="activityHostName">{host.displayName}</span>
                             </Item.Description>
                     </Item.Content>
                     <Item.Content className={isTabletOrMobile ? "activity_listItem_extraContent_mobile":"activity_listItem_extraContent"} >
@@ -192,9 +191,8 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                        key={activity.id+Math.random()+"subPopover"}
                        trigger={ 
                         <Icon 
-                        className='activity_addToFav' 
-                        name={activity.isSaved?"bookmark" :"bookmark outline"}  
-                        color={"orange"}
+                        className={activity.isSaved?'activity_addToFav saved' :'activity_addToFav' }
+                        name={"bookmark"}  
                         onClick={(e:any) => activity.isSaved ? handleUnSave(e,activity.id) :handleSave(e,activity.id) } />
                        }
                      />

@@ -45,10 +45,10 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
           </Grid.Column>
           <Grid.Column width={11}>
             {
-                  (activity.isGoing || activity.isHost) && isMobile &&
+                  (activity.isGoing || activity.isHost) && isMobile && 
                   <>
                   <ActivityCountDown activity={activity} /> 
-                  <ActivityVideoCall activity={activity} />
+                  {activity.online && <ActivityVideoCall activity={activity} />}
                   </>
                  
                  }   
@@ -93,7 +93,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
                  }  
                    
                   {
-                  (activity.isGoing || activity.isHost) && !isMobile &&
+                  (activity.isGoing || activity.isHost) && !isMobile && activity.online &&
                  <ActivityVideoCall activity={activity} />
                  }  
                  {

@@ -46,8 +46,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
   const [imageIndex, setImageIndex] = useState(0)
 
   const handleDeleteActivity = (e:any) => {
-    debugger;
-    deleteActivity(e,activity.id);
+    //deleteActivity(e,activity.id);
   }
 
   useEffect(() => {
@@ -132,7 +131,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                       icon='edit'
                       circular>
                       </Button>
-                      <Modal
+                      {/* <Modal
                         basic
                         onClose={() => setOpen(false)}
                         onOpen={() => setOpen(true)}
@@ -160,7 +159,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                             <Icon name='trash' /> Sil
                           </Button>
                         </Modal.Actions>
-                      </Modal>
+                      </Modal> */}
                     </>                   
                     ): activity.isGoing ? (
                       <Button circular loading={loading} onClick={()=>setcancellationUserOpen(true)}>Katılımı iptal et</Button>
@@ -265,7 +264,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                       labelPosition='right'
                       icon='edit'>
                       </Button>
-                      <Modal
+                      {/* <Modal
                         basic
                         circular
                         onClose={() => setOpen(false)}
@@ -289,11 +288,11 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                           <Button circular basic color='grey' onClick={() => setOpen(false)}>
                             <Icon name='backward' /> İptal
                           </Button>
-                          <Button circular basic color='red' onClick={(e:any) => {handleDeleteActivity(e);setOpen(false)}}>
+                           <Button circular basic color='red' onClick={(e:any) => {handleDeleteActivity(e);setOpen(false)}}>
                             <Icon name='trash' /> Sil
-                          </Button>
+                          </Button> 
                         </Modal.Actions>
-                      </Modal>
+                      </Modal> */}
                     </>                   
                     ): activity.isGoing ? (
                       <Button circular style={{marginTop:"20px"}} loading={loading} onClick={()=>setcancellationUserOpen(true)}>Katılımı iptal et</Button>

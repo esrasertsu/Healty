@@ -39,7 +39,7 @@ const TrainerForm = () =>{
        
         <List bulleted className="applicationConditions">
         <List.Item key="applicationConditions_1">18 yaşından büyük olmak</List.Item>
-        <List.Item key="applicationConditions_2">Başvurmak istediğin alan/alanlarda bir uzmanlık belgesine sahip olmak(diploma, sertifika vs.)</List.Item>
+        <List.Item key="applicationConditions_2">Başvurmak istediğin alan/alanlarda bir uzmanlık belgesine sahip olmak</List.Item>
         {/* <List.Item key="applicationConditions_3">Oluşturacağınız aktivite ücretlerini size aktarabilmemiz için bir banka hesabınız olması</List.Item> */}
         </List>
       

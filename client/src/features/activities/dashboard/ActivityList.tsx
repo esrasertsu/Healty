@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from 'react'
-import { Header, Icon, Image, Item, Label, Message } from 'semantic-ui-react'
+import { Grid, Header, Icon, Image, Item, Label, Message } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
 import ActivityListItem  from './ActivityListItem';
 import { RootStoreContext } from '../../../app/stores/rootStore';
@@ -24,14 +24,26 @@ const ActivityList: React.FC = () => {
       {activitiesByDate.length > 0 ?
       activitiesByDate.map(([group, activities]) =>(
         <Fragment key={group}>
-           <h3 className={"activityDateLabels "} >
-             <Icon size='large' name="calendar alternate outline" /> {format(new Date(group), 'dd MMMM yyyy, eeee',{locale: tr})}
+          <Grid stackable>
+            <Grid.Row style={{marginTop:"1rem"}}>
+            <Grid.Column width={2}  style={!isMobile ? {paddingTop:"30px"}: {}}>
+          <h3 className={"activityDateLabels "} >
+             {/* <Icon size='large' name="calendar alternate outline" /> */}
+              {format(new Date(group), 'dd MMMM, eeee',{locale: tr})}
            </h3>
-        <Item.Group divided>
-          {activities.map((activity) => (
-           <ActivityListItem key={activity.id} activity={activity} />
-          ))}
-        </Item.Group>
+            </Grid.Column>
+            <Grid.Column style={{paddingRight:0}} width={14}>
+            <Item.Group divided>
+              {activities.map((activity) => (
+              <ActivityListItem key={activity.id} activity={activity} />
+              ))}
+            </Item.Group>
+            </Grid.Column>
+          </Grid.Row>
+        
+          </Grid>
+         
+        
      </Fragment>
       )) :
       <>

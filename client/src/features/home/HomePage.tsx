@@ -8,7 +8,8 @@ import ActivitySearchArea from './ActivitySearchArea';
 import { observer } from 'mobx-react-lite';
 import ActivityListItemPlaceholder from '../activities/dashboard/ActivityListItemPlaceHolder';
 import ActivityList from '../activities/dashboard/ActivityList';
-
+import { Form as FinalForm, Field } from "react-final-form";
+import TextInput from "../../app/common/form/TextInput";
 
 const HomePage = () => {
  
@@ -60,22 +61,7 @@ const HomePage = () => {
           </>,true,
           "","blurring",true) 
       }
-  
 
-        // const handleTrainerFormClick= (e:any) => {
-    
-        //   e.stopPropagation();
-        //   if(modal.open) closeModal();
-
-        //       openModal("Uzman Başvuru Formu", <>
-        //       <Image size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/welcome1.png' wrapped />
-        //       <Modal.Description>
-        //       <TrainerForm />
-        //       </Modal.Description>
-        //       </>,true,
-        //       <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
-             
-        //   }
   
     return (
       <>
@@ -233,13 +219,13 @@ const HomePage = () => {
                 </Header> */}
           
                 <Header as='h1'  style={{fontSize: '30px',  textAlign:'center', width:"100%",textShadow: "1.5px 1.5px #f2f2f2" }}>
-                 Doğru uzmanı doğru aktiviteyi tam yerinde keşfet 
+                 Doğru uzmanı ve doğru aktiviteyi tam yerinde keşfet! 
                {/* Yeni aktiviteler yeni insanlar keşfetme zamanı!*/}
                 </Header>
-                {/* <p style={{ fontSize: '1.3rem', color: "#222E50" }}>
+                 <p style={{ fontSize: '1.3rem', color: "#222E50" }}>
                 Spor koçundan diyetisyene, meditasyon eğitmeninden psikoloğa ihtiyacın olan en doğru uzmanı en kolay şekilde bulabileceğin yerdesin. 
                 Üstelik istediğin lokasyonda ya da online olarak aktivitelere katılabilir, eğitmenlerin paylaştıkları blogları okuyarak ilgilendiğin alanda bilgi sahibi olabilirsin. 
-                </p> */}
+                </p> 
               <Grid className="activityListGrid">
               <Grid.Row>
               <Grid.Column width={16}>
@@ -379,7 +365,7 @@ const HomePage = () => {
       </Grid> */}
       <div className="spacingContainer__small" />
 
-{/* <Segment clearing secondary className="homepage_contactus-form">
+ <Segment clearing secondary className="homepage_contactus-form">
 <Grid columns={2} stackable textAlign='left'>
     <Grid.Row verticalAlign='middle' className="contactus-row">
         <Grid.Column>
@@ -388,10 +374,10 @@ const HomePage = () => {
        
         <Grid.Column>
                 <Header as="h1">
-                    <Header.Content>Hoşgeldin!</Header.Content>
+                    <Header.Content>Eğitmen misin?</Header.Content>
                 </Header>
                 <Header.Subheader style={{fontSize:"1.2rem",marginBottom:"20px"}}>
-                      <div>Uzman olduğun alanda hizmet vermek için bize doğrudan başvurabilirsin.
+                      <div>Uzman olduğun alanda aktivite planlamak ve erişilebilirliğini arttırmak için buradan başvurabilirsin.
                         </div>  
                             <div>
                             <Button  
@@ -400,53 +386,17 @@ const HomePage = () => {
                             disabled={loading}
                             floated="left"
                             style={{ marginTop:"20px"}} 
-                            onClick={handleTrainerFormClick}
+                            onClick={()=>{history.push('/trainerOnboarding');}}
                             >
-                          Uzman eğitmen başvurusu <Icon name='send' inverted></Icon> 
+                          Uzman başvuru formu 
                         </Button>
                             </div>
-                          
-                     
                 </Header.Subheader>
-                 <FinalForm
-               // validate = {validate}
-              //  initialValues={post}
-                onSubmit={handleFinalFormSubmit}
-                render={({ handleSubmit, invalid, pristine }) => (
-                    <Form loading={loading}>
-                        <Grid columns={2} stackable>
-                        <Grid.Row verticalAlign='middle'>
-                            <GridColumn  width={10}>
-                            <Field
-                            name="title"
-                            placeholder="Email"
-                            //   value={post.title}
-                            component={TextInput}
-                            />
-                            </GridColumn>
-                            <GridColumn  width={6}>
-                            <Button  
-                            primary 
-                            circular
-                            disabled={loading}
-                            floated="left"
-                            type="submit">
-                           <Icon name='send' inverted></Icon> Gönder
-                        </Button>
-                            </GridColumn>
-                            </Grid.Row>
-                        </Grid>
-                       
-                   
-                    </Form>
-            )}
-            /> 
-             
         </Grid.Column>
 
         </Grid.Row>
         </Grid>
-        </Segment> */}
+        </Segment> 
     <div style={{display:"flex"}}>
         <div className="spacingContainer__small" />
     </div>

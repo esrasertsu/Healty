@@ -314,6 +314,13 @@ html, body {
 
 }
 
+.item.listItemAttendees_img{
+  margin-left:-0.5em !important;
+  .mini.image{
+    width:28px !important;
+  } 
+}
+
 
 .agoraPage{
   position: fixed;

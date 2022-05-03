@@ -243,9 +243,10 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                 <Icon name='clock' /> Saat: {format(activity.date, 'HH:mm',{locale: tr})}
                 &nbsp;
                { !activity.online && <><Icon name='marker' /> <span>{activity.venue}, {activity.city && activity.city.text}</span></> }
-               {/* {
-                   isLoggedIn && user &&  <ActivityListItemAttendees attendees={activity.attendees}/>
-               } */}
+                {
+                  //  isLoggedIn && user &&  
+                   <ActivityListItemAttendees attendees={activity.attendees}/>
+               }
               
              {/* <Button 
              circular 
@@ -257,12 +258,8 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
 
 
             </Segment>
-           {/*  <Segment secondary>
+            {/* <Segment secondary>
                <ActivityListItemAttendees attendees={activity.attendees}/>
-            </Segment>
-            <Segment clearing>
-               <span> {activity.description} </span>
-              
             </Segment> */}
         </Segment.Group>
         </Card>

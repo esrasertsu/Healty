@@ -99,7 +99,7 @@ namespace CleanArchitecture.Application.Activities
                 MainImage = activity.Photos.Where(x => x.IsMain == true).FirstOrDefault(),
                 Levels = levelsDto,
                 Categories = catsToReturn,
-                UserActivities = _mapper.Map<ICollection<UserActivity>, ICollection<AttendeeDto>>(activity.UserActivities.Where(x => x.IsHost == true).ToList()),
+                UserActivities = _mapper.Map<ICollection<UserActivity>, ICollection<AttendeeDto>>(activity.UserActivities),
                 SavedCount = activity.UserSavedActivities != null? activity.UserSavedActivities.Count() : 0,
                 SubCategories = subcatsToReturn,
                 Address= activity.Address,
@@ -112,7 +112,7 @@ namespace CleanArchitecture.Application.Activities
 
             if (currentUser != null)
             {
-                activityDto.UserActivities = _mapper.Map<ICollection<UserActivity>, ICollection<AttendeeDto>>(activity.UserActivities.Where(x => x.IsHost || x.AppUser == currentUser || currentUser.Followings.Any(y => y.TargetId == x.AppUser.Id)).ToList());
+               // activityDto.UserActivities = _mapper.Map<ICollection<UserActivity>, ICollection<AttendeeDto>>(activity.UserActivities.Where(x => x.IsHost || x.AppUser == currentUser || currentUser.Followings.Any(y => y.TargetId == x.AppUser.Id)).ToList());
                 activityDto.IsSaved = activity.UserSavedActivities != null ? activity.UserSavedActivities.Any(x => x.AppUser == currentUser) : false;
                 activityDto.HasCommentByUser = activity.Reviews != null ? activity.Reviews.Any(x => x.Author == currentUser) : false;
             }

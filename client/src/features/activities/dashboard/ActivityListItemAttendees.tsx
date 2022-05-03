@@ -16,8 +16,16 @@ export const ActivityListItemAttendees: React.FC<IProps> = ({attendees}) => {
         {
         attendees.map((attendee,index) => (
          index<4 &&
-          <List.Item key={attendee.userName}>
-            <Popup
+          <List.Item key={attendee.userName} className="listItemAttendees_img">
+              <Image
+                  size="mini"
+                  circular
+                  src={attendee.image || "/assets/user.png"}
+                  bordered
+                  style ={attendee.isFollowing ? styles : null}
+                  onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}
+                />
+            {/* <Popup
               header={attendee.displayName}
               trigger={
                 <Image
@@ -29,7 +37,7 @@ export const ActivityListItemAttendees: React.FC<IProps> = ({attendees}) => {
                   onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}
                 />
               }
-            />
+            /> */}
           </List.Item>
         ))
       }

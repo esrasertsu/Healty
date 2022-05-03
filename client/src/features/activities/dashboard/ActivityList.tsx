@@ -25,11 +25,16 @@ const ActivityList: React.FC = () => {
       activitiesByDate.map(([group, activities]) =>(
         <Fragment key={group}>
           <Grid stackable>
-            <Grid.Row style={{marginTop:"1rem"}}>
+            <Grid.Row style={{marginTop:"30px"}}>
             <Grid.Column width={2}  style={!isMobile ? {paddingTop:"30px"}: {}}>
           <h3 className={"activityDateLabels "} >
              {/* <Icon size='large' name="calendar alternate outline" /> */}
-              {format(new Date(group), 'dd MMMM, eeee',{locale: tr})}
+             {isMobile ? format(new Date(group), 'd MMMM, eeee',{locale: tr}) :
+            <>
+            <div>{format(new Date(group), 'd MMM',{locale: tr})}</div> 
+             <div style={{fontSize:"14px"}}>{format(new Date(group), 'eeee',{locale: tr})}</div>
+             </>
+             }
            </h3>
             </Grid.Column>
             <Grid.Column style={{paddingRight:0}} width={14}>

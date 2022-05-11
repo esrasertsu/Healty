@@ -60,7 +60,6 @@ const PostUpdateForm: React.FC<IProps> = ({ updatePost, blog }) => {
           subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
       ))
       setSubCategoryOptions(subCategoryOptionFilteredList);
-      debugger;
       const renewedSubIds = blogForm!.subCategoryIds!.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
       setBlogForm({...blogForm,subCategoryIds: [...renewedSubIds]});
 
@@ -116,7 +115,6 @@ const PostUpdateForm: React.FC<IProps> = ({ updatePost, blog }) => {
                   options = {categoryOptions}
                   onChange={(e: any,data:any)=>
                     {
-                      debugger;
                       handleCategoryChanged(e,data)}}
                 /> 
                  <label>Branşlar*</label>        
@@ -128,7 +126,6 @@ const PostUpdateForm: React.FC<IProps> = ({ updatePost, blog }) => {
                   options={subCategoryOptions}
                   onChange={(e: any,data:[])=>
                     {
-                      debugger;
                       handleSubCategoryChanged(e,data)}}
                 />  
           <Button 

@@ -84,6 +84,9 @@ namespace CleanArchitecture.Application.Activities
                 if (activity == null)
                     throw new RestException(HttpStatusCode.NotFound, new { activity = "Not Found" });
 
+                if (DateTime.Parse(request.EndDate) <= DateTime.Parse(request.Date))
+                    throw new RestException(HttpStatusCode.BadRequest, new { Category = "Bitiş tarihi hatalı" });
+
                 if (request.Photos != null) //yeni eklenenler
                 {
                     foreach (var item in request.Photos)

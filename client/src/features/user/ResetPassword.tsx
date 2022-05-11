@@ -37,7 +37,6 @@ const ResetPassword : React.FC<RouteComponentProps> = ({location}) =>{
 
 
         const handlePasswordReset = (e:any, data:any) => {
-            debugger;
             setsamePassword(true);
             setshowSuccessMessage(false);
             setshowErrorMessage(false);
@@ -47,7 +46,6 @@ const ResetPassword : React.FC<RouteComponentProps> = ({location}) =>{
             }else{
                 setSubmitting(true);
                 agent.User.resetPassword(token as string,email as string,psw1 as string).then((res) => {
-                    debugger;
                     if(res.succeeded===true)
                     { 
                        setshowSuccessMessage(true);

@@ -18,7 +18,6 @@ import PhotoPreviewCard from './PhotoPreviewCard';
 
 
   const PhotoGallery:React.FC<IProps> = ({ docs,setFiles,setDocuments, setUpdateEnabled,deleteActivityPhoto,makeCoverPic,newMainId }) => {
-   debugger;
     return (
       <>
          <Grid stackable columns={4}>

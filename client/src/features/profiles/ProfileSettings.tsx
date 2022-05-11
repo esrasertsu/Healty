@@ -81,7 +81,6 @@ const ProfileSettings: React.FC<IProps> = ({ updateProfile, profile,deleteDocume
           subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
       ))
       setSubCategoryOptions(subCategoryOptionFilteredList);
-      debugger;
       const renewedSubIds = profileForm!.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
       setProfileForm({...profileForm,subCategoryIds: [...renewedSubIds]});
    }
@@ -224,7 +223,6 @@ const ProfileSettings: React.FC<IProps> = ({ updateProfile, profile,deleteDocume
                   options = {categoryOptions}
                   onChange={(e: any,data:[])=>
                     {
-                      debugger;
                       handleCategoryChanged(e,data)}}
                 /> 
                  <label>Branşlar*</label>        
@@ -236,7 +234,6 @@ const ProfileSettings: React.FC<IProps> = ({ updateProfile, profile,deleteDocume
                   options={subCategoryOptions}
                   onChange={(e: any,data:[])=>
                     {
-                      debugger;
                       handleSubCategoryChanged(e,data)}}
                 />  
             <label>Eğitim Bilgileri (Diploma/Sertifika)</label>    

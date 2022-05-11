@@ -6,7 +6,7 @@ import { history } from '../..';
 import ProfileDashboardPopularProfiles from '../../features/profiles/ProfileDashboardPopularProfiles';
 import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
-import { ActivityFormValues, ActivityOnlineJoinInfo, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, IActivityReview, IActivitySelectedFilter, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IPersonalActivity, PaymentUserInfoDetails } from '../models/activity';
+import { ActivityFormValues, ActivityOnlineJoinInfo, ActivityStatus, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, IActivityReview, IActivitySelectedFilter, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IPersonalActivity, PaymentUserInfoDetails } from '../models/activity';
 import { IOrder } from '../models/order';
 import { RootStore } from './rootStore';
 
@@ -88,6 +88,9 @@ export default class ActivityStore {
 
     @action setActiveIndex = (index:number) =>{
         this.activeIndex = index;
+    }
+    @action setActivity = (ac:IActivity | null) =>{
+        this.activity = ac;
     }
     @action setActiveUserPreIndex = (index:number) =>{
         this.activeUserPreIndex = index;
@@ -378,7 +381,6 @@ export default class ActivityStore {
             const activitiesEnvelope = await agent.Activities.listPersonalActs(this.personalActAxiosParams);
             const {activities, activityCount } = activitiesEnvelope;
             runInAction(() => {
-                debugger
                 activities.forEach((activity) =>{
                     activity.date = new Date(activity.date);
                     activity.endDate = new Date(activity.endDate);
@@ -420,15 +422,16 @@ export default class ActivityStore {
     }
 
     @action loadActivity = async (id:string) => {
+        this.loadingActivity = true;
         let activity = this.getActivity(id);
 
         if(activity){
             this.activity = activity;
             this.rootStore.categoryStore.loadAllCategoryList();
+            this.loadingActivity = false;
             return toJS(activity);
         } 
         else{
-            this.loadingActivity = true;
             try {
                 let activity = await agent.Activities.details(id);
                 runInAction(() => {
@@ -497,7 +500,6 @@ export default class ActivityStore {
 
     @action createActivity = async (activity: IActivityFormValues) =>{
         this.submitting = true;
-        debugger;
         try {
            await agent.Activities.create(activity);
             //const attendee = createAttendee(this.rootStore.userStore.user!);
@@ -758,7 +760,6 @@ export default class ActivityStore {
             return res;
 
         } catch (error) {
-            debugger;
             runInAction(() => {
                 this.loadingPaymentPage = false;
             });
@@ -889,4 +890,26 @@ export default class ActivityStore {
             console.log(error);
         }
     };
+
+
+    @action changeActivityStatus = async (id:string, status:ActivityStatus) =>{
+        this.loadingActivity = true;
+        try {
+            await agent.Activities.updateActivityStatus(id,status.toString());
+            runInAction(() => {
+                this.loadingActivity = false;
+                toast.success('Aktivite statüsü değiştirme işleminiz başarılı.');
+                this.activity!.status = status;
+            })
+        } catch (error) {
+            console.log(error);
+            toast.error('Problem changing status');
+            runInAction(() => {
+                this.loadingActivity = false;
+            })
+            
+        }
+
+    }
+
 }

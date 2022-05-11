@@ -28,9 +28,7 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
    const borderColor = borderColors[index].value;
     
 
-    const handleCardClick = (e:any) => {
-        debugger;
-       
+    const handleCardClick = (e:any) => {       
             history.push(`/activities/${activity.id}`);
     }
 
@@ -129,8 +127,10 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
 
                 
                     <Item.Content className={isTabletOrMobile ? "activity_listItem_mobile":"activity_listItem"} >
-                        <Item.Header>{activity.title}</Item.Header>
-                        <StarRating rating={5} editing={false} size={'small'} showCount={false}/> 
+                        <Item.Header className='activity_listItem_title'>{activity.title}</Item.Header>
+                        {(new Date(activity.endDate).getTime() < new Date().getTime()) ?
+                        <StarRating rating={activity.star} editing={false} size={'small'} showCount={false}/>:
+                        <div style={{margin:"3px 0 5px 0px",width: "max-content"}}>{activity.savedCount > 0 ? <span><Icon name='bookmark' /> {activity.savedCount} kişi tarafından kaydedildi </span> : <span></span>}</div> } 
 
                         {/* <Item.Description>
                             <div>{activity.description}</div>

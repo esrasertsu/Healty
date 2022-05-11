@@ -258,7 +258,6 @@ export default class BlogStore{
     };
 
     @action editPost = async (post: Partial<IBlogUpdateFormValues>) =>{
-        debugger;
         if(post.categoryId && post.categoryId.length === 0)
         {
           toast.warning("Kategori boş seçilemez!")

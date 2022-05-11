@@ -145,7 +145,6 @@ export default class CommonStore {
                   console.log(result.state);
               //    navigator.geolocation.getCurrentPosition((pos:any) => success(pos,setUserCity,cityRegistery,setUserCityPlaced), errors, options);
                 } else if (result.state === "denied") {
-                    debugger;
                     setUserCityPlaced(true);
                   //If denied then you have to show instructions to enable location
                 }

@@ -13,6 +13,11 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
   const [showMore, setShowMore] = useState(false);
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
+  const [durationDay, setDurationDay] = useState(Math.floor(activity.duration / (24*60)))
+  const [durationHour, setDurationHour] = useState(Math.floor((activity.duration % (60*24) )/ 60))
+  const [durationMin, setDurationMin] = useState(Math.floor((activity.duration % (60*24)) % 60))
+
+
     return (
        <Segment.Group className="activityDetails_GridSegment">
           <Segment attached>
@@ -90,7 +95,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    <Icon name='calendar alternate outline' size='large'  style={{color:"#222E50"}} />
                  </Grid.Column>
                  <Grid.Column width={isMobile? 6 :7}>
-                 <span className="activityDetailLabel">Tarih: </span> 
+                 <span className="activityDetailLabel">Başlangıç Tarihi: </span> 
                    <span>
                      { activity.date &&  format(activity.date, 'dd MMMM yyyy, eeee',{locale: tr})} 
                    </span>
@@ -99,10 +104,46 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    <Icon name='clock outline' size='large'  style={{color:"#222E50"}} />
                  </Grid.Column>
                  <Grid.Column width={isMobile? 6 :7}>
-                 <span className="activityDetailLabel">Saat: </span> 
+                 <span className="activityDetailLabel">Başlangıç Saati: </span> 
                    <span>
                    { activity.date && format(activity.date, 'H:mm',{locale: tr})}
                    </span>
+                 </Grid.Column>
+               </Grid>
+             </Segment>
+             <Segment attached>
+               <Grid verticalAlign='middle'>
+                 <Grid.Column width={isMobile? 2 :1}>
+                   <Icon name='calendar alternate outline' size='large'  style={{color:"#222E50"}} />
+                 </Grid.Column>
+                 <Grid.Column width={isMobile? 6 :7}>
+                 <span className="activityDetailLabel">Bitiş Tarihi: </span> 
+                   <span>
+                     { activity.endDate &&  format(activity.endDate, 'dd MMMM yyyy, eeee',{locale: tr})} 
+                   </span>
+                 </Grid.Column>
+                 <Grid.Column width={isMobile? 2 :1}>
+                   <Icon name='clock outline' size='large'  style={{color:"#222E50"}} />
+                 </Grid.Column>
+                 <Grid.Column width={isMobile? 6 :7}>
+                 <span className="activityDetailLabel">Bitiş Saati: </span> 
+                   <span>
+                   { activity.endDate && format(activity.endDate, 'H:mm',{locale: tr})}
+                   </span>
+                 </Grid.Column>
+               </Grid>
+             </Segment>
+             <Segment attached>
+               <Grid verticalAlign='middle'>
+                 <Grid.Column width={isMobile? 2 :1}>
+                   <Icon name="time" size='large'  style={{color:"#222E50"}} />
+                 </Grid.Column>
+                 <Grid.Column width={11}>
+                 <span className="activityDetailLabel">Süre: </span> 
+
+                   <span>{durationDay > 0 && (durationDay + " gün ")}</span>
+                   <span>{durationHour > 0 && (durationHour +" saat ")}</span>
+                   <span>{durationMin >0 && (durationMin + " dakika")}</span>
                  </Grid.Column>
                </Grid>
              </Segment>

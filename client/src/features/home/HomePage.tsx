@@ -372,7 +372,7 @@ const HomePage = () => {
             <Image src={'/assets/contactus.jpg'} />
         </Grid.Column>
        
-        <Grid.Column>
+        <Grid.Column style={{textAlign:"center"}}>
                 <Header as="h1">
                     <Header.Content>Eğitmen misin?</Header.Content>
                 </Header>
@@ -384,7 +384,6 @@ const HomePage = () => {
                             primary
                             circular
                             disabled={loading}
-                            floated="left"
                             style={{ marginTop:"20px"}} 
                             onClick={()=>{history.push('/trainerOnboarding');}}
                             >

@@ -34,7 +34,10 @@ export interface IActivity {
     photos: IPhoto[],
     videos: IPhoto[],
     mainImage: IPhoto,
-    channelName: string
+    channelName: string,
+    star:number,
+    starCount: number,
+    status: any
 
 }
 

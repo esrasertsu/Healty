@@ -9,8 +9,10 @@ const DateInput: React.FC<IProps> = ({
   width,
   label,
   placeholder,
+  disabled,
   date = false,
   time = false,
+  min,
   meta: { touched, error },
   ...rest
 }) => {
@@ -18,6 +20,7 @@ const DateInput: React.FC<IProps> = ({
     <Form.Field width={width}>
       <label className={input.value.toString() === "" ? "errorLabel" :""}>{label}</label>
       <DateTimePicker
+        disabled={disabled}
         placeholder={placeholder}
         value={input.value || null}
         onChange={input.onChange}
@@ -25,6 +28,7 @@ const DateInput: React.FC<IProps> = ({
         onKeyDown={(e) => e.preventDefault()}
         date = {date}
         time = {time}
+        min={min}
         messages={input.messages}
         id={input.id}
         {...rest}

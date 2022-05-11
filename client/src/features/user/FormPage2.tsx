@@ -173,7 +173,6 @@ useEffect(() => {
 
     const handleSaveTrainerForm = (e:any,values:ITrainerFormValues) =>{
       setTrainerForm2Message(false);
-      debugger;
       e && e.preventDefault();
       
 
@@ -351,7 +350,6 @@ useEffect(() => {
                 />  
                  <OnChange name="suggestedSubCategory">
            {(value, previous) => {
-             debugger;
                         if(value !== trainerForm.suggestedSubCategory)
                         {
                             setTrainerForm({...trainerForm,suggestedSubCategory: value});

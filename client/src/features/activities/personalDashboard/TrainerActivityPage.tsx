@@ -28,7 +28,6 @@ const TrainerActivityPage: React.FC<IProps> = ({settings}) => {
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   const handleGetNext = () => {
-      debugger;
     setLoadingNext(true);
     setPersonalActivityPage(personalActivityPage +1);
     getTrainerActivities().then(() => setLoadingNext(false))
@@ -50,17 +49,16 @@ const TrainerActivityPage: React.FC<IProps> = ({settings}) => {
   }
 
   const getPercentText = (status:string) =>{
-     debugger;
     if(status === ActivityStatus.UnderReview.toString())
-      return <><Icon name="search" /><span>Değerlendirme</span></>;
+      return <><Icon key="search" name="search" /><span>Değerlendirme</span></>;
     else if(status === ActivityStatus.Active.toString())
-      return <><Icon color="orange" name="check" /><span>Aktif</span></>;
+      return <><Icon key="check" color="orange" name="check" /><span>Aktif</span></>;
     else if(status === ActivityStatus.PassiveByAdmin.toString())
       return <span>Donduruldu</span>;
     else if(status === ActivityStatus.TrainerCompleteApproved.toString())
-      return <><Icon name="check" /><span>Admin ödeme onayı bekleniyor.</span></>;
+      return <><Icon key="clock" name="clock outline" color="blue"/><span>Ödeme onayı bekleniyor</span></>;
     else if(status === ActivityStatus.AdminPaymentApproved.toString())
-      return <><Icon name="check" /><span>Ödeme onaylandı.</span></>;
+      return <><Icon key="money" name="money bill alternate outline" color="green" /><span>Ödeme onaylandı</span></>;
     return "";
   }
   useEffect(() => {
@@ -90,26 +88,26 @@ const TrainerActivityPage: React.FC<IProps> = ({settings}) => {
      {loadingActivity && personalActivityPage === 0 ? <ActivityListItemPlaceholder/> :
      personalActivityList.length > 0 ?
       <>
-      <Segment className="myOrdersHeader" style={!settings ? {marginTop:"40px"} : {}}>
-        <Header as="h2">Aktivitelerim</Header>
-        <div className='header_info'>
-        <p>Açmış olduğunuz aktivitelerin süreçlerini bu sayfada takip edebilirsiniz. Aktiviler sırasıyla şu aşamaları tamamlamaktadır:</p>
+      <Segment key="myOrdersHeader"  className="myOrdersHeader" style={!settings ? {marginTop:"40px"} : {}}>
+        <Header key="h2" as="h2">Aktivitelerim</Header>
+        <div key="header_info" className='header_info'>
+        <p key="desc">Açmış olduğunuz aktivitelerin süreçlerini bu sayfada takip edebilirsiniz. Aktiviler sırasıyla şu aşamaları tamamlamaktadır:</p>
         <List>
-          <List.Item>
-            <List.Icon name='search' />
-            <List.Content>Değerlendirme</List.Content>
+          <List.Item key="review">
+            <List.Icon key="reviewIcon" name='search' />
+            <List.Content key="reviewCont">Değerlendirme</List.Content>
           </List.Item>
-          <List.Item>
-            <List.Icon name="check" color='orange' />
-            <List.Content>Aktif</List.Content>
+          <List.Item key="active">
+            <List.Icon key="activeIcon" name="check" color='orange' />
+            <List.Content key="activeCont">Aktif</List.Content>
           </List.Item>
-          <List.Item>
-            <List.Icon name='user' color='blue' />
-            <List.Content>Admin ödeme onayı bekleniyor. (**Bu aşamaya geçebilmek için lütfen aktivite tamamlandığını aktivite üzerindeki buton ile bildir.)</List.Content>
+          <List.Item key="paymentInfo">
+            <List.Icon key="userIcon" name='user' color='blue' />
+            <List.Content key="userCont">Admin ödeme onayı bekleniyor. (**Bu aşamaya geçebilmek için lütfen aktivite tamamlandığını aktivite üzerindeki buton ile bildir.)</List.Content>
           </List.Item>
-          <List.Item>
-            <List.Icon name="handshake outline" color="green"/>
-            <List.Content>Ödeme Onaylandı.</List.Content>
+          <List.Item key="paymentApprove">
+            <List.Icon key="handshakeIcon" name="handshake outline" color="green"/>
+            <List.Content key="paymentCont">Ödeme Onaylandı.</List.Content>
           </List.Item>
         </List>
         </div>
@@ -119,56 +117,58 @@ const TrainerActivityPage: React.FC<IProps> = ({settings}) => {
         <>
         
         <Segment key={activity.id + "_segment"} className="orderListItem">
-         <Item.Group divided>
-          <Item key={activity.id} style={{ zIndex: '1' }} className={isMobile? "activityListItem_mobile":""} >
-         <div className={isMobile? "activityListItemDiv_mobile":"activityListItemDiv"} >
-             <Item.Image size={!isMobile ? "small":undefined} style={{ display: "block"}} 
+         <Item.Group divided key={activity.id + "_itemGroup"}>
+          <Item key={activity.id + "_activityListItem"} style={{ zIndex: '1' }} className={isMobile? "activityListItem_mobile":""} >
+         <div key={activity.id + "_activityListItemDiv"} className={isMobile? "activityListItemDiv_mobile":"activityListItemDiv small"} >
+             <Item.Image key={activity.id + "img"} size={!isMobile ? "small":undefined} style={{ display: "block"}} 
                  src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'}
                  className={isMobile ? "activityListItem_Image_mobile":""} >
              </Item.Image>
          </div>
-       <div className="orderListItem_content_div">
+       <div key={"orderListItem_content_div"} className="orderListItem_content_div">
  
-         <Item.Content className={isMobile ? "order_listItem_mobile":"order_listItem"} >
-             <Item.Header>{activity.title}</Item.Header>
-             <Item.Description>
-                 <div>
+         <Item.Content  key={activity.id + "title"}  className={isMobile ? "order_listItem_mobile":"order_listItem"} >
+             <Item.Header key={activity.id + "titleHeader"} >{activity.title}</Item.Header>
+             <Item.Description key={activity.id + "desc"} >
+                 <div key={activity.id + "date"}>
                  Tarih: {format(new Date(activity.date), 'dd MMMM yyyy, HH:mm',{locale: tr})} - {format(new Date(activity.endDate), 'dd MMMM yyyy, HH:mm',{locale: tr})}
                  </div>
              </Item.Description>
          </Item.Content>
         
-         <Item.Content className={isMobile ? "order_listItem_extraContent_mobile":"order_listItem_extraContent"}>
-         <Item.Description>
-         <div>
+         <Item.Content  key={activity.id + "extra"} className={isMobile ? "order_listItem_extraContent_mobile":"order_listItem_extraContent"}>
+         <Item.Description key={activity.id + "extradesc"}>
+         <div key={activity.id + "attCount"}>
                      Katılımcı sayısı : {activity.attendanceCount}
                  </div>
-                 <div>
+                 <div key={activity.id + "limit"}>
                      Katılımcı limiti : {activity.attendancyLimit?activity.attendancyLimit : "Sınırsız" }
                  </div>
-                 <div>
+                 <div key={activity.id + "price"}>
                     Bilet Fiyatı : {Number(activity.price)}TL
                  </div>
              </Item.Description>
          </Item.Content>
-         <Item.Content className={isMobile ? "order_listItem_extraContent_mobile":"order_listItem_extraContent"}>
-         <Item.Description>
-         <div>
+         <Item.Content key={activity.id + "status"} className={isMobile ? "order_listItem_extraContent_mobile":"order_listItem_extraContent"}>
+         <Item.Description key={activity.id + "statusDesc"}>
+         <div key={activity.id + "progress"}>
             <Progress 
             percent={getPercentStatus(String(activity.status))} 
             indicating={getPercentStatus(String(activity.status)) !== 0} 
             progress
             className='myActivity_progress'
+            key={activity.id + "myActivity_progress"}
             >
              {getPercentText(String(activity.status))}
             </Progress>
           </div>       
              </Item.Description>
          </Item.Content>
-         <Item.Content className={isMobile ? "order_listItem_extraContent_mobile":"order_listItem_extraContent"} >
-         <Item.Description style={{flex:"end"}}>
+         <Item.Content key={activity.id + "buttonItem"} className={isMobile ? "order_listItem_extraContent_mobile":"order_listItem_extraContent"} >
+         <Item.Description key={activity.id + "buttondesc"} style={{flex:"end"}}>
          <Button
                  onClick={()=> history.push(`/activities/${activity.id}`)}
+                 key={activity.id + "button"}
                  floated="right"
                  content="Detay"
                  size={isTabletOrMobile ?"mini" :"medium"}

@@ -73,7 +73,6 @@ const handleResetPassword = (e:any) => {
   }
 
   const handleEmailResend = () => {
-    debugger;
     agent.User.resendVerifyEmailConfirm(email as string).then(() => {
         closeModal();
         toast.success('Doğrulama linki yeniden gönderildi - Lütfen e-posta kutunuzu kontrol edin');

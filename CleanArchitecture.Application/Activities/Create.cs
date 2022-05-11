@@ -75,6 +75,10 @@ namespace CleanArchitecture.Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
+
+               if(DateTime.Parse(request.EndDate) <= DateTime.Parse(request.Date))
+                throw new RestException(HttpStatusCode.BadRequest, new { Category = "Bitiş tarihi hatalı" });
+
                 var activity = new Activity
                 {
                     Id = request.Id,

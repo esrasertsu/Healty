@@ -14,7 +14,6 @@ const ProfileCard: React.FC<IProps> = ({profile}) => {
   const {setLoadingProfile} = rootStore.profileStore;
 
   const handleCardClick = (e:any) => {
-    debugger;
     e.stopPropagation() ;
     //     if(!isLoggedIn)
     // {    var str = `/profile/${profile.userName}`;

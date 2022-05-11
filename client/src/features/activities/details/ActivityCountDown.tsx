@@ -9,7 +9,7 @@ import ActivityReview from './ActivityReview';
 
 
 
-const Completionist = () => <span>Aktivite başladı!</span>;
+const Completionist = () => <div style={{textAlign:"center", marginTop:"20px"}}>Aktivite başladı!</div>;
 
 
  const ActivityCountDown:React.FC<{activity:IActivity}> = ({activity}) =>  {

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { Segment, Item, Header, Button, Image, Modal, Icon, Confirm, Container, Grid } from 'semantic-ui-react'
-import { IActivity } from '../../../app/models/activity';
+import { ActivityStatus, IActivity } from '../../../app/models/activity';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import tr  from 'date-fns/locale/tr'
 import { history } from '../../..';
@@ -18,6 +18,7 @@ import SwiperCore, {
 import { IPhoto } from '../../../app/models/profile';
 import { useMediaQuery } from 'react-responsive';
 import ActivityGalleryModal from './ActivityGalleryModal';
+import { StarRating } from '../../../app/common/form/StarRating';
 
 SwiperCore.use([Navigation,Pagination,Mousewheel,Keyboard]);
 
@@ -36,7 +37,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
   const host = activity.attendees && activity.attendees.filter(x => x.isHost === true)[0];
 
   const rootStore = useContext(RootStoreContext);
-  const { attendActivity, cancelAttendance, loading, deleteActivity} = rootStore.activityStore;
+  const { cancelAttendance, loading, deleteActivity,changeActivityStatus} = rootStore.activityStore;
   const { getOrders, orderList } = rootStore.activityStore;
   const { user } = rootStore.userStore;
 
@@ -44,6 +45,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
   const [cancellationUserOpen, setcancellationUserOpen] = React.useState(false);
   const [galleryModal, setGalleryModal] = useState(false);
   const [imageIndex, setImageIndex] = useState(0)
+  const [openStatusChange, setOpenStatusChange] = useState(false);
 
   const handleDeleteActivity = (e:any) => {
     //deleteActivity(e,activity.id);
@@ -57,7 +59,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
   const handleSendUserToOrders = () =>{
 
     if(activity.price && activity.price > 0 )
-    { 
+    { debugger;
       if(orderList.length > 0)
       {
           const relatedOrder = orderList.find(x=> x.productId === activity.id);
@@ -87,7 +89,16 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
         setGalleryModal(true);
 
     }
-  
+
+    const handleCloseStatusChange = () => {
+      setOpenStatusChange(false);
+    };
+    const confirmActivityStatusChange = () => {
+      changeActivityStatus(activity.id, ActivityStatus.TrainerCompleteApproved).then(() =>
+      handleCloseStatusChange()
+      )
+     
+    };
   
 
     return (
@@ -96,9 +107,23 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
          <ActivityGalleryModal currentImageIndex={imageIndex} onClose={onGalleryModalClose} images={activity.photos} /> 
         }
         <Confirm
+          key={"statusChange"}
+          content={'Aktivitenizin tamamlandığını onaylıyor musunuz?'}
+          open={openStatusChange}
+          header="Aktivite Tamamlandı Onayı"
+          confirmButton="Evet, Tamamlandı!"
+          cancelButton="Geri"
+          size='mini'
+          onCancel={() =>setOpenStatusChange(false)}
+          onConfirm={confirmActivityStatusChange}
+        />
+
+    <Confirm
+          key={"cancellationRez"}
           content={'Bu rezervasyonu iptal etmek istediğinize emin misiniz?'}
           open={cancellationUserOpen}
           header="Rezervasyon iptali"
+          size='mini'
           confirmButton="Devam et"
           cancelButton="Geri"
           onCancel={() =>setcancellationUserOpen(false)}
@@ -117,20 +142,31 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                               content={activity.title}
                             />
                             <p>{activity.date && format(activity.date,'dd MMMM yyyy, eeee',{locale: tr})}</p>
-                            <p>
-                              Düzenleyen: <Link to={`/profile/${host && host.userName}`} ><strong>{host && host.displayName}</strong></Link> 
-                            </p>
+                            <div>
+                            {(new Date(activity.endDate).getTime() < new Date().getTime()) && 
+                            <span><StarRating rating={activity.star} editing={false} size={'small'} showCount={true} count={activity.starCount}/> </span> }
+                             <span>Düzenleyen: <Link to={`/profile/${host && host.userName}`} ><strong>{host && host.displayName}</strong></Link> </span> 
+                            </div>
                           </Item.Content>
                         </Item>
-                        <Item style={{display:"flex", justifyContent:"end"}}>
+                        <Item style={{display:"flex", alignItems:"flex-end", flexDirection:"column"}}>
                         {(activity.isHost && host && host.userRole==="Trainer") || (user && user.role==="Admin") ? (
                       <>
-                      <Button as={Link} to={`/manage/${activity.id}`} color='green' floated='right'
+                     
+                      <Button as={Link} to={`/manage/${activity.id}`} color='blue' floated='right'
+                      style={{marginBottom:"10px"}}
                       content='Düzenle'
                       labelPosition='right'
                       icon='edit'
                       circular>
                       </Button>
+                      {(new Date(activity.endDate).getTime() < new Date().getTime()) && activity.status === ActivityStatus.Active &&
+                      <Button onClick={() => setOpenStatusChange(true)} color='green' floated='right'
+                      content='Tamamlandı onayı!'
+                      labelPosition='right'
+                      icon="check"
+                      circular>
+                      </Button>}
                       {/* <Modal
                         basic
                         onClose={() => setOpen(false)}
@@ -253,17 +289,26 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                             <p>
                               Düzenleyen: <Link to={`/profile/${host && host.userName}`} ><strong>{host && host.displayName}</strong></Link> 
                             </p>
+                            {(new Date(activity.endDate).getTime() < new Date().getTime()) && 
+                        <div><StarRating rating={activity.star} editing={false} size={'small'} showCount={true} count={activity.starCount}/> </div> }
                           </Item.Content>
                         </Item>
                       </Item.Group>
                     </Container>
                    { (activity.isHost && host && host.userRole==="Trainer") || (user && user.role==="Admin") ? (
-                      <>
-                      <Button circular as={Link} to={`/manage/${activity.id}`} color='green' floated='right' style={{marginTop:"20px"}}
+                      <div style={{display:"flex", alignItems:"flex-end", flexDirection:"row",justifyContent: "space-evenly"}}>
+                      <Button circular as={Link} to={`/manage/${activity.id}`} color='blue' floated='right' style={{marginTop:"20px"}}
                       content='Düzenle'
                       labelPosition='right'
                       icon='edit'>
                       </Button>
+                      {(new Date(activity.endDate).getTime() < new Date().getTime()) && activity.status === ActivityStatus.Active &&
+                      <Button  onClick={() => setOpenStatusChange(true)} color='green' floated='right'
+                      content='Tamamlandı onayı!'
+                      labelPosition='right'
+                      icon="check"
+                      circular>
+                      </Button>}
                       {/* <Modal
                         basic
                         circular
@@ -293,7 +338,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                           </Button> 
                         </Modal.Actions>
                       </Modal> */}
-                    </>                   
+                    </div>                   
                     ): activity.isGoing ? (
                       <Button circular style={{marginTop:"20px"}} loading={loading} onClick={()=>setcancellationUserOpen(true)}>Katılımı iptal et</Button>
                     ): (

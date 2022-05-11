@@ -82,7 +82,6 @@ const VideoCall  = (props: {
            
           generateAgoraToken(name,activityId)
             .then(async(response) => {
-                debugger;
                 if(response!== "")
                 {
                     try {
@@ -125,7 +124,6 @@ const VideoCall  = (props: {
 
 
             client.on("token-privilege-will-expire", async () => {
-              debugger;
                 generateAgoraToken(name,activityId)
                 .then(async(response) => {
                  const data =  JSON.parse(response);
@@ -143,7 +141,6 @@ const VideoCall  = (props: {
         }
 
         return() =>{
-          debugger;
           const footer = document.getElementById("footer");
          if(footer) footer.hidden = false;
         }

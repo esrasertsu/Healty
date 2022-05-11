@@ -29,8 +29,7 @@ const validate = combineValidators({
 
     
     const handleFinalFormSubmit = async (video: IVideoUploadParam) => {
-debugger;
-if(video!.url)
+  if(video!.url)
            await uploadProfileVideo(video!.url);
     };
 

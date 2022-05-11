@@ -27,7 +27,6 @@ const OrderList: React.FC<IProps> = ({settings}) => {
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   const handleGetNext = () => {
-      debugger;
     setLoadingNext(true);
     setOrderPage(orderPage +1);
     getOrders().then(() => setLoadingNext(false))
@@ -69,7 +68,7 @@ const OrderList: React.FC<IProps> = ({settings}) => {
         <Segment key={order.id + "_segment"} className="orderListItem">
          <Item.Group divided>
           <Item key={order.id} style={{ zIndex: '1' }} className={isMobile? "activityListItem_mobile":""} >
-         <div className={isMobile? "activityListItemDiv_mobile":"activityListItemDiv"} >
+         <div className={isMobile? "activityListItemDiv_mobile":"activityListItemDiv small"} >
              <Item.Image size={!isMobile ? "small":undefined} style={{ display: "block"}} 
                  src={(order.photo && order.photo) || '/assets/placeholder.png'}
                  className={isMobile ? "activityListItem_Image_mobile":""} >

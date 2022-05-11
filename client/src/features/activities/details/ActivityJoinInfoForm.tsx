@@ -32,7 +32,6 @@ const validate = combineValidators({
 
 
     const handleZoomChange = (e:any, data:any) => {
-        debugger;
         if(data.checked)
         {
             setActivityOnlineJoinInfoForm({...activityOnlineJoinInfo,zoom: true});
@@ -86,7 +85,6 @@ const validate = combineValidators({
             <Field name="meetingId" placeholder="Örn: Zoom için 822 715 8503" component={TextInput} value={activityOnlineJoinInfo.meetingId}/>
             <OnChange name="meetingId">
                 {(value, previous) => {
-                  debugger;
                     if(value !== activityOnlineJoinInfo.meetingId)
                     {
                         setActivityOnlineJoinInfoForm({...activityOnlineJoinInfo,meetingId: value});
@@ -99,7 +97,6 @@ const validate = combineValidators({
             <Field name="meetingPsw" placeholder="Şifre" component={TextInput} value={activityOnlineJoinInfo.meetingPsw}/>
             <OnChange name="meetingPsw">
                 {(value, previous) => {
-                  debugger;
                     if(value !== activityOnlineJoinInfo.meetingPsw)
                     {
                         setActivityOnlineJoinInfoForm({...activityOnlineJoinInfo,meetingPsw: value});
@@ -118,7 +115,6 @@ const validate = combineValidators({
                 />  
                 <OnChange name="activityUrl">
                 {(value, previous) => {
-                  debugger;
                     if(value !== activityOnlineJoinInfo.activityUrl)
                     {
                         setActivityOnlineJoinInfoForm({...activityOnlineJoinInfo,activityUrl: value});

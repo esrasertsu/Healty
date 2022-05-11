@@ -124,7 +124,6 @@ export default class UserStore {
     }
     @action login = async (values : IUserFormValues,location:string) =>{
         try {
-            debugger;
             const user = await agent.User.login(values);
             runInAction(()=>{
                 this.user = user;
@@ -196,7 +195,6 @@ export default class UserStore {
     @action registerTrainer = async (values: ITrainerFormValues) =>{
         try {
             this.trainerRegistering = true;
-            debugger;
             const user = await agent.User.registerTrainer(values);
             runInAction(()=>{
                 this.trainerRegistering = false;
@@ -216,7 +214,6 @@ export default class UserStore {
     @action getAccountDetails = async () =>{
         try {
             this.loadingUserInfo = true;
-            debugger;
             const user = await agent.User.getAccountInfo();
             runInAction(()=>{
                 this.loadingUserInfo = false;

@@ -71,7 +71,6 @@ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
   }, [activity])
 
   const onSubmit = async (e:any) => {
-    debugger;
     e.stopPropagation();
     e.preventDefault()
 ;

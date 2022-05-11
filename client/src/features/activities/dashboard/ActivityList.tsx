@@ -16,7 +16,7 @@ const ActivityList: React.FC = () => {
     'Talepte bulunmak için bize mail atabilir,',
     'Ya da bir eğitmen olarak kriterlere uygun bir aktivite açabilirsiniz :)'
   ]
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 767px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   return (
@@ -26,18 +26,18 @@ const ActivityList: React.FC = () => {
         <Fragment key={group}>
           <Grid stackable>
             <Grid.Row style={{marginTop:"30px"}}>
-            <Grid.Column width={2}  style={!isMobile ? {paddingTop:"30px"}: {}}>
+            <Grid.Column width={2}>
           <h3 className={"activityDateLabels "} >
              {/* <Icon size='large' name="calendar alternate outline" /> */}
-             {isMobile ? format(new Date(group), 'd MMMM, eeee',{locale: tr}) :
+             {isTabletOrMobile ? format(new Date(group), 'd MMMM, eeee',{locale: tr}) :
             <>
-            <div>{format(new Date(group), 'd MMM',{locale: tr})}</div> 
-             <div style={{fontSize:"14px"}}>{format(new Date(group), 'eeee',{locale: tr})}</div>
+            <div style={{fontSize:"1.7rem"}}>{format(new Date(group), 'd',{locale: tr})}</div> 
+             <div style={{fontSize:"14px"}}>{format(new Date(group), 'MMMM',{locale: tr})}</div>
              </>
              }
            </h3>
             </Grid.Column>
-            <Grid.Column style={{paddingRight:0}} width={14}>
+            <Grid.Column width={14}>
             <Item.Group divided>
               {activities.map((activity) => (
               <ActivityListItem key={activity.id} activity={activity} />

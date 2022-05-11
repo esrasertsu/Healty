@@ -56,7 +56,6 @@ interface IProps{
 
     
     const handleGetNext = () => {
-      debugger;
       setLoadingNext(true);
       setPage(page +1);
       if(sortingInput==="")

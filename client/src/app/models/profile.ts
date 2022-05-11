@@ -141,7 +141,6 @@ export class ActivityPhoto implements IPhoto{
 
          if(init)
         {    
-            debugger;
             init.url = init.preview;
         }
         Object.assign(this, init);
@@ -177,7 +176,6 @@ export class Document implements IDocument{
 
          if(init)
         {    
-            debugger;
             this.url = init.preview;
             this.name = init.name;
 

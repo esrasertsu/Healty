@@ -1,7 +1,7 @@
 ﻿import React, { useContext, useEffect, useState } from "react";
 import { Segment, Form, Button, Grid, Icon, Popup, Container } from "semantic-ui-react";
 import {
-  ActivityFormValues
+  ActivityFormValues, ActivityStatus
 } from "../../../app/models/activity";
 import { v4 as uuid } from "uuid";
 import { observer } from "mobx-react-lite";
@@ -11,7 +11,7 @@ import TextInput from "../../../app/common/form/TextInput";
 import TextAreaInput from "../../../app/common/form/TextAreaInput";
 import DateInput from "../../../app/common/form/DateInput";
 import { combineDateAndTime } from "../../../app/common/util/util";
-import {combineValidators, composeValidators, hasLengthGreaterThan, isRequired} from 'revalidate';
+import {combineValidators, composeValidators, createValidator, hasLengthGreaterThan, isRequired} from 'revalidate';
 import { RootStoreContext } from "../../../app/stores/rootStore";
 import DropdownMultiple from "../../../app/common/form/DropdownMultiple";
 import { Category, ICategory } from "../../../app/models/category";
@@ -44,7 +44,10 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
     submitting,
     loadActivity,
     loadLevels,
-    levelList
+    levelList,
+    activity,
+    setActivity,
+    loadingActivity
   } = rootStore.activityStore;
 
   const {
@@ -58,6 +61,18 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
   isRequired({message:""}):
   isRequired({message: 'Online olmayan aktiviteler için zorunlu alandır.'}) 
 
+
+const isValidEndTime = createValidator(
+  message => value => {
+    if (value && activityForm.endDate && activityForm.date && 
+      (activityForm.date >= activityForm.endDate) && activityForm.time && value <= activityForm.time) {
+      return message
+    }
+  },
+  'Geçersiz bitiş tarihi'
+)
+
+
 const validate = combineValidators({
   title: isRequired({message: 'Aktivite başlığı zorunlu alandır.'}),
   categoryIds: isRequired({message: 'Kategori zorunlu alandır.'}),
@@ -67,8 +82,11 @@ const validate = combineValidators({
   )(),
   date: isRequired({message: 'Başlangıç Tarihi zorunlu alandır.'}),
   time:isRequired({message: 'Başlangıç Saati zorunlu alandır.'}),
-  endDate: isRequired({message: 'Bitiş Tarihi zorunlu alandır.'}),
-  endTime:isRequired({message: 'Bitiş Saati zorunlu alandır.'}),
+  endTime: composeValidators(
+    isRequired({message: 'Bitiş Saati zorunlu alandır.'}),
+    isValidEndTime
+  )(),
+  endDate:isRequired({message: 'Bitiş Tarihi zorunlu alandır.'}),
   price:isRequired('price'),
   cityId: customCityRequired,
   venue:customCityRequired,
@@ -97,6 +115,7 @@ const validate = combineValidators({
    const [subCategoryOptions, setSubCategoryOptions] = useState<ICategory[]>([]);
 
    const [durationMessage, setDurationMessage] = useState("");
+   const [dateErrorMessge, showDateErrorMessage]= useState("");
 
    const [image, setImage] = useState<Blob | null>(null);
    const [imageDeleted, setImageDeleted] = useState(false);
@@ -119,6 +138,7 @@ const validate = combineValidators({
          setLoading(false));
     }else{
         setImageDeleted(true);
+        setActivity(null);
     }
     loadLevels();
 
@@ -167,23 +187,57 @@ const validate = combineValidators({
 const handleDateChange = (date:any) =>{
 
   const dateAndTime = activityForm.time ? combineDateAndTime(date, activityForm.time): combineDateAndTime(date, new Date());
-  setActivityForm({...activityForm, date: dateAndTime, description:description, title:title});
+  if(activityForm.endDate && (new Date(dateAndTime).getTime() > new Date(activityForm.endDate).getTime()))
+    showDateErrorMessage("Başlangıç tarihi bitiş tarihinden geri bir tarih olmalıdır.");  
+  else if(activityForm.endTime && (new Date(dateAndTime).getTime() >= new Date(activityForm.endTime).getTime())) 
+  {
+    showDateErrorMessage("Başlangıç saati bitiş saatinden geri olmalıdır.");  
+  }  
+  else if((new Date(dateAndTime).getTime() > new Date().getTime()))
+  {
+    showDateErrorMessage(""); 
+    setActivityForm({...activityForm, date: dateAndTime, description:description, title:title});
+  }
+
 }
 
 const handleTimeChange = (time:any) =>{
   const dateAndTime = activityForm.date ? combineDateAndTime(activityForm.date, time) : combineDateAndTime(new Date(), time);
-  setActivityForm({...activityForm, time: dateAndTime, description:description, title:title});
+  if(activityForm.endTime && (new Date(dateAndTime).getTime() >= new Date(activityForm.endTime).getTime()))
+      showDateErrorMessage("Başlangıç saati bitiş saatinden geri bir saat olmalıdır.");     
+  else{
+    showDateErrorMessage(""); 
+    setActivityForm({...activityForm, time: dateAndTime, description:description, title:title});
+  }
+  
 }
 
 const handleEndDateChange = (endDate:any) =>{
 
   const dateAndTime = activityForm.endTime ? combineDateAndTime(endDate, activityForm.endTime): combineDateAndTime(endDate, new Date());
-  setActivityForm({...activityForm, endDate: dateAndTime, description:description, title:title});
+ 
+   if(activityForm.time && (new Date(dateAndTime).getTime() <= new Date(activityForm.time).getTime())) 
+  {
+      showDateErrorMessage("Başlangıç saati bitiş saatinden geri olmalıdır.");  
+  }  
+  else if((new Date(dateAndTime).getTime() < new Date().getTime())){
+    showDateErrorMessage("Bitiş tarihi bugünden ileri bir tarih olmalıdır.");
+  } 
+  else {
+    showDateErrorMessage("");
+    setActivityForm({...activityForm, endDate: dateAndTime, description:description, title:title});
+  }
+    
 }
 
 const handleEndTimeChange = (endTime:any) =>{
   const dateAndTime = activityForm.endDate ? combineDateAndTime(activityForm.endDate, endTime) : combineDateAndTime(new Date(), endTime);
-  setActivityForm({...activityForm, endTime: dateAndTime, description:description, title:title});
+  if(activityForm.time && (new Date(dateAndTime).getTime() <= new Date(activityForm.time).getTime()))
+     showDateErrorMessage("Bitiş saati başlangıç saatinden ileri bir saat olmalıdır.");
+  else{
+    showDateErrorMessage("");
+    setActivityForm({...activityForm, endTime: dateAndTime, description:description, title:title});
+  }
 }
 
 
@@ -198,7 +252,6 @@ useEffect(() => {
 
 
 const deleteActivityPhoto = (photo:IPhoto) =>{
-debugger;
   if(photo.id !== "")
   { 
     let deleteds = activityForm.deletedPhotos;
@@ -210,7 +263,6 @@ debugger;
       setActivityForm({...activityForm, photos:restPhotos, description:description, title:title});
 
   }else{
-    debugger;
     let restNews =  activityForm.newphotos.filter(x => x.url !== photo.url );
     setActivityForm({...activityForm, newphotos:restNews, description:description, title:title});
 
@@ -230,7 +282,6 @@ const makeCoverPic = (photo:IPhoto) =>{
 }
 
 const uploadedNewImage = (file:any) =>{
-  debugger;
 
   var reader = new FileReader();
   var url = reader.readAsDataURL(file);//original blob data dönüyor
@@ -266,9 +317,19 @@ const uploadedNewImage = (file:any) =>{
     const dateAndTime = combineDateAndTime(values.date, values.time);
     const enddateAndTime = combineDateAndTime(values.endDate, values.endTime);
 
-    const { date, time, endDate, endTime,durationHour,durationDay, durationMin, ...activity } = values;
-    activity.date = dateAndTime;
-    activity.endDate = enddateAndTime;
+    const { date, time, endDate, endTime,durationHour,durationDay, durationMin, ...restactivity } = values;
+    restactivity.date = dateAndTime;
+    restactivity.endDate = enddateAndTime;
+debugger;
+    if(new Date(restactivity.date) >= new Date(restactivity.endDate))
+     {
+         showDateErrorMessage("Aktivite başlangıç tarihi bitiş tarihinden önce olmalıdır.");
+         error = true;
+       }
+    else 
+    {showDateErrorMessage("");
+    error = false;
+      }
 
    const totalDuration = +((durationDay ? durationDay : 0) *24 *60) + +((durationHour ? durationHour : 0) * 60) + +(durationMin ? durationMin : 0);
    if(totalDuration === 0) {
@@ -281,7 +342,7 @@ const uploadedNewImage = (file:any) =>{
     }
       if(!error)
       {
-        if (!activity.id) {
+        if (!restactivity.id) {
           
             if(activityForm.photos!.length === 0)
             {
@@ -290,7 +351,7 @@ const uploadedNewImage = (file:any) =>{
 
             }else{
               let newActivity = {
-                ...activity,
+                ...restactivity,
                 id: uuid(),
                 duration:totalDuration,
                 description: description,
@@ -306,11 +367,10 @@ const uploadedNewImage = (file:any) =>{
             }
           //
         } else {
-          debugger;
           if(activityForm.photos!.length !== 0)
           {
             let editedActivity = {
-              ...activity,
+              ...restactivity,
               duration:totalDuration,
               description: description,
                 title:title
@@ -332,6 +392,9 @@ const uploadedNewImage = (file:any) =>{
 
   if(submitting) 
   return <LoadingComponent content='Aktivite oluşturuluyor...' />
+
+  if(loadingActivity) 
+  return <LoadingComponent content='Aktivite yükleniyor...' />
 
   return (
     <Container className="pageContainer">
@@ -362,7 +425,6 @@ const uploadedNewImage = (file:any) =>{
                     />
                       <OnChange name="TrainerUserName">
                     {(value, previous) => {
-                      debugger;
                           setActivityForm({...activityForm,trainerUserName: value, description:description, title:title});
                     }}
                      </OnChange>
@@ -382,7 +444,6 @@ const uploadedNewImage = (file:any) =>{
                 />
                   <OnChange name="title">
                 {(value, previous) => {
-                  debugger;
                       setTitle(value);
                 }}
                  </OnChange>
@@ -441,7 +502,6 @@ const uploadedNewImage = (file:any) =>{
                   options = {categoryOptions}
                   onChange={(e: any,data:[])=>
                     {
-                      debugger;
                       handleCategoryChanged(e,data)}
                     }
                 /> 
@@ -566,8 +626,10 @@ const uploadedNewImage = (file:any) =>{
                     label="Başlangıç Tarihi*"
                     name="date"
                     date={true}
+                    min={new Date(new Date().setDate(new Date().getDate() + 7))}
                     placeholder="Seçiniz"
                     value={activityForm.date}
+                    disabled={activity && (new Date(activity.endDate).getTime() < new Date().getTime() || activity.status !== ActivityStatus.UnderReview)  }
                     component={DateInput}
                     messages={{
                       dateButton: "",
@@ -581,6 +643,7 @@ const uploadedNewImage = (file:any) =>{
                     time={true}
                     placeholder="Seçiniz"
                     value={activityForm.time}
+                    disabled={activity && (new Date(activity.endDate).getTime() < new Date().getTime() || activity.status !== ActivityStatus.UnderReview)  }
                     component={DateInput}
                     messages={{
                       dateButton: "",
@@ -599,7 +662,9 @@ const uploadedNewImage = (file:any) =>{
                     date={true}
                     placeholder="Seçiniz"
                     value={activityForm.endDate}
+                    disabled={activity && (new Date(activity.endDate).getTime() < new Date().getTime() || activity.status !== ActivityStatus.UnderReview)  }
                     component={DateInput}
+                    min={activityForm.date ? new Date(activityForm.date) :  new Date()}
                     messages={{
                       dateButton: "",
                       timeButton: "",
@@ -612,6 +677,7 @@ const uploadedNewImage = (file:any) =>{
                     time={true}
                     placeholder="Seçiniz"
                     value={activityForm.endTime}
+                    disabled={activity && (new Date(activity.endDate).getTime() < new Date().getTime() || activity.status !== ActivityStatus.UnderReview)  }
                     component={DateInput}
                     messages={{
                       dateButton: "",
@@ -623,7 +689,7 @@ const uploadedNewImage = (file:any) =>{
                 </Form.Group>
                 </Form.Group>
 
-
+                {dateErrorMessge!=="" && <label style={{color:"red", marginBottom:"15px"}}>*{dateErrorMessge}</label>}
                 <label id="durationLabel" className={durationMessage !== "" ? "customErrorLabel fieldLabel" :"fieldLabel"} >Etkinlik Süresi* 
                 <Popup 
                     hoverable
@@ -725,6 +791,7 @@ const uploadedNewImage = (file:any) =>{
                   component={NumberInput}
                   value={activityForm.price}
                   placeholder="500TL"
+                  disabled={activity && (new Date(activity.endDate).getTime() < new Date().getTime()) }
                   labelName="priceLabel"
                   width={isMobile ? 6 :3}
                   type="number"

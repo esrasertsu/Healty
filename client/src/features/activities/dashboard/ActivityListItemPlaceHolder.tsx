@@ -5,7 +5,7 @@ const ActivityListItemPlaceholder = () => {
     <Fragment>
       <Placeholder fluid style={{ marginTop: 50 }}>
         <Segment.Group>
-          <Segment style={{ minHeight: 110 }}>
+          <Segment key="1" style={{ minHeight: 110 }}>
             <Placeholder>
               <Placeholder.Header image>
                 <Placeholder.Line />
@@ -16,7 +16,7 @@ const ActivityListItemPlaceholder = () => {
               </Placeholder.Paragraph>
             </Placeholder>
           </Segment>
-          <Segment>
+          <Segment key="2">
             <Placeholder>
               <Placeholder.Line />
               <Placeholder.Line />

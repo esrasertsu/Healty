@@ -124,7 +124,6 @@ const sixItem:SemanticWIDTHS = 6;
 
     
     const handleGetNext = () => {
-      debugger;
       setLoadingNext(true);
       setPage(page +1);
       if(sortingInput==="")

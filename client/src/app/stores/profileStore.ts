@@ -573,7 +573,6 @@ export default class ProfileStore{
     }
 
     @action uploadProfileVideo = async (url: string) =>{
-        debugger;
         this.submittingVideo = true;
         try {
             var result = await agent.Profiles.uploadProfileVideo(url);
@@ -737,7 +736,6 @@ export default class ProfileStore{
 
         try {
             const pics = await agent.Profiles.updateReferencePics(photos,deletedPhotos);
-            debugger;
             runInAction(() => {
                 if(this.profile)
                 {

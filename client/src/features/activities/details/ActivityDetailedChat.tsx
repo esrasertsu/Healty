@@ -30,7 +30,6 @@ import { IComment } from '../../../app/models/activity';
 
 
   useEffect(() => {
-    debugger;
 
     if(activity && activity.comments)
     {

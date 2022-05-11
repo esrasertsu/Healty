@@ -44,7 +44,6 @@ const ForgotPassword = () => {
 
    
 const handleSubmit = async(values:IUserFormValues) =>{
-  debugger;
     recaptchaRef.current.executeAsync().then((token:string) =>
     {
       setshowErrorMessage(false);
@@ -53,7 +52,6 @@ const handleSubmit = async(values:IUserFormValues) =>{
 
       values.reCaptcha = token;
       agent.User.resetPasswordRequest(values.email, values.reCaptcha).then(action((res:boolean) => {
-        debugger;
         if(res === true)
         {
             setshowErrorMessage(false);

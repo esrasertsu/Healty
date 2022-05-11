@@ -107,7 +107,6 @@ if(loadingActivity) return <LoadingComponent content='Loading...'/>
 
     setLoading(true);
     processPayment(values).then((res) => {
-      debugger;
   if(res)
   {
     if(res.status === false)
@@ -237,7 +236,6 @@ if(loadingActivity) return <LoadingComponent content='Loading...'/>
                 <OnChange name="gsmNumber">
                 {(value, previous) => {
                        // setUpdateEnabled(true);
-                       debugger;
                         setActivityUserPaymentInfo({...activityUserPaymentInfo,gsmNumber: value});
                       
                 }}

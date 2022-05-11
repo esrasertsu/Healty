@@ -15,7 +15,6 @@ export const ActivityVideoCall:React.FC<{activity:IActivity}> = ({activity}) => 
 
 
     const handleJoinMeeting = () => {
-      debugger;
       //  const win = window.open(`/videoMeeting/${activity.id}`, "_blank");
       const win = window.open(`https://meet.afitapp.com/create/${activity.id}/${token}/${user!.userName}`, "_blank");
         win!.focus()

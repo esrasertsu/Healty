@@ -131,7 +131,6 @@ const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant,id}) => {
       setLoading(true);
       getSubMerchantInfo(id)
         .then(action((res) => {
-          debugger;
             if(res)
             {
               setsubMerchantFormValues(new SubMerchantInfo(res));
@@ -224,7 +223,6 @@ const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant,id}) => {
 
       if(ok)
       {
-        debugger;
         setLoading(true);
         if (!values.id) {
           let subMerchant = {
@@ -353,7 +351,6 @@ const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant,id}) => {
                 <OnChange name="gsmNumber">
                 {(value, previous) => {
                        // setUpdateEnabled(true);
-                       debugger;
                        setsubMerchantFormValues({...subMerchantForm,gsmNumber: value});
                       
                 }}

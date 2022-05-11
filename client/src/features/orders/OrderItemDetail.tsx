@@ -28,7 +28,6 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
     const { modal, openModal, closeModal} = rootStore.modalStore;
 
     useEffect(() => {
-        debugger;
         getOrderDetails(match.params.id)
     }, [getOrderDetails, match.params.id]) // sadece 1 kere çalışcak, koymazsak her component render olduğunda
     
@@ -282,7 +281,7 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
                             <Segment key={order.id + "_segment"} className="orderListItem">
                             <Item.Group divided>
                             <Item key={order.id} style={{ zIndex: '1' }} className={isMobile? "activityListItem_mobile":""} >
-                            <div className={isMobile? "activityListItemDiv_mobile":"activityListItemDiv"} >
+                            <div className={isMobile? "activityListItemDiv_mobile":"activityListItemDiv small"} >
                                 <Item.Image size={!isMobile ? "small":undefined} style={{ display: "block"}} 
                                     src={(order.photo && order.photo) || '/assets/placeholder.png'}
                                     className={isMobile ? "activityListItem_Image_mobile":""} >

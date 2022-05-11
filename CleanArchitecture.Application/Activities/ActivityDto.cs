@@ -38,7 +38,8 @@ namespace CleanArchitecture.Application.Activities
         public ICollection<Photo> Photos { get; set; }
         public ICollection<LevelDto> Levels { get; set; }
         public ICollection<Video> Videos { get; set; }
-
-
+        public int Star { get; set; }
+        public int StarCount { get; set; }
+        public ActivityStatus Status { get; set; }
     }
 }

@@ -62,6 +62,12 @@ namespace CleanArchitecture.Application.Activities.Administration
                         activity.Status = (ActivityStatus)status;
                         activity.LastUpdateDate = DateTime.Now;
 
+                        if((ActivityStatus)status == ActivityStatus.TrainerCompleteApproved)
+                            activity.TrainerApprovedDate =  DateTime.Now;
+
+                        if ((ActivityStatus)status == ActivityStatus.AdminPaymentApproved)
+                            activity.AdminApprovedDate =  DateTime.Now;
+
                         var result = await _context.SaveChangesAsync() > 0;
                         if (result)
                             return Unit.Value;

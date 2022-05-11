@@ -114,7 +114,6 @@ const requests = {
     editActivity: async (url:string,title: string, description:string, categoryIds: string[]| null,subCategoryIds: string[]| null, levelIds: string[]| null,
         date:Date,enddate:Date, cityId:string,venue:string,online:boolean, attendancyLimit:number,price:number,
         photo:Blob,photos:any[],deletedPhotos:string[],address:string,duration:number, mainPhotoId:string ) =>{
-            debugger;
         let formData = new FormData();
         formData.append('photo',photo);
         formData.append('Title', title);
@@ -360,7 +359,9 @@ const Activities = {
     getSavedActivities: () : Promise<IActivity[]>=>  requests.get(`/activities/saved`),
     sendReview: (comment:IActivityReview) => requests.post(`/activities/${comment.activityId}/review`, comment),
     listPersonalActs: (params: URLSearchParams): Promise<IPersonalActivitiesEnvelope> => 
-            axios.get(`/activities/personalActivities`, {params:params}).then(responseBody)
+            axios.get(`/activities/personalActivities`, {params:params}).then(responseBody),
+    updateActivityStatus: (id: string, status:string) => requests.put(`/activities/${id}/status?id=${id}&status=${status}`,{}),
+
 }
 
 const User ={

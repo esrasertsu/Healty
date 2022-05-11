@@ -38,7 +38,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
 
     return (
       <Container className="pageContainer">
-
+      
       <Grid  stackable style={{marginBottom:"50px"}}>
       <Grid.Column width={16}>
             <ActivityDetailedHeader activity={activity}/>
@@ -59,7 +59,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
                  } 
             <ActivityDetailedInfo activity={activity} />
             {
-              activity.attendanceCount > 0 &&
+              activity.attendanceCount > 1 &&
               <ActivityDetailedSideBar atCount={activity.attendanceCount} attendees={activity.attendees} date={activity.date}/>
 
             }
@@ -74,7 +74,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
 
           <Grid.Column width={5}>
                  {
-                  (activity.isGoing || activity.isHost) && !isMobile &&  (new Date(activity.date).getTime() > new Date().getTime()) &&
+                  (activity.isGoing || activity.isHost) && !isMobile && 
                  <ActivityCountDown activity={activity} />
                  }
                  {

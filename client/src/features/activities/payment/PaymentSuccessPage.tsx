@@ -65,7 +65,7 @@ const PaymentSuccessPage : React.FC<RouteComponentProps> = ({location}) =>{
          <Segment key={activity.id + "_segment"} className="orderListItem">
          <Item.Group divided>
           <Item key={activity.id} style={{ zIndex: '1' }} className={isMobile? "activityListItem_mobile":""} >
-         <div className={isMobile? "activityListItemDiv_mobile":"activityListItemDiv"} >
+         <div className={isMobile? "activityListItemDiv_mobile":"activityListItemDiv small"} >
              <Item.Image size={!isMobile ? "small":undefined} style={{ display: "block"}} 
                  src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'}
                  className={isMobile ? "activityListItem_Image_mobile":""} >

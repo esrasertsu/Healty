@@ -83,7 +83,6 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
     }
 
   const handleFinalFormSubmit = (values: any) => {
-    debugger;
     const { ...post } = values;
     let done = true;
 

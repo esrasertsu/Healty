@@ -54,7 +54,6 @@ const numberOptions = [
 
    
 const handleCardClick = (e:any) => {
-    debugger;
     // if(!isLoggedIn)
     // {    var str = `/activities/${activity.id}`;
     //     handleLoginClick(e,str); 
@@ -127,7 +126,6 @@ const handleCardClick = (e:any) => {
                         />
                           <OnChange name="count">
                         {(value, previous) => {
-                            debugger;
                             setCount(value);
                         }}
                  </OnChange>

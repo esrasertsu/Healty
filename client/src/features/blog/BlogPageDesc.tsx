@@ -55,7 +55,6 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
   }
 
   const handleDeleteBlog = (e:any) => {
-    debugger;
     deletePost(e,blog.id);
   }
 
@@ -85,7 +84,6 @@ const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog
                       icon='cancel'
                       onClick={() => 
                         { 
-                          debugger;
                           setEditMode(false);
                           setUpdatedBlog(false);
                         }}

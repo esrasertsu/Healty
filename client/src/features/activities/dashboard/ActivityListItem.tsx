@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { Item, Segment, Icon, Label, Card, Popup, Image, Modal, Button } from 'semantic-ui-react'
+import React, { useContext, useState } from 'react'
+import { Item, Segment, Icon, Label, Card, Popup, Image, Modal, Button, Grid } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/activity';
 import { format } from 'date-fns';
 import {ActivityListItemAttendees } from './ActivityListItemAttendees';
@@ -11,6 +11,8 @@ import tr  from 'date-fns/locale/tr'
 import { useHistory } from 'react-router-dom';
 import LoginForm from '../../user/LoginForm';
 import { observer } from 'mobx-react-lite';
+import { BsFillBookmarkStarFill } from "react-icons/bs";
+import { BiTimer, BiWifi, BiWifiOff } from "react-icons/bi";
 
 const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
     const rootStore = useContext(RootStoreContext);
@@ -26,7 +28,10 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
     const index = activity.categories && activity.categories.length>0 ? colors.findIndex(x => x.key === activity.categories[0].text): 0;
     const color = colors[index].value;
    const borderColor = borderColors[index].value;
-    
+  
+   const [durationDay, setDurationDay] = useState(Math.floor(activity.duration / (24*60)))
+   const [durationHour, setDurationHour] = useState(Math.floor((activity.duration % (60*24) )/ 60))
+   const [durationMin, setDurationMin] = useState(Math.floor((activity.duration % (60*24)) % 60))
 
     const handleCardClick = (e:any) => {       
             history.push(`/activities/${activity.id}`);
@@ -100,27 +105,23 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                     {
                         (!activity.isHost) && isTabletOrMobile &&
                         <Popup
-                        hoverable
-                        position="top center"
-                        on={['hover', 'click']}
-                        positionFixed 
-                       content="Kaydet"
-                       key={activity.id+Math.random()+"subPopover"}
-                       trigger={ 
-                        <Icon 
-                        className={activity.isSaved?'activity_addToFav_mobile saved' :'activity_addToFav_mobile' }
-                        name={"bookmark"}  
-                        color={activity.isSaved?"orange" :"pink"}
-                        onClick={(e:any) => activity.isSaved ? handleUnSave(e,activity.id) :handleSave(e,activity.id) } />
-                       }
-                     />
-                      
-                        
-                    }
+                      hoverable
+                      position="top center"
+                      on={['hover', 'click']}
+                      positionFixed
+                      content="Kaydet"
+                      key={activity.id + Math.random() + "subPopover"}
+                      trigger={<BsFillBookmarkStarFill
+                        className={activity.isSaved ? 'activity_addToFav_mobile saved' : 'activity_addToFav_mobile'}
+                        onClick={(e: any) => activity.isSaved ? handleUnSave(e, activity.id) : handleSave(e, activity.id)} />} />
+  
+                    }  
                         <Item.Image size={!isTabletOrMobile ? "medium":undefined} style={{ display: "block"}} 
                             src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'}
                             className={isTabletOrMobile ? "activityListItem_Image_mobile":""} >
+                             
                         </Item.Image>
+                       
                        
                     </div>
                   <div className="activityListItem_content_div">
@@ -128,10 +129,8 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                 
                     <Item.Content className={isTabletOrMobile ? "activity_listItem_mobile":"activity_listItem"} >
                         <Item.Header className='activity_listItem_title'>{activity.title}</Item.Header>
-                        {(new Date(activity.endDate).getTime() < new Date().getTime()) ?
-                        <StarRating rating={activity.star} editing={false} size={'small'} showCount={false}/>:
-                        <div style={{margin:"3px 0 5px 0px",width: "max-content"}}>{activity.savedCount > 0 ? <span><Icon name='bookmark' /> {activity.savedCount} kişi tarafından kaydedildi </span> : <span></span>}</div> } 
-
+                        {(new Date(activity.endDate).getTime() < new Date().getTime()) &&
+                        <StarRating rating={activity.star} editing={false} size={'small'} showCount={false}/>}
                         {/* <Item.Description>
                             <div>{activity.description}</div>
                             <div>
@@ -157,7 +156,14 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                                  <span>+{activity.subCategories.length-3} </span>
                             }
                             </>
-                              <div style={{marginTop:"10px"}}>
+                            <div style={{margin:"10px 0 0 0px",width: "max-content", display:"flex", alignItems:"center"}}>
+                          <BiTimer style={{fontSize: "21px",marginRight:"8px"}} />
+                          <span style={{marginRight:"2px"}}>Süre:</span> 
+                          <span style={{marginRight:"2px"}}>{durationDay > 0 && (durationDay + " gün ")}</span>
+                          <span style={{marginRight:"2px"}}>{durationHour > 0 && (durationHour +" saat ")}</span>
+                          <span>{durationMin >0 && (durationMin + " dakika")}</span>
+                         </div> 
+                             
                                 <Icon style={{color:"#222E50"}} name='heartbeat' /><span> Seviye: </span>
                                 {
                                     activity.levels && activity.levels.length> 0 ? 
@@ -165,15 +171,15 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                                     : " Bilgi yok"
                                 }
                                {activity.online ?  <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}> 
-                               <Image style={{height:"20px", marginRight:"10px"}} src="/icons/wifi-ok.png"/><span> Online katılıma açık</span> 
+                               <BiWifi style={{fontSize: "20px",marginRight:"8px"}}/><span> Online katılıma açık</span> 
                                 </div>: 
                                 <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>
-                                  <Image style={{height:"20px",marginRight:"10px"}} src="/icons/wifi-nok.png"/><span> Online katılıma kapalı</span></div>}
-                                </div>
+                                  <BiWifiOff style={{fontSize: "20px",marginRight:"8px"}}/><span> Online katılıma kapalı</span></div>}
+                            
                         </Item.Description> 
-                        <Item.Description style={{marginTop:"10px"}}>
-                            <Item.Image key={host.image} size="mini" circular src={host.image || '/assets/user.png'}
-                             style={{}}/>
+                        <Item.Description style={{marginTop:"5px"}}>
+                            <Item.Image key={host.image} size="mini" style={{width:"25px"}} circular src={host.image || '/assets/user.png'}
+                            />
                              &nbsp;<span className="activityHostName">{host.displayName}</span>
                             </Item.Description>
                     </Item.Content>
@@ -190,9 +196,8 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                        content="Kaydet"
                        key={activity.id+Math.random()+"subPopover"}
                        trigger={ 
-                        <Icon 
+                        <BsFillBookmarkStarFill 
                         className={activity.isSaved?'activity_addToFav saved' :'activity_addToFav' }
-                        name={"bookmark"}  
                         onClick={(e:any) => activity.isSaved ? handleUnSave(e,activity.id) :handleSave(e,activity.id) } />
                        }
                      />
@@ -239,24 +244,26 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
             </Item>
             </Item.Group>
             </div>
-            <Segment clearing secondary className="activityListItem_footer">
-                <Icon name='clock' /> Saat: {format(activity.date, 'HH:mm',{locale: tr})}
-                &nbsp;
-               { !activity.online && <><Icon name='marker' /> <span>{activity.venue}, {activity.city && activity.city.text}</span></> }
-                {
-                  //  isLoggedIn && user &&  
-                   <ActivityListItemAttendees attendees={activity.attendees}/>
+            <Segment secondary className="activityListItem_footer">
+             <div>
+               <div>
+               <Icon name='clock' /> Saat: {format(activity.date, 'HH:mm',{locale: tr})}   &nbsp;
+               { !activity.online && <>
+               <Icon name='marker' /> 
+               <span>{activity.venue}, {activity.city && activity.city.text}</span>
+               </> 
                }
-              
-             {/* <Button 
-             circular 
-             size='small' 
-             content="Aktivite Detayı" 
-             className='gradientBtn' 
-             floated='right' icon="angle right" labelPosition='right'
-             onClick={(e:any) => handleCardClick(e)}></Button> */}
-
-
+               </div>
+              <div>
+              {
+                 activity.savedCount > 0 ? 
+                        <span><Icon name='bookmark' /> {activity.savedCount} kişi tarafından kaydedildi </span> :
+                         <span></span>
+              }
+              </div>
+               
+             </div>
+                <ActivityListItemAttendees attendees={activity.attendees}/>
             </Segment>
             {/* <Segment secondary>
                <ActivityListItemAttendees attendees={activity.attendees}/>

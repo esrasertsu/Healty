@@ -6,6 +6,7 @@ import { IActivity } from '../../../app/models/activity'
 import dompurify from 'dompurify';
 import tr  from 'date-fns/locale/tr'
 import { useMediaQuery } from 'react-responsive'
+import { BiWifi, BiWifiOff } from 'react-icons/bi'
 
 const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
 
@@ -173,7 +174,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
              <Segment attached>
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
-                 {activity.online ? <Image style={{height:"22px", maxWidth:"22px"}} src="/icons/wifi-ok.png"/> : <Image style={{height:"22px", maxWidth:"22px"}} src="/icons/wifi-nok.png"/> }
+                 {activity.online ? <BiWifi style={{fontSize: "26px"}}/> :<BiWifiOff style={{fontSize: "26px"}}/> }
                  </Grid.Column>
                  <Grid.Column width={11}>
                   {activity.online ?  

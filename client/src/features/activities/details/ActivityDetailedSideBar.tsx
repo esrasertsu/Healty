@@ -26,7 +26,8 @@ interface IProps{
                { atCount }  Kişi  { (new Date(date).getTime() > new Date().getTime()) ? " Katılıyor" : " Katıldı" }
             </span> 
             <br></br>
-            <span style={{fontSize:"12px"}}>* Sadece takip ettiğin kullanıcılar listelenmektedir.</span> </>
+            {/* <span style={{fontSize:"12px"}}>* Sadece takip ettiğin kullanıcılar listelenmektedir.</span>  */}
+            </>
              </Header>
              
 

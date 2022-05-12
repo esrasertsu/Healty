@@ -281,6 +281,7 @@ html, body {
 .ui.comments{
   display: contents !important;
 }
+
 .ellipsis {
   display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -745,6 +746,8 @@ h1, h2, h3, h4, h5 {
 .activityListItem_footer{
   color:rgb(38, 58, 94) !important;
   padding:10px !important;
+  display: flex;
+    justify-content: space-between;
 }
 p.baseline-pricing__value{
   font-size: 18px !important;
@@ -765,46 +768,38 @@ p.baseline-pricing__value{
       font-size: 18px !important;
     }
     i.heartbeat.icon{
-      background: -webkit-gradient(linear, left top, left bottom, from(#7e3af2), to(#3f83f8));
-      background-clip: text;
-	    -webkit-text-fill-color: transparent;
-      font-size: 19px !important;
+      // background: -webkit-gradient(linear, left top, left bottom, from(#7e3af2), to(#3f83f8));
+      // background-clip: text;
+	    // -webkit-text-fill-color: transparent;
+      font-size: 17px !important;
     }
-    i.activity_addToFav_mobile.icon.bookmark{
+    .activity_addToFav_mobile{
       cursor: pointer;
       height: 40px !important;
-      padding-top: 5px;
-      margin-top: -6px;
+      padding-top: 0px;
+      margin-top: -9px;
       position: absolute;
       right: 0;
-      font-size: 30px;
-      color:#bcbdbd !important;
+      font-size: 38px;
+      color: #263a5e !important;
     }
     
-    i.activity_addToFav.icon{
+    .activity_addToFav{
       font-size: 30px !important;
       cursor: pointer;
-      margin-top: -9px;
-      color:#bcbdbd !important;
+      margin-top: -14px;
+    //  color:#bcbdbd !important;
+      font-size: 34px;
     }
-    i.activity_addToFav.saved.icon,i.activity_addToFav_mobile.saved.icon{
+    .activity_addToFav.saved,.activity_addToFav_mobile.saved{
       color: #ff5722!important;
     }
    
-    i.activity_addToFav.icon.bookmark{
-      font-size: 30px;
-      cursor: pointer;
-      // background: -webkit-gradient(linear, left top, left bottom, from(#7e3af2), to(#3f83f8)) !important;
-      // -webkit-background-clip: text !important;
-      // background-clip: text;
-      // -webkit-text-fill-color: transparent;
-      height: 40px !important;
-    padding-top: 5px;
-    margin-top: -15px;
-    }
-    i.activity_addToFav.icon:hover{
+ 
+    .activity_addToFav:hover{
       transform: scale(1.20);
       cursor: pointer;
+      color: #ff5722!important;
     }
     
 }
@@ -814,7 +809,11 @@ p.baseline-pricing__value{
 .activityDetailLabel{
   color:rgb(38, 58, 94)
 }
-
+.ui.segment.profilecomments{
+  background: none;
+    box-shadow: none !important;
+    border: none;
+}
 .activityDetail_zoom_info{
   margin-top: 15px;
     border-top: 1px solid rgba(34,36,38,.15);
@@ -1084,6 +1083,9 @@ a.ui.card:hover {
   display: flex;
   padding: 15px;
   color: rgb(38, 58, 94) !important;
+  font-size: .875rem;
+  font-weight: 400;
+  line-height: 1.25rem;
 }
 .orderListItem_content_div{
   width: 100%;
@@ -1953,7 +1955,9 @@ max-width: 80%;
     width: 100%;
     display: flex;
     color: rgb(38, 58, 94) !important;
-
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.25rem;
   }
   .orderListItem_content_div{
     width: 100%;

@@ -42,7 +42,7 @@ import ProfileCommentList from './ProfileCommentList';
                    {/* <Icon name="comment outline"></Icon> */}
                </Header>
              {/* </Segment> */}
-             <Segment clearing>
+             <Segment clearing className='profilecomments'>
                
                <ProfileCommentList handleGetNext={handleGetNext} commentPage={commentPage}
                totalPages={totalPages} loadingNext={loadingNext} getCommentsByDate={getCommentsByDate}/>

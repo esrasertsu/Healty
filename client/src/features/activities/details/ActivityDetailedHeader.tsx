@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-import { Segment, Item, Header, Button, Image, Modal, Icon, Confirm, Container, Grid } from 'semantic-ui-react'
+import { Segment, Item, Header, Button, Image, Modal, Icon, Confirm, Container, Grid, Label } from 'semantic-ui-react'
 import { ActivityStatus, IActivity } from '../../../app/models/activity';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import tr  from 'date-fns/locale/tr'
@@ -202,8 +202,11 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                     ): (
                       <>
                       { 
-                      activity.attendancyLimit && (activity.attendancyLimit !==0 && (activity.attendancyLimit>0) && (activity.attendancyLimit - activity.attendees.length) <4) ?
-                      <span style={{color:"red"}}>Son {activity.attendancyLimit - activity.attendees.length} katılımcı!</span> : ""
+                      activity.attendancyLimit && (activity.attendancyLimit !==0 && (activity.attendancyLimit>0) && (activity.attendancyLimit - activity.attendanceCount) <4) ?
+                     ( activity.attendancyLimit - activity.attendanceCount >0 ?
+                       <Label color='red'>Son {activity.attendancyLimit - activity.attendanceCount} katılımcı!</Label>
+                       :
+                       <Label color='red'>Yer kalmadı!</Label> ) : ""
                       }
                       {/* {
                       (activity.attendancyLimit ===null ||activity.attendancyLimit ===0 || (activity.attendancyLimit && (activity.attendancyLimit > activity.attendees.length))) &&

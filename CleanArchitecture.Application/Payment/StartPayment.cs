@@ -150,7 +150,7 @@ namespace CleanArchitecture.Application.Payment
                                
                         var paymentStartedRes = _paymentAccessor.PaymentProcessWithIyzico(activity, user, request.TicketCount, request.UserIpAddress,
                         order.ConversationId, request.CardHolderName, request.CardNumber.Replace(" ", ""), request.CVC, request.ExpireMonth, request.ExpireYear,
-                        subMerchantKey, callbackUrl);
+                        subMerchantKey, callbackUrl, ownerTrainer);
 
                         if (paymentStartedRes.ErrorMessage == "" && paymentStartedRes.ErrorCode == "")
                         {

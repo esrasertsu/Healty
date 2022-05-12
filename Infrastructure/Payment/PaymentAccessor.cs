@@ -230,7 +230,7 @@ namespace Infrastructure.Payment
         }
 
         public StartPaymentResult PaymentProcessWithIyzico(Activity activity, AppUser user, int count, string userIp, string conversationId, 
-            string cardHolderName, string cardNumber, string cvc, string expireMonth, string expireYear, string subMerchantKey, string callbackUrl)
+            string cardHolderName, string cardNumber, string cvc, string expireMonth, string expireYear, string subMerchantKey, string callbackUrl, AppUser trainer)
         {
 
             CreatePaymentRequest request = new CreatePaymentRequest();
@@ -290,12 +290,12 @@ namespace Infrastructure.Payment
 
             if (!string.IsNullOrEmpty(subMerchantKey))
             {
-                var comision = user.SubMerchantDetails.CommissionStatus.Rate;
+                var comision = trainer.SubMerchantDetails.CommissionStatus.Rate;
                 var KDV = 18 / 100;
 
                 var submerchantprice = activity.Price - (activity.Price * comision /100);
 
-                if (user.SubMerchantDetails.MerchantType != MerchantType.Personal)
+                if (trainer.SubMerchantDetails.MerchantType != MerchantType.Personal)
                    submerchantprice = activity.Price - (activity.Price * comision / 100);
                 else
                 {

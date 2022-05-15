@@ -11,6 +11,7 @@ import { useMediaQuery } from 'react-responsive'
 interface IProps{
     setVisibleMobileNav:(visible:boolean) => void;
     visible:boolean;
+
 }
 
 const MobileNavBar: React.FC<IProps> = ({setVisibleMobileNav,visible}) => {
@@ -18,15 +19,14 @@ const MobileNavBar: React.FC<IProps> = ({setVisibleMobileNav,visible}) => {
     const { activeMenu,setActiveMenu } = rootStore.commonStore;
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
-    const fixed = "top";
     return (
       <>
       {
       <Menu 
-      fixed={fixed ? 'top' : undefined}
       pointing
       secondary
       size='massive'
+      className='mainMenu'
        >
        <Container>
        <Menu.Item as='a' header  

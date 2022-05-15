@@ -10,11 +10,13 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 
 namespace CleanArchitecture.Application.User
 {
@@ -50,13 +52,15 @@ namespace CleanArchitecture.Application.User
             private readonly UserManager<AppUser> _userManager;
             private readonly IEmailSender _emailSender;
             private readonly IGoogleReCAPTCHAAccessor _reCAPTCHAAccessor;
+            private IWebHostEnvironment _hostingEnvironment;
 
-            public Handler(DataContext context, UserManager<AppUser> userManager, IEmailSender emailSender, IGoogleReCAPTCHAAccessor reCAPTCHAAccessor)
+            public Handler(DataContext context, UserManager<AppUser> userManager, IEmailSender emailSender, IGoogleReCAPTCHAAccessor reCAPTCHAAccessor,IWebHostEnvironment environment)
             {
                 _context = context;
                 _userManager = userManager;
                 _emailSender = emailSender;
                 _reCAPTCHAAccessor = reCAPTCHAAccessor;
+                _hostingEnvironment = environment;
 
             }
 
@@ -97,9 +101,16 @@ namespace CleanArchitecture.Application.User
 
                 var verifyUrl = $"{request.Origin}/user/verifyEmail?token={token}&email={request.Email}";
 
-                var message = $"<p>Merhaba,</p><p>Email adresini aşağıdaki linke tıklayarak doğrulayabilir ve siteye giriş yapabilirsiniz.</p><p><a href='{verifyUrl}'>{verifyUrl}></a></p>";
+                string FilePath = Directory.GetCurrentDirectory() + "/Templates/WelcomeTemplate.html";
 
-                await _emailSender.SendEmailAsync(request.Email, "Hesap Doğrulama", message);
+                StreamReader str = new StreamReader(FilePath);
+                string MailText = str.ReadToEnd();
+                str.Close();
+                MailText = MailText.Replace("[username]", request.UserName).Replace("[email]", request.Email).Replace("[displayName]", request.DisplayName).Replace("[verifyUrl]", verifyUrl);
+
+                //var message = $"<p>Merhaba,</p><p>Email adresini aşağıdaki linke tıklayarak doğrulayabilir ve siteye giriş yapabilirsiniz.</p><p><a href='{verifyUrl}'>{verifyUrl}></a></p>";
+
+                await _emailSender.SendEmailAsync(request.Email, "Hesap Doğrulama", MailText);
 
                 return Unit.Value;
             }

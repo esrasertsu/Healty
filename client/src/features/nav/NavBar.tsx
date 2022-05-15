@@ -10,7 +10,11 @@ import  RegisterForm from '../user/RegisterForm';
 import TrainerForm from '../user/TrainerRegisterModal';
 import { useMediaQuery } from 'react-responsive'
 
-const NavBar: React.FC = () => {
+interface IProps{
+  fixed:boolean;
+}
+
+const NavBar: React.FC<IProps> = ({fixed}) => {
     const rootStore = useContext(RootStoreContext);
     const { user, logout,isLoggedIn,loggingOut} = rootStore.userStore;
     const { activeMenu,setActiveMenu } = rootStore.commonStore;
@@ -70,15 +74,16 @@ const NavBar: React.FC = () => {
             }
     
 
-    const fixed = "top";
+    
     return (
       <>
       {
       <Menu 
-      fixed={fixed ? 'top' : undefined}
+      // fixed={fixed ? 'top' : undefined}
       pointing
       secondary
       size='massive'
+      className='mainMenu'
        >
        <Container>
        <Menu.Item as='a' header  

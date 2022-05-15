@@ -8,6 +8,7 @@ import ProfileStore from "./profileStore";
 import BlogStore from "./blogStore";
 import CategoryStore from "./categoryStore";
 import MessageStore from "./messageStore";
+import ContractStore from "./contractStore";
 
 configure({enforceActions: 'always'});
 
@@ -20,6 +21,7 @@ export class RootStore {
     blogStore: BlogStore;
     categoryStore: CategoryStore;
     messageStore: MessageStore;
+    contractStore: ContractStore;
 
     constructor() {
         this.activityStore = new ActivityStore(this);
@@ -30,6 +32,7 @@ export class RootStore {
         this.blogStore = new BlogStore(this);
         this.categoryStore = new CategoryStore(this);
         this.messageStore = new MessageStore(this);
+        this.contractStore = new ContractStore(this);
 
     }
 }

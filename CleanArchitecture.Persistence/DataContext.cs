@@ -60,6 +60,9 @@ namespace CleanArchitecture.Persistence
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<CommissionStatus> CommissionStatuses { get; set; }
         public DbSet<ProfileCommentReports> ProfileCommentReports { get; set; }
+        public DbSet<Contract> Contracts { get; set; }
+        public DbSet<UserSellContract> UserSellContracts { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

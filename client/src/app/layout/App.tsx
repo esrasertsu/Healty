@@ -2,8 +2,9 @@ import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { Container, Icon, Image, Menu, Modal, Segment, Sidebar } from 'semantic-ui-react';
 import NavBar from '../../features/nav/NavBar';
 import { observer } from 'mobx-react-lite';
-import { Route , RouteComponentProps,Switch, withRouter} from 'react-router-dom';
+import { Redirect, Route , RouteComponentProps,Switch, withRouter} from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
+import KVKKContract from '../../features/home/KVKKContract';
 import ActivityForm from '../../features/activities/form/ActivityForm';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
 import ActivityDetails from '../../features/activities/details/ActivityDetails';
@@ -51,6 +52,9 @@ import MainVideoPage from '../../features/videoCall/MainVideoPage';
 import SavedPage from '../../features/savedItems/SavedPage';
 import ActivitySuccessPage from '../../features/activities/form/ActivitySuccessPage';
 import TrainerActivityPage from '../../features/activities/personalDashboard/TrainerActivityPage';
+import ResponsiveContainer from './theme/ResponsiveContainer';
+import KullanimSartlari from '../../features/home/KullanimSartlari';
+import MembershipContract from '../../features/home/MembershipContract';
 
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
@@ -177,22 +181,24 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
 
   if(!appLoaded) return <LoadingComponent content='Yükleniyor...' />
   if(loggingOut) return <LoadingComponent content='Çıkış yapılıyor...' />
-
-    return (
+  const reload = () => window.location.reload();
+    
+  return (
       <AnalyticsWrapper initialized={initialized}>
 
        <Fragment>
          <ModalContainer />
          <ToastContainer position= 'bottom-right' />
-         {!isTabletOrMobile ? 
-          <>
-          <NavBar/>
-
+         <ResponsiveContainer>         
+         <>
         <Route exact path="/" component={HomePage} />
         <Route path={'/(.+)'} render={()=>(
           <Fragment>
-             <Switch>
-                <Route path="/profiles" component={ProfileDashboard}/>
+             <Switch> 
+             <Route path="/uyelik_ve_gizlilik_sozlesmesi" component={MembershipContract}/>
+                <Route path="/kisisel_verilerin_korunmasi" component={KVKKContract}/>
+                <Route path="/kullanim_sartlari" component={KullanimSartlari}/>
+                 <Route path="/profiles" component={ProfileDashboard}/>
                 <Route exact path="/activities" component={ActivityDashboard} />
                 <Route path="/activities/:id" component={ActivityDetails} />
                 <PrivateRoute  path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
@@ -227,74 +233,19 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
         )} />
 
         </>
-           :
+        <Footer /> 
 
-        <>
-         <MobileNavBar setVisibleMobileNav={setVisible} visible={visible}/>
-          
-          <Sidebar.Pushable style={{ overflow: 'hidden' }}>
-          <Sidebar
-                as={Menu}
-                animation={"push"}
-                direction={"right"}
-                icon='labeled'
-                vertical
-                visible={visible}
-                width='wide'
-                className="sidebar_menu"
-              >
-               <MobileNavMenu setVisibleMobileNav={setVisible} visible={visible} />
-              </Sidebar>
-
-        <Sidebar.Pusher>
-        <Route exact path="/" component={HomePage}/>
-         <Route path={'/(.+)'} render={()=>(
-           <Fragment>
-                <Switch>
-                <Route path="/profiles" component={ProfileDashboard}/>
-                <Route exact path="/activities" component={ActivityDashboard} />
-                 <Route path="/activities/:id" component={ActivityDetails} />
-                 <PrivateRoute exact path="/payment/activity/:id/:count" component={ActivityPaymentPage} />
-                 <Route exact path="/blog" component={BlogList} />
-                 <Route exact path="/blog/:id" component={BlogPage} />
-                 <PrivateRoute key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityForm} />
-                 <PrivateRoute key={location.key} path={["/createPost", "/manage/:id"]} component={PostForm} />
-                 <Route path="/profile/:username" component={ProfilePage}/>
-                 <PrivateRoute path="/messages" component={MessagesPage}/>
-                 <Route path="/login" component={LoginForm}/>
-                 <Route path="/login-required" component={LoginRequiredPage}/>
-                 {/* <Route exact path="/activitysearch" component={ActivitySearchPage}/> */}
-                 <Route path="/user/registerSuccess" component={RegisterSuccess}/>
-                 <PrivateRoute path="/activitySuccess" component={ActivitySuccessPage}/>
-                 <Route path="/myActivities" component={TrainerActivityPage}/>
-                 <Route path="/user/verifyEmail" component={VerifyEmail}/>
-                 <Route path="/user/resetPassword" component={ResetPassword}/>
-                 <Route path="/TrainerOnboarding" component={TrainerOnboardingPage} />
-                 <PrivateRoute path="/TrainerRegister/:id" component={TrainerRegisterPage} />
-                 <PrivateRoute path="/settings" component={Settings}/>
-                 <PrivateRoute exact path="/payment/success" component={PaymentSuccessPage} />
-                 <PrivateRoute exact path="/payment/error" component={PaymentErrorPage} />
-                 <Route exact path="/orders" component={OrderList}/>
-                 <PrivateRoute exact path="/orders/:id" component={OrderItemDetail}/>
-                 <PrivateRoute exact path="/videoMeeting/:id" component={MainVideoPage}/>
-                 <Route exact path="/admin" component={Admin}/>
-                 <Route exact path="/forbidden" component={Forbidden}/>
-                 <PrivateRoute path="/saved" component={SavedPage}/>
-                 <Route component={NotFound}/>
-           </Switch>
-           </Fragment>
-         )} />
-        </Sidebar.Pusher>
-      </Sidebar.Pushable>
-
-
-        
-         </>
-
-}
-                
-   <Footer /> 
-
+      </ResponsiveContainer>  
+      {
+        isMobile && history.location.pathname.includes("/activities/") &&
+        <div className='stickyButton'>
+        <a aria-current="page" className="ui teal button active" role="button" href="https://react.semantic-ui.com/layouts">
+          <i aria-hidden="true" className="left arrow icon"></i>Layouts</a>
+          <a target="_blank" className="ui secondary button" role="button" href="https://github.com/Semantic-Org/Semantic-UI-React/blob/master/docs/src/layouts/HomepageLayout.js">
+            <i aria-hidden="true" className="github icon"></i>Source</a>
+       </div>
+      }       
+     
         </Fragment>
         </AnalyticsWrapper>
     

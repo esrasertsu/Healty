@@ -124,7 +124,7 @@ const handleRegister = async(values:IUserFormValues) =>{
               isMobile ? {maxWidth:"100%", marginBottom:"10px", textAlign:"right"} :
               isTablet ? {maxWidth:"303px", marginBottom:"10px", textAlign:"right"}:
               isDesktop ? {maxWidth:"375px", marginBottom:"10px", textAlign:"right"} :{}
-            }>Hesap oluşturarak <a style={{cursor:"pointer"}}>Gizlilik Sözleşmesi</a> ve <a style={{cursor:"pointer"}}>Site Kullanım Şartları</a>'nı kabul etmiş olursunuz. </div>
+            }>Hesap oluşturarak <a href="/uyelik_ve_gizlilik_sozlesmesi" target="_blank" style={{cursor:"pointer"}}>Gizlilik Sözleşmesi</a> ve <a href="/kullanim_sartlari" target="_blank" style={{cursor:"pointer"}}>Site Kullanım Şartları</a>'nı kabul etmiş olursunuz. </div>
             <Button
               disabled={(invalid && !dirtySinceLastSubmit) || pristine}
               loading={submitting}

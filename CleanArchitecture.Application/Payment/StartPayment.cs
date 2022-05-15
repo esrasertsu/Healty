@@ -91,7 +91,7 @@ namespace CleanArchitecture.Application.Payment
                 order.BuyerName = request.CardHolderName;
                 var cardLength = request.CardNumber.Replace(" ","").Length;
                 order.CardLastFourDigit = request.CardNumber.Substring(cardLength - 4, 4);
-
+     
                 var orderItem = new OrderItem()
                 {
                     Price = activity.Price.Value,

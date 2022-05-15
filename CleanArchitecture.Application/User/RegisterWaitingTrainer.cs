@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -111,9 +112,13 @@ namespace CleanArchitecture.Application.User
 
                 var verifyUrl = $"{request.Origin}/user/verifyEmail?token={token}&email={request.Email}";
 
-                var message = $"<p>Merhaba,</p><p>Email adresini aşağıdaki linke tıklayarak doğrulayabilir ve siteye giriş yapabilirsiniz.</p><p><a href='{verifyUrl}'>{verifyUrl}></a></p>";
+                string FilePath = Directory.GetCurrentDirectory() + "/Templates/WelcomeTemplate.html";
+                StreamReader str = new StreamReader(FilePath);
+                string MailText = str.ReadToEnd();
+                str.Close();
+                MailText = MailText.Replace("[username]", request.UserName).Replace("[email]", request.Email).Replace("[displayName]", request.DisplayName).Replace("[verifyUrl]", verifyUrl);
 
-                await _emailSender.SendEmailAsync(request.Email, "Hesap Doğrulama", message);
+                await _emailSender.SendEmailAsync(request.Email, "Hesap Doğrulama", MailText);
 
 
                

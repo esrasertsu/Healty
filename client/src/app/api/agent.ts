@@ -481,6 +481,10 @@ const Order = {
 
 } 
 
+const Contract = {
+    get: (code: string) => requests.get(`/contracts/content/${code}`),
+} 
+
 const Agora = {
     generateToken: (params: URLSearchParams): Promise<string> => 
             axios.get(`/agora`, {params:params}).then(responseBody),
@@ -498,5 +502,6 @@ export default {
     Zoom,
     Payment,
     Order,
-    Agora
+    Agora,
+    Contract
 }

@@ -32,6 +32,7 @@ namespace CleanArchitecture.Domain
         public string CardAssociation { get; set; }
         public string PaidPrice { get; set; }
         public string Currency { get; set; }
+        public string ContractId { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
 
     }

@@ -202,7 +202,7 @@ const TrainerActivityPage: React.FC<IProps> = ({settings}) => {
       :
       <>
       {!isTabletOrMobile && <br></br> }
-      <Segment placeholder>
+      <Segment placeholder style={{minHeight: "90vh"}}>
             <Header icon>
                 <Icon name="calendar times outline" />
             </Header>

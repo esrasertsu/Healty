@@ -133,6 +133,7 @@ namespace CleanArchitecture.Application.Payment
                         str.Close();
                         MailText = MailText.Replace("[activityUrl]", $"https://afitapp.com/activities/{activity.Id}")
                             .Replace("[activityImage]", activity.Photos.SingleOrDefault(x => x.IsMain)?.Url)
+                            .Replace("[orderNo]", item.PaymentTransactionId)
                             .Replace("[ActivityTitle]", activity.Title)
                             .Replace("[ActivityDescription]", activity.Description.Length > 50 ? activity.Description.Substring(0, 50) : activity.Description)
                             .Replace("[ItemCount]", request.count.ToString())

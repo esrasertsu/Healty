@@ -16,7 +16,7 @@ namespace CleanArchitecture.Application.User
     public class Login
     {
         public class Query : IRequest<User> {
-            public string Email { get; set; }
+            public string EmailOrUserName { get; set; }
             public string Password { get; set; }
             public string ReCaptcha { get; set; }
 
@@ -26,9 +26,9 @@ namespace CleanArchitecture.Application.User
         {
             public QueryValidator()
             {
-                RuleFor(x => x.Email).NotEmpty();
-                RuleFor(x => x.Password).NotEmpty();
-                RuleFor(x => x.ReCaptcha).NotEmpty();
+                RuleFor(x => x.EmailOrUserName).NotEmpty().WithMessage("Email veya kullanıcı adı girilmesi zorunludur");
+                RuleFor(x => x.Password).NotEmpty().WithMessage("Şifre girilmesi zorunludur.");
+                RuleFor(x => x.ReCaptcha).NotEmpty().WithMessage("Erişim onaylanmadı.");
 
             }
         }
@@ -59,10 +59,14 @@ namespace CleanArchitecture.Application.User
                     throw new RestException(HttpStatusCode.BadRequest, new { Email = "Geçersiz giriş." });
                 }
 
-                var user = await _userManager.FindByEmailAsync(request.Email);
+                var user = await _userManager.FindByEmailAsync(request.EmailOrUserName);
 
                 if (user == null)
-                    throw new RestException(HttpStatusCode.BadRequest, new { Email = "Sistemde bu email adresiyle kayıtlı bir kullanıcı bulunamadı."});
+                {
+                     user = await _userManager.FindByNameAsync(request.EmailOrUserName);
+                     if(user == null)
+                        throw new RestException(HttpStatusCode.BadRequest, new { Email = "Sistemde bu kullanıcı adı veya email adresiyle kayıtlı bir kullanıcı bulunamadı." });
+                }
 
                 if (!user.EmailConfirmed) throw new RestException(HttpStatusCode.BadRequest, new { EmailVerification = "Email doğrulaması gerçekleştirilmedi." });
 

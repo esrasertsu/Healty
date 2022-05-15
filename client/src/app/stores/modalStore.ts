@@ -31,7 +31,7 @@ export default class ModalStore {
         this.modal.image = image;
         this.modal.footer = footer;
         this.modal.dimmer = dimmer === "inverted" ? "inverted" : "blurring";
-        this.modal.closeOnDimmerClick = closeOnDimmerClick === true ? true :false;
+        this.modal.closeOnDimmerClick = closeOnDimmerClick === false ? false :true;
         this.modal.className = className || "";
        // this.modal.redirectPage=redirectPage ? redirectPage : "";
     }

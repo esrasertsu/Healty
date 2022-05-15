@@ -3,10 +3,9 @@ import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { combineValidators, composeValidators, createValidator, isRequired } from 'revalidate';
-import { Button, Container, Divider, Form, Header, Icon, Image, Modal } from 'semantic-ui-react';
+import { Button, Container, Divider, Form, Header, Image, Modal } from 'semantic-ui-react';
 import agent from '../../app/api/agent';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
@@ -16,26 +15,26 @@ import ForgotPassword from './ForgotPassword';
 import SocialLogin from './SocialLogin';
 import GoogleLogin from 'react-google-login';
 import ReCAPTCHA from "react-google-recaptcha";
-import { action, runInAction } from 'mobx';
 import  RegisterForm  from './RegisterForm';
 import { useMediaQuery } from 'react-responsive';
+import { AxiosResponse } from 'axios';
 
 
-const isValidEmail = createValidator(
+const isValidEmailOrUserName = createValidator(
   message => value => {
-    if (value && !/.+@.+\.[A-Za-z]+$/.test(value)) {
+    if (value && !/^([A-z0-9!@#$%^&*().,<>{}[\]<>?_=+\-|;:\'\"\/])*[^\s]\1*$/.test(value)) {
       return message
     }
   },
-  'Geçersiz e-posta'
+  'Geçersiz giriş'
 )
 
 const validate = combineValidators({
-  email: composeValidators(
-    isRequired({message: 'Email zorunlu alandır.'}),
-    isValidEmail
+  password: isRequired({ message: 'Şifre zorunlu alan.' }),
+  emailOrUserName: composeValidators(
+    isRequired({message: '"Email veya kullanıcı" adı zorunlu alandır.'}),
+    isValidEmailOrUserName
   )(),
-  password: isRequired({ message: 'Şifre zorunlu alan.' })
 })
 
 interface IProps {
@@ -45,7 +44,7 @@ interface IProps {
 const LoginForm:React.FC<IProps> = ({location}) => {
     const rootStore = useContext(RootStoreContext);
     const { login, fbLogin, loadingFbLogin ,setResendEmailVeriMessage, resendEmailVeriMessage,
-    googleLogin,loadingGoogleLogin} = rootStore.userStore;
+    googleLogin,loadingGoogleLogin,submitting} = rootStore.userStore;
     const { closeModal, openModal, modal } = rootStore.modalStore;
 
     const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
@@ -53,7 +52,8 @@ const LoginForm:React.FC<IProps> = ({location}) => {
   
     const [email, setEmail] = useState("");
     const recaptchaRef = React.createRef<any>();
-const [submitErr, setSubmitErr] = useState()
+const [submitErr, setSubmitErr] = useState<AxiosResponse<any> | null>(null)
+
     useEffect(() => {
       setResendEmailVeriMessage(false);
       
@@ -91,13 +91,15 @@ const handleResetPassword = (e:any) => {
   
    
 const handleLogin = async(values:IUserFormValues) =>{
+  setSubmitErr(null)
 
      recaptchaRef.current.executeAsync().then((token:string) => {
+       debugger;
         values.reCaptcha = token;
               
         login(values,location)
         .catch((error) => 
-        setSubmitErr(error)
+         setSubmitErr(error)
         )
       })
  }
@@ -123,10 +125,8 @@ const handleLogin = async(values:IUserFormValues) =>{
         validate={validate}
         render={({
           handleSubmit,
-          submitting,
           submitError,
           invalid,
-          pristine,
           dirtySinceLastSubmit,
         }) => (
           <Form onSubmit={handleSubmit} error>
@@ -135,8 +135,8 @@ const handleLogin = async(values:IUserFormValues) =>{
               content="Giriş Yap"
               textAlign="center"
             />
-            <label id="lbl_Email">Email*</label>
-            <Field labelName="lbl_Email" type="email" name="email" placeholder="Email" component={TextInput}
+            <label id="lbl_Email">Email / Kullanıcı adı*</label>
+            <Field labelName="lbl_Email" name="emailOrUserName" placeholder="Email veya kullanıcı adı" component={TextInput}
             />
               <OnChange name="email">
                 {(value, previous) => {
@@ -163,7 +163,7 @@ const handleLogin = async(values:IUserFormValues) =>{
              <ErrorMessage error={submitErr} text='Geçersiz email adresi / şifre' />
             )}
             <Button
-              disabled={(invalid && !dirtySinceLastSubmit) || pristine}
+              disabled={(invalid)}
               loading={submitting}
               className='orangeBtn'
               circular

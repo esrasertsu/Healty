@@ -3046,12 +3046,11 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
   color:#345289 !important;
 }
 
-.ui.modal>.content>.icon+.description.loginreg, .ui.modal>.content>.image+.description.loginreg {
-  -webkit-box-flex: 0;
-  -ms-flex: 1 0 auto !important;
-  flex: 1 0 auto !important;
-}
 
+
+.ui.modal > .content > .large.image {
+  width: 50%!important;
+}
 .ui.modal>.content>.icon+.description, .ui.modal>.content>.image+.description {
   -webkit-box-flex: 1;
   -ms-flex: 1 !important;

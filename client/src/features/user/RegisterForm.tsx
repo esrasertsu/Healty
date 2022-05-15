@@ -14,6 +14,7 @@ import { observer } from 'mobx-react';
 import TrainerForm from '../user/TrainerRegisterModal';
 import ReCAPTCHA from "react-google-recaptcha";
 import { runInAction } from 'mobx';
+import { AxiosResponse } from 'axios';
 
 const isValidEmail = createValidator(
   message => value => {
@@ -23,11 +24,23 @@ const isValidEmail = createValidator(
   },
   'Geçersiz e-posta'
 )
+
+const isValidUsername = createValidator(
+  message => value => {
+    if (value && (!/^[A-Za-z0-9]*$/.test(value) || /^[0-9]+$/.test(value))) {
+      return message
+    }
+  },
+  'Kullanıcı adı boşluk ve özel karakter içermemeli. En az bir harf içermelidir ve sayı kullanılabilir.'
+)
 const validate = combineValidators({
-    username: isRequired({ message: 'Kullanıcı adı zorunlu alan.' }),
     email: composeValidators(
       isRequired({message: 'Email zorunlu alandır.'}),
       isValidEmail
+    )(),
+    username: composeValidators(
+      isRequired({ message: 'Kullanıcı adı zorunlu alan.' }),
+      isValidUsername
     )(),
     password: isRequired({ message: 'Şifre zorunlu alan.' })
 })
@@ -36,14 +49,14 @@ interface IProps {
 }
 const RegisterForm:React.FC<IProps> = ({location}) =>{
     const rootStore = useContext(RootStoreContext);
-    const { register,fbLogin,loadingFbLogin,googleLogin,loadingGoogleLogin } = rootStore.userStore;
+    const { register,fbLogin,loadingFbLogin,googleLogin,loadingGoogleLogin,submitting } = rootStore.userStore;
 
     const isDesktop =  useMediaQuery({ query: '(min-width: 920px)' })
     const isTablet = useMediaQuery({ query: '(max-width: 919px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
     const { closeModal, openModal, modal } = rootStore.modalStore;
     const recaptchaRef = React.createRef<any>();
-    const [submitErr, setSubmitErr] = useState()
+    const [submitErr, setSubmitErr] = useState<AxiosResponse<any>|null>(null)
 
     const responseGoogle = (response:any) => {
       googleLogin(response.tokenId, location).catch((error) => 
@@ -58,7 +71,8 @@ const RegisterForm:React.FC<IProps> = ({location}) =>{
 
 
     const handleTrainerFormClick= (e:any) => {
-    
+      setSubmitErr(null)
+
       e.stopPropagation();
       if(modal.open) closeModal();
 
@@ -77,7 +91,7 @@ const RegisterForm:React.FC<IProps> = ({location}) =>{
 
       
 const handleRegister = async(values:IUserFormValues) =>{
-
+  setSubmitErr(null)
   recaptchaRef.current.executeAsync().then((token:string) => {
      values.reCaptcha = token;
            
@@ -96,7 +110,6 @@ const handleRegister = async(values:IUserFormValues) =>{
         validate={validate}
         render={({
           handleSubmit,
-          submitting,
           submitError,
           invalid,
           pristine,
@@ -108,7 +121,8 @@ const handleRegister = async(values:IUserFormValues) =>{
               content="Yeni Üye"
               textAlign="center"
             />
-            <h4>Uzman başvuru için <span className="registerLoginAnchor" onClick={handleTrainerFormClick}>tıkla!</span></h4>            <Field name="username" placeholder="*Kullanıcı Adı" component={TextInput}/>
+            <h4>Uzman başvuru için <span className="registerLoginAnchor" onClick={handleTrainerFormClick}>tıkla!</span></h4>            
+            <Field name="username" placeholder="*Kullanıcı Adı" component={TextInput}/>
             <Field name="displayname" placeholder="Ad Soyad" component={TextInput} />
             <Field name="email" type="email" placeholder="*Email" component={TextInput} />
             <Field

@@ -34,6 +34,7 @@ export default class UserStore {
     @observable tranierCreationForm : ITrainerCreationFormValues = new TrainerCreationFormValues();
     @observable trainerRegistering = false;
     @observable loadingUserInfo = false;
+    @observable submitting = false;
     @observable submittingContactDetails = false;
     @observable submittingAccountInfo = false;
     @observable submittingPassword = false;
@@ -123,6 +124,7 @@ export default class UserStore {
                 }
     }
     @action login = async (values : IUserFormValues,location:string) =>{
+        this.submitting = true;
         try {
             const user = await agent.User.login(values);
             runInAction(()=>{
@@ -132,6 +134,7 @@ export default class UserStore {
             this.rootStore.commonStore.setToken(user.token);
             this.startRefreshTokenTimer(user);
             this.rootStore.modalStore.closeModal();
+            this.submitting = false;
             if(location!==null && location !=="")
               history.push(location);
             else
@@ -142,19 +145,25 @@ export default class UserStore {
             {
                 this.setResendEmailVeriMessage(true);
             }
+            this.submitting = false;
             throw error;
         }
     }
 
     @action register = async (values: IUserFormValues,location:string) =>{
+        this.submitting = true;
+
         try {
            await agent.User.register(values);
          
             this.rootStore.modalStore.closeModal();
+            this.submitting = false;
+
             history.push(`/user/registerSuccess?email=${values.email}`);
             this.hubConnection === null && this.createHubConnection(false);
 
         } catch (error) {
+            this.submitting = false;
             throw error;
         }
     }

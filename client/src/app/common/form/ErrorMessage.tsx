@@ -3,12 +3,13 @@ import React from 'react'
 import { Message } from 'semantic-ui-react'
 
 interface IProps {
-    error : AxiosResponse,
+    error? : AxiosResponse,
     text?: string
 }
 
 export const ErrorMessage: React.FC<IProps> = ({ error, text }) => {
   return (
+    error ?
     <Message error>
       <Message.Header>{error.statusText === "Bad Request" || error.statusText === "Internal Server Error" ? "" : error.statusText}</Message.Header>
       {error.data && Object.keys(error.data.errors).length > 0 && (
@@ -26,5 +27,6 @@ export const ErrorMessage: React.FC<IProps> = ({ error, text }) => {
       )}
       {/* {text && <Message.Content content={text} />} */}
     </Message>
+    : <></>
   );
 };

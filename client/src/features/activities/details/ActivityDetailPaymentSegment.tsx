@@ -157,7 +157,7 @@ const handleCardClick = (e:any) => {
                                 <div className="price">{activity.price! * count} TL</div>
                      </div>
                       <Button circular  className='orangeBtn'  floated='right' onClick ={handlePaySubmit} disabled={count === 0}
-                       content={activity.price && activity.price > 0 ? 'Ödemeye geç': 'Rezervasyonu Tamamla'}></Button>
+                       content={activity.price && activity.price > 0 ? 'Rezervasyon Yap': 'Rezervasyonu Tamamla'}></Button>
 
                     </div>
                    </Segment>

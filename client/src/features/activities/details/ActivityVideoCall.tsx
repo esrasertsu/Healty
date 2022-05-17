@@ -22,7 +22,7 @@ export const ActivityVideoCall:React.FC<{activity:IActivity}> = ({activity}) => 
 
     return (<>
         {
-           <>
+           <div className='activityDetails_videoCall-segment'>
             <Segment attached>
             <Header>Online Aktivite  </Header>
                 <div style={{marginBottom:"10px"}}>
@@ -40,7 +40,7 @@ export const ActivityVideoCall:React.FC<{activity:IActivity}> = ({activity}) => 
                <Button circular  className='orangeBtn' onClick={handleJoinMeeting} content={"Katıl"} icon="video" labelPosition="right"></Button>
             }
                </Segment>
-            </>
+            </div>
           
         }
         </>

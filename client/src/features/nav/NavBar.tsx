@@ -182,7 +182,7 @@ const NavBar: React.FC<IProps> = ({fixed}) => {
                     className='border'
                     onClick={()=>{setActiveMenu(-1);}}
                   >  <Icon name="bookmark outline" />
-                       Kaydettiklerim
+                       Favorilerim
                   </Dropdown.Item>
                   <Dropdown.Item
                     key="settings"

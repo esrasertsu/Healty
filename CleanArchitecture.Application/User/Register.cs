@@ -109,12 +109,11 @@ namespace CleanArchitecture.Application.User
                 MailText = MailText.Replace("[username]", request.UserName).Replace("[email]", request.Email).Replace("[displayName]", request.DisplayName).Replace("[verifyUrl]", verifyUrl);
 
                 //var message = $"<p>Merhaba,</p><p>Email adresini aşağıdaki linke tıklayarak doğrulayabilir ve siteye giriş yapabilirsiniz.</p><p><a href='{verifyUrl}'>{verifyUrl}></a></p>";
-
-                await _emailSender.SendEmailAsync(request.Email, "Hesap Doğrulama", MailText);
+                var message = $"{MailText}";
+                await _emailSender.SendEmailAsync(request.Email, "Hesap Doğrulama", message);
 
                 return Unit.Value;
             }
-         
         }
     }
 }

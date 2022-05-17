@@ -19,6 +19,8 @@ import { IPhoto } from '../../../app/models/profile';
 import { useMediaQuery } from 'react-responsive';
 import ActivityGalleryModal from './ActivityGalleryModal';
 import { StarRating } from '../../../app/common/form/StarRating';
+import { BsStar } from "react-icons/bs";
+import LoginForm from '../../user/LoginForm';
 
 SwiperCore.use([Navigation,Pagination,Mousewheel,Keyboard]);
 
@@ -33,13 +35,16 @@ const activityImageStyle = {
 const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
 
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
 
   const host = activity.attendees && activity.attendees.filter(x => x.isHost === true)[0];
 
   const rootStore = useContext(RootStoreContext);
   const { cancelAttendance, loading, deleteActivity,changeActivityStatus} = rootStore.activityStore;
   const { getOrders, orderList } = rootStore.activityStore;
-  const { user } = rootStore.userStore;
+  const {isLoggedIn,user} = rootStore.userStore;
+  const {save,unsave} = rootStore.activityStore;
+  const {openModal,closeModal,modal} = rootStore.modalStore;
 
   const [open, setOpen] = React.useState(false);
   const [cancellationUserOpen, setcancellationUserOpen] = React.useState(false);
@@ -52,14 +57,15 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
   }
 
   useEffect(() => {
-    getOrders()
+    if(user && isLoggedIn)
+      getOrders()
    
   }, [activity])
 
   const handleSendUserToOrders = () =>{
 
     if(activity.price && activity.price > 0 )
-    { debugger;
+    {
       if(orderList.length > 0)
       {
           const relatedOrder = orderList.find(x=> x.productId === activity.id);
@@ -99,6 +105,48 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
       )
      
     };
+
+    
+    const handleLoginClick = (e:any,str:string) => {
+    
+      if(modal.open) closeModal();
+  
+          openModal("Giriş Yap", <>
+          <Image  size={isMobile ? 'big': isTabletOrMobile ? 'medium' :'large'} src='/assets/Login1.jpg'  wrapped />
+          <Modal.Description className="loginreg">
+          <LoginForm location={str} />
+          </Modal.Description>
+          </>,true,
+          "","blurring",true, "loginModal") 
+      }
+  
+
+    const handleSave = (e:any,id:string) =>{
+      e.stopPropagation();
+      if(isLoggedIn)
+      {
+        save(id).then(() =>{
+          activity.isSaved = true;
+        })
+      }else{
+        var str = `/activities/${id}`;
+        handleLoginClick(null,str);
+      }
+    }
+  
+    
+    const handleUnSave = (e:any,id:string) =>{
+      e.stopPropagation();
+      if(isLoggedIn)
+      {
+        unsave(id).then(() =>{
+          activity.isSaved = false;
+        })
+      }else{
+          var str = `/activities/${id}`;
+          handleLoginClick(null,str);
+      }
+    }
   
 
     return (
@@ -136,16 +184,23 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                       <Item.Group>
                         <Item>
                           <Item.Content>
-                            <Header
-                              as="h2"
-                              style={{color:"#222E50"}}
-                              content={activity.title}
-                            />
+                            <h1
+                              className='activity-title'
+                            >{activity.title}</h1>
                             <p>{activity.date && format(activity.date,'dd MMMM yyyy, eeee',{locale: tr})}</p>
+                            <p>Düzenleyen: <Link to={`/profile/${host && host.userName}`} ><strong>{host && host.displayName}</strong></Link> </p> 
                             <div>
-                            {(new Date(activity.endDate).getTime() < new Date().getTime()) && 
-                            <span><StarRating rating={activity.star} editing={false} size={'small'} showCount={true} count={activity.starCount}/> </span> }
-                             <span>Düzenleyen: <Link to={`/profile/${host && host.userName}`} ><strong>{host && host.displayName}</strong></Link> </span> 
+                            {/* {(new Date(activity.endDate).getTime() < new Date().getTime()) &&  */}
+                            <span>
+                              <StarRating 
+                              rating={activity.star} 
+                              editing={false} 
+                              size={'small'} 
+                              showCount={true} 
+                              count={activity.starCount}
+                              showCountSide={true}
+                              /> 
+                              </span> 
                             </div>
                           </Item.Content>
                         </Item>
@@ -167,38 +222,8 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                       icon="check"
                       circular>
                       </Button>}
-                      {/* <Modal
-                        basic
-                        onClose={() => setOpen(false)}
-                        onOpen={() => setOpen(true)}
-                        open={open}
-                        size='small'
-                        trigger={<Button circular
-                          color='red' floated='right' content='Sil'
-                        labelPosition='right'
-                        icon='trash'></Button>}
-                      >
-                        <Header icon>
-                          <Icon name='archive' />
-                          Aktivite Silme Onayı
-                        </Header>
-                        <Modal.Content>
-                          <p>
-                            Oluşturmuş olduğun bu aktiviteyi silmek istediğine emin misin?
-                          </p>
-                        </Modal.Content>
-                        <Modal.Actions>
-                          <Button circular basic color='grey'  onClick={() => setOpen(false)}>
-                            <Icon name='backward' /> İptal
-                          </Button>
-                          <Button circular basic color='red' onClick={(e:any) => {handleDeleteActivity(e);setOpen(false)}}>
-                            <Icon name='trash' /> Sil
-                          </Button>
-                        </Modal.Actions>
-                      </Modal> */}
+                     
                     </>                   
-                    ): activity.isGoing ? (
-                      <Button circular loading={loading} onClick={()=>setcancellationUserOpen(true)}>Katılımı iptal et</Button>
                     ): (
                       <>
                       { 
@@ -222,6 +247,10 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                   
                   <Segment basic className='activityGallery'  style={{ padding: '0' }}>
                     { isMobile && activity.photos.length > 0?
+                    <div>
+                        <Button style={{position:"absolute", margin:"20px",zIndex:"5",right:"0"}} className="whiteBtn"
+                           onClick={(e: any) => activity.isSaved ? handleUnSave(e, activity.id) : handleSave(e, activity.id)}
+                           ><span style={{marginRight:"5px"}}>{activity.isSaved ? "Favorilerimden Çıkar" : "Favorilere Ekle"}</span>&nbsp;<Icon name='star'/></Button>
                     <Swiper cssMode={true} navigation={true} pagination={true} mousewheel={true} keyboard={true} className="activitySwiper">
                     {
                       activity.photos.map((photo:IPhoto) =>
@@ -231,9 +260,18 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                       )
                     }  
                     </Swiper>
+                    </div>
+                    
+                   
                     : 
                     isMobile && activity.photos.length === 0 ?
-                    <Image src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} fluid style={activityImageStyle}/>
+                    <div>
+                       <Button style={{position:"absolute", margin:"20px",zIndex:"5",right:"0"}} className="whiteBtn"
+                           onClick={(e: any) => activity.isSaved ? handleUnSave(e, activity.id) : handleSave(e, activity.id)}
+                           ><span style={{marginRight:"5px"}}>{activity.isSaved ? "Favorilerimden Çıkar" : "Favorilere Ekle"}</span>&nbsp;<Icon name='star'/></Button>
+                      <Image src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} fluid style={activityImageStyle}/>
+
+                            </div>
                     :
                     activity.photos.length > 3?
                     <Grid>
@@ -246,12 +284,15 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                           </Grid.Column>
                           <Grid.Column width={5}>
                               <Grid.Row>
+                              <Button style={{position:"absolute", margin:"20px",zIndex:"5",right:"0"}} className="whiteBtn"
+                           onClick={(e: any) => activity.isSaved ? handleUnSave(e, activity.id) : handleSave(e, activity.id)}
+                           ><span style={{marginRight:"5px"}}>{activity.isSaved ? "Favorilerimden Çıkar" : "Favorilere Ekle"}</span>&nbsp;<Icon name='star'/></Button> 
                               <img style={{cursor:"pointer",borderRadius: "0.28571429rem"}} className='activitySecondCol_FirstRow_Img' key={activity.photos[1].id} src={activity.photos[1].url}
                                onClick={() => openGalleryModal(1)} />
                               </Grid.Row>
                               <Grid.Row style={{display:"flex",cursor:"pointer"}}>
                               <Grid.Column>
-                                <img style={{paddingRight:"5px",cursor:"pointer",borderRadius: "0.28571429rem"}} className='activitySecondCol_SecondRow_Img' key={activity.photos[2].id}
+                               <img style={{paddingRight:"5px",cursor:"pointer",borderRadius: "0.28571429rem"}} className='activitySecondCol_SecondRow_Img' key={activity.photos[2].id}
                                  src={activity.photos[2].url}  onClick={() => openGalleryModal(2)} />
                               </Grid.Column>
                               <Grid.Column>
@@ -267,10 +308,19 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                     <div>
                       <Button style={{position:"absolute", margin:"20px", zIndex:"5"}} className="blueBtn" content={"Tüm resimler (" + activity.photos.length.toString() + ")"}
                       onClick={() => openGalleryModal(0)}/>
+                       <Button style={{position:"absolute", margin:"20px",zIndex:"5",right:"0"}} className="whiteBtn"
+                           onClick={(e: any) => activity.isSaved ? handleUnSave(e, activity.id) : handleSave(e, activity.id)}
+                           ><span style={{marginRight:"5px"}}>{activity.isSaved ? "Favorilerimden Çıkar" : "Favorilere Ekle"}</span>&nbsp;<Icon name='star'/></Button>
                       <Image src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} onClick={() => openGalleryModal(0)} fluid style={activityImageStyle}/>
                     </div>
                     :
-                    <Image src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} fluid style={activityImageStyle}/>
+                    <div>
+                      <Button style={{position:"absolute", margin:"20px",zIndex:"5",right:"0"}} className="whiteBtn"
+                           onClick={(e: any) => activity.isSaved ? handleUnSave(e, activity.id) : handleSave(e, activity.id)}
+                           ><span style={{marginRight:"5px"}}>{activity.isSaved ? "Favorilerimden Çıkar" : "Favorilere Ekle"}</span>&nbsp;<Icon name='star'/></Button>
+                       <Image src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} fluid style={activityImageStyle}/>
+
+                    </div>
 
                     }
                 
@@ -279,28 +329,45 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
 
                     {isMobile && 
                     <>
-                     <Container>
-                      <Item.Group>
-                        <Item>
+                        <Item style={{margin:"15px 0"}}>
                           <Item.Content>
-                          <Header
-                              as="h1"
-                              style={{color:"#222E50"}}
-                              content={activity.title}
-                            />
+                          <h1 className='activity-title'>
+                             {activity.title}
+                           </h1>
                             <p>{activity.date && format(activity.date,'dd MMMM yyyy, eeee',{locale: tr})}</p>
-                            <p>
+                            {/* {(new Date(activity.endDate).getTime() < new Date().getTime()) &&  */}
+                        <div className='activity__mobile-pricing'>
+                            <div>
+                          <p>
                               Düzenleyen: <Link to={`/profile/${host && host.userName}`} ><strong>{host && host.displayName}</strong></Link> 
                             </p>
-                            {(new Date(activity.endDate).getTime() < new Date().getTime()) && 
-                        <div><StarRating rating={activity.star} editing={false} size={'small'} showCount={true} count={activity.starCount}/> </div> }
+                            <StarRating 
+                          rating={activity.star} 
+                          editing={false} 
+                          size={'small'} 
+                          showCount={true} 
+                          count={activity.starCount}
+                          showCountSide={true}/>
+                            </div>
+                         
+                          <div className="baseline-pricing">
+                              <p className="baseline-pricing__from">Kişi başı</p> 
+                          <div className="baseline-pricing__container">
+                          <p className="baseline-pricing__value">
+                              {activity.price}&nbsp;TL
+                              </p>
+                              </div> 
+                              <p className="baseline-pricing__category">
+                          {/* 'den başlayan fiyatlarla */}
+                      </p>
+                      </div>
+                           </div> 
                           </Item.Content>
                         </Item>
-                      </Item.Group>
-                    </Container>
                    { (activity.isHost && host && host.userRole==="Trainer") || (user && user.role==="Admin") ? (
                       <div style={{display:"flex", alignItems:"flex-end", flexDirection:"row",justifyContent: "space-evenly"}}>
-                      <Button circular as={Link} to={`/manage/${activity.id}`} color='blue' floated='right' style={{marginTop:"20px"}}
+                      <Button circular as={Link} to={`/manage/${activity.id}`} color='blue' floated='right' 
+                      style={isMobile ? {width:"100%"}: {marginTop:"20px"}}
                       content='Düzenle'
                       labelPosition='right'
                       icon='edit'>
@@ -312,44 +379,16 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                       icon="check"
                       circular>
                       </Button>}
-                      {/* <Modal
-                        basic
-                        circular
-                        onClose={() => setOpen(false)}
-                        onOpen={() => setOpen(true)}
-                        open={open}
-                        size='small'
-                        trigger={<Button color='red' floated='right' content='Sil' style={{marginTop:"20px"}}
-                        labelPosition='right'
-                        icon='trash'></Button>}
-                      >
-                        <Header icon>
-                          <Icon name='archive' />
-                          Aktivite Silme Onayı
-                        </Header>
-                        <Modal.Content>
-                          <p>
-                            Oluşturmuş olduğun bu aktiviteyi silmek istediğine emin misin?
-                          </p>
-                        </Modal.Content>
-                        <Modal.Actions>
-                          <Button circular basic color='grey' onClick={() => setOpen(false)}>
-                            <Icon name='backward' /> İptal
-                          </Button>
-                           <Button circular basic color='red' onClick={(e:any) => {handleDeleteActivity(e);setOpen(false)}}>
-                            <Icon name='trash' /> Sil
-                          </Button> 
-                        </Modal.Actions>
-                      </Modal> */}
                     </div>                   
-                    ): activity.isGoing ? (
-                      <Button circular style={{marginTop:"20px"}} loading={loading} onClick={()=>setcancellationUserOpen(true)}>Katılımı iptal et</Button>
                     ): (
                       <>
                       { 
-                      activity.attendancyLimit && (activity.attendancyLimit !==0 && (activity.attendancyLimit>0) && (activity.attendancyLimit - activity.attendees.length) <4) ?
-                      <span style={{color:"red"}}>Son {activity.attendancyLimit - activity.attendees.length} katılımcı!</span> : ""
-                      }
+                        activity.attendancyLimit && (activity.attendancyLimit !==0 && (activity.attendancyLimit>0) && (activity.attendancyLimit - activity.attendanceCount) <4) ?
+                       ( activity.attendancyLimit - activity.attendanceCount >0 ?
+                        <div className='almost-sell-out-label'>Son {activity.attendancyLimit - activity.attendanceCount} katılımcı!</div>
+                         :
+                         <div className='almost-sell-out-label'>Üzgünüz yer kalmadı.</div> ):""
+                        }
                       {/* {
                       (activity.attendancyLimit ===null ||activity.attendancyLimit ===0 || (activity.attendancyLimit && (activity.attendancyLimit > activity.attendees.length))) &&
                       <Button  floated='right' loading={loading} onClick={attendActivity} color='teal'>Aktiviteye Katıl</Button>

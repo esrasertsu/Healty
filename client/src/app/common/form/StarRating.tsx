@@ -9,8 +9,9 @@ interface IProps{
     size?:"large" | "mini" | "tiny" | "small" | "big" | "huge" | "massive" | undefined;
     count?:number;
     showCount: boolean;
+    showCountSide?:boolean;
 }
-export const StarRating:React.FC<IProps> = ({rating,setRating,editing,size,count, showCount}) => {
+export const StarRating:React.FC<IProps> = ({rating,setRating,editing,size,count, showCount, showCountSide}) => {
 
     const clickStar = (nextValue:number, prevValue:number, name:string) => {
         setRating!(nextValue);
@@ -31,9 +32,12 @@ export const StarRating:React.FC<IProps> = ({rating,setRating,editing,size,count
             );
           }}
         />
-         <span className="starRating_Rating">{rating}</span>
+         <span className="starRating_Rating">{rating}</span> 
+         {
+           showCountSide && <span className="starRating_Count">&nbsp;&nbsp;/&nbsp;{count} Yorum</span> 
+         }
        </div>
-       {showCount && 
+       {showCount && !showCountSide &&
           <div className="starRating_Count">{count} Yorum</div> 
         }
        

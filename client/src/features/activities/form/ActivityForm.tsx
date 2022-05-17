@@ -17,14 +17,14 @@ import DropdownMultiple from "../../../app/common/form/DropdownMultiple";
 import { Category, ICategory } from "../../../app/models/category";
 import DropdownInput from "../../../app/common/form/DropdownInput";
 import NumberInput from "../../../app/common/form/NumberInput";
-import { OnChange, OnBlur } from "react-final-form-listeners";
-import WYSIWYGEditor from "../../../app/common/form/WYSIWYGEditor";
+import { OnChange } from "react-final-form-listeners";
 import { action } from "mobx";
 import { toast } from "react-toastify";
 import { useMediaQuery } from "react-responsive";
 import PhotoGallery from "./PhotoGallery";
 import { ActivityPhoto, IPhoto } from "../../../app/models/profile";
 import { LoadingComponent } from "../../../app/layout/LoadingComponent";
+import TextEditorInput from "../../../app/common/form/TextEditorInput";
 
 
 interface DetailParams {
@@ -105,7 +105,6 @@ const validate = combineValidators({
   const [docs, setDocs] = useState<any[]>([]);
   const [filedocs, setFileDocs] = useState<any[]>([]);
   const [title,setTitle] = useState("");
-  const [description, setDescription] = useState("");
 
   const [updateEnabled, setUpdateEnabled] = useState<boolean>(false);
 
@@ -127,7 +126,6 @@ const validate = combineValidators({
       loadActivity(match.params.id)
         .then(action((activity) => {
           setActivityForm(new ActivityFormValues(activity!));
-          setDescription(activity.description);
           setTitle(activity.title);
           if(activity.mainImage===undefined)
           {
@@ -148,22 +146,22 @@ const validate = combineValidators({
   }, [loadActivity,match.params.id]);
 
   const handleCategoryChanged = (e: any, data: string[]) => {
-    setActivityForm({...activityForm, categoryIds: [...data], description:description, title:title});
+    setActivityForm({...activityForm, categoryIds: [...data],  title:title});
     setCategory(data);  
   
  }
 
  const handleSubCategoryChanged = (e: any, data: string[]) => {  
-     setActivityForm({...activityForm,subCategoryIds: [...data], description:description, title:title});
+     setActivityForm({...activityForm,subCategoryIds: [...data],  title:title});
    }
 
    const handleCityChanged = (e: any, data: string) => {  
     if((activityForm.cityId !== data))
-    setActivityForm({...activityForm,cityId: data, description:description, title:title});
+    setActivityForm({...activityForm,cityId: data, title:title});
     
  }
  const handleLevelChanged = (e: any, data: any) => {  
-  setActivityForm({...activityForm,levelIds: [...data], description:description, title:title});
+  setActivityForm({...activityForm,levelIds: [...data], title:title});
   setUpdateEnabled(true);
  }
       allCategoriesOptionList.filter(x=>x.parentId===null).map(option => (
@@ -176,7 +174,7 @@ const validate = combineValidators({
       ))
       setSubCategoryOptions(subCategoryOptionFilteredList);
       const renewedSubIds = activityForm.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
-      setActivityForm({...activityForm,subCategoryIds: [...renewedSubIds], description:description, title:title});
+      setActivityForm({...activityForm,subCategoryIds: [...renewedSubIds], title:title});
 
    }
         useEffect(() => {
@@ -196,7 +194,7 @@ const handleDateChange = (date:any) =>{
   else if((new Date(dateAndTime).getTime() > new Date().getTime()))
   {
     showDateErrorMessage(""); 
-    setActivityForm({...activityForm, date: dateAndTime, description:description, title:title});
+    setActivityForm({...activityForm, date: dateAndTime,  title:title});
   }
 
 }
@@ -207,7 +205,7 @@ const handleTimeChange = (time:any) =>{
       showDateErrorMessage("Başlangıç saati bitiş saatinden geri bir saat olmalıdır.");     
   else{
     showDateErrorMessage(""); 
-    setActivityForm({...activityForm, time: dateAndTime, description:description, title:title});
+    setActivityForm({...activityForm, time: dateAndTime,  title:title});
   }
   
 }
@@ -225,7 +223,7 @@ const handleEndDateChange = (endDate:any) =>{
   } 
   else {
     showDateErrorMessage("");
-    setActivityForm({...activityForm, endDate: dateAndTime, description:description, title:title});
+    setActivityForm({...activityForm, endDate: dateAndTime, title:title});
   }
     
 }
@@ -236,7 +234,7 @@ const handleEndTimeChange = (endTime:any) =>{
      showDateErrorMessage("Bitiş saati başlangıç saatinden ileri bir saat olmalıdır.");
   else{
     showDateErrorMessage("");
-    setActivityForm({...activityForm, endTime: dateAndTime, description:description, title:title});
+    setActivityForm({...activityForm, endTime: dateAndTime, title:title});
   }
 }
 
@@ -256,18 +254,18 @@ const deleteActivityPhoto = (photo:IPhoto) =>{
   { 
     let deleteds = activityForm.deletedPhotos;
     deleteds.push(photo.id);
-      setActivityForm({...activityForm, deletedPhotos:deleteds, description:description, title:title});
+      setActivityForm({...activityForm, deletedPhotos:deleteds, title:title});
       //galery görünümde gösterdiklerimiz
       
       let restPhotos = activityForm.photos!.filter(x => x.id !== photo.id);
-      setActivityForm({...activityForm, photos:restPhotos, description:description, title:title});
+      setActivityForm({...activityForm, photos:restPhotos, title:title});
 
   }else{
     let restNews =  activityForm.newphotos.filter(x => x.url !== photo.url );
-    setActivityForm({...activityForm, newphotos:restNews, description:description, title:title});
+    setActivityForm({...activityForm, newphotos:restNews,  title:title});
 
     let restPhotos = activityForm.photos!.filter(x => x.url !== photo.url);
-      setActivityForm({...activityForm, photos:restPhotos, description:description, title:title});
+      setActivityForm({...activityForm, photos:restPhotos, title:title});
   }
 }
 
@@ -277,7 +275,7 @@ const makeCoverPic = (photo:IPhoto) =>{
      toast.error("Önce değişiklikleri kaydetmelisiniz.")
   }else{
     setNewMainId(photo.id);
-    setActivityForm({...activityForm, mainPhotoId:photo.id, description:description, title:title});
+    setActivityForm({...activityForm, mainPhotoId:photo.id,  title:title});
   }
 }
 
@@ -292,7 +290,7 @@ const uploadedNewImage = (file:any) =>{
       //yeni eklenen fotolar backend'e giden
       let photos = activityForm.newphotos;
       photos.push(file);
-      setActivityForm({...activityForm, newphotos:photos, description:description, title:title});
+      setActivityForm({...activityForm, newphotos:photos, title:title});
 
       //galery görünümde gösterdiklerimiz
       let existingPhotos = activityForm.photos;
@@ -302,7 +300,7 @@ const uploadedNewImage = (file:any) =>{
       :
       existingPhotos = [actPhoto];
 
-      setActivityForm({...activityForm, photos:existingPhotos, description:description, title:title});
+      setActivityForm({...activityForm, photos:existingPhotos, title:title});
 
     }; 
 }
@@ -320,7 +318,6 @@ const uploadedNewImage = (file:any) =>{
     const { date, time, endDate, endTime,durationHour,durationDay, durationMin, ...restactivity } = values;
     restactivity.date = dateAndTime;
     restactivity.endDate = enddateAndTime;
-debugger;
     if(new Date(restactivity.date) >= new Date(restactivity.endDate))
      {
          showDateErrorMessage("Aktivite başlangıç tarihi bitiş tarihinden önce olmalıdır.");
@@ -354,7 +351,6 @@ debugger;
                 ...restactivity,
                 id: uuid(),
                 duration:totalDuration,
-                description: description,
                 title:title
               };
               createActivity(newActivity).then(action((res) =>{
@@ -372,7 +368,6 @@ debugger;
             let editedActivity = {
               ...restactivity,
               duration:totalDuration,
-              description: description,
                 title:title
             }
             editActivity(editedActivity);
@@ -425,7 +420,7 @@ debugger;
                     />
                       <OnChange name="TrainerUserName">
                     {(value, previous) => {
-                          setActivityForm({...activityForm,trainerUserName: value, description:description, title:title});
+                          setActivityForm({...activityForm,trainerUserName: value, title:title});
                     }}
                      </OnChange>
                      </>
@@ -471,12 +466,14 @@ debugger;
                   <Field
                   labelName="activityDesc"
                   name="description"
-                  component={WYSIWYGEditor}
-                  value={description}
+                  allowNull={false}
+                  component={TextEditorInput}
+                  value={activityForm.description}
                 />
                   <OnChange name="description">
                 {(value, previous) => {
-                  setDescription(value);
+                 setUpdateEnabled(true);
+                 setActivityForm({...activityForm,description: value, title:title});
                 }}
                  </OnChange>
                 <label id="activityCat">Kategori*
@@ -584,7 +581,7 @@ debugger;
                     if(value !== activityForm.attendancyLimit)
                     {
                         setUpdateEnabled(true);
-                        setActivityForm({...activityForm,attendancyLimit: value, description:description, title:title});
+                        setActivityForm({...activityForm,attendancyLimit: value, title:title});
                     }
                 }}
                 </OnChange>
@@ -615,7 +612,7 @@ debugger;
                     if(value !== activityForm.online)
                     {
                         setUpdateEnabled(true);
-                        setActivityForm({...activityForm,online: value, description:description, title:title});
+                        setActivityForm({...activityForm,online: value, title:title});
                     }
                 }}
                 </OnChange>
@@ -720,7 +717,7 @@ debugger;
                         if(value !== activityForm.durationDay)
                         {
                             setUpdateEnabled(true);
-                            setActivityForm({...activityForm,durationDay: value, description:description, title:title});
+                            setActivityForm({...activityForm,durationDay: value, title:title});
                         }
                     }}
                     </OnChange>
@@ -742,7 +739,7 @@ debugger;
                     if(value !== activityForm.durationHour)
                     {
                         setUpdateEnabled(true);
-                        setActivityForm({...activityForm,durationHour: value, description:description, title:title});
+                        setActivityForm({...activityForm,durationHour: value, title:title});
                     }
                 }}
                 </OnChange>
@@ -764,7 +761,7 @@ debugger;
                         if(value !== activityForm.durationMin)
                         {
                             setUpdateEnabled(true);
-                            setActivityForm({...activityForm,durationMin: value, description:description, title:title});
+                            setActivityForm({...activityForm,durationMin: value, title:title});
                         }
                     }}
                     </OnChange>
@@ -802,7 +799,7 @@ debugger;
                     if(value !== activityForm.price)
                     {
                         setUpdateEnabled(true);
-                        setActivityForm({...activityForm,price: value, description:description, title:title});
+                        setActivityForm({...activityForm,price: value, title:title});
                     }
                 }}
                 </OnChange>
@@ -856,7 +853,7 @@ debugger;
                     <OnChange name="venue">
                 {(value, previous) => {
                         setUpdateEnabled(true);
-                        setActivityForm({...activityForm,venue: value, description:description, title:title});
+                        setActivityForm({...activityForm,venue: value, title:title});
                 }}
                 </OnChange>
                 <label>Adres
@@ -882,7 +879,7 @@ debugger;
                        <OnChange name="address">
                 {(value, previous) => {
                         setUpdateEnabled(true);
-                        setActivityForm({...activityForm,address: value, description:description, title:title});
+                        setActivityForm({...activityForm,address: value, title:title});
                 }}
                 </OnChange>
                 <Button

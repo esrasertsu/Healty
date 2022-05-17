@@ -865,7 +865,7 @@ export default class ActivityStore {
                
             })
         } catch (error) {
-            toast.error('Kaydettiğin aktiviteler getirilemedi.');
+            toast.error('Favori aktivitelerin getirilemedi.');
             runInAction(() => {
                 this.loading = false;
             })

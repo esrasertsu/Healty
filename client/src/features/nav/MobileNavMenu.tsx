@@ -187,7 +187,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                                     
                                 <h3 className="mobileNavMenu_container_item">
                                 <Icon name="bookmark outline" style={{marginRight:"10px"}} ></Icon>
-                                    Kaydettiklerim
+                                    Favorilerim
                                     </h3>
                     </Menu.Item>
                     <Menu.Item as={Link} to={`/orders`}

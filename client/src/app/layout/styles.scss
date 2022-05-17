@@ -354,6 +354,7 @@ right: 0;
 }
 .blogListItem_Header{
   color: #222E50 !important;
+  text-transform: capitalize;
 }
 .ui.form input:not([type]), .ui.form input[type=date], .ui.form input[type=datetime-local], .ui.form input[type=email], .ui.form input[type=file], .ui.form input[type=number], .ui.form input[type=password], .ui.form input[type=search], .ui.form input[type=tel], .ui.form input[type=text], .ui.form input[type=time], .ui.form input[type=url]{
   font-family: AssistantRegular, Arial,  sans-serif !important;
@@ -369,7 +370,7 @@ right: 0;
 }
 
 h1, h2, h3, h4, h5 {
-  font-family:  AssistantRegular, Arial,  sans-serif !important;
+  font-family:  AssistantBold, Arial,  sans-serif !important;
   /* font-family:  "Inter","Helvetica Neue","Segoe UI","Fira Sans",Roboto,Oxygen,Ubuntu,"Droid Sans","Arial",sans-serif!important */
 
 }
@@ -424,6 +425,31 @@ h1, h2, h3, h4, h5 {
   background:#325AA7 !important;
   --tw-text-opacity: 1;
   color: rgb(255 255 255/var(--tw-text-opacity)) !important;
+  &:hover {
+    transform: scale(1.03);
+  }
+}
+
+.ql-container {
+  min-height: 10rem;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ql-editor {
+  height: 100%;
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.whiteBtn{
+  background:#fff !important;
+  --tw-text-opacity: 1;
+  color: #222e50 !important;
+  border: 1px solid rgba(21, 22, 23, 0.15) !important;
   &:hover {
     transform: scale(1.03);
   }
@@ -750,6 +776,7 @@ h1, h2, h3, h4, h5 {
 }
 .activity_listItem_title{
   font-size: 16px !important;
+  text-transform: capitalize;
 }
 .activityListItem_footer{
   color:rgb(38, 58, 94) !important;
@@ -770,7 +797,15 @@ p.baseline-pricing__value{
   }
 
   .stickyButton{
-    position:fixed;margin:2em;bottom:0;left:0;animation:back-to-docs 1.5s ease-in-out infinite;z-index:6
+    position:fixed;bottom:0;left:0;animation:back-to-docs 1.5s ease-in-out infinite;z-index:6; width: 100%;
+    height: 60px;
+    background-color: #222e50;
+    text-align: center;
+    display: flex;
+    .button{
+      width: 95%;
+       margin: auto;
+    }
   }
   .ui.toggle.checkbox input:checked~.box:before, .ui.toggle.checkbox input:checked~label:before {
     background-color: #1bbe3e!important;
@@ -798,11 +833,11 @@ p.baseline-pricing__value{
     }
     
     .activity_addToFav{
-      font-size: 30px !important;
+      font-size: 40px !important;
       cursor: pointer;
       margin-top: -14px;
     //  color:#bcbdbd !important;
-      font-size: 34px;
+      font-size: 40px;
     }
     .activity_addToFav.saved,.activity_addToFav_mobile.saved{
       color: #ff5722!important;
@@ -1271,17 +1306,7 @@ a.ui.card:hover {
 
 
 @media (min-width: 1200px){
- .pageContainer.ui.container {
-    width: 1250px !important;
-   
-  }
 
- 
-  .ui.container {
-    width: 1250px !important;
-    margin-left: auto!important;
-    margin-right: auto!important;
-}
 
 .ui.text.container {
   margin: 40px 0 41px 70px !important;
@@ -1308,6 +1333,10 @@ a.ui.card:hover {
     padding-left: 150px;
     padding-right: 150px;
     max-width: 1400px;
+}
+
+.ui.container{
+  width: 80%;
 }
 
 
@@ -1553,6 +1582,10 @@ max-width: 95%;
 
   .activityDetails_Countdown_Segment{
     padding: 1em !important;
+    margin-bottom: 30px !important;
+  }
+  .activityDetails_videoCall-segment{
+    margin-bottom: 30px !important;
   }
   .profileList_WelcomeMessage{
     margin-top: 40px;
@@ -2189,6 +2222,16 @@ i.search.inverted.icon {
   .SearchArea {
     width: 63%;
   }
+  .ui.steps.unstackable{
+    .step{
+      .content{
+        .description{
+          display: none;
+        }
+      }
+    }
+  }
+
 button, input, optgroup, select, textarea {
   font-family: sans-serif;
   font-size: 12px;
@@ -2401,7 +2444,7 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
   flex-direction: row;
 }
 .starRating_Count{
-  font-size: 11px;
+  font-size: 12px;
 }
 
 
@@ -2640,8 +2683,37 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
       animation-fill-mode: both;
    }
 }
+@media only screen and (min-width: 768px) and (max-width: 991px){
+  .ui.container.pageContainer {
+    width: 774px;
+  }
+}
+@media only screen and (min-width: 992px) and (max-width: 1199px)
+{
+  .ui.container.pageContainer {
+    width: 1025px;
+}
+}
 
 @media (max-width: 767px){
+
+  .ui.steps.unstackable{
+    .step{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 33%;
+      font-size: 14px;
+      
+      i{
+        margin: 0;
+      }
+      .content{
+        margin-top: 10px;
+      }
+    }
+  }
 
   .ui.container.mobile_text_container{
     padding:50px 16px 40px 16px;
@@ -2657,6 +2729,42 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
     bottom: 0;
   }
 
+  .activity-title{
+    color: rgb(34, 46, 80);
+    font-family: AssistantBold, Arial, sans-serif !important;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 30px;
+    margin-top: 28px !important;
+    text-transform: capitalize;
+  }
+
+  .activity-description{
+    font-size: 15px;
+  }
+
+  .almost-sell-out-label{
+    background-color: #ffe9e3;
+    color: #ff5722;
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 16px;
+    text-align: left;
+  }
+.activity__mobile-pricing{
+  align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+
+    .baseline-pricing__value{
+      font-family:  AssistantBold, Arial, sans-serif !important;
+      font-size: 26px !important
+    }
+    .baseline-pricing__from{
+      font-size: 14px !important
+    }
+}
   .homepage_contactus-form{
     .ui.stackable.grid{
       margin-left: -1rem !important;
@@ -2735,6 +2843,20 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
       border-top-left-radius: 6px !important;
       width: 70px;
       text-align: center;
+  }
+
+  .activity-title{
+    color: #222e50;
+    font-family: AssistantBold, Arial, sans-serif !important;
+    font-size: 30px;
+    margin-bottom: 0;
+    text-transform: capitalize;
+
+  }
+
+  .activity-description{
+    font-size: 15px;
+    margin: 30px 0;
   }
  
   .savedProfile_lastcolumn{

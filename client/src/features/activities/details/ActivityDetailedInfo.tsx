@@ -20,6 +20,16 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
 
 
     return (
+      <>
+    {
+     !showMore ?
+      <>
+                  <div className='activity-description' key={activity.id+"_desc"} dangerouslySetInnerHTML={{__html:sanitizer(activity.description.slice(0, 2000))}} />
+                  {activity.description.length > 2000 && <div className="readMore" onClick={() => setShowMore(true)}>Read more</div>} 
+                  </> :
+                <div className='activity-description' key={activity.id+"_desc"} dangerouslySetInnerHTML={{__html:sanitizer(activity.description)}} />
+                }
+      <h2>Aktivite Detayları</h2>
        <Segment.Group className="activityDetails_GridSegment">
           <Segment attached>
                <Grid verticalAlign='middle'>
@@ -49,27 +59,6 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                      activity.subCategories.map<React.ReactNode>(s => <span key={activity.id + "_subcat_"+s.key}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
                      : "Bilgi yok"
                    }
-                 </Grid.Column>
-               </Grid>
-             </Segment>
-             <Segment attached>
-               <Grid>
-                 <Grid.Column width={isMobile? 2 :1}>
-                   <Icon size='large'  style={{color:"#222E50"}} name='info' />
-                 </Grid.Column>
-                 <Grid.Column width={isMobile? 14 :15}>
-                {
-                  !showMore ?
-                  <>
-                 <span className="activityDetailLabel">Açıklama: </span> 
-                  <span key={activity.id+"_desc"} dangerouslySetInnerHTML={{__html:sanitizer(activity.description.slice(0, 2000))}} />
-                  {activity.description.length > 2000 && <div className="readMore" onClick={() => setShowMore(true)}>Read more</div>} 
-                  </> :
-                  <>
-                 <span className="activityDetailLabel">Açıklama </span> 
-                <span key={activity.id+"_desc"} dangerouslySetInnerHTML={{__html:sanitizer(activity.description)}} />
-                </>
-                }
                  </Grid.Column>
                </Grid>
              </Segment>
@@ -205,6 +194,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                </Grid>
              </Segment>
            </Segment.Group>
+           </>
     )
 }
 

@@ -52,6 +52,7 @@ const validate = combineValidators({
 
   const [loading, setLoading] = useState(false);
   const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
+  const wideMobile  = useMediaQuery({ query: '(max-width: 767px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
     const [stepNo, setStepNo] = useState(0);  
 
@@ -152,7 +153,7 @@ if(loadingActivity) return <LoadingComponent content='Loading...'/>
  }
     return (
       <Container className="pageContainer">
-      <Step.Group style={{marginTop:"30px", width:"100%"}} >
+      <Step.Group unstackable style={{marginTop:"30px", width:"100%"}} >
     <Step onClick={() => handleStepClick(0)} active={stepNo === 0}>
       <Icon name='user' />
       <Step.Content>
@@ -178,9 +179,7 @@ if(loadingActivity) return <LoadingComponent content='Loading...'/>
     </Step>
   </Step.Group>
 {showUserPaymentInfoPage &&  
-     <Grid stackable style={{marginBottom:"50px"}}>
-     
-      <Grid.Row>
+     <Grid stackable style={{marginBottom:"50px"}} reversed={"mobile"}>
       <Grid.Column width={!isTablet ? 12 : 11}>
         <Segment clearing>
           <FinalForm
@@ -269,9 +268,6 @@ if(loadingActivity) return <LoadingComponent content='Loading...'/>
                   style={{marginBottom:15}}
                   width={isMobile ? "16" :"4"}
                 />
-            
-         
-              
                 <Button
                   loading={loading}
                   disabled={loading || invalid }
@@ -282,17 +278,18 @@ if(loadingActivity) return <LoadingComponent content='Loading...'/>
                   type="submit"
                   style={{margin:"20px 0"}}
                 >Kaydet ve Devam et <Icon style={{opacity:"1", marginLeft:"5px"}} name="angle right"></Icon></Button>
-                { <Button
+                {/* { <Button
                   floated="left"
                   disabled={loading}
                   type="cancel"
                   content="İptal"
+                  className='activity_payment-cancelBtn'
                   onClick={
                     match.params.id
                       ? () => history.push(`/activities/${match.params.id}`)
                       : () => history.push("/activities")
                   }
-                />}
+                />} */}
               </Form>
             )}
           />
@@ -328,9 +325,7 @@ if(loadingActivity) return <LoadingComponent content='Loading...'/>
       
        </Container>
     </Segment>
-    </Grid.Column>
-       </Grid.Row>
-      
+    </Grid.Column>      
     </Grid>
    }  
    {showPaymentPage && 

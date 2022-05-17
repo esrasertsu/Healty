@@ -124,6 +124,8 @@ namespace CleanArchitecture.API
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 0;
+                options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;
+                options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
             }).AddErrorDescriber<CustomIdentityErrorDescriber>();
 
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);

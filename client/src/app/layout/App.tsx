@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
-import { Container, Icon, Image, Menu, Modal, Segment, Sidebar } from 'semantic-ui-react';
+import { Button, Container, Icon, Image, Menu, Modal, Segment, Sidebar } from 'semantic-ui-react';
 import NavBar from '../../features/nav/NavBar';
 import { observer } from 'mobx-react-lite';
 import { Redirect, Route , RouteComponentProps,Switch, withRouter} from 'react-router-dom';
@@ -63,9 +63,10 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
 
   const rootStore = useContext(RootStoreContext);
   const {setAppLoaded, token, appLoaded,loadCities} = rootStore.commonStore;
-  const { getUser,user,createHubConnection,hubConnection,stopHubConnection ,loggingOut} = rootStore.userStore;
+  const { getUser,user,createHubConnection,isLoggedIn,stopHubConnection ,loggingOut} = rootStore.userStore;
   const { loadCategories} = rootStore.categoryStore;
   const { modal, openModal, closeModal} = rootStore.modalStore;
+  const { activity,attendActivity} = rootStore.activityStore;
   const initialized = UseAnalytics();
 
   // useLoadScript({
@@ -95,6 +96,42 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
      )
      
  }
+
+ const handleLoginClick = (e:any,str:string) => {
+  e.stopPropagation();
+  if(modal.open) closeModal();
+
+      openModal("Giriş Yap", <>
+      <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
+      <Modal.Description className="loginreg">
+      <LoginForm location={str} />
+      </Modal.Description>
+      </>,true,
+      "","blurring",true) 
+  }
+ 
+ const handlePaySubmit = (e:any) => {
+  if(!isLoggedIn && activity)
+      {    
+        var str = `/payment/activity/${activity.id}/1`; 
+
+          handleLoginClick(e,str); 
+      }
+else
+{
+  if(activity && activity.price && activity.price > 0 )
+  {    
+      var str = `/payment/activity/${activity.id}/1`; 
+      history.push(str);
+
+  }
+  else
+  {
+    activity && attendActivity();
+  }
+}
+}
+
 
 
 //  const handleLoginClick = () => {
@@ -237,12 +274,17 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
 
       </ResponsiveContainer>  
       {
-        isMobile && history.location.pathname.includes("/activities/") &&
+        isMobile && history.location.pathname.includes("/activities/") && activity && !activity.isGoing && !activity.isHost &&
         <div className='stickyButton'>
-        <a aria-current="page" className="ui teal button active" role="button" href="https://react.semantic-ui.com/layouts">
-          <i aria-hidden="true" className="left arrow icon"></i>Layouts</a>
+          <Button circular  className='orangeBtn' onClick ={handlePaySubmit}
+                       content={activity.price && activity.price > 0 ? 'Rezervasyon Yap': 'Rezervasyonu Tamamla'}></Button>
+
+        {/* <a aria-current="page" className="ui teal button active" role="button" href="https://react.semantic-ui.com/layouts">
+          <i aria-hidden="true" className="left arrow icon"></i>Layouts
+      </a>
           <a target="_blank" className="ui secondary button" role="button" href="https://github.com/Semantic-Org/Semantic-UI-React/blob/master/docs/src/layouts/HomepageLayout.js">
-            <i aria-hidden="true" className="github icon"></i>Source</a>
+            <i aria-hidden="true" className="github icon"></i>Source 
+            </a>*/}
        </div>
       }       
      

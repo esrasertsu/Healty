@@ -307,6 +307,38 @@ html, body {
 .notFoundText{
   font-size: 15px;
 }
+
+.cookie-policy-app {
+  position: fixed;
+  z-index: 1000;
+  bottom: 10px;
+  left: 10px;
+  width: 325px;
+  padding: 15px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  opacity: .75;
+  background: #333;
+  color: #fff;
+  transition: opacity .4s;
+  font-size: 12px;
+
+  .button, a{
+    font-size: 12px !important;
+    color: #fff;
+  }
+
+  a{
+    text-decoration: underline;
+  }
+}
+
+.cookie-policy-app:hover {
+  opacity: 1;
+}
 .ui.secondary.pointing.menu .item{
   margin:0;
 }
@@ -2699,6 +2731,12 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
     justify-content: center;
     align-items: center;
 
+  }
+
+  .cookie-policy-app{
+   opacity: 1 !important;
+   width: 100% !important;
+   margin-bottom: 0 !important;
   }
 
   .profileMessageSegment{

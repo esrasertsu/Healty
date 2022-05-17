@@ -28,7 +28,7 @@ import  LoginRequiredPage  from './LoginRequiredPage';
 import  Admin  from '../../features/admin/Admin';
 import { useMediaQuery } from 'react-responsive'
 import MobileNavBar from '../../features/nav/MobileNavBar';
-import MobileNavMenu from '../../features/nav/MobileNavMenu';
+import CookieConsent, { Cookies } from "react-cookie-consent";
 import ActivityPaymentPage from '../../features/activities/payment/ActivityPaymentPage';
 import Footer from '../../features/home/Footer';
 import { history } from '../../index';
@@ -55,6 +55,7 @@ import TrainerActivityPage from '../../features/activities/personalDashboard/Tra
 import ResponsiveContainer from './theme/ResponsiveContainer';
 import KullanimSartlari from '../../features/home/KullanimSartlari';
 import MembershipContract from '../../features/home/MembershipContract';
+import CookiesContract from '../../features/home/CookiesContract';
 
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
@@ -235,6 +236,8 @@ else
         <Route path={'/(.+)'} render={()=>(
           <Fragment>
              <Switch> 
+             
+             <Route path="/cerez_politikasi" component={CookiesContract}/>
              <Route path="/uyelik_ve_gizlilik_sozlesmesi" component={MembershipContract}/>
                 <Route path="/kisisel_verilerin_korunmasi" component={KVKKContract}/>
                 <Route path="/kullanim_sartlari" component={KullanimSartlari}/>
@@ -289,7 +292,24 @@ else
             <i aria-hidden="true" className="github icon"></i>Source 
             </a>*/}
        </div>
-      }       
+      } 
+      <CookieConsent
+      disableStyles={true}
+      location="bottom"
+      buttonText="Kabul ediyorum"
+      cookieName="_cookieAcc"
+      containerClasses="cookie-policy-app"
+      //debug={true}
+      style={{ background: "#2B373B" }}
+      buttonClasses="ui circular right floated button orangeBtn"
+      buttonStyle={{ color: "#E36034" }}
+      expires={150}
+    ><p>
+      Size daha iyi hizmet sunabilmek için çerezler kullanıyoruz.
+      <span>
+      Detaylı bilgi için <a href="/cerez_politikasi" target="_blank">çerez politikamızı</a> ve <a href="/kisisel_verilerin_korunmasi" target="_blank">kişisel verilerin korunması</a> hakkında açıklama metnini inceleyebilirsiniz. 
+      </span></p>
+    </CookieConsent>      
      
         </Fragment>
         </AnalyticsWrapper>

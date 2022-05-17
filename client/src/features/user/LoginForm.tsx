@@ -96,7 +96,6 @@ const handleLogin = async(values:IUserFormValues) =>{
   setSubmitErr(null)
 
      recaptchaRef.current.executeAsync().then((token:string) => {
-       debugger;
         values.reCaptcha = token;
               
         login(values,location)

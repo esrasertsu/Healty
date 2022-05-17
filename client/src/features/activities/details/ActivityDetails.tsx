@@ -43,7 +43,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
     const handleSendUserToOrders = () =>{
 
       if(activity && activity.price && activity.price > 0 )
-      { debugger;
+      { 
         if(orderList.length > 0)
         {
             const relatedOrder = orderList.find(x=> x.productId === activity.id);

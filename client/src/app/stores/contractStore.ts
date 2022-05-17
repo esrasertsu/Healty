@@ -22,7 +22,6 @@ export default class ContractStore{
     @action loadContract = async (id:string) =>{
         this.loadingContracts = true;
         try {
-            debugger;
             const contract = await agent.Contract.get(id);
             runInAction(()=>{
                 this.contract = contract;

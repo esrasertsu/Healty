@@ -67,7 +67,6 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
   }
 
 const handleSendReport = async (data:any) =>{
-  debugger;
   if(data.body!=="" && data.body!==null && data.body.length>5 && data.id !== null)
      reportComment(data.id,data.body)
 }

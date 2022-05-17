@@ -10,6 +10,7 @@ import tr  from 'date-fns/locale/tr'
 import { IProfileComment } from '../../app/models/profile';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
 import { Form as FinalForm , Field } from 'react-final-form';
+import { useMediaQuery } from 'react-responsive';
 interface IProps {
   handleGetNext: () => void;
   totalPages: number;
@@ -24,6 +25,7 @@ const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentP
   const {openModal, closeModal} = rootStore.modalStore;
   const {profile, deleteComment,reportComment} = rootStore.profileStore;
   const {user,isLoggedIn} = rootStore.userStore;
+  const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
 
   const handleDeleteComment = (id:string) =>{
     deleteComment(id)
@@ -73,9 +75,9 @@ const handleSendReport = async (data:any) =>{
   return (
 <Fragment>
 {getCommentsByDate.length === 0 ? 
-              <p style={{fontSize:"16px"}}>
+              <div className='notFoundText'>
                 Eğitmen hakkında henüz yorum yapılmamış.
-              </p>  :
+            </div>:
     <Comment.Group style={{maxWidth: "100%"}}>
                  {getCommentsByDate.map((comment) => (
                      <Fragment key={comment.id}>
@@ -143,6 +145,7 @@ const handleSendReport = async (data:any) =>{
                       className='blueBtn'
                       primary
                       circular
+                      fluid={isMobile}
                       onClick={()=>
                         openModal("Leave a comment",
                         <ProfileCommentForm closeModal={closeModal} />,false,null

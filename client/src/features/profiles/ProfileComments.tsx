@@ -38,7 +38,7 @@ import ProfileCommentList from './ProfileCommentList';
                attached='top'
                className="profile_segmentHeaders"
              > */}
-               <Header>Yorumlar &nbsp;&nbsp;({getCommentsByDate.length}/{commentCount})
+               <Header className='contentHeader'>Yorumlar &nbsp;&nbsp;({getCommentsByDate.length}/{commentCount})
                    {/* <Icon name="comment outline"></Icon> */}
                </Header>
              {/* </Segment> */}

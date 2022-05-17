@@ -17,6 +17,7 @@ import { ProfileRefPlaceholder } from './ProfileRefPlaceholder'
 import { history } from '../../';
 import {Button, ButtonGroup, Reveal} from 'semantic-ui-react';
 import ProfileVideo from './ProfileVideo'
+import { useMediaQuery } from 'react-responsive'
 
 interface RouteParams {
     username: string
@@ -30,6 +31,9 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
     const {setProfileNull,loadingProfile, loadProfile, loadingBlogs, loadingComments, loadingReferencePics, profile, follow,
          unfollow, isCurrentUser, loading,setActiveTab, setProfileForm, referencePics} = rootStore.profileStore;
     const {isLoggedIn } = rootStore.userStore;
+
+    const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
+
     useEffect(() => {
        
         loadProfile(match.params.username)
@@ -56,76 +60,84 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
         {profile===null || profile!.userName !== match.params.username ? (<LoadingComponent content='Uzman yükleniyor...' />) :
        (
          <>
-        <Grid stackable>
+        <Grid stackable className='profilePage_header-grid'>
             <Grid.Column width={16}>
                 <ProfileHeader profile={profile!} isCurrentUser={isCurrentUser} follow={follow} unfollow={unfollow} loading={loading} />
             </Grid.Column>
             </Grid>
             <Grid stackable className="profilePage_Container_Grid_mobile">
-            <Grid.Column width={11} style={{marginTop:"40px"}}>
-                  <ProfileContent profile={profile!} setActiveTab={setActiveTab}/>   
-                {(loadingBlogs || profile!.userName !== match.params.username) && profile!.role === "Trainer"  ?   <ProfileBlogPlaceHolder />: ( profile!.role === "Trainer" && <ProfileBlogs />)}
-                {(loadingComments || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileCommentPlaceHolder />: ( profile!.role === "Trainer" && <ProfileComments /> )}
-                 
-           </Grid.Column>
-           <Grid.Column width={5} style={{marginTop:"40px"}}>
-           {isCurrentUser && profile.role === "WaitingTrainer" &&
+            <Grid.Column width={isMobile?"16" :"11"} style={{marginTop:"40px"}}>
+            {isMobile && (isCurrentUser && profile.role === "WaitingTrainer" && 
           <ButtonGroup widths={2}>
             <Button
               className='blueBtn'
               content={'Uzman Başvuruma Git'}
               onClick={()=> history.push(`/trainerRegister/${profile.userName}`)}
             />
-          </ButtonGroup>
+          </ButtonGroup>)
+          }
+                  <ProfileContent profile={profile!} setActiveTab={setActiveTab}/>   
+
+          {isMobile && (profile!.role === "Trainer" && 
+              (
+                <>
+                <Header className='contentHeader'><Icon name="film"></Icon> Tanıtım Videosu </Header>
+                   <ProfileVideo videoUrl={profile!.videoUrl}/> 
+                 </>
+              ))
+            }
+
+              {isMobile && ((loadingReferencePics || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  
+              <ProfileRefPlaceholder />: 
+              ( profile!.role === "Trainer" && <ProfileReferances referencePics={referencePics}/> ))
+              }
+                 
+                  {isMobile && (!isCurrentUser && profile!.role === "Trainer" && 
+                <ProfileMessage profile={profile!}/> )
+            }
+               
+                {(loadingBlogs || profile!.userName !== match.params.username) && profile!.role === "Trainer"  ?   
+                <ProfileBlogPlaceHolder />:
+                 ( profile!.role === "Trainer" && <ProfileBlogs />)}
+                
+                {(loadingComments || profile!.userName !== match.params.username) && profile!.role === "Trainer" ? 
+                 <ProfileCommentPlaceHolder />: 
+                 ( profile!.role === "Trainer" && <ProfileComments /> )}
+               
+           </Grid.Column>
+           <Grid.Column width={isMobile?"16":"5"} style={{marginTop:"40px"}}>
+           {!isMobile && (isCurrentUser && profile.role === "WaitingTrainer" && 
+          <ButtonGroup widths={2}>
+            <Button
+              className='blueBtn'
+              content={'Uzman Başvuruma Git'}
+              onClick={()=> history.push(`/trainerRegister/${profile.userName}`)}
+            />
+          </ButtonGroup>)
           }
             
-          {/* {!isCurrentUser && 
-          <div className="ui pointing secondary menu" style={{height:"75px", alignItems:"center"}}>
-          <Reveal animated='move' style={{width:"100%"}}>
-            <Reveal.Content visible style={{ width: '100%' }}>
-              <Button
-                fluid
-                className="followingButtonOut"
-                content={profile.isFollowing ? 'Takip Ediliyor' : 'Takip Edilmiyor'}
-                icon="hand pointer"
-              />
-            </Reveal.Content>
-            <Reveal.Content hidden>
-              <Button
-                loading={loading}
-                fluid
-                className={profile.isFollowing ? 'followingButtonOut_redClassName' : 'followingButtonOut_greenClassName'}
-                content={profile.isFollowing ? 'Takipten Çık' : 'Takip Et'}
-                disabled={!isLoggedIn}
-                onClick={profile.isFollowing ? () => unfollow(profile.userName): () => follow(profile.userName)}
-              />
-            </Reveal.Content>
-          </Reveal>
-          </div> }
-           */}
-            {!isCurrentUser && profile!.role === "Trainer" &&
-                <ProfileMessage profile={profile!}/> 
+            {!isMobile && (!isCurrentUser && profile!.role === "Trainer" && 
+                <ProfileMessage profile={profile!}/> )
             }
             
             {
-              profile!.role === "Trainer" &&
+             !isMobile && ( profile!.role === "Trainer" && 
               (
                 <>
-                <Header><Icon name="film"></Icon> Tanıtım Videosu 
-                  
-            </Header>
-                          <ProfileVideo videoUrl={profile!.videoUrl}/> 
-                          </>
-
-              )
+                <Header className='contentHeader'><Icon name="film"></Icon> Tanıtım Videosu </Header>
+                   <ProfileVideo videoUrl={profile!.videoUrl}/> 
+                 </>
+              ))
             }
 
+              {!isMobile && ((loadingReferencePics || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  
+              <ProfileRefPlaceholder />: 
+              ( profile!.role === "Trainer" && <ProfileReferances referencePics={referencePics}/> ))}
 
-{(loadingReferencePics || profile!.userName !== match.params.username) && profile!.role === "Trainer" ?  <ProfileRefPlaceholder />: ( profile!.role === "Trainer" && <ProfileReferances referencePics={referencePics}/> )}
 
-            
             </Grid.Column>
             </Grid>
+           
           </>
            
         

@@ -23,13 +23,11 @@ const ProfileVideo: React.FC<IProps> = ({videoUrl}) => {
 
          
     return (
+        
+            (videoUrl!=="" && videoUrl !== null) ?
         <Segment className="profileMessageSegment">
                 <Grid container className="profileMessageGrid" stackable>
-                    
-                    <Grid.Row>
-                        <Grid.Column width={16}>
-                            {
-                                (videoUrl!=="" && videoUrl !== null) ?
+                    <Grid.Column width={16}>
                                 <>
                                 <ReactPlayer
                                 config={{ playerVars:{controls:1}}}
@@ -69,13 +67,13 @@ const ProfileVideo: React.FC<IProps> = ({videoUrl}) => {
                                 openModal("Video Yükleme",
                                 <ProfileVideoUploadForm  url="" closeModal={closeModal} />,false,null, undefined, true)}
                             ></Button>
-                            : 
-                            <span><Icon name="meh outline" />Henüz bu uzmana ait bir tanıtım videosu bulunmamaktadır.</span>
-                            }
+                            
                         </Grid.Column>
-                    </Grid.Row>
                 </Grid>
        </Segment>
+       : 
+         <div className='notFoundText'><Icon name="meh outline" />Henüz bu uzmana ait bir tanıtım videosu bulunmamaktadır.</div>
+
     )
 }
 

@@ -20,11 +20,11 @@ import ProfileBlogList from './ProfileBlogList';
           attached='top'
           className="profile_segmentHeaders"
         > */}
-          <Header>Blog Yazılar &nbsp; ({profileBlogs.length})
+          <Header className='contentHeader'>Blog Yazılar &nbsp; ({profileBlogs.length})
               {/* <Icon name="comment outline"></Icon> */}
           </Header>
         {/* </Segment> */}
-        {profileBlogs.length === 0 && "Henüz paylaştığı bir blog bulunmamaktadır."}
+        {profileBlogs.length === 0 && <div className='notFoundText'>Henüz paylaştığı bir blog bulunmamaktadır.</div> }
         <ProfileBlogList profileBlogs={profileBlogs} profileUserName={profile!.userName} displayName={profile!.displayName}/>
       </Fragment>
     );

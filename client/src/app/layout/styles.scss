@@ -304,6 +304,9 @@ html, body {
   display:none;
 }
 
+.notFoundText{
+  font-size: 15px;
+}
 .ui.secondary.pointing.menu .item{
   margin:0;
 }
@@ -371,10 +374,12 @@ right: 0;
 
 h1, h2, h3, h4, h5 {
   font-family:  AssistantBold, Arial,  sans-serif !important;
-  /* font-family:  "Inter","Helvetica Neue","Segoe UI","Fira Sans",Roboto,Oxygen,Ubuntu,"Droid Sans","Arial",sans-serif!important */
-
 }
 
+h1.ui.header.profieHeader_displayName{
+  font-family: AssistantMedium, Arial, sans-serif !important;
+  color: #222E50 !important;
+}
 .ui.modal{
   overflow: hidden !important;
 }
@@ -1728,9 +1733,7 @@ max-width: 95%;
 }
 
 
-.profileHeader_label{
-  box-shadow:2px 8px 14px 0px #bcbdbdcc, 0 0 0 1px #d4d4d557;
-}
+
 
 .profileHeader_videoPlay{
   color: #4d4d4d;
@@ -2166,6 +2169,8 @@ i.search.inverted.icon {
   font-size: 1.1em;
   color: rgb(26, 43, 73) !important;
   font-weight: 500 !important;
+  font-family:  AssistantRegular, Arial,  sans-serif !important;
+
 }
 
 .sidebar_menu{
@@ -2646,6 +2651,12 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
   min-height: 90vh;
 }
 
+.profileHeader_content .starRating_Count,.profileHeader_content .starRating_Rating{
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a2b49c2 !important;
+}
+
 @media screen and (max-width: 539px){
   
   #slideImages.masthead {
@@ -2669,7 +2680,7 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
 }
 @media only screen and (min-width: 768px) and (max-width: 991px){
   .ui.container.pageContainer {
-    width: 723px;
+    width: 95%;
   }
 }
 @media only screen and (min-width: 992px) and (max-width: 1199px)
@@ -2680,6 +2691,38 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
 }
 
 @media (max-width: 767px){
+  .profileHeader_label{
+    box-shadow:2px 8px 14px 0px #bcbdbdcc, 0 0 0 1px #d4d4d557;
+  }
+  .profileHeader_content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+
+  .profileMessageSegment{
+    margin-top:40px
+  }
+
+
+  .profileMessageGrid .header.trainerName,.profileMessageGrid .infoArea{
+      text-align: center;
+  }
+
+  .notFoundText{
+    text-align: center;
+  }
+
+  .ui.stackable.grid.profilePage_Container_Grid_mobile .contentHeader{
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .ui.grid.profilePage_header-grid{
+    margin-left: -1em !important;
+    margin-right: -1em !important;
+  }
 
   .ui.steps.unstackable{
     .step{
@@ -2778,16 +2821,13 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
 .profieHeader_segment_item{
   margin-bottom: 15px;
 }
-.profileHeader_content .starRating_Count,.profileHeader_content .starRating_Rating{
-  font-size: 14px;
-  color: #1a2b49c2 !important;
-}
+
 
 .coverImage {
-  height: 165px !important;
-  /* margin-left: calc(625px - 50vw) !important; */
+  height: 100% !important;
   width: 100%;
-  border: 6px solid #fff !important
+  border:none!important;
+  box-shadow: none!important;
 }
 
 .coverImage img {
@@ -2799,10 +2839,7 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
 .ui.items:not(.unstackable)>.item>.image.profieHeader_userImage{
   max-height: 165px !important;
 }
-.ui.grid.profilePage_Container_Grid_mobile{
-  display: flex;
-  flex-direction: column-reverse;
-}
+
 
 .ui.selection.dropdown .menu {
   max-height: 12.11428571rem !important;
@@ -2868,7 +2905,9 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
   }
 }
 
-@media only screen and (min-width: 820px){
+
+
+@media only screen and (min-width: 768px){
   .savedActivity_lastcolumn{
     display: flex;
     flex-direction: column;
@@ -2880,17 +2919,11 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
      width: 175px;
      height: 175px;
   }
-  .profieHeader_displayName{
+  h1.ui.header.profieHeader_displayName,  .profieHeader_title{
     color:#fff !important;
     text-shadow: 1.5px 1.5px #222E50;
   }
-  .profieHeader_starRating{
-    text-shadow: rgb(69 60 38) 1.5px 1.5px
-  }
-  .profileHeader_content .starRating_Count,.profileHeader_content .starRating_Rating{
-    font-size: 14px;
-    color: #fff;
- }
+
 
  
 .masthead_page.profileDashboard

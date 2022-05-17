@@ -23,15 +23,17 @@ interface IProps{
 
 const activityImageStyle = {
   width:"100%",
-  height:"300px"
+  height:"300px",
+  objectFit:"cover"
 };
 
 const activityImageTextStyle:any = {
 position: 'absolute',
 top: '15%',
-width: '100%',
 height: 'auto',
 color: 'white',
+right:"0",
+marginRight:"10px"
 };
 
 const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCurrentUser}) => {
@@ -110,7 +112,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
           </Dimmer>
                   {
                    profile.coverImage && !imageChange ?
-                   <Segment style={{padding:'0', margin:'0'}}  className="coverImage">
+                   <Segment style={{padding:'0', margin:'0', height:"300px"}}  className="coverImage">
                     <Image src={profile.coverImage} fluid style={activityImageStyle} />
                   </Segment>
                 :
@@ -120,7 +122,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                     isCurrentUser ? 
                     <PhotoWidgetDropzone setFiles={setFiles} /> 
                     :
-                    <Segment style={{padding:'0', margin:'0'}}  className="coverImage">
+                    <Segment style={{padding:'0', margin:'0', height:"300px"}}  className="coverImage">
                       <Image src={'/assets/trainerback.png'} fluid style={activityImageStyle} />
                     </Segment> 
                   )
@@ -153,7 +155,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
         {
           !imageChange && isCurrentUser && profile.coverImage !== null &&
           <div style={activityImageTextStyle}>
-          <Label floating style={{cursor:"pointer", left:"80%"}} 
+          <Label style={{cursor:"pointer"}} 
           circular className='blueBtn'
            size={isTabletOrMobile ? "small" :"medium"}
           onClick={()=>{setImageDeleted(true); setImageChange(true)}}>Kapak Resmini Değiştir <Icon name="picture"></Icon></Label>
@@ -165,7 +167,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
       <Grid stackable>
         <Grid.Column width={11} className="profieHeader_segment_column">
           <Item.Group>
-            <Item className="profieHeader_segment_item" style={{marginTop:"-112px"}}>
+            <Item className="profieHeader_segment_item" style={{marginTop:"-112px", marginBottom:0}}>
               <Image
                 avatar
                 size='small'
@@ -175,24 +177,29 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                 onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}
               />
               <Item.Content verticalAlign='middle' className="profileHeader_content">
-                <Grid.Row>
                   <Header as='h1' className="profieHeader_displayName" style={{ marginBottom:"5px"}}>{profile.displayName}</Header>
                   {profile!.role === "Trainer" && 
-                  <div className="profieHeader_starRating" style={{marginBottom:"10px"}}>
-                    <StarRating rating={profileRating} editing={false} key={"header"} count={profile.starCount} showCount={true}/>
+                  <div className="profieHeader_title" style={{marginBottom:isMobile?"20px": "10px"}}>
+                    {profile.title}
                   </div>
                     }
-                  <br/>
+                  <div style={{marginBottom:"10px"}}>
                   {profile!.role === "Trainer" && profile.categories.map((cat) => (
                     <Label className="profileHeader_label" key={cat.key} style={{background:getColor(cat.text)}} horizontal>{cat.text}</Label>
                   ))}
+                  </div>
                   {
                      (profile.videoUrl!=="" && profile.videoUrl !== null) &&
                      <div onClick={handleVideoPlay} className="profileHeader_videoPlay">
                        <Icon size="big" color='red' name="youtube play" /> Tanıtım videosu <Icon name="hand point up"></Icon></div> 
                 
                   }
-                </Grid.Row>
+                   {profile!.role === "Trainer" && 
+                  <div className="profieHeader_starRating" style={{marginTop:"20px"}}>
+                    <StarRating rating={profileRating} editing={false} key={"header"} count={profile.starCount} showCount={true}
+                    showCountSide={isMobile ?true : false}/>
+                  </div>
+                    }
               </Item.Content>
             </Item>
           </Item.Group>

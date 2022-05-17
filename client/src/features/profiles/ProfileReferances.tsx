@@ -148,10 +148,10 @@ const handleSaveRef = () =>{
         <Button primary content="Kaydet" loading={uploadingReferencePics} onClick={handleSaveRef} disabled={newRefPics.length===0 && deletedRefPics.length===0}></Button>
       </Modal.Actions>
     </Modal>
-        <Header>Referans İşler </Header>
-
+        <Header className='contentHeader'>Referans İşler </Header>
+        {isCurrentUser && referencePics.length < 7 && (
       <Segment style={{display:"flex", flexDirection:"column"}}>
-      {isCurrentUser && referencePics.length < 7 && (
+      
         <div>
             <Button
               floated='right'
@@ -166,12 +166,10 @@ const handleSaveRef = () =>{
             />
         </div>
             
-          )}
+          
                 <Grid stackable style={{width:"100%", margin:"0"}} >
-                   
-                    <Grid.Row>
-                        <Grid.Column width={16}>
-     {referencePics.length !== 0 ?      
+                   <Grid.Column width={16}>
+     {referencePics.length !== 0 &&      
       <>
       <Swiper cssMode={true} navigation={true} pagination={true} mousewheel={true} keyboard={true} className="activitySwiper">
                     {
@@ -183,12 +181,14 @@ const handleSaveRef = () =>{
                     }  
                     </Swiper>
       </>
-    :  <span><Icon name="meh outline" />Henüz paylaşılan bir referans görsel bulunmamaktadır.</span> 
+    
     }
        </Grid.Column>
-       </Grid.Row>
      </Grid>
      </Segment>
+)}
+     {referencePics.length == 0 &&   
+     <div className='notFoundText'><Icon name="meh outline" />Henüz paylaşılan bir referans görsel bulunmamaktadır.</div>  }
   
 
       </>

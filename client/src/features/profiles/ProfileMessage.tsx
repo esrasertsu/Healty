@@ -21,8 +21,8 @@ const ProfileMessage: React.FC<IProps> = ({profile}) => {
                             </div>
                             
                         </Grid.Column>
-                        <Grid.Column width={11}>
-                            <Header>{profile.displayName}</Header>
+                        <Grid.Column width={11} className="infoArea">
+                            <Header className='trainerName'>{profile.displayName}</Header>
                             <Label className='gray_label' size="large">Yanıtlama oranı %{profile.responseRate}&nbsp;
                                 {/* <Icon size="large" name="question circle" className="questionmarkicon"></Icon> */}
                             </Label>

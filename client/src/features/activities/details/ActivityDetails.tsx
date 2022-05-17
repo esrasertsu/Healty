@@ -30,14 +30,9 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
  const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
-    const scrollToTop = () => {
-      document.querySelector('body')!.scrollTo(0,0)
-    };
-
+ 
     useEffect(() => {
         loadActivity(match.params.id);
-        scrollToTop();
-
     }, [loadActivity, match.params.id]) // sadece 1 kere çalışcak, koymazsak her component render olduğunda
 
     useEffect(() => {

@@ -364,7 +364,7 @@ const HomePage = () => {
         </Grid.Column>
       </Grid> */}
       <div className="spacingContainer__small" />
-
+{user === null &&
  <Segment clearing secondary className="homepage_contactus-form">
 <Grid columns={2} stackable textAlign='left'>
     <Grid.Row verticalAlign='middle' className="contactus-row">
@@ -395,7 +395,7 @@ const HomePage = () => {
 
         </Grid.Row>
         </Grid>
-        </Segment> 
+        </Segment> }
     <div style={{display:"flex"}}>
         <div className="spacingContainer__small" />
     </div>

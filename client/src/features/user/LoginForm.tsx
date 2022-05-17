@@ -76,7 +76,9 @@ const handleResetPassword = (e:any) => {
     agent.User.resendVerifyEmailConfirm(email as string).then(() => {
         closeModal();
         toast.success('Doğrulama linki yeniden gönderildi - Lütfen e-posta kutunuzu kontrol edin');
-    }).catch((error) => console.log(error));
+    }).catch((error) =>{
+      toast.success('Doğrulama linki gönderilemedi!');
+       console.log(error)});
 }
     const responseGoogle = (response:any) => {
       googleLogin(response.tokenId, location).catch((error) => 
@@ -138,7 +140,7 @@ const handleLogin = async(values:IUserFormValues) =>{
             <label id="lbl_Email">Email / Kullanıcı adı*</label>
             <Field labelName="lbl_Email" name="emailOrUserName" placeholder="Email veya kullanıcı adı" component={TextInput}
             />
-              <OnChange name="email">
+              <OnChange name="emailOrUserName">
                 {(value, previous) => {
                    
                       setEmail(value);

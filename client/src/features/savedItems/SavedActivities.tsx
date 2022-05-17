@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import React, { Fragment, useContext, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { Button, Card, Grid, Header, Image, Segment, Tab } from 'semantic-ui-react';
+import { Button, Card, Grid, Header, Icon, Image, Segment, Tab } from 'semantic-ui-react';
 import { SemanticWIDTHS } from 'semantic-ui-react/dist/commonjs/generic';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import tr  from 'date-fns/locale/tr'
@@ -31,7 +31,7 @@ const SavedActivities = () => {
   return (
     <Tab.Pane attached={false} loading={loading}>
         {
-        savedActivities.map((act) => (
+     (savedActivities &&  savedActivities.length>0) ? savedActivities.map((act) => (
             <Segment key={"savedActivity_segment_"+ act.id}>
         <Grid stackable>
                     <Grid.Column width={3}>
@@ -77,7 +77,22 @@ const SavedActivities = () => {
             </Segment>
          
         
-            ))
+            )) :
+           <><Segment placeholder style={{minHeight: "90vh"}}>
+            <Header icon>
+                <Icon name="calendar times outline" />
+            </Header>
+
+            <Segment.Inline>
+                <div className="center">
+                    <p style={{color:"#1a2b49", fontSize:"16px"}}>Favorilere eklediğin bir aktivite bulunmamaktadır.</p>
+                    <p>
+                    <Button onClick={() => history.push("/activities")} circular positive content="Aktivitelere göz at"></Button> 
+
+                    </p>
+                </div>
+            </Segment.Inline>
+        </Segment></> 
         }
         </Tab.Pane>
   );

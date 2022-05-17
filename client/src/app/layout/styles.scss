@@ -2046,23 +2046,7 @@ max-width: 80%;
   }
 
 
-  img.activityFirstCol_Img{
-    object-fit: cover;
-    width: 100%;
-    height: 380px;
-  }
-
-  img.activitySecondCol_FirstRow_Img{
-    object-fit: cover;
-    width: 100%;
-    height: 190px;
-  }
-
-  img.activitySecondCol_SecondRow_Img{
-    object-fit: cover;
-    width: 100%;
-    height: 190px;
-  }
+ 
   
 }
 
@@ -2685,7 +2669,7 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
 }
 @media only screen and (min-width: 768px) and (max-width: 991px){
   .ui.container.pageContainer {
-    width: 774px;
+    width: 723px;
   }
 }
 @media only screen and (min-width: 992px) and (max-width: 1199px)
@@ -2865,7 +2849,23 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
     justify-content: space-between;
     height: 100%;
   }
- 
+  img.activityFirstCol_Img{
+    object-fit: cover;
+    width: 100%;
+    height: 380px;
+  }
+
+  img.activitySecondCol_FirstRow_Img{
+    object-fit: cover;
+    width: 100%;
+    height: 190px;
+  }
+
+  img.activitySecondCol_SecondRow_Img{
+    object-fit: cover;
+    width: 100%;
+    height: 190px;
+  }
 }
 
 @media only screen and (min-width: 820px){

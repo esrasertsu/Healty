@@ -118,6 +118,7 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                     }  
                         <Item.Image size={!isTabletOrMobile ? "medium":undefined} style={{ display: "block"}} 
                             src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'}
+                            onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}}
                             className={isTabletOrMobile ? "activityListItem_Image_mobile":""} >
                              
                         </Item.Image>
@@ -178,7 +179,9 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                             
                         </Item.Description> 
                         <Item.Description style={{marginTop:"5px"}}>
-                            <Item.Image key={host.image} size="mini" style={{width:"25px"}} circular src={host.image || '/assets/user.png'}
+                            <Item.Image key={host.image} size="mini" style={{width:"25px"}} circular 
+                            src={host.image || '/assets/user.png'}
+                            onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}
                             />
                              &nbsp;<span className="activityHostName">{host.displayName}</span>
                             </Item.Description>

@@ -64,9 +64,10 @@ const SavedProfiles = () => {
 
   return (
     <Tab.Pane attached={false} loading={loading}> 
+     {(followings && followings.length>0)?  
      <Grid columns={2} stackable>
-     {
-        followings.map((pro) => (
+        {
+          followings.map((pro) => (
            
                
                     <Grid.Column>
@@ -125,13 +126,27 @@ const SavedProfiles = () => {
                      </Grid>  
                          </Segment>
                     </Grid.Column>
-              
-                    
-           
-            ))
+            )) 
         }
                    
-                   </Grid>
+    </Grid>
+   :
+        <><Segment placeholder style={{minHeight: "90vh"}}>
+        <Header icon>
+            <Icon name="graduation cap" />
+        </Header>
+
+        <Segment.Inline>
+            <div className="center">
+                <p style={{color:"#1a2b49", fontSize:"16px"}}>Favorilere eklediğin bir uzman eğitmen bulunmamaktadır.</p>
+                <p>
+                <Button onClick={() => history.push("/profiles")} circular positive content="Uzmanlara göz at"></Button> 
+
+                </p>
+            </div>
+        </Segment.Inline>
+    </Segment></> 
+}
         </Tab.Pane>
   );
 };

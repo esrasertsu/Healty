@@ -9,7 +9,7 @@ import ActivityForm from '../../features/activities/form/ActivityForm';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
 import ActivityDetails from '../../features/activities/details/ActivityDetails';
 import NotFound from './NotFound';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import LoginForm from '../../features/user/LoginForm';
 import { RootStoreContext } from '../stores/rootStore';
 import { LoadingComponent } from './LoadingComponent';
@@ -77,14 +77,17 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1023px)' })
   const [visible, setVisible] = useState(false);
-  // useEffect(() => {
-  //   return history.listen((location) => { 
-  //     if(location.pathname === "/profiles")
-  //        setActiveMenu(0);
+  
+  useEffect(() => {
+   // return history.listen((location) => { 
+    //   if(location.pathname === "/profiles")
+    //    toast.success("Değişti")
 
-  //      console.log(`You changed the page to: ${location.pathname}`) 
-  //   }) 
-  // },[history]) 
+    //    console.log(`You changed the page to: ${location.pathname}`) 
+    // }) 
+    document.querySelector('body')!.scrollTo(0,0)
+  },[history,location.pathname]) 
+  
   const alertUser = async (event:any) => {
 
     await stopHubConnection();

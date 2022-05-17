@@ -288,9 +288,9 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
    <div style={{fontSize: "30px"}}>
      <Icon name="calendar times outline" />
    </div>
-   <p style={{fontSize: "18px"}}>
+   <div style={{fontSize: "18px"}}>
      <div>Planlarınız mı değişti?</div>
-     <div>24 saat öncesine kadar yapılan iptal işlemlerinde %100 para iadesi</div></p>
+     <div>24 saat öncesine kadar yapılan iptal işlemlerinde %100 para iadesi</div></div>
 </Segment>
 }
     

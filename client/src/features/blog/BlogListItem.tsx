@@ -19,7 +19,8 @@ const BlogListItem: React.FC<IProps> = ({blog}) => {
       history.push(`/blog/${blog.id}`)
       }}
     key={blog.id} >
-      <Image className="blogListItem_image" src={blog.photo || '/assets/placeholder.png'} />
+      <Image className="blogListItem_image" src={blog.photo || '/assets/placeholder.png'} 
+      onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}}/>
       <Card.Content className="profileCard_Content">
         <Card.Description>
           <div className="homepage_subheader">{format(new Date(blog.date), 'dd MMMM yyyy, eeee',{locale: tr})}</div>

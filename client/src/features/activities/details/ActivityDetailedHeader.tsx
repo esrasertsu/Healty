@@ -255,7 +255,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                     {
                       activity.photos.map((photo:IPhoto) =>
                       <SwiperSlide key={photo.id}>
-                        <img key={photo.id} src={photo.url} />
+                        <img key={photo.id} src={photo.url} onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}} />
                       </SwiperSlide>
                       )
                     }  
@@ -269,7 +269,9 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                        <Button style={{position:"absolute", margin:"20px",zIndex:"5",right:"0"}} className="whiteBtn"
                            onClick={(e: any) => activity.isSaved ? handleUnSave(e, activity.id) : handleSave(e, activity.id)}
                            ><span style={{marginRight:"5px"}}>{activity.isSaved ? "Favorilerimden Çıkar" : "Favorilere Ekle"}</span>&nbsp;<Icon name='star'/></Button>
-                      <Image src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} fluid style={activityImageStyle}/>
+                      <Image src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} 
+                      fluid style={activityImageStyle}
+                      onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}}/>
 
                             </div>
                     :
@@ -280,7 +282,8 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                             <Button style={{position:"absolute", margin:"20px"}} className="blueBtn" content={"Tüm resimler (" + activity.photos.length.toString() + ")"}
                             onClick={() => openGalleryModal(0)}/>
                              <img style={{cursor:"pointer", borderRadius: "0.28571429rem"}} className='activityFirstCol_Img' key={activity.photos[0].id} src={activity.photos[0].url}
-                             onClick={() => openGalleryModal(0)} />
+                             onClick={() => openGalleryModal(0)}
+                             onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}} />
                           </Grid.Column>
                           <Grid.Column width={5}>
                               <Grid.Row>
@@ -288,16 +291,19 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                            onClick={(e: any) => activity.isSaved ? handleUnSave(e, activity.id) : handleSave(e, activity.id)}
                            ><span style={{marginRight:"5px"}}>{activity.isSaved ? "Favorilerimden Çıkar" : "Favorilere Ekle"}</span>&nbsp;<Icon name='star'/></Button> 
                               <img style={{cursor:"pointer",borderRadius: "0.28571429rem"}} className='activitySecondCol_FirstRow_Img' key={activity.photos[1].id} src={activity.photos[1].url}
-                               onClick={() => openGalleryModal(1)} />
+                               onClick={() => openGalleryModal(1)} 
+                               onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}}/>
                               </Grid.Row>
                               <Grid.Row style={{display:"flex",cursor:"pointer"}}>
                               <Grid.Column>
                                <img style={{paddingRight:"5px",cursor:"pointer",borderRadius: "0.28571429rem"}} className='activitySecondCol_SecondRow_Img' key={activity.photos[2].id}
-                                 src={activity.photos[2].url}  onClick={() => openGalleryModal(2)} />
+                                 src={activity.photos[2].url}  onClick={() => openGalleryModal(2)}
+                                 onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}} />
                               </Grid.Column>
                               <Grid.Column>
                               <img style={{paddingLeft:"5px",cursor:"pointer",borderRadius: "0.28571429rem"}} className='activitySecondCol_SecondRow_Img' key={activity.photos[3].id} 
-                              src={activity.photos[3].url}  onClick={() => openGalleryModal(3)}/>
+                              src={activity.photos[3].url}  onClick={() => openGalleryModal(3)}
+                              onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}}/>
                               </Grid.Column>
                           </Grid.Row>
                           </Grid.Column>
@@ -311,14 +317,18 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                        <Button style={{position:"absolute", margin:"20px",zIndex:"5",right:"0"}} className="whiteBtn"
                            onClick={(e: any) => activity.isSaved ? handleUnSave(e, activity.id) : handleSave(e, activity.id)}
                            ><span style={{marginRight:"5px"}}>{activity.isSaved ? "Favorilerimden Çıkar" : "Favorilere Ekle"}</span>&nbsp;<Icon name='star'/></Button>
-                      <Image src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} onClick={() => openGalleryModal(0)} fluid style={activityImageStyle}/>
+                      <Image src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} 
+                      onClick={() => openGalleryModal(0)} fluid style={activityImageStyle}
+                      onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}}/>
                     </div>
                     :
                     <div>
                       <Button style={{position:"absolute", margin:"20px",zIndex:"5",right:"0"}} className="whiteBtn"
                            onClick={(e: any) => activity.isSaved ? handleUnSave(e, activity.id) : handleSave(e, activity.id)}
                            ><span style={{marginRight:"5px"}}>{activity.isSaved ? "Favorilerimden Çıkar" : "Favorilere Ekle"}</span>&nbsp;<Icon name='star'/></Button>
-                       <Image src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} fluid style={activityImageStyle}/>
+                       <Image src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'} 
+                       fluid style={activityImageStyle}
+                       onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}}/>
 
                     </div>
 

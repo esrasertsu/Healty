@@ -35,10 +35,15 @@ namespace CleanArchitecture.Application.User
 
             public async Task<Unit> Handle(Query request, CancellationToken cancellationToken)
             {
+
                 var user = await _userManager.FindByEmailAsync(request.Email);
 
                 if (user == null)
-                    throw new RestException(HttpStatusCode.BadRequest);
+                {
+                    user = await _userManager.FindByNameAsync(request.Email);
+                    if (user == null)
+                        throw new RestException(HttpStatusCode.BadRequest, new { Email = "Sistemde bu kullanıcı adı veya email adresiyle kayıtlı bir kullanıcı bulunamadı." });
+                }
 
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 

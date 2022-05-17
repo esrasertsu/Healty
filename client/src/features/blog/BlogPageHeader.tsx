@@ -36,7 +36,9 @@ const BlogPageHeader:React.FC<{blog:IBlog}> = ({blog}) => {
                   {
                    blog.photo && !imageChange ?
                    <Segment>
-                    <Image src={blog.photo} fluid style={activityImageStyle}/>
+                    <Image src={blog.photo || '/assets/placeholder.png'}
+                    onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}}
+                     fluid style={activityImageStyle}/>
                   </Segment>
                 :
                 files.length === 0 ? 

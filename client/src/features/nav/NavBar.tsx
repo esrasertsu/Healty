@@ -111,14 +111,14 @@ const NavBar: React.FC<IProps> = ({fixed}) => {
                    //setLoadingProfiles(true);
                    setActiveMenu(0);
                   //  history.push(`/profiles`);
-                    }} > <Icon name="graduation cap"></Icon> <span>Uzman</span></Menu.Item> 
+                    }} > <Icon name="graduation cap"></Icon> <span>Uzmanlar</span></Menu.Item> 
                <Menu.Item as={Link} to="/activities" className='desktopMenu'
                 active={activeMenu === 1}
                   onClick={() => {
                  //   setLoadingInitial(true);
                     setActiveMenu(1)
                    // history.push(`/activities`);
-                    }} ><Icon name="heartbeat"></Icon> <span>Aktivite</span></Menu.Item>
+                    }} ><Icon name="heartbeat"></Icon> <span>Aktiviteler</span></Menu.Item>
 
                 
           <Menu.Item as={Link} to="/blog" className='desktopMenu'
@@ -166,7 +166,7 @@ const NavBar: React.FC<IProps> = ({fixed}) => {
                   >  <Icon name='unordered list' />
                        Rezervasyonlarım
                   </Dropdown.Item>
-                  <Dropdown.Item
+                { user && user.role !== "User" && <Dropdown.Item
                     key="myActivities"
                     as={Link}
                     to={`/myActivities`}
@@ -174,7 +174,7 @@ const NavBar: React.FC<IProps> = ({fixed}) => {
                     onClick={()=>{setActiveMenu(-1);}}
                   >  <Icon name='calendar check outline' />
                        Aktivitelerim
-                  </Dropdown.Item>
+                  </Dropdown.Item>}
                   <Dropdown.Item
                     key="saved"
                     as={Link}

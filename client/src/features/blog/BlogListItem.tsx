@@ -26,7 +26,7 @@ const BlogListItem: React.FC<IProps> = ({blog}) => {
           <div className="homepage_subheader">{format(new Date(blog.date), 'dd MMMM yyyy, eeee',{locale: tr})}</div>
         </Card.Description>
         <br></br>
-        <Card.Header className="blogListItem_Header">{blog.title}</Card.Header>
+        <Card.Header className="blogListItem_Header" as={"h1"}>{blog.title}</Card.Header>
         <Card.Description>
           <div key={blog.id+"_desc"} className="homepage_subheader" dangerouslySetInnerHTML={{__html:sanitizer(blog.summary)}} />
         </Card.Description>

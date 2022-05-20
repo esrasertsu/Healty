@@ -80,7 +80,8 @@ const SavedProfiles = () => {
                             key={"savedProfiles_img_" + pro.id}
                             circular size="tiny"
                             className='savedProfiles_img'
-                            src={pro.image || '/assets/user.png'} />
+                            src={pro.image || '/assets/user.png'}
+                            onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}} />
                         </Grid.Column>
                         <Grid.Column width={8}>
                              <Header style={{marginBottom:"7px"}}>

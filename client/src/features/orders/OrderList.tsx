@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { Button, Card, Container, Header, Icon, Item, Label, Message, Segment } from 'semantic-ui-react'
+import { Button, Card, Container, Grid, Header, Icon, Image, Item, Label, Message, Segment } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
@@ -71,7 +71,8 @@ const OrderList: React.FC<IProps> = ({settings}) => {
          <div className={isMobile? "activityListItemDiv_mobile":"activityListItemDiv small"} >
              <Item.Image size={!isMobile ? "small":undefined} style={{ display: "block"}} 
                  src={(order.photo && order.photo) || '/assets/placeholder.png'}
-                 className={isMobile ? "activityListItem_Image_mobile":""} >
+                 className={isMobile ? "activityListItem_Image_mobile":""}
+                 onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}} >
              </Item.Image>
          </div>
        <div className="orderListItem_content_div">
@@ -147,21 +148,20 @@ const OrderList: React.FC<IProps> = ({settings}) => {
       :
       <>
       {!isTabletOrMobile && <br></br> }
-      <Segment placeholder style={{minHeight: "90vh"}}>
-            <Header icon>
-                <Icon name="calendar times outline" />
-            </Header>
 
-            <Segment.Inline>
-                <div className="center">
-                    <p style={{color:"#1a2b49", fontSize:"16px"}}>Henüz ödeme aşamasına geldiğiniz bir aktivite bulunmamaktadır.</p>
-                    <p>
-                    <Button onClick={() => history.push("/activities")} circular positive content="Aktivitelere göz at"></Button> 
+      
 
-                    </p>
-                </div>
-            </Segment.Inline>
-        </Segment>
+      <Grid textAlign='center' stackable style={{minHeight: "300px", marginTop:"50px"}}>
+        <Grid.Column verticalAlign="middle" width={4}>
+           <Image src={'/assets/wishlist-empty.svg'} />
+        </Grid.Column>
+        <Grid.Column  verticalAlign="middle" width={9}>
+            <p style={{color:"#1a2b49", fontSize:"18px"}}>Henüz ödeme aşamasına geldiğiniz bir aktivite bulunmamaktadır.</p>
+        </Grid.Column>
+        <Grid.Column verticalAlign="middle" width={3}>
+            <Button onClick={() => history.push("/activities")} circular positive content="Aktivitelere göz at"></Button> 
+        </Grid.Column>
+     </Grid>
      </>
     }
     </Fragment>

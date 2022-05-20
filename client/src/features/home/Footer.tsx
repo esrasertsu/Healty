@@ -23,7 +23,7 @@ const Footer = () => {
               <List link inverted>
                 <List.Item as='a' target="_blank">Sıkça Sorulan Sorular</List.Item>
                 <List.Item as='a' href="/kisisel_verilerin_korunmasi">Kişisel Verilerin Korunması</List.Item>
-                <List.Item as='a' href="/kisisel_verilerin_korunmasi">Çerez Politikası</List.Item>
+                <List.Item as='a' href="/cerez_politikasi">Çerez Politikası</List.Item>
                 <List.Item as='a' href="/kullanim_sartlari">Kullanım Şartları</List.Item>
               </List>
             </Grid.Column>

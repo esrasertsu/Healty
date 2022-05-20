@@ -3,7 +3,7 @@ import { Segment, Header, Form, Button,Comment, Icon, Container, Grid, Image, Mo
 import { RootStoreContext } from '../../../app/stores/rootStore'
 import { Form as FinalForm, Field} from 'react-final-form';
 import { observer } from 'mobx-react-lite';
-import {  IActivity, IPaymentCardInfo, PaymentCardInfo } from '../../../app/models/activity';
+import {  IActivity, IAttendee, IPaymentCardInfo, IPaymentUserInfoDetails, PaymentCardInfo } from '../../../app/models/activity';
 import { OnChange } from 'react-final-form-listeners';
 import Card from 'react-credit-cards';
 import {
@@ -15,6 +15,7 @@ import 'react-credit-cards/es/styles-compiled.css';
 import { LoadingComponent } from '../../../app/layout/LoadingComponent';
 import Payment from "payment";
 import { useMediaQuery } from 'react-responsive'
+import DOMPurify from 'dompurify';
 
 
   interface IProps{
@@ -22,9 +23,11 @@ import { useMediaQuery } from 'react-responsive'
     handlePaymentFormSubmit: (values:any) => void;
     count: string;
     loading: boolean;
+    activityUserInfo:IPaymentUserInfoDetails;
   }
 
- const ActivityPaymentStarterPage:React.FC<IProps> = ({handlePaymentFormSubmit,activity, count,loading}) =>  {
+ const ActivityPaymentStarterPage:React.FC<IProps> = ({handlePaymentFormSubmit,activity, count,loading,activityUserInfo}) =>  {
+  const sanitizer = DOMPurify.sanitize;
 
   const rootStore = useContext(RootStoreContext);
   const [focused, setFocused] = useState("");
@@ -50,12 +53,15 @@ import { useMediaQuery } from 'react-responsive'
 const [paymentContract, setPaymentContract] = useState(false);
 const [iyzicoContract, setIyzicoContract] = useState(false);
 const [loading3DPage, setLoading3DPage] = useState(false);
+
 const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
 
     const { user } = rootStore.userStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;
+    const {contract,loadContract} = rootStore.contractStore;
 
-  
+    const [editedContract, setEditedContract] = useState(contract);
+
   const handleInputFocus = (e:any) => {
     e.stopPropagation();
     setFocused(e.target.name);
@@ -63,12 +69,45 @@ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
 
   useEffect(() => {
     if(activity)
-    setPaymentInfo({...paymentInfo, activityId:activity!.id, ticketCount:Number(count)});
+    {
+      setPaymentInfo({...paymentInfo, activityId:activity!.id, ticketCount:Number(count)});
+      loadContract("MSS");
+    }
 
     return () => {
       //cleanup
     }
   }, [activity])
+
+    useEffect(() => {
+      
+     if(contract && activity)
+       {
+        setEditedContract(
+          contract.replace("[MerchantTitle]",activity.trainerCompanyName)
+          .replace("[MerchantAddress]", activity.trainerAddress)
+          .replace("[MerchantPhoneNumber]",activity.trainerPhone)
+          .replace("[MerchantFax]","")
+          .replace("[MerchantEmail]",activity.trainerEmail)
+          .replace("[BuyerName]",activityUserInfo.name + " "+ activityUserInfo.surname)
+          .replace("[BuyerAddress]",activityUserInfo.address)
+          .replace("[BuyerPhone]",activityUserInfo.gsmNumber)
+          .replace("[BuyerEmail]",user!.email)
+          .replace("[OrderItemType]","Aktivite Bileti")
+          .replace("[OrderDescription]",activity.title)
+          .replace("[OrderCount]",activityUserInfo.ticketCount.toString())
+          .replace("[OrderPrice]",(activityUserInfo.ticketCount * activity.price).toString())
+          .replace("[PaymentType]","Kredi Kartı")
+          .replace("[BillingAddress]",activityUserInfo.address)
+
+          )
+       } 
+      
+  
+    }, [contract])
+  
+
+
 
   const onSubmit = async (e:any) => {
     e.stopPropagation();
@@ -99,12 +138,6 @@ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
       success = false;
     }
   if(success){
-
-    // setPaymentInfo({...paymentInfo, 
-    //    activityId:activity!.id,
-    //   expireMonth: exMonth, expireYear: exYear,
-    //   ticketCount:Number(count)});
-    //setLoading3DPage(true);
     handlePaymentFormSubmit(paymentInfo);
 
   }
@@ -115,12 +148,25 @@ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     e.stopPropagation();
     if(modal.open) closeModal();
   
-        openModal("Uzman Başvuru Formu", <>
-        <Modal.Description>
-        <iframe style={{width:"100%", border:"none"}} src="https://www.iyzico.com/pazaryeri-alici-anlasma/" />
-        </Modal.Description>
+        openModal("Iyzico", <>
+        <Modal.Content className='iyzicoModal-content'>
+        <iframe height="315" style={{width:"100%", border:"none"}} src="https://www.iyzico.com/pazaryeri-alici-anlasma/" />
+        </Modal.Content>
         </>,false,
-       "","", false) 
+       "","", true) 
+       
+  }
+  
+  const openMSSModal = (e:any) => {
+    e.stopPropagation();
+    if(modal.open) closeModal();
+  
+        openModal("MSS", <>
+        <Modal.Content scrolling>
+             <div dangerouslySetInnerHTML={{__html:sanitizer(editedContract)}} />
+        </Modal.Content>
+        </>,false,
+       "","", true) 
        
   }
 
@@ -297,7 +343,7 @@ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
                       initialValue={paymentInfo.hasSignedPaymentContract}
                       parse={v => (v ? true : false) }
                     />&nbsp;&nbsp;
-                   <span><a style={{cursor:"pointer"}}  onClick={openIyzicoModal} >Ön Bilgilendirme Satış Sözleşmesi</a>'ni okudum.</span> 
+                   <span><a style={{cursor:"pointer"}}  onClick={openMSSModal} >Ön Bilgilendirme Satış Sözleşmesi</a>'ni okudum.</span> 
                     <OnChange name="paymentContract">
                 {(value, previous) => {
                         setPaymentInfo({...paymentInfo, hasSignedPaymentContract:value});
@@ -320,7 +366,6 @@ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
                 {(value, previous) => {
                     setPaymentInfo({...paymentInfo, hasSignedIyzicoContract:value});
                     setIyzicoContract(value);
-
                 }}
                 </OnChange>
                 </div>

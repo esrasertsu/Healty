@@ -64,7 +64,7 @@ const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant,id}) => {
         <iframe style={{width:"100%", border:"none"}} src="https://www.iyzico.com/pazaryeri-satici-anlasma/" />
         </Modal.Description>
         </>,false,
-       "","", false) 
+       "","", true) 
        
   }
 

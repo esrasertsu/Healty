@@ -278,6 +278,8 @@ namespace CleanArchitecture.API
                     "sha256-rQPGpX1K43jebTtYXBT+mlyP+LK8/XEaJ2xTV7ZzY6E=",
                     "sha256-HFNclDLj6iSv9QbDzx+r/dbp6qGgueQHe+zFYPyTAdg=",
                     "sha256-FGCiQnbAwKl2SmXDefilnApiPGF+sIfXLAyEb9WGDUg=",
+                    "sha256-ydc51uUxdflOzOpxZ2LyMxnmvM8CS2iyRIH/A0/x8Jo=",
+                    "sha256-r3x6D0yBZdyG8FpooR5ZxcsLuwuJ+pSQ/80YzwXS5IU=",
                     "https://www.googletagmanager.com/gtm.js",
                     "https://www.google-analytics.com/analytics.js"))
                 );

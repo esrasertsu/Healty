@@ -39,8 +39,8 @@ const MobileNavBar: React.FC<IProps> = ({setVisibleMobileNav,visible}) => {
           >
                 <div style={{display:"flex", alignItems:"center"}}>
                   <img
-                      src="/assets/logo.png"
-                      alt="logo"
+                      src="/assets/afitapp.png"
+                      alt="afitapp"
                       style={{ height:"50px"}}
                     />
                 </div>

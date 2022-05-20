@@ -41,7 +41,7 @@ const BlogPageHeader:React.FC<{blog:IBlog}> = ({blog}) => {
                      fluid style={activityImageStyle}/>
                   </Segment>
                 :
-                files.length === 0 ? 
+                files.length === 0 && isCurrentUserAuthor ? 
                 <div style={{marginBottom:15}}>
                 <PhotoWidgetDropzone setFiles={setFiles} />
                 </div>

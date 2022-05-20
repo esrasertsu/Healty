@@ -83,6 +83,8 @@ namespace CleanArchitecture.Application.Activities
                     subcatsToReturn.Add(catDto);
                 }
 
+            var host = activity.UserActivities.FirstOrDefault(x => x.IsHost);
+
             var activityDto = new ActivityDto
             {
                 Id = activity.Id,
@@ -100,7 +102,7 @@ namespace CleanArchitecture.Application.Activities
                 Levels = levelsDto,
                 Categories = catsToReturn,
                 UserActivities = _mapper.Map<ICollection<UserActivity>, ICollection<AttendeeDto>>(activity.UserActivities),
-                SavedCount = activity.UserSavedActivities != null? activity.UserSavedActivities.Count() : 0,
+                SavedCount = activity.UserSavedActivities != null ? activity.UserSavedActivities.Count() : 0,
                 SubCategories = subcatsToReturn,
                 Address= activity.Address,
                 City = _mapper.Map<City, CityDto>(activity.City),
@@ -110,8 +112,17 @@ namespace CleanArchitecture.Application.Activities
                 ChannelName = activity.CallRoomId,
                 Star = activity.Star,
                 StarCount = activity.StarCount,
-                Status = activity.Status
+                Status = activity.Status,
+                TrainerId = host.AppUser.Id
             };
+
+            if (host.AppUser.SubMerchantDetails != null)
+            {
+                activityDto.TrainerCompanyName = host.AppUser.SubMerchantDetails.MerchantType == MerchantType.Personal ? host.AppUser.SubMerchantDetails.ContactName : host.AppUser.SubMerchantDetails.LegalCompanyTitle;
+                activityDto.TrainerPhone = host.AppUser.SubMerchantDetails.GsmNumber;
+                activityDto.TrainerEmail = host.AppUser.SubMerchantDetails.Email;
+                activityDto.TrainerAddress = host.AppUser.SubMerchantDetails.Address;
+            }
 
             if (currentUser != null)
             {

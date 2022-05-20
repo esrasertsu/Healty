@@ -14,6 +14,7 @@ import { useMediaQuery } from 'react-responsive'
 import ActivityVideoCall from './ActivityVideoCall';
 import ActivityReview from './ActivityReview';
 import { toast } from 'react-toastify';
+import ActivitySuggestions from './ActivitySuggestions';
 
 interface DetailParams{
     id:string
@@ -157,9 +158,14 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
 
                    
           </Grid.Column>
+          <Grid.Column width={16}>
+          <ActivitySuggestions activity={activity} />
+          </Grid.Column>
+
       </Grid>
     
     </Container>
+
     </>
     )
 }

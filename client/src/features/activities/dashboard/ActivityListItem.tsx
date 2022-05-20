@@ -11,7 +11,7 @@ import tr  from 'date-fns/locale/tr'
 import { useHistory } from 'react-router-dom';
 import LoginForm from '../../user/LoginForm';
 import { observer } from 'mobx-react-lite';
-import { BsFillBookmarkStarFill } from "react-icons/bs";
+import { BsFillBookmarkStarFill} from "react-icons/bs";
 import { BiTimer, BiWifi, BiWifiOff } from "react-icons/bi";
 
 const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
@@ -119,9 +119,10 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                         <Item.Image size={!isTabletOrMobile ? "medium":undefined} style={{ display: "block"}} 
                             src={(activity.mainImage && activity.mainImage.url) || '/assets/placeholder.png'}
                             onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}}
-                            className={isTabletOrMobile ? "activityListItem_Image_mobile":""} >
+                            className={isTabletOrMobile ? "activityListItem_Image_mobile":""} 
+                            alt={activity.title}/>
                              
-                        </Item.Image>
+                    
                        
                        
                     </div>
@@ -129,7 +130,7 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
 
                 
                     <Item.Content className={isTabletOrMobile ? "activity_listItem_mobile":"activity_listItem"} >
-                        <Item.Header className='activity_listItem_title'>{activity.title}</Item.Header>
+                        <Item.Header as={"h1"} className='activity_listItem_title'>{activity.title}</Item.Header>
                         {(new Date(activity.endDate).getTime() < new Date().getTime()) &&
                         <StarRating rating={activity.star} editing={false} size={'small'} showCount={false}/>}
                         {/* <Item.Description>

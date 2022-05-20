@@ -229,9 +229,9 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                       { 
                       activity.attendancyLimit && (activity.attendancyLimit !==0 && (activity.attendancyLimit>0) && (activity.attendancyLimit - activity.attendanceCount) <4) ?
                      ( activity.attendancyLimit - activity.attendanceCount >0 ?
-                       <Label color='red'>Son {activity.attendancyLimit - activity.attendanceCount} katılımcı!</Label>
+                       <div className='almost-sell-out-label'>Son {activity.attendancyLimit - activity.attendanceCount} katılımcı!</div>
                        :
-                       <Label color='red'>Yer kalmadı!</Label> ) : ""
+                       <div className="almost-sell-out-label">Üzgünüz yer kalmadı</div> ) : ""
                       }
                       {/* {
                       (activity.attendancyLimit ===null ||activity.attendancyLimit ===0 || (activity.attendancyLimit && (activity.attendancyLimit > activity.attendees.length))) &&
@@ -397,7 +397,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
                        ( activity.attendancyLimit - activity.attendanceCount >0 ?
                         <div className='almost-sell-out-label'>Son {activity.attendancyLimit - activity.attendanceCount} katılımcı!</div>
                          :
-                         <div className='almost-sell-out-label'>Üzgünüz yer kalmadı.</div> ):""
+                         <div className='almost-sell-out-label'>Üzgünüz yer kalmadı</div> ):""
                         }
                       {/* {
                       (activity.attendancyLimit ===null ||activity.attendancyLimit ===0 || (activity.attendancyLimit && (activity.attendancyLimit > activity.attendees.length))) &&

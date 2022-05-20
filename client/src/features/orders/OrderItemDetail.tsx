@@ -55,7 +55,7 @@ const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, hi
                 <RefundSuccess RefundSuccess={res} />
                 </Modal.Description>
                 </>,false,
-                "","",false) 
+                "","",true) 
 
              }
         })

@@ -5,6 +5,7 @@ import { IAccessibility, IDocument } from "./profile";
 export interface IUser {
     userName : string;
     displayName: string;
+    email: string;
     token: string;
     image?: string;
     role: string;

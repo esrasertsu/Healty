@@ -32,7 +32,8 @@ const BlogMoreFromUser:React.FC<{blog:IBlog}> = ({blog}) => {
                         key={blog.id}
                       >
                         <Image
-                          src={blog.photo}
+                          src={blog.photo || '/assets/placeholder.png'} 
+                          onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}}
                           style={{ height: 100, objectFit: 'cover',width:"100%" }}
                         />
                         <Card.Content>

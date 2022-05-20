@@ -32,8 +32,9 @@ const BlogMoreFromThisCategory:React.FC<{blog:IBlog}> = ({blog}) => {
                         key={blog.id}
                       >
                         <Image
-                          src={blog.photo}
                           style={{ height: 100, objectFit: 'cover',width:"100%" }}
+                          src={blog.photo || '/assets/placeholder.png'} 
+                          onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}}
                         />
                         <Card.Content>
                           <Card.Header className="profileBlogCard_header" textAlign="left">{blog.title}</Card.Header>

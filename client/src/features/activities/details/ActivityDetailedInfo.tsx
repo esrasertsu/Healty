@@ -30,8 +30,8 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                 <div className='activity-description' key={activity.id+"_desc"} dangerouslySetInnerHTML={{__html:sanitizer(activity.description)}} />
                 }
       <h2>Aktivite Detayları</h2>
-       <Segment.Group className="activityDetails_GridSegment">
-          <Segment attached>
+       {/* <Segment.Group className="activityDetails_GridSegment"> */}
+       <div>
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 : 1}>
                    <Icon name='bookmark' size='large'  style={{color:"#222E50"}} />
@@ -46,8 +46,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    }
                  </Grid.Column>
                </Grid>
-             </Segment>
-             <Segment attached>
+            
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='tags' size='large'  style={{color:"#222E50"}} />
@@ -61,8 +60,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    }
                  </Grid.Column>
                </Grid>
-             </Segment>
-             <Segment attached>
+            
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='heartbeat' size='large' style={{color:"#222E50"}} />
@@ -78,8 +76,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                  
                  </Grid.Column>
                </Grid>
-             </Segment>
-             <Segment attached>
+             
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='calendar alternate outline' size='large'  style={{color:"#222E50"}} />
@@ -100,8 +97,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    </span>
                  </Grid.Column>
                </Grid>
-             </Segment>
-             <Segment attached>
+            
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='calendar alternate outline' size='large'  style={{color:"#222E50"}} />
@@ -122,8 +118,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    </span>
                  </Grid.Column>
                </Grid>
-             </Segment>
-             <Segment attached>
+           
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
                    <Icon name="time" size='large'  style={{color:"#222E50"}} />
@@ -136,8 +131,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    <span>{durationMin >0 && (durationMin + " dakika")}</span>
                  </Grid.Column>
                </Grid>
-             </Segment>
-             <Segment attached>
+            
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='map outline' size='large'  style={{color:"#222E50"}} />
@@ -148,8 +142,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    <span>{activity.city ? activity.city.text : "Belirtilmemiş"}</span>
                  </Grid.Column>
                </Grid>
-             </Segment>
-             <Segment attached>
+            
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='map pin' size='large'  style={{color:"#222E50"}} />
@@ -159,8 +152,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    <span>{activity.venue !== "null" && activity.venue !=="" ? activity.venue : "Belirtilmemiş"}</span>
                  </Grid.Column>
                </Grid>
-             </Segment>
-             <Segment attached>
+             
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
                  {activity.online ? <BiWifi style={{fontSize: "26px"}}/> :<BiWifiOff style={{fontSize: "26px"}}/> }
@@ -170,8 +162,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                   <span> Online katılıma açık  </span>: <span>Online katılıma kapalı</span>}
                  </Grid.Column>
                </Grid>
-             </Segment>
-             <Segment attached>
+            
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='users' size='large'  style={{color:"#222E50"}} />
@@ -181,8 +172,7 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    <span>{activity.attendancyLimit===0 || activity.attendancyLimit === null? "Sınırsız katılımcı" : activity.attendancyLimit +" kişi"}</span>
                  </Grid.Column>
                </Grid>
-             </Segment>
-             <Segment attached>
+            
                <Grid verticalAlign='middle'>
                  <Grid.Column width={isMobile? 2 :1}>
                    <Icon name='money' size='large' style={{color:"#222E50"}} />
@@ -192,8 +182,8 @@ const ActivityDetailedInfo:React.FC<{activity:IActivity}> = ({activity}) => {
                    <span>{activity.price===0 ? "Ücretsiz" : activity.price +" TL"}</span>
                  </Grid.Column>
                </Grid>
-             </Segment>
-           </Segment.Group>
+           </div>
+           
            </>
     )
 }

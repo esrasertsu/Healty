@@ -218,14 +218,10 @@ const HomePage = () => {
                 Hoşgeldin!
                 </Header> */}
           
-                <Header as='h1'  style={{fontSize: '30px',  textAlign:'center', width:"100%",textShadow: "1.5px 1.5px #f2f2f2" }}>
-                 Doğru uzmanı ve doğru aktiviteyi tam yerinde keşfet! 
+                <Header as='h1'  style={{fontSize: '30px',  textAlign:'center', width:"100%",textShadow: "1.5px 1.5px #f2f2f2", marginBottom:"20px" }}>
+                 Doğru uzmanı ve doğru aktiviteyi AFitApp ile keşfet! 
                {/* Yeni aktiviteler yeni insanlar keşfetme zamanı!*/}
                 </Header>
-                 <p style={{ fontSize: '1.3rem', color: "#222E50" }}>
-                Spor koçundan diyetisyene, meditasyon eğitmeninden psikoloğa ihtiyacın olan en doğru uzmanı en kolay şekilde bulabileceğin yerdesin. 
-                Üstelik istediğin lokasyonda ya da online olarak aktivitelere katılabilir, eğitmenlerin paylaştıkları blogları okuyarak ilgilendiğin alanda bilgi sahibi olabilirsin. 
-                </p> 
               <Grid className="activityListGrid">
               <Grid.Row>
               <Grid.Column width={16}>
@@ -276,7 +272,7 @@ const HomePage = () => {
         <Header.Content>
             Aktivite Planla
             <Header.Subheader className="homepage_subheader">
-            Uzman danışmanların oluşturmuş olduğu aktivitelere katılabilir, sağlığın için kendine vakit ayırırken aynı zamanda sosyalleşmenin de tadını çıkarabilirsin.  
+            AFitApp ile uzman danışmanların oluşturmuş olduğu aktivitelere katılabilir, sağlığın için kendine vakit ayırırken aynı zamanda sosyalleşmenin de tadını çıkarabilirsin.  
         </Header.Subheader>
          </Header.Content> 
     </Header>
@@ -376,8 +372,8 @@ const HomePage = () => {
                 <Header as="h1">
                     <Header.Content>Eğitmen misin?</Header.Content>
                 </Header>
-                <Header.Subheader style={{fontSize:"1.2rem",marginBottom:"20px"}}>
-                      <div>Uzman olduğun alanda aktivite planlamak ve erişilebilirliğini arttırmak için buradan başvurabilirsin.
+                <Header.Subheader as="h2" style={{fontSize:"1.2rem",marginBottom:"20px", fontWeight:"500"}}>
+                      <div>AFitApp'da uzman olduğun alanda aktivite planlamak ve erişilebilirliğini arttırmak için buradan başvurabilirsin.
                         </div>  
                             <div>
                             <Button  
@@ -387,7 +383,7 @@ const HomePage = () => {
                             style={{ marginTop:"20px"}} 
                             onClick={()=>{history.push('/trainerOnboarding');}}
                             >
-                          Uzman başvuru formu 
+                          Uzman Başvuru Formu 
                         </Button>
                             </div>
                 </Header.Subheader>

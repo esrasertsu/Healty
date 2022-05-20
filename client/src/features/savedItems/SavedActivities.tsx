@@ -39,7 +39,8 @@ const SavedActivities = () => {
                     style={{width:"100%", objectFit:"cover"}} 
                     size="small" 
                     className='savedActivity_img'
-                    src={act.mainImage ? act.mainImage.url : '/assets/placeholder.png'} />
+                    src={act.mainImage ? act.mainImage.url : '/assets/placeholder.png'} 
+                    onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}}/>
                     </Grid.Column>
                     <Grid.Column width={isTablet ? 9 : 10}>
                     <div>

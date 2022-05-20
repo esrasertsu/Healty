@@ -41,5 +41,11 @@ namespace CleanArchitecture.Application.Activities
         public int Star { get; set; }
         public int StarCount { get; set; }
         public ActivityStatus Status { get; set; }
+        public string TrainerId { get; set; }
+        public string TrainerCompanyName { get; set; }
+        public string TrainerPhone { get; set; }
+        public string TrainerEmail { get; set; }
+        public string TrainerAddress { get; set; }
+
     }
 }

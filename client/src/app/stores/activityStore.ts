@@ -7,6 +7,7 @@ import ProfileDashboardPopularProfiles from '../../features/profiles/ProfileDash
 import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
 import { ActivityFormValues, ActivityOnlineJoinInfo, ActivityStatus, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, IActivityReview, IActivitySelectedFilter, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IPersonalActivity, PaymentUserInfoDetails } from '../models/activity';
+import { ICategory, ISubCategory } from '../models/category';
 import { IOrder } from '../models/order';
 import { RootStore } from './rootStore';
 
@@ -36,6 +37,8 @@ export default class ActivityStore {
     @observable personalActivityRegistery = new Map<string, IPersonalActivity>();
     @observable orderRegistery = new Map<string,IOrder>();
     @observable activity: IActivity | null = null;
+    @observable activitySuggestions: IActivity[]  = [];
+    @observable activitySuggestionCount: number = 0;
     @observable order: IOrder | null = null;
     @observable savedActivities: IActivity[] = [];
     @observable loadingInitial = false;
@@ -79,6 +82,7 @@ export default class ActivityStore {
     @observable cityId:string = ""
 
     @observable activeUserPreIndex = 0;
+    @observable loadingActivitySuggestions = false;
 
     @observable isOnline = false;
     @observable loadingPaymentPage = false;
@@ -91,6 +95,9 @@ export default class ActivityStore {
     }
     @action setActivity = (ac:IActivity | null) =>{
         this.activity = ac;
+    }
+    @action setLoadingActivitySuggestions = (ac:boolean) =>{
+        this.loadingActivitySuggestions = ac;
     }
     @action setActiveUserPreIndex = (index:number) =>{
         this.activeUserPreIndex = index;
@@ -374,6 +381,37 @@ export default class ActivityStore {
             }
     };
 
+    @action loadActivitySuggestions = async (categoryNames:ICategory[],subCategoryNames:ISubCategory[]) =>{
+        debugger;
+        this.loadingActivitySuggestions = true;
+
+        try {
+
+            const params = new URLSearchParams();
+            params.append('limit', String(5));
+            params.append('offset', String(0));
+            categoryNames.forEach((item) => {
+                params.append("categoryIds", item.key);
+        })
+            subCategoryNames.forEach((item) => {
+                    params.append("subCategoryIds", item.key);
+            })
+            const activitiesEnvelope = await agent.Activities.list(params);
+            const {activities, activityCount } = activitiesEnvelope;
+            runInAction(()=>{
+                this.activitySuggestions =activities;
+                this.activitySuggestionCount = activityCount;
+                this.loadingActivitySuggestions = false;
+            })
+        } catch (error) {
+            runInAction(()=>{
+                this.loadingActivitySuggestions = false;
+            })
+            console.log(error);
+        }
+    }
+
+
 
     @action getTrainerActivities = async () => {
         this.loadingActivity = true;
@@ -428,6 +466,7 @@ export default class ActivityStore {
         if(activity){
             this.activity = activity;
             this.rootStore.categoryStore.loadAllCategoryList();
+            this.loadActivitySuggestions(activity.categoryNames,activity.subCategoryNames);
             this.loadingActivity = false;
             return toJS(activity);
         } 
@@ -437,6 +476,7 @@ export default class ActivityStore {
                 runInAction(() => {
                     setActivityProps(activity,this.rootStore.userStore.user!)
                     this.rootStore.categoryStore.loadAllCategoryList();
+                    this.loadActivitySuggestions(activity.categories,activity.subCategories);
                     this.activity = activity;
                     this.loadingActivity = false;
                 })

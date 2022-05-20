@@ -21,7 +21,7 @@ export interface IActivity {
     attendees: IAttendee[];
     attendancyLimit?: number;
     attendanceCount:number;
-    price?:number;
+    price:number;
     levels: ILevel[];
     isGoing:boolean;
     isHost: boolean;
@@ -37,7 +37,12 @@ export interface IActivity {
     channelName: string,
     star:number,
     starCount: number,
-    status: any
+    status: any,
+    trainerId: string,
+    trainerCompanyName:string,
+    trainerAddress:string,
+    trainerPhone:string,
+    trainerEmail:string
 
 }
 

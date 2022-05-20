@@ -20,14 +20,11 @@ import PostForm from '../../features/posts/PostForm';
 import BlogList from '../../features/blog/BlogList';
 import BlogPage from '../../features/blog/BlogPage';
 import MessagesPage from '../../features/messages/MessagesPage';
-// import { useLoadScript } from "@react-google-maps/api";
-// import { LoadScriptUrlOptions } from "@react-google-maps/api/dist/utils/make-load-script-url";
 import { runInAction } from 'mobx';
 import PrivateRoute from './PrivateRoute';
 import  LoginRequiredPage  from './LoginRequiredPage';
 import  Admin  from '../../features/admin/Admin';
 import { useMediaQuery } from 'react-responsive'
-import MobileNavBar from '../../features/nav/MobileNavBar';
 import CookieConsent, { Cookies } from "react-cookie-consent";
 import ActivityPaymentPage from '../../features/activities/payment/ActivityPaymentPage';
 import Footer from '../../features/home/Footer';
@@ -35,19 +32,15 @@ import { history } from '../../index';
 import RegisterSuccess from '../../features/user/RegisterSuccess';
 import VerifyEmail from '../../features/user/VerifyEmail';
 import ResetPassword from '../../features/user/ResetPassword';
-import { IUser } from '../models/user';
-import SubMerchantDetails from '../../features/subMerchant/SubMerchantDetails';
 import Settings from '../../features/user/Settings';
 import PaymentSuccessPage from '../../features/activities/payment/PaymentSuccessPage';
 import PaymentErrorPage from '../../features/activities/payment/PaymentErrorPage';
 import OrderList from '../../features/orders/OrderList';
 import OrderItemDetail  from '../../features/orders/OrderItemDetail';
-import TrainerForm from '../../features/user/TrainerRegisterModal';
 import TrainerOnboardingPage from '../../features/user/TrainerOnboardingPage';
 import TrainerRegisterPage from '../../features/user/TrainerRegisterPage';
 import { AnalyticsWrapper, UseAnalytics } from '../common/util/util';
 import Forbidden from './Forbidden';
-import ReadyOnlyApplication from '../../features/user/ReadyOnlyApplication';
 import MainVideoPage from '../../features/videoCall/MainVideoPage';
 import SavedPage from '../../features/savedItems/SavedPage';
 import ActivitySuccessPage from '../../features/activities/form/ActivitySuccessPage';
@@ -189,35 +182,6 @@ else
     }
   },[])
 
-  // useEffect(() => {
-  //   if(appLoaded && user!==null && hubConnection === null)
-  //   {
-  //     debugger;
-  //     createHubConnection(true);
-
-  //   }
-
-  // }, [appLoaded,user])
-
-  // useEffect(() => {
-  //   loadCities().then(()=>
-  //   runInAction(() => {
-  //     setAppLoaded();
-  //     loadCategories();
-  //   })
-  //   );
-  
-  // }, [])
-
-
-  // useEffect(() => {
-  //   debugger;
-  //   if (token) {
-  //     getUser().finally(() => setAppLoaded())
-  //   } else {
-  //     setAppLoaded();
-  //   }
-  // }, [getUser, setAppLoaded, token])
 
 
   if(!appLoaded) return <LoadingComponent content='Yükleniyor...' />
@@ -284,13 +248,6 @@ else
         <div className='stickyButton'>
           <Button circular  className='orangeBtn' onClick ={handlePaySubmit}
                        content={activity.price && activity.price > 0 ? 'Rezervasyon Yap': 'Rezervasyonu Tamamla'}></Button>
-
-        {/* <a aria-current="page" className="ui teal button active" role="button" href="https://react.semantic-ui.com/layouts">
-          <i aria-hidden="true" className="left arrow icon"></i>Layouts
-      </a>
-          <a target="_blank" className="ui secondary button" role="button" href="https://github.com/Semantic-Org/Semantic-UI-React/blob/master/docs/src/layouts/HomepageLayout.js">
-            <i aria-hidden="true" className="github icon"></i>Source 
-            </a>*/}
        </div>
       } 
       <CookieConsent
@@ -303,7 +260,7 @@ else
       style={{ background: "#2B373B" }}
       buttonClasses="ui circular right floated button orangeBtn"
       buttonStyle={{ color: "#E36034" }}
-      expires={150}
+      expires={30}
     ><p>
       Size daha iyi hizmet sunabilmek için çerezler kullanıyoruz.
       <span>

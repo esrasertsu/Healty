@@ -72,7 +72,14 @@ const isValidEndTime = createValidator(
   'Geçersiz bitiş tarihi'
 )
 
-
+const isValidPrice = createValidator(
+  message => value => {
+    if (value && value<1) {
+      return message
+    }
+  },
+  'Aktivite fiyatı zorunlu alandır'
+)
 const validate = combineValidators({
   title: isRequired({message: 'Aktivite başlığı zorunlu alandır.'}),
   categoryIds: isRequired({message: 'Kategori zorunlu alandır.'}),
@@ -87,7 +94,10 @@ const validate = combineValidators({
     isValidEndTime
   )(),
   endDate:isRequired({message: 'Bitiş Tarihi zorunlu alandır.'}),
-  price:isRequired('price'),
+  price: composeValidators(
+    isRequired({message: 'Aktivite fiyatı zorunlu alandır.'}),
+    isValidPrice
+  )(),
   cityId: customCityRequired,
   venue:customCityRequired,
   address: customCityRequired
@@ -779,7 +789,7 @@ const uploadedNewImage = (file:any) =>{
                     trigger={<Icon style={{cursor:"pointer", marginLeft:"5px"}} 
                     name="info circle" />}>
                       <Popup.Content>
-                        <div style={{fontSize:"14px"}}>Aktivitenin herşey dahil ücreti(KDV, site komisyonu vs). Ücretsiz aktiviteler için 0 (sıfır) giriniz.</div>
+                        <div style={{fontSize:"14px"}}>Aktivitenin herşey dahil ücreti(KDV, site komisyonu vs).</div>
                       </Popup.Content>
                     </Popup>
                     </label>

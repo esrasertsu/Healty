@@ -30,9 +30,9 @@ axios.interceptors.response.use(undefined, error => {
     const {status, data, config, headers} = error.response;
     if(status === 401 && headers['www-authenticate'] === 'Bearer error="invalid_token", error_description="The token is expired"')
     {
-       window.localStorage.removeItem('jwt');
-       history.push('/');
        toast.info("Oturumunuzun süresi dolmuştur.")
+       window.localStorage.removeItem('jwt');
+       history.push('/login');
     }   
     if(status === 404)
     {

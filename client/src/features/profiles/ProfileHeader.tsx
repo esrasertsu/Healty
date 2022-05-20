@@ -123,7 +123,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                     <PhotoWidgetDropzone setFiles={setFiles} /> 
                     :
                     <Segment style={{padding:'0', margin:'0', height:"300px"}}  className="coverImage">
-                      <Image src={'/assets/trainerback.png'} fluid style={activityImageStyle} />
+                      <Image src={'/assets/placeholder.png'} fluid style={activityImageStyle} />
                     </Segment> 
                   )
                   :

@@ -175,6 +175,15 @@ export const getStatusTranslate = (status: string): IOrderStatus => {
           return orderStat;
    
          }
+         case "Failed":
+          { 
+            orderStat.color ="red";
+            orderStat.desc = "Başarısız";
+            orderStat.icon ="exclamation circle"
+     
+            return orderStat;
+     
+           }
      default:
       {  
         orderStat.color ="green";

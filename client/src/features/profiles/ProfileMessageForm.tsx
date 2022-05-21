@@ -7,6 +7,9 @@ import { IMessageForm } from '../../app/models/message';
 import LoginForm from '../user/LoginForm';
 import { observer } from 'mobx-react-lite';
 import { useMediaQuery } from 'react-responsive';
+import { toast } from 'react-toastify';
+import { runInAction } from 'mobx';
+import { Link } from 'react-router-dom';
 
 // interface IProps{
 //     sendMessage:() => void;
@@ -36,6 +39,11 @@ import { useMediaQuery } from 'react-responsive';
           </>,true,
           "","blurring",true, "loginModal") 
       }
+      const CustomToastWithLink = (chatId:string) => (
+        <div>
+          <Link className='redirectMessageBox' to="/messages">Mesajın iletidi. Konuşmaya devam etmek için mesaj kutunu kontrol et.</Link>
+        </div>
+      );
 
     const handleFinalFormSubmit = async (values: IMessageForm) => {
         let newMessage = {
@@ -43,7 +51,14 @@ import { useMediaQuery } from 'react-responsive';
         };
         if(isLoggedIn)
             {
-              await sendMessageFromProfile(newMessage);
+             const chatId = await sendMessageFromProfile(newMessage);
+             runInAction(() =>{
+              if(chatId !== null && chatId!=undefined)
+              toast.success(CustomToastWithLink(chatId))
+           else 
+             toast.error("Sayfayı yenileyip tekrar deneyin.")
+             })
+             
             }else{
               var str = `/profile/${profile!.userName}`;
               handleLoginClick(null,str);

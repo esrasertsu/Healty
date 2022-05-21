@@ -48,10 +48,19 @@ namespace CleanArchitecture.API.Controllers
             command.uid = uid;
             var result = await Mediator.Send(command);
 
-            if(result.Status =="success")
-                return Redirect(Request.Scheme +"://"+Request.Host+"/payment/success?paymentId="+result.PaymentId+"&paymentTransactionId="+result.PaymentTransactionId+"&paidPrice="+result.PaidPrice+"&status="+result.Status+"&count="+count+ "&activityId=" + id+"");
+
+
+            if (result.Status =="success")
+            {
+                var successUri = new Uri(Request.Scheme +"://"+Request.Host+"/payment/success?paymentId="+result.PaymentId+"&paymentTransactionId="+result.PaymentTransactionId+"&paidPrice="+result.PaidPrice+"&status="+result.Status+"&count="+count+ "&activityId=" + id+"");
+                return Redirect(successUri.AbsoluteUri);
+            }
             else
-                return Redirect(Request.Scheme + "://" + Request.Host + "/payment/error?errorCode=" + result.ErrorCode + "&errorMessage=" + result.ErrorMessage +"");
+            {
+                var uri = new Uri(Request.Scheme + "://" + Request.Host + "/payment/error?errorCode=" + result.ErrorCode + "&errorMessage=" + result.ErrorMessage +"");
+                return Redirect(uri.AbsoluteUri);
+
+            }
 
         }
 

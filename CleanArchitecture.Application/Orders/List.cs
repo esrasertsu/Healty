@@ -27,15 +27,19 @@ namespace CleanArchitecture.Application.Orders
         public class Query : IRequest<OrdersEnvelope>
         {
 
-            public Query(int? limit, int? offset)
+            public Query(int? limit, int? offset, Guid? activityId, string predicate)
             {
                 Limit = limit;
                 Offset = offset;
+                ActivityId = activityId;
+                this.Predicate = predicate;
+
                
             }
             public int? Limit { get; set; }
             public int? Offset { get; set; }
-          
+            public Guid? ActivityId { get; set; }
+            public string Predicate { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, OrdersEnvelope>
@@ -57,13 +61,25 @@ namespace CleanArchitecture.Application.Orders
                 var currentUser = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
 
                 if (currentUser == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { User = "NotFound" });
+                    throw new RestException(HttpStatusCode.Forbidden, new { User = "NotFound" });
 
                 var queryable = _context.Orders
-                    .Where(x => x.UserId == currentUser.Id && x.OrderState != EnumOrderState.Deleted)
                     .OrderByDescending(x => x.OrderDate)
                     .AsQueryable();
 
+                if (request.Predicate == "past")
+                    queryable = queryable.Where(x => x.OrderItems.FirstOrDefault().Activity.Date < DateTime.Now);
+                else if (request.Predicate == "future")
+                    queryable = queryable.Where(x => x.OrderItems.FirstOrDefault().Activity.Date > DateTime.Now); //şimdilik first or default. Any de olurdu
+                    
+                if (request.ActivityId != null)
+                    queryable = queryable.Where(x => x.OrderItems.Any(y => y.Activity.Id == request.ActivityId));
+
+                if (currentUser.Role != Role.Admin)
+                {
+                    queryable = queryable.Where(x => x.UserId == currentUser.Id && x.OrderState != EnumOrderState.Deleted && x.OrderState != EnumOrderState.Failed && x.UserVisibilityStatus);
+                }
+                
                 var orders = await queryable
                     .Skip(request.Offset ?? 0)
                     .Take(request.Limit ?? 10).ToListAsync();
@@ -88,8 +104,13 @@ namespace CleanArchitecture.Application.Orders
                         PaidPrice = item.PaidPrice,
                         ProductId = activity.Activity.Id.ToString(),
                         TrainerId = trainer.AppUser.UserName,
-                        TrainerImage = trainer.AppUser.Photos.Count > 0 ? trainer.AppUser.Photos.FirstOrDefault(x => x.IsMain == true).Url : ""
-
+                        TrainerImage = trainer.AppUser.Photos.Count > 0 ? trainer.AppUser.Photos.FirstOrDefault(x => x.IsMain == true).Url : "",
+                        CardAssociation = item.CardAssociation,
+                        BuyerName = item.BuyerName,
+                        CardFamily = item.CardFamily,
+                        CardLastFourDigit = item.CardLastFourDigit,
+                        CardType = item.PaymentType,
+                        PaymentTransactionId = activity.PaymentTransactionId,
                     }) ;
                 }
 

@@ -2,8 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import {Link, RouteComponentProps} from 'react-router-dom';
 import queryString from 'query-string';
 import { Button, Container, Header, Icon, Image, Item, Segment } from 'semantic-ui-react';
-import agent from '../../../app/api/agent';
-import { toast } from 'react-toastify';
 import { observer } from 'mobx-react-lite';
 import { useMediaQuery } from 'react-responsive';
 import { RootStoreContext } from '../../../app/stores/rootStore';
@@ -12,8 +10,7 @@ import { format } from 'date-fns';
 import tr  from 'date-fns/locale/tr'
 
 const PaymentSuccessPage : React.FC<RouteComponentProps> = ({location}) =>{
-    const {status,activityId,count, paidPrice, paymentTransactionId, paymentId} = queryString.parse(location.search);
-    const [activityName, setActivityName] = useState("");
+    const {status,activityId,count, paidPrice, paymentTransactionId} = queryString.parse(location.search);
     const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
     const rootStore = useContext(RootStoreContext);
     const { activity, loadActivity, loadingActivity } = rootStore.activityStore;
@@ -80,7 +77,7 @@ const PaymentSuccessPage : React.FC<RouteComponentProps> = ({location}) =>{
 
                 {
                     activity.online ?  
-                    <div style={{marginTop:".6em"}}> 
+                    <div style={{marginTop:".6em",display: "flex",alignItems: "center", marginBottom: "7px"}}> 
                    <Image style={{height:"25px", marginRight:"5px",display:"flex", flexDirection:"row", alignItems:"center"}} src="/icons/wifi-ok.png"/>
                     <span>Online katılım</span> </div>
                      :

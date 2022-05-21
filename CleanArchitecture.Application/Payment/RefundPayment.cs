@@ -79,10 +79,10 @@ namespace CleanArchitecture.Application.Payment
                     var attendance = await _context.UserActivities.SingleOrDefaultAsync(x =>
                           x.ActivityId == activity.Id && x.AppUserId == currentUser.Id);
 
-                    if (attendance == null)
-                        return refundRes;
+                    if (attendance != null)
+                      _context.UserActivities.Remove(attendance);
 
-                    _context.UserActivities.Remove(attendance);
+                    activity.AttendanceCount = activity.AttendanceCount - orderItem.Quantity;
                     order.OrderState = EnumOrderState.Cancelled;
                     var success = await _context.SaveChangesAsync() > 0;
                 }

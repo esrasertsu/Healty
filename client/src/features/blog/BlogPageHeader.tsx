@@ -35,7 +35,7 @@ const BlogPageHeader:React.FC<{blog:IBlog}> = ({blog}) => {
           </Dimmer>
                   {
                    blog.photo && !imageChange ?
-                   <Segment>
+                   <Segment style={{background:"#fff"}}>
                     <Image src={blog.photo || '/assets/placeholder.png'}
                     onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}}
                      fluid style={activityImageStyle}/>

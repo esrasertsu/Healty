@@ -1,5 +1,5 @@
 import { action, observable, runInAction, computed, reaction, makeObservable } from "mobx";
-import { toast } from "react-toastify";
+import { toast, ToastPosition } from "react-toastify";
 import agent from "../api/agent";
 import { IAccessibility, IPhoto, IProfile, IProfileBlog, IProfileComment, IProfileFilterFormValues, IProfileFormValues, IRefencePic, IUserActivity, ProfileFilterFormValues, ProfileFormValues } from "../models/profile";
 import { RootStore } from "./rootStore";
@@ -691,7 +691,6 @@ export default class ProfileStore{
                 //     this.rootStore.messageStore.chatRooms.push(new ChatRoom(newMessage.chatRoomId));
                 // }
                 const senderName = this.rootStore.userStore.user!.displayName;
-                toast.success("Mesajın iletidi. Konuşmaya devam etmek için mesaj kutunu kontrol et.")
 
                 this.rootStore.userStore.hubConnection === null ? 
                 this.rootStore.userStore.createHubConnection(true).then(()=>{
@@ -700,14 +699,16 @@ export default class ProfileStore{
                 : 
                 this.rootStore.userStore.hubConnection!.invoke('AddToNewChat', newMessage.chatRoomId, this.profile!.userName,senderName);
 
-
             });
+            return newMessage.chatRoomId;
+
         } catch (error) {
             runInAction(() => {
                 this.submittingMessage = false;
             });
             toast.error('Problem sending message');
             console.log(error);
+            return null;
         }
     };
 

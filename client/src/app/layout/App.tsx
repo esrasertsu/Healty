@@ -73,13 +73,14 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   const [visible, setVisible] = useState(false);
   
   useEffect(() => {
-   // return history.listen((location) => { 
-    //   if(location.pathname === "/profiles")
-    //    toast.success("Değişti")
-
-    //    console.log(`You changed the page to: ${location.pathname}`) 
-    // }) 
-    document.querySelector('body')!.scrollTo(0,0)
+ 
+    document.querySelector('body')!.scrollTo(0,0);
+    if(history.location.pathname.includes("/profile/"))
+    {
+      document.querySelector('body')!.style.background = "#f8f7f7";
+    }else{
+      document.querySelector('body')!.style.background = "none";
+    }
   },[history,location.pathname]) 
   
   const alertUser = async (event:any) => {

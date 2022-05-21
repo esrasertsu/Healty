@@ -55,6 +55,7 @@ namespace CleanArchitecture.Application.Orders
                 {
                     Id = order.Id.ToString(),
                     AttendeeName = order.FirstName + " " + order.LastName,
+                    BuyerName = order.BuyerName,
                     PaymentInfo = order.CardLastFourDigit,
                     CardType = order.PaymentType,
                     CardFamily = order.CardFamily,

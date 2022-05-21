@@ -59,6 +59,7 @@ namespace CleanArchitecture.Application.Activities.Administration
                 {
                     if (activity.Status != (ActivityStatus)status)
                     {
+
                         activity.Status = (ActivityStatus)status;
                         activity.LastUpdateDate = DateTime.Now;
 

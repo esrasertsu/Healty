@@ -166,57 +166,5 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(command);
         }
 
-
-        //[HttpGet("{username}/details")]
-        //public async Task<ActionResult<Profile>> Get(string username)
-        //{
-        //    return await Mediator.Send(new Details.Query { UserName = username });
-        //}
-
-        //[HttpPost]
-        //[Authorize(Policy = "CanCreateActivity")]
-        //public async Task<ActionResult<ActivityDto>> Create([FromForm] Create.Command command)
-        //{
-        //    return await Mediator.Send(command);
-        //}
-
-        //[HttpPut("{id}")]
-        //[Authorize(Policy = "IsActivityHost")]
-        //public async Task<ActionResult<ActivityDto>> Update(Guid Id, [FromForm] Update.Command command)
-        //{
-        //    command.Id = Id;
-        //    return await Mediator.Send(command);
-        //}
-
-
-
-        //[HttpPost("{id}/attend")]
-        //public async Task<ActionResult<Unit>> Attend(Guid id, bool showName)
-        //{
-        //    return await Mediator.Send(new Attend.Command { Id = id, ShowName = showName });
-        //}
-
-        //[HttpDelete("{id}/attend")]
-        //public async Task<ActionResult<Unit>> Unattend(Guid id)
-        //{
-        //    return await Mediator.Send(new Unattend.Command { Id = id });
-        //}
-
-
-        //[HttpGet("levels")]
-        //[AllowAnonymous]
-        //public async Task<ActionResult<List<LevelDto>>> List()
-        //{
-        //    return await Mediator.Send(new ListLevels.Query());
-        //}
-
-        //[HttpPut("{id}/joindetails")]
-        //[Authorize(Policy = "IsActivityHost")]
-        //public async Task<ActionResult<Unit>> UpdateJoinDetails(UpdateJoinDetails.Command command)
-        //{
-        //    return await Mediator.Send(command);
-        //}
-
-
     }
 }

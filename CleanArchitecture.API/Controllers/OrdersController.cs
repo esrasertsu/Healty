@@ -13,9 +13,9 @@ namespace CleanArchitecture.API.Controllers
     {
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<List.OrdersEnvelope>> List(int? limit, int? offset)
+        public async Task<ActionResult<List.OrdersEnvelope>> List(int? limit, int? offset, Guid? activityId, string predicate)
         {
-            return await Mediator.Send(new List.Query(limit, offset));
+            return await Mediator.Send(new List.Query(limit, offset, activityId,predicate));
         }
 
         [HttpGet("{id}")]

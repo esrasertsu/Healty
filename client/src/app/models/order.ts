@@ -12,7 +12,6 @@ export interface IOrder {
     photo: string;
     orderStatus: string;
     orderNo: string;
-    description: string;
     price?:number;
     paidPrice:string;
     productId : string;

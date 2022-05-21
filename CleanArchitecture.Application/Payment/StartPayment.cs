@@ -144,11 +144,16 @@ namespace CleanArchitecture.Application.Payment
 
                             }
                         }
+
+                        if (string.IsNullOrEmpty(subMerchantKey))
+                        {
+                            throw new Exception("Aktivite sahibi sistem bilgileri eksik");
+                        }
                         //
 
                         var callbackUrl = $"{request.Origin}/api/payment/callback/" + activity.Id + "/" + request.TicketCount + "?id=" + activity.Id + "&count=" + request.TicketCount + "&uId=" + user.Id + "";
                                
-                        var paymentStartedRes = _paymentAccessor.PaymentProcessWithIyzico(activity, user, request.TicketCount, request.UserIpAddress,
+                        var paymentStartedRes = _paymentAccessor.PaymentProcessWithIyzico(orderItem, user, request.UserIpAddress,
                         order.ConversationId, request.CardHolderName, request.CardNumber.Replace(" ", ""), request.CVC, request.ExpireMonth, request.ExpireYear,
                         subMerchantKey, callbackUrl, ownerTrainer);
 

@@ -15,6 +15,7 @@ import ActivityVideoCall from './ActivityVideoCall';
 import ActivityReview from './ActivityReview';
 import { toast } from 'react-toastify';
 import ActivitySuggestions from './ActivitySuggestions';
+import BlogMainPageItemsPlaceholder from '../../blog/BlogMainPageItemsPlaceholder';
 
 interface DetailParams{
     id:string
@@ -23,7 +24,7 @@ interface DetailParams{
 const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, history}) => {
 
     const rootStore = useContext(RootStoreContext);
-    const { activity, loadActivity, loadingActivity,cancelAttendance,loading } = rootStore.activityStore;
+    const { activity, loadActivity, loadingActivity,cancelAttendance,loading, loadingActivitySuggestions } = rootStore.activityStore;
     const { user,isLoggedIn } = rootStore.userStore;
     const [cancellationUserOpen, setcancellationUserOpen] = React.useState(false);
     const { getOrders, orderList } = rootStore.activityStore;
@@ -37,7 +38,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
     }, [loadActivity, match.params.id]) // sadece 1 kere çalışcak, koymazsak her component render olduğunda
 
     useEffect(() => {
-      if(user && isLoggedIn)
+      if(user && isLoggedIn) //3 kere çağrılıyor bi kontrol et
         getOrders()
     }, [activity])
 
@@ -142,7 +143,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
                   (activity.isGoing || activity.isHost) && !isMobile && activity.online &&
                  <ActivityVideoCall activity={activity} />
                  }  
-                { activity.isGoing && !isMobile && (
+                { activity.isGoing && !isMobile && !activity.isHost && (
                       <Button circular style={{marginTop:"30px", width:"100%"}} loading={loading} color="red" onClick={()=>setcancellationUserOpen(true)}>Katılımı iptal et</Button>
                  )}
                  {
@@ -159,7 +160,8 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
                    
           </Grid.Column>
           <Grid.Column width={16}>
-          <ActivitySuggestions activity={activity} />
+          {loadingActivitySuggestions ? <BlogMainPageItemsPlaceholder count={isTablet?1 :5} /> :
+          <ActivitySuggestions activity={activity} />}
           </Grid.Column>
 
       </Grid>

@@ -361,6 +361,7 @@ export default class ActivityStore {
 
     @action loadActivities = async () => {
         this.loadingInitial = true;
+        debugger;
         try {
             const activitiesEnvelope = await agent.Activities.list(this.axiosParams);
             const {activities, activityCount } = activitiesEnvelope;
@@ -382,7 +383,6 @@ export default class ActivityStore {
     };
 
     @action loadActivitySuggestions = async (categoryNames:ICategory[],subCategoryNames:ISubCategory[]) =>{
-        debugger;
         this.loadingActivitySuggestions = true;
 
         try {
@@ -466,7 +466,7 @@ export default class ActivityStore {
         if(activity){
             this.activity = activity;
             this.rootStore.categoryStore.loadAllCategoryList();
-            this.loadActivitySuggestions(activity.categoryNames,activity.subCategoryNames);
+            this.loadActivitySuggestions(activity.categories,activity.subCategories);
             this.loadingActivity = false;
             return toJS(activity);
         } 

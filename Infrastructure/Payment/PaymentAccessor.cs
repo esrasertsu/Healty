@@ -229,15 +229,15 @@ namespace Infrastructure.Payment
             return checkoutFormInitialize.PaymentPageUrl;
         }
 
-        public StartPaymentResult PaymentProcessWithIyzico(Activity activity, AppUser user, int count, string userIp, string conversationId, 
+        public StartPaymentResult PaymentProcessWithIyzico(OrderItem orderItem, AppUser user, string userIp, string conversationId, 
             string cardHolderName, string cardNumber, string cvc, string expireMonth, string expireYear, string subMerchantKey, string callbackUrl, AppUser trainer)
         {
 
             CreatePaymentRequest request = new CreatePaymentRequest();
             request.Locale = Locale.TR.ToString();
             request.ConversationId = conversationId;
-            request.Price = RemoveTrailingZeros((activity.Price * count).ToString().Split(',')[0]);
-            request.PaidPrice = RemoveTrailingZeros((activity.Price * count).ToString().Split(',')[0]);
+            request.Price = RemoveTrailingZeros((orderItem.Price * orderItem.Quantity).ToString().Split(',')[0]);
+            request.PaidPrice = RemoveTrailingZeros((orderItem.Price * orderItem.Quantity).ToString().Split(',')[0]);
             request.Currency = Currency.TRY.ToString();
             request.Installment = 1;
             request.BasketId = "B67832";
@@ -282,27 +282,27 @@ namespace Infrastructure.Payment
             
             List<BasketItem> basketItems = new List<BasketItem>();
             BasketItem firstBasketItem = new BasketItem();
-            firstBasketItem.Id = activity.Id.ToString();
-            firstBasketItem.Name = activity.Title;
-            firstBasketItem.Category1 = activity.Categories.Select(x => x.Category.Name).FirstOrDefault();
+            firstBasketItem.Id = orderItem.Activity.Id.ToString();
+            firstBasketItem.Name = orderItem.Activity.Title;
+            firstBasketItem.Category1 = orderItem.Activity.Categories.Select(x => x.Category.Name).FirstOrDefault();
             firstBasketItem.ItemType = BasketItemType.VIRTUAL.ToString();
-            firstBasketItem.Price = RemoveTrailingZeros((activity.Price * count).ToString().Split(',')[0]);
+            firstBasketItem.Price = RemoveTrailingZeros((orderItem.Price * orderItem.Quantity).ToString().Split(',')[0]);
 
             if (!string.IsNullOrEmpty(subMerchantKey))
             {
                 var comision = trainer.SubMerchantDetails.CommissionStatus.Rate;
                 var KDV = 18 / 100;
 
-                var submerchantprice = activity.Price - (activity.Price * comision /100);
+                var submerchantprice = orderItem.Price - (orderItem.Price * comision /100);
 
                 if (trainer.SubMerchantDetails.MerchantType != MerchantType.Personal)
-                   submerchantprice = activity.Price - (activity.Price * comision / 100);
+                   submerchantprice = orderItem.Price - (orderItem.Price * comision / 100);
                 else
                 {
-                    submerchantprice = activity.Price - (activity.Price * comision /100) - (activity.Price * KDV);
+                    submerchantprice = orderItem.Price - (orderItem.Price * comision /100) - (orderItem.Price * KDV);
                 }
                 firstBasketItem.SubMerchantKey = subMerchantKey;
-                firstBasketItem.SubMerchantPrice = RemoveTrailingZeros((submerchantprice * count).ToString().Split(',')[0]);
+                firstBasketItem.SubMerchantPrice = RemoveTrailingZeros((submerchantprice * orderItem.Quantity).ToString().Split(',')[0]);
 
             }
 
@@ -410,6 +410,35 @@ namespace Infrastructure.Payment
                 ErrorGroup = refund.ErrorGroup,
                 Status = refund.Status
             };
+        }
+
+        public PaymentApprovalDto IyzicoPaymentApprove(string paymentTransactionId)
+        {
+            var conversationId = new Guid();
+
+            CreateApprovalRequest request = new CreateApprovalRequest();
+            request.Locale = Locale.TR.ToString();
+            request.ConversationId = conversationId.ToString();
+            request.PaymentTransactionId = paymentTransactionId;
+
+            Approval approval = Approval.Create(request, _options);
+
+            if (approval.ConversationId == conversationId.ToString() && approval.Status == IyzipayCore.Model.Status.SUCCESS.ToString())
+            {
+                return new PaymentApprovalDto()
+                {
+                    PaymentTransactionId = approval.PaymentTransactionId,
+                    Status = approval.Status
+                };
+            }
+            else
+                return new PaymentApprovalDto()
+                {
+                    ErrorGroup = approval.ErrorGroup,
+                    ErrorMessage = approval.ErrorMessage,
+                    ErrorCode = approval.ErrorCode,
+                    Status = approval.Status
+                };
         }
     }
 }

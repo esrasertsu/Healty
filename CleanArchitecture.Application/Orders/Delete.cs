@@ -38,7 +38,7 @@ namespace CleanArchitecture.Application.Orders
                     throw new Exception("Ödemesi yapılmış rezervasyon listeden çıkarılamaz.");
 
 
-                order.OrderState = Domain.EnumOrderState.Deleted;
+                order.UserVisibilityStatus = false;
 
                 var success = _context.SaveChanges() > 0;
 

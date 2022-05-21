@@ -390,6 +390,10 @@ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
         activity && (
           <>
           <div className="activity_paymentpage_price_containerdiv">
+            <img src={activity.mainImage ? activity.mainImage.url : "/assets/placeholder.png"}
+             alt={activity.title} style={{objectFit:"cover",marginBottom:"10px"}}
+             onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}}></img>
+             <div style={{ fontSize:"16px"}}>{activity.title}</div>
             <div className="activity_paymentpage_price_header" style={{marginBottom:"20px"}}>Ödenecek Tutar</div>
             <div className="activity_paymentpage_price_items"><span>Aktivite fiyatı</span> <span>{activity.price} TL</span> </div>
             <div className="activity_paymentpage_price_items"><span>Kişi sayısı</span> <span>{count}</span> </div>

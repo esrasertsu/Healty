@@ -18,7 +18,6 @@ const ActivitySuggestions:React.FC<{activity:IActivity}> = ({activity}) => {
   const { activitySuggestions} = rootStore.activityStore;
   const isMobile = useMediaQuery({ query: '(max-width: 500px)' })
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
-  const host = activity.attendees.filter(x => x.isHost === true)[0];
 
   const {isLoggedIn,user} = rootStore.userStore;
   const {save,unsave} = rootStore.activityStore;
@@ -39,6 +38,7 @@ const ActivitySuggestions:React.FC<{activity:IActivity}> = ({activity}) => {
   
   const handleSave = (e:any,id:string) =>{
     e.stopPropagation();
+    e.preventDefault();
     if(isLoggedIn)
     {
       save(id).then(() =>{
@@ -52,6 +52,7 @@ const ActivitySuggestions:React.FC<{activity:IActivity}> = ({activity}) => {
 
   
   const handleUnSave = (e:any,id:string) =>{
+    e.preventDefault();
     e.stopPropagation();
     if(isLoggedIn)
     {
@@ -68,45 +69,46 @@ const ActivitySuggestions:React.FC<{activity:IActivity}> = ({activity}) => {
            <>
             <Divider clearing />
            
-            <h2>Bunları da görmelisin</h2>
+            <h2 style={{margin:"40px 0 45px 0"}}>Benzer Aktiviteler</h2>
              <Card.Group itemsPerRow={isTabletOrMobile?"3":"5"} stackable>
                 {
-                    activitySuggestions.map((activity,index) => (
-                      index< (isTabletOrMobile? 3 : 5) &&
+                    activitySuggestions.map((acc,index) => (
+                      index< (isTabletOrMobile? 3 : 5) && acc.id !== activity.id &&
                         <Card
                         as={Link}
-                        to={`/activities/${activity.id}`}
-                        key={activity.id}
+                        to={`/activities/${acc.id}`}
+                        key={acc.id}
                       >
-                     {   (!activity.isHost) && 
+                     {/* {   (!acc.isHost) && 
                         <Popup
                       hoverable
                       position="top center"
                       on={['hover', 'click']}
                       positionFixed
                       content="Kaydet"
-                      key={activity.id + Math.random() + "subPopover"}
+                      key={acc.id + Math.random() + "subPopover"}
                       trigger={<BsFillBookmarkStarFill
-                        className={activity.isSaved ? 'activity_addToFav_mobile suggested saved' : 'activity_addToFav_mobile suggested'}
-                        onClick={(e: any) => activity.isSaved ? handleUnSave(e, activity.id) : handleSave(e, activity.id)} />} />
+                        className={acc.isSaved ? 'activity_addToFav_mobile suggested saved' : 'activity_addToFav_mobile suggested'}
+                        onClick={(e: any) => acc.isSaved ? handleUnSave(e, acc.id) : handleSave(e, acc.id)} />} />
   
-                    }  
+                    }   */}
                         <Image
-                         src={activity.mainImage? activity.mainImage.url : '/assets/placeholder.png'} 
+                         src={acc.mainImage? acc.mainImage.url : '/assets/placeholder.png'} 
                          onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/placeholder.png'}}
-                          style={{ height: 100, objectFit: 'cover',width:"100%" }}
+                          style={{ height: 150, objectFit: 'cover',width:"100%" }}
                         />
                         <Card.Content>
-                          <Card.Header className="profileBlogCard_header" textAlign="left">{activity.title}</Card.Header>
+                          <Card.Header className="profileBlogCard_header" textAlign="left">{acc.title}</Card.Header>
                           <Card.Meta textAlign="left">
-                            <div><span>{format(new Date(activity.date), 'dd LLL yyyy',{locale: tr})}</span></div>
+                            <div><span>{format(new Date(acc.date), 'dd LLL yyyy',{locale: tr})}</span></div>
                           </Card.Meta>
                           <Card.Description>
-                          <Item.Image key={host.image} size="mini" style={{width:"20px"}} circular 
-                            src={host.image || '/assets/user.png'}
+
+                          <Item.Image key={acc.attendees.filter(x => x.isHost === true)[0].image} size="mini" style={{width:"20px"}} circular 
+                            src={acc.attendees.filter(x => x.isHost === true)[0].image || '/assets/user.png'}
                             onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}
                             />
-                             &nbsp;<span style={{fontSize:"14px"}}>{host.displayName}</span>
+                             &nbsp;<span style={{fontSize:"14px"}}>{acc.attendees.filter(x => x.isHost === true)[0].displayName}</span>
                           {/* {
                            <span><Icon name='bookmark' /> {activity.savedCount}  </span> 
                           } */}

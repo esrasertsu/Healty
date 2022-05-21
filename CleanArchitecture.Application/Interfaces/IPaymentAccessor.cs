@@ -11,15 +11,14 @@ namespace CleanArchitecture.Application.Interfaces
     public interface IPaymentAccessor
     {
         string GetActivityPaymentPageFromIyzico(Activity activity, AppUser user, int count, string userIp);
-        StartPaymentResult PaymentProcessWithIyzico(Activity activity, AppUser user, int count, string userIp, string conversationId,
+        StartPaymentResult PaymentProcessWithIyzico(OrderItem activity, AppUser user, string userIp, string conversationId,
                                         string cardHolderName,string cardNumber, string cvc ,string expireMonth, string expireYear, 
                                         string subMerchantKey, string callbackUrl, AppUser trainer);
         IyzicoPaymentResult FinishPaymentWithIyzico(string conversationId, string paymentId, string conversationData);
         IyziSubMerchantResponse CreateSubMerchantIyzico(SubMerchant subMerchant);
         IyziSubMerchantResponse UpdateSubMerchantIyzico(SubMerchant subMerchant);
-
         SubMerchant GetSubMerchantFromIyzico(string subMerchantExternalId);
-
         RefundDto IyzicoRefund(string paymentTransactionId, string price, string ip);
+        PaymentApprovalDto IyzicoPaymentApprove(string paymentTransactionId);
     }
 }

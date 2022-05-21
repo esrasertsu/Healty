@@ -10,11 +10,13 @@ namespace CleanArchitecture.Domain
         public Order()
         {
             OrderItems = new Collection<OrderItem>();
+            UserVisibilityStatus = true;
         }
         public Guid Id { get; set; }
         public long OrderNumber { get; set; }
         public DateTime OrderDate { get; set; }
         public EnumOrderState OrderState { get; set; }
+        public bool UserVisibilityStatus { get; set; }
         public string PaymentType { get; set; }
         public string UserId { get; set; }
         public virtual AppUser User { get; set; }
@@ -45,7 +47,7 @@ namespace CleanArchitecture.Domain
         Completed =2,
         Cancelled =3,
         Failed = 4,
-        FailedServer = 5,
+        FailedServer = 5, //20.05 henüz kullanılmadı
         Deleted = 6
     }
 

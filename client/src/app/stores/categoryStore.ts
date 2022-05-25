@@ -20,6 +20,7 @@ export default class CategoryStore{
 
     @observable allDetailedList: IAllCategoryList[] = [];
     @observable allCategoriesOptionList : IAllCategoryOption[] = [];
+
     @observable loadingSubCategories = false;
     @observable categoryRegistery = new Map();
     @observable subCategoryRegistery = new Map();

@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
-import { Accordion, Button, Confirm, Form,  Icon, Message } from 'semantic-ui-react';
+import { Accordion, Button, Confirm, Form,  Grid,  Icon, Message, Segment } from 'semantic-ui-react';
 import DropdownInput from '../../../app/common/form/DropdownInput';
 import DropdownMultiple from '../../../app/common/form/DropdownMultiple';
 import { ErrorMessage } from '../../../app/common/form/ErrorMessage';
@@ -40,7 +40,7 @@ const ApplicationForm1: React.FC<IProps> = ({trainerForm,setTrainerForm,setActiv
    const [filedocs, setFileDocs] = useState<any[]>([]);
    const [updateEnabled, setUpdateEnabled] = useState(false);
 
-  const {allCategoriesOptionList} = rootStore.categoryStore;
+  const {allCategoriesOptionList, categoryList, loadAllCategoryList } = rootStore.categoryStore;
   const {accessibilities, loadAccessibilities} = rootStore.profileStore;
 
 
@@ -52,7 +52,6 @@ const ApplicationForm1: React.FC<IProps> = ({trainerForm,setTrainerForm,setActiv
     const [messageVisibility, setmessageVisibility] = useState(true);
 
     const [subCategoryOptions, setSubCategoryOptions] = useState<ICategory[]>([]);
-    const [categoryOptions, setCategoryOptions] = useState<ICategory[]>([]);
     const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
     let subCategoryOptionFilteredList: ICategory[] = [];
@@ -62,10 +61,6 @@ const ApplicationForm1: React.FC<IProps> = ({trainerForm,setTrainerForm,setActiv
             setCityId(data);
             setTrainerForm({...trainerForm,cityId: data});
      }    
-
-     allCategoriesOptionList.filter(x=>x.parentId===null).map(option => (
-        categoryOptions.push(new Category({key: option.key, value: option.value, text: option.text}))
-      ));
 
      const loadSubCatOptions = () =>{
       allCategoriesOptionList.filter(x=> trainerForm.categoryIds.findIndex(y=> y === x.parentId!) > -1).map(option => (
@@ -81,6 +76,10 @@ const ApplicationForm1: React.FC<IProps> = ({trainerForm,setTrainerForm,setActiv
         }, [categoryIds,allCategoriesOptionList]);
       
 
+        useEffect(() => {
+            loadAllCategoryList()
+        }, [])
+        
 
     const handleDeleteDocument = (document:IDocument) =>{
 
@@ -117,7 +116,6 @@ const ApplicationForm1: React.FC<IProps> = ({trainerForm,setTrainerForm,setActiv
     const handleCategoryChanged = (e: any, data: string[]) => {
         setTrainerForm({...trainerForm, categoryIds: [...data]});
         setCategoryIds(data);  
-      
      }
     
      const handleSubCategoryChanged = (e: any, data: string[]) => {  
@@ -146,7 +144,6 @@ const ApplicationForm1: React.FC<IProps> = ({trainerForm,setTrainerForm,setActiv
         registerTrainer(values).then((res) => 
         {
           if(res)
-            setActiveTab(2);
             toast.success("Uzmanlık bilgileriniz kaydedildi.")
           })
         .catch((error:any) => (
@@ -196,8 +193,11 @@ const ApplicationForm1: React.FC<IProps> = ({trainerForm,setTrainerForm,setActiv
         </>}
       />
       {
-      <>
-    
+     
+      <Grid>
+          <Grid.Row>
+              <Grid.Column>
+           <Segment>
         <FinalForm
         onSubmit={(values: ITrainerFormValues) =>
           handleSaveTrainerForm(null,values)
@@ -206,16 +206,17 @@ const ApplicationForm1: React.FC<IProps> = ({trainerForm,setTrainerForm,setActiv
         render={({
           handleSubmit,
           submitting,
-          submitError
+          submitError,
+          
         }) => (
-          <Form className='trainerRegisterForm' onSubmit={handleSubmit} error>
+          <Form className='trainerRegisterForm' loading={trainerRegistering} onSubmit={handleSubmit} error>
       
             <label>Uzman Kategorisi*</label>
             <Field
                   name="categoryIds"
                   placeholder="Kategori"
                   component={DropdownMultiple}
-                  options = {categoryOptions}
+                  options = {categoryList}
                   value={trainerForm.categoryIds}
                   onChange={(e: any,data:[])=>
                     {
@@ -337,10 +338,10 @@ const ApplicationForm1: React.FC<IProps> = ({trainerForm,setTrainerForm,setActiv
                 }}
             </OnChange>
             <Button
-                  loading={submitting}
+                  loading={submitting || trainerRegistering}
                   disabled={submitting }
                   floated="right"
-                  className="blueBtn"
+                  color="green"
                   labelPosition="right"
                   icon="save"
                   circular
@@ -358,8 +359,12 @@ const ApplicationForm1: React.FC<IProps> = ({trainerForm,setTrainerForm,setActiv
           </Form>
         )}
       />
-    
-      </>
+         </Segment>
+       </Grid.Column>
+     
+     </Grid.Row>
+    </Grid>
+   
        }
     
       </>

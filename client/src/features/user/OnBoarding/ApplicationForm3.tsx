@@ -67,10 +67,16 @@ const ApplicationForm3: React.FC<IProps> = ({userSubmerchant,setTrainerForm2Mess
         {
           messages.push("Alt üye iş yeri bilgilerinizi lütfen kaydedin.")
         }
-    
-        if(messages.length > 0){
+        if(signedContract === false)
+         messages.push("Lütfen hizmet sözleşmesini okuyup onaylayın.")
+      
+         if(messages.length > 0){
           setError2Message(messages);
           setTrainerForm2Message(true);
+          document.querySelector('body')!.scrollTo({
+            top:100,
+            behavior: 'smooth'
+          })
         }
         else { 
           

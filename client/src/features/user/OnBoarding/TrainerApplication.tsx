@@ -50,6 +50,15 @@ const TrainerApplication : React.FC<RouteComponentProps<DetailParams>> = ({match
     const [docs, setDocs] = useState<any[]>([]);
     const [userSubmerchant,setUserSubmerchant] = useState(false);
 
+
+    const handlePageNext = () =>{
+        activeId <3 && setActiveId(activeId +1);
+        document.querySelector('body')!.scrollTo({
+            top:100,
+            behavior: 'smooth'
+          })
+    }
+
     useEffect(() => {
 
         agent.User.loadNewTrainer(match.params.id)
@@ -115,7 +124,7 @@ const TrainerApplication : React.FC<RouteComponentProps<DetailParams>> = ({match
     />}
            <StepsContentWrapper>
                <StepContent
-                stepId={0}
+                stepId={1}
                 className={activeId === 1 ? "active" : ""}>
                    <ApplicationForm1 
                    docs={docs}
@@ -125,15 +134,34 @@ const TrainerApplication : React.FC<RouteComponentProps<DetailParams>> = ({match
                    setTrainerRegisteredSuccess={setTrainerRegisteredSuccess}
                    setActiveTab={setActiveId}
                    setTrainerForm2Message={setTrainerForm2Message}/>
-               </StepContent>
-               <StepContent
-                 stepId={1}
-                 className={activeId === 2 ? "active" : ""}>
-                    <ApplicationForm2 id={match.params.id}
-                    setUserSubmerchant={setUserSubmerchant} />
+                   <div style={{marginTop:"20px"}}>
+                   <Button
+                     floated="right"
+                     className="blueBtn"
+                     circular
+                     content="Sonraki" onClick={handlePageNext} />
+                   </div>
+                    
                </StepContent>
                <StepContent
                  stepId={2}
+                 className={activeId === 2 ? "active" : ""}>
+                     <>
+                     <ApplicationForm2 id={match.params.id}
+                    setUserSubmerchant={setUserSubmerchant}
+                    />
+                  <div style={{marginTop:"20px"}}>
+                   <Button
+                     floated="right"
+                     className="blueBtn"
+                     circular
+                     content="Sonraki" onClick={handlePageNext} />
+                    
+                     </div>
+                     </>
+               </StepContent>
+               <StepContent
+                 stepId={3}
                  className={activeId === 3 ? "active" : ""}>
                     <ApplicationForm3
                     setTrainerRegisteredSuccess={setTrainerRegisteredSuccess}
@@ -143,15 +171,11 @@ const TrainerApplication : React.FC<RouteComponentProps<DetailParams>> = ({match
                      userSubmerchant={userSubmerchant}
                      docs={docs} />
                </StepContent>
-
            </StepsContentWrapper>
        </StepsComponent>
        </div>
-       { trainerForm2Message && <Message
-      error
-      header=''
-      list={error2Message}
-    />}
+      
+        
 
        </Container> 
         

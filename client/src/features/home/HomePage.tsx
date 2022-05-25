@@ -1,34 +1,28 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { Button, Container, Header, Segment, Image, Grid, Card, Icon, Form, GridColumn, Label, Modal, Loader } from 'semantic-ui-react'
+import { Button, Container, Header, Segment, Image, Grid, Icon, Modal } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
-import LoginForm from '../user/LoginForm';
+import { Helmet } from 'react-helmet-async';
 import { history } from '../../index'
 import { useMediaQuery } from 'react-responsive'
 import ActivitySearchArea from './ActivitySearchArea';
 import { observer } from 'mobx-react-lite';
 import ActivityListItemPlaceholder from '../activities/dashboard/ActivityListItemPlaceHolder';
 import ActivityList from '../activities/dashboard/ActivityList';
-import { Form as FinalForm, Field } from "react-final-form";
-import TextInput from "../../app/common/form/TextInput";
 
 const HomePage = () => {
  
-  const token = window.localStorage.getItem('jwt');
     const rootStore = useContext(RootStoreContext);
-    const {isLoggedIn, user} = rootStore.userStore;
+    const {user} = rootStore.userStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;
     const [loading, setLoading] = useState(false);
   
     const [open, setOpen] = React.useState(false)
     const [title, setTitle] = React.useState("")
-    const [allCatId, setAllCatId] = React.useState("")
 
-    const {setProfileFilterForm,profileFilterForm,clearProfileRegistery, setPage,page} = rootStore.profileStore;
-    const {userCity} = rootStore.commonStore;
+    const { setPage,page} = rootStore.profileStore;
     const {setClearPredicateBeforeSearch,clearUserPredicates,clearKeyPredicate,setActiveUserPreIndex,
-      clearActivityRegistery, setCategoryIds,loadActivities,setPredicate,setActiveIndex,loadingInitial,activityRegistery,
-      levelList,loadLevels} = rootStore.activityStore;
-      const { loadCategories,categoryRegistery } = rootStore.categoryStore;
+      clearActivityRegistery, loadActivities,setActiveIndex,loadingInitial,activityRegistery,loadLevels} = rootStore.activityStore;
+      const { loadCategories } = rootStore.categoryStore;
 
       const {setClearedBeforeNewPredicateComing,clearPredicates} = rootStore.blogStore;
 
@@ -41,30 +35,14 @@ const HomePage = () => {
       },[loadActivities,loadCategories,loadLevels]); //[] provides the same functionality with componentDidMounth..   dependency array
     
     
-    
-
-    const isTablet = useMediaQuery({ query: '(max-width: 767px)' })
-    const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
-
-    const handleFinalFormSubmit = (values: any) => {
-    }
-  
-    const handleLoginClick = (e:any) => {
-      e.stopPropagation();
-      if(modal.open) closeModal();
-  
-          openModal("Giriş Yap", <>
-          <Image  size={isMobile ? 'big': isTablet ? 'medium' :'large'}  src='/assets/Login1.jpg' wrapped />
-          <Modal.Description className="loginreg">
-          <LoginForm location={"/"} />
-          </Modal.Description>
-          </>,true,
-          "","blurring",true) 
-      }
+        const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
   
     return (
       <>
+        <Helmet>
+        <title>Afitapp - Sağlıklı Aktivite Platformu</title>
+      </Helmet>
       <Modal
       dimmer="blurring"
       closeIcon

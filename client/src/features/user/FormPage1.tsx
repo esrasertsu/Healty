@@ -36,9 +36,8 @@ const FormPage1:React.FC = () =>{
     const { trainerRegistering, tranierCreationForm,setTrainerCreationForm,userNameAndPhoneCheck,
     setTrainerFormMessage, trainerFormMessage,errorMessage,setErrorMessage,registerWaitingTrainer } = rootStore.userStore;
    // trainerForm, setTrainerForm,
-    const {openModal,closeModal,modal} = rootStore.modalStore;
+    const {closeModal,modal} = rootStore.modalStore;
 
-    const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
     const [passwordErrorMessage, setPasswordErrorMessage]= useState("")  
@@ -122,8 +121,9 @@ const FormPage1:React.FC = () =>{
 
             return (
             <a style={{cursor:"pointer", textDecoration:"underline"}} 
-            onClick={()=>agent.User.sendSms(tranierCreationForm.phone as string)}>Doğrulama Kodunu Tekrar Gönder</a>
-            );
+            onClick={()=>agent.User.sendSms(tranierCreationForm.phone as string)}>Doğrulama Kodunu Tekrar Gönder
+            </a>
+            )
 
     } else {
       return (
@@ -493,7 +493,7 @@ const FormPage1:React.FC = () =>{
                         format={v =>v === true}
                         parse={v => (v ? true : false) }
                       />&nbsp;&nbsp;
-                      <span><a style={{cursor:"pointer"}} onClick={()=>{}}>Aydınlatma metni</a>'ni okudum ve onayladım.</span> 
+                      <span><a style={{cursor:"pointer"}} href="/kisisel_verilerin_korunmasi" target="_blank">Aydınlatma metni</a>'ni okudum ve onayladım.</span> 
                        {contractErrorMessage!=="" && <label style={{color:"red"}}>{contractErrorMessage}</label>}    
                       <OnChange name="hasSignedContract">
                   {(value, previous) => {

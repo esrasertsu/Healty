@@ -113,7 +113,9 @@ namespace CleanArchitecture.Application.SubMerchants
                 else
                     throw new RestException(HttpStatusCode.BadRequest, new { HasSignedContract = "Not signed contract" });
 
-               // subMerchant.Id = new Guid(request.Id);
+                var commission = await _context.CommissionStatuses.SingleOrDefaultAsync(x => x.Name == "Standart");
+
+                // subMerchant.Id = new Guid(request.Id);
                 subMerchant.User = user;
                 subMerchant.UserId = user.Id;
                 subMerchant.MerchantType = (MerchantType)merchantType;
@@ -125,23 +127,25 @@ namespace CleanArchitecture.Application.SubMerchants
                 subMerchant.Iban = request.Iban;
                 subMerchant.IdentityNumber = request.IdentityNumber;
                 subMerchant.Name = request.LegalCompanyTitle;
+                subMerchant.CommissionStatus = commission;
 
                 if (subMerchant.MerchantType == MerchantType.LimitedOrAnonim)
                 {
-                    if (request.TaxOffice == "" || request.TaxOffice == null || request.LegalCompanyTitle == "" || request.TaxOffice == "")
+                    if (request.TaxOffice == "" || request.TaxOffice == null || request.LegalCompanyTitle == "" || request.TaxOffice == ""
+                         || request.TaxNumber == "" || request.TaxNumber == null)
                         throw new Exception("Problem creating subMerchant -- tax office and/or legal company title not be null");
-
+                    subMerchant.TaxNumber = request.TaxNumber;
                     subMerchant.TaxOffice = request.TaxOffice;
                     subMerchant.LegalCompanyTitle = request.LegalCompanyTitle;
                 }
                 else if (subMerchant.MerchantType == MerchantType.Private)
                 {
                     if (request.TaxOffice == "" || request.TaxOffice == null || request.LegalCompanyTitle == "" || request.TaxOffice == ""
-                        || request.TaxNumber == "" || request.TaxNumber == null)
+                      ||request.IdentityNumber == "" || request.IdentityNumber == null )
                         throw new Exception("Problem creating subMerchant -- tax office , tax number and/or legal company title not be null");
 
                     subMerchant.TaxOffice = request.TaxOffice;
-                    subMerchant.TaxNumber = request.TaxNumber;
+                    subMerchant.IdentityNumber = request.IdentityNumber;
                     subMerchant.LegalCompanyTitle = request.LegalCompanyTitle;
                 }
                 else if (subMerchant.MerchantType == MerchantType.Personal)

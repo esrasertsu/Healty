@@ -80,19 +80,31 @@
   <!-- End Google Tag Manager (noscript) -->
    
    <noscript>Noscript</noscript>
+
    <script>
     window.fbAsyncInit = function() {
       window.FB.init({
-        appId            : '372698491064171',
-        autoLogAppEvents : true,
-        xfbml            : true,
-        version          : 'v12.0'
+        appId      : '372698491064171',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v12.0'
       });
+        
+      window.FB.AppEvents.logPageView();   
+        
     };
-  </script>
-  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
-      
+  
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
 
+
+  </script>   
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/tr_TR/sdk.js#xfbml=1&version=v13.0&appId=372698491064171&autoLogAppEvents=1" nonce="wBDWa21g"></script>
     <div id="root">
     <div class="ui active transition visible inverted dimmer active-spinner">
      <div class="content">

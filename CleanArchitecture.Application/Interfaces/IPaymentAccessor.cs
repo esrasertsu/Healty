@@ -20,5 +20,7 @@ namespace CleanArchitecture.Application.Interfaces
         SubMerchant GetSubMerchantFromIyzico(string subMerchantExternalId);
         RefundDto IyzicoRefund(string paymentTransactionId, string price, string ip);
         PaymentApprovalDto IyzicoPaymentApprove(string paymentTransactionId);
+        PaymentApprovalDto IyzicoPaymentDisapprove(string paymentTransactionId);
+
     }
 }

@@ -192,9 +192,6 @@ namespace CleanArchitecture.Application.SubMerchants
                                 return response;
                             }
 
-                       
-
-
                     }
                     catch (Exception ex)
                     {

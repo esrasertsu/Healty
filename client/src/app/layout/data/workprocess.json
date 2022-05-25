@@ -1,0 +1,20 @@
+[
+    {
+        "id":1,
+        "icon":"flaticon-pharmacy",
+        "title":"Search Best Online <br> Professional",
+        "text":"It is a long established fact that a reader will be distracted by the readable."
+    },
+    {
+        "id":2,
+        "icon":"flaticon-event",
+        "title":"Get Instant <br> Appointment",
+        "text":"It is a long established fact that a reader will be distracted by the readable."
+    },
+    {
+        "id":3,
+        "icon":"flaticon-doctor",
+        "title":"Leave Your <br> Feedback",
+        "text":"It is a long established fact that a reader will be distracted by the readable."
+    }
+]

@@ -30,7 +30,7 @@ namespace CleanArchitecture.Application.Contracts
 
             public async Task<string> Handle(Query request, CancellationToken cancellationToken)
             {
-                var cont = await _context.Contracts.SingleOrDefaultAsync(x => x.Code == request.Code);
+                var cont = await _context.Contracts.SingleOrDefaultAsync(x => x.Code == request.Code && x.Status);
 
                 if (cont == null)
                     throw new RestException(HttpStatusCode.NotFound, new { post = "Not Found" });

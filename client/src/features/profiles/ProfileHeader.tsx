@@ -265,7 +265,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
           //   </Reveal.Content>
           // </Reveal>
           }
-          {isCurrentUser && profile.role === "Trainer" &&
+          {isCurrentUser && (profile.role === "Trainer" ||  profile.role === "Admin") &&
             <>
             <Button
               circular

@@ -24,9 +24,8 @@ namespace CleanArchitecture.Application.Activities.Administration
         public ActivityStatus Status { get; set; }
         public bool TrainerApproved { get; set; }
         public DateTime TrainerApprovedDate { get; set; }
-        public bool AdminApproved { get; set; }
+        public EnumOrderItemApproveState AdminApproved { get; set; }
         public DateTime AdminApprovedDate { get; set; }
-
         public ICollection<ActivityReview> Reviews { get; set; }
         public int Star { get; set; }
         public int StarCount { get; set; }

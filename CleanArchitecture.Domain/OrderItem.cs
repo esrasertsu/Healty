@@ -15,5 +15,17 @@ namespace CleanArchitecture.Domain
 
         public decimal Price { get; set; }        //kullanıcı fiyatı product tablosundan alıp zamdan etkilenmemesi için ayrıca ilk price'ı tutuyoruz
         public int Quantity { get; set; }
+        public EnumOrderItemApproveState AdminPaymentApproved { get; set; }
+        public DateTime? AdminPaymentApprovedDate { get; set; }
+        public DateTime? AdminPaymentDisapprovedDate { get; set; }
+
+    }
+
+
+    public enum EnumOrderItemApproveState
+    {
+        Waiting = 0,
+        Approved = 1,
+        Disapproved = 2
     }
 }

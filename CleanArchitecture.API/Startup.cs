@@ -88,7 +88,7 @@ namespace CleanArchitecture.API
                     policy.AllowAnyHeader()
                     .AllowAnyMethod()
                      .WithExposedHeaders("WWW-Authenticate")
-                     .WithOrigins("http://localhost:3000", "http://localhost:3001", "https://sandbox-api.iyzipay.com", "https://afitapp.com",
+                     .WithOrigins("http://localhost:3000", "https://localhost:3000", "http://localhost:3001", "https://sandbox-api.iyzipay.com", "https://afitapp.com",
                     "https://admin.afitapp.com", "http://localhost:9000", "https://meet.afitapp.com")
                     .AllowCredentials();
                 });
@@ -251,15 +251,19 @@ namespace CleanArchitecture.API
                     "https://fonts.googleapis.com",
                     "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
                     "sha256-yChqzBduCCi4o4xdbXRXh4U/t1rP4UUUMJt+rB+ylUI=",
+                    "sha256-r3x6D0yBZdyG8FpooR5ZxcsLuwuJ+pSQ/80YzwXS5IU=",
                     "sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs=",
                     "sha256-4Su6mBWzEIFnH4pAGMOuaeBrstwJN4Z3pq/s1Kn4/KQ=",
-                    "sha256-l/kITchrl9q5dw4BYXZI0P1FWNEEwjMlHnE32kyiX30="))
+                    "sha256-l/kITchrl9q5dw4BYXZI0P1FWNEEwjMlHnE32kyiX30=",
+                    "sha256-9nMkFvkNMPR36XCOOuQ11EpWkiooBa2ZMVO38K0PHaE="))
                 .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com","data:"))
                 .FormActions(s => s.Self().CustomSources("https://sandbox-api.iyzipay.com"))
-                .FrameAncestors(s => s.Self().CustomSources("https://sandbox-api.iyzipay.com"))
-                //.FrameSources(s => s.Self().CustomSources("https://www.google.com/recaptcha/"))
+                //.FrameAncestors(s => s.Self().CustomSources("https://sandbox-api.iyzipay.com"))
+               // .FrameSources(s => s.Self().CustomSources("https://www.google.com/recaptcha/", "https://sandbox-api.iyzipay.com"))
                 .ImageSources(s => s.Self().CustomSources(
                     "https://res.cloudinary.com",
+                    "https://maps.gstatic.com",
+                    "https://maps.googleapis.com",
                     "https://www.facebook.com",
                     "https://platform-lookaside.fbsbx.com",
                     "https://purecatamphetamine.github.io",
@@ -272,6 +276,7 @@ namespace CleanArchitecture.API
                     "https://www.youtube.com",
                     "https://connect.facebook.net",
                     "https://apis.google.com/",
+                    "https://maps.googleapis.com",
                     "https://www.google.com/recaptcha/",
                     "https://www.gstatic.com/recaptcha/",
                     "sha256-eE1k/Cs1U0Li9/ihPPQ7jKIGDvR8fYw65VJw+txfifw=",

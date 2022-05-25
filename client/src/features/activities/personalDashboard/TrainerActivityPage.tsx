@@ -43,6 +43,8 @@ const TrainerActivityPage: React.FC<IProps> = ({settings}) => {
       return 0;
     else if(status === ActivityStatus.TrainerCompleteApproved.toString())
       return 66;
+    else if(status === ActivityStatus.AdminPaymentDisapproved.toString())
+      return 66;
     else if(status === ActivityStatus.AdminPaymentApproved.toString())
       return 100;
     return 0;
@@ -59,6 +61,8 @@ const TrainerActivityPage: React.FC<IProps> = ({settings}) => {
       return <><Icon key="clock" name="clock outline" color="blue"/><span>Ödeme onayı bekleniyor</span></>;
     else if(status === ActivityStatus.AdminPaymentApproved.toString())
       return <><Icon key="money" name="money bill alternate outline" color="green" /><span>Ödeme onaylandı</span></>;
+    else if(status === ActivityStatus.AdminPaymentDisapproved.toString())
+      return <><Icon key="money" name="money bill alternate outline" color="red" /><span>Ödeme onayı geri çekildi</span></>;
     return "";
   }
   useEffect(() => {

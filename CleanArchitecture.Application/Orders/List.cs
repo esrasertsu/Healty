@@ -71,8 +71,14 @@ namespace CleanArchitecture.Application.Orders
                     queryable = queryable.Where(x => x.OrderItems.FirstOrDefault().Activity.Date < DateTime.Now);
                 else if (request.Predicate == "future")
                     queryable = queryable.Where(x => x.OrderItems.FirstOrDefault().Activity.Date > DateTime.Now); //şimdilik first or default. Any de olurdu
-                    
-                if (request.ActivityId != null)
+
+                Enum.TryParse(typeof(EnumOrderState), request.Predicate, out var searchOrderStatus);
+                if (searchOrderStatus!=null)
+                {
+                    queryable = queryable.Where(x => x.OrderState == (EnumOrderState)searchOrderStatus);
+                }
+
+                    if (request.ActivityId != null)
                     queryable = queryable.Where(x => x.OrderItems.Any(y => y.Activity.Id == request.ActivityId));
 
                 if (currentUser.Role != Role.Admin)
@@ -111,7 +117,9 @@ namespace CleanArchitecture.Application.Orders
                         CardLastFourDigit = item.CardLastFourDigit,
                         CardType = item.PaymentType,
                         PaymentTransactionId = activity.PaymentTransactionId,
-                    }) ;
+                        AdminPaymentApproved = activity.AdminPaymentApproved.ToString(),
+                        ActivityStatus = activity.Activity.Status.ToString()
+                    }); 
                 }
 
 

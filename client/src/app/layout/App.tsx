@@ -49,7 +49,13 @@ import ResponsiveContainer from './theme/ResponsiveContainer';
 import KullanimSartlari from '../../features/home/KullanimSartlari';
 import MembershipContract from '../../features/home/MembershipContract';
 import CookiesContract from '../../features/home/CookiesContract';
-
+import AboutUs from './AboutUs';
+import ContactUs from './ContactUs';
+import SSS from './SSS';
+import AcikRiza from '../../features/home/AcikRiza';
+import MesafeliSatis from '../../features/home/MesafeliSatis';
+import OnBilgilendirme from '../../features/home/OnBilgilendirme';
+import TrainerApplication from '../../features/user/OnBoarding/TrainerApplication';
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
@@ -57,16 +63,13 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
 
   const rootStore = useContext(RootStoreContext);
   const {setAppLoaded, token, appLoaded,loadCities} = rootStore.commonStore;
-  const { getUser,user,createHubConnection,isLoggedIn,stopHubConnection ,loggingOut} = rootStore.userStore;
+  const { getUser,user,createHubConnection,isLoggedIn,stopHubConnection ,loggingOut, getFacebookLoginStatus} = rootStore.userStore;
   const { loadCategories} = rootStore.categoryStore;
   const { modal, openModal, closeModal} = rootStore.modalStore;
   const { activity,attendActivity} = rootStore.activityStore;
   const initialized = UseAnalytics();
 
-  // useLoadScript({
-  //     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string,
-  //     libraries
-  // });
+
   const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1023px)' })
@@ -170,11 +173,15 @@ else
           }
           )
       }else{
-        loadCities().then(()=>
-        runInAction(() => {
-         loadCategories();
-         setAppLoaded();
-       }));
+        getFacebookLoginStatus().then(()=>
+          loadCities().then(()=>
+          runInAction(() => {
+          loadCategories();
+          setAppLoaded();
+       }))
+       )
+        
+     
       }
        
     return () => {
@@ -201,9 +208,12 @@ else
         <Route path={'/(.+)'} render={()=>(
           <Fragment>
              <Switch> 
-             
+             <PrivateRoute path="/TrainerApplication/:id" component={TrainerApplication}/>
              <Route path="/cerez_politikasi" component={CookiesContract}/>
              <Route path="/uyelik_ve_gizlilik_sozlesmesi" component={MembershipContract}/>
+             <Route path="/acik_riza" component={AcikRiza}/>
+             <Route path="/mesafeli_satis" component={MesafeliSatis}/>
+             <Route path="/on_bilgilendirme" component={OnBilgilendirme}/>
                 <Route path="/kisisel_verilerin_korunmasi" component={KVKKContract}/>
                 <Route path="/kullanim_sartlari" component={KullanimSartlari}/>
                  <Route path="/profiles" component={ProfileDashboard}/>
@@ -232,9 +242,11 @@ else
                  <Route exact path="/orders" component={OrderList}/>
                  <PrivateRoute exact path="/orders/:id" component={OrderItemDetail}/>
                  <PrivateRoute exact path="/videoMeeting/:id" component={MainVideoPage}/>
-                 <Route exact path="/admin" component={Admin}/>
-                 <Route exact path="/forbidden" component={Forbidden}/>
                  <PrivateRoute path="/saved" component={SavedPage}/>
+                 <Route exact path="/about-us" component={AboutUs}/>
+                 <Route exact path="/contact-us" component={ContactUs}/>
+                 <Route exact path="/sikca-sorulan-sorualar"component={SSS}/>
+                 <Route exact path="/forbidden" component={Forbidden}/>
                  <Route component={NotFound}/>
               </Switch>
           </Fragment>

@@ -1,0 +1,127 @@
+
+  .steps {
+    display: flex;
+    width: 100%;
+    max-width: 1000px;
+    justify-content: space-around;
+    align-items:center;
+    margin: 50px auto 0 auto;
+    
+    div.line {
+      width: 100%;
+      height: 2px;
+      background: rgba(49, 140, 252, .25);
+      position: relative;
+      
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: #318cfc;
+        transform-origin: left;
+        transform: scaleX(0);
+        transition: transform .5s ease-in-out;
+      }
+      
+      &.active {
+        &::after {
+          transform: scaleX(1)
+        }
+      }
+    }
+  
+    button.steps_btn {
+      cursor: pointer;
+      background: transparent;
+      border: 2px solid #318cfc;
+      color: #318cfc;
+      font-weight: 900;
+      border-radius: 100%;
+      min-width: 65px;
+      height: 65px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 25px;
+      background: white;
+      transition: all .3s ease;
+  
+      &.active {
+        background: #318cfc;
+        color: white;
+        min-width: 70px;
+        height: 70px;
+        font-size: 30px;
+      }
+      &:hover:not(.active){
+        background: #2876d6;
+        color: white;
+      }
+    }
+  }
+  
+  .contents {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 200px;
+    box-sizing: border-box;
+
+  
+  .content {
+    position: relative;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    transition: all .3s ease-out;
+  
+    &.active {
+      display: block;
+    }
+  
+    &__box {
+      background: white;
+      box-shadow: 0.9px 2.8px 2.2px rgba(49, 140, 252, 0.02),
+        2.1px 6.7px 5.3px rgba(49, 140, 252, 0.028),
+        4px 12.5px 10px rgba(49, 140, 252, 0.035),
+        7.1px 22.3px 17.9px rgba(49, 140, 252, 0.042),
+        13.4px 41.8px 33.4px rgba(49, 140, 252, 0.05),
+        32px 100px 80px rgba(49, 140, 252, 0.07);
+      border-radius: 20px;
+      padding: 50px;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+
+      .ui.segment{
+        box-shadow:none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        border: 0 !important;
+      }
+
+      .trainerFormAccordionMessage, .docCardAddAction{
+        .content{
+          display: block;
+        }
+
+      } 
+    }
+  }
+  
+}
+  @media (max-width: 550px){
+      .content__box{
+
+        padding: 20px 20px 50px 20px !important;
+       
+      }
+
+  }

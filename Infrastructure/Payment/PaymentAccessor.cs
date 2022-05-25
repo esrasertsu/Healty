@@ -45,13 +45,14 @@ namespace Infrastructure.Payment
 
             if (subMerchantDomain.MerchantType == MerchantType.Personal)
                 request.SubMerchantType = SubMerchantType.PERSONAL.ToString();
-            else if (subMerchantDomain.MerchantType == MerchantType.LimitedOrAnonim)
+
+            else if (subMerchantDomain.MerchantType == MerchantType.Private)
             {
                 request.SubMerchantType = SubMerchantType.PRIVATE_COMPANY.ToString();
                 request.TaxOffice = subMerchantDomain.TaxOffice;
                 request.LegalCompanyTitle = subMerchantDomain.LegalCompanyTitle;
             }
-            else if (subMerchantDomain.MerchantType == MerchantType.Private)
+            else if (subMerchantDomain.MerchantType == MerchantType.LimitedOrAnonim)
             {
                 request.SubMerchantType = SubMerchantType.LIMITED_OR_JOINT_STOCK_COMPANY.ToString();
                 request.TaxOffice = subMerchantDomain.TaxOffice;
@@ -438,6 +439,35 @@ namespace Infrastructure.Payment
                     ErrorMessage = approval.ErrorMessage,
                     ErrorCode = approval.ErrorCode,
                     Status = approval.Status
+                };
+        }
+
+        public PaymentApprovalDto IyzicoPaymentDisapprove(string paymentTransactionId)
+        {
+            var conversationId = new Guid();
+
+            CreateApprovalRequest request = new CreateApprovalRequest();
+            request.Locale = Locale.TR.ToString();
+            request.ConversationId = conversationId.ToString();
+            request.PaymentTransactionId = paymentTransactionId;
+
+            Disapproval disapproval = Disapproval.Create(request, _options);
+
+            if (disapproval.ConversationId == conversationId.ToString() && disapproval.Status == IyzipayCore.Model.Status.SUCCESS.ToString())
+            {
+                return new PaymentApprovalDto()
+                {
+                    PaymentTransactionId = disapproval.PaymentTransactionId,
+                    Status = disapproval.Status
+                };
+            }
+            else
+                return new PaymentApprovalDto()
+                {
+                    ErrorGroup = disapproval.ErrorGroup,
+                    ErrorMessage = disapproval.ErrorMessage,
+                    ErrorCode = disapproval.ErrorCode,
+                    Status = disapproval.Status
                 };
         }
     }

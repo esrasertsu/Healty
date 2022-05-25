@@ -9,6 +9,7 @@ import BlogStore from "./blogStore";
 import CategoryStore from "./categoryStore";
 import MessageStore from "./messageStore";
 import ContractStore from "./contractStore";
+import OrderStore from "./orderStore";
 
 configure({enforceActions: 'always'});
 
@@ -22,6 +23,7 @@ export class RootStore {
     categoryStore: CategoryStore;
     messageStore: MessageStore;
     contractStore: ContractStore;
+    orderStore: OrderStore;
 
     constructor() {
         this.activityStore = new ActivityStore(this);
@@ -33,7 +35,7 @@ export class RootStore {
         this.categoryStore = new CategoryStore(this);
         this.messageStore = new MessageStore(this);
         this.contractStore = new ContractStore(this);
-
+        this.orderStore = new OrderStore(this);
     }
 }
 

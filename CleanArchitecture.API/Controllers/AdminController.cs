@@ -12,6 +12,7 @@ using CleanArchitecture.Application.Admin.Comments;
 using CleanArchitecture.Application.Activities.Administration;
 using CleanArchitecture.Application.Admin.Reviews;
 using CleanArchitecture.Application.Admin.SubMerchants;
+using CleanArchitecture.Application.Admin.Orders;
 
 namespace CleanArchitecture.API.Controllers
 {
@@ -163,6 +164,20 @@ namespace CleanArchitecture.API.Controllers
         [HttpPut("commissionStat/removeTrainer")]
         public async Task<ActionResult<SubMerchantInfo>> RemoveSubMerchantFromCommission([FromForm] RemoveSubMerchantFromCommission.Command command)
         {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPut("paymentApprove")]
+        public async Task<ActionResult<Unit>> AdminPaymentApprove(string paymentTransactionId, Guid orderItemId)
+        {
+            PaymentApprove.Command command = new PaymentApprove.Command { PaymentTransactionId= paymentTransactionId, OrderItemId= orderItemId };
+            return await Mediator.Send(command);
+        }
+
+        [HttpPut("paymentDisapprove")]
+        public async Task<ActionResult<Unit>> AdminPaymentDisapprove(string paymentTransactionId, Guid orderItemId)
+        {
+            PaymentDisapprove.Command command = new PaymentDisapprove.Command { PaymentTransactionId= paymentTransactionId, OrderItemId= orderItemId };
             return await Mediator.Send(command);
         }
 

@@ -16,7 +16,7 @@ import format from "date-fns/format";
 import getDay from "date-fns/getDay";
 import { tr } from "date-fns/locale";
 import parse from "date-fns/parse";
-import ReactDOMServer from 'react-dom/server';
+import { HelmetProvider } from 'react-helmet-async';
 import App from './app/layout/App';
 const locales = {
   "tr": tr
@@ -33,11 +33,14 @@ export const history = createBrowserHistory();
 
 
   ReactDOM.render(
+    <HelmetProvider>
     <Router history={history}>
-     <ScrollToTop>
-       <App />
-     </ScrollToTop>
-     </Router>
+      <ScrollToTop>
+        <App />
+      </ScrollToTop>
+      </Router>
+    </HelmetProvider>
+  
  , document.getElementById('root'));
 
 

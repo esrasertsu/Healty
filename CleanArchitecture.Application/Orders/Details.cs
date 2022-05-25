@@ -54,6 +54,7 @@ namespace CleanArchitecture.Application.Orders
                 return new OrderDto()
                 {
                     Id = order.Id.ToString(),
+                    OrderItemId = orderItem.Id.ToString(),
                     AttendeeName = order.FirstName + " " + order.LastName,
                     BuyerName = order.BuyerName,
                     PaymentInfo = order.CardLastFourDigit,
@@ -79,7 +80,11 @@ namespace CleanArchitecture.Application.Orders
                     ActivityLevel = orderItem.Activity.Levels.Count > 0 ? orderItem.Activity.Levels.Select(x => x.Level.Name).ToList() : new System.Collections.Generic.List<string>(),
                     ActivityCategories = orderItem.Activity.Categories.Count > 0 ? orderItem.Activity.Categories.Select(x => x.Category.Name).ToList() : new System.Collections.Generic.List<string>(),
                     CardAssociation = order.CardAssociation,
-                    PaymentTransactionId = orderItem.PaymentTransactionId
+                    PaymentTransactionId = orderItem.PaymentTransactionId,
+                    AdminPaymentApproved = orderItem.AdminPaymentApproved.ToString(),
+                    AdminPaymentApprovedDate = orderItem.AdminPaymentApprovedDate,
+                    ActivityStatus = orderItem.Activity.Status.ToString()
+
                 };
             }
         }

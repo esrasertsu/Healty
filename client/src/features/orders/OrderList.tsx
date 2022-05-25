@@ -19,7 +19,7 @@ interface IProps{
 const OrderList: React.FC<IProps> = ({settings}) => {
 
   const rootStore = useContext(RootStoreContext);
-  const { getOrders, orderList, setOrderPage, orderPage,clearOrderRegistery, totalOrderPages, loadingOrders } = rootStore.activityStore;
+  const { getOrders, orderList, setOrderPage, orderPage,clearOrderRegistery, totalOrderPages, loadingOrders } = rootStore.orderStore;
   const {isLoggedIn} = rootStore.userStore;
   const [loadingNext, setLoadingNext] = useState(false);
 

@@ -7,6 +7,7 @@ namespace CleanArchitecture.Application.Orders
     public class OrderDto
     {
         public string Id { get; set; }
+        public string OrderItemId { get; set; }
         public DateTime Date { get; set; }
         public string Title { get; set; }
         public string Photo { get; set; }
@@ -33,6 +34,10 @@ namespace CleanArchitecture.Application.Orders
         public List<string> ActivityLevel { get; set; }
         public List<string> ActivityCategories { get; set; }
         public string PaymentTransactionId { get; set; }
+        public string AdminPaymentApproved { get; set; }
+        public DateTime? AdminPaymentApprovedDate { get; set; }
+        public string ActivityStatus { get; set; }
+
 
     }
 }

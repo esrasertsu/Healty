@@ -16,6 +16,8 @@ import { LoadingComponent } from '../../../app/layout/LoadingComponent';
 import Payment from "payment";
 import { useMediaQuery } from 'react-responsive'
 import DOMPurify from 'dompurify';
+import { format } from 'date-fns';
+import { tr } from 'date-fns/locale';
 
 
   interface IProps{
@@ -51,6 +53,7 @@ import DOMPurify from 'dompurify';
   const [cvcErrorMessage, setCvcErrorMessage] = useState(false);
 
 const [paymentContract, setPaymentContract] = useState(false);
+const [onBilContract, setOnBilContract] = useState(false);
 const [iyzicoContract, setIyzicoContract] = useState(false);
 const [loading3DPage, setLoading3DPage] = useState(false);
 
@@ -58,9 +61,10 @@ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
 
     const { user } = rootStore.userStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;
-    const {contract,loadContract} = rootStore.contractStore;
+    const {OnBilContract,MSSContract,loadMSSContract,loadOnBilContract} = rootStore.contractStore;
 
-    const [editedContract, setEditedContract] = useState(contract);
+    const [editedContract, setEditedContract] = useState(MSSContract);
+    const [editedOnBilContract, setEditedOnBilContract] = useState(OnBilContract);
 
   const handleInputFocus = (e:any) => {
     e.stopPropagation();
@@ -71,7 +75,8 @@ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     if(activity)
     {
       setPaymentInfo({...paymentInfo, activityId:activity!.id, ticketCount:Number(count)});
-      loadContract("MSS");
+      loadMSSContract("MSS");
+      loadOnBilContract("OnBilgilendirme");
     }
 
     return () => {
@@ -81,33 +86,56 @@ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
 
     useEffect(() => {
       
-     if(contract && activity)
+     if(MSSContract && activity)
        {
         setEditedContract(
-          contract.replace("[MerchantTitle]",activity.trainerCompanyName)
-          .replace("[MerchantAddress]", activity.trainerAddress)
-          .replace("[MerchantPhoneNumber]",activity.trainerPhone)
-          .replace("[MerchantFax]","")
-          .replace("[MerchantEmail]",activity.trainerEmail)
-          .replace("[BuyerName]",activityUserInfo.name + " "+ activityUserInfo.surname)
-          .replace("[BuyerAddress]",activityUserInfo.address)
-          .replace("[BuyerPhone]",activityUserInfo.gsmNumber)
-          .replace("[BuyerEmail]",user!.email)
-          .replace("[OrderItemType]","Aktivite Bileti")
-          .replace("[OrderDescription]",activity.title)
-          .replace("[OrderCount]",activityUserInfo.ticketCount.toString())
-          .replace("[OrderPrice]",(activityUserInfo.ticketCount * activity.price).toString())
-          .replace("[PaymentType]","Kredi Kartı")
-          .replace("[BillingAddress]",activityUserInfo.address)
+          MSSContract.replaceAll("[MerchantTitle]",activity.trainerCompanyName)
+          .replaceAll("[MerchantAddress]", activity.trainerAddress)
+          .replaceAll("[MerchantPhoneNumber]",activity.trainerPhone)
+          .replaceAll("[MerchantFax]","")
+          .replaceAll("[MerchantEmail]",activity.trainerEmail)
+          .replaceAll("[BuyerName]",activityUserInfo.name + " "+ activityUserInfo.surname)
+          .replaceAll("[BuyerAddress]",activityUserInfo.address)
+          .replaceAll("[BuyerPhone]",activityUserInfo.gsmNumber)
+          .replaceAll("[BuyerEmail]",user!.email)
+          .replaceAll("[OrderItemType]","Aktivite Bileti")
+          .replaceAll("[OrderDescription]",activity.title)
+          .replaceAll("[OrderCount]",activityUserInfo.ticketCount.toString())
+          .replaceAll("[OrderPrice]",(activityUserInfo.ticketCount * activity.price).toString())
+          .replaceAll("[PaymentType]","Kredi Kartı")
+          .replaceAll("[BillingAddress]",activityUserInfo.address)
 
           )
        } 
       
   
-    }, [contract])
+    }, [MSSContract])
   
 
-
+    useEffect(() => {
+      
+      if(OnBilContract && activity)
+        {
+          setEditedOnBilContract(
+            OnBilContract.replaceAll("[merchantName]",activity.trainerCompanyName)
+           .replaceAll("[merchantAddress]", activity.trainerAddress)
+           .replaceAll("[merchantPhone]",activity.trainerPhone)
+           .replaceAll("[merchantEmail]",activity.trainerEmail)
+           .replaceAll("[buyerName]",activityUserInfo.name + " "+ activityUserInfo.surname)
+           .replaceAll("[buyerAddress]",activityUserInfo.address)
+           .replaceAll("[buyerPhone]",activityUserInfo.gsmNumber)
+           .replaceAll("[buyerEmail]",user!.email)
+           .replaceAll("[productTitle]",activity.title)
+           .replaceAll("[count]",activityUserInfo.ticketCount.toString())
+           .replaceAll("[price]",(activityUserInfo.ticketCount * activity.price).toString())
+           .replaceAll("[rezervationDate]",format(activity.endDate, 'dd MMMM yyyy, eeee',{locale: tr}))
+           .replaceAll("[billingAddress]",activityUserInfo.address)
+ 
+           )
+        } 
+       
+   
+     }, [OnBilContract])
 
   const onSubmit = async (e:any) => {
     e.stopPropagation();
@@ -164,6 +192,19 @@ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
         openModal("MSS", <>
         <Modal.Content scrolling>
              <div dangerouslySetInnerHTML={{__html:sanitizer(editedContract)}} />
+        </Modal.Content>
+        </>,false,
+       "","", true) 
+       
+  }
+
+  const openOnBilModal = (e:any) => {
+    e.stopPropagation();
+    if(modal.open) closeModal();
+  
+        openModal("OnBilgilendirme", <>
+        <Modal.Content scrolling>
+             <div dangerouslySetInnerHTML={{__html:sanitizer(editedOnBilContract)}} />
         </Modal.Content>
         </>,false,
        "","", true) 
@@ -343,7 +384,7 @@ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
                       initialValue={paymentInfo.hasSignedPaymentContract}
                       parse={v => (v ? true : false) }
                     />&nbsp;&nbsp;
-                   <span><a style={{cursor:"pointer"}}  onClick={openMSSModal} >Ön Bilgilendirme Satış Sözleşmesi</a>'ni okudum.</span> 
+                   <span><a style={{cursor:"pointer"}}  onClick={openMSSModal} >Mesafeli Satış Sözleşmesi</a>'ni okudum.</span> 
                     <OnChange name="paymentContract">
                 {(value, previous) => {
                         setPaymentInfo({...paymentInfo, hasSignedPaymentContract:value});
@@ -351,6 +392,25 @@ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
                     
                 }}
                 </OnChange> 
+              <div>
+              <Field
+                      name="onBilPaymentContract"
+                      component="input"
+                      type="checkbox"
+                      width={4}
+                      format={v =>v === true}
+                      initialValue={paymentInfo.onBilPaymentContract}
+                      parse={v => (v ? true : false) }
+                    />&nbsp;&nbsp;
+                   <span><a style={{cursor:"pointer"}}  onClick={openOnBilModal} >Ön Bilgilendirme Formu</a>'nu okudum.</span> 
+                    <OnChange name="onBilPaymentContract">
+                {(value, previous) => {
+                        setPaymentInfo({...paymentInfo, onBilPaymentContract:value});
+                        setOnBilContract(value);
+                    
+                }}
+                </OnChange> 
+              </div>
                    <div style={{marginBottom:15}}>
                   <Field
                       name="hasSignedIyzicoContract"
@@ -405,7 +465,7 @@ const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
             </div>
             <div>
             <Button circular positive fluid  floated="right" style={{marginTop:"20px"}}
-                  type="submit" onClick={onSubmit} disabled={!paymentContract || !iyzicoContract}>
+                  type="submit" onClick={onSubmit} disabled={!paymentContract || !iyzicoContract || !onBilContract}>
                 Ödemeyi Tamamla <Icon style={{opacity:"1", marginLeft:"5px"}} name="thumbs up"></Icon>
               </Button>
             </div>

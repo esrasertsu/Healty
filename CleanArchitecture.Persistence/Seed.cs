@@ -798,817 +798,13 @@ namespace Persistence
             {
                 var users = new List<AppUser>
                 {
-                    new AppUser
-                    {
-                        Id = "a",
-                        DisplayName = "Bob",
-                        UserName = "bob",
-                        Email = "bob@test.com",
-                        Title="Personal Trainer",
-                        Role=Role.Trainer,
-                        Experience="çok tecrübeliyim yıllarıdr bu işi yapıyorum",
-                        ExperienceYear=5,
-                        Dependency="MacFit",
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                        EmailConfirmed = true,
-                        UserAccessibilities = new List<UserAccessibility>
-                        {
-                            new UserAccessibility
-                            {
-                                AppUserId = "a",
-                                AccessibilityId = online.Id
-                            },
-                            new UserAccessibility
-                            {
-                                AppUserId = "a",
-                                AccessibilityId = OwnPlace.Id
-                            }
-                        },
-                         UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "a",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "a",
-                                Category = Spor
-                            },
-                        },
-                         UserSubCategories = new List<UserSubCategories>
-                        {
-                            new UserSubCategories
-                            {
-                                AppUserId = "a",
-                                SubCategory = Swim
-                            },
-                             new UserSubCategories
-                            {
-                                AppUserId = "a",
-                                SubCategory = Yoga
-                            },
-                        },
-
-                    },
-                    new AppUser
-                    {
-                        Id = "b",
-                        DisplayName = "Jane",
-                        UserName = "jane",
-                        Email = "jane@test.com",
-                        Title="Personal Trainer",
-                        Role=Role.Trainer,
-                         ExperienceYear=5,
-                        Dependency="MacFit",
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                        EmailConfirmed = true,
-                        UserAccessibilities = new List<UserAccessibility>
-                        {
-                            new UserAccessibility
-                            {
-                                AppUserId = "b",
-                                AccessibilityId = online.Id
-                            },
-                            new UserAccessibility
-                            {
-                                AppUserId = "b",
-                                Accessibility = OwnPlace
-                            }
-                        } ,
-                         UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "b",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "b",
-                                Category = Spor
-                            },
-                        },
-                           UserSubCategories = new List<UserSubCategories>
-                        {
-                            new UserSubCategories
-                            {
-                                AppUserId = "b",
-                                SubCategory = Swim
-                            },
-                             new UserSubCategories
-                            {
-                                AppUserId = "b",
-                                SubCategory = Yoga
-                            },
-                        }
-                    },
-                    new AppUser
-                    {
-                        Id = "c",
-                        DisplayName = "Tom",
-                        UserName = "tom",
-                        Email = "tom@test.com",
-                        Role=Role.Trainer,
-                         ExperienceYear=3,
-                        Title="Yoga Uzmanı",
-                        Dependency="Tom'un Yeri",
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                        EmailConfirmed = true,
-                          UserAccessibilities = new List<UserAccessibility>
-                        {
-                            new UserAccessibility
-                            {
-                                AppUserId = "c",
-                                Accessibility = online
-                            },
-                            new UserAccessibility
-                            {
-                                AppUserId = "c",
-                                Accessibility = OwnPlace
-                            }
-                        } ,
-                         UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "c",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "c",
-                                Category = Spor
-                            },
-                        },
-                           UserSubCategories = new List<UserSubCategories>
-                        {
-                            new UserSubCategories
-                            {
-                                AppUserId = "c",
-                                SubCategory = Swim
-                            },
-                             new UserSubCategories
-                            {
-                                AppUserId = "c",
-                                SubCategory = Yoga
-                            },
-                        }
-
-                    },
-                    new AppUser
-                    {
-                        Id = "d",
-                        DisplayName = "Esra",
-                        UserName = "esra",
-                        Email = "esra@test.com",
-                        Role=Role.Trainer,
-                        ExperienceYear=2,
-                       Title="Basketbol Antrenoru",
-                        Dependency="Esra'un Yeri",
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                       EmailConfirmed = true,
-                      UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "d",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "d",
-                                Category = Spor
-                            },
-                        },
-                        UserSubCategories = new List<UserSubCategories>
-                        {
-                            new UserSubCategories
-                            {
-                                AppUserId = "d",
-                                SubCategory = Swim
-                            },
-                             new UserSubCategories
-                            {
-                                AppUserId = "d",
-                                SubCategory = Yoga
-                            },
-                        }
-
-                    },
-                    new AppUser
-                    {
-                        Id = "e",
-                        DisplayName = "Steve",
-                        UserName = "Steve",
-                        Email = "steve@test.com",
-                        Role=Role.Trainer,
-                        ExperienceYear=1,
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                        UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "e",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "e",
-                                Category = Spor
-                            },
-                        },
-                          UserSubCategories = new List<UserSubCategories>
-                        {
-                            new UserSubCategories
-                            {
-                                AppUserId = "e",
-                                SubCategory = Swim
-                            },
-                             new UserSubCategories
-                            {
-                                AppUserId = "e",
-                                SubCategory = Yoga
-                            },
-                        }
-
-                    },
-                    new AppUser
-                    {
-                        Id = "f",
-                        DisplayName = "Ahmet",
-                        UserName = "ahmet",
-                        Email = "ahmet@test.com",
-                        Role=Role.Trainer,
-                        Title= "Spor Hocası",
-                        ExperienceYear=3,
-                       ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                          UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "f",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "f",
-                                Category = Spor
-                            },
-                        },
-                            UserSubCategories = new List<UserSubCategories>
-                        {
-                            new UserSubCategories
-                            {
-                                AppUserId = "f",
-                                SubCategory = Swim
-                            },
-                             new UserSubCategories
-                            {
-                                AppUserId = "f",
-                                SubCategory = Yoga
-                            },
-                        }
-                    },
-                    new AppUser
-                    {
-                        Id = "g",
-                        DisplayName = "Semih",
-                        UserName = "semih",
-                        Email = "semih@test.com",
-                        Role=Role.Trainer,
-                        Title="Tenis Antrenorü",
-                        ExperienceYear=3,
-                       ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                        UserAccessibilities = new List<UserAccessibility>
-                        {
-                            new UserAccessibility
-                            {
-                                AppUserId = "g",
-                                AccessibilityId = online.Id
-                            },
-                            new UserAccessibility
-                            {
-                                AppUserId = "g",
-                                Accessibility = OwnPlace
-                            }
-                        } ,
-                         UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "g",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "g",
-                                Category = Spor
-                            },
-                        },
-                           UserSubCategories = new List<UserSubCategories>
-                        {
-                            new UserSubCategories
-                            {
-                                AppUserId = "g",
-                                SubCategory = Swim
-                            },
-                             new UserSubCategories
-                            {
-                                AppUserId = "g",
-                                SubCategory = Yoga
-                            },
-                        }
-                    },
-                     new AppUser
-                    {
-                        Id = "h",
-                        DisplayName = "Jack",
-                        UserName = "jack",
-                        Email = "jack@test.com",
-                        Role=Role.Trainer,
-                        ExperienceYear=3,
-                         Title="Yoga Uzmanı",
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                      UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "h",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "h",
-                                Category = Spor
-                            },
-                        },
-                        UserSubCategories = new List<UserSubCategories>
-                        {
-                            new UserSubCategories
-                            {
-                                AppUserId = "h",
-                                SubCategory = Swim
-                            },
-                             new UserSubCategories
-                            {
-                                AppUserId = "h",
-                                SubCategory = Yoga
-                            },
-                        },
-
-                    },
-                     new AppUser
-                    {
-                        Id = "j",
-                        DisplayName = "Johny",
-                        UserName = "johny",
-                        Email = "johny@test.com",
-                         ExperienceYear = 5,
-                        Role=Role.Trainer,
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                          UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "j",
-                                Category = Psikoloji
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "j",
-                                Category = Spor
-                            },
-                        }
-                    },
-                new AppUser
-                {
-                    Id = "k",
-                    DisplayName = "Kağan Onbaşılar",
-                    UserName = "kagan",
-                    Email = "kagan@test.com",
-                    Role = Role.Trainer,
-                    Experience = "çok tecrübeliyim yıllarıdr bu işi yapıyorum",
-                    ExperienceYear = 5,
-                    Dependency = "MacFit",
-                    ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                       UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "k",
-                                Category = Meditasyon
-                            }
-                        }
-                },
-                    new AppUser
-                    {
-                        Id = "l",
-                        DisplayName = "Lale Can",
-                        UserName = "lale",
-                        Email = "lale@test.com",
-                        Role = Role.Trainer,
-                        ExperienceYear = 5,
-                        Dependency = "MacFit",
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                       UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "l",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "l",
-                                Category = Spor
-                            },
-                        }
-                    },
-                    new AppUser
-                    {
-                        Id = "m",
-                        DisplayName = "Murat Durak",
-                        UserName = "murat",
-                        Email = "murat@test.com",
-                        Role = Role.Trainer,
-                        ExperienceYear = 3,
-                        Dependency = "Tom'un Yeri",
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                        UserCategories = new List<UserCategories>
-                        {
-                           
-                             new UserCategories
-                            {
-                                AppUserId = "m",
-                                Category = Spor
-                            },
-                        },
-                        
-                    },
-                    new AppUser
-                    {
-                        Id = "n",
-                        DisplayName = "Ayse Sert",
-                        UserName = "ayse",
-                        Email = "ayse@test.com",
-                        Role = Role.Trainer,
-                        ExperienceYear = 2,
-                        Dependency = "Esra'un Yeri",
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                          UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "n",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "n",
-                                Category = Diyet
-                            },
-                        }
-
-                    },
-                    new AppUser
-                    {
-                        Id = "o",
-                        DisplayName = "Begüm",
-                        UserName = "begum",
-                        Email = "begum@test.com",
-                        Role = Role.Trainer,
-                        ExperienceYear = 1,
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                      UserCategories = new List<UserCategories>
-                        {
-                            
-                             new UserCategories
-                            {
-                                AppUserId = "o",
-                                Category = Spor
-                            },
-                        }
-
-                    },
-                    new AppUser
-                    {
-                        Id = "p",
-                        DisplayName = "Pınar Saylak",
-                        UserName = "pinar",
-                        Email = "pinar@test.com",
-                        Role = Role.Trainer,
-                        ExperienceYear = 3,
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                        UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "p",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "p",
-                                Category = Spor
-                            },
-                        }
-
-                    },
-                    new AppUser
-                    {
-                        Id = "r",
-                        DisplayName = "Rasim Ok",
-                        UserName = "rasim",
-                        Email = "rasim@test.com",
-                        Role = Role.Trainer,
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                        UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "r",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "r",
-                                Category = Spor
-                            },
-                        }
-
-                    },
-                     new AppUser
-                     {
-                         Id = "s",
-                         DisplayName = "Süleyman Soymanlı",
-                         UserName = "sulu",
-                         Email = "sulu@test.com",
-                         Role = Role.User,
-                         ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                       UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "s",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "s",
-                                Category = Spor
-                            },
-                        }
-
-                     },
-                     new AppUser
-                     {
-                         Id = "t",
-                         DisplayName = "Tayfun Demircili",
-                         UserName = "tayfun",
-                         Email = "tayfun@test.com",
-                         Role = Role.Trainer,
-                         ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                          UserCategories = new List<UserCategories>
-                        {
-                            
-                             new UserCategories
-                            {
-                                AppUserId = "t",
-                                Category = Spor
-                            },
-                        }
-                     },
-            new AppUser
-            {
-                Id = "u",
-                DisplayName = "Ulaş Çekmeköy",
-                UserName = "ulas",
-                Email = "ulas@test.com",
-                Role = Role.Trainer,
-                Experience = "çok tecrübeliyim yıllarıdr bu işi yapıyorum",
-                ExperienceYear = 5,
-                Dependency = "MacFit",
-                ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                 UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "u",
-                                Category = Meditasyon
-                            }
-                        }
-
-            },
-                    new AppUser
-                    {
-                        Id = "v",
-                        DisplayName = "Veli Ali Elli",
-                        UserName = "veli",
-                        Email = "veli@test.com",
-                        Role = Role.Trainer,
-                        ExperienceYear = 5,
-                        Dependency = "MacFit",
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                        UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "v",
-                                Category = Diyet
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "v",
-                                Category = Spor
-                            },
-                        }
-                    },
-                    new AppUser
-                    {
-                        Id = "y",
-                        DisplayName = "Yasin",
-                        UserName = "yasin",
-                        Email = "yasin@test.com",
-                        Role = Role.Trainer,
-                        ExperienceYear = 3,
-                        Dependency = "Tom'un Yeri",
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                         UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "y",
-                                Category = Diyet
-                            }
-                        }
-
-                    },
-                    new AppUser
-                    {
-                        Id = "z",
-                        DisplayName = "Zehra Durali",
-                        UserName = "zehra",
-                        Email = "zehra@test.com",
-                        Role = Role.Trainer,
-                        ExperienceYear = 2,
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                        Dependency = "Esra'un Yeri",
-                      UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "z",
-                                Category = Psikoloji
-                            }
-                        }
-
-                    },
-                    new AppUser
-                    {
-                        Id = "i",
-                        DisplayName = "İnan Bektaşilili",
-                        UserName = "inan",
-                        Email = "inan@test.com",
-                        Role = Role.Trainer,
-                        ExperienceYear = 1,
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                        UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "i",
-                                Category = Psikoloji
-                            }
-                        }
-
-                    },
-                    new AppUser
-                    {
-                        Id = "ab",
-                        DisplayName = "Ahmet Okçu",
-                        UserName = "ahmeto",
-                        Email = "ahmeto@test.com",
-                        Role = Role.Trainer,
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                        ExperienceYear = 3,
-                        UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "ab",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "ab",
-                                Category = Psikoloji
-                            },
-                        }
-
-                    },
-                    new AppUser
-                    {
-                        Id = "st",
-                        DisplayName = "Semih Tınaztepe",
-                        UserName = "semiht",
-                        Email = "semiht@test.com",
-                        Role = Role.Trainer,
-                        ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                       UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "st",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "st",
-                                Category = Diyet
-                            },
-                        }
-
-                    },
-                     new AppUser
-                     {
-                         Id = "iuc",
-                         DisplayName = "İbrahim Uğur Caner",
-                         UserName = "ibo",
-                         Email = "ibo@test.com",
-                         Role = Role.Trainer,
-                         ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                       UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "iuc",
-                                Category = Meditasyon
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "iuc",
-                                Category = Diyet
-                            },
-                        }
-
-                     },
-                     new AppUser
-                     {
-                         Id = "kd",
-                         DisplayName = "Kerimcan Durmaz",
-                         UserName = "kerimcan",
-                         Email = "kerimcan@test.com",
-                         Role = Role.Trainer,
-                         ApplicationDate = DateTime.Now,
-                        RegistrationDate = DateTime.Now,
-                       UserCategories = new List<UserCategories>
-                        {
-                            new UserCategories
-                            {
-                                AppUserId = "kd",
-                                Category = Diyet
-                            },
-                             new UserCategories
-                            {
-                                AppUserId = "kd",
-                                Category = Spor
-                            },
-                        }
-                     },   
+                      
                     new AppUser
                      {
                          Id = "admin1",
                          DisplayName = "Esra Sertsu",
                          UserName = "esrasertsu",
-                         Email = "admin@test.com",
+                         Email = "admin@afitapp.com",
                          Role = Role.Admin,
                          EmailConfirmed = true,
                          PhoneNumberConfirmed = true,
@@ -1619,7 +815,7 @@ namespace Persistence
                          Id = "admin2",
                          DisplayName = "Ulvi Sertsu",
                          UserName = "usertsu",
-                         Email = "usertsu@test.com",
+                         Email = "ulvisertsu@gmail.com",
                          Role = Role.Admin,
                          EmailConfirmed = true,
                          PhoneNumberConfirmed = true,
@@ -1646,445 +842,445 @@ namespace Persistence
                 }
             }
 
-            if (!context.Activities.Any())
-            {
-                var activities = new List<Activity>
-                {
-                    new Activity
-                    {
-                        Title = "Past Activity 1",
-                        Date = DateTime.Now.AddMonths(-2),
-                        EndDate = DateTime.Now.AddMonths(-2).AddDays(1),
-                        Duration=130,
-                        Description = "Activity 2 months ago",
-                        Venue = "Pub",
-                        Online= true,
-                        Price= Convert.ToDecimal("100"),
-                        AttendancyLimit = 15,
-                        AttendanceCount=0,
-                        Status= ActivityStatus.Active,
-                        UserActivities = new List<UserActivity>
-                        {
-                            new UserActivity
-                            {
-                                AppUserId = "a",
-                                IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(-2)
-                            }
-                        },
-                         Categories  = new List<ActivityCategories>
-                        {
-                            new ActivityCategories
-                            {
-                                Category = Spor
-                            }
-                        },
-                        SubCategories =  new List<ActivitySubCategories>
-                        {
-                            new ActivitySubCategories
-                            {
-                                SubCategoryId = Swim.Id
-                            }
-                        },
-                          Levels= new List<ActivityLevels>
-                        {
-                            new ActivityLevels
-                            {
-                                 Level = ortaLevel
-                            }
-                        }
-                    },
-                    new Activity
-                    {
-                        Title = "Past Activity 2",
-                        Date = DateTime.Now.AddMonths(-1),
-                        EndDate = DateTime.Now.AddMonths(-1).AddDays(1),
-                        Duration=2*60,
-                        Description = "Activity 1 month ago",
-                        Status= ActivityStatus.Active,
-                        Categories  = new List<ActivityCategories>
-                        {
-                            new ActivityCategories
-                            {
-                                Category = Meditasyon
-                            }
-                        },
-                        SubCategories =  new List<ActivitySubCategories>
-                        {
-                            new ActivitySubCategories
-                            {
-                                SubCategoryId = Yoga.Id
-                            }
-                        },
-                        Venue = "The Louvre",
-                         AttendancyLimit = 5,
-                         AttendanceCount=1,
-                        Price= Convert.ToDecimal("500"),
-                        UserActivities = new List<UserActivity>
-                        {
-                            new UserActivity
-                            {
-                                AppUserId = "b",
-                                IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(-1)
-                            },
-                            new UserActivity
-                            {
-                                AppUserId = "a",
-                                IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(-1)
-                            },
-                        },
-                          Levels= new List<ActivityLevels>
-                        {
-                            new ActivityLevels
-                            {
-                                 Level = ortaLevel
-                            }
-                        }
+            //if (!context.Activities.Any())
+            //{
+            //    var activities = new List<Activity>
+            //    {
+            //        new Activity
+            //        {
+            //            Title = "Past Activity 1",
+            //            Date = DateTime.Now.AddMonths(-2),
+            //            EndDate = DateTime.Now.AddMonths(-2).AddDays(1),
+            //            Duration=130,
+            //            Description = "Activity 2 months ago",
+            //            Venue = "Pub",
+            //            Online= true,
+            //            Price= Convert.ToDecimal("100"),
+            //            AttendancyLimit = 15,
+            //            AttendanceCount=0,
+            //            Status= ActivityStatus.Active,
+            //            UserActivities = new List<UserActivity>
+            //            {
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "a",
+            //                    IsHost = true,
+            //                    DateJoined = DateTime.Now.AddMonths(-2)
+            //                }
+            //            },
+            //             Categories  = new List<ActivityCategories>
+            //            {
+            //                new ActivityCategories
+            //                {
+            //                    Category = Spor
+            //                }
+            //            },
+            //            SubCategories =  new List<ActivitySubCategories>
+            //            {
+            //                new ActivitySubCategories
+            //                {
+            //                    SubCategoryId = Swim.Id
+            //                }
+            //            },
+            //              Levels= new List<ActivityLevels>
+            //            {
+            //                new ActivityLevels
+            //                {
+            //                     Level = ortaLevel
+            //                }
+            //            }
+            //        },
+            //        new Activity
+            //        {
+            //            Title = "Past Activity 2",
+            //            Date = DateTime.Now.AddMonths(-1),
+            //            EndDate = DateTime.Now.AddMonths(-1).AddDays(1),
+            //            Duration=2*60,
+            //            Description = "Activity 1 month ago",
+            //            Status= ActivityStatus.Active,
+            //            Categories  = new List<ActivityCategories>
+            //            {
+            //                new ActivityCategories
+            //                {
+            //                    Category = Meditasyon
+            //                }
+            //            },
+            //            SubCategories =  new List<ActivitySubCategories>
+            //            {
+            //                new ActivitySubCategories
+            //                {
+            //                    SubCategoryId = Yoga.Id
+            //                }
+            //            },
+            //            Venue = "The Louvre",
+            //             AttendancyLimit = 5,
+            //             AttendanceCount=1,
+            //            Price= Convert.ToDecimal("500"),
+            //            UserActivities = new List<UserActivity>
+            //            {
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "b",
+            //                    IsHost = true,
+            //                    DateJoined = DateTime.Now.AddMonths(-1)
+            //                },
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "a",
+            //                    IsHost = false,
+            //                    DateJoined = DateTime.Now.AddMonths(-1)
+            //                },
+            //            },
+            //              Levels= new List<ActivityLevels>
+            //            {
+            //                new ActivityLevels
+            //                {
+            //                     Level = ortaLevel
+            //                }
+            //            }
 
-                    },
-                    new Activity
-                    {
-                        Title = "Future Activity 1",
-                        Date = DateTime.Now.AddMonths(1),
-                        EndDate = DateTime.Now.AddMonths(1).AddDays(2),
-                        Duration=48*60,
-                        Description = "Activity 1 month in future",
-                        Venue = "Wembly Stadium",
-                        Price= Convert.ToDecimal("200"),
-                         AttendanceCount=1,
-                        Status= ActivityStatus.UnderReview,
-                        UserActivities = new List<UserActivity>
-                        {
-                            new UserActivity
-                            {
-                                AppUserId = "b",
-                                IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(1)
-                            },
-                            new UserActivity
-                            {
-                                AppUserId = "a",
-                                IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(1)
-                            },
-                        },
-                         Categories  = new List<ActivityCategories>
-                        {
-                            new ActivityCategories
-                            {
-                                Category = Spor
-                            }
-                        },
-                        SubCategories =  new List<ActivitySubCategories>
-                        {
-                            new ActivitySubCategories
-                            {
-                                SubCategoryId = Swim.Id
-                            }
-                        },
-                          Levels= new List<ActivityLevels>
-                        {
-                            new ActivityLevels
-                            {
-                                 Level = ortaLevel
-                            }
-                        }
-                    },
-                    new Activity
-                    {
-                        Title = "Future Activity 2",
-                        Date = DateTime.Now.AddMonths(3),
-                         EndDate = DateTime.Now.AddMonths(3).AddDays(2),
-                        Duration=48*60,
-                        Description = "The header spscroll, which smooth scrolls some link clicks, was globally targeting any element with data-scroll… a shared attribute that your plugin also uses. I updated the specificity on this to target the header data-scroll elements only, and all is right in the universe.Thanks for the quick response.Close this puppy up as resolved",
-                        Venue = "Pub",
-                         Online= true,
-                         Price= Convert.ToDecimal("200"),
-                         AttendanceCount=1,
-                        Status= ActivityStatus.UnderReview,
-                        UserActivities = new List<UserActivity>
-                        {
-                            new UserActivity
-                            {
-                                AppUserId = "b",
-                                IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(3)
-                            },
-                            new UserActivity
-                            {
-                                AppUserId = "c",
-                                IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(3)
-                            },
-                        },
-                         Categories  = new List<ActivityCategories>
-                        {
-                            new ActivityCategories
-                            {
-                                Category = Psikoloji
-                            }
-                        },
-                        SubCategories =  new List<ActivitySubCategories>
-                        {
-                            new ActivitySubCategories
-                            {
-                                SubCategoryId = Pedagoji.Id
-                            }
-                        },
-                          Levels= new List<ActivityLevels>
-                        {
-                            new ActivityLevels
-                            {
-                                 Level = ortaLevel
-                            }
-                        }
-                    },
-                    new Activity
-                    {
-                        Title = "Future Activity 4",
-                        Date = DateTime.Now.AddMonths(4),
-                         EndDate = DateTime.Now.AddMonths(4).AddDays(1),
-                        Duration=24*60,
-                        Description = "Activity 4 months in future",
-                        Venue = "British Museum",
-                        Price= Convert.ToDecimal("100"),
-                         Online= true,
-                          AttendanceCount=0,
-                        Status= ActivityStatus.UnderReview,
-                        UserActivities = new List<UserActivity>
-                        {
-                            new UserActivity
-                            {
-                                AppUserId = "a",
-                                IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(4)
-                            }
-                        },
-                        Categories  = new List<ActivityCategories>
-                        {
-                            new ActivityCategories
-                            {
-                                Category = Psikoloji
-                            }
-                        },
-                        SubCategories =  new List<ActivitySubCategories>
-                        {
-                            new ActivitySubCategories
-                            {
-                                SubCategoryId = Pedagoji.Id
-                            }
-                        },
-                          Levels= new List<ActivityLevels>
-                        {
-                            new ActivityLevels
-                            {
-                                 Level = ortaLevel
-                            }
-                        }
-                    },
-                    new Activity
-                    {
-                        Title = "Future Activity 5",
-                        Date = DateTime.Now.AddMonths(5),
-                         EndDate = DateTime.Now.AddMonths(5).AddDays(1),
-                        Duration=3*60,
-                        Description = "Activity 5 months in future",
-                        Venue = "Punch and Judy",
-                        Price= Convert.ToDecimal("200"),
-                         Online= true,
-                          AttendanceCount=1,
-                        Status= ActivityStatus.UnderReview,
-                        UserActivities = new List<UserActivity>
-                        {
-                            new UserActivity
-                            {
-                                AppUserId = "c",
-                                IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(5)
-                            },
-                            new UserActivity
-                            {
-                                AppUserId = "b",
-                                IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(5)
-                            },
-                        },
-                        Categories  = new List<ActivityCategories>
-                        {
-                            new ActivityCategories
-                            {
-                                Category = Psikoloji
-                            }
-                        },
-                        SubCategories =  new List<ActivitySubCategories>
-                        {
-                            new ActivitySubCategories
-                            {
-                                SubCategoryId = Pedagoji.Id
-                            }
-                        },
-                        Levels= new List<ActivityLevels>
-                        {
-                            new ActivityLevels
-                            {
-                                 Level = ortaLevel
-                            }
-                        }
-                    },
-                    new Activity
-                    {
-                        Title = "Future Activity 6",
-                        Date = DateTime.Now.AddMonths(6),
-                         EndDate = DateTime.Now.AddMonths(6).AddDays(1),
-                        Duration=5*60,
-                        Description = "Activity 6 months in future",
-                        Price= Convert.ToDecimal("300"),
-                        Venue = "O2 Arena",
-                         AttendanceCount=1,
-                        Status= ActivityStatus.UnderReview,
-                        UserActivities = new List<UserActivity>
-                        {
-                            new UserActivity
-                            {
-                                AppUserId = "a",
-                                IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(6)
-                            },
-                            new UserActivity
-                            {
-                                AppUserId = "b",
-                                IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(6)
-                            },
-                        },
-                        Categories  = new List<ActivityCategories>
-                        {
-                            new ActivityCategories
-                            {
-                                Category = Psikoloji
-                            }
-                        },
-                        SubCategories =  new List<ActivitySubCategories>
-                        {
-                            new ActivitySubCategories
-                            {
-                                SubCategoryId = Pedagoji.Id
-                            }
-                        },
-                          Levels= new List<ActivityLevels>
-                        {
-                            new ActivityLevels
-                            {
-                                 Level = ortaLevel
-                            }
-                        }
-                    },
-                    new Activity
-                    {
-                        Title = "Future Activity 7",
-                        Date = DateTime.Now.AddMonths(7),
-                         EndDate = DateTime.Now.AddMonths(7).AddDays(1),
-                        Duration=8*60,
-                        Description = "Activity 7 months in future",
-                        Venue = "All",
-                        Price= Convert.ToDecimal("150"),
-                        Online= true,
-                         AttendanceCount=1,
-                        Status= ActivityStatus.UnderReview,
-                        UserActivities = new List<UserActivity>
-                        {
-                            new UserActivity
-                            {
-                                AppUserId = "a",
-                                IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(7)
-                            },
-                            new UserActivity
-                            {
-                                AppUserId = "c",
-                                IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(7)
-                            },
-                        },
-                        Categories  = new List<ActivityCategories>
-                        {
-                            new ActivityCategories
-                            {
-                                Category = Psikoloji
-                            }
-                        },
-                        SubCategories =  new List<ActivitySubCategories>
-                        {
-                            new ActivitySubCategories
-                            {
-                                SubCategoryId = Pedagoji.Id
-                            }
-                        },
-                          Levels= new List<ActivityLevels>
-                        {
-                            new ActivityLevels
-                            {
-                                 Level = ortaLevel
-                            }
-                        }
-                    },
-                    new Activity
-                    {
-                        Title = "Future Activity 8",
-                        Date = DateTime.Now.AddMonths(8),
-                         EndDate = DateTime.Now.AddMonths(8).AddDays(1),
-                        Duration=16*60,
-                        Description = "Activity 8 months in future",
-                        Venue = "Pub",
-                         Online= true,
-                         Price= null,
-                          AttendanceCount=1,
-                        Status= ActivityStatus.UnderReview,
-                        UserActivities = new List<UserActivity>
-                        {
-                            new UserActivity
-                            {
-                                AppUserId = "b",
-                                IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(8)
-                            },
-                            new UserActivity
-                            {
-                                AppUserId = "a",
-                                IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(8)
-                            },
-                        },
-                        Categories  = new List<ActivityCategories>
-                        {
-                            new ActivityCategories
-                            {
-                                Category = Psikoloji
-                            }
-                        },
-                        SubCategories =  new List<ActivitySubCategories>
-                        {
-                            new ActivitySubCategories
-                            {
-                                SubCategoryId = Pedagoji.Id
-                            }
-                        },
-                          Levels= new List<ActivityLevels>
-                        {
-                            new ActivityLevels
-                            {
-                                 Level = ortaLevel
-                            }
-                        }
-                    }
-                };
+            //        },
+            //        new Activity
+            //        {
+            //            Title = "Future Activity 1",
+            //            Date = DateTime.Now.AddMonths(1),
+            //            EndDate = DateTime.Now.AddMonths(1).AddDays(2),
+            //            Duration=48*60,
+            //            Description = "Activity 1 month in future",
+            //            Venue = "Wembly Stadium",
+            //            Price= Convert.ToDecimal("200"),
+            //             AttendanceCount=1,
+            //            Status= ActivityStatus.UnderReview,
+            //            UserActivities = new List<UserActivity>
+            //            {
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "b",
+            //                    IsHost = true,
+            //                    DateJoined = DateTime.Now.AddMonths(1)
+            //                },
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "a",
+            //                    IsHost = false,
+            //                    DateJoined = DateTime.Now.AddMonths(1)
+            //                },
+            //            },
+            //             Categories  = new List<ActivityCategories>
+            //            {
+            //                new ActivityCategories
+            //                {
+            //                    Category = Spor
+            //                }
+            //            },
+            //            SubCategories =  new List<ActivitySubCategories>
+            //            {
+            //                new ActivitySubCategories
+            //                {
+            //                    SubCategoryId = Swim.Id
+            //                }
+            //            },
+            //              Levels= new List<ActivityLevels>
+            //            {
+            //                new ActivityLevels
+            //                {
+            //                     Level = ortaLevel
+            //                }
+            //            }
+            //        },
+            //        new Activity
+            //        {
+            //            Title = "Future Activity 2",
+            //            Date = DateTime.Now.AddMonths(3),
+            //             EndDate = DateTime.Now.AddMonths(3).AddDays(2),
+            //            Duration=48*60,
+            //            Description = "The header spscroll, which smooth scrolls some link clicks, was globally targeting any element with data-scroll… a shared attribute that your plugin also uses. I updated the specificity on this to target the header data-scroll elements only, and all is right in the universe.Thanks for the quick response.Close this puppy up as resolved",
+            //            Venue = "Pub",
+            //             Online= true,
+            //             Price= Convert.ToDecimal("200"),
+            //             AttendanceCount=1,
+            //            Status= ActivityStatus.UnderReview,
+            //            UserActivities = new List<UserActivity>
+            //            {
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "b",
+            //                    IsHost = true,
+            //                    DateJoined = DateTime.Now.AddMonths(3)
+            //                },
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "c",
+            //                    IsHost = false,
+            //                    DateJoined = DateTime.Now.AddMonths(3)
+            //                },
+            //            },
+            //             Categories  = new List<ActivityCategories>
+            //            {
+            //                new ActivityCategories
+            //                {
+            //                    Category = Psikoloji
+            //                }
+            //            },
+            //            SubCategories =  new List<ActivitySubCategories>
+            //            {
+            //                new ActivitySubCategories
+            //                {
+            //                    SubCategoryId = Pedagoji.Id
+            //                }
+            //            },
+            //              Levels= new List<ActivityLevels>
+            //            {
+            //                new ActivityLevels
+            //                {
+            //                     Level = ortaLevel
+            //                }
+            //            }
+            //        },
+            //        new Activity
+            //        {
+            //            Title = "Future Activity 4",
+            //            Date = DateTime.Now.AddMonths(4),
+            //             EndDate = DateTime.Now.AddMonths(4).AddDays(1),
+            //            Duration=24*60,
+            //            Description = "Activity 4 months in future",
+            //            Venue = "British Museum",
+            //            Price= Convert.ToDecimal("100"),
+            //             Online= true,
+            //              AttendanceCount=0,
+            //            Status= ActivityStatus.UnderReview,
+            //            UserActivities = new List<UserActivity>
+            //            {
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "a",
+            //                    IsHost = true,
+            //                    DateJoined = DateTime.Now.AddMonths(4)
+            //                }
+            //            },
+            //            Categories  = new List<ActivityCategories>
+            //            {
+            //                new ActivityCategories
+            //                {
+            //                    Category = Psikoloji
+            //                }
+            //            },
+            //            SubCategories =  new List<ActivitySubCategories>
+            //            {
+            //                new ActivitySubCategories
+            //                {
+            //                    SubCategoryId = Pedagoji.Id
+            //                }
+            //            },
+            //              Levels= new List<ActivityLevels>
+            //            {
+            //                new ActivityLevels
+            //                {
+            //                     Level = ortaLevel
+            //                }
+            //            }
+            //        },
+            //        new Activity
+            //        {
+            //            Title = "Future Activity 5",
+            //            Date = DateTime.Now.AddMonths(5),
+            //             EndDate = DateTime.Now.AddMonths(5).AddDays(1),
+            //            Duration=3*60,
+            //            Description = "Activity 5 months in future",
+            //            Venue = "Punch and Judy",
+            //            Price= Convert.ToDecimal("200"),
+            //             Online= true,
+            //              AttendanceCount=1,
+            //            Status= ActivityStatus.UnderReview,
+            //            UserActivities = new List<UserActivity>
+            //            {
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "c",
+            //                    IsHost = true,
+            //                    DateJoined = DateTime.Now.AddMonths(5)
+            //                },
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "b",
+            //                    IsHost = false,
+            //                    DateJoined = DateTime.Now.AddMonths(5)
+            //                },
+            //            },
+            //            Categories  = new List<ActivityCategories>
+            //            {
+            //                new ActivityCategories
+            //                {
+            //                    Category = Psikoloji
+            //                }
+            //            },
+            //            SubCategories =  new List<ActivitySubCategories>
+            //            {
+            //                new ActivitySubCategories
+            //                {
+            //                    SubCategoryId = Pedagoji.Id
+            //                }
+            //            },
+            //            Levels= new List<ActivityLevels>
+            //            {
+            //                new ActivityLevels
+            //                {
+            //                     Level = ortaLevel
+            //                }
+            //            }
+            //        },
+            //        new Activity
+            //        {
+            //            Title = "Future Activity 6",
+            //            Date = DateTime.Now.AddMonths(6),
+            //             EndDate = DateTime.Now.AddMonths(6).AddDays(1),
+            //            Duration=5*60,
+            //            Description = "Activity 6 months in future",
+            //            Price= Convert.ToDecimal("300"),
+            //            Venue = "O2 Arena",
+            //             AttendanceCount=1,
+            //            Status= ActivityStatus.UnderReview,
+            //            UserActivities = new List<UserActivity>
+            //            {
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "a",
+            //                    IsHost = true,
+            //                    DateJoined = DateTime.Now.AddMonths(6)
+            //                },
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "b",
+            //                    IsHost = false,
+            //                    DateJoined = DateTime.Now.AddMonths(6)
+            //                },
+            //            },
+            //            Categories  = new List<ActivityCategories>
+            //            {
+            //                new ActivityCategories
+            //                {
+            //                    Category = Psikoloji
+            //                }
+            //            },
+            //            SubCategories =  new List<ActivitySubCategories>
+            //            {
+            //                new ActivitySubCategories
+            //                {
+            //                    SubCategoryId = Pedagoji.Id
+            //                }
+            //            },
+            //              Levels= new List<ActivityLevels>
+            //            {
+            //                new ActivityLevels
+            //                {
+            //                     Level = ortaLevel
+            //                }
+            //            }
+            //        },
+            //        new Activity
+            //        {
+            //            Title = "Future Activity 7",
+            //            Date = DateTime.Now.AddMonths(7),
+            //             EndDate = DateTime.Now.AddMonths(7).AddDays(1),
+            //            Duration=8*60,
+            //            Description = "Activity 7 months in future",
+            //            Venue = "All",
+            //            Price= Convert.ToDecimal("150"),
+            //            Online= true,
+            //             AttendanceCount=1,
+            //            Status= ActivityStatus.UnderReview,
+            //            UserActivities = new List<UserActivity>
+            //            {
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "a",
+            //                    IsHost = true,
+            //                    DateJoined = DateTime.Now.AddMonths(7)
+            //                },
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "c",
+            //                    IsHost = false,
+            //                    DateJoined = DateTime.Now.AddMonths(7)
+            //                },
+            //            },
+            //            Categories  = new List<ActivityCategories>
+            //            {
+            //                new ActivityCategories
+            //                {
+            //                    Category = Psikoloji
+            //                }
+            //            },
+            //            SubCategories =  new List<ActivitySubCategories>
+            //            {
+            //                new ActivitySubCategories
+            //                {
+            //                    SubCategoryId = Pedagoji.Id
+            //                }
+            //            },
+            //              Levels= new List<ActivityLevels>
+            //            {
+            //                new ActivityLevels
+            //                {
+            //                     Level = ortaLevel
+            //                }
+            //            }
+            //        },
+            //        new Activity
+            //        {
+            //            Title = "Future Activity 8",
+            //            Date = DateTime.Now.AddMonths(8),
+            //             EndDate = DateTime.Now.AddMonths(8).AddDays(1),
+            //            Duration=16*60,
+            //            Description = "Activity 8 months in future",
+            //            Venue = "Pub",
+            //             Online= true,
+            //             Price= null,
+            //              AttendanceCount=1,
+            //            Status= ActivityStatus.UnderReview,
+            //            UserActivities = new List<UserActivity>
+            //            {
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "b",
+            //                    IsHost = true,
+            //                    DateJoined = DateTime.Now.AddMonths(8)
+            //                },
+            //                new UserActivity
+            //                {
+            //                    AppUserId = "a",
+            //                    IsHost = false,
+            //                    DateJoined = DateTime.Now.AddMonths(8)
+            //                },
+            //            },
+            //            Categories  = new List<ActivityCategories>
+            //            {
+            //                new ActivityCategories
+            //                {
+            //                    Category = Psikoloji
+            //                }
+            //            },
+            //            SubCategories =  new List<ActivitySubCategories>
+            //            {
+            //                new ActivitySubCategories
+            //                {
+            //                    SubCategoryId = Pedagoji.Id
+            //                }
+            //            },
+            //              Levels= new List<ActivityLevels>
+            //            {
+            //                new ActivityLevels
+            //                {
+            //                     Level = ortaLevel
+            //                }
+            //            }
+            //        }
+            //    };
              
 
-                await context.Activities.AddRangeAsync(activities);
-                await context.SaveChangesAsync();
-            }
+            //    await context.Activities.AddRangeAsync(activities);
+            //    await context.SaveChangesAsync();
+            //}
 
           
         }

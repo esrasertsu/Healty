@@ -41,7 +41,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
 
   const rootStore = useContext(RootStoreContext);
   const { cancelAttendance, loading, deleteActivity,changeActivityStatus} = rootStore.activityStore;
-  const { getOrders, orderList } = rootStore.activityStore;
+  const { getOrders, orderList } = rootStore.orderStore;
   const {isLoggedIn,user} = rootStore.userStore;
   const {save,unsave} = rootStore.activityStore;
   const {openModal,closeModal,modal} = rootStore.modalStore;

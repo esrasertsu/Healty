@@ -12,7 +12,9 @@ import { useHistory } from 'react-router-dom';
 import LoginForm from '../../user/LoginForm';
 import { observer } from 'mobx-react-lite';
 import { BsFillBookmarkStarFill} from "react-icons/bs";
-import { BiTimer, BiWifi, BiWifiOff } from "react-icons/bi";
+import { BiMapPin, BiWifi, BiWifiOff } from "react-icons/bi";
+import { FcClock,FcOvertime,FcPositiveDynamic } from "react-icons/fc";
+
 
 const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
     const rootStore = useContext(RootStoreContext);
@@ -157,26 +159,32 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
                                  activity.subCategories.length>3 &&
                                  <span>+{activity.subCategories.length-3} </span>
                             }
-                            </>
-                            <div style={{margin:"10px 0 0 0px",width: "max-content", display:"flex", alignItems:"center"}}>
-                          <BiTimer style={{fontSize: "21px",marginRight:"8px"}} />
-                          <span style={{marginRight:"2px"}}>Süre:</span> 
-                          <span style={{marginRight:"2px"}}>{durationDay > 0 && (durationDay + " gün ")}</span>
-                          <span style={{marginRight:"2px"}}>{durationHour > 0 && (durationHour +" saat ")}</span>
-                          <span>{durationMin >0 && (durationMin + " dakika")}</span>
-                         </div> 
-                             
-                                <Icon style={{color:"#222E50"}} name='heartbeat' /><span> Seviye: </span>
+                            </> 
+                            <Grid className="details">
+                            <Grid.Row>
+                              <Grid.Column style={{width:"22px"}}> <FcClock style={{fontSize: "21px"}} /></Grid.Column>
+                              <Grid.Column className='text'> Süre: {durationDay > 0 && (durationDay + " gün ")} {durationHour > 0 && (durationHour +" saat ")} {durationMin >0 && (durationMin + " dakika")} </Grid.Column>
+                            </Grid.Row>
+                             <Grid.Row>
+                              <Grid.Column style={{width:"22px"}}><FcPositiveDynamic style={{fontSize: "21px",marginRight:"6px"}} /></Grid.Column>
+                              <Grid.Column className='text'> <span> Seviye: </span>
                                 {
                                     activity.levels && activity.levels.length> 0 ? 
                                     activity.levels.map<React.ReactNode>(s => <span key={s.value}>{s.text}</span>).reduce((prev, cur) => [prev, ',', cur])
                                     : " Bilgi yok"
                                 }
-                               {activity.online ?  <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}> 
-                               <BiWifi style={{fontSize: "20px",marginRight:"8px"}}/><span> Online katılıma açık</span> 
-                                </div>: 
-                                <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>
-                                  <BiWifiOff style={{fontSize: "20px",marginRight:"8px"}}/><span> Online katılıma kapalı</span></div>}
+                                </Grid.Column>
+                             </Grid.Row>
+                            <Grid.Row>
+                              <Grid.Column style={{width:"22px"}}>{activity.online  ?
+                                  <BiWifi color='green' style={{fontSize: "20px",marginRight:"8px"}}/> :
+                                  <BiWifiOff color='red' style={{fontSize: "20px",marginRight:"8px"}}/> }
+                                </Grid.Column>
+                                <Grid.Column className='text'>
+                               { activity.online  ?<span> Online katılıma açık</span> :<span> Online katılıma kapalı</span> }
+                                </Grid.Column>
+                            </Grid.Row>
+                            </Grid>
                             
                         </Item.Description> 
                         <Item.Description style={{marginTop:"5px"}}>
@@ -249,22 +257,24 @@ const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {
             </Item.Group>
             </div>
             <Segment secondary className="activityListItem_footer">
-             <div>
-               <div>
-               <Icon name='clock' /> Saat: {format(activity.date, 'HH:mm',{locale: tr})}   &nbsp;
-               { !activity.online && <>
-               <Icon name='marker' /> 
-               <span>{activity.venue}, {activity.city && activity.city.text}</span>
-               </> 
-               }
-               </div>
-              <div>
-              {
-                 activity.savedCount > 0 ? 
-                        <span><Icon name='bookmark' /> {activity.savedCount} kişi tarafından kaydedildi </span> :
-                         <span></span>
-              }
-              </div>
+             <div style={{width:"50%"}}>
+               <Grid stackable>
+                 <Grid.Column width={8} className={"grid_col"}>
+                 <FcOvertime  style={{fontSize: "22px", marginRight:"6px"}}/> Saat: {format(activity.date, 'HH:mm',{locale: tr})}
+                 </Grid.Column>
+                 { !activity.online && 
+                  <Grid.Column  width={8} className={"grid_col"}>
+                  <span><BiMapPin style={{fontSize: "22px", marginRight:"6px"}} /> {activity.venue}, {activity.city && activity.city.text}</span>  
+                 </Grid.Column>
+                }
+               </Grid>
+                <div className='bookmarked_text'>
+                {
+                  activity.savedCount > 0 ? 
+                          <span><Icon name='bookmark' /> {activity.savedCount} kişi kaydetti </span> :
+                          <span></span>
+                }
+                </div>
                
              </div>
                 <ActivityListItemAttendees attendees={activity.attendees}/>

@@ -674,6 +674,15 @@ namespace CleanArchitecture.Persistence.Migrations
                     b.Property<Guid>("ActivityId")
                         .HasColumnType("char(36)");
 
+                    b.Property<int>("AdminPaymentApproved")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("AdminPaymentApprovedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("AdminPaymentDisapprovedDate")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<Guid>("OrderId")
                         .HasColumnType("char(36)");
 

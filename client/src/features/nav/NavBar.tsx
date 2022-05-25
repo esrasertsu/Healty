@@ -85,7 +85,7 @@ const NavBar: React.FC<IProps> = ({fixed}) => {
       size='massive'
       className='mainMenu'
        >
-       <Container>
+       <Container className='desktopNavBar'>
        <Menu.Item as='a' header  
         onClick={() => {
           setActiveMenu(-1);

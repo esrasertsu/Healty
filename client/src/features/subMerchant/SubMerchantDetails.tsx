@@ -30,10 +30,11 @@ const companyTypeOptions = [
 
 interface IProps{
   setIsSubMerchant?:(val:boolean) => void;
-  id:string
+  id:string;
+  headerHide?:boolean;
 }
 
-const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant,id}) => {
+const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant,id,headerHide}) => {
   const rootStore = useContext(RootStoreContext);
 
   const {
@@ -280,7 +281,7 @@ const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant,id}) => {
 
   return (
     <>
-    <Header>Fatura(Firma) Bilgileri</Header>
+   {!headerHide && <Header>Fatura(Firma) Bilgileri</Header>}
 
     <Grid stackable>
       <Grid.Row>

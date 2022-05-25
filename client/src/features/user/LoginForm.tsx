@@ -5,7 +5,7 @@ import { Form as FinalForm , Field } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
 import { toast } from 'react-toastify';
 import { combineValidators, composeValidators, createValidator, isRequired } from 'revalidate';
-import { Button, Container, Divider, Form, Header, Image, Modal } from 'semantic-ui-react';
+import { Button, Container, Divider, Form, Header, Icon, Image, Modal } from 'semantic-ui-react';
 import agent from '../../app/api/agent';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
@@ -44,7 +44,7 @@ interface IProps {
 const LoginForm:React.FC<IProps> = ({location}) => {
     const rootStore = useContext(RootStoreContext);
     const { login, fbLogin, loadingFbLogin ,setResendEmailVeriMessage, resendEmailVeriMessage,
-    googleLogin,loadingGoogleLogin,submitting} = rootStore.userStore;
+    googleLogin,loadingGoogleLogin,submitting,facebookLogin} = rootStore.userStore;
     const { closeModal, openModal, modal } = rootStore.modalStore;
 
     const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
@@ -182,7 +182,15 @@ const handleLogin = async(values:IUserFormValues) =>{
               Kayıt ol
             </Button>
             <br></br>
-            <SocialLogin loading={loadingFbLogin} fbCallback={(resonse:any) => fbLogin(resonse,location)} />
+            <Divider />
+            <Button loading={loadingFbLogin} circular fluid color="facebook" className="fbtn"
+            style={{marginBottom:"40px"}}
+            onClick={(e)=>{
+              e.preventDefault();
+              e.stopPropagation();
+              facebookLogin(location)}}>
+                  <Icon name="facebook" />{" "} Facebook ile giriş yap
+                </Button>
             <br></br>
             {/* <GoogleLogin
               clientId="1086747484183-2avit5lboliou5c8nt90tjf2ueu5f8bk.apps.googleusercontent.com"

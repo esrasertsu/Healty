@@ -16,6 +16,7 @@ import ActivityReview from './ActivityReview';
 import { toast } from 'react-toastify';
 import ActivitySuggestions from './ActivitySuggestions';
 import BlogMainPageItemsPlaceholder from '../../blog/BlogMainPageItemsPlaceholder';
+import { Helmet } from 'react-helmet-async';
 
 interface DetailParams{
     id:string
@@ -27,7 +28,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
     const { activity, loadActivity, loadingActivity,cancelAttendance,loading, loadingActivitySuggestions } = rootStore.activityStore;
     const { user,isLoggedIn } = rootStore.userStore;
     const [cancellationUserOpen, setcancellationUserOpen] = React.useState(false);
-    const { getOrders, orderList } = rootStore.activityStore;
+    const { getOrders, orderList } = rootStore.orderStore;
 
  const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
@@ -72,6 +73,9 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
 
     return (
       <>
+        <Helmet>
+        <title>Afitapp - {activity.title}</title>
+      </Helmet>
       <Confirm
           key={"cancellationRez"}
           content={'Bu rezervasyonu iptal etmek istediğinize emin misiniz?'}

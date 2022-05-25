@@ -8,7 +8,6 @@ import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
 import { ActivityFormValues, ActivityOnlineJoinInfo, ActivityStatus, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, IActivityReview, IActivitySelectedFilter, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IPersonalActivity, PaymentUserInfoDetails } from '../models/activity';
 import { ICategory, ISubCategory } from '../models/category';
-import { IOrder } from '../models/order';
 import { RootStore } from './rootStore';
 
 const LIMIT = 6;
@@ -35,16 +34,12 @@ export default class ActivityStore {
 
     @observable activityRegistery = new Map();
     @observable personalActivityRegistery = new Map<string, IPersonalActivity>();
-    @observable orderRegistery = new Map<string,IOrder>();
     @observable activity: IActivity | null = null;
     @observable activitySuggestions: IActivity[]  = [];
     @observable activitySuggestionCount: number = 0;
-    @observable order: IOrder | null = null;
     @observable savedActivities: IActivity[] = [];
     @observable loadingInitial = false;
     @observable loadingActivity = false;
-    @observable loadingOrders = false;
-    @observable loadingOrder = false;
     @observable levelList: ILevel[] = [];
     @observable activitySelectedFilters: IActivitySelectedFilter[] =[];
     @observable loadingLevels = false;
@@ -62,9 +57,7 @@ export default class ActivityStore {
     @observable.ref hubConnection : HubConnection | null = null;
     @observable activityCount = 0;
     @observable page = 0;
-    @observable orderCount = 0;
     @observable personalActivityCount = 0;
-    @observable orderPage = 0;
 
     @observable personalActivityPage = 0;
     @observable predicate = new Map();
@@ -124,9 +117,6 @@ export default class ActivityStore {
     @action setIsOnline = (bool : boolean) =>{
         this.isOnline = bool;
     }
-    @action setOrderPage = (index:number) =>{
-        this.orderPage = index;
-    }
 
     @action setPersonalActivityPage = (index:number) =>{
         this.personalActivityPage = index;
@@ -143,10 +133,6 @@ export default class ActivityStore {
     
     @computed get totalPages(){
         return Math.ceil(this.activityCount / LIMIT);
-    }
-
-    @computed get totalOrderPages(){
-        return Math.ceil(this.orderCount / 5);
     }
 
     @computed get totalPersonalActPages(){
@@ -183,15 +169,8 @@ export default class ActivityStore {
     @action deleteActivityRegisteryItem = (id:string) => {
         this.activityRegistery.delete(id);
     }
-    @action deleteOrderRegisteryItem = (id:string) => {
-        this.orderRegistery.delete(id);
-    }
     @action clearActivityRegistery = () => {
         this.activityRegistery.clear();
-    }
-
-    @action clearOrderRegistery = () => {
-        this.orderRegistery.clear();
     }
 
     @action clearPersonalActRegistery = () => {
@@ -308,7 +287,7 @@ export default class ActivityStore {
         this.hubConnection.on('Send', message => {
           //  toast.info(message);
         })
-        this.hubConnection.onclose(() => setTimeout(this.createHubConnection(activityId), 5000));
+        this.hubConnection.onclose(() => this.createHubConnection(activityId));
         return "";
     };
 
@@ -337,10 +316,6 @@ export default class ActivityStore {
          return this.groupActivitiesByDate(Array.from(this.activityRegistery.values()));
     }
 
-    @computed get orderList(){
-          return Array.from(this.orderRegistery.values());
-     }
-
      @computed get personalActivityList(){
         return Array.from(this.personalActivityRegistery.values());
    }
@@ -361,7 +336,6 @@ export default class ActivityStore {
 
     @action loadActivities = async () => {
         this.loadingInitial = true;
-        debugger;
         try {
             const activitiesEnvelope = await agent.Activities.list(this.axiosParams);
             const {activities, activityCount } = activitiesEnvelope;
@@ -437,28 +411,6 @@ export default class ActivityStore {
     };
 
     
-
-
-    @action getOrders = async () => {
-        this.loadingOrders = true;
-        try {
-            const ordersEnvelope = await agent.Order.list(5, this.orderPage ? this.orderPage * 5 : 0);
-            const {orderList, orderCount } = ordersEnvelope;
-            runInAction(() => {
-                orderList.forEach((order) =>{
-                    this.orderRegistery.set(order.id, order);
-                });
-                this.orderCount = orderCount;
-                this.loadingOrders = false;
-            })
-            } catch (error) {
-                console.log(error);
-                runInAction(() => {
-                  this.loadingOrders = false
-                });
-            }
-    }
-
     @action loadActivity = async (id:string) => {
         this.loadingActivity = true;
         let activity = this.getActivity(id);
@@ -505,24 +457,7 @@ export default class ActivityStore {
                 console.log(error);
             }
     }
-    @action getOrderDetails = async (id:string) => {
-      
-            this.loadingOrder = true;
-            try {
-                let order = await agent.Order.details(id);
-                runInAction(() => {
-                    this.order = order;
-                    this.loadingOrder = false;
-                })
-                return order;
-                } catch (error) {
-                    runInAction(() => {
-                      this.loadingOrder = false
-                    });
-                    console.log(error);
-                }
-            
-    };
+
 
     
 
@@ -534,9 +469,6 @@ export default class ActivityStore {
         return this.activityRegistery.get(id);
     }
 
-    getOrder = (id:string) => {
-        return this.orderRegistery.get(id);
-    }
 
     @action createActivity = async (activity: IActivityFormValues) =>{
         this.submitting = true;
@@ -803,7 +735,7 @@ export default class ActivityStore {
             runInAction(() => {
                 this.loadingPaymentPage = false;
             });
-            toast.error(error.data.errors);//uyarı pop up'ı gösterilecek
+          //  toast.error(error.data.errors);//uyarı pop up'ı gösterilecek
             console.log(error);
         }
     };
@@ -821,9 +753,9 @@ export default class ActivityStore {
                         activity.isGoing = false;
                         this.deleteActivityRegisteryItem(activity.id);
                         this.activityRegistery.set(activity.id, res);
-                        this.deleteOrderRegisteryItem(orderId);
-                        this.order!.orderStatus = res.status;
-                        this.orderRegistery.set(orderId, this.order!);
+                        this.rootStore.orderStore.deleteOrderRegisteryItem(orderId);
+                        this.rootStore.orderStore.order!.orderStatus = res.status;
+                        this.rootStore.orderStore.orderRegistery.set(orderId, this.rootStore.orderStore.order!);
                     });
 
                 
@@ -839,29 +771,6 @@ export default class ActivityStore {
             console.log(error);
         }
     };
-
-
-    @action deleteOrder = async (orderId: string) =>{
-        this.loadingRefundPaymentPage = true;
-        try {
-           await agent.Order.deleteOrder(orderId);
-            runInAction(async() => {
-                this.deleteOrderRegisteryItem(orderId);
-                this.loadingRefundPaymentPage = false;
-               // this.target = '';
-                history.push(`/orders`);
-            });
-
-        } catch (error) {
-            runInAction(() => {
-                this.loadingRefundPaymentPage = false;
-            });
-            toast.error('Problem Processing refund payment');
-            console.log(error);
-        }
-    };
-
-
     @action save = async (id: string) => {
         this.loading = true;
         try {

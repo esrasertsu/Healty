@@ -160,7 +160,7 @@ namespace CleanArchitecture.Application.Activities
                     City = _mapper.Map<City, CityDto>(activity.City),
                     TrainerApprovedDate = activity.TrainerApprovedDate,
                     AdminApprovedDate = activity.AdminApprovedDate,
-                  //  Reviews = activity.Reviews,
+                    //  Reviews = activity.Reviews,
                     Star = activity.Star,
                     StarCount = activity.StarCount,
                     Status = activity.Status

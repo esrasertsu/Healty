@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Card,  Grid, Popup } from 'semantic-ui-react';
+import { Card,  Grid, Popup, SemanticWIDTHS } from 'semantic-ui-react';
 import FileUploadDropzone from '../../app/common/util/FileUploadDropzone';
 import { IDocument } from '../../app/models/profile';
 import  DocumentPreviewCard from './DocumentPreviewCard';
@@ -11,16 +11,17 @@ import  DocumentPreviewCard from './DocumentPreviewCard';
     setDocuments: (files: object[]) => void;
     setUpdateEnabled: (enable: boolean) => void;
     deleteDocument: (photo:IDocument) => void;
+    columnCount?:SemanticWIDTHS;
 
   }
 
 
-  const Documents:React.FC<IProps> = ({ docs,setFiles,setDocuments, setUpdateEnabled,deleteDocument }) => {
+  const Documents:React.FC<IProps> = ({ docs,setFiles,setDocuments, setUpdateEnabled,deleteDocument,columnCount }) => {
     return (
       <>
-         <Grid columns={4} stackable>
+         <Grid columns={columnCount ? columnCount :4} stackable>
              {docs!.map((document) => 
-               ( <DocumentPreviewCard key={document.id+"_documentPreviewCard"} document={document}  deleteDocument={deleteDocument}/>)
+               ( <DocumentPreviewCard key={Math.random()+"_documentPreviewCard"} document={document}  deleteDocument={deleteDocument}/>)
              )}
             <Grid.Column>
             <Popup 

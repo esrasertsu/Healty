@@ -66,7 +66,7 @@ namespace CleanArchitecture.Application.Activities.Administration
                         if((ActivityStatus)status == ActivityStatus.TrainerCompleteApproved)
                             activity.TrainerApprovedDate =  DateTime.Now;
 
-                        if ((ActivityStatus)status == ActivityStatus.AdminPaymentApproved)
+                        if ((ActivityStatus)status == ActivityStatus.AdminPaymentDisapproved && (ActivityStatus)status == ActivityStatus.AdminPaymentApproved && user.Role == Role.Admin)
                             activity.AdminApprovedDate =  DateTime.Now;
 
                         var result = await _context.SaveChangesAsync() > 0;

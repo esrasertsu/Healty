@@ -72,7 +72,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
             <Button
               className='blueBtn'
               content={'Uzman Başvuruma Git'}
-              onClick={()=> history.push(`/trainerRegister/${profile.userName}`)}
+              onClick={()=> history.push(`/TrainerApplication/${profile.userName}`)}
             />
           </ButtonGroup>)
           }
@@ -111,7 +111,7 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
             <Button
               className='blueBtn'
               content={'Uzman Başvuruma Git'}
-              onClick={()=> history.push(`/trainerRegister/${profile.userName}`)}
+              onClick={()=> history.push(`/TrainerApplication/${profile.userName}`)}
             />
           </ButtonGroup>)
           }

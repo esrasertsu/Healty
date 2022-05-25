@@ -126,7 +126,6 @@ const validate = combineValidators({
    const [durationMessage, setDurationMessage] = useState("");
    const [dateErrorMessge, showDateErrorMessage]= useState("");
 
-   const [image, setImage] = useState<Blob | null>(null);
    const [imageDeleted, setImageDeleted] = useState(false);
    const [newMainId, setNewMainId] = useState("");
 

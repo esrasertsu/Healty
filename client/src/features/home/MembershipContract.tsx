@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Container } from 'semantic-ui-react';
 import { RootStoreContext } from '../../app/stores/rootStore';
 
-const KVKKContract = () => {
+const Membership = () => {
 
   const rootStore = useContext(RootStoreContext);
   const sanitizer = dompurify.sanitize;
@@ -26,4 +26,4 @@ useEffect(() => {
   )
 }
 
-export default observer(KVKKContract);
+export default observer(Membership);

@@ -49,7 +49,7 @@ interface IProps {
 }
 const RegisterForm:React.FC<IProps> = ({location}) =>{
     const rootStore = useContext(RootStoreContext);
-    const { register,fbLogin,loadingFbLogin,googleLogin,loadingGoogleLogin,submitting } = rootStore.userStore;
+    const { register,facebookLogin,loadingFbLogin,googleLogin,loadingGoogleLogin,submitting } = rootStore.userStore;
 
     const isDesktop =  useMediaQuery({ query: '(min-width: 920px)' })
     const isTablet = useMediaQuery({ query: '(max-width: 919px)' })
@@ -149,7 +149,14 @@ const handleRegister = async(values:IUserFormValues) =>{
               fluid
             />
               <Divider horizontal>veya</Divider>
-            <SocialLogin loading={loadingFbLogin} fbCallback={(resonse:any) => fbLogin(resonse,location)} />
+              <Button loading={loadingFbLogin} circular fluid color="facebook" className="fbtn"
+            style={{marginBottom:"40px"}}
+            onClick={(e)=>{
+              e.preventDefault();
+              e.stopPropagation();
+              facebookLogin(location)}}>
+                  <Icon name="facebook" />{" "} Facebook ile giriş yap
+                </Button>
             <br></br>
             {/* <GoogleLogin
               clientId="1086747484183-2avit5lboliou5c8nt90tjf2ueu5f8bk.apps.googleusercontent.com"

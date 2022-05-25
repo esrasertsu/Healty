@@ -21,7 +21,7 @@ export default class UserStore {
 
     @observable user: IUser | null = null;
     @observable accountInfo: IAccountInfo | null = null;
-
+    @observable fbAccessToken: string|null =null;
     @observable.ref hubConnection : HubConnection | null = null;
     
     @observable initialMessages: IMessage[]  = [];
@@ -303,7 +303,7 @@ export default class UserStore {
                     this.rootStore.commonStore.setToken(user.token);
                     this.startRefreshTokenTimer(user);
                     this.rootStore.modalStore.closeModal();
-                    history.push(`/TrainerRegister/${user.userName}`);
+                    history.push(`/TrainerApplication/${user.userName}`);
                 }
             })
 
@@ -552,8 +552,8 @@ export default class UserStore {
                 this.rootStore.profileStore.setPage(0);
                 this.rootStore.profileStore.clearProfileRegistery();
                 this.rootStore.profileStore.clearPopularProfileRegistery();
-                this.rootStore.activityStore.setOrderPage(0);
-                this.rootStore.activityStore.clearOrderRegistery();
+                this.rootStore.orderStore.setOrderPage(0);
+                this.rootStore.orderStore.clearOrderRegistery();
                 this.clearCurrentUser();
                 this.stopRefreshTokenTimer();
                 this.rootStore.commonStore.setToken(null);
@@ -570,6 +570,7 @@ export default class UserStore {
     // }
 
     @action fbLogin = async (response:any,location:string) => {
+        debugger;
         this.loadingFbLogin = true;
         try{
             const user = await agent.User.fbLogin(response.accessToken);
@@ -591,6 +592,58 @@ export default class UserStore {
             this.setLoadingFbLogin(false);
             throw error;
         }
+    }
+
+
+    @action facebookLogin = (location:string|undefined) => {
+        this.loadingFbLogin = true;
+
+        const apiLogin = (accessToken:string) =>{
+            agent.User.fbLogin(accessToken).then((user) =>{
+                this.hubConnection === null && this.createHubConnection(false);
+                this.rootStore.commonStore.setToken(user.token);
+                this.startRefreshTokenTimer(user);
+               
+                runInAction(() => {
+                  this.user = user;
+                  this.rootStore.modalStore.closeModal();
+                  this.setLoadingFbLogin(false);
+                })
+                if(location!==undefined && location !=="")
+                history.push(location);
+              else
+                window.location.reload();
+            
+            }
+
+                
+            ).catch((error)=>{
+                 console.log(error);
+                 runInAction(() => {
+                    this.setLoadingFbLogin(false);
+                  })
+            })
+        }
+
+        if(this.fbAccessToken)
+        {
+            apiLogin(this.fbAccessToken)
+        }else{
+            window.FB.login((response:any) =>{
+                apiLogin(response.authResponse.accessToken);
+            },{scope:"public_profile, email"})
+        }
+ 
+    }
+
+    @action getFacebookLoginStatus = async ()=>{
+        window.FB.getLoginStatus((response:any) =>{
+            if(response.status==="connected")
+            {
+                this.fbAccessToken = response.authResponse.accessToken;
+                this.facebookLogin("");
+            }
+      });
     }
 
     @action googleLogin = async (token:any,location:string) => {

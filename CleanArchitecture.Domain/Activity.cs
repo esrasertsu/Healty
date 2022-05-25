@@ -39,8 +39,7 @@ namespace CleanArchitecture.Domain
             }
         }
         public DateTime TrainerApprovedDate { get; set; }
-        public DateTime AdminApprovedDate { get; set; }
-
+        public DateTime AdminApprovedDate { get; set; }//payment onay tarihi
         public virtual ICollection<ActivityReview> Reviews { get; set; }
         public int Star { get { return Convert.ToInt32(this.Reviews.Count() > 0 ? this.Reviews.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Average() : 0); } } //rating
         public int StarCount { get { return Convert.ToInt32(this.Reviews.Count() > 0 ? this.Reviews.Select(x => x.StarCount).Where(x => x > 0).DefaultIfEmpty().Count() : 0); } } //total rate votes ( bigger than zero) 
@@ -53,7 +52,8 @@ namespace CleanArchitecture.Domain
         UnderReview = 100, //listelenmeyecek X
         Active = 110, //sadece aktifse ödeme alınacak..
         TrainerCompleteApproved = 111, 
-        AdminPaymentApproved = 112, 
+        AdminPaymentApproved = 112,
+        AdminPaymentDisapproved = 113,
         CancelRequested = 120, //listelenmeyecek X
         PassiveByAdmin = 130 //listelenmeyecek X
     }

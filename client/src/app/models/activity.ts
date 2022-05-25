@@ -318,6 +318,7 @@ export interface IPaymentCardInfo {
     expireMonth: string;
     hasSignedPaymentContract : boolean;
     hasSignedIyzicoContract  : boolean;
+    onBilPaymentContract:boolean;
     activityId : string;
     ticketCount : number;
 
@@ -338,6 +339,7 @@ export class PaymentCardInfo implements IPaymentCardInfo {
     hasSignedIyzicoContract : boolean = false;
     activityId : string = "";
     ticketCount : number = 1;
+    onBilPaymentContract: boolean = false;
 
     constructor(init?: IPaymentUserInfoDetails){
         if(init)
@@ -387,6 +389,7 @@ export enum ActivityStatus {
         Active = 110,
         TrainerCompleteApproved = 111,
         AdminPaymentApproved = 112,
+        AdminPaymentDisapproved = 113,
         CancelRequested = 120,
         PassiveByAdmin = 130
 }

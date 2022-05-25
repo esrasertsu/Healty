@@ -97,7 +97,8 @@ namespace CleanArchitecture.Application.Payment
                     Price = activity.Price.Value,
                     Quantity = request.TicketCount,
                     ActivityId = activity.Id,
-                    Activity = activity
+                    Activity = activity,
+                    AdminPaymentApproved = EnumOrderItemApproveState.Waiting
                 };
                 order.OrderItems.Add(orderItem);
 

@@ -10,6 +10,7 @@ import BlogMoreFromUser from './BlogMoreFromUser';
 import BlogMoreFromThisCategory from './BlogMoreFromThisCategory';
 import { toast } from 'react-toastify';
 import { BlogUpdateFormValues } from '../../app/models/blog';
+import { Helmet } from 'react-helmet-async';
 
 
 interface DetailParams{
@@ -42,17 +43,23 @@ const BlogPage: React.FC<RouteComponentProps<DetailParams>> = ({match, history})
     if(loadingPost) return <LoadingComponent content='Loading blog...'/>  
 
     return (
-        <Container className="pageContainer">
+      <>
+       <Helmet>
+        <title>Afitapp - Sağlıklı Yaşam Platformu - {post!.title}</title>
+      </Helmet>
+      <Container className="pageContainer">
  
-      <Grid>
-          <Grid.Column>
-            <BlogPageHeader blog={post!} />
-            <BlogPageDesc editMode={editMode} setEditMode={setEditMode} setUpdatedBlog={setUpdatedBlog} updatedBlog={updatedBlog}  blog={post!} />
-            <BlogMoreFromUser blog={post!} />
-            <BlogMoreFromThisCategory blog={post!} />
-          </Grid.Column>
-      </Grid>
-     </Container>
+ <Grid>
+     <Grid.Column>
+       <BlogPageHeader blog={post!} />
+       <BlogPageDesc editMode={editMode} setEditMode={setEditMode} setUpdatedBlog={setUpdatedBlog} updatedBlog={updatedBlog}  blog={post!} />
+       <BlogMoreFromUser blog={post!} />
+       <BlogMoreFromThisCategory blog={post!} />
+     </Grid.Column>
+ </Grid>
+</Container>
+      </>
+      
     )
 }
 

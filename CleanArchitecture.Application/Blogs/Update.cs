@@ -34,13 +34,14 @@ namespace CleanArchitecture.Application.Blogs
            private readonly DataContext _context;
                 private readonly IUserAccessor _userAccessor;
                 private readonly IMapper _mapper;
-                private readonly IPhotoAccessor _photoAccessor;
-              public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPhotoAccessor photoAccessor)
-                {
-                    _context = context;
-                    _mapper = mapper;
-                    _userAccessor = userAccessor;
-                    _photoAccessor = photoAccessor;
+             private readonly IUserCultureInfo _userCultureInfo;
+
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPhotoAccessor photoAccessor, IUserCultureInfo userCultureInfo)
+            {
+                _context = context;
+                _mapper = mapper;
+                _userAccessor = userAccessor;
+                _userCultureInfo = userCultureInfo;
             }
 
             public async Task<BlogDto> Handle(Command request, CancellationToken cancellationToken)
@@ -97,7 +98,7 @@ namespace CleanArchitecture.Application.Blogs
                 blog.Title = request.Title ?? blog.Title;
                 blog.Description = request.Description ?? blog.Description;
                 blog.Category = category ?? blog.Category;
-                blog.LastUpdateDate = DateTime.Now;
+                blog.LastUpdateDate =_userCultureInfo.GetUserLocalTime();
 
                 _context.Blogs.Update(blog);
 
@@ -118,7 +119,7 @@ namespace CleanArchitecture.Application.Blogs
                             {
                                 SubCategory = subCat,
                                 Blog = blog,
-                                DateCreated = DateTime.Now
+                                DateCreated = _userCultureInfo.GetUserLocalTime()
                             };
                             _context.SubCatBlogs.Add(subCatBlog);
                         }

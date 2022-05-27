@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useState } from 'react'
-import { Segment, Header, Form, Button, Icon, Grid, Message } from 'semantic-ui-react'
+import { Segment, Header, Form, Button, Icon, Grid, Message, Modal, Image } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
 import { useMediaQuery } from 'react-responsive'
 import { RootStoreContext } from '../../../app/stores/rootStore';
@@ -12,6 +12,10 @@ import TextAreaInput from '../../../app/common/form/TextAreaInput';
 import PhoneNumberInput from '../../../app/common/form/PhoneNumberInput';
 import { IAccountInfoValues } from '../../../app/models/user';
 import { ErrorMessage } from '../../../app/common/form/ErrorMessage';
+import OtpInput from 'react-otp-input';
+import Countdown from 'react-countdown';
+import agent from '../../../app/api/agent';
+import { toast } from 'react-toastify';
 
 
  const ContactSettings: React.FC = () => {
@@ -28,10 +32,120 @@ import { ErrorMessage } from '../../../app/common/form/ErrorMessage';
     const [errorMessage, setErrorMessage]= useState("")  
     const [trainerFormMessage, setTrainerFormMessage]= useState(false)  
 
+    const [otpInput, setOtpInput] = useState("")
+    const [optInputDisabled, setoptInputDisabled] = useState(false)
+    const [countDownDate, setCountDownDate]= useState(Date.now() +180000);
+    const [showPasswordModal, setshowPasswordModal] = useState(false)
+    const {closeModal,modal} = rootStore.modalStore;
+
   const handleFinalFormSubmit = (values: IAccountInfoValues) => {
 
-    editContactDetails(values)
     
+    editContactDetails(values).then((res) =>{
+      if(res)
+       toast.success("Bilgileriz başarıyla kaydedildi")
+    })
+    
+  }
+
+
+  
+  const renderer = ({ days,hours, minutes, seconds, completed }: any) => {
+    if (completed || (seconds===0 && minutes ===0)) {
+           setoptInputDisabled(true);
+
+            return (
+            <a style={{cursor:"pointer", textDecoration:"underline"}} 
+            onClick={()=>agent.User.sendSms(accountForm.phoneNumber as string)}>Doğrulama Kodunu Tekrar Gönder
+            </a>
+            )
+
+    } else {
+      return (
+      <>
+        <span style={{marginRight:"10px", color:"#429dad"}}>Kalan süre</span>
+        <span style={{color:"#429dad"}}>{minutes + ":" + seconds}</span>   
+        
+       </>
+       );
+    }
+
+   }
+
+   
+   const handleSubmitOtpCode = () =>{
+    agent.User.sendSmsVerification(accountForm.phoneNumber!,otpInput).then((res) => {
+
+     if(res){
+       if(modal.open) closeModal();
+       setshowPasswordModal(false);
+       setOtpInput("");
+       setoptInputDisabled(false);
+       setCountDownDate(Date.now());
+       toast.error("Telefon no değiştirme başarılı.")
+     }else{
+       toast.error("Yanlış kod gönderdiniz. Lütfen tekrar deneyin.")
+     }
+     }).catch((error) => toast.error(error));
+  }
+
+  
+  if(showPasswordModal)
+  {
+    return(
+   <Modal
+       open={showPasswordModal} 
+       onClose={() => setshowPasswordModal(false)}
+       closeIcon
+       size={"tiny"}
+       closeOnEscape={true}
+       closeOnDimmerClick={false}>
+       <Modal.Content>
+       <Header style={{margin:"0 0 30px 0"}} as="h3" content="SMS Doğrulama" />
+         <Modal.Description style={{margin:"20px"}}>
+         <Grid stackable>
+         <Grid.Row>
+           <Grid.Column width="16" style={{display:"flex", justifyContent:"center", alignItems:"center"}} >
+           <Image style={{maxHeight:"220px"}} src={"/icons/otp.jpg"} />
+           </Grid.Column>
+           <Grid.Column width="16" style={{display:"flex", textAlign:"center",justifyContent:"space-between", alignItems:"center", flexDirection:"column"}}>
+           <p style={{fontSize:"16px", marginTop:"30px"}}>Lütfen telefonunuza SMS yoluyla gelen 5 haneli kodu aşağıdaki alana giriniz.</p>
+           <OtpInput
+             value={otpInput}
+             isDisabled={optInputDisabled}
+             onChange={(val:string)=>setOtpInput(val)}
+             numInputs={5}
+             isInputNum={true}
+             containerStyle={"otpInput-container"}
+             inputStyle={"otpInput-input"}
+             focusStyle={"otpInput-input-focus"}
+           />
+             <div style={{ marginTop:"20px"}}> 
+             <Countdown
+             date={countDownDate} 
+             renderer={renderer}
+             intervalDelay={0}
+             precision={3}
+             
+               />
+             </div>
+             <Button 
+             disabled={optInputDisabled} 
+             style={{ marginTop:"20px"}} 
+             positive 
+             fluid 
+             circular
+             onClick={handleSubmitOtpCode}
+             content="Kodu Onayla"></Button>
+           </Grid.Column>
+         </Grid.Row>
+       </Grid>
+        
+         </Modal.Description>
+       </Modal.Content>
+     </Modal>
+    )
+   
   }
 
  

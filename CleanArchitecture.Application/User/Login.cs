@@ -40,15 +40,17 @@ namespace CleanArchitecture.Application.User
             private readonly IJwtGenerator _jwtGenerator;
             private readonly DataContext _context;
             private readonly IGoogleReCAPTCHAAccessor _reCAPTCHAAccessor;
+            private readonly IUserCultureInfo _userCultureInfo;
 
-
-            public Handler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IJwtGenerator jwtGenerator, DataContext context, IGoogleReCAPTCHAAccessor reCAPTCHAAccessor)
+            public Handler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, 
+                IJwtGenerator jwtGenerator, DataContext context, IGoogleReCAPTCHAAccessor reCAPTCHAAccessor, IUserCultureInfo userCultureInfo)
             {
                 _signInManager = signInManager;
                 _userManager = userManager;
                 _jwtGenerator = jwtGenerator;
                 _context = context;
                 _reCAPTCHAAccessor = reCAPTCHAAccessor;
+                _userCultureInfo = userCultureInfo;
             }
             public async Task<User> Handle(Query request, CancellationToken cancellationToken)
             {
@@ -59,11 +61,11 @@ namespace CleanArchitecture.Application.User
                     throw new RestException(HttpStatusCode.BadRequest, new { Email = "Geçersiz giriş." });
                 }
 
-                var user = await _userManager.FindByEmailAsync(request.EmailOrUserName);
+                var user = await _userManager.FindByEmailAsync(request.EmailOrUserName.Trim());
 
                 if (user == null)
                 {
-                     user = await _userManager.FindByNameAsync(request.EmailOrUserName);
+                     user = await _userManager.FindByNameAsync(request.EmailOrUserName.Trim());
                      if(user == null)
                         throw new RestException(HttpStatusCode.BadRequest, new { Email = "Sistemde bu kullanıcı adı veya email adresiyle kayıtlı bir kullanıcı bulunamadı." });
                 }
@@ -74,7 +76,7 @@ namespace CleanArchitecture.Application.User
 
                 if(result.Succeeded)
                 {
-                    user.LastLoginDate = DateTime.Now;
+                    user.LastLoginDate =_userCultureInfo.GetUserLocalTime();
                     user.IsOnline = true;
                     var resfreshToken = _jwtGenerator.GenerateRefreshToken();
                     user.RefreshTokens.Add(resfreshToken);

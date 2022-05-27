@@ -27,13 +27,15 @@ namespace CleanArchitecture.Application.User
             private readonly IUserAccessor _userAccessor;
             private readonly IJwtGenerator _jwtGenerator;
             private readonly IGoogleAccessor _googleAccessor;
-
-            public Handler(UserManager<AppUser> userManager, IJwtGenerator jwtGenerator, IUserAccessor userAccessor, IGoogleAccessor googleAccessor)
+            private readonly IUserCultureInfo _userCultureInfo;
+            public Handler(UserManager<AppUser> userManager, IJwtGenerator jwtGenerator, IUserAccessor userAccessor, 
+                IGoogleAccessor googleAccessor, IUserCultureInfo userCultureInfo)
             {
                 _userAccessor = userAccessor;
                 _userManager = userManager;
                 _jwtGenerator = jwtGenerator;
                 _googleAccessor = googleAccessor;
+                _userCultureInfo = userCultureInfo;
             }
             public async Task<User> Handle(Query request, CancellationToken cancellationToken)
             {
@@ -48,7 +50,7 @@ namespace CleanArchitecture.Application.User
 
                 if (user != null)
                 {
-                    user.LastLoginDate = DateTime.Now;
+                    user.LastLoginDate = _userCultureInfo.GetUserLocalTime();
                     user.IsOnline = true;
                     user.RefreshTokens.Add(resfreshToken);
                     await _userManager.UpdateAsync(user);
@@ -75,8 +77,8 @@ namespace CleanArchitecture.Application.User
 
                 user.Photos.Add(photo);
                 user.RefreshTokens.Add(resfreshToken);
-                user.RegistrationDate = DateTime.Now;
-                user.LastLoginDate = DateTime.Now;
+                user.RegistrationDate = _userCultureInfo.GetUserLocalTime();
+                user.LastLoginDate = _userCultureInfo.GetUserLocalTime();
                 user.IsOnline = true;
                 
                 var result = await _userManager.CreateAsync(user);

@@ -6,7 +6,7 @@ import { Segment, Item, Header, Button, Image, Modal, Icon, Confirm, Container, 
 import { ActivityStatus, IActivity } from '../../../app/models/activity';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import tr  from 'date-fns/locale/tr'
-import { history } from '../../..';
+import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 import 'swiper/swiper.scss'; // core Swiper
@@ -33,7 +33,7 @@ const activityImageStyle = {
 
 
 const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
-
+  const history = useHistory();
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
 

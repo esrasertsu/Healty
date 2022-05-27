@@ -28,14 +28,14 @@ namespace CleanArchitecture.Application.Contracts
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
-            private readonly UserManager<AppUser> _userManager;
+            private readonly IUserCultureInfo _userCultureInfo;
             private readonly IMapper _mapper;
 
-            public Handler(DataContext context, UserManager<AppUser> userManager, IUserAccessor userAccessor, IMapper mapper)
+            public Handler(DataContext context, UserManager<AppUser> userManager, IUserAccessor userAccessor, IMapper mapper, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _userAccessor = userAccessor;
-                _userManager = userManager;
+                _userCultureInfo = userCultureInfo;
                 _mapper = mapper;
 
             }
@@ -55,7 +55,7 @@ namespace CleanArchitecture.Application.Contracts
                     if(!string.IsNullOrEmpty(request.Content))
                         contract.Content = request.Content;
 
-                    contract.LastUpdateDate = DateTime.Now;
+                    contract.LastUpdateDate = _userCultureInfo.GetUserLocalTime();
 
                     var success = await _context.SaveChangesAsync() > 0;
 

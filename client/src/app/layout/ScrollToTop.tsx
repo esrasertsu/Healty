@@ -1,14 +1,10 @@
-import { useEffect } from "react"
+import { useEffect, useLayoutEffect } from "react"
 import { withRouter } from "react-router-dom";
 
+export const ScrollToTop = withRouter(({ children, location: { pathname } }: any) => {
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
 
-const ScrollToTop =({children}: any) =>{
-    
-    useEffect(()=>{
-        document.querySelector('body')!.scrollTo(0,0)
-    }, []);
-
-    return children;
-};
-
-export default withRouter(ScrollToTop);
+  return children || null
+})

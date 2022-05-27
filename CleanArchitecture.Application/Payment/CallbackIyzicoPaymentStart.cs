@@ -40,8 +40,8 @@ namespace CleanArchitecture.Application.Payment
             private readonly IPaymentAccessor _paymentAccessor;
             private readonly IHttpContextAccessor _httpContextAccessor;
             private readonly IEmailSender _emailSender;
-
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPaymentAccessor paymentAccessor, IHttpContextAccessor httpContextAccessor, IEmailSender emailSender)
+            private readonly IUserCultureInfo _userCultureInfo;
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPaymentAccessor paymentAccessor, IUserCultureInfo userCultureInfo, IHttpContextAccessor httpContextAccessor, IEmailSender emailSender)
             {
                 _context = context;
                 _mapper = mapper;
@@ -49,7 +49,8 @@ namespace CleanArchitecture.Application.Payment
                 _userAccessor = userAccessor;
                 _httpContextAccessor = httpContextAccessor;
                  _emailSender = emailSender;
-        }
+                _userCultureInfo = userCultureInfo;
+            }
 
             public async Task<IyzicoPaymentResult> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -97,7 +98,7 @@ namespace CleanArchitecture.Application.Payment
                             Activity = activity,
                             AppUser = user,
                             IsHost = false,
-                            DateJoined = DateTime.Now,
+                            DateJoined = _userCultureInfo.GetUserLocalTime(),
                             ShowName = true
                         };
 

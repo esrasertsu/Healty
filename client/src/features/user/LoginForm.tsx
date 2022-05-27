@@ -30,11 +30,11 @@ const isValidEmailOrUserName = createValidator(
 )
 
 const validate = combineValidators({
-  password: isRequired({ message: 'Şifre zorunlu alan.' }),
   emailOrUserName: composeValidators(
     isRequired({message: '"Email veya kullanıcı" adı zorunlu alandır.'}),
     isValidEmailOrUserName
   )(),
+  password: isRequired({ message: 'Şifre zorunlu alan.' })
 })
 
 interface IProps {
@@ -93,6 +93,7 @@ const handleResetPassword = (e:any) => {
   
    
 const handleLogin = async(values:IUserFormValues) =>{
+
   setSubmitErr(null)
 
      recaptchaRef.current.executeAsync().then((token:string) => {

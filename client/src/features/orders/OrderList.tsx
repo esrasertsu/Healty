@@ -5,8 +5,7 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
 import tr  from 'date-fns/locale/tr'
 import { useMediaQuery } from 'react-responsive'
-import { Link } from 'react-router-dom';
-import { history } from '../..';
+import { useHistory } from 'react-router-dom';
 import ActivityListItemPlaceholder from '../activities/dashboard/ActivityListItemPlaceHolder';
 import { getStatusTranslate } from '../../app/common/util/util';
 import { SemanticICONS } from 'semantic-ui-react/dist/commonjs/generic';
@@ -17,6 +16,7 @@ interface IProps{
 }
 
 const OrderList: React.FC<IProps> = ({settings}) => {
+  const history = useHistory();
 
   const rootStore = useContext(RootStoreContext);
   const { getOrders, orderList, setOrderPage, orderPage,clearOrderRegistery, totalOrderPages, loadingOrders } = rootStore.orderStore;

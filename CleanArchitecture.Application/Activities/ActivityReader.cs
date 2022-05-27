@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -109,13 +110,17 @@ namespace CleanArchitecture.Application.Activities
                 Venue = activity.Venue,
                 Comments = _mapper.Map<ICollection<ActivityComment>, ICollection<ActivityCommentDto>>(activity.Comments),
                 Videos = activity.Videos,
-                ChannelName = activity.CallRoomId,
                 Star = activity.Star,
                 StarCount = activity.StarCount,
                 Status = activity.Status,
                 TrainerId = host.AppUser.Id
-            };
-
+    };
+            if(activity.ActivityJoinDetails != null)
+            {
+                activityDto.HostUrl = activity.ActivityJoinDetails.HostUrl;
+                activityDto.ViewUrl = activity.ActivityJoinDetails.ViewUrl;
+                activityDto.RoomTitle = activity.ActivityJoinDetails.ChannelName;
+            }
             if (host.AppUser.SubMerchantDetails != null)
             {
                 activityDto.TrainerCompanyName = host.AppUser.SubMerchantDetails.MerchantType == MerchantType.Personal ? host.AppUser.SubMerchantDetails.ContactName : host.AppUser.SubMerchantDetails.LegalCompanyTitle;
@@ -160,14 +165,20 @@ namespace CleanArchitecture.Application.Activities
                     City = _mapper.Map<City, CityDto>(activity.City),
                     TrainerApprovedDate = activity.TrainerApprovedDate,
                     AdminApprovedDate = activity.AdminApprovedDate,
-                    //  Reviews = activity.Reviews,
                     Star = activity.Star,
                     StarCount = activity.StarCount,
                     Status = activity.Status
                 };
 
-             
-                return activityDto;
+            if (activity.ActivityJoinDetails != null)
+            {
+                activityDto.HostUrl = activity.ActivityJoinDetails.HostUrl;
+                activityDto.ViewUrl = activity.ActivityJoinDetails.ViewUrl;
+                activityDto.RoomTitle = activity.ActivityJoinDetails.ChannelName;
+            }
+
+
+            return activityDto;
             }
 
 
@@ -248,7 +259,6 @@ namespace CleanArchitecture.Application.Activities
                 City = _mapper.Map<City, CityDto>(activity.City),
                 Venue = activity.Venue,
                 Comments = _mapper.Map<ICollection<ActivityComment>, ICollection<ActivityCommentDto>>(activity.Comments),
-                ChannelName = activity.CallRoomId,
                 TrainerUserName = activity.UserActivities.Where(x => x.IsHost).FirstOrDefault().AppUser.UserName,
                 TrainerApprovedDate = activity.TrainerApprovedDate,
                 TrainerDisplayName = activity.UserActivities.Where(x => x.IsHost).FirstOrDefault().AppUser.DisplayName,
@@ -260,7 +270,12 @@ namespace CleanArchitecture.Application.Activities
                 Status = activity.Status
             };
 
-            
+            if (activity.ActivityJoinDetails != null)
+            {
+                activityDto.HostUrl = activity.ActivityJoinDetails.HostUrl;
+                activityDto.ViewUrl = activity.ActivityJoinDetails.ViewUrl;
+                activityDto.RoomTitle = activity.ActivityJoinDetails.ChannelName;
+            }
 
             return activityDto;
         }

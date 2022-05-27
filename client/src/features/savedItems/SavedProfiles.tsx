@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Button, Grid, Header, Icon, Image, Label, Modal, Segment, Tab } from 'semantic-ui-react';
-import { history } from '../..';
+import { useHistory } from 'react-router-dom';
 import { StarRating } from '../../app/common/form/StarRating';
 import { colors } from '../../app/models/category';
 import { IProfile } from '../../app/models/profile';
@@ -11,7 +11,7 @@ import LoginForm from '../user/LoginForm';
 
 
 const SavedProfiles = () => {
-
+    const history = useHistory();
     const rootStore = useContext(RootStoreContext);
     const { getSavedProfiles, loading ,followings,follow,unfollow} = rootStore.profileStore;
     const {isLoggedIn} = rootStore.userStore;

@@ -10,7 +10,7 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { useMediaQuery } from 'react-responsive'
 import * as _screenfull from "screenfull";
 import ReactPlayer from 'react-player/youtube'
-import { history } from '../../';
+import { useHistory } from 'react-router-dom';
 import LoginForm from '../user/LoginForm';
 
 interface IProps{
@@ -37,7 +37,7 @@ marginRight:"10px"
 };
 
 const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCurrentUser}) => {
-  
+  const history = useHistory();
   const profileRating = profile ? profile.star : 0;
 
   const getColor = (catName:string) =>{

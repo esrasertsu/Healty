@@ -10,6 +10,7 @@ import { OnChange } from 'react-final-form-listeners';
 import { IAccountInfoValues } from '../../../app/models/user';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
+import { toast } from 'react-toastify';
 
 
  const ProfileSettings: React.FC = () => {
@@ -26,7 +27,10 @@ import { tr } from 'date-fns/locale';
 
   const handleFinalFormSubmit = (values: IAccountInfoValues) => {
 
-    editAccountDetails(values)
+    editAccountDetails(values).then((res) =>{
+      if(res)
+       toast.success("Bilgileriz başarıyla kaydedildi")
+    })
     
   }
 
@@ -61,17 +65,17 @@ import { tr } from 'date-fns/locale';
         if (!values.displayName) {
           errors.displayName = 'Profil adı zorunlu alan'
         }
-        if (!values.userName) {
-            errors.userName = 'Kullanıcı adı zorunlu alan'
-          }
-        if (!values.email) {
-            errors.email = 'Email zorunlu alan'
-          }
+        // if (!values.userName) {
+        //     errors.userName = 'Kullanıcı adı zorunlu alan'
+        //   }
+        // if (!values.email) {
+        //     errors.email = 'Email zorunlu alan'
+        //   }
   
-          if(!values.email || !/.+@.+\.[A-Za-z]+$/.test(values.email))
-          {
-            errors.email = 'Geçersiz email adresi'
-          }
+          // if(!values.email || !/.+@.+\.[A-Za-z]+$/.test(values.email))
+          // {
+          //   errors.email = 'Geçersiz email adresi'
+          // }
 
         return errors
       }}
@@ -88,16 +92,17 @@ import { tr } from 'date-fns/locale';
             maxLength={40}
             labelName="emailLabel" 
             component={TextInput} 
+            disabled={true}
             value={accountForm.email}
             />
-            <OnChange name="email">
+            {/* <OnChange name="email">
                 {(value, previous) => {
                     if(value !== accountForm.email)
                     {
                         setAccountForm({...accountForm,email: value});
                     }
                 }}
-            </OnChange>
+            </OnChange> */}
             <Field
               width={!isTablet ? 6 : 16}
               label="Kullanıcı Adı*"
@@ -107,12 +112,14 @@ import { tr } from 'date-fns/locale';
             maxLength={30}
             placeholder='Kullanıcı adı'
             value={accountForm!.userName}
+            disabled={true}
+            
           />
-           <OnChange name="userName">
+           {/* <OnChange name="userName">
                 {(value, previous) => {
                     setAccountForm({...accountForm,userName: value});
                 }}
-            </OnChange>
+            </OnChange> */}
  
             <Field
             label="Profil Adı*"

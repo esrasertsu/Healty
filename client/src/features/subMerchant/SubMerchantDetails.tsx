@@ -14,11 +14,11 @@ import { RootStoreContext } from "../../app/stores/rootStore";
 import { OnChange } from 'react-final-form-listeners';
 import { action, values } from "mobx";
 import { toast } from "react-toastify";
-import { history } from "../..";
 import SelectInput from "../../app/common/form/SelectInput";
 import PhoneNumberInput from "../../app/common/form/PhoneNumberInput";
 import NumberInput from "../../app/common/form/NumberInput";
 import IBAN from "iban";
+import { useHistory } from "react-router-dom";
 
 
 
@@ -35,6 +35,8 @@ interface IProps{
 }
 
 const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant,id,headerHide}) => {
+  const history = useHistory();
+
   const rootStore = useContext(RootStoreContext);
 
   const {

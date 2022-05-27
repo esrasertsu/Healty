@@ -6,9 +6,11 @@ import { useMediaQuery } from 'react-responsive'
 
 import { RootStoreContext } from '../../app/stores/rootStore';
 import FormPage1 from './FormPage1';
-import { history } from '../..';
+import { useHistory } from 'react-router-dom';
 
 const TrainerForm = () =>{
+
+  const history = useHistory();
     const rootStore = useContext(RootStoreContext);
     const {openModal,closeModal,modal} = rootStore.modalStore;
     const {trainerForm, setTrainerForm} = rootStore.userStore;

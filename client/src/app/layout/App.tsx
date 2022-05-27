@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { Button, Container, Icon, Image, Menu, Modal, Segment, Sidebar } from 'semantic-ui-react';
 import NavBar from '../../features/nav/NavBar';
 import { observer } from 'mobx-react-lite';
-import { Redirect, Route , RouteComponentProps,Switch, withRouter} from 'react-router-dom';
+import { Redirect, Route , RouteComponentProps,Switch, withRouter, BrowserRouter as Router, useLocation, useHistory} from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
 import KVKKContract from '../../features/home/KVKKContract';
 import ActivityForm from '../../features/activities/form/ActivityForm';
@@ -28,7 +28,6 @@ import { useMediaQuery } from 'react-responsive'
 import CookieConsent, { Cookies } from "react-cookie-consent";
 import ActivityPaymentPage from '../../features/activities/payment/ActivityPaymentPage';
 import Footer from '../../features/home/Footer';
-import { history } from '../../index';
 import RegisterSuccess from '../../features/user/RegisterSuccess';
 import VerifyEmail from '../../features/user/VerifyEmail';
 import ResetPassword from '../../features/user/ResetPassword';
@@ -56,11 +55,14 @@ import AcikRiza from '../../features/home/AcikRiza';
 import MesafeliSatis from '../../features/home/MesafeliSatis';
 import OnBilgilendirme from '../../features/home/OnBilgilendirme';
 import TrainerApplication from '../../features/user/OnBoarding/TrainerApplication';
+import {ScrollToTop} from './ScrollToTop';
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
-const App: React.FC<RouteComponentProps> = ({location}) => {
 
+
+const App: React.FC<RouteComponentProps> = () => {
+  const history = useHistory();
   const rootStore = useContext(RootStoreContext);
   const {setAppLoaded, token, appLoaded,loadCities} = rootStore.commonStore;
   const { getUser,user,createHubConnection,isLoggedIn,stopHubConnection ,loggingOut, getFacebookLoginStatus} = rootStore.userStore;
@@ -68,7 +70,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
   const { modal, openModal, closeModal} = rootStore.modalStore;
   const { activity,attendActivity} = rootStore.activityStore;
   const initialized = UseAnalytics();
-
+  const location  = useLocation();
 
   const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })

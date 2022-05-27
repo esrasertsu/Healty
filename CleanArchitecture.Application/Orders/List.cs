@@ -48,13 +48,14 @@ namespace CleanArchitecture.Application.Orders
             private readonly IMapper _mapper;
             private readonly IUserAccessor _userAccessor;
             private readonly IActivityReader _activityReader;
-
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IActivityReader activityReader)
+            private readonly IUserCultureInfo _userCultureInfo;
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IActivityReader activityReader, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _mapper = mapper;
                 _userAccessor = userAccessor;
                 _activityReader = activityReader;
+                _userCultureInfo = userCultureInfo;
             }
             public async Task<OrdersEnvelope> Handle(Query request, CancellationToken cancellationToken)
             {
@@ -68,9 +69,9 @@ namespace CleanArchitecture.Application.Orders
                     .AsQueryable();
 
                 if (request.Predicate == "past")
-                    queryable = queryable.Where(x => x.OrderItems.FirstOrDefault().Activity.Date < DateTime.Now);
+                    queryable = queryable.Where(x => x.OrderItems.FirstOrDefault().Activity.Date < _userCultureInfo.GetUserLocalTime());
                 else if (request.Predicate == "future")
-                    queryable = queryable.Where(x => x.OrderItems.FirstOrDefault().Activity.Date > DateTime.Now); //şimdilik first or default. Any de olurdu
+                    queryable = queryable.Where(x => x.OrderItems.FirstOrDefault().Activity.Date > _userCultureInfo.GetUserLocalTime()); //şimdilik first or default. Any de olurdu
 
                 Enum.TryParse(typeof(EnumOrderState), request.Predicate, out var searchOrderStatus);
                 if (searchOrderStatus!=null)
@@ -104,13 +105,13 @@ namespace CleanArchitecture.Application.Orders
                         Date = item.OrderDate,
                         Title = activity.Activity.Title,
                         OrderNo = item.OrderNumber.ToString(),
-                        Photo = activity.Activity.Photos.Count > 0 ? activity.Activity.Photos.FirstOrDefault(x => x.IsMain).Url : "",
+                        Photo = activity.Activity.Photos.Count > 0 ? activity.Activity.Photos.FirstOrDefault(x => x.IsMain)?.Url : "",
                         OrderStatus = item.OrderState.ToString(),
                         Price = activity.Price,
                         PaidPrice = item.PaidPrice,
                         ProductId = activity.Activity.Id.ToString(),
                         TrainerId = trainer.AppUser.UserName,
-                        TrainerImage = trainer.AppUser.Photos.Count > 0 ? trainer.AppUser.Photos.FirstOrDefault(x => x.IsMain == true).Url : "",
+                        TrainerImage = trainer.AppUser.Photos.Count > 0 ? trainer.AppUser.Photos.FirstOrDefault(x => x.IsMain == true)?.Url : "",
                         CardAssociation = item.CardAssociation,
                         BuyerName = item.BuyerName,
                         CardFamily = item.CardFamily,

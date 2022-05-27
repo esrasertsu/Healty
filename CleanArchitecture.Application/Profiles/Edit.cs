@@ -49,15 +49,17 @@ namespace CleanArchitecture.Application.Profiles
                 private readonly IUserAccessor _userAccessor;
                 private readonly IProfileReader _profileReader;
                 private readonly IDocumentAccessor _documentAccessor;
+                private readonly IUserCultureInfo _userCultureInfo;
 
-
-                public Handler(DataContext context, IUserAccessor userAccessor, IProfileReader profileReader, IDocumentAccessor documentAccessor)
+                public Handler(DataContext context, IUserAccessor userAccessor, IProfileReader profileReader,
+                    IDocumentAccessor documentAccessor, IUserCultureInfo userCultureInfo)
                 {
                     _context = context;
                     _userAccessor = userAccessor;
                     _profileReader = profileReader;
                     _documentAccessor = documentAccessor;
-            }
+                    _userCultureInfo = userCultureInfo;
+                }
 
             public async Task<Profile> Handle(Command request, CancellationToken cancellationToken)
                 {
@@ -72,9 +74,9 @@ namespace CleanArchitecture.Application.Profiles
                     user.Bio = request.Bio ?? String.Empty;
                     user.Experience = request.Experience ?? String.Empty;
                     user.ExperienceYear = Convert.ToDecimal(request.ExperienceYear) > 0 ? Convert.ToDecimal(request.ExperienceYear) : user.ExperienceYear;
-                    user.LastProfileUpdatedDate = DateTime.Now;
+                    user.LastProfileUpdatedDate =_userCultureInfo.GetUserLocalTime();
 
-                    if(request.CityId != null && request.CityId != Guid.Empty)
+                    if (request.CityId != null && request.CityId != Guid.Empty)
                     {
                         var city = await _context.Cities.SingleOrDefaultAsync(x => x.Id == request.CityId);
                         if (city == null)

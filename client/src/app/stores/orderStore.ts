@@ -1,9 +1,9 @@
 import {observable, action, computed, runInAction, makeObservable} from 'mobx';
 import { toast } from 'react-toastify';
-import { history } from '../..';
 import agent from '../api/agent';
 import { IOrder } from '../models/order';
 import { RootStore } from './rootStore';
+import { history } from '../..';
 
 const LIMIT = 6;
 export default class OrderStore {
@@ -97,6 +97,7 @@ export default class OrderStore {
     }
 
     @action deleteOrder = async (orderId: string) =>{
+
         this.loadingOrders = true;
         try {
            await agent.Order.deleteOrder(orderId);

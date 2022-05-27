@@ -21,7 +21,9 @@ namespace CleanArchitecture.Application.Activities.Administration
         public ICollection<CategoryDto> Categories { get; set; }
         public ICollection<SubCategoryDto> SubCategories { get; set; }
         public bool Online { get; set; }
-        public string ChannelName { get; set; }
+        public string HostUrl { get; set; }
+        public string ViewUrl { get; set; }
+        public string RoomTitle { get; set; }
         public int AttendanceCount { get; set; }
         public int? AttendancyLimit { get; set; }
         public int SavedCount { get; set; }

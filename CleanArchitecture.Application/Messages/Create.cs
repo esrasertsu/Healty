@@ -30,13 +30,14 @@ namespace CleanArchitecture.Application.Messages
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
             private readonly IMapper _mapper;
+            private readonly IUserCultureInfo _userCultureInfo;
 
-
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _mapper = mapper;
                 _userAccessor = userAccessor;
+                _userCultureInfo = userCultureInfo;
             }
 
             public async Task<ChatMessageDto> Handle(Command request, CancellationToken cancellationToken)
@@ -59,12 +60,12 @@ namespace CleanArchitecture.Application.Messages
                         Sender = currentUser,
                         ChatRoom = chatRoom,
                         Body = request.Body,
-                        CreatedAt = DateTime.Now,
+                        CreatedAt = _userCultureInfo.GetUserLocalTime(),
                         Seen = false
                     };
 
                     chatRoom.Messages.Add(message);
-                    chatRoom.LastMessageAt = DateTime.Now;
+                    chatRoom.LastMessageAt = _userCultureInfo.GetUserLocalTime();
 
                     var success = await _context.SaveChangesAsync() > 0;
 

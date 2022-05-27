@@ -34,15 +34,16 @@ namespace CleanArchitecture.Application.User
                 private readonly IUserAccessor _userAccessor;
                 private readonly IDocumentAccessor _documentAccessor;
                 private readonly UserManager<AppUser> _userManager;
+                private readonly IUserCultureInfo _userCultureInfo;
 
-
-                public Handler(DataContext context, IUserAccessor userAccessor, IDocumentAccessor documentAccessor, UserManager<AppUser> userManager)
+                public Handler(DataContext context, IUserAccessor userAccessor, IDocumentAccessor documentAccessor,
+                    UserManager<AppUser> userManager, IUserCultureInfo userCultureInfo)
                 {
                     _context = context;
                     _userAccessor = userAccessor;
                     _documentAccessor = documentAccessor;
                     _userManager = userManager;
-
+                    _userCultureInfo = userCultureInfo;
                 }
 
                 public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -60,7 +61,7 @@ namespace CleanArchitecture.Application.User
                             throw new RestException(HttpStatusCode.BadRequest, new { UserName = "Problem changing user password" });
                         else
                         {
-                            user.LastProfileUpdatedDate = DateTime.Now;
+                            user.LastProfileUpdatedDate =_userCultureInfo.GetUserLocalTime();
                             var result = await _context.SaveChangesAsync() > 0;
                             if (result)
                                 return Unit.Value;

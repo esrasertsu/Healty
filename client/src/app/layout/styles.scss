@@ -1008,10 +1008,6 @@ font-size: 17px;
     color: #222E50;
     font-size: 16px;
 }
-.activityDetail_payment_calenderIcon{
-  color: #222E50;
-
-}
 
 .activityDetail_payment .ui.selection.dropdown{
   min-width: 0 !important;
@@ -1873,18 +1869,7 @@ max-width: 95%;
 
 @media (max-width: 820px){
 
-  .active-spinner{
-    margin:auto;
-   height: 100vh;
-    width: 100% !important;
-    text-align: center;
-    position: relative;
-  }
-  .active-spinner img{
-    width: 100% !important;
-    position: absolute !important;
-    top: 50%;
-  }
+
   
 
   .masthead_page {

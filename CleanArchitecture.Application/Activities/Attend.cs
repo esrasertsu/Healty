@@ -23,13 +23,15 @@ namespace CleanArchitecture.Application.Activities
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
-
-            public Handler(DataContext context, IUserAccessor userAccessor)
+            private readonly IUserCultureInfo _userCultureInfo;
+            public Handler(DataContext context, IUserAccessor userAccessor, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _userAccessor = userAccessor;
+                _userCultureInfo = userCultureInfo;
             }
 
+          
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 var activity = await _context.Activities.FindAsync(request.Id);
@@ -52,7 +54,7 @@ namespace CleanArchitecture.Application.Activities
                     Activity = activity,
                     AppUser = user,
                     IsHost = false,
-                    DateJoined = DateTime.Now,
+                    DateJoined = _userCultureInfo.GetUserLocalTime(),
                     ShowName = request.ShowName
                 };
                 activity.AttendanceCount = activity.AttendanceCount + 1;

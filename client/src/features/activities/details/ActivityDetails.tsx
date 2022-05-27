@@ -75,6 +75,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
       <>
         <Helmet>
         <title>Afitapp - {activity.title}</title>
+        <meta name="description" content={activity.description} />
       </Helmet>
       <Confirm
           key={"cancellationRez"}
@@ -147,7 +148,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
                   (activity.isGoing || activity.isHost) && !isMobile && activity.online &&
                  <ActivityVideoCall activity={activity} />
                  }  
-                { activity.isGoing && !isMobile && !activity.isHost && (
+                { activity.isGoing && !isMobile && !activity.isHost &&  (((new Date(activity.date).getTime() - new Date().getTime()) / (1000 *3600 *24)) >= 1 ) &&(
                       <Button circular style={{marginTop:"30px", width:"100%"}} loading={loading} color="red" onClick={()=>setcancellationUserOpen(true)}>Katılımı iptal et</Button>
                  )}
                  {
@@ -156,7 +157,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
                   <ActivityDetailedChat />
                 }
                 {
-                   isMobile &&  activity.isGoing && !activity.isHost && (
+                   isMobile &&  activity.isGoing && !activity.isHost && (((new Date(activity.date).getTime() - new Date().getTime()) / (1000 *3600 *24)) >= 1 ) &&(
                     <Button circular style={{marginTop:"50px", width:"100%"}} color="red" loading={loading} onClick={()=>setcancellationUserOpen(true)}>Katılımı iptal et</Button>
                    )
                 }

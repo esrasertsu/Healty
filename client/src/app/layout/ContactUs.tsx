@@ -4,12 +4,13 @@ import { Button, Container, Header, Segment, Image, Grid, Icon, Modal } from 'se
 import { useMediaQuery } from 'react-responsive';
 import { RootStoreContext } from '../stores/rootStore';
 import { observer } from 'mobx-react-lite';
-import { history } from '../..';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { useHistory } from 'react-router-dom';
 
   
  const ContactUs = () => {
-   
+  const history = useHistory();
+
     const isTablet = useMediaQuery({ query: '(max-width: 767px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 

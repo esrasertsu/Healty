@@ -25,12 +25,12 @@ namespace CleanArchitecture.Application.Admin.Orders
         {
             private readonly DataContext _context;
             private readonly IPaymentAccessor _paymentAccessor;
-
-            public Handler(DataContext context, IPaymentAccessor paymentAccessor)
+            private readonly IUserCultureInfo _userCultureInfo;
+            public Handler(DataContext context, IPaymentAccessor paymentAccessor, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _paymentAccessor = paymentAccessor;
-
+                _userCultureInfo = userCultureInfo;
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -53,7 +53,7 @@ namespace CleanArchitecture.Application.Admin.Orders
                     if (string.IsNullOrEmpty(result.ErrorMessage) && string.IsNullOrEmpty(result.ErrorCode))
                     {
                         orderItem.AdminPaymentApproved = EnumOrderItemApproveState.Disapproved;
-                        orderItem.AdminPaymentDisapprovedDate = DateTime.Now;
+                        orderItem.AdminPaymentDisapprovedDate = _userCultureInfo.GetUserLocalTime();
 
                     var success = await _context.SaveChangesAsync() > 0;
 

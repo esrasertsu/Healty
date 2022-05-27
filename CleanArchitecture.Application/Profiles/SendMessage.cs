@@ -30,13 +30,14 @@ namespace CleanArchitecture.Application.Profiles
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
             private readonly IMapper _mapper;
+            private readonly IUserCultureInfo _userCultureInfo;
 
-
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _mapper = mapper;
                 _userAccessor = userAccessor;
+                _userCultureInfo = userCultureInfo;
             }
 
             public async Task<ChatMessageDto> Handle(Command request, CancellationToken cancellationToken)
@@ -67,9 +68,9 @@ namespace CleanArchitecture.Application.Profiles
                     ChatRoom newchatRoom = new ChatRoom
                     {
                         Id = new Guid(),
-                        CreatedAt = DateTime.Now,
+                        CreatedAt = _userCultureInfo.GetUserLocalTime(),
                         Messages = messages,
-                        LastMessageAt = DateTime.Now,
+                        LastMessageAt =_userCultureInfo.GetUserLocalTime(),
                         StarterId = author.Id
                     };
 
@@ -78,7 +79,7 @@ namespace CleanArchitecture.Application.Profiles
                         Id = new Guid(),
                         Sender = author,
                         Body = request.Body,
-                        CreatedAt = DateTime.Now,
+                        CreatedAt = _userCultureInfo.GetUserLocalTime(),
                         SenderId = author.Id,
                         Seen = false
                     };
@@ -89,7 +90,7 @@ namespace CleanArchitecture.Application.Profiles
                     {
                         ChatRoom = newchatRoom,
                         AppUser = author,
-                        DateJoined = DateTime.Now
+                        DateJoined = _userCultureInfo.GetUserLocalTime()
                     };
                     _context.UserChatRooms.Add(userChatRoom);
 
@@ -97,7 +98,7 @@ namespace CleanArchitecture.Application.Profiles
                     {
                         ChatRoom = newchatRoom,
                         AppUser = receiver,
-                        DateJoined = DateTime.Now
+                        DateJoined = _userCultureInfo.GetUserLocalTime()
                     };
                     _context.UserChatRooms.Add(receiverChatRoom);
 

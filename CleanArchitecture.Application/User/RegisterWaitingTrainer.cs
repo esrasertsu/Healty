@@ -53,10 +53,10 @@ namespace CleanArchitecture.Application.User
         public async Task<User> Handle(Command request, CancellationToken cancellationToken)
             {
 
-                if (await _context.Users.AnyAsync(x => x.Email == request.Email))
+                if (await _context.Users.AnyAsync(x => x.Email == request.Email.Trim()))
                     throw new RestException(HttpStatusCode.BadRequest, new { Email = "Email already exists." });
 
-                if (await _context.Users.AnyAsync(x => x.UserName == request.UserName))
+                if (await _context.Users.AnyAsync(x => x.UserName == request.UserName.Trim()))
                     throw new RestException(HttpStatusCode.BadRequest, new { UserName = "UserName already exists." });
 
                 var phone = request.Phone.Trim();
@@ -68,8 +68,8 @@ namespace CleanArchitecture.Application.User
                 var user = new AppUser
                     {
                         DisplayName = request.DisplayName,
-                        Email = request.Email,
-                        UserName = request.UserName,
+                        Email = request.Email.Trim(),
+                        UserName = request.UserName.Trim(),
                         Role = Role.WaitingTrainer,
                       //  ApplicationDate = DateTime.Now,
                         PhoneNumber = phone,

@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { Card, Image, Icon, Grid, Label, Modal, Popup, Button} from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
-import { history } from '../../index'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { StarRating } from '../../app/common/form/StarRating';
 import { colors } from '../../app/models/category';
 import { observer } from 'mobx-react-lite';
 import LoginForm from '../user/LoginForm';
 import { useMediaQuery } from 'react-responsive';
+import { useHistory } from 'react-router-dom';
 
 interface IProps {
     profile: IProfile,
@@ -15,6 +15,7 @@ interface IProps {
 }
 
  const ProfileListItem: React.FC<IProps> = ({profile,popular}) => {
+  const history = useHistory();
 
   const rootStore = useContext(RootStoreContext);
   const {setLoadingProfile,follow,unfollow} = rootStore.profileStore;

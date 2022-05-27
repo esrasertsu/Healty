@@ -1,15 +1,14 @@
 import React, { Fragment, useContext } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Button, Container, Header, Segment, Image, Grid, Icon, Modal } from 'semantic-ui-react'
 import { useMediaQuery } from 'react-responsive';
 import { RootStoreContext } from '../stores/rootStore';
 import { observer } from 'mobx-react-lite';
-import { history } from '../..';
 
  const AboutUs = () => {
 
-    
+    const history = useHistory();
     const isTablet = useMediaQuery({ query: '(max-width: 767px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 

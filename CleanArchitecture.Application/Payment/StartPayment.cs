@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Application.SubMerchants;
 using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -42,14 +44,18 @@ namespace CleanArchitecture.Application.Payment
             private readonly IUserAccessor _userAccessor;
             private readonly IPaymentAccessor _paymentAccessor;
             private readonly IHttpContextAccessor _httpContextAccessor;
-
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPaymentAccessor paymentAccessor, IHttpContextAccessor httpContextAccessor)
+            private readonly IUserCultureInfo _userCultureInfo;
+            private readonly UserManager<AppUser> _userManager;
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPaymentAccessor paymentAccessor, UserManager<AppUser> userManager,
+                IHttpContextAccessor httpContextAccessor, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _mapper = mapper;
                 _paymentAccessor = paymentAccessor;
                 _userAccessor = userAccessor;
                 _httpContextAccessor = httpContextAccessor;
+                _userCultureInfo = userCultureInfo;
+                _userManager = userManager;
             }
             public async Task<PaymentThreeDResult> Handle(Query request, CancellationToken cancellationToken)
             {
@@ -80,7 +86,7 @@ namespace CleanArchitecture.Application.Payment
 
                 order.OrderNumber = lastOrder != null ? lastOrder.OrderNumber + 1 : 1;
                 order.OrderState = EnumOrderState.Unpaid;
-                order.OrderDate = DateTime.Now;
+                order.OrderDate = _userCultureInfo.GetUserLocalTime();
                 order.FirstName = user.Name;
                 order.LastName = user.Surname;
                 order.Email = user.Email;
@@ -105,12 +111,12 @@ namespace CleanArchitecture.Application.Payment
                 if (user.HasSignedIyzicoContract == false)
                 {
                     user.HasSignedIyzicoContract = request.HasSignedIyzicoContract;
-                    user.IyzicoContractSignedDate = DateTime.Now;
+                    user.IyzicoContractSignedDate = _userCultureInfo.GetUserLocalTime();
                 }
                 if (user.HasSignedPaymentContract == false)
                 {
                     user.HasSignedPaymentContract = request.HasSignedPaymentContract;
-                    user.PaymentSignedDate = DateTime.Now;
+                    user.PaymentSignedDate = _userCultureInfo.GetUserLocalTime();
                 }
 
                 user.Orders.Add(order);
@@ -148,7 +154,42 @@ namespace CleanArchitecture.Application.Payment
 
                         if (string.IsNullOrEmpty(subMerchantKey))
                         {
-                            throw new Exception("Aktivite sahibi sistem bilgileri eksik");
+                            //throw new Exception("Aktivite sahibi sistem bilgileri eksik");
+                            var systemMerchant = await _context.SubMerchants.FirstOrDefaultAsync(x => x.User == ownerTrainer);
+
+                            if(systemMerchant == null)
+                                throw new Exception("Aktivite sahibi bilgileri eksik. Admin veya eğitmen ile iletişime geçiniz.");
+
+                            IyziSubMerchantResponse newIyzicoMerchant = _paymentAccessor.CreateSubMerchantIyzico(systemMerchant);
+
+                            if (newIyzicoMerchant.Status)
+                            {
+
+                                subMerchant.SubMerchantKey = newIyzicoMerchant.SubMerchantKey;
+                                subMerchant.Status = true;
+                                subMerchant.ApplicationDate = _userCultureInfo.GetUserLocalTime();
+                                subMerchant.LastEditDate = _userCultureInfo.GetUserLocalTime();
+                                var editedSubMerchant = await _context.SaveChangesAsync() > 0;
+
+                                if (editedSubMerchant)
+                                {
+                                    ownerTrainer.SubMerchantKey = newIyzicoMerchant.SubMerchantKey;
+                                    ownerTrainer.LastProfileUpdatedDate = _userCultureInfo.GetUserLocalTime();
+                                    await _userManager.UpdateAsync(ownerTrainer);
+
+                                }
+                                else
+                                {
+                                    throw new Exception("Problem editing subMerchant Key on DB");
+                                }
+                            }
+                            else
+                            {
+                                _context.SubMerchants.Remove(ownerTrainer.SubMerchantDetails);
+                                ownerTrainer.SubMerchantKey = "";
+                                ownerTrainer.LastProfileUpdatedDate = _userCultureInfo.GetUserLocalTime();
+                                await _context.SaveChangesAsync();
+                            }
                         }
                         //
 

@@ -1,12 +1,12 @@
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { HttpTransportType, HubConnection, HubConnectionBuilder, JsonHubProtocol, LogLevel } from '@microsoft/signalr';
-import { history } from "../..";
 import agent from "../api/agent";
 import { AccountInfoFormValues, IAccountInfo, IAccountInfoValues, ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues, TrainerCreationFormValues, TrainerFormValues } from "../models/user";
 import { RootStore } from "./rootStore";
 import { toast } from 'react-toastify';
 import { IMessage } from "../models/message";
 import { ISubMerchantInfo, SubMerchantInfo } from "../models/user";
+import { history } from "../..";
 
 export default class UserStore {
 
@@ -135,6 +135,7 @@ export default class UserStore {
             this.startRefreshTokenTimer(user);
             this.rootStore.modalStore.closeModal();
             this.submitting = false;
+            debugger;
             if(location!==null && location !=="")
               history.push(location);
             else

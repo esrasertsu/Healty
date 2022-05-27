@@ -63,8 +63,11 @@ namespace CleanArchitecture.Application.SubMerchants
             private readonly IPaymentAccessor _paymentAccessor;
             private readonly IHttpContextAccessor _httpContextAccessor;
             private readonly UserManager<AppUser> _userManager;
+            private readonly IUserCultureInfo _userCultureInfo;
 
-            public Handler(DataContext context, IMapper mapper, UserManager<AppUser> userManager, IUserAccessor userAccessor, IPaymentAccessor paymentAccessor, IHttpContextAccessor httpContextAccessor)
+
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, UserManager<AppUser> userManager,
+                IPaymentAccessor paymentAccessor, IHttpContextAccessor httpContextAccessor, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _mapper = mapper;
@@ -72,6 +75,8 @@ namespace CleanArchitecture.Application.SubMerchants
                 _userAccessor = userAccessor;
                 _httpContextAccessor = httpContextAccessor;
                 _userManager = userManager;
+                _userCultureInfo = userCultureInfo;
+
             }
             public async Task<IyziSubMerchantResponse> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -102,7 +107,7 @@ namespace CleanArchitecture.Application.SubMerchants
 
                 subMerchant.MerchantType = (MerchantType)merchantType;
                 subMerchant.Address = request.Address;
-                subMerchant.LastEditDate = DateTime.Now;
+                subMerchant.LastEditDate = _userCultureInfo.GetUserLocalTime();
                 subMerchant.ContactName = request.ContactName;
                 subMerchant.ContactSurname = request.ContactSurname;
                 subMerchant.Email = request.Email;
@@ -144,14 +149,14 @@ namespace CleanArchitecture.Application.SubMerchants
                             {
                                 subMerchant.SubMerchantKey = result.SubMerchantKey;
                                 subMerchant.Status = true;
-                                subMerchant.ApplicationDate = DateTime.Now;
-                                subMerchant.LastEditDate = DateTime.Now;
+                                subMerchant.ApplicationDate = _userCultureInfo.GetUserLocalTime();
+                                subMerchant.LastEditDate = _userCultureInfo.GetUserLocalTime();
                                 var editedSubMerchant = await _context.SaveChangesAsync() > 0;
 
                                 if (editedSubMerchant)
                                 {
                                     user.SubMerchantKey = result.SubMerchantKey;
-                                    user.LastProfileUpdatedDate = DateTime.Now;
+                                    user.LastProfileUpdatedDate = _userCultureInfo.GetUserLocalTime();
                                     await _userManager.UpdateAsync(user);
 
                                     return result;
@@ -172,12 +177,12 @@ namespace CleanArchitecture.Application.SubMerchants
                             var response = _paymentAccessor.UpdateSubMerchantIyzico(subMerchant);
                             if(response.Status)
                             {
-                                subMerchant.LastEditDate = DateTime.Now;
+                                subMerchant.LastEditDate = _userCultureInfo.GetUserLocalTime();
                                 var editedSubMerchant = await _context.SaveChangesAsync() > 0;
 
                                 if (editedSubMerchant)
                                 {
-                                    user.LastProfileUpdatedDate = DateTime.Now;
+                                    user.LastProfileUpdatedDate = _userCultureInfo.GetUserLocalTime();
                                     await _userManager.UpdateAsync(user);
 
                                     return response;

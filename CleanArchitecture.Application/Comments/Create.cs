@@ -27,13 +27,14 @@ namespace CleanArchitecture.Application.Comments
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
             private readonly IMapper _mapper;
+            private readonly IUserCultureInfo _userCultureInfo;
 
-
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _mapper = mapper;
                 _userAccessor = userAccessor;
+                _userCultureInfo = userCultureInfo;
             }
 
             public async Task<ActivityCommentDto> Handle(Command request, CancellationToken cancellationToken)
@@ -51,7 +52,7 @@ namespace CleanArchitecture.Application.Comments
                     Author = user,
                     Activity = activity,
                     Body = request.Body,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = _userCultureInfo.GetUserLocalTime()
                 };
 
                 activity.Comments.Add(comment);

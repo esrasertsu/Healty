@@ -3,12 +3,12 @@ import { Menu, Container, Image, Dropdown, Label, Icon, Button, Modal } from 'se
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import {history} from '../../index';
 import NavSearchArea from './NavSearchArea';
 import LoginForm from '../user/LoginForm';
 import  RegisterForm from '../user/RegisterForm';
 import TrainerForm from '../user/TrainerRegisterModal';
 import { useMediaQuery } from 'react-responsive'
+import { history } from '../..';
 
 interface IProps{
   fixed:boolean;
@@ -225,12 +225,7 @@ const NavBar: React.FC<IProps> = ({fixed}) => {
             </Button>
               <Button key={"login-nav"} className='blueBtn'  content={"Giriş Yap"} style={{color:"#fff",borderRadius: "5rem", marginRight:"5px"}}
                
-               onClick={(e:any)=>
-                 {
-                   handleLoginClick(e);
-                 }
-                 
-                 }></Button>
+               onClick={handleLoginClick}></Button>
                   <Button key={"reg-nav"} basic color="blue" content={"Kaydol"} style={{borderRadius: "5rem"}}
           
           onClick={(e:any)=>

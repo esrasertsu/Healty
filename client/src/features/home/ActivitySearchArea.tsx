@@ -4,12 +4,12 @@ import { RootStoreContext } from '../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
 import { IAllCategoryList } from '../../app/models/category';
-import { history } from '../..';
+import { useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive'
 
 
  const ActivitySearchArea:React.FC = () => {
-
+  const history = useHistory();
     const rootStore = useContext(RootStoreContext);
 
     const {

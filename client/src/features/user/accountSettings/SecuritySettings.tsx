@@ -9,6 +9,7 @@ import TextInput from '../../../app/common/form/TextInput';
 import { OnChange } from 'react-final-form-listeners';
 import { IAccountInfoValues } from '../../../app/models/user';
 import { ErrorMessage } from '../../../app/common/form/ErrorMessage';
+import { toast } from 'react-toastify';
 
 
  const SecuritySettings: React.FC = () => {
@@ -29,7 +30,10 @@ import { ErrorMessage } from '../../../app/common/form/ErrorMessage';
 
   const handleFinalFormSubmit = (values: IAccountInfoValues) => {
 
-    refreshPassword(values.password)
+    refreshPassword(values.password).then((res) =>{
+      if(res)
+       toast.success("Şifre başarıyla değiştirildi")
+    })
     
   }
   if(submittingPassword) return <LoadingComponent content='Güncelleniyor...'/>  

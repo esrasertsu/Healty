@@ -4,12 +4,12 @@ import React, { useContext } from 'react'
 import { Segment, Header, Button, Image, Container, Icon, Label, Modal } from 'semantic-ui-react'
 import { IBlog } from '../../app/models/blog';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import { history } from '../../index'
 import dompurify from 'dompurify';
 import PostUpdateForm from '../posts/PostUpdateForm';
 import LoginForm from '../user/LoginForm';
 import { useMediaQuery } from 'react-responsive'
 import tr  from 'date-fns/locale/tr'
+import { useHistory } from 'react-router-dom';
 
 interface IProps{
   editMode:boolean;
@@ -21,7 +21,7 @@ interface IProps{
 }
 
 const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog,updatedBlog}) => {
-
+  const history = useHistory();
   const rootStore = useContext(RootStoreContext);
   const { isCurrentUserAuthor, deletePost ,editPost} = rootStore.blogStore;
   const {isLoggedIn} = rootStore.userStore;

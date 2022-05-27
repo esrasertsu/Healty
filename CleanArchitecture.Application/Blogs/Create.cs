@@ -34,14 +34,15 @@ namespace CleanArchitecture.Application.Blogs
                 private readonly IUserAccessor _userAccessor;
                 private readonly IMapper _mapper;
                 private readonly IPhotoAccessor _photoAccessor;
+                private readonly IUserCultureInfo _userCultureInfo;
 
-
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPhotoAccessor photoAccessor)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPhotoAccessor photoAccessor, IUserCultureInfo userCultureInfo)
                 {
                     _context = context;
                     _mapper = mapper;
                     _userAccessor = userAccessor;
                     _photoAccessor = photoAccessor;
+                  _userCultureInfo = userCultureInfo;
             }
 
                 public async Task<BlogDto> Handle(Command request, CancellationToken cancellationToken)
@@ -69,7 +70,7 @@ namespace CleanArchitecture.Application.Blogs
                         Id = request.Id,
                         Title = request.Title,
                         Description = request.Description,
-                        Date = DateTime.Now,
+                        Date =_userCultureInfo.GetUserLocalTime(),
                         Category = category,
                         Author = user,
                         BlogImage = image 
@@ -90,7 +91,7 @@ namespace CleanArchitecture.Application.Blogs
                         {
                             SubCategory = subCat,
                             Blog = blog,
-                            DateCreated = DateTime.Now
+                            DateCreated = _userCultureInfo.GetUserLocalTime()
                         };
                         _context.SubCatBlogs.Add(subCatBlog);
                     }

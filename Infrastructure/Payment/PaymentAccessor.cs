@@ -241,7 +241,7 @@ namespace Infrastructure.Payment
             request.PaidPrice = RemoveTrailingZeros((orderItem.Price * orderItem.Quantity).ToString().Split(',')[0]);
             request.Currency = Currency.TRY.ToString();
             request.Installment = 1;
-            request.BasketId = "B67832";
+            request.BasketId = orderItem.Order.Id.ToString();
             request.PaymentChannel = PaymentChannel.WEB.ToString();
             request.PaymentGroup = PaymentGroup.PRODUCT.ToString();
             request.CallbackUrl = callbackUrl; //verify Email sayfası gibi olcak içerik

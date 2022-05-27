@@ -20,7 +20,6 @@ namespace CleanArchitecture.Domain
         public int Duration { get; set; }
         public DateTime Date { get; set; }
         public DateTime EndDate { get; set; }
-        public string CallRoomId { get; set; }
         public virtual City City { get; set; }
         public string Venue { get; set; }
         public string Address { get; set; }

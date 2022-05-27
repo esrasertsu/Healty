@@ -38,18 +38,18 @@ namespace CleanArchitecture.Application.Admin
             private readonly IMapper _mapper;
             private readonly UserManager<AppUser> _userManager;
             private readonly IProfileReader _profileReader;
+            private readonly IUserCultureInfo _userCultureInfo;
 
 
-
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, UserManager<AppUser> userManager, IProfileReader profileReader)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, UserManager<AppUser> userManager, IUserCultureInfo userCultureInfo, IProfileReader profileReader)
             {
                 _context = context;
                 _mapper = mapper;
                 _userAccessor = userAccessor;
                 _userManager = userManager;
                _profileReader = profileReader;
-
-        }
+                _userCultureInfo = userCultureInfo;
+            }
 
         public async Task<Admin> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -76,8 +76,8 @@ namespace CleanArchitecture.Application.Admin
                     PhoneNumberConfirmed= true,
                     UserName = request.UserName,
                     Role = Role.Admin,
-                    RegistrationDate = DateTime.Now,
-                    LastLoginDate = DateTime.Now,
+                    RegistrationDate = _userCultureInfo.GetUserLocalTime(),
+                    LastLoginDate =_userCultureInfo.GetUserLocalTime(),
                     Title= "Kurucu Ortak"
                 };
 

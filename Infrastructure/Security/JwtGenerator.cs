@@ -15,9 +15,11 @@ namespace Infrastructure.Security
     public class JwtGenerator : IJwtGenerator
     {
         private readonly SymmetricSecurityKey _key;
-        public JwtGenerator(IConfiguration configuration)
+        private readonly IUserCultureInfo _userCultureInfo;
+        public JwtGenerator(IConfiguration configuration, IUserCultureInfo userCultureInfo)
         {
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["TokenKey"]));
+            _userCultureInfo = userCultureInfo;
         }
         public string CreateToken(AppUser user)
         {
@@ -33,7 +35,7 @@ namespace Infrastructure.Security
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddMinutes(10), //10-15
+                Expires = _userCultureInfo.GetUserLocalTime().AddMinutes(20), //10-15
                 SigningCredentials = creds
             };
 

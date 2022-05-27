@@ -53,15 +53,16 @@ namespace CleanArchitecture.Application.User
             private readonly IEmailSender _emailSender;
             private readonly IGoogleReCAPTCHAAccessor _reCAPTCHAAccessor;
             private IWebHostEnvironment _hostingEnvironment;
-
-            public Handler(DataContext context, UserManager<AppUser> userManager, IEmailSender emailSender, IGoogleReCAPTCHAAccessor reCAPTCHAAccessor,IWebHostEnvironment environment)
+            private readonly IUserCultureInfo _userCultureInfo;
+            public Handler(DataContext context, UserManager<AppUser> userManager, IEmailSender emailSender, 
+                IGoogleReCAPTCHAAccessor reCAPTCHAAccessor,IWebHostEnvironment environment, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _userManager = userManager;
                 _emailSender = emailSender;
                 _reCAPTCHAAccessor = reCAPTCHAAccessor;
                 _hostingEnvironment = environment;
-
+                _userCultureInfo = userCultureInfo;
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -83,11 +84,11 @@ namespace CleanArchitecture.Application.User
                 var user = new AppUser
                 {
                     DisplayName = request.DisplayName,
-                    Email = request.Email,
-                    UserName = request.UserName,
+                    Email = request.Email.Trim(),
+                    UserName = request.UserName.Trim(),
                     Role = Role.User,
-                    RegistrationDate = DateTime.Now,
-                    LastLoginDate = DateTime.Now,
+                    RegistrationDate = _userCultureInfo.GetUserLocalTime(),
+                    LastLoginDate = _userCultureInfo.GetUserLocalTime(),
                     IsOnline = true
                 };
 

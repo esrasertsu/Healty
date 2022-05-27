@@ -22,11 +22,12 @@ namespace CleanArchitecture.Application.Activities
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
-
-            public Handler(DataContext context, IUserAccessor userAccessor)
+            private readonly IUserCultureInfo _userCultureInfo;
+            public Handler(DataContext context, IUserAccessor userAccessor, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _userAccessor = userAccessor;
+                _userCultureInfo = userCultureInfo;
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -50,7 +51,7 @@ namespace CleanArchitecture.Application.Activities
                 {
                     Activity = activity,
                     AppUser = user,
-                    SaveDate = DateTime.Now,
+                    SaveDate = _userCultureInfo.GetUserLocalTime(),
                 };
                 activity.SavedCount = activity.SavedCount + 1;
                 _context.UserSavedActivities.Add(saved);

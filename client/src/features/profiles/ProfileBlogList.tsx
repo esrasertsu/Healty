@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { Button, Card, Grid,Image } from 'semantic-ui-react';
 import { IProfileBlog } from '../../app/models/profile';
-import { history } from '../..';
+import { useHistory } from 'react-router-dom';
 import tr  from 'date-fns/locale/tr'
 import { useMediaQuery } from 'react-responsive'
 
@@ -17,7 +17,7 @@ interface IProps
 }
 
 const ProfileBlogList: React.FC<IProps> = ({profileBlogs,profileUserName,displayName}) => {
-
+  const history = useHistory();
   const rootStore = useContext(RootStoreContext);
    const { setPredicate,clearPredicates ,setPredicateDisplayName,setClearedBeforeNewPredicateComing} = rootStore.blogStore;
    const isWideMobileOrSmaller = useMediaQuery({ query: '(max-width: 430px)' })

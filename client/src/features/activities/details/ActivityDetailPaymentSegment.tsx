@@ -3,7 +3,7 @@ import { Segment, Header, Form, Button,Comment, Icon , Image, Modal} from 'seman
 
 import { RootStoreContext } from '../../../app/stores/rootStore'
 import { Form as FinalForm, Field} from 'react-final-form';
-import { history } from '../../../index'
+import { useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import SelectInput from '../../../app/common/form/SelectInput';
 import { IActivity } from '../../../app/models/activity';
@@ -23,7 +23,7 @@ const numberOptions = [
   
 
  const ActivityDetailPaymentSegment:React.FC<{activity:IActivity}> = ({activity}) =>  {
-
+  const history = useHistory();
   const rootStore = useContext(RootStoreContext);
   const {getActivityPaymentPage,attendActivity} = rootStore.activityStore;
   const {isLoggedIn} = rootStore.userStore;

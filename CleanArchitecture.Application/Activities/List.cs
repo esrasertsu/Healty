@@ -34,7 +34,7 @@ namespace CleanArchitecture.Application.Activities
                 IsHost = isHost;
                 IsFollowed = isFollowed;
                 IsOnline = isOnline;
-                StartDate = startDate ?? DateTime.Now;
+                StartDate = startDate;
                 EndDate = endDate;
                 CategoryIds = categoryIds;
                 SubCategoryIds = subCategoryIds;
@@ -63,18 +63,21 @@ namespace CleanArchitecture.Application.Activities
             private readonly IMapper _mapper;
             private readonly IUserAccessor _userAccessor;
             private readonly IActivityReader _activityReader;
-
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IActivityReader activityReader)
+            private readonly IUserCultureInfo _userCultureInfo;
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IActivityReader activityReader, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _mapper = mapper;
                 _userAccessor = userAccessor;
                 _activityReader = activityReader;
+                _userCultureInfo = userCultureInfo;
             }
             public async Task<ActivitiesEnvelope> Handle(Query request, CancellationToken cancellationToken)
             {
+                var defaultStart = _userCultureInfo.GetUserLocalTime();
+
                 var queryable = _context.Activities
-                    .Where(x => x.Date >= request.StartDate)
+                    .Where(x => x.Date >= (request.StartDate != null ? request.StartDate : defaultStart))
                     .OrderBy(x => x.Date)
                     .AsQueryable();
 

@@ -26,7 +26,6 @@ import { ActivityPhoto, IPhoto } from "../../../app/models/profile";
 import { LoadingComponent } from "../../../app/layout/LoadingComponent";
 import TextEditorInput from "../../../app/common/form/TextEditorInput";
 
-
 interface DetailParams {
   id: string;
 }
@@ -221,8 +220,10 @@ const handleTimeChange = (time:any) =>{
 
 const handleEndDateChange = (endDate:any) =>{
 
-  const dateAndTime = activityForm.endTime ? combineDateAndTime(endDate, activityForm.endTime): combineDateAndTime(endDate, new Date());
- 
+
+  const dateAndTime = activityForm.endTime ? combineDateAndTime(endDate, activityForm.endTime): 
+                      activityForm.time && activityForm.date ?  combineDateAndTime(endDate, activityForm.date) : combineDateAndTime(endDate, new Date());
+
    if(activityForm.time && (new Date(dateAndTime).getTime() <= new Date(activityForm.time).getTime())) 
   {
       showDateErrorMessage("Başlangıç saati bitiş saatinden geri olmalıdır.");  

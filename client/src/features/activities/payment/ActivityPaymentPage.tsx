@@ -15,7 +15,7 @@ import { useMediaQuery } from 'react-responsive'
 import { isValidPhoneNumber } from 'react-phone-number-input'
 import ActivityPaymentStarterPage from './ActivityPaymentStarterPage';
 import { combineValidators, isRequired } from 'revalidate';
-import { history } from '../../..';
+import { useHistory } from 'react-router-dom';
 import { LoadingComponent } from '../../../app/layout/LoadingComponent';
 import { toast } from 'react-toastify';
 import dompurify from 'dompurify';

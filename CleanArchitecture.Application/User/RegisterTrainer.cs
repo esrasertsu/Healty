@@ -69,9 +69,11 @@ namespace CleanArchitecture.Application.User
             private readonly IPhotoAccessor _photoAccessor;
             private readonly IDocumentAccessor _documentAccessor;
             private readonly IUserAccessor _userAccessor;
+            private readonly IUserCultureInfo _userCultureInfo;
 
-
-            public Handler(DataContext context, UserManager<AppUser> userManager, IJwtGenerator jwtGenerator, IPhotoAccessor photoAccessor, IDocumentAccessor documentAccessor, IUserAccessor userAccessor)
+            public Handler(DataContext context, UserManager<AppUser> userManager,
+                IJwtGenerator jwtGenerator, IPhotoAccessor photoAccessor, IDocumentAccessor documentAccessor,
+                IUserAccessor userAccessor, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _userManager = userManager;
@@ -79,6 +81,7 @@ namespace CleanArchitecture.Application.User
                 _photoAccessor = photoAccessor;
                 _documentAccessor = documentAccessor;
                 _userAccessor = userAccessor;
+                _userCultureInfo = userCultureInfo;
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -103,9 +106,9 @@ namespace CleanArchitecture.Application.User
                     user.DisplayName = request.DisplayName;
                     user.Bio = request.Description;
                     user.Dependency = request.Dependency;
-                    user.ApplicationDate = DateTime.Now;
+                    user.ApplicationDate = _userCultureInfo.GetUserLocalTime();
                     user.ExperienceYear = Convert.ToDecimal(request.ExperienceYear) > 0 ? Convert.ToDecimal(request.ExperienceYear) : user.ExperienceYear;
-                    user.LastProfileUpdatedDate = DateTime.Now;
+                    user.LastProfileUpdatedDate = _userCultureInfo.GetUserLocalTime();
                     user.Title = request.Title;
                     user.SuggestedSubCategory = request.SuggestedSubCategory;
 

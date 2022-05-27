@@ -40,14 +40,17 @@ namespace CleanArchitecture.Application.Payment
             private readonly IUserAccessor _userAccessor;
             private readonly IPaymentAccessor _paymentAccessor;
             private readonly IHttpContextAccessor _httpContextAccessor;
+            private readonly IUserCultureInfo _userCultureInfo;
 
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPaymentAccessor paymentAccessor, IHttpContextAccessor httpContextAccessor)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPaymentAccessor paymentAccessor,
+                IHttpContextAccessor httpContextAccessor, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _mapper = mapper;
                 _paymentAccessor = paymentAccessor;
                 _userAccessor = userAccessor;
                 _httpContextAccessor = httpContextAccessor;
+                _userCultureInfo = userCultureInfo;
             }
             public async Task<bool> Handle(Query request, CancellationToken cancellationToken)
             {
@@ -76,7 +79,7 @@ namespace CleanArchitecture.Application.Payment
                     user.City = city;
                     user.Name = request.Name;
                     user.Surname = request.Surname;
-                    user.LastProfileUpdatedDate = DateTime.Now;
+                    user.LastProfileUpdatedDate = _userCultureInfo.GetUserLocalTime();
 
                     success = await _context.SaveChangesAsync() > 0;
 

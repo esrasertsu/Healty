@@ -95,8 +95,8 @@ namespace CleanArchitecture.API.Controllers
         }
         
         [HttpPut("{id}/joindetails")]
-        [Authorize(Policy = "IsActivityHost")]
-        public async Task<ActionResult<Unit>> UpdateJoinDetails(UpdateJoinDetails.Command command)
+        [Authorize]
+        public async Task<ActionResult<Unit>> UpdateJoinDetails([FromForm]UpdateJoinDetails.Command command)
         {
             return await Mediator.Send(command);
         }

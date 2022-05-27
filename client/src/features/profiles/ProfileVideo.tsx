@@ -61,18 +61,23 @@ const ProfileVideo: React.FC<IProps> = ({videoUrl}) => {
                                 )
                               }
                               </>
-                            :
-                            isCurrentUser ? <Button circular color='red' content={<span>Video Ekle <Icon name='youtube'></Icon></span>}  size='mini'
-                            onClick={()=>
-                                openModal("Video Yükleme",
-                                <ProfileVideoUploadForm  url="" closeModal={closeModal} />,false,null, undefined, true)}
-                            ></Button>
+                           
                             
                         </Grid.Column>
                 </Grid>
        </Segment>
        : 
-         <div className='notFoundText'><Icon name="meh outline" />Henüz bu uzmana ait bir tanıtım videosu bulunmamaktadır.</div>
+      isCurrentUser ?
+        <> <Button circular color='red' content={<span>Video Ekle <Icon name='youtube'></Icon></span>}  size='mini'
+                            onClick={()=>
+                                openModal("Video Yükleme",
+                                <ProfileVideoUploadForm  url="" closeModal={closeModal} />,false,null, undefined, true)}
+                            ></Button>
+                            <div className='notFoundText'><Icon name="meh outline" />Henüz bu uzmana ait bir tanıtım videosu bulunmamaktadır.</div>
+          </>:
+            <div className='notFoundText'><Icon name="meh outline" />Henüz bu uzmana ait bir tanıtım videosu bulunmamaktadır.</div>
+         
+         
 
     )
 }

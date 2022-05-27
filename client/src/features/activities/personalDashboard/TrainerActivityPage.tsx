@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { SemanticICONS } from 'semantic-ui-react/dist/commonjs/generic';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import LoginForm from '../../user/LoginForm';
-import { history } from '../../..';
+import { useHistory } from 'react-router-dom';
 import ActivityListItemPlaceholder from '../dashboard/ActivityListItemPlaceHolder';
 import { ActivityStatus } from '../../../app/models/activity';
 
@@ -17,7 +17,7 @@ interface IProps{
 }
 
 const TrainerActivityPage: React.FC<IProps> = ({settings}) => {
-
+  const history = useHistory();
   const rootStore = useContext(RootStoreContext);
   const { getTrainerActivities, personalActivityList, setPersonalActivityPage, personalActivityPage,clearPersonalActRegistery, totalPersonalActPages, loadingActivity,
     personalActStatus, setPersonalActStatus } = rootStore.activityStore;

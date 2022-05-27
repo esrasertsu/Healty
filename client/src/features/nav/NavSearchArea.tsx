@@ -3,11 +3,11 @@ import {  Search } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
-import { history } from '../../index'
+import { useHistory } from 'react-router-dom';
 
 
  const NavSearchArea = () => {
-
+  const history = useHistory();
     const rootStore = useContext(RootStoreContext);
     const {setProfileFilterForm,profileFilterForm,clearPopularProfileRegistery,clearProfileRegistery,
       navSearchValue, setNavSearchValue, setPage,loadPopularProfiles,setprofileSearchAreaValue} = rootStore.profileStore;

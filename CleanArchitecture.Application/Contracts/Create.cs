@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Domain;
+﻿using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using MediatR;
 using System;
@@ -21,10 +22,12 @@ namespace CleanArchitecture.Application.Contracts
         public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
+            private readonly IUserCultureInfo _userCultureInfo;
 
-            public Handler(DataContext context)
+            public Handler(DataContext context,  IUserCultureInfo userCultureInfo)
             {
                 _context = context;
+                _userCultureInfo = userCultureInfo;
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -33,7 +36,7 @@ namespace CleanArchitecture.Application.Contracts
                 {
                     Title = request.Name,
                     Code = request.Code,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = _userCultureInfo.GetUserLocalTime(),
                     Status = false
                 };
 

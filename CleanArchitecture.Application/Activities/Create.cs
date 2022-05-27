@@ -62,17 +62,20 @@ namespace CleanArchitecture.Application.Activities
             private readonly IPhotoAccessor _photoAccessor;
             private readonly IMapper _mapper;
             private readonly IActivityReader _activityReader;
+            private readonly IUserCultureInfo _userCultureInfo;
 
-
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPhotoAccessor photoAccessor, IActivityReader activityReader)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPhotoAccessor photoAccessor, IActivityReader activityReader, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _mapper = mapper;
                 _userAccessor = userAccessor;
                 _photoAccessor = photoAccessor;
                 _activityReader = activityReader;
+                _userCultureInfo = userCultureInfo;
             }
 
+           
+         
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
 
@@ -85,15 +88,15 @@ namespace CleanArchitecture.Application.Activities
                     Title = request.Title,
                     Description = request.Description,
                     Address = request.Address,
-                    Date = DateTime.Parse(request.Date),
-                    EndDate = DateTime.Parse(request.EndDate),
+                    Date = _userCultureInfo.ConvertToLocalTime(request.Date),
+                    EndDate = _userCultureInfo.ConvertToLocalTime(request.EndDate),
                     Duration = string.IsNullOrEmpty(request.Duration) ? 0 : Convert.ToInt32(request.Duration),
                     Venue = request.Venue,
                     AttendancyLimit = string.IsNullOrEmpty(request.AttendancyLimit) ? 0 : Convert.ToInt32(request.AttendancyLimit),
                     AttendanceCount = 0,
                     Price = string.IsNullOrEmpty(request.Price) ? 0 : Convert.ToDecimal(request.Price),
                     Online = request.Online,
-                    CreationDate = DateTime.Now,
+                    CreationDate = _userCultureInfo.GetUserLocalTime(),
                     Status = ActivityStatus.UnderReview
                      
                 };
@@ -179,7 +182,7 @@ namespace CleanArchitecture.Application.Activities
                 {
                     AppUser = user,
                     IsHost = true,
-                    DateJoined = DateTime.Now,
+                    DateJoined = _userCultureInfo.GetUserLocalTime(),
                     ShowName = true
                 };
 

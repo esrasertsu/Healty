@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -65,15 +66,17 @@ namespace CleanArchitecture.Application.Activities
             private readonly IPhotoAccessor _photoAccessor;
             private readonly IMapper _mapper;
             private readonly IActivityReader _activityReader;
+            private readonly IUserCultureInfo _userCultureInfo;
 
-
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPhotoAccessor photoAccessor, IActivityReader activityReader)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IPhotoAccessor photoAccessor,
+                IActivityReader activityReader, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _mapper = mapper;
                 _userAccessor = userAccessor;
                 _photoAccessor = photoAccessor;
                 _activityReader = activityReader;
+                _userCultureInfo = userCultureInfo;
             }
 
 
@@ -231,19 +234,17 @@ namespace CleanArchitecture.Application.Activities
 
                 //}
 
-
-
                 activity.Title = request.Title;
                 activity.Description = request.Description ?? activity.Description;
-                activity.Date = DateTime.Parse(request.Date);
-                activity.EndDate = DateTime.Parse(request.EndDate);
+                activity.Date = _userCultureInfo.ConvertToLocalTime(request.Date);
+                activity.EndDate =_userCultureInfo.ConvertToLocalTime(request.EndDate);
                 activity.Duration = String.IsNullOrEmpty(request.Duration) ? 0 : Convert.ToInt32(request.Duration);
                 activity.Address = request.Address;
                 activity.Venue = request.Venue;
                 activity.AttendancyLimit = String.IsNullOrEmpty(request.AttendancyLimit) ? 0 : Convert.ToInt32(request.AttendancyLimit);
                 activity.Price = String.IsNullOrEmpty(request.Price) ? 0 : Convert.ToDecimal(request.Price);
                 activity.Online = Convert.ToBoolean(request.Online);
-                activity.LastUpdateDate = DateTime.Now;
+                activity.LastUpdateDate = _userCultureInfo.GetUserLocalTime();
 
                // _context.Activities.Update(activity);
                 var success = await _context.SaveChangesAsync() > 0;

@@ -125,7 +125,7 @@ import { Helmet } from 'react-helmet-async';
            Rezervasyonumu iptal edeceğim, iade alabilir miyim?
            </Header>
            <p>
-           Rezervasyon yaptırdığınız aktivite ile ilgili iptal iade koşulları aldığınız ürün içeriğinde yer almaktadır. Bu bilgilere göre, tam veya kısmi iade alabilirsiniz. Belirtilen koşulların harici gelen iptal taleplerinde, iade işlemi gerçekleşmez ama genel olarak söylemek gerekirse; birçok üründe aktivite tarihine iki gün kalaya kadar kesintisiz iadeli olarak rezervasyonunuzu iptal edebilirsiniz.
+           Rezervasyon yaptırdığınız aktivite tarihine 24 saat kalaya kadar kesintisiz iadeli olarak rezervasyonunuzu iptal edebilirsiniz.
            </p>
            <Header as='h2'  style={{fontSize:"22px",width:"100%",textShadow: "1.5px 1.5px #f2f2f2", marginBottom:"20px" }}>
            İptal/İade koşullarına uymadığı için iade talebim reddedildi. Ne yapabilirim?

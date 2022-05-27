@@ -7,7 +7,7 @@ import { Form as FinalForm, Field} from 'react-final-form';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
 import InfiniteScroll from 'react-infinite-scroller';
 import Scrollbars from 'react-custom-scrollbars';
-import { history } from '../..';
+import { useHistory } from 'react-router-dom';
 import tr  from 'date-fns/locale/tr'
 import { useMediaQuery } from 'react-responsive'
 
@@ -15,6 +15,7 @@ interface IProps{
     setshowChatRoomList:(value:boolean) => void;
   }
 const MessageChat: React.FC<IProps> = ({setshowChatRoomList}) => {
+    const history = useHistory();
     const rootStore = useContext(RootStoreContext);
     const { messagesByDate, setPage,loadMessages ,page, totalPages ,chatRoomId,addComment, chatRooms} = rootStore.messageStore;
     const [loadingNext, setLoadingNext] = useState(false);

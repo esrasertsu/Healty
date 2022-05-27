@@ -48,7 +48,7 @@
       font-size: 25px;
       background: white;
       transition: all .3s ease;
-  
+      padding: 0 !important;
       &.active {
         background: #318cfc;
         color: white;

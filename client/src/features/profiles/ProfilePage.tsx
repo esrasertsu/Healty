@@ -14,7 +14,7 @@ import ProfileHeader from './ProfileHeader'
 import ProfileMessage from './ProfileMessage'
 import  ProfileReferances  from './ProfileReferances'
 import { ProfileRefPlaceholder } from './ProfileRefPlaceholder'
-import { history } from '../../';
+import { useHistory } from 'react-router-dom';
 import {Button, ButtonGroup, Reveal} from 'semantic-ui-react';
 import ProfileVideo from './ProfileVideo'
 import { useMediaQuery } from 'react-responsive'
@@ -26,7 +26,7 @@ interface RouteParams {
 interface IProps extends RouteComponentProps<RouteParams> {}
 
 const ProfilePage: React.FC<IProps> = ({match}) => {
-
+  const history = useHistory();
     const rootStore = useContext(RootStoreContext);
     const {setProfileNull,loadingProfile, loadProfile, loadingBlogs, loadingComments, loadingReferencePics, profile, follow,
          unfollow, isCurrentUser, loading,setActiveTab, setProfileForm, referencePics} = rootStore.profileStore;

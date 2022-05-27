@@ -28,13 +28,14 @@ namespace CleanArchitecture.Application.Activities
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
             private readonly IMapper _mapper;
+            private readonly IUserCultureInfo _userCultureInfo;
 
-
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _mapper = mapper;
                 _userAccessor = userAccessor;
+                _userCultureInfo = userCultureInfo;
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -58,7 +59,7 @@ namespace CleanArchitecture.Application.Activities
                     Activity = activity,
                     StarCount = request.StarCount,
                     Body = request.Body,
-                    CreatedAt = DateTime.Now,
+                    CreatedAt = _userCultureInfo.GetUserLocalTime(),
                     AllowDisplayName = request.AllowDisplayName,
                     Status = false
                 };

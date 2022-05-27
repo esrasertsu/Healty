@@ -27,13 +27,15 @@ namespace CleanArchitecture.Application.User
             private readonly UserManager<AppUser> _userManager;
             private readonly IJwtGenerator _jwtGenerator;
             private readonly IUserAccessor _userAccessor;
-
-            public Handler(DataContext context,UserManager<AppUser> userManager, IJwtGenerator jwtGenerator, IUserAccessor userAccessor)
+            private readonly IUserCultureInfo _userCultureInfo;
+            public Handler(DataContext context,UserManager<AppUser> userManager, IJwtGenerator jwtGenerator, IUserAccessor userAccessor,
+                  IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _userManager = userManager;
                 _jwtGenerator = jwtGenerator;
                 _userAccessor = userAccessor;
+                _userCultureInfo = userCultureInfo;
             }
 
             public async Task<User> Handle(Command request, CancellationToken cancellationToken)
@@ -59,7 +61,7 @@ namespace CleanArchitecture.Application.User
                     var inactiveTokens = user.RefreshTokens.Where(t => !t.Token.Equals(oldToken.Token)).ToList();
                     foreach (var token in inactiveTokens)
                     {
-                        if (DateTime.UtcNow - token.LastRefreshed > TimeSpan.FromMinutes(9))
+                        if (_userCultureInfo.GetUserLocalTime() - token.LastRefreshed > TimeSpan.FromMinutes(9))
                         {
                             _context.RefreshTokens.Remove(token);
                         }
@@ -67,7 +69,7 @@ namespace CleanArchitecture.Application.User
 
                     if (oldToken != null)
                     {
-                        oldToken.Revoked = DateTime.UtcNow;
+                        oldToken.Revoked =_userCultureInfo.GetUserLocalTime();
                     }
                 }
               

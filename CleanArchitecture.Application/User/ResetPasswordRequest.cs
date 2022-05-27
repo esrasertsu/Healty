@@ -46,7 +46,7 @@ namespace CleanArchitecture.Application.User
                     throw new RestException(HttpStatusCode.BadRequest, new { Email = "Geçersiz giriş." });
                 }
 
-                var user = await _userManager.FindByEmailAsync(request.Email);
+                var user = await _userManager.FindByEmailAsync(request.Email.Trim());
 
                 if (user == null)
                     return false;

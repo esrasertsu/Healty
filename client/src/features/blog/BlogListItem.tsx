@@ -1,17 +1,17 @@
 import React from 'react';
 import { Card, Image, Icon} from 'semantic-ui-react';
-import { history } from '../../index'
 import { IBlog } from '../../app/models/blog';
 import { format } from 'date-fns';
 import dompurify from 'dompurify';
 import tr  from 'date-fns/locale/tr'
+import { useHistory } from 'react-router-dom';
 
 interface IProps {
     blog: IBlog
 }
 
 const BlogListItem: React.FC<IProps> = ({blog}) => {
-
+  const history = useHistory();
   const sanitizer = dompurify.sanitize;
 
   return (

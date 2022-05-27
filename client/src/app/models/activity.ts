@@ -34,7 +34,10 @@ export interface IActivity {
     photos: IPhoto[],
     videos: IPhoto[],
     mainImage: IPhoto,
-    channelName: string,
+    channelName: string,//eski
+    hostUrl: string,
+    viewUrl: string, 
+    roomTitle: string, 
     star:number,
     starCount: number,
     status: any,
@@ -59,6 +62,9 @@ export interface IPersonalActivity {
     endDate: Date;
     duration:number;
     city: ICity,
+    hostUrl: string,
+    viewUrl: string, 
+    roomTitle: string, 
     attendanceCount:number;
     attendancyLimit:number;
     price?:number;

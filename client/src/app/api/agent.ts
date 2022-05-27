@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
 import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, IActivityReview, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IPersonalActivitiesEnvelope, IRefundPayment, PaymentThreeDResult } from '../models/activity';
-import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IAccountInfo, IAccountInfoValues, ISubMerchantInfo, ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues, IyziSubMerchantResponse } from '../models/user';
 import { IAccessibility, IDocument, IPhoto, IProfile, IProfileBlogsEnvelope, IProfileComment, IProfileCommentEnvelope, IProfileEnvelope, IProfileFormValues, IRefencePic } from '../models/profile';
@@ -9,6 +8,7 @@ import { IAllCategoryList, ICategory, ISubCategory } from '../models/category';
 import { IChatRoom, IMessage, IMessageEnvelope, IMessageForm } from '../models/message';
 import { ICity } from '../models/location';
 import { IOrderListEnvelope } from '../models/order';
+import { history } from '../..';
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -23,6 +23,7 @@ axios.interceptors.request.use((config) => {
 })
 
 axios.interceptors.response.use(undefined, error => {
+
     if(error.message === 'Network Error' && !error.response)
     {
         toast.error('Network error - Sunucu bağlantı hatası!');//make sure API is running!

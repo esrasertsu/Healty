@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import Scrollbars from 'react-custom-scrollbars';
 import tr  from 'date-fns/locale/tr';
 import { useMediaQuery } from 'react-responsive'
-import { history } from '../..';
+import { useHistory } from 'react-router-dom';
 
 const styles = {
   color:"#000"
@@ -18,7 +18,7 @@ interface IProps{
 }
 
 const ChatRoomList: React.FC<IProps> = ({setshowChatRoomList}) => {
-
+  const history = useHistory();
     const rootStore = useContext(RootStoreContext);
     const {loadingChatRooms, chatRooms,chatRoomId,setChatRoomId } = rootStore.messageStore;
     const [activeChatRoomIndex, setActiveChatRoomIndex] = useState<string|null>(null)

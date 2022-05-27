@@ -3,9 +3,9 @@ import { toast } from "react-toastify";
 import agent from "../api/agent";
 import { BlogUpdateFormValues, IBlog, IBlogUpdateFormValues, IPostFormValues } from "../models/blog";
 import { RootStore } from "./rootStore";
-import { history } from '../..';
 import { SyntheticEvent } from 'react';
 import { IProfileBlog } from "../models/profile";
+import { history } from "../..";
 
 const LIMIT = 9;
 

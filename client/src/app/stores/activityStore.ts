@@ -2,13 +2,12 @@ import { HttpTransportType, HubConnection, HubConnectionBuilder, JsonHubProtocol
 import {observable, action, computed, runInAction, reaction, toJS,makeObservable} from 'mobx';
 import { SyntheticEvent } from 'react';
 import { toast } from 'react-toastify';
-import { history } from '../..';
-import ProfileDashboardPopularProfiles from '../../features/profiles/ProfileDashboardPopularProfiles';
 import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
 import { ActivityFormValues, ActivityOnlineJoinInfo, ActivityStatus, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, IActivityReview, IActivitySelectedFilter, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IPersonalActivity, PaymentUserInfoDetails } from '../models/activity';
 import { ICategory, ISubCategory } from '../models/category';
 import { RootStore } from './rootStore';
+import { history } from '../..';
 
 const LIMIT = 6;
 export default class ActivityStore {
@@ -510,6 +509,7 @@ export default class ActivityStore {
             this.activityRegistery.set(activity.id, activityReturned);
             this.activity = activityReturned;
             this.submitting = false;
+            
             history.push(`/activities/${activity.id}`);
 
             });

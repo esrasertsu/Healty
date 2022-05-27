@@ -13,7 +13,7 @@ import { useMediaQuery } from 'react-responsive'
 import { action, runInAction } from 'mobx';
 import ReCAPTCHA from "react-google-recaptcha";
 import PhoneNumberInput from '../../app/common/form/PhoneNumberInput';
-import { history } from '../..';
+import { useHistory } from 'react-router-dom';
 import agent from '../../app/api/agent';
 import { toast } from 'react-toastify';
 import OtpInput from 'react-otp-input';
@@ -269,6 +269,9 @@ const FormPage1:React.FC = () =>{
           }
           if (!values.email) {
             errors.email = 'Email zorunlu alan'
+          }
+          if (values.username && (!/^[A-Za-z0-9]*$/.test(values.username) || /^[0-9]+$/.test(values.username))) {
+            errors.username = 'Kullanıcı adı boşluk içermemelidir, en az 1 harf ve istenirse rakam içermelidir.'
           }
 
           if(!values.email || !/.+@.+\.[A-Za-z]+$/.test(values.email))

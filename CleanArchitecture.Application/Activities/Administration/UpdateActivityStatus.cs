@@ -27,13 +27,13 @@ namespace CleanArchitecture.Application.Activities.Administration
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
             private readonly UserManager<AppUser> _userManager;
-
-            public Handler(DataContext context, UserManager<AppUser> userManager, IUserAccessor userAccessor)
+            private readonly IUserCultureInfo _userCultureInfo;
+            public Handler(DataContext context, UserManager<AppUser> userManager, IUserAccessor userAccessor, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _userAccessor = userAccessor;
                 _userManager = userManager;
-
+                _userCultureInfo = userCultureInfo;
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -61,13 +61,13 @@ namespace CleanArchitecture.Application.Activities.Administration
                     {
 
                         activity.Status = (ActivityStatus)status;
-                        activity.LastUpdateDate = DateTime.Now;
+                        activity.LastUpdateDate = _userCultureInfo.GetUserLocalTime();
 
-                        if((ActivityStatus)status == ActivityStatus.TrainerCompleteApproved)
-                            activity.TrainerApprovedDate =  DateTime.Now;
+                        if ((ActivityStatus)status == ActivityStatus.TrainerCompleteApproved)
+                            activity.TrainerApprovedDate =  _userCultureInfo.GetUserLocalTime();
 
                         if ((ActivityStatus)status == ActivityStatus.AdminPaymentDisapproved && (ActivityStatus)status == ActivityStatus.AdminPaymentApproved && user.Role == Role.Admin)
-                            activity.AdminApprovedDate =  DateTime.Now;
+                            activity.AdminApprovedDate = _userCultureInfo.GetUserLocalTime();
 
                         var result = await _context.SaveChangesAsync() > 0;
                         if (result)

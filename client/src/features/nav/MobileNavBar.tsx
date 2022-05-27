@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
 import { Menu, Container, Image, Dropdown, Label, Icon } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
-import {history} from '../../index';
 import NavSearchArea from './NavSearchArea';
 import { useMediaQuery } from 'react-responsive'
 
@@ -18,7 +17,7 @@ const MobileNavBar: React.FC<IProps> = ({setVisibleMobileNav,visible}) => {
     const rootStore = useContext(RootStoreContext);
     const { activeMenu,setActiveMenu } = rootStore.commonStore;
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
-
+    const history = useHistory();
     return (
       <>
       {

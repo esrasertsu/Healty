@@ -1,8 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useState } from 'react'
-import { Route, RouteComponentProps, RouteProps } from 'react-router-dom'
+import { Route, RouteComponentProps, RouteProps, useHistory } from 'react-router-dom'
 import { Container, Image, Modal, Segment } from 'semantic-ui-react';
-import { history } from '../../index';
 import  LoginForm from '../../features/user/LoginForm';
 import {RootStoreContext} from '../stores/rootStore';
 
@@ -14,7 +13,7 @@ interface IProps extends RouteProps{
     const {isLoggedIn} = rootStore.userStore;
    const [open, setOpen] = useState(true);
 
-
+   const history = useHistory();
 
     return (
         <Route

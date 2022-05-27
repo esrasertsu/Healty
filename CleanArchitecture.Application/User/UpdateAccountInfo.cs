@@ -38,15 +38,16 @@ namespace CleanArchitecture.Application.User
                 private readonly IUserAccessor _userAccessor;
                 private readonly IDocumentAccessor _documentAccessor;
                 private readonly UserManager<AppUser> _userManager;
+                private readonly IUserCultureInfo _userCultureInfo;
 
-
-                public Handler(DataContext context, IUserAccessor userAccessor, IDocumentAccessor documentAccessor, UserManager<AppUser> userManager)
+                public Handler(DataContext context, IUserAccessor userAccessor, IDocumentAccessor documentAccessor,
+                    UserManager<AppUser> userManager ,IUserCultureInfo userCultureInfo)
                 {
                     _context = context;
                     _userAccessor = userAccessor;
                     _documentAccessor = documentAccessor;
                     _userManager = userManager;
-
+                    _userCultureInfo = userCultureInfo;
                 }
 
                 public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -69,7 +70,7 @@ namespace CleanArchitecture.Application.User
                     user.DisplayName = request.DisplayName;
                     user.UserName = request.UserName;
                     user.Email = request.Email;
-                    user.LastProfileUpdatedDate = DateTime.Now;
+                    user.LastProfileUpdatedDate = _userCultureInfo.GetUserLocalTime();
 
                     try
                     {

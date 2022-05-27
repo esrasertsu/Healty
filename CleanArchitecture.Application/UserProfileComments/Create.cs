@@ -28,13 +28,14 @@ namespace CleanArchitecture.Application.UserProfileComments
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
             private readonly IMapper _mapper;
+            private readonly IUserCultureInfo _userCultureInfo;
 
-
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
                 _mapper = mapper;
                 _userAccessor = userAccessor;
+                _userCultureInfo = userCultureInfo;
             }
 
             public async Task<UserProfileCommentDto> Handle(Command request, CancellationToken cancellationToken)
@@ -57,7 +58,7 @@ namespace CleanArchitecture.Application.UserProfileComments
                     StarCount = request.StarCount,
                     AllowDisplayName = request.AllowDisplayName,
                     Body = request.Body,
-                    CreatedAt = DateTime.Now,
+                    CreatedAt = _userCultureInfo.GetUserLocalTime(),
                     Status = false
                 };
 

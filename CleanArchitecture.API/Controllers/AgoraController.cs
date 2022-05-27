@@ -23,6 +23,5 @@ namespace CleanArchitecture.API.Controllers
         {
             return await Mediator.Send(new CanCreateAgoraMeeting.Query { ActivityId = activityId, UserName = userName , Token = token});
         }
-
     }
 }

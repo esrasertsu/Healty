@@ -7,13 +7,13 @@ import { useMediaQuery } from 'react-responsive'
 import tr  from 'date-fns/locale/tr'
 import { IActivity } from '../../../app/models/activity';
 import { RootStoreContext } from '../../../app/stores/rootStore';
-import { history } from '../../..';
+import { useHistory } from 'react-router-dom';
 import LoginForm from '../../user/LoginForm';
 import { BsFillBookmarkStarFill } from 'react-icons/bs';
 
 
 const ActivitySuggestions:React.FC<{activity:IActivity}> = ({activity}) => {
-
+  const history = useHistory();
   const rootStore = useContext(RootStoreContext);
   const { activitySuggestions} = rootStore.activityStore;
   const isMobile = useMediaQuery({ query: '(max-width: 500px)' })

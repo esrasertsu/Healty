@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using CleanArchitecture.Application.Errors;
+using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -22,9 +23,11 @@ namespace CleanArchitecture.Application.Profiles
         public class Handler : IRequestHandler<Query, List<UserActivityDto>>
         {
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IUserCultureInfo _userCultureInfo;
+            public Handler(DataContext context, IUserCultureInfo userCultureInfo)
             {
                 _context = context;
+                _userCultureInfo = userCultureInfo;
             }
 
             public async Task<List<UserActivityDto>> Handle(Query request,
@@ -44,8 +47,8 @@ namespace CleanArchitecture.Application.Profiles
                     case "past":
                         {
                             if (user.Role == Domain.Role.Trainer)
-                                queryable = queryable.Where(a => a.Activity.Date <= DateTime.Now && a.IsHost);
-                            else queryable = queryable.Where(a => a.Activity.Date <= DateTime.Now);
+                                queryable = queryable.Where(a => a.Activity.Date <= _userCultureInfo.GetUserLocalTime() && a.IsHost);
+                            else queryable = queryable.Where(a => a.Activity.Date <= _userCultureInfo.GetUserLocalTime());
                         }
                         break;
                     case "hosting":
@@ -54,8 +57,8 @@ namespace CleanArchitecture.Application.Profiles
                     default:
                         {
                             if (user.Role == Domain.Role.Trainer)
-                                queryable = queryable.Where(a => a.Activity.Date >= DateTime.Now && a.IsHost);
-                            else queryable = queryable.Where(a => a.Activity.Date >= DateTime.Now);
+                                queryable = queryable.Where(a => a.Activity.Date >= _userCultureInfo.GetUserLocalTime() && a.IsHost);
+                            else queryable = queryable.Where(a => a.Activity.Date >= _userCultureInfo.GetUserLocalTime());
                         }
                         break;
                 }

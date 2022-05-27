@@ -2,15 +2,15 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Button, Container, Header, Segment, Image, Grid, Icon, Modal } from 'semantic-ui-react'
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { Helmet } from 'react-helmet-async';
-import { history } from '../../index'
 import { useMediaQuery } from 'react-responsive'
 import ActivitySearchArea from './ActivitySearchArea';
 import { observer } from 'mobx-react-lite';
 import ActivityListItemPlaceholder from '../activities/dashboard/ActivityListItemPlaceHolder';
 import ActivityList from '../activities/dashboard/ActivityList';
+import { useHistory } from 'react-router-dom';
 
 const HomePage = () => {
- 
+  const history = useHistory();
     const rootStore = useContext(RootStoreContext);
     const {user} = rootStore.userStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;

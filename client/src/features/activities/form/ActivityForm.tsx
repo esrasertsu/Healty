@@ -423,12 +423,12 @@ const uploadedNewImage = (file:any) =>{
                     >Aktivite Uzmanı*</label>
                     <Field
                       labelName="activityTrainer"
-                      name="TrainerUserName"
+                      name="trainerUserName"
                       placeholder="Uzman"
                       value={activityForm.trainerUserName}
                       component={TextInput}
                     />
-                      <OnChange name="TrainerUserName">
+                      <OnChange name="trainerUserName">
                     {(value, previous) => {
                           setActivityForm({...activityForm,trainerUserName: value, title:title});
                     }}

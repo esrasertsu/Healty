@@ -232,7 +232,8 @@ export interface IProfileFormValues extends Partial<IProfile>{
     categoryIds: string[],
     accessibilityIds: string[],
     cityId:string,
-    documents:File[]
+    documents:File[],
+    trainerUserName: string
 
 }
 
@@ -253,6 +254,7 @@ export class ProfileFormValues implements IProfileFormValues{
     accessibilityIds: string[] =[];
     documents:File[] = [];
     certificates: IDocument[] = [];
+    trainerUserName: string = "";
 
     constructor(init?: IProfileFormValues){
          if(init)

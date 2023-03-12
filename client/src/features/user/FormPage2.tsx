@@ -113,7 +113,6 @@ useEffect(() => {
             setTrainerForm({...trainerForm,cityId: data});
      }    
     useEffect(() => {
-      debugger;
         loadSubCatOptions();
     }, [allCategoriesOptionList,categoryIds]);
 

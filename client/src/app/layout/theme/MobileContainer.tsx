@@ -8,7 +8,7 @@ import MobileNavBar from "../../../features/nav/MobileNavBar"
 const { Media } = createMedia({
     breakpoints: {
       mobile: 0,
-      tablet: 768,
+      tablet: 820,
       computer: 1024,
     },
   })

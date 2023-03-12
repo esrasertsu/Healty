@@ -63,7 +63,7 @@ namespace CleanArchitecture.Application.Profiles
                         break;
                 }
 
-                var activities = queryable.ToList();
+                var activities = queryable.Where(x => x.Activity.Is_Active).ToList();
                 var activitiesToReturn = new List<UserActivityDto>();
 
                 foreach (var activity in activities)

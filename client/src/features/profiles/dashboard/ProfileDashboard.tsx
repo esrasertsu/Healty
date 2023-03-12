@@ -1,15 +1,15 @@
 import { observer } from 'mobx-react-lite';
 import React, { Fragment, useContext, useEffect,useState } from 'react'
 import {Button, Container, Grid, Header, Icon, Image, Label, Message, Segment, Select, Sticky } from 'semantic-ui-react'
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 import ProfileListFilters from './ProfileListFilters';
-import { profileSortingOptions } from "../../app/common/options/profileSortingOptions";
+import { profileSortingOptions } from "../../../app/common/options/profileSortingOptions";
 import ProfileListItemsPlaceholder from './ProfileListItemsPlaceholder';
 import ProfileList from './ProfileList';
 import { SemanticWIDTHS } from 'semantic-ui-react/dist/commonjs/generic';
 import { useMediaQuery } from 'react-responsive'
 import ProfileDashboardPopularProfiles from './ProfileDashboardPopularProfiles';
-import SearchArea from '../home/SearchArea';
+import SearchArea from '../../home/SearchArea';
 
 
 const threeItem:SemanticWIDTHS = 3;
@@ -163,7 +163,7 @@ const sixItem:SemanticWIDTHS = 6;
          </Container>
          <Container className="pageContainer">
 
-         {  isMobile &&
+         {  isTablet &&
                 <Segment textAlign='center' vertical className='masthead_page profileDashboard'>
                   <Container>
                   <ProfileListFilters />
@@ -172,7 +172,7 @@ const sixItem:SemanticWIDTHS = 6;
         }
 
            <div ref={contextRef}>
-        {  !isMobile &&
+        {  !isTablet &&
             <Sticky context={contextRef}>
                 <Segment textAlign='center' vertical className='masthead_page profileDashboard'>
                   <Container>

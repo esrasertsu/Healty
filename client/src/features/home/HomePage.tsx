@@ -140,7 +140,7 @@ const HomePage = () => {
         <Segment textAlign='center' vertical className='masthead' id="slideImages">
                <Container text>
                    <Header as='h1' inverted>
-                       Dilediğin kategoride aktivite ara, sağlıklı sosyalleşmenin tadını çıkar!
+                    {isMobile ? "Dilediğin kategoride aktivite ara!":"Dilediğin kategoride aktivite ara, sağlıklı sosyalleşmenin tadını çıkar!"}   
                    </Header>
                    {/* {isLoggedIn && user && token ? (  */}
                    <Fragment>
@@ -197,7 +197,7 @@ const HomePage = () => {
                 </Header> */}
           
                 <Header as='h1'  style={{fontSize: '30px',  textAlign:'center', width:"100%",textShadow: "1.5px 1.5px #f2f2f2", marginBottom:"20px" }}>
-                 Doğru uzmanı ve doğru aktiviteyi AFitApp ile keşfet! 
+                 Doğru uzmanı ve doğru aktiviteyi AfitApp ile keşfet! 
                {/* Yeni aktiviteler yeni insanlar keşfetme zamanı!*/}
                 </Header>
               <Grid className="activityListGrid">

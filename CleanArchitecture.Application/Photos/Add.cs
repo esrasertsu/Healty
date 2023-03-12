@@ -18,6 +18,7 @@ namespace CleanArchitecture.Application.Photos
         public class Command : IRequest<Photo>
         {
             public IFormFile File { get; set; }
+            public string TrainerUserName { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Photo>
@@ -36,9 +37,15 @@ namespace CleanArchitecture.Application.Photos
             public async Task<Photo> Handle(Command request, CancellationToken cancellationToken)
             {
 
+                var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
+
+                if (user.Role == Role.Admin)
+                {
+                    user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.TrainerUserName);
+                }
+
                 var photoUploadResults = _photoAccessor.AddPhoto(request.File);
 
-                var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
 
                 var photo = new Photo
                 {

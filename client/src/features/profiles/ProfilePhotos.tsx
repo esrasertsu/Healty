@@ -10,7 +10,7 @@ import { useMediaQuery } from 'react-responsive'
   const rootStore = useContext(RootStoreContext);
   const { profile, isCurrentUser, uploadPhoto , uploadingPhoto, setMainPhoto,loadingForPhotoDeleteMain,deletePhoto } = rootStore.profileStore;
   const { openModal,closeModal,modal } = rootStore.modalStore;
-
+  const { user } = rootStore.userStore;
   const [addPhotoMode, setAddPhotoMode] = useState(false);
   const [target, setTarget] = useState<string | undefined>(undefined);
 const [deleteTarget, setDeleteTarget] = useState<string | undefined>(undefined);
@@ -29,7 +29,7 @@ const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
 
 
   const handleUploadImage = (photo: Blob) => {
-    uploadPhoto(photo).then(() => {
+    uploadPhoto(photo,profile!.userName).then(() => {
       setAddPhotoMode(false);
       setOpen(false);
       setFiles([]);}
@@ -104,7 +104,7 @@ const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
             style={{fontSize:"16px"}}
             content="Fotoğraflar"
           /> }
-          {isCurrentUser && profile && profile.photos && profile.photos.length <6 && (
+          {(isCurrentUser || (user && user.role === "Admin")) && profile && profile.photos && profile.photos.length <6 && (
             <Button
               floated="left"
               basic
@@ -152,12 +152,12 @@ const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
                   <Card key={photo.id}>
                     <Image onClick={() => handlePhotoClick(photo.url)} src={photo.url} 
                      onError={(e:any)=>{e.target.onerror = null; e.target.src='/assets/user.png'}}/>
-                    {isCurrentUser && (
+                    {(isCurrentUser || (user && user.role === "Admin")) && (
                       <Button.Group fluid widths={2}>
                         <Button
                           name={photo.id}
                           onClick={(e) => {
-                            setMainPhoto(photo);
+                            setMainPhoto(photo,profile.userName);
                             setTarget(e.currentTarget.name);
                           }}
                           disabled={photo.isMain}
@@ -172,7 +172,7 @@ const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
                           disabled={photo.isMain}
                           circular
                           onClick={(e) => {
-                            deletePhoto(photo);
+                            deletePhoto(photo,profile.userName);
                             setDeleteTarget(e.currentTarget.name);
                           }}
                           loading={loadingForPhotoDeleteMain && deleteTarget === photo.id}

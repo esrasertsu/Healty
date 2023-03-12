@@ -21,7 +21,7 @@ namespace CleanArchitecture.Application.Profiles
         {
             public List<IFormFile> Photos { get; set; }
             public List<string> DeletedPhotos { get; set; }
-
+            public string TrainerUserName { get; set; }
 
         }
 
@@ -41,6 +41,11 @@ namespace CleanArchitecture.Application.Profiles
             public async Task<ReferencePic[]> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
+
+                if(user.Role == Role.Admin)
+                {
+                    user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.TrainerUserName);
+                }
 
                 if (request.Photos != null) //yeni eklenenler
                 {

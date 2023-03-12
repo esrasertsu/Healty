@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { Card, Image, Icon, Grid, Label, Modal, Popup, Button} from 'semantic-ui-react';
-import { IProfile } from '../../app/models/profile';
-import { RootStoreContext } from '../../app/stores/rootStore';
-import { StarRating } from '../../app/common/form/StarRating';
-import { colors } from '../../app/models/category';
+import { IProfile } from '../../../app/models/profile';
+import { RootStoreContext } from '../../../app/stores/rootStore';
+import { StarRating } from '../../../app/common/form/StarRating';
+import { colors } from '../../../app/models/category';
 import { observer } from 'mobx-react-lite';
-import LoginForm from '../user/LoginForm';
+import LoginForm from '../../user/LoginForm';
 import { useMediaQuery } from 'react-responsive';
 import { useHistory } from 'react-router-dom';
 
@@ -79,7 +79,7 @@ interface IProps {
 }
   return (
     <Card
-      style={{height:"100%", marginBottom:"10px", minHeight:"470px"}}
+      style={{height:"100%", marginBottom:"10px", minHeight:"500px"}}
       onClick={handleCardClick}
       key={profile.userName+Math.random()} >
         {

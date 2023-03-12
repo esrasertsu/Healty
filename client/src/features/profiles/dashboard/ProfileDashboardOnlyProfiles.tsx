@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext } from 'react'
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 import { SemanticWIDTHS } from 'semantic-ui-react/dist/commonjs/generic';
 import { useMediaQuery } from 'react-responsive'

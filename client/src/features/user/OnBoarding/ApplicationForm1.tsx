@@ -265,7 +265,7 @@ const ApplicationForm1: React.FC<IProps> = ({trainerForm,setTrainerForm,setActiv
             </OnChange>
             <label>Tecrübe (Yıl)*</label>
            <Field 
-                  width={2}
+                  width={4}
                   name="experienceYear"
                   type="number"
                   placeholder="Tecrübe (Yıl)"

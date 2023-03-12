@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext} from 'react'
 import {Grid,  Header,  Label} from 'semantic-ui-react'
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 import ProfileListItem from './ProfileListItem'
 import { useMediaQuery } from 'react-responsive';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
@@ -11,6 +11,7 @@ import 'swiper/modules/pagination/pagination.scss'; // Pagination module
 import SwiperCore, {
   Pagination,Navigation
 } from 'swiper';
+import PopularProfileItem from './PopularProfileItem';
 
 SwiperCore.use([Pagination,Navigation]);
 
@@ -41,14 +42,14 @@ SwiperCore.use([Pagination,Navigation]);
               "clickable": true
             }} 
             spaceBetween={10}
-            slidesPerView={isMobile? 1: isTablet?3 :5}
+            slidesPerView={isMobile? 1: isTablet?3 :4}
             navigation={true} 
             initialSlide={0}
         >
      {
        popularProfileList.map((pro,i) => (
         <SwiperSlide key={pro.userName+"_" +i}>
-          <ProfileListItem key={pro.userName+"_popularListItems"} profile={pro} popular={true} />
+          <PopularProfileItem key={pro.userName+"_popularListItems"} profile={pro} popular={true} />
          </SwiperSlide>
       ))
      }

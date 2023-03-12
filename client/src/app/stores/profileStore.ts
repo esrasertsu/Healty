@@ -278,6 +278,7 @@ export default class ProfileStore{
                     this.profile = profile;
                     this.loadingBlogs = true;
                     this.loadingComments = true;
+                    this.loadUserActivities(profile.userName);
                     this.loadBlogs(profile.userName);
                     this.loadComments(profile.userName);
                     this.loadUserReferencePics(profile.userName);
@@ -466,11 +467,11 @@ export default class ProfileStore{
         }
     }
 
-    @action uploadPhoto = async (file: Blob) => {
+    @action uploadPhoto = async (file: Blob,name:string) => {
         this.uploadingPhoto = true;
 
         try {
-            const photo = await agent.Profiles.uploadPhoto(file);
+            const photo = await agent.Profiles.uploadPhoto(file,name);
             runInAction(() => {
                 if(this.profile)
                 {
@@ -494,11 +495,11 @@ export default class ProfileStore{
         }
     }
 
-    @action uploadCoverPic = async (file: Blob,setImageChange: React.Dispatch<React.SetStateAction<boolean>>) => {
+    @action uploadCoverPic = async (file: Blob,setImageChange: React.Dispatch<React.SetStateAction<boolean>>, name:string) => {
         this.uploadingCoverImage = true;
 
         try {
-            const photo = await agent.Profiles.uploadCoverPic(file);
+            const photo = await agent.Profiles.uploadCoverPic(file,name);
             runInAction(() => {
                 if(this.profile)
                 {
@@ -528,11 +529,11 @@ export default class ProfileStore{
     }
 
 
-    @action setMainPhoto = async (photo: IPhoto) => {
+    @action setMainPhoto = async (photo: IPhoto, name: string) => {
         this.loadingForPhotoDeleteMain = true;
 
         try {
-            await agent.Profiles.setMainPhoto(photo.id);
+            await agent.Profiles.setMainPhoto(photo.id, name);
             runInAction(() => {
                 this.rootStore.userStore.user!.image = photo.url;
                 this.profile!.photos.find(e => e.isMain)!.isMain = false;
@@ -551,11 +552,11 @@ export default class ProfileStore{
         }
     }
 
-    @action deletePhoto = async (photo: IPhoto) => {
+    @action deletePhoto = async (photo: IPhoto, name: string) => {
         this.loadingForPhotoDeleteMain = true;
 
         try {
-            await agent.Profiles.deletePhoto(photo.id);
+            await agent.Profiles.deletePhoto(photo.id, name);
             runInAction(() => {
                 
                     this.profile!.photos = this.profile!.photos.filter(e => e.id !== photo.id);
@@ -572,10 +573,10 @@ export default class ProfileStore{
         }
     }
 
-    @action uploadProfileVideo = async (url: string) =>{
+    @action uploadProfileVideo = async (url: string, name:string) =>{
         this.submittingVideo = true;
         try {
-            var result = await agent.Profiles.uploadProfileVideo(url);
+            var result = await agent.Profiles.uploadProfileVideo(url, name);
             runInAction( () => {
                 this.profile!.videoUrl =url;
                 this.submittingVideo = false;
@@ -656,12 +657,23 @@ export default class ProfileStore{
         }
     }
 
+
+    groupActivitiesByDate = (activities:IUserActivity[]) : {[key:string]:IUserActivity[]} =>{
+    return activities.reduce((accs,activity) =>{
+         const date = activity.date.toISOString().split('T')[0];
+         accs[date] = accs[date] ? [...accs[date],activity] : [activity]
+        return accs;
+       },{} as {[key:string]:IUserActivity[]})
+    }
+
     @action loadUserActivities = async (username: string, predicate?: string) => {
         this.loadingActivities = true;
         try {
             
             const activities = await agent.Profiles.listActivities(username, predicate!);
             runInAction(() =>{
+                const a = this.groupActivitiesByDate(activities);
+                debugger;
                 this.userActivities = activities;
                 this.loadingActivities = false;
             })
@@ -736,7 +748,7 @@ export default class ProfileStore{
         this.setuploadingReferencePics(true);
 
         try {
-            const pics = await agent.Profiles.updateReferencePics(photos,deletedPhotos);
+            const pics = await agent.Profiles.updateReferencePics(photos,deletedPhotos, this.profile!.userName);
             runInAction(() => {
                 if(this.profile)
                 {

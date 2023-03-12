@@ -18,16 +18,16 @@ namespace CleanArchitecture.API.Controllers
             return await Mediator.Send(command);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Unit>> Delete(string id)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Unit>> Delete([FromForm] Delete.Command command)
         {
-            return await Mediator.Send(new Delete.Command { Id = id});
+            return await Mediator.Send(command);
         }
 
         [HttpPost("{id}/setmain")]
-        public async Task<ActionResult<Unit>> SetMain(string id)
+        public async Task<ActionResult<Unit>> SetMain([FromForm] SetMain.Command command)
         {
-            return await Mediator.Send(new SetMain.Command { Id = id });
+            return await Mediator.Send(command);
         }
 
     }

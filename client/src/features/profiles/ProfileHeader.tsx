@@ -50,7 +50,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
   const rootStore = useContext(RootStoreContext);
   const { uploadCoverPic,uploadingCoverImage } = rootStore.profileStore;
   const {openModal,closeModal,modal} = rootStore.modalStore;
-  const {isLoggedIn } = rootStore.userStore;
+  const {isLoggedIn ,user} = rootStore.userStore;
 
   const [imageChange, setImageChange] = useState(false);
   const [imageDeleted, setImageDeleted] = useState(false);
@@ -119,7 +119,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                
                   files.length === 0 ? 
                   (
-                    isCurrentUser ? 
+                    (isCurrentUser || (user && user.role === "Admin")) ? 
                     <PhotoWidgetDropzone setFiles={setFiles} /> 
                     :
                     <Segment style={{padding:'0', margin:'0', height:"300px"}}  className="coverImage">
@@ -137,7 +137,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                     setImageChange(false); setImageDeleted(false); setFiles([])}}>Değişiklikleri geri al <Icon name="backward"></Icon> </Label>   
                      {image && <Label color="green" style={{ cursor:"pointer"}} onClick={()=> {
                      
-                      uploadCoverPic(image!,setImageChange).then(() => {
+                      uploadCoverPic(image!,setImageChange,profile.userName).then(() => {
                       setImageDeleted(false); setFiles([])
                     }) 
                     }}>Kaydet <Icon name="save"></Icon> </Label>  } 
@@ -153,7 +153,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
                
          }  
         {
-          !imageChange && isCurrentUser && profile.coverImage !== null &&
+          !imageChange && (isCurrentUser || (user && user.role === "Admin")) && profile.coverImage !== null &&
           <div style={activityImageTextStyle}>
           <Label style={{cursor:"pointer"}} 
           circular className='blueBtn'
@@ -265,7 +265,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
           //   </Reveal.Content>
           // </Reveal>
           }
-          {isCurrentUser && (profile.role === "Trainer" ||  profile.role === "Admin") &&
+          {(isCurrentUser || (user && user.role === "Admin"))  && (profile.role === "Trainer" ||  profile.role === "Admin") &&
             <>
             <Button
               circular

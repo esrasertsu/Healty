@@ -22,7 +22,7 @@ const validate = combineValidators({
   const rootStore = useContext(RootStoreContext);
 
   const {
-    uploadProfileVideo
+    uploadProfileVideo, profile
   } = rootStore.profileStore;
 
     const [rating, setRating] = useState(0);
@@ -30,7 +30,7 @@ const validate = combineValidators({
     
     const handleFinalFormSubmit = async (video: IVideoUploadParam) => {
   if(video!.url)
-           await uploadProfileVideo(video!.url);
+           await uploadProfileVideo(video!.url, profile!.userName);
     };
 
     return (

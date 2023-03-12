@@ -31,6 +31,9 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
     const rootStore = useContext(RootStoreContext);
     const {accessibilities, profileForm, setProfileForm, updatingProfile} = rootStore.profileStore;
     const {cities} = rootStore.commonStore;
+    const {allCategoriesOptionList} = rootStore.categoryStore;
+    const subCategoryOptionFilteredList: ICategory[] = [];
+    const [subCategoryOptions, setSubCategoryOptions] = useState<ICategory[]>([]);
 
     const [updateEnabled, setUpdateEnabled] = useState<boolean>(false);
 
@@ -39,21 +42,14 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
          setUpdateEnabled(true);
         }
 
-    //    const handleCategoryChanged = (e: any, data: string[]) => {
-    //     setProfileForm({...profileForm,categoryIds: [...data]});
-    //     setCategory(data);  
-    //     if((profile.categories.filter(x => data.findIndex(y => y !== x.key) === -1).length > 0) ||
-    //     (data.filter(x => profile.categories.findIndex(y => y.key !== x) === -1).length > 0))
-    //        setUpdateEnabled(true);
-    //  }
 
-    //  const handleSubCategoryChanged = (e: any, data: string[]) => {  
-    //       setProfileForm({...profileForm,subCategoryIds: [...data]});
+     const handleSubCategoryChanged = (e: any, data: string[]) => {  
+          setProfileForm({...profileForm,subCategoryIds: [...data]});
 
-    //       if((profile.subCategories.filter(x => data.findIndex(y => y !== x.key) === -1).length > 0) ||
-    //         (data.filter(x => profile.subCategories.findIndex(y => y.key !== x) === -1).length > 0))
-    //         setUpdateEnabled(true);
-    //    }
+          if((profile.subCategories.filter(x => data.findIndex(y => y !== x.key) === -1).length > 0) ||
+            (data.filter(x => profile.subCategories.findIndex(y => y.key !== x) === -1).length > 0))
+            setUpdateEnabled(true);
+       }
 
        const handleCityChanged = (e: any, data: string) => {  
         setProfileForm({...profileForm,cityId: data});
@@ -63,23 +59,23 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
 
    
 
-  //    const loadSubCatOptions = () =>{
-  //     allCategoriesOptionList.filter(x=> profileForm!.categoryIds.findIndex(y=> y === x.parentId!) > -1).map(option => (
-  //         subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
-  //     ))
-  //     setSubCategoryOptions(subCategoryOptionFilteredList);
-  //     debugger;
-  //     const renewedSubIds = profileForm!.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
-  //     setProfileForm({...profileForm,subCategoryIds: [...renewedSubIds]});
-  //  }
+     const loadSubCatOptions = () =>{
+      allCategoriesOptionList.filter(x=> profileForm!.categoryIds.findIndex(y=> y === x.parentId!) > -1).map(option => (
+          subCategoryOptionFilteredList.push(new Category({key: option.key, value: option.value, text: option.text}))
+      ))
+      setSubCategoryOptions(subCategoryOptionFilteredList);
+      const renewedSubIds = profileForm!.subCategoryIds.filter(x=> subCategoryOptionFilteredList.findIndex(y => y.key === x) > -1);
+      setProfileForm({...profileForm,subCategoryIds: [...renewedSubIds]});
+   }
 
-  //       useEffect(() => {
-  //           loadSubCatOptions();
-  //       }, [category])
+        useEffect(() => {
+            loadSubCatOptions();
+        }, [])
 
         const handleSubmitTrainerForm = (values:IProfileFormValues) =>{
           let edittedValues = {
-            ...values
+            ...values,
+            trainerUserName: profile.userName
           }
             updateProfile(edittedValues);
             
@@ -219,7 +215,7 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
                     {
                       debugger;
                       handleCategoryChanged(e,data)}}
-                /> 
+                />  */}
                  <label id="subCatLabel">Branşlar*</label>        
                  <Field
                   name="subCategoryIds"
@@ -231,9 +227,10 @@ const ProfileUpdateForm: React.FC<IProps> = ({ updateProfile, profile }) => {
                   emptyError={profileForm.subCategoryIds}
                   onChange={(e: any,data:[])=>
                     {
-                      debugger;
-                      handleSubCategoryChanged(e,data)}}
-                />   */}
+                      
+                      handleSubCategoryChanged(e,data)
+                      setUpdateEnabled(true)}}
+                />  
               
           <Field
             name='dependency'

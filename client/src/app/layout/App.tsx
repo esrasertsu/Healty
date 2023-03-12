@@ -15,7 +15,7 @@ import { RootStoreContext } from '../stores/rootStore';
 import { LoadingComponent } from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
 import ProfilePage  from '../../features/profiles/ProfilePage';
-import ProfileDashboard  from '../../features/profiles/ProfileDashboard';
+import ProfileDashboard  from '../../features/profiles/dashboard/ProfileDashboard';
 import PostForm from '../../features/posts/PostForm';
 import BlogList from '../../features/blog/BlogList';
 import BlogPage from '../../features/blog/BlogPage';
@@ -151,7 +151,7 @@ else
   useEffect(() => {
       if(token)
       {
-        getUser().then((res) => {
+        getUser().then(async(res) => {
           if(res){
             window.addEventListener('beforeunload', alertUser);
             createHubConnection(true)
@@ -165,6 +165,7 @@ else
             }
           );
           }else{
+          
             loadCities().then(()=>
             runInAction(() => {
              loadCategories();

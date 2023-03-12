@@ -128,9 +128,9 @@ namespace CleanArchitecture.API.Controllers
 
 
         [HttpPut("videoUrl")]
-        public async Task<ActionResult<Unit>> AddVideoUrl(string url)
+        public async Task<ActionResult<Unit>> AddVideoUrl(string url, string trainerUserName)
         {
-            return await Mediator.Send(new AddVideoUrl.Command { VideoUrl = url });
+            return await Mediator.Send(new AddVideoUrl.Command { VideoUrl = url, TrainerUserName = trainerUserName });
         }
     }
 }

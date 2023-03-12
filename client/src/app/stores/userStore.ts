@@ -135,7 +135,6 @@ export default class UserStore {
             this.startRefreshTokenTimer(user);
             this.rootStore.modalStore.closeModal();
             this.submitting = false;
-            debugger;
             if(location!==null && location !=="")
               history.push(location);
             else
@@ -571,7 +570,6 @@ export default class UserStore {
     // }
 
     @action fbLogin = async (response:any,location:string) => {
-        debugger;
         this.loadingFbLogin = true;
         try{
             const user = await agent.User.fbLogin(response.accessToken);

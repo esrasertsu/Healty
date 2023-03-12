@@ -18,6 +18,8 @@ import { useHistory } from 'react-router-dom';
 import {Button, ButtonGroup, Reveal} from 'semantic-ui-react';
 import ProfileVideo from './ProfileVideo'
 import { useMediaQuery } from 'react-responsive'
+import ProfileActivities from './ProfileActivities'
+import ProfileMainActivities from './ProfileMainActivities'
 
 interface RouteParams {
     username: string
@@ -29,8 +31,8 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
   const history = useHistory();
     const rootStore = useContext(RootStoreContext);
     const {setProfileNull,loadingProfile, loadProfile, loadingBlogs, loadingComments, loadingReferencePics, profile, follow,
-         unfollow, isCurrentUser, loading,setActiveTab, setProfileForm, referencePics} = rootStore.profileStore;
-    const {isLoggedIn } = rootStore.userStore;
+         unfollow, isCurrentUser, loading,setActiveTab, setProfileForm, referencePics,loadingActivities} = rootStore.profileStore;
+    const {isLoggedIn, user } = rootStore.userStore;
 
     const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
 
@@ -95,7 +97,10 @@ const ProfilePage: React.FC<IProps> = ({match}) => {
                   {isMobile && (!isCurrentUser && profile!.role === "Trainer" && 
                 <ProfileMessage profile={profile!}/> )
             }
-               
+                 {(loadingActivities || profile!.userName !== match.params.username) && profile!.role === "Trainer"  ?   
+                <ProfileBlogPlaceHolder />:
+                 ( profile!.role === "Trainer" && <ProfileMainActivities />)}
+
                 {(loadingBlogs || profile!.userName !== match.params.username) && profile!.role === "Trainer"  ?   
                 <ProfileBlogPlaceHolder />:
                  ( profile!.role === "Trainer" && <ProfileBlogs />)}

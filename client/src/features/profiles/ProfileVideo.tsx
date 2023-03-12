@@ -14,11 +14,12 @@ const ProfileVideo: React.FC<IProps> = ({videoUrl}) => {
 
     const rootStore = useContext(RootStoreContext);
     const {openModal, closeModal} = rootStore.modalStore;
+    const {user} = rootStore.userStore;
     const { isCurrentUser,uploadProfileVideo, submittingVideo, profile } = rootStore.profileStore;
 
 
     const handleDelete = () => {
-             uploadProfileVideo("");
+             uploadProfileVideo("", profile!.userName);
             };
 
          
@@ -35,7 +36,7 @@ const ProfileVideo: React.FC<IProps> = ({videoUrl}) => {
                                 height="256px" 
                                 controls={true}
                                 url={videoUrl} />
-                                {isCurrentUser && (
+                                {(isCurrentUser || (user && user.role==="Admin")) && (
                                 <Button.Group fluid widths={2}>
                                     <Button
                                     name="upload"
@@ -67,7 +68,7 @@ const ProfileVideo: React.FC<IProps> = ({videoUrl}) => {
                 </Grid>
        </Segment>
        : 
-      isCurrentUser ?
+      (isCurrentUser || (user && user.role ==="Admin")) ?
         <> <Button circular color='red' content={<span>Video Ekle <Icon name='youtube'></Icon></span>}  size='mini'
                             onClick={()=>
                                 openModal("Video Yükleme",

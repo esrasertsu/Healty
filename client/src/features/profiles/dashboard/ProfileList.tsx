@@ -2,7 +2,7 @@ import React, { Fragment, useContext } from 'react'
 import { Card } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
 import ProfileListItem from './ProfileListItem';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 import { SemanticWIDTHS } from 'semantic-ui-react/dist/commonjs/generic';
 import { useMediaQuery } from 'react-responsive'
 
@@ -23,7 +23,7 @@ const ProfileList: React.FC = () => {
   
   return (
     <Fragment>
-         <Card.Group itemsPerRow={ isMobile ? twoItems : isTablet ? threeItem: 5} className="allProfileCards">
+         <Card.Group itemsPerRow={ isMobile ? 1 : isTablet ? threeItem: 5} className="allProfileCards">
         {
         Array.from(profileRegistery.values()).map((pro2) => (
             <ProfileListItem key={pro2!.userName+Math.random()} profile={pro2} />

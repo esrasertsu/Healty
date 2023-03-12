@@ -416,13 +416,13 @@ right: 0;
 }
 
 h1, h2, h3, h4, h5 {
-  font-family:  AssistantMedium, Arial,  sans-serif !important;
+  font-family:  AssistantMedium,  sans-serif !important;
   font-weight: 500;
 }
 
 
 h1.ui.header.profieHeader_displayName{
-  font-family: AssistantMedium, Arial, sans-serif !important;
+  font-family: AssistantMedium, sans-serif !important;
   color: #222E50 !important;
 }
 .ui.modal{
@@ -474,6 +474,7 @@ h1.ui.header.profieHeader_displayName{
 
 .blueBtn{
   background:#325AA7 !important;
+  border-radius: 5rem !important;
   --tw-text-opacity: 1;
   color: rgb(255 255 255/var(--tw-text-opacity)) !important;
   &:hover {
@@ -887,8 +888,11 @@ p.baseline-pricing__value{
   position: absolute;
   right: 0;
   font-size: 38px;
-  color: #263a5e !important;
   z-index: 2;
+  color: #ffffffde !important;
+    z-index: 2;
+    stroke-width: 0.5;
+    stroke: #afafaf;
 }
 .activity_addToFav_mobile.suggested{
   cursor: pointer;
@@ -908,6 +912,7 @@ p.baseline-pricing__value{
   margin-top: -14px;
 //  color:#bcbdbd !important;
   font-size: 40px;
+  
 }
 .activity_addToFav.saved,.activity_addToFav_mobile.saved{
   color: #ff5722!important;
@@ -2217,7 +2222,9 @@ i.search.inverted.icon {
   color: rgb(26, 43, 73) !important;
   font-weight: 500 !important;
   font-family:  AssistantRegular, Arial,  sans-serif !important;
-
+ &.login{
+  color: #325aa7 !important;
+ }
 }
 
 .sidebar_menu{
@@ -2471,11 +2478,13 @@ button, input, optgroup, select, textarea {
   right: 10px;
   height: 40px;
   z-index: 5;
-  font-size: 20px !important
+  font-size: 20px !important;
+  color: #ffffff ;
 }
 i.icon.heart.outline:before,i.icon.bookmark:before{
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
   text-shadow: 0px 9px 16px rgb(159 162 191 / 18%), 0px 2px 2px rgb(159 162 191 / 32%) !important;
+  
 }
 
 
@@ -2776,6 +2785,20 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
 }
 
 @media (max-width: 767px){
+
+  .ui.items>.item>.content>.header
+  {
+    font-weight: normal !important;
+  }
+
+  h1.ui.header.profieHeader_displayName{
+       font-size: 30px;
+  }
+
+  .profieHeader_title{
+    font-size: 20px ;
+    text-align: center;
+  }
   .profileHeader_label{
     box-shadow:2px 8px 14px 0px #bcbdbdcc, 0 0 0 1px #d4d4d557;
   }
@@ -2959,6 +2982,9 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
 }
 
 }
+
+
+
 
 @media only screen and (min-width: 768px){
   .activityDateLabels{
@@ -3426,6 +3452,12 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
 
 .profile_activity_card_header{
   font-size: 16px !important;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 
 .otpInput-input{
@@ -3461,7 +3493,7 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
 }
 
 .swiper-button-prev, .swiper-button-next{
-  color: #38527a !important;
+  color: #ffffff !important;
   font-weight: 700 !important;
   top: 41% !important;
   background:#f9f9f95d;
@@ -3511,7 +3543,7 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
 .activitySwiper .swiper-slide img {
   display: block;
   width: 100%;
-  height: 350px;
+  height: 250px;
   object-fit: cover;
 }
 

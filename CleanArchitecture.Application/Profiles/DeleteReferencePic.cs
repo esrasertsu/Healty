@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Application.Errors;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Domain;
 using CleanArchitecture.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,7 @@ namespace CleanArchitecture.Application.Profiles
         public class Command : IRequest
         {
             public string OriginalId { get; set; }
-
+            public string TrainerUserName { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -37,6 +38,11 @@ namespace CleanArchitecture.Application.Profiles
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
+
+                if (user.Role == Role.Admin)
+                {
+                    user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.TrainerUserName);
+                }
 
                 var photo = user.ReferencePics.FirstOrDefault(x => x.Id == request.OriginalId);
 

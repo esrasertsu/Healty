@@ -151,8 +151,6 @@ const ActivityDashboard: React.FC = () => {
   }
   return (
     <Container className="pageContainer">
-
-   
         {!isTabletOrMobile ?
 <>
          <Grid style={{paddingTop:"10px"}}>

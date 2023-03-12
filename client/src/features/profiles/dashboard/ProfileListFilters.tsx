@@ -1,12 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext,useState } from 'react'
 import {  Button,Form } from 'semantic-ui-react'
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 import { Form as FinalForm, Field } from "react-final-form";
-import SelectInput from "../../app/common/form/SelectInput";
-import DropdownInput from '../../app/common/form/DropdownInput';
-import DropdownMultiple from '../../app/common/form/DropdownMultiple';
-import {  ProfileFilterFormValues } from '../../app/models/profile';
+import SelectInput from "../../../app/common/form/SelectInput";
+import DropdownInput from '../../../app/common/form/DropdownInput';
+import DropdownMultiple from '../../../app/common/form/DropdownMultiple';
+import {  ProfileFilterFormValues } from '../../../app/models/profile';
 import { OnChange } from 'react-final-form-listeners';
 
 

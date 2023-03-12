@@ -87,7 +87,17 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                      setActiveMenu(-1)
                      setVisibleMobileNav(false);
                  }}
-                 className="loginRegMobileButton orangeBtn">Hesap Oluştur</Button>
+                 className="blueBtn">Hesap Oluştur</Button>
+                   <Button
+                circular
+                style={{marginTop:"20px"}}
+                onClick={(e:any) => 
+                    { 
+                    handleTrainerFormClick(e);
+                     setActiveMenu(-1)
+                     setVisibleMobileNav(false);
+                 }}
+                 className="loginRegMobileButton orangeBtn">Uzman Başvurusu</Button>
                   
                   </Menu.Item>
            
@@ -99,7 +109,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                    setActiveMenu(0);
                    setVisibleMobileNav(false);
                     }} >
-                        <h3 className="mobileNavMenu_container_item">
+                        <h3 className="mobileNavMenu_container_item login" style={{color:"blue"}}>
                         <Icon name="user" style={{marginRight:"10px"}} ></Icon>
                           Giriş Yap
                         </h3>

@@ -28,6 +28,7 @@ const ProfileReferances:React.FC<IProps> = ({referencePics}) => {
 
   const rootStore = useContext(RootStoreContext);
   const { saveReferencePics,uploadingReferencePics , isCurrentUser } = rootStore.profileStore;
+  const { user } = rootStore.userStore;
 
 const [open, setOpen] = React.useState(false)
 const [title, setTitle] = useState("");
@@ -149,7 +150,7 @@ const handleSaveRef = () =>{
       </Modal.Actions>
     </Modal>
         <Header className='contentHeader'>Referans İşler </Header>
-        {isCurrentUser && referencePics.length < 7 && (
+        {(isCurrentUser || (user && user.role === "Admin")) && referencePics.length < 7 && (
       <Segment style={{display:"flex", flexDirection:"column"}}>
       
         <div>

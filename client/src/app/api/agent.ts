@@ -65,10 +65,27 @@ const requests = {
     post:( url:string, body:{} ) => axios.post(url, body).then(responseBody),
     put: (url: string, body:{}) => axios.put(url, body).then(responseBody),
     del:(url:string) => axios.delete(url).then(responseBody),
-    postForm: async (url: string, file: Blob) =>{
+    postForm: async (url: string, file: Blob, name:string) =>{
         let formData = new FormData();
         formData.append('File',file);
+        formData.append('TrainerUserName',name);
         return axios.post(url, formData, {
+            headers: {'Content-type': 'multipart/form-data'}
+        }).then(responseBody)
+    },
+    postMainPhoto: async (url: string, id: string, name:string) =>{
+        let formData = new FormData();
+        formData.append('Id',id);
+        formData.append('TrainerUserName',name);
+        return axios.post(url, formData, {
+            headers: {'Content-type': 'multipart/form-data'}
+        }).then(responseBody)
+    },
+    deleteProfPhoto: async (url: string, id: string, name:string) =>{
+        let formData = new FormData();
+        formData.append('Id',id);
+        formData.append('TrainerUserName',name);
+        return axios.put(url, formData, {
             headers: {'Content-type': 'multipart/form-data'}
         }).then(responseBody)
     },
@@ -95,13 +112,13 @@ const requests = {
         formData.append('ExperienceYear', profile.experienceYear ? profile.experienceYear.toString(): "0");
         profile.dependency && profile.dependency !== "" && formData.append('Dependency', profile.dependency);
         profile.cityId && profile.cityId !== "" && formData.append('CityId', profile.cityId);
-
+        profile.trainerUserName && profile.trainerUserName !== "" && formData.append('TrainerUserName', profile.trainerUserName);
         // profile.documents!.length>0 && profile.documents!.map((acc:File)=>(
         //     formData.append('certificates', acc)
         // ));
-        // profile.subCategoryIds!.length>0 && profile.subCategoryIds!.map((subCategoryId:string)=>(
-        //     formData.append('SubCategoryIds', subCategoryId)
-        // ));
+        profile.subCategoryIds!.length>0 && profile.subCategoryIds!.map((subCategoryId:string)=>(
+            formData.append('SubCategoryIds', subCategoryId)
+        ));
         // profile.categoryIds!.length>0 && profile.categoryIds!.map((category:string)=>(
         //     formData.append('CategoryIds', category)
         // ));
@@ -210,7 +227,7 @@ const requests = {
             headers: {'Content-type': 'application/json'}
         }).then(responseBody)
     },
-    postReferencePic: async (url: string, photos: any[],deletedPhotos:any[]) =>{
+    postReferencePic: async (url: string, photos: any[],deletedPhotos:any[], name:string) =>{
         let formData = new FormData();
         photos && photos.map((photo:Blob)=>(
             formData.append('photos',photo)
@@ -219,6 +236,8 @@ const requests = {
          deletedPhotos && deletedPhotos.map((photo:string)=>(
             formData.append('deletedPhotos',photo)
             ));
+
+            formData.append('TrainerUserName',name)
 
         return axios.post(url, formData, {
             headers: {'Content-type': 'multipart/form-data'}
@@ -399,9 +418,9 @@ const Profiles = {
     get: (userName: string) => requests.get(`/profiles/${userName}/details`),
     list: (params: URLSearchParams): Promise<IProfileEnvelope> => axios.get(`/profiles`, {params:params}).then(responseBody),
     popularlist: (params: URLSearchParams): Promise<IProfile[]> => axios.get(`/profiles/popularList`, {params:params}).then(responseBody),
-    uploadPhoto: ( photo: Blob): Promise<IPhoto> => requests.postForm(`/photos`, photo),
-    setMainPhoto: (id:string) => requests.post(`/photos/${id}/setMain`,{}),
-    deletePhoto: (id:string) => requests.del(`/photos/${id}`),
+    uploadPhoto: ( photo: Blob,name:string): Promise<IPhoto> => requests.postForm(`/photos`, photo, name),
+    setMainPhoto: (id:string, trainerUserName:string) => requests.postMainPhoto(`/photos/${id}/setMain`,id,trainerUserName),
+    deletePhoto: (id:string,trainerUserName:string) => requests.deleteProfPhoto(`/photos/${id}`,id, trainerUserName),
     follow: (username:string) => requests.post(`/profiles/${username}/follow`, {}),
     unfollow:  (username:string) => requests.del(`/profiles/${username}/follow`),
     listFollowings: (username: string, predicate: string) => requests.get(`/profiles/${username}/follow?predicate=${predicate}`),
@@ -416,11 +435,11 @@ const Profiles = {
     updateProfile: (profile: Partial<IProfile>):Promise<IProfile> => requests.editProfile(`/profiles`,profile),
     getAccessibilities : (): Promise<IAccessibility[]>  => requests.get(`/profiles/accessibilities`),
     getReferencePics : (username:string): Promise<IPhoto[]>  => requests.get(`/profiles/${username}/referencepics`),
-    updateReferencePics: ( photos: Blob[], deletedPhotos: Blob[]): Promise<IPhoto[]> => requests.postReferencePic(`/profiles/referencepic`, photos, deletedPhotos),
+    updateReferencePics: ( photos: Blob[], deletedPhotos: Blob[],name:string): Promise<IPhoto[]> => requests.postReferencePic(`/profiles/referencepic`, photos, deletedPhotos, name),
     deleteReferencePic: ( id1:string): Promise<IPhoto> => requests.del(`/profiles/referencepic/${id1}`),
     deleteDocument: ( id:string) => requests.del(`/profiles/documents/${id}`),
-    uploadCoverPic: ( photo: Blob): Promise<IPhoto> => requests.postForm(`/profiles/coverpic`, photo),
-    uploadProfileVideo: ( url: string)  => requests.put(`/profiles/videoUrl?url=${url}`, {}),
+    uploadCoverPic: ( photo: Blob, name:string): Promise<IPhoto> => requests.postForm(`/profiles/coverpic`, photo, name),
+    uploadProfileVideo: ( url: string,name:string)  => requests.put(`/profiles/videoUrl?url=${url}&trainerUserName=${name}`, {}),
     deleteComment: (id:string) => requests.del(`/profiles/comments/${id}`),
     reportComment: (id:string,body:string) => requests.post(`/profiles/comments/${id}/report?body=${body}`,{})
 }

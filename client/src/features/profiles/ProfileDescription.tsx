@@ -12,6 +12,7 @@ const ProfileDescription = () => {
   const { updateProfile, profile, isCurrentUser ,setUpdatedProfile, updatedProfile,deleteDocument,updatingProfile} = rootStore.profileStore;
   const [editMode, setEditMode] = useState(false);
   const {openModal,closeModal,modal} = rootStore.modalStore;
+  const {user} = rootStore.userStore;
   const {allCategoriesOptionList,loadAllCategoryList} = rootStore.categoryStore;
 
   const [categoryOptions, setcategoryOptions] = useState<ICategory[]>([]);
@@ -46,7 +47,7 @@ const ProfileDescription = () => {
     <Tab.Pane style={{ borderRadius: "12px"}}>
       <Grid>
         <Grid.Column width={16}>
-          {isCurrentUser && (
+          {(isCurrentUser || (user && user.role === "Admin")) && (
             <Button
               floated='right'
               circular

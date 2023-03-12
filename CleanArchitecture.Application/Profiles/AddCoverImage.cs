@@ -19,7 +19,7 @@ namespace CleanArchitecture.Application.Profiles
         public class Command : IRequest<Photo>
         {
             public IFormFile File { get; set; }
-
+            public string TrainerUserName { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Photo>
@@ -43,6 +43,11 @@ namespace CleanArchitecture.Application.Profiles
 
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound, new { User = "Not Found" });
+
+                if (user.Role == Role.Admin)
+                {
+                    user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.TrainerUserName);
+                }
 
                 var photoUploadResults = _photoAccessor.AddUserCoverPhoto(request.File);
 

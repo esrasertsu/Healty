@@ -31,6 +31,8 @@ namespace CleanArchitecture.Application.Profiles
             public List<Guid> CategoryIds { get; set; }
             public List<Guid> SubCategoryIds { get; set; }
             public List<Guid> Accessibilities { get; set; }
+            public string TrainerUserName { get; set; }
+            
 
             //public class CommandValidator : AbstractValidator<Command>
             //{
@@ -67,6 +69,12 @@ namespace CleanArchitecture.Application.Profiles
 
                     if (user == null)
                         throw new RestException(HttpStatusCode.NotFound, new { User = "NotFound" });
+
+                    if (user.Role == Role.Admin)
+                    {
+                        user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.TrainerUserName);
+                    }
+
 
                     user.DisplayName = request.DisplayName ?? user.DisplayName;
                     user.Title = request.Title ?? user.Title;

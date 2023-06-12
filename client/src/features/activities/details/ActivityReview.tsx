@@ -5,12 +5,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useMediaQuery } from 'react-responsive';
 import { Button, Form, Header, Icon, Label, Segment } from 'semantic-ui-react';
 import { IActivity, IActivityReview } from '../../../app/models/activity';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import { StarRating } from '../../../app/common/form/StarRating';
 import TextAreaInput from '../../../app/common/form/TextAreaInput';
 
 export const ActivityReview:React.FC<{activity:IActivity}> = ({activity}) => {
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {sendReview} = rootStore.activityStore;
     const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const {isLoggedIn} = rootStore.userStore;

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Card, Image, Grid} from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { StarRating } from '../../app/common/form/StarRating';
 import { useHistory } from 'react-router-dom';
 interface IProps {
@@ -10,7 +10,7 @@ interface IProps {
 
 const ProfileCard: React.FC<IProps> = ({profile}) => {
   const history = useHistory();
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {setLoadingProfile} = rootStore.profileStore;
 
   const handleCardClick = (e:any) => {

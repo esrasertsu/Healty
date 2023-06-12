@@ -9,6 +9,7 @@ import { IChatRoom, IMessage, IMessageEnvelope, IMessageForm } from '../models/m
 import { ICity } from '../models/location';
 import { IOrderListEnvelope } from '../models/order';
 import { history } from '../..';
+import { store } from '../stores/rootStore';
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -29,9 +30,11 @@ axios.interceptors.response.use(undefined, error => {
         toast.error('Network error - Sunucu bağlantı hatası!');//make sure API is running!
     }
     const {status, data, config, headers} = error.response;
-    if(status === 401 && headers['www-authenticate'] === 'Bearer error="invalid_token", error_description="The token is expired"')
+    if(status === 401 && headers['www-authenticate'].startsWith('Bearer error="invalid_token"'))
     {
+       
        toast.info("Oturumunuzun süresi dolmuştur.")
+       store.userStore.logout();
        window.localStorage.removeItem('jwt');
        history.push('/login');
     }   
@@ -385,14 +388,10 @@ const Activities = {
 }
 
 const User ={
-    current: () : Promise<IUser> => requests.get('/user'),
     getAccountInfo: () : Promise<IAccountInfoValues> => requests.get('/user/account'),
     editAccountInfo: (accInfo: IAccountInfoValues) => requests.updateAccount('/user/account',accInfo),
     refreshPassword: (password: string) => requests.refreshPassword('/user/password',password),
     updateContactInfo: (accInfo: IAccountInfoValues) => requests.updateContactInfo('/user/contactInfo',accInfo),
-    login: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/login', user),
-    register: ( user : IUserFormValues) : Promise<IUser> => requests.post('/user/register', user),
-    registerWaitingTrainer: ( trainer : ITrainerCreationFormValues) : Promise<IUser>=> requests.registerWaitingTrainer('/user/registerWaitingTrainer', trainer),
     loadNewTrainer: (username:string) : Promise<ITrainerFormValues> => requests.get(`/user/newTrainerInfo?username=${username}`),
     sendSms: ( phoneNumber : string) : Promise<Boolean> => requests.post(`/user/sendSms?phoneNumber=${phoneNumber}`, {}),
     sendSmsVerification: (phone: string, code : string) : Promise<Boolean> => requests.post(`/user/sendSmsVerification?phoneNumber=${phone}&code=${code}`, {}),
@@ -401,7 +400,6 @@ const User ={
     registerTrainer: ( trainer : ITrainerFormValues) => requests.registerTrainer('/user/registertrainer', trainer),
     fbLogin: (accessToken: string) => requests.post(`/user/facebook`, {accessToken}),
     googleLogin: (accessToken: string) => requests.post(`/user/google`, {accessToken}),
-    refreshToken: () : Promise<IUser> => requests.post(`/user/refreshToken`,{}),
     verifyEmail: (token: string, email:string): Promise<void> => requests.post(`/user/verifyEmail`,{token,email}),
     resendVerifyEmailConfirm:(email:string): Promise<void> => requests.post(`/user/resendEmailVerification?email=${email}`,{}),
     resetPasswordRequest:(email:string, token:string): Promise<boolean> => requests.post(`/user/resetPswRequest?email=${email}&reCaptcha=${token}`,{}),
@@ -412,6 +410,14 @@ const User ={
     checkCallbackandStartPayment: (id:string, count:string, status:string, paymentId:string, conversationData:string, conversationId:string, mdStatus:string): Promise<Boolean> => 
         requests.post(`/payment/callback`,{id, count, status, paymentId, conversationData, conversationId, mdStatus}),
 
+}
+
+const Account ={
+    login: ( user : IUserFormValues) : Promise<IUser> => requests.post('/account/login', user),
+    refreshToken: () : Promise<IUser> => requests.post(`/account/refreshToken`,{}),
+    current: () : Promise<IUser> => requests.get('/account'),
+    register: ( user : IUserFormValues) : Promise<IUser> => requests.post('/account/register', user),
+    registerWaitingTrainer: ( trainer : ITrainerCreationFormValues) : Promise<IUser>=> requests.registerWaitingTrainer('/account/registerWaitingTrainer', trainer),
 }
 
 const Profiles = {
@@ -513,6 +519,7 @@ const Agora = {
 export default {
     Activities,
     User,
+    Account,
     Profiles,
     Blogs,
     Categories,

@@ -1,9 +1,9 @@
 import { observer } from "mobx-react-lite";
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { RootStoreContext } from "../../stores/rootStore";
+import { useStore } from "../../stores/rootStore";
 
 const FilesUpload = () => {
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {loadTrainerDocuments,uploadFile} = rootStore.commonStore;
   const {profile} = rootStore.profileStore;
 

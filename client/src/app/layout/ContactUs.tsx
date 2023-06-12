@@ -2,7 +2,7 @@ import React, { Fragment, ReactElement, useContext, useEffect, useRef } from 're
 import { Helmet } from 'react-helmet-async';
 import { Button, Container, Header, Segment, Image, Grid, Icon, Modal } from 'semantic-ui-react'
 import { useMediaQuery } from 'react-responsive';
-import { RootStoreContext } from '../stores/rootStore';
+import { store } from '../stores/rootStore';
 import { observer } from 'mobx-react-lite';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import { useHistory } from 'react-router-dom';
@@ -14,8 +14,7 @@ import { useHistory } from 'react-router-dom';
     const isTablet = useMediaQuery({ query: '(max-width: 767px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
-    const rootStore = useContext(RootStoreContext);
-    const {isLoggedIn, user} = rootStore.userStore;
+    const {isLoggedIn, user} = store.userStore;
     const zoom = 4;
 
 

@@ -4,11 +4,11 @@ import OrderList from '../orders/OrderList'
 import SubMerchantDetails from '../subMerchant/SubMerchantDetails'
 import { useMediaQuery } from 'react-responsive';
 import { observer } from 'mobx-react-lite'
-import { RootStoreContext } from '../../app/stores/rootStore'
+import { useStore } from '../../app/stores/rootStore'
 import AccountSettingsPage from './accountSettings/AccountSettingsPage'
 
  const Settings:React.FC = () => {
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {user} = rootStore.userStore;
 
     const [activeItem, setActiveItem] = useState("Hesap Ayarları")

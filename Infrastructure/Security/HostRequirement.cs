@@ -1,6 +1,7 @@
 ﻿using CleanArchitecture.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,20 +28,21 @@ namespace Infrastructure.Security
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, HostRequirement requirement)
         {
-            var currenUserName = _httpContextAccessor.HttpContext.User?.Claims?
-                .SingleOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+          var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var activityId = Guid.Parse(_httpContextAccessor.HttpContext.Request.RouteValues.SingleOrDefault(x =>
-                                            x.Key == "id").Value.ToString());
+            if (userId == null) return Task.CompletedTask;
 
-            var activity = _context.Activities.FindAsync(activityId).Result;
+            var activityId = Guid.Parse(_httpContextAccessor.HttpContext?.Request.RouteValues
+                .SingleOrDefault(x => x.Key == "id").Value?.ToString());
 
-            var host = activity.UserActivities.FirstOrDefault(x => x.IsHost);
+            var attendee = _context.UserActivities
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.AppUserId == userId && x.ActivityId == activityId)
+                .Result;
 
-            var user =  _context.Users.FirstOrDefault(x => x.UserName == currenUserName);
+            if (attendee == null) return Task.CompletedTask;
 
-            if (host?.AppUser?.UserName == currenUserName || user.Role == CleanArchitecture.Domain.Role.Admin)
-                context.Succeed(requirement);
+            if (attendee.IsHost) context.Succeed(requirement);
 
             return Task.CompletedTask;
         }

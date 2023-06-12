@@ -2,17 +2,15 @@ import { action, observable, runInAction, computed, reaction, makeObservable } f
 import { toast, ToastPosition } from "react-toastify";
 import agent from "../api/agent";
 import { IAccessibility, IPhoto, IProfile, IProfileBlog, IProfileComment, IProfileFilterFormValues, IProfileFormValues, IRefencePic, IUserActivity, ProfileFilterFormValues, ProfileFormValues } from "../models/profile";
-import { RootStore } from "./rootStore";
+import { store } from "./rootStore";
 import { IMessageForm } from "../models/message";
 
 const LIMIT = 10; //axios'u düzeltmeyi unutma
 
 export default class ProfileStore{
-    rootStore: RootStore
-    constructor(rootStore: RootStore){
-        this.rootStore = rootStore;
-        makeObservable(this);
 
+    constructor(){
+        makeObservable(this);
 
         reaction(
             () => this.activeTab,
@@ -21,12 +19,12 @@ export default class ProfileStore{
                 if(this.profile && this.profile.role=== "Trainer" && (activeIndex ===3 || activeIndex===4))
                 {
                     const predicate = activeIndex ===4 ? 'followers' : 'following';
-                    if(rootStore.userStore.isLoggedIn)
+                    if(store.userStore.isLoggedIn)
                      this.loadFollowings(predicate);
                 }if(this.profile && this.profile.role !== "Trainer" && (activeIndex ===2 || activeIndex===3))
                 {
                     const predicate = activeIndex ===3 ? 'followers' : 'following';
-                    if(rootStore.userStore.isLoggedIn)
+                    if(store.userStore.isLoggedIn)
                         this.loadFollowings(predicate);
                 }else{
                     this.followings = [];
@@ -87,8 +85,8 @@ export default class ProfileStore{
     @observable totalProfilePage = 0;
     @observable page = 0;
     @computed get isCurrentUser(){
-        if (this.rootStore.userStore.user && this.profile){
-            return this.rootStore.userStore.user.userName === this.profile.userName;
+        if (store.userStore.user && this.profile){
+            return store.userStore.user.userName === this.profile.userName;
         }else {
             return false;
         }
@@ -284,7 +282,7 @@ export default class ProfileStore{
                     this.loadUserReferencePics(profile.userName);
                     this.setLoadingProfile(false);
                     this.loadAccessibilities();
-                    this.rootStore.categoryStore.loadCategories();
+                    store.categoryStore.loadCategories();
 
                 })
                 return profile;
@@ -389,8 +387,8 @@ export default class ProfileStore{
                     const pro = await agent.Profiles.updateProfile(profileDto);
                     runInAction(()=>{
 
-                        if(pro.displayName !== this.rootStore.userStore.user!.displayName){
-                            this.rootStore.userStore.user!.displayName = pro.displayName!;
+                        if(pro.displayName !== store.userStore.user!.displayName){
+                            store.userStore.user!.displayName = pro.displayName!;
                         }
                         this.profile = pro;  
                         this.updatedProfile = true; 
@@ -416,9 +414,9 @@ export default class ProfileStore{
                     this.profileForm.certificates = this.profileForm.certificates!.filter(e => e.id !== id);
                     this.deletingDocument = false;
                     toast.success('Dokuman silme işleminiz başarılı.');
-                }else if(this.rootStore.userStore.user)
+                }else if(store.userStore.user)
                 {
-                    this.rootStore.userStore.trainerForm.certificates = this.rootStore.userStore.trainerForm.certificates!.filter(e => e.id !== id);
+                    store.userStore.trainerForm.certificates = store.userStore.trainerForm.certificates!.filter(e => e.id !== id);
                     this.deletingDocument = false;
                     toast.success('Dokuman silme işleminiz başarılı.');
                 }
@@ -476,9 +474,9 @@ export default class ProfileStore{
                 if(this.profile)
                 {
                     this.profile.photos.push(photo);
-                    if(photo.isMain && this.rootStore.userStore.user)
+                    if(photo.isMain && store.userStore.user)
                     {
-                        this.rootStore.userStore.user.image = photo.url;
+                        store.userStore.user.image = photo.url;
                         this.profile.image = photo.url;
                     }
                 }
@@ -504,7 +502,7 @@ export default class ProfileStore{
                 if(this.profile)
                 {
                     
-                    if(photo.isCoverPic && this.rootStore.userStore.user)
+                    if(photo.isCoverPic && store.userStore.user)
                     {
                         setImageChange(false);
                         this.profile.coverImage = photo.url;
@@ -535,7 +533,7 @@ export default class ProfileStore{
         try {
             await agent.Profiles.setMainPhoto(photo.id, name);
             runInAction(() => {
-                this.rootStore.userStore.user!.image = photo.url;
+                store.userStore.user!.image = photo.url;
                 this.profile!.photos.find(e => e.isMain)!.isMain = false;
                 this.profile!.photos.find(e => e.id === photo.id)!.isMain = true;
                 this.profile!.image = photo.url;
@@ -696,20 +694,20 @@ export default class ProfileStore{
                 this.submittingMessage = false;
                 this.profile!.hasConversation = true;
 
-                // if(this.rootStore.messageStore.chatRooms!==null)
-                // this.rootStore.messageStore.chatRooms.push(new ChatRoom(newMessage.chatRoomId))
+                // if(store.messageStore.chatRooms!==null)
+                // store.messageStore.chatRooms.push(new ChatRoom(newMessage.chatRoomId))
                 // else {
-                //     this.rootStore.messageStore.chatRooms = [];
-                //     this.rootStore.messageStore.chatRooms.push(new ChatRoom(newMessage.chatRoomId));
+                //     store.messageStore.chatRooms = [];
+                //     store.messageStore.chatRooms.push(new ChatRoom(newMessage.chatRoomId));
                 // }
-                const senderName = this.rootStore.userStore.user!.displayName;
+                const senderName = store.userStore.user!.displayName;
 
-                this.rootStore.userStore.hubConnection === null ? 
-                this.rootStore.userStore.createHubConnection(true).then(()=>{
-                    this.rootStore.userStore.hubConnection!.invoke('AddToNewChat', newMessage.chatRoomId, this.profile!.userName,senderName);
+                store.userStore.hubConnection === null ? 
+                store.userStore.createHubConnection(true).then(()=>{
+                    store.userStore.hubConnection!.invoke('AddToNewChat', newMessage.chatRoomId, this.profile!.userName,senderName);
                 })
                 : 
-                this.rootStore.userStore.hubConnection!.invoke('AddToNewChat', newMessage.chatRoomId, this.profile!.userName,senderName);
+                store.userStore.hubConnection!.invoke('AddToNewChat', newMessage.chatRoomId, this.profile!.userName,senderName);
 
             });
             return newMessage.chatRoomId;
@@ -810,7 +808,7 @@ export default class ProfileStore{
 @action getSavedProfiles = async () => {
     this.loading = true;
     try {
-        const profiles = await agent.Profiles.listFollowings(this.rootStore.userStore.user!.userName, 'following');
+        const profiles = await agent.Profiles.listFollowings(store.userStore.user!.userName, 'following');
         runInAction(() =>{
             this.followings = profiles;
             this.loading = false;

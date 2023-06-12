@@ -1,13 +1,11 @@
 import { action, computed, observable, reaction, runInAction,makeObservable } from "mobx";
 import agent from "../api/agent";
 import { ICity } from "../models/location";
-import { RootStore } from "./rootStore";
+import { store } from "./rootStore";
 
 export default class CommonStore {
-    rootStore: RootStore;
 
-    constructor(rootStore: RootStore) {
-        this.rootStore = rootStore;
+    constructor() {
         makeObservable(this);
 
         reaction(
@@ -38,7 +36,7 @@ export default class CommonStore {
     }
     @action setUserCity = (city: string) => {
         this.userCity = city;
-        this.rootStore.profileStore.setProfileFilterForm({...this.rootStore.profileStore.profileFilterForm, cityId:city});
+        store.profileStore.setProfileFilterForm({...store.profileStore.profileFilterForm, cityId:city});
         this.userCityPlaced = true;
     }
     @action setUserCityPlaced = (bool: boolean) => {

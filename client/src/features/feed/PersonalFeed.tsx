@@ -2,7 +2,7 @@ import React,  { useEffect, useContext, useState}  from 'react';
 import { Button, Grid, Icon, Loader } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 
 import InfiniteScroll from 'react-infinite-scroller';
 import { Feed } from 'semantic-ui-react'
@@ -78,7 +78,7 @@ const events = [
 ]
 
 const PersonalFeed: React.FC = () => {
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {loadActivities, loadingInitial, setPage, page, totalPages} = rootStore.activityStore;
   const [loadingNext, setLoadingNext] = useState(false);
   const history = useHistory();

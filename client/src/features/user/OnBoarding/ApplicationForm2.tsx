@@ -9,7 +9,7 @@ import TextAreaInput from '../../../app/common/form/TextAreaInput';
 import TextInput from '../../../app/common/form/TextInput';
 import { Category, ICategory } from '../../../app/models/category';
 import { ITrainerFormValues, TrainerFormValues } from '../../../app/models/user';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import { OnChange } from 'react-final-form-listeners';
 import { toast } from 'react-toastify';
 import NumberInput from '../../../app/common/form/NumberInput';
@@ -27,7 +27,7 @@ interface IProps{
 }
 
 const ApplicationForm2: React.FC<IProps> = ({id,setUserSubmerchant}) =>{
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
    
     const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })

@@ -3,7 +3,7 @@ import { Form as FinalForm , Field } from 'react-final-form';
 import { Button, Form, Grid, Header, Icon, Label } from 'semantic-ui-react';
 import { StarRating } from '../../app/common/form/StarRating';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { IProfileComment } from '../../app/models/profile';
 import { combineValidators, isRequired } from 'revalidate';
 
@@ -19,7 +19,7 @@ const validate = combineValidators({
 })
 
  const ProfileVideoUploadForm:React.FC<IProps> = ({url,closeModal}) => {
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
 
   const {
     uploadProfileVideo, profile

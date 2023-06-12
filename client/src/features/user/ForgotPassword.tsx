@@ -9,7 +9,7 @@ import agent from '../../app/api/agent';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
 import { IUserFormValues } from '../../app/models/user';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import SocialLogin from './SocialLogin';
 import  RegisterForm  from './RegisterForm';
 import { action, runInAction } from 'mobx';

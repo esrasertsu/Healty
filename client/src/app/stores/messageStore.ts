@@ -4,14 +4,12 @@ import agent from '../api/agent';
 import { setMessageProps } from '../common/util/util';
 import { IChatRoom, IMessage } from '../models/message';
 
-import { RootStore } from './rootStore';
+import { store } from './rootStore';
 
 const LIMIT = 10;
 export default class MessageStore {
 
-    rootStore:RootStore;
-    constructor(rootStore: RootStore){
-        this.rootStore = rootStore;
+    constructor(){
         makeObservable(this);
         reaction(
             () => this.chatRoomId,
@@ -23,8 +21,8 @@ export default class MessageStore {
                         this.messageRegistery.delete(this.chatRoomId);
                     }
                     this.messageRegistery.set(this.chatRoomId, null);
-                    this.rootStore.userStore.hubConnection === null ? 
-                    this.rootStore.userStore.createHubConnection(true).then(()=>{this.loadMessages(this.chatRoomId!)})
+                    store.userStore.hubConnection === null ? 
+                    store.userStore.createHubConnection(true).then(()=>{this.loadMessages(this.chatRoomId!)})
                     : 
                     this.loadMessages(this.chatRoomId!);
                 }
@@ -68,10 +66,10 @@ export default class MessageStore {
     @action addComment = async (values: any) => {
         values.chatRoomId = this.chatRoomId;
         try {
-            if(this.rootStore.userStore.hubConnection!.state === "Disconnected")
+            if(store.userStore.hubConnection!.state === "Disconnected")
             toast.error("Please refresh the page!");
             
-            await this.rootStore.userStore.hubConnection!.invoke("SendMessage", values);
+            await store.userStore.hubConnection!.invoke("SendMessage", values);
         } catch (error) {
             console.log(error);
         }
@@ -95,7 +93,7 @@ export default class MessageStore {
                 this.loadingChatRooms = false;
                 chatRooms.forEach((chatRoom) =>{
                     chatRoom.userStatus && 
-                    this.rootStore.userStore.setUserOnline(chatRoom.userName);
+                    store.userStore.setUserOnline(chatRoom.userName);
                     this.messageRegistery.set(chatRoom.id, null);
                 });
             })
@@ -158,9 +156,9 @@ export default class MessageStore {
                 const {messages, messageCount } = messagesEnvelope;
                 runInAction(() => {
                     messages.forEach(async(message) =>{
-                        setMessageProps(message,this.rootStore.userStore.user!);
+                        setMessageProps(message,store.userStore.user!);
                         messageList.push(message);
-                        if(message.username !== this.rootStore.userStore.user!.userName)
+                        if(message.username !== store.userStore.user!.userName)
                         {
                             
                             var values = {
@@ -169,7 +167,7 @@ export default class MessageStore {
                                 seen: true
                             }
     
-                            await this.rootStore.userStore.hubConnection!.invoke('SetMessageSeenJustAfterLooked',values  );
+                            await store.userStore.hubConnection!.invoke('SetMessageSeenJustAfterLooked',values  );
                         }
                     });
                     this.messageRegistery.get(id) !== null 
@@ -179,9 +177,9 @@ export default class MessageStore {
                     this.messageRegistery.set(id,messageList)
                     this.messageCount = messageCount;
                     const crIndex = this.chatRooms!.findIndex(x => x.id === id);
-                    this.rootStore.userStore.notificationCount > 0 &&
-                    this.rootStore.userStore.setNotificationCount(
-                        this.rootStore.userStore.notificationCount - this.chatRooms![crIndex].unReadMessageCount 
+                    store.userStore.notificationCount > 0 &&
+                    store.userStore.setNotificationCount(
+                        store.userStore.notificationCount - this.chatRooms![crIndex].unReadMessageCount 
                     );
                     this.chatRooms![crIndex].unReadMessageCount = 0;
                     this.loadingMessages = false;

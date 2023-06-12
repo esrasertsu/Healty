@@ -2,7 +2,7 @@ import { action, computed, makeObservable, observable, runInAction } from "mobx"
 import { HttpTransportType, HubConnection, HubConnectionBuilder, JsonHubProtocol, LogLevel } from '@microsoft/signalr';
 import agent from "../api/agent";
 import { AccountInfoFormValues, IAccountInfo, IAccountInfoValues, ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues, TrainerCreationFormValues, TrainerFormValues } from "../models/user";
-import { RootStore } from "./rootStore";
+import { store } from "./rootStore";
 import { toast } from 'react-toastify';
 import { IMessage } from "../models/message";
 import { ISubMerchantInfo, SubMerchantInfo } from "../models/user";
@@ -12,11 +12,8 @@ export default class UserStore {
 
     refreshTokenTimeout :any;
 
-    rootStore:RootStore;
-    constructor(rootStore: RootStore){
-        this.rootStore = rootStore;
+    constructor(){
         makeObservable(this);
-
     }
 
     @observable user: IUser | null = null;
@@ -126,14 +123,14 @@ export default class UserStore {
     @action login = async (values : IUserFormValues,location:string) =>{
         this.submitting = true;
         try {
-            const user = await agent.User.login(values);
+            const user = await agent.Account.login(values);
             runInAction(()=>{
                 this.user = user;
                 this.hubConnection === null && this.createHubConnection(false);
             })
-            this.rootStore.commonStore.setToken(user.token);
+            store.commonStore.setToken(user.token);
             this.startRefreshTokenTimer(user);
-            this.rootStore.modalStore.closeModal();
+            store.modalStore.closeModal();
             this.submitting = false;
             if(location!==null && location !=="")
               history.push(location);
@@ -154,9 +151,11 @@ export default class UserStore {
         this.submitting = true;
 
         try {
-           await agent.User.register(values);
-         
-            this.rootStore.modalStore.closeModal();
+            const user = await agent.Account.register(values);
+            // store.commonStore.setToken(user.token);
+            // this.startRefreshTokenTimer(user);
+            // runInAction(()=> this.user = user);
+            store.modalStore.closeModal();
             this.submitting = false;
 
             history.push(`/user/registerSuccess?email=${values.email}`);
@@ -293,16 +292,16 @@ export default class UserStore {
         try {
             this.trainerRegistering = true;
             
-            const user = await agent.User.registerWaitingTrainer(values);
+            const user = await agent.Account.registerWaitingTrainer(values);
             runInAction(()=>{
                 this.settrainerRegisteringFalse();
                 if(user)
                 {
                     this.user = user;
                     this.hubConnection === null && this.createHubConnection(false);
-                    this.rootStore.commonStore.setToken(user.token);
+                    store.commonStore.setToken(user.token);
                     this.startRefreshTokenTimer(user);
-                    this.rootStore.modalStore.closeModal();
+                    store.modalStore.closeModal();
                     history.push(`/TrainerApplication/${user.userName}`);
                 }
             })
@@ -326,7 +325,7 @@ export default class UserStore {
             transport,
             logMessageContent: true,
             logger: LogLevel.Warning,
-            accessTokenFactory: () => this.rootStore.commonStore.token!
+            accessTokenFactory: () => store.commonStore.token!
           };
     
         this.hubConnection = new HubConnectionBuilder()
@@ -348,10 +347,10 @@ export default class UserStore {
                    await agent.User.update(true);
                 runInAction(() => {
 
-                    this.rootStore.messageStore.loadChatRooms().then(() => {
+                    store.messageStore.loadChatRooms().then(() => {
                         let count = 0; 
-                        this.rootStore.messageStore.chatRooms &&  
-                        this.rootStore.messageStore.chatRooms.forEach((chatroom)=>{
+                        store.messageStore.chatRooms &&  
+                        store.messageStore.chatRooms.forEach((chatroom)=>{
                             this.hubConnection!.invoke('AddToChat', chatroom.id);
                             count = count + chatroom.unReadMessageCount;
                         })
@@ -369,27 +368,27 @@ export default class UserStore {
                 runInAction(() => {
                     message.createdAt= new Date();
                     this.initialMessages.push(message);
-                    if(this.rootStore.messageStore.messageRegistery.get(message.chatRoomId) !==null &&
-                    this.rootStore.messageStore.messageRegistery.get(message.chatRoomId) !==undefined)
+                    if(store.messageStore.messageRegistery.get(message.chatRoomId) !==null &&
+                    store.messageStore.messageRegistery.get(message.chatRoomId) !==undefined)
                      {
-                        this.rootStore.messageStore.messageRegistery.get(message.chatRoomId)!.findIndex(x => x.id === message.id) < 0 &&
-                        this.rootStore.messageStore.messageRegistery.get(message.chatRoomId)!.push(message)
+                        store.messageStore.messageRegistery.get(message.chatRoomId)!.findIndex(x => x.id === message.id) < 0 &&
+                        store.messageStore.messageRegistery.get(message.chatRoomId)!.push(message)
                      }
                     else
-                    this.rootStore.messageStore.messageRegistery.set(message.chatRoomId, this.initialMessages);
+                    store.messageStore.messageRegistery.set(message.chatRoomId, this.initialMessages);
                     
                     //mesajın göndericisi şuanki user değilse ve şuanki user'ın baktığı chatroom mesajın chatroom'u ise seen true'ya çek
-                    const crIndex = this.rootStore.messageStore.chatRooms!.findIndex(x => x.id === message.chatRoomId);
-                    this.rootStore.messageStore.chatRooms![crIndex].lastMessage = message.body;
+                    const crIndex = store.messageStore.chatRooms!.findIndex(x => x.id === message.chatRoomId);
+                    store.messageStore.chatRooms![crIndex].lastMessage = message.body;
                     if(message.username !== this.user!.userName && 
-                        message.chatRoomId !== this.rootStore.messageStore.chatRoomId)
+                        message.chatRoomId !== store.messageStore.chatRoomId)
                         {
                             this.notificationCount = this.notificationCount + 1;
-                            this.rootStore.messageStore.chatRooms![crIndex].unReadMessageCount = this.rootStore.messageStore.chatRooms![crIndex].unReadMessageCount +1;
+                            store.messageStore.chatRooms![crIndex].unReadMessageCount = store.messageStore.chatRooms![crIndex].unReadMessageCount +1;
                             toast.info(message.displayName +" kişisinden mesajınız var");
                         }
                     else if(message.username !== this.user!.userName &&  
-                            message.chatRoomId === this.rootStore.messageStore.chatRoomId)
+                            message.chatRoomId === store.messageStore.chatRoomId)
                             {
                                 var values = {
                                     id:message.id,
@@ -422,7 +421,7 @@ export default class UserStore {
             })
 
             this.hubConnection!.on('MessageSeen', message => {
-                    this.rootStore.messageStore.setMessageSeen(message);
+                    store.messageStore.setMessageSeen(message);
             })
 
             this.hubConnection!.on('NewChatRoomAdded', (chatRoomId,userName,senderName) => {
@@ -449,7 +448,7 @@ export default class UserStore {
             const b = await agent.User.update(false);
             runInAction(async() => {
                 await Promise.all(
-                    this.rootStore.messageStore.chatRooms!.map(async(chatroom)=>{
+                    store.messageStore.chatRooms!.map(async(chatroom)=>{
                       const a =  await this.hubConnection!.invoke('RemoveFromChat', chatroom.id)
                     })
                 )
@@ -464,12 +463,12 @@ export default class UserStore {
     @action refreshToken = async  () =>{
         this.stopRefreshTokenTimer();
         try {
-            const user = await agent.User.refreshToken();
+            const user = await agent.Account.refreshToken();
             runInAction(() =>
             {
                 this.user = user;
             })
-            this.rootStore.commonStore.setToken(user.token);
+            store.commonStore.setToken(user.token);
             this.startRefreshTokenTimer(user);
         } catch (error) {
             console.log(error);
@@ -478,16 +477,16 @@ export default class UserStore {
 
     @action getUser = async () =>{
         try{
-            const user = await agent.User.current();
+            const user = await agent.Account.current();
+            if(user)
+            {
+                store.commonStore.setToken(user.token);
+                this.startRefreshTokenTimer(user);
+            }
             runInAction(() => {
                 this.user = user;
 
             });
-            if(user)
-            {
-                this.rootStore.commonStore.setToken(user.token);
-                this.startRefreshTokenTimer(user);
-            }
             return user;
         }catch(error){
             console.log(error);
@@ -542,21 +541,21 @@ export default class UserStore {
                      await this.hubConnection!.stop();
                 console.log('Connection stopped');
                 this.setHubConnectionNull();
-                this.rootStore.messageStore.setPage(0);
-                this.rootStore.messageStore.clearMessageRegistery();
+                store.messageStore.setPage(0);
+                store.messageStore.clearMessageRegistery();
                 this.setInitialMessageNull();
-                this.rootStore.messageStore.setChatRoomId(null);
-                this.rootStore.messageStore.setChatRoomsEmpty();
-                this.rootStore.activityStore.setPage(0);
-                this.rootStore.activityStore.clearActivityRegistery();
-                this.rootStore.profileStore.setPage(0);
-                this.rootStore.profileStore.clearProfileRegistery();
-                this.rootStore.profileStore.clearPopularProfileRegistery();
-                this.rootStore.orderStore.setOrderPage(0);
-                this.rootStore.orderStore.clearOrderRegistery();
+                store.messageStore.setChatRoomId(null);
+                store.messageStore.setChatRoomsEmpty();
+                store.activityStore.setPage(0);
+                store.activityStore.clearActivityRegistery();
+                store.profileStore.setPage(0);
+                store.profileStore.clearProfileRegistery();
+                store.profileStore.clearPopularProfileRegistery();
+                store.orderStore.setOrderPage(0);
+                store.orderStore.clearOrderRegistery();
                 this.clearCurrentUser();
                 this.stopRefreshTokenTimer();
-                this.rootStore.commonStore.setToken(null);
+                store.commonStore.setToken(null);
                 this.setLoggingOut(false);
                 history.push("/");
             })
@@ -577,9 +576,9 @@ export default class UserStore {
             runInAction(() => {
                 this.user = user;
                 this.hubConnection === null && this.createHubConnection(false);
-                this.rootStore.commonStore.setToken(user.token);
+                store.commonStore.setToken(user.token);
                 this.startRefreshTokenTimer(user);
-                this.rootStore.modalStore.closeModal();
+                store.modalStore.closeModal();
                 this.setLoadingFbLogin(false);
             });
        
@@ -600,12 +599,12 @@ export default class UserStore {
         const apiLogin = (accessToken:string) =>{
             agent.User.fbLogin(accessToken).then((user) =>{
                 this.hubConnection === null && this.createHubConnection(false);
-                this.rootStore.commonStore.setToken(user.token);
+                store.commonStore.setToken(user.token);
                 this.startRefreshTokenTimer(user);
                
                 runInAction(() => {
                   this.user = user;
-                  this.rootStore.modalStore.closeModal();
+                  store.modalStore.closeModal();
                   this.setLoadingFbLogin(false);
                 })
                 if(location!==undefined && location !=="")
@@ -653,9 +652,9 @@ export default class UserStore {
             runInAction(() => {
                 this.user = user;
                 this.hubConnection === null && this.createHubConnection(false);
-                this.rootStore.commonStore.setToken(user.token);
+                store.commonStore.setToken(user.token);
                 this.startRefreshTokenTimer(user);
-                this.rootStore.modalStore.closeModal();
+                store.modalStore.closeModal();
                 this.setLoadingGoogleLogin(false);
             });
        

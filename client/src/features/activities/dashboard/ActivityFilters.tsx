@@ -1,7 +1,7 @@
 import React, { FormEvent, Fragment, useContext, useEffect, useRef, useState } from 'react';
 import { Menu, Segment, Accordion, Form, CheckboxProps, Button, Label, Icon, Radio, Dropdown } from 'semantic-ui-react';
 import { DateTimePicker} from 'react-widgets';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import { observer } from 'mobx-react-lite';
 import { ICategory, ISubCategory } from '../../../app/models/category';
 import { ILevel,IActivitySelectedFilter } from '../../../app/models/activity';
@@ -16,7 +16,7 @@ interface IProps{
 
 const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivitySelectedFilters,activitySelectedFilters}) => {
   
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { predicate, setPredicate,setClearPredicateBeforeSearch,clearUserPredicates,
     clearKeyPredicate, setPage, clearActivityRegistery,loadActivities,loadingInitial,
     activeIndex, setActiveIndex,categoryIds, setCategoryIds,subCategoryIds, setSubCategoryIds,

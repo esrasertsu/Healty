@@ -4,7 +4,7 @@ import queryString from 'query-string';
 import { Button, Form, Header, Icon, Image, Message, Modal, Segment ,Input, Container} from 'semantic-ui-react';
 import agent from '../../app/api/agent';
 import { toast } from 'react-toastify';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { useMediaQuery } from 'react-responsive'
 import LoginForm from './LoginForm';
 import { observer } from 'mobx-react-lite';
@@ -18,7 +18,7 @@ interface IErrorMessage {
 
 const ResetPassword : React.FC<RouteComponentProps> = ({location}) =>{
 
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     
     const {openModal} = rootStore.modalStore;
 

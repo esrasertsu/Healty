@@ -1,10 +1,6 @@
 ﻿using CleanArchitecture.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
 
 namespace Infrastructure.Security
 {
@@ -17,10 +13,7 @@ namespace Infrastructure.Security
         }
         public string GetCurrentUsername()
         {
-            var username = _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(
-                x => x.Type == ClaimTypes.NameIdentifier)?.Value;
-
-            return username;
+            return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
         }
     }
 }

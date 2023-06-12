@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CleanArchitecture.Domain
 {
@@ -14,6 +12,5 @@ namespace CleanArchitecture.Domain
         public bool IsExpired => DateTime.UtcNow >= Expires;
         public DateTime? Revoked { get; set; }
         public bool IsActive => Revoked == null & !IsExpired;
-
     }
 }

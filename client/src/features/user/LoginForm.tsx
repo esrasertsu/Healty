@@ -10,7 +10,7 @@ import agent from '../../app/api/agent';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
 import { IUserFormValues } from '../../app/models/user';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import ForgotPassword from './ForgotPassword';
 import SocialLogin from './SocialLogin';
 import GoogleLogin from 'react-google-login';
@@ -42,7 +42,7 @@ interface IProps {
 } 
 
 const LoginForm:React.FC<IProps> = ({location}) => {
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { login, fbLogin, loadingFbLogin ,setResendEmailVeriMessage, resendEmailVeriMessage,
     googleLogin,loadingGoogleLogin,submitting,facebookLogin} = rootStore.userStore;
     const { closeModal, openModal, modal } = rootStore.modalStore;

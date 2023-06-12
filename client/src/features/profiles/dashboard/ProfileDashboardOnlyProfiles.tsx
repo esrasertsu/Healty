@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext } from 'react'
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 
 import { SemanticWIDTHS } from 'semantic-ui-react/dist/commonjs/generic';
 import { useMediaQuery } from 'react-responsive'
@@ -37,7 +37,7 @@ interface IProps{
 
  const ProfileDashboardOnlyProfiles: React.FC<IProps> = ({setLoadingNext,loadingNext}) => {
 
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {loadProfiles,setPage,page,totalProfileListPages,
      profilePageCount, clearProfileRegistery,loadingOnlyProfiles,sortingInput,setSortingInput} = rootStore.profileStore;
 

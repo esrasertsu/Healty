@@ -4,13 +4,13 @@ import { Tab, Grid, Card, Image, TabProps, Header, Container } from 'semantic-ui
 import { Link } from 'react-router-dom';
 import { IProfile, IUserActivity } from '../../app/models/profile';
 import { format } from 'date-fns';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import tr  from 'date-fns/locale/tr'
 import { useMediaQuery } from 'react-responsive'
 
 
 const ProfileMainActivities = () => {
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {
 
     userActivities

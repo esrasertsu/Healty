@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from 'react'
 import { observer } from 'mobx-react-lite';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { Button, Card, Grid,Image } from 'semantic-ui-react';
@@ -18,7 +18,7 @@ interface IProps
 
 const ProfileBlogList: React.FC<IProps> = ({profileBlogs,profileUserName,displayName}) => {
   const history = useHistory();
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
    const { setPredicate,clearPredicates ,setPredicateDisplayName,setClearedBeforeNewPredicateComing} = rootStore.blogStore;
    const isWideMobileOrSmaller = useMediaQuery({ query: '(max-width: 430px)' })
 

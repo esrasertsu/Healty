@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Segment, Header, Form, Button,Comment } from 'semantic-ui-react'
-import { RootStoreContext } from '../../../app/stores/rootStore'
+import { useStore } from '../../../app/stores/rootStore'
 import { Form as FinalForm, Field} from 'react-final-form';
 import { Link } from 'react-router-dom';
 import TextAreaInput from '../../../app/common/form/TextAreaInput';
@@ -10,7 +10,7 @@ import { IComment } from '../../../app/models/activity';
 
  const ActivityDetailedChat = () => {
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
 
   const [sortedMessages, setSortedMessages] = useState<IComment[]>([])
 

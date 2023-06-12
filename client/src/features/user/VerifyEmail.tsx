@@ -4,14 +4,14 @@ import queryString from 'query-string';
 import { Button, Container, Header, Icon, Image, Modal, Segment } from 'semantic-ui-react';
 import agent from '../../app/api/agent';
 import { toast } from 'react-toastify';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { useMediaQuery } from 'react-responsive'
 import LoginForm from './LoginForm';
 import { observer } from 'mobx-react-lite';
 
 const VerifyEmail : React.FC<RouteComponentProps> = ({location}) =>{
 
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const Status = {
         Verifying: "Verifying",
         Failed:"Failed",

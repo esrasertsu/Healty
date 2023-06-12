@@ -31,7 +31,7 @@ export const ActivitySearchPage = () => {
 // import "@reach/combobox/styles.css";
 // import mapStyles from "./mapStyles";
 // import { IActivityMapItem } from "../../../app/models/activity";
-// import { RootStoreContext } from "../../../app/stores/rootStore";
+// import { useStore } from "../../../app/stores/rootStore";
 // import { observer } from "mobx-react-lite";
 // import { LoadingComponent } from "../../../app/layout/LoadingComponent";
 // import { LoadScriptUrlOptions } from "@react-google-maps/api/dist/utils/make-load-script-url";
@@ -66,7 +66,7 @@ export const ActivitySearchPage = () => {
 //   // const infowindow = new google.maps.InfoWindow();
 
 
-//   const rootStore = useContext(RootStoreContext);
+//   const rootStore = useStore();
 //   const {setMarkers,markers,selected, setSelected} = rootStore.activityStore;
   
 //    const mapRef = React.useRef<google.maps.Map | null>(null);

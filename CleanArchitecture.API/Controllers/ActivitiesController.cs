@@ -3,10 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
-using CleanArchitecture.Domain;
 using CleanArchitecture.Application.Activities;
 using Microsoft.AspNetCore.Authorization;
-using CleanArchitecture.Application.User;
 using CleanArchitecture.Application.Activities.Administration;
 
 namespace CleanArchitecture.API.Controllers

@@ -4,7 +4,7 @@ import queryString from 'query-string';
 import { Button, Container, Header, Icon, Image, Item, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { useMediaQuery } from 'react-responsive';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import { LoadingComponent } from '../../../app/layout/LoadingComponent';
 import { format } from 'date-fns';
 import tr  from 'date-fns/locale/tr'
@@ -12,7 +12,7 @@ import tr  from 'date-fns/locale/tr'
 const PaymentSuccessPage : React.FC<RouteComponentProps> = ({location}) =>{
     const {status,activityId,count, paidPrice, paymentTransactionId} = queryString.parse(location.search);
     const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { activity, loadActivity, loadingActivity } = rootStore.activityStore;
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 

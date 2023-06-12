@@ -4,7 +4,7 @@ import { Segment, Image, Label, Icon, Grid, Header, Dimmer, Loader } from 'seman
 import PhotoWidgetCropper from '../../app/common/photoUpload/PhotoWidgetCropper';
 import PhotoWidgetDropzone from '../../app/common/photoUpload/PhotoWidgetDropzone';
 import { IBlog } from '../../app/models/blog';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { useMediaQuery } from 'react-responsive'
 
 const activityImageStyle = {
@@ -14,7 +14,7 @@ const activityImageStyle = {
 
 const BlogPageHeader:React.FC<{blog:IBlog}> = ({blog}) => {
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { isCurrentUserAuthor,editBlogImage,submittingPhoto } = rootStore.blogStore;
   const [imageChange, setImageChange] = useState(false);
   const [imageDeleted, setImageDeleted] = useState(false);

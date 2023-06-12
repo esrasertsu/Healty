@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useState } from 'react'
 import {  Button, Comment, Form, Icon, TextArea } from 'semantic-ui-react'
 import { observer } from 'mobx-react';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { format, formatDistance } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { StarRating } from '../../app/common/form/StarRating';
@@ -21,7 +21,7 @@ interface IProps {
 
 const ProfileCommentList: React.FC<IProps> = ({handleGetNext,totalPages,commentPage,loadingNext,getCommentsByDate}) => {
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {openModal, closeModal} = rootStore.modalStore;
   const {profile, deleteComment,reportComment} = rootStore.profileStore;
   const {user,isLoggedIn} = rootStore.userStore;

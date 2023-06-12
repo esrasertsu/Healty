@@ -1,57 +1,106 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CleanArchitecture.API.Extensions;
+using CleanArchitecture.API.Middleware;
+using CleanArchitecture.API.SignalR;
 using CleanArchitecture.Domain;
-using CleanArchitecture.Persistence;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using CleanArchitecture.Persistence;
+using Microsoft.AspNetCore.Http;
+using System;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Persistence;
+using Microsoft.Extensions.Logging;
 
-namespace CleanArchitecture.API
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllers(opt => 
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var host = CreateHostBuilder(args).Build();
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    opt.Filters.Add(new AuthorizeFilter(policy));
+});
+builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddIdentityServices(builder.Configuration);
+builder.Services.ConfigureApplicationCookie(options => { 
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.LoginPath = new PathString("/login-required");
+                options.LogoutPath = new PathString("/");
+                options.Cookie.MaxAge = TimeSpan.FromDays(7);
+                options.ExpireTimeSpan = TimeSpan.FromDays(7);
+                options.Cookie.HttpOnly = true;
+                options.SlidingExpiration = true;
+                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+            });
 
-            using ( var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
+var app = builder.Build();
 
-                try
-                {
-                    var context = services.GetRequiredService<DataContext>();
-                    var userManager = services.GetRequiredService<UserManager<AppUser>>();
-                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+// Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>();
 
-                    context.Database.Migrate();
-                    Seed.SeedData(context, userManager, roleManager).Wait();
+app.UseXContentTypeOptions();
+app.UseReferrerPolicy(x => x.NoReferrer());
+app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
+app.UseXfo(op => op.Deny());
 
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex,"Error occured during the migration");
-                }
-            }
-            host.Run();
-        }
+        
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                    webBuilder.ConfigureKestrel(serverOpt => serverOpt.AddServerHeader = false);
-                });
-    }
+if (app.Environment.IsDevelopment())
+{
+//
 }
+else 
+{
+    app.Use(async (context, next) => 
+    {
+        context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
+        await next.Invoke();
+    });
+}
+// app.UseStaticFiles(new StaticFileOptions
+//             {
+//                 FileProvider = new PhysicalFileProvider(
+//                     Path.Combine(env.ContentRootPath, "Templates")
+//                     ),
+//                 RequestPath = "/Templates"
+//             });
+app.UseRouting();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.UseCors("CorsPolicy");
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+app.MapControllers();
+app.MapHub<ChatHub>("/chat");
+app.MapHub<MessagesHub>("/message");
+app.MapFallbackToController("Index", "Fallback");
+
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+
+try
+{
+    var context = services.GetRequiredService<DataContext>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedData(context, userManager, roleManager);
+}
+catch (Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occured during migration");
+}
+
+app.Run();

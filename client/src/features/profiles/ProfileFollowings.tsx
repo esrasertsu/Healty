@@ -1,12 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext } from 'react';
 import { Tab, Grid, Card, Header } from 'semantic-ui-react';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import ProfileCard from './ProfileCard';
 import { useMediaQuery } from 'react-responsive'
 
 const ProfileFollowings = () => {
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {  followings, loading,activeTab } = rootStore.profileStore;
   const {  isLoggedIn } = rootStore.userStore;
 

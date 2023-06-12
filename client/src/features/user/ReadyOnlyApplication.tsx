@@ -9,7 +9,7 @@ import TextInput from '../../app/common/form/TextInput';
 import FileUploadDropzone from '../../app/common/util/FileUploadDropzone';
 import { Category, ICategory } from '../../app/models/category';
 import { ITrainerFormValues, TrainerFormValues } from '../../app/models/user';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { OnChange } from 'react-final-form-listeners';
 import { toast } from 'react-toastify';
 import { useMediaQuery } from 'react-responsive'
@@ -24,7 +24,7 @@ interface IProps{
 }
 
 const ReadyOnlyApplication: React.FC<IProps> = ({id}) =>{
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { trainerRegistering, registerTrainer,tranierCreationForm,
       settrainerRegisteringFalse,user } = rootStore.userStore;
       const{deletingDocument,deleteDocument} = rootStore.profileStore;

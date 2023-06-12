@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Segment, Header, Form, Button,Comment, Icon, Container, Grid, Image, Modal } from 'semantic-ui-react'
-import { RootStoreContext } from '../../../app/stores/rootStore'
+import { useStore } from '../../../app/stores/rootStore'
 import { Form as FinalForm, Field} from 'react-final-form';
 import { observer } from 'mobx-react-lite';
 import {  IActivity, IAttendee, IPaymentCardInfo, IPaymentUserInfoDetails, PaymentCardInfo } from '../../../app/models/activity';
@@ -31,7 +31,7 @@ import { tr } from 'date-fns/locale';
  const ActivityPaymentStarterPage:React.FC<IProps> = ({handlePaymentFormSubmit,activity, count,loading,activityUserInfo}) =>  {
   const sanitizer = DOMPurify.sanitize;
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const [focused, setFocused] = useState("");
   const [cvc, setCVC] = useState("");
   const [cardExpire, setCardExpire] = useState("");

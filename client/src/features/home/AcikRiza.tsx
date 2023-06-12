@@ -2,11 +2,11 @@ import dompurify from 'dompurify';
 import { observer } from 'mobx-react';
 import React, { useContext, useEffect, useState } from 'react'
 import { Container } from 'semantic-ui-react';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 
 const AcikRiza = () => {
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const sanitizer = dompurify.sanitize;
 
   const {contract,loadContract} = rootStore.contractStore;

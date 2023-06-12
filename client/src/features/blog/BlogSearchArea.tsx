@@ -1,6 +1,6 @@
 import React, {  useContext, useState } from 'react'
 import {  Search } from 'semantic-ui-react'
-import { RootStoreContext } from '../../app/stores/rootStore'
+import { useStore } from '../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
 
@@ -11,7 +11,7 @@ interface IProps{
 
  const BlogSearchArea:React.FC<IProps> = ({className,placeholder}) => {
 
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
 
     const {
       profileList,

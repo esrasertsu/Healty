@@ -17,9 +17,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "experimentalDecorators": true,
-    "types": ["googlemaps"]
+    "types": [
+      "googlemaps"
+    ],
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "src",

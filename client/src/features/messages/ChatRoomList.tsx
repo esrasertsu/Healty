@@ -1,7 +1,7 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react';
 import { Button, Container, Icon, Image, List, Popup, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import { format } from 'date-fns';
 import Scrollbars from 'react-custom-scrollbars';
@@ -19,7 +19,7 @@ interface IProps{
 
 const ChatRoomList: React.FC<IProps> = ({setshowChatRoomList}) => {
   const history = useHistory();
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {loadingChatRooms, chatRooms,chatRoomId,setChatRoomId } = rootStore.messageStore;
     const [activeChatRoomIndex, setActiveChatRoomIndex] = useState<string|null>(null)
     const {onlineUsers} = rootStore.userStore;

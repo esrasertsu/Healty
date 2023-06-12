@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Card, Image, Icon, Grid, Label, Modal, Popup, Button} from 'semantic-ui-react';
 import { IProfile } from '../../../app/models/profile';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import { StarRating } from '../../../app/common/form/StarRating';
 import { colors } from '../../../app/models/category';
 import { observer } from 'mobx-react-lite';
@@ -17,7 +17,7 @@ interface IProps {
  const MobileProfileItem: React.FC<IProps> = ({profile,popular}) => {
   const history = useHistory();
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {setLoadingProfile,follow,unfollow} = rootStore.profileStore;
   const {isLoggedIn,user} = rootStore.userStore;
   const {openModal,closeModal,modal} = rootStore.modalStore;

@@ -9,7 +9,7 @@ import TextAreaInput from '../../../app/common/form/TextAreaInput';
 import TextInput from '../../../app/common/form/TextInput';
 import { Category, ICategory } from '../../../app/models/category';
 import { ITrainerFormValues, TrainerFormValues } from '../../../app/models/user';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import { OnChange } from 'react-final-form-listeners';
 import { toast } from 'react-toastify';
 import NumberInput from '../../../app/common/form/NumberInput';
@@ -31,7 +31,7 @@ interface IProps{
 }
 
 const ApplicationForm1: React.FC<IProps> = ({trainerForm,setTrainerForm,setActiveTab,setTrainerForm2Message,setDocs, docs}) =>{
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { trainerRegistering, registerTrainer,tranierCreationForm,
       settrainerRegisteringFalse,user } = rootStore.userStore;
       const{deletingDocument,deleteDocument} = rootStore.profileStore;

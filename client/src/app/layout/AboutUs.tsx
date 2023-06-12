@@ -3,8 +3,8 @@ import { Link, useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Button, Container, Header, Segment, Image, Grid, Icon, Modal } from 'semantic-ui-react'
 import { useMediaQuery } from 'react-responsive';
-import { RootStoreContext } from '../stores/rootStore';
 import { observer } from 'mobx-react-lite';
+import { useStore } from '../stores/rootStore';
 
  const AboutUs = () => {
 
@@ -12,7 +12,7 @@ import { observer } from 'mobx-react-lite';
     const isTablet = useMediaQuery({ query: '(max-width: 767px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {isLoggedIn, user} = rootStore.userStore;
 
   return (

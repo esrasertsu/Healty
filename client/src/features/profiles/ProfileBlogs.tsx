@@ -1,12 +1,12 @@
 import React, { Fragment, useContext } from 'react'
 import { Segment, Header } from 'semantic-ui-react'
-import { RootStoreContext } from '../../app/stores/rootStore'
+import { useStore } from '../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
 import ProfileBlogList from './ProfileBlogList';
 
  const ProfileBlogs: React.FC = () => {
   
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
 
     const {
       profile,

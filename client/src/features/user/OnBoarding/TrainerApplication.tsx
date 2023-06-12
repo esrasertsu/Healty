@@ -19,7 +19,7 @@ import TextAreaInput from '../../../app/common/form/TextAreaInput';
 import TextInput from '../../../app/common/form/TextInput';
 import { Category, ICategory } from '../../../app/models/category';
 import { ITrainerFormValues, TrainerFormValues } from '../../../app/models/user';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import { OnChange } from 'react-final-form-listeners';
 import { toast } from 'react-toastify';
 import NumberInput from '../../../app/common/form/NumberInput';
@@ -38,7 +38,7 @@ interface DetailParams{
 
 const TrainerApplication : React.FC<RouteComponentProps<DetailParams>> = ({match, history}) =>{
     
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {trainerForm, setTrainerForm} = rootStore.userStore;
     const {accessibilities, loadAccessibilities} = rootStore.profileStore;
     const { trainerRegistering, registerTrainer,tranierCreationForm,

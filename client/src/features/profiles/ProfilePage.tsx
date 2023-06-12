@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router-dom'
 import { Container, Grid, Header, Icon, Image, Label, Segment, Statistic } from 'semantic-ui-react'
 import { LoadingComponent } from '../../app/layout/LoadingComponent'
 import { ProfileFormValues } from '../../app/models/profile'
-import { RootStoreContext } from '../../app/stores/rootStore'
+import { useStore } from '../../app/stores/rootStore'
 import ProfileBlogPlaceHolder from './ProfileBlogPlaceHolder'
 import ProfileBlogs from './ProfileBlogs'
 import ProfileCommentPlaceHolder from './ProfileCommentPlaceHolder'
@@ -29,7 +29,7 @@ interface IProps extends RouteComponentProps<RouteParams> {}
 
 const ProfilePage: React.FC<IProps> = ({match}) => {
   const history = useHistory();
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {setProfileNull,loadingProfile, loadProfile, loadingBlogs, loadingComments, loadingReferencePics, profile, follow,
          unfollow, isCurrentUser, loading,setActiveTab, setProfileForm, referencePics,loadingActivities} = rootStore.profileStore;
     const {isLoggedIn, user } = rootStore.userStore;

@@ -4,7 +4,7 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
 import { Segment, Header, Image, Container, Icon, Card } from 'semantic-ui-react'
 import { IBlog } from '../../app/models/blog';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { history } from '../../index'
 import { useMediaQuery } from 'react-responsive'
 import tr  from 'date-fns/locale/tr'
@@ -12,7 +12,7 @@ import tr  from 'date-fns/locale/tr'
 
 const BlogMoreFromUser:React.FC<{blog:IBlog}> = ({blog}) => {
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { userBlogs,setPredicateDisplayName ,setClearedBeforeNewPredicateComing,clearPredicates,setPredicate} = rootStore.blogStore;
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
 

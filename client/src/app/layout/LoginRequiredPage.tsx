@@ -4,11 +4,11 @@ import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom'
 import { Button, Container, Header, Icon, Image, Modal, Segment } from 'semantic-ui-react'
 import LoginForm from '../../features/user/LoginForm';
-import { RootStoreContext } from '../stores/rootStore';
+import { useStore } from '../stores/rootStore';
 
  const LoginRequiredPage = () => {
 
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {openModal,closeModal,modal} = rootStore.modalStore;
 
     

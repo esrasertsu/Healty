@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
 import { Button, Form, Grid, Header, Icon, Label, Radio } from 'semantic-ui-react';
 import { combineValidators, isRequired } from 'revalidate';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import TextAreaInput from '../../../app/common/form/TextAreaInput';
 import { OnChange } from 'react-final-form-listeners';
 import TextInput from '../../../app/common/form/TextInput';
@@ -18,7 +18,7 @@ const validate = combineValidators({
 })
 
  const ActivityJoinInfoForm:React.FC<IProps> = ({closeModal}) => {
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
 
  
   const {activityOnlineJoinInfo, setActivityOnlineJoinInfoForm,updateOnlineJoinInfo} = rootStore.activityStore;

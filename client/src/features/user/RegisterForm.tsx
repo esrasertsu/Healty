@@ -7,7 +7,7 @@ import { Button, Divider, Form, Header,Icon, Image, Modal } from 'semantic-ui-re
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
 import { IUserFormValues } from '../../app/models/user';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import SocialLogin from './SocialLogin';
 import GoogleLogin from 'react-google-login';
 import { observer } from 'mobx-react';
@@ -48,7 +48,7 @@ interface IProps {
   location: string;
 }
 const RegisterForm:React.FC<IProps> = ({location}) =>{
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { register,facebookLogin,loadingFbLogin,googleLogin,loadingGoogleLogin,submitting } = rootStore.userStore;
 
     const isDesktop =  useMediaQuery({ query: '(min-width: 920px)' })

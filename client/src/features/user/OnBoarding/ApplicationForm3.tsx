@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
 import { Accordion, Button, Checkbox, Confirm, Form,  Icon, Message, Modal } from 'semantic-ui-react';
 import { ITrainerFormValues, TrainerFormValues } from '../../../app/models/user';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import { toast } from 'react-toastify';
 import { useMediaQuery } from 'react-responsive';
 import DOMPurify from 'dompurify';
@@ -19,7 +19,7 @@ interface IProps{
 }
 
 const ApplicationForm3: React.FC<IProps> = ({userSubmerchant,setTrainerForm2Message,setError2Message,docs,setTrainerRegisteredSuccess}) =>{
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {trainerForm, settrainerRegisteringFalse,registerTrainer} = rootStore.userStore;
     const {loadContract,contract} = rootStore.contractStore;
     const sanitizer = DOMPurify.sanitize;

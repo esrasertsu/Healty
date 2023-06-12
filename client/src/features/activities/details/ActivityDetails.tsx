@@ -7,7 +7,7 @@ import  ActivityDetailedHeader from './ActivityDetailedHeader';
 import  ActivityDetailedChat  from './ActivityDetailedChat';
 import ActivityDetailedSideBar  from './ActivityDetailedSideBar';
 import ActivityDetailedInfo from './ActivityDetailedInfo';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import ActivityDetailPaymentSegment from './ActivityDetailPaymentSegment';
 import ActivityCountDown from './ActivityCountDown';
 import { useMediaQuery } from 'react-responsive'
@@ -24,7 +24,7 @@ interface DetailParams{
 
 const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, history}) => {
 
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { activity, loadActivity, loadingActivity,cancelAttendance,loading, loadingActivitySuggestions } = rootStore.activityStore;
     const { user,isLoggedIn } = rootStore.userStore;
     const [cancellationUserOpen, setcancellationUserOpen] = React.useState(false);

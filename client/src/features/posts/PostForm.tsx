@@ -6,7 +6,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../app/common/form/TextInput";
 import WYSIWYGEditor from "../../app/common/form/WYSIWYGEditor";
-import { RootStoreContext } from "../../app/stores/rootStore";
+import { useStore } from "../../app/stores/rootStore";
 import { PostFormValues } from "../../app/models/blog";
 import PhotoWidgetDropzone from "../../app/common/photoUpload/PhotoWidgetDropzone";
 import PhotoWidgetCropper from "../../app/common/photoUpload/PhotoWidgetCropper";
@@ -32,7 +32,7 @@ const PostForm: React.FC<RouteComponentProps<DetailParams>> = ({
   match,
   history,
 }) => {
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {
     loadBlog,
     createPost,

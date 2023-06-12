@@ -2,7 +2,7 @@ import { action, computed, observable, reaction, runInAction,makeObservable } fr
 import { toast } from "react-toastify";
 import agent from "../api/agent";
 import { BlogUpdateFormValues, IBlog, IBlogUpdateFormValues, IPostFormValues } from "../models/blog";
-import { RootStore } from "./rootStore";
+import { store } from "./rootStore";
 import { SyntheticEvent } from 'react';
 import { IProfileBlog } from "../models/profile";
 import { history } from "../..";
@@ -10,11 +10,8 @@ import { history } from "../..";
 const LIMIT = 9;
 
 export default class BlogStore{
-    rootStore: RootStore;
-    constructor(rootStore: RootStore){
-        this.rootStore = rootStore;
+    constructor(){
         makeObservable(this);
-
         
         reaction(
             () => this.predicate.keys() ,
@@ -23,7 +20,7 @@ export default class BlogStore{
                 {
                     this.page=0;
                     this.blogRegistery.clear();
-                    this.rootStore.categoryStore.getPredicateTexts(this.predicate);
+                    store.categoryStore.getPredicateTexts(this.predicate);
                     this.loadBlogs();
                 }
                 
@@ -68,8 +65,8 @@ export default class BlogStore{
         this.updatedBlog = up;
     }
     @computed get isCurrentUserAuthor(){
-        if (this.rootStore.userStore.user && this.post){
-            return this.rootStore.userStore.user.userName === this.post!.username;
+        if (store.userStore.user && this.post){
+            return store.userStore.user.userName === this.post!.username;
         }else {
             return false;
         }
@@ -152,7 +149,7 @@ export default class BlogStore{
             const {blogs, blogCount } = blogsEnvelope;
             runInAction(()=>{
                 blogs.forEach((blog) =>{
-                  //  setActivityProps(activity,this.rootStore.userStore.user!)
+                  //  setActivityProps(activity,store.userStore.user!)
                     this.blogRegistery.set(blog.id, blog);
                 });
                 this.updatedBlog= false;

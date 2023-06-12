@@ -1,23 +1,19 @@
 import { HttpTransportType, HubConnection, HubConnectionBuilder, JsonHubProtocol, LogLevel } from '@microsoft/signalr';
-import {observable, action, computed, runInAction, reaction, toJS,makeObservable} from 'mobx';
+import {observable, action, computed, runInAction, reaction, toJS,makeAutoObservable} from 'mobx';
 import { SyntheticEvent } from 'react';
 import { toast } from 'react-toastify';
 import agent from '../api/agent';
 import { createAttendee, setActivityProps } from '../common/util/util';
 import { ActivityFormValues, ActivityOnlineJoinInfo, ActivityStatus, IActivity, IActivityFormValues, IActivityMapItem, IActivityOnlineJoinInfo, IActivityReview, IActivitySelectedFilter, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IPersonalActivity, PaymentUserInfoDetails } from '../models/activity';
 import { ICategory, ISubCategory } from '../models/category';
-import { RootStore } from './rootStore';
+import { store } from './rootStore';
 import { history } from '../..';
 
 const LIMIT = 6;
 export default class ActivityStore {
 
-    rootStore:RootStore;
-    constructor(rootStore: RootStore){
-        this.rootStore = rootStore;
-        makeObservable(this);
-
-
+    constructor(){
+        makeAutoObservable(this);
         reaction(
             () => this.predicate.keys(),
             () => {
@@ -234,7 +230,7 @@ export default class ActivityStore {
         params.append('limit', String(LIMIT));
         params.append('offset', `${this.personalActivityPage ? this.personalActivityPage * LIMIT : 0}`);
 
-        params.append("userName", this.rootStore.userStore.user!.userName)
+        params.append("userName", store.userStore.user!.userName)
         params.append("status", this.personalActStatus)
 
       
@@ -253,7 +249,7 @@ export default class ActivityStore {
             transport,
             logMessageContent: true,
             logger: LogLevel.Warning,
-            accessTokenFactory: () => this.rootStore.commonStore.token!
+            accessTokenFactory: () => store.commonStore.token!
           };
     
         this.hubConnection = new HubConnectionBuilder()
@@ -342,12 +338,12 @@ export default class ActivityStore {
             const {activities, activityCount } = activitiesEnvelope;
             runInAction(() => {
                 activities.forEach((activity) =>{
-                    setActivityProps(activity,this.rootStore.userStore.user!)
+                    setActivityProps(activity,store.userStore.user!)
                     this.activityRegistery.set(activity.id, activity);
                 });
                 this.activityCount = activityCount;
                 this.loadingInitial = false;
-                this.rootStore.categoryStore.allCategoriesOptionList.length === 0 && this.rootStore.categoryStore.loadAllCategoryList();
+                store.categoryStore.allCategoriesOptionList.length === 0 && store.categoryStore.loadAllCategoryList();
             })
             } catch (error) {
                 console.log(error);
@@ -401,7 +397,7 @@ export default class ActivityStore {
                 });
                 this.personalActivityCount = activityCount;
                 this.loadingActivity = false;
-                this.rootStore.categoryStore.allCategoriesOptionList.length === 0 && this.rootStore.categoryStore.loadAllCategoryList();
+                store.categoryStore.allCategoriesOptionList.length === 0 && store.categoryStore.loadAllCategoryList();
             })
             } catch (error) {
                 console.log(error);
@@ -418,7 +414,7 @@ export default class ActivityStore {
 
         if(activity){
             this.activity = activity;
-            this.rootStore.categoryStore.loadAllCategoryList();
+            store.categoryStore.loadAllCategoryList();
             this.loadActivitySuggestions(activity.categories,activity.subCategories);
             this.loadingActivity = false;
             return toJS(activity);
@@ -427,8 +423,8 @@ export default class ActivityStore {
             try {
                 let activity = await agent.Activities.details(id);
                 runInAction(() => {
-                    setActivityProps(activity,this.rootStore.userStore.user!)
-                    this.rootStore.categoryStore.loadAllCategoryList();
+                    setActivityProps(activity,store.userStore.user!)
+                    store.categoryStore.loadAllCategoryList();
                     this.loadActivitySuggestions(activity.categories,activity.subCategories);
                     this.activity = activity;
                     this.loadingActivity = false;
@@ -475,7 +471,7 @@ export default class ActivityStore {
         this.submitting = true;
         try {
            await agent.Activities.create(activity);
-            //const attendee = createAttendee(this.rootStore.userStore.user!);
+            //const attendee = createAttendee(store.userStore.user!);
             // attendee.isHost = true;
             // let attendees = [];
             // attendees.push(attendee);
@@ -483,7 +479,7 @@ export default class ActivityStore {
             // activity.comments = [];
             // activity.isHost = true;            
             runInAction( () => {
-              //  setActivityProps(newAct,this.rootStore.userStore.user!)
+              //  setActivityProps(newAct,store.userStore.user!)
               //  this.activityRegistery.set(newAct.id, newAct);
               //  this.activity = newAct;
               this.submitting = false;
@@ -506,7 +502,7 @@ export default class ActivityStore {
         try {
             var activityReturned = await agent.Activities.update(activity);
             runInAction(() => {
-            setActivityProps(activityReturned,this.rootStore.userStore.user!)
+            setActivityProps(activityReturned,store.userStore.user!)
             this.activityRegistery.delete(activity.id);
             this.activityRegistery.set(activity.id, activityReturned);
             this.activity = activityReturned;
@@ -546,7 +542,7 @@ export default class ActivityStore {
     }
 
     @action attendActivity = async() => {
-       const attendee = createAttendee(this.rootStore.userStore.user!);
+       const attendee = createAttendee(store.userStore.user!);
        this.loading = true;
        try {
            await agent.Activities.attend(this.activity!.id);
@@ -576,7 +572,7 @@ export default class ActivityStore {
             await agent.Activities.unattend(this.activity!.id);
             runInAction(()=>{
                 if(this.activity){
-                    this.activity.attendees = this.activity.attendees.filter(a => a.userName !== this.rootStore.userStore.user!.userName);
+                    this.activity.attendees = this.activity.attendees.filter(a => a.userName !== store.userStore.user!.userName);
                     this.activity.isGoing = false;
                     this.activity.attendanceCount = this.activity.attendanceCount-1;
                     this.activityRegistery.set(this.activity.id, this.activity);
@@ -755,9 +751,9 @@ export default class ActivityStore {
                         activity.isGoing = false;
                         this.deleteActivityRegisteryItem(activity.id);
                         this.activityRegistery.set(activity.id, res);
-                        this.rootStore.orderStore.deleteOrderRegisteryItem(orderId);
-                        this.rootStore.orderStore.order!.orderStatus = res.status;
-                        this.rootStore.orderStore.orderRegistery.set(orderId, this.rootStore.orderStore.order!);
+                        store.orderStore.deleteOrderRegisteryItem(orderId);
+                        store.orderStore.order!.orderStatus = res.status;
+                        store.orderStore.orderRegistery.set(orderId, store.orderStore.order!);
                     });
 
                 

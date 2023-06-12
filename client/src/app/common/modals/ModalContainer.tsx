@@ -1,10 +1,10 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import { Modal } from "semantic-ui-react";
-import { RootStoreContext } from "../../stores/rootStore";
+import { useStore } from "../../stores/rootStore";
 
 const ModalContainer = () => {
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { modal: {open, body, image,footer,dimmer,closeOnDimmerClick, className,header }, closeModal } = rootStore.modalStore;
 
   return (

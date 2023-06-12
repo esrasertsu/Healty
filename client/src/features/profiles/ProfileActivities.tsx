@@ -4,7 +4,7 @@ import { Tab, Grid, Card, Image, TabProps, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { IProfile, IUserActivity } from '../../app/models/profile';
 import { format } from 'date-fns';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import tr  from 'date-fns/locale/tr'
 import { useMediaQuery } from 'react-responsive'
 
@@ -33,7 +33,7 @@ const getPanes = (profile:IProfile) => {
 }
 
 const ProfileEvents = () => {
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {
     loadUserActivities,
     profile,

@@ -9,7 +9,7 @@ interface IProps {
 
 export const ErrorMessage: React.FC<IProps> = ({ error, text }) => {
   return (
-    error ?
+    (error !== null && error !== undefined) ?
     <Message error>
       <Message.Header>{error.statusText === "Bad Request" || error.statusText === "Internal Server Error" ? "" : error.statusText}</Message.Header>
       {error.data && Object.keys(error.data.errors).length > 0 && (

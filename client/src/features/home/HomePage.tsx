@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Button, Container, Header, Segment, Image, Grid, Icon, Modal } from 'semantic-ui-react'
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { Helmet } from 'react-helmet-async';
 import { useMediaQuery } from 'react-responsive'
 import ActivitySearchArea from './ActivitySearchArea';
@@ -11,7 +11,7 @@ import { useHistory } from 'react-router-dom';
 
 const HomePage = () => {
   const history = useHistory();
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {user} = rootStore.userStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;
     const [loading, setLoading] = useState(false);

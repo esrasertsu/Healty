@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Segment, Header, Form, Button,Comment, Icon , Image, Modal} from 'semantic-ui-react'
 
-import { RootStoreContext } from '../../../app/stores/rootStore'
+import { useStore } from '../../../app/stores/rootStore'
 import { Form as FinalForm, Field} from 'react-final-form';
 import { useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
@@ -24,7 +24,7 @@ const numberOptions = [
 
  const ActivityDetailPaymentSegment:React.FC<{activity:IActivity}> = ({activity}) =>  {
   const history = useHistory();
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {getActivityPaymentPage,attendActivity} = rootStore.activityStore;
   const {isLoggedIn} = rootStore.userStore;
   const {openModal,closeModal,modal} = rootStore.modalStore;

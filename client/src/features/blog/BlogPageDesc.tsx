@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import React, { useContext } from 'react'
 import { Segment, Header, Button, Image, Container, Icon, Label, Modal } from 'semantic-ui-react'
 import { IBlog } from '../../app/models/blog';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import dompurify from 'dompurify';
 import PostUpdateForm from '../posts/PostUpdateForm';
 import LoginForm from '../user/LoginForm';
@@ -22,7 +22,7 @@ interface IProps{
 
 const BlogPageDesc:React.FC<IProps> = ({editMode,blog,setEditMode,setUpdatedBlog,updatedBlog}) => {
   const history = useHistory();
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { isCurrentUserAuthor, deletePost ,editPost} = rootStore.blogStore;
   const {isLoggedIn} = rootStore.userStore;
   const sanitizer = dompurify.sanitize;

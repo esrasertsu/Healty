@@ -4,14 +4,14 @@ import { Button, Container, Header, Icon, Image, List, Modal } from 'semantic-ui
 import { ITrainerFormValues, TrainerFormValues } from '../../app/models/user';
 import { useMediaQuery } from 'react-responsive'
 
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import FormPage1 from './FormPage1';
 import { useHistory } from 'react-router-dom';
 
 const TrainerForm = () =>{
 
   const history = useHistory();
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {openModal,closeModal,modal} = rootStore.modalStore;
     const {trainerForm, setTrainerForm} = rootStore.userStore;
 

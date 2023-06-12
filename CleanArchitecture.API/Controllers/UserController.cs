@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.API.Services;
 using CleanArchitecture.Application.SubMerchants;
 using CleanArchitecture.Application.User;
 using CleanArchitecture.Domain;
@@ -16,33 +15,15 @@ namespace CleanArchitecture.API.Controllers
 {
     public class UserController : BaseController
     {
-        [AllowAnonymous]
-        [HttpPost("login")]
-        public async Task<ActionResult<User>> Login(Login.Query query)
-        {
-            var user = await Mediator.Send(query);
-            SetTokenCookie(user.RefreshToken);
-            return user;
-        }
+         private readonly UserManager<AppUser> _userManager;
+        private readonly TokenService _tokenService;
 
-        [AllowAnonymous]
-        [HttpPost("register")]
-        public async Task<ActionResult> Register(Register.Command command)
+        public UserController(UserManager<AppUser> userManager, TokenService tokenService)
         {
-            command.Origin = Request.Headers["origin"];
-            await Mediator.Send(command);
-            return Ok("Kayıt başarılı - Giriş yapmak için lütfen email hesabınızdaki linki kullanınız.");
+            _tokenService = tokenService;
+            _userManager = userManager;
         }
-
-        [HttpGet]
-        public async Task<ActionResult<User>> CurrentUser()
-        {
-            var user = await Mediator.Send(new CurrentUser.Query());
-            if(user!=null)
-                SetTokenCookie(user.RefreshToken);
-            return user;
-        }
-
+       
         [HttpGet("account")]
         public async Task<ActionResult<AccountDto>> GetAccountSettings()
         {
@@ -101,17 +82,6 @@ namespace CleanArchitecture.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("registerWaitingTrainer")]
-        public async Task<ActionResult<User>> RegisterWaitingTrainer([FromForm] RegisterWaitingTrainer.Command command)
-        {
-            command.Origin = Request.Headers["origin"];
-            var user = await Mediator.Send(command);
-            if (user != null)
-                SetTokenCookie(user.RefreshToken);
-            return user;
-        }
-
-        [AllowAnonymous]
         [HttpPost("registertrainer")]
         public async Task<ActionResult<Unit>> RegisterTrainer([FromForm]RegisterTrainer.Command command)
         {
@@ -144,8 +114,8 @@ namespace CleanArchitecture.API.Controllers
         public async Task<ActionResult<User>> FacebookLogin(ExternalLogin.Query query)
         {
             var user = await Mediator.Send(query);
-            SetTokenCookie(user.RefreshToken);
-            return user;
+            await SetRefreshToken(user);    
+            return CreateUserObject(user);
         }
 
         [AllowAnonymous]
@@ -153,19 +123,8 @@ namespace CleanArchitecture.API.Controllers
         public async Task<ActionResult<User>> GoogleLogin(GoogleLogin.Query query)
         {
             var user = await Mediator.Send(query);
-            SetTokenCookie(user.RefreshToken);
-            return user;
-        }
-
-        [HttpPost("refreshToken")]
-        public async Task<ActionResult<User>> RefreshToken(RefreshTokenHandler.Command command)
-        {
-            command.RefreshToken = Request.Cookies["refreshToken"];
-
-            var user = await Mediator.Send(command);
-
-            SetTokenCookie(user.RefreshToken);
-            return user;
+            await SetRefreshToken(user);    
+            return CreateUserObject(user);
         }
 
         [AllowAnonymous]
@@ -209,17 +168,35 @@ namespace CleanArchitecture.API.Controllers
             return result;
         }
 
-        private void SetTokenCookie(string refreshToken)
+         private async Task SetRefreshToken(AppUser user)
         {
-            var cookieOptions = new CookieOptions
-            {
+            var refreshToken = _tokenService.GenerateRefreshToken();
+
+            user.RefreshTokens.Add(refreshToken);
+            await _userManager.UpdateAsync(user);
+
+            var cookieOptions = new CookieOptions{
                 HttpOnly = true,
                 Expires = DateTime.UtcNow.AddDays(7),
                 IsEssential = true,
                 SameSite = SameSiteMode.None,
                 Secure = true
             };
-            Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+
+            Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
+        }
+
+        private User CreateUserObject(AppUser user)
+        {
+            return new User
+            {
+                DisplayName = user.DisplayName,
+                Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
+                Token = _tokenService.CreateToken(user),
+                UserName = user.UserName,
+                Email = user.Email,
+                Role = user.Role.ToString(),
+            };
         }
     }
 }

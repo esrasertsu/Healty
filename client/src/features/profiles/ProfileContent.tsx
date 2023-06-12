@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import {Button, ButtonGroup, Icon, Label, Menu, Tab} from 'semantic-ui-react';
 import { IProfile } from '../../app/models/profile';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import ProfileActivities from './ProfileActivities';
 import ProfileDescription from './ProfileDescription';
 import ProfileFollowings from './ProfileFollowings';
@@ -89,7 +89,7 @@ const getPanes = (profile:IProfile,isTabletOrMobile:boolean) => {
 
 
 const ProfileContent: React.FC<IProps> = ({setActiveTab, profile}) => {
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
 
         const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })
 

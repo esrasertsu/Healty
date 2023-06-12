@@ -10,7 +10,7 @@ import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../app/common/form/TextInput";
 import TextAreaInput from "../../app/common/form/TextAreaInput";
 import {combineValidators, composeValidators, createValidator, hasLengthGreaterThan, hasLengthLessThan, isRequired} from 'revalidate';
-import { RootStoreContext } from "../../app/stores/rootStore";
+import { useStore } from "../../app/stores/rootStore";
 import { OnChange } from 'react-final-form-listeners';
 import { action, values } from "mobx";
 import { toast } from "react-toastify";
@@ -37,7 +37,7 @@ interface IProps{
 const SubMerchantDetails: React.FC<IProps> = ({setIsSubMerchant,id,headerHide}) => {
   const history = useHistory();
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
 
   const {
     cities

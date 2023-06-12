@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Segment,  Form, Button,Icon, Grid,  Step,  Container, Modal } from 'semantic-ui-react'
-import { RootStoreContext } from '../../../app/stores/rootStore'
+import { useStore } from '../../../app/stores/rootStore'
 import { Form as FinalForm, Field} from 'react-final-form';
 import {  RouteComponentProps } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
@@ -39,7 +39,7 @@ const validate = combineValidators({
 
  const ActivityPaymentPage: React.FC<IProps> = ({match,location}) => {
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {getActivityPaymentPage,setActivityUserPaymentInfo,activityUserPaymentInfo,getUserPaymentDetailedInfo,
     processPayment, loadActivity, loadingActivity,activity} = rootStore.activityStore;
   const {

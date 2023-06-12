@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
 import { Button, Form, Grid,Image,Modal } from 'semantic-ui-react';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { IMessageForm } from '../../app/models/message';
 import LoginForm from '../user/LoginForm';
 import { observer } from 'mobx-react-lite';
@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 // }
 
  const ProfileMessageForm:React.FC = () => {
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
 
   const {
     profile,sendMessageFromProfile, submittingMessage

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { Segment, List, Item, Label,Image, Header, Divider } from 'semantic-ui-react'
 import { IAttendee } from '../../../app/models/activity'
 import { Scrollbars } from 'react-custom-scrollbars';
-import { RootStoreContext } from '../../../app/stores/rootStore'
+import { useStore } from '../../../app/stores/rootStore'
 
 interface IProps{
   atCount:number;
@@ -13,7 +13,7 @@ interface IProps{
 }
  const ActivityDetailedSideBar: React.FC<IProps> = ({atCount, attendees,date}) => {
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
 
   const { isLoggedIn } = rootStore.userStore;
 

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Menu, Container, Image, Label, Icon, Button, Modal } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import LoginForm from '../user/LoginForm';
 import  RegisterForm from '../user/RegisterForm';
 import TrainerForm from '../user/TrainerRegisterModal';
@@ -13,7 +13,7 @@ interface IProps{
     visible:boolean;
 }
 const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { user, logout,loggingOut} = rootStore.userStore;
     const { activeMenu,setActiveMenu, token } = rootStore.commonStore;
     const { notificationCount, isLoggedIn } = rootStore.userStore;

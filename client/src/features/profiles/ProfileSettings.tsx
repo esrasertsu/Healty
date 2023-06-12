@@ -9,7 +9,7 @@ import TextInput from '../../app/common/form/TextInput';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
 import NumberInput from '../../app/common/form/NumberInput';
 import DropdownMultiple from '../../app/common/form/DropdownMultiple';
-import { RootStoreContext } from '../../app/stores/rootStore'
+import { useStore } from '../../app/stores/rootStore'
 import DropdownInput from '../../app/common/form/DropdownInput';
 import { OnChange } from 'react-final-form-listeners';
 import FileUploadDropzone from '../../app/common/util/FileUploadDropzone';
@@ -28,7 +28,7 @@ interface IProps {
 
 const ProfileSettings: React.FC<IProps> = ({ updateProfile, profile,deleteDocument }) => {
    
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {accessibilities, profileForm, setProfileForm, deletingDocument} = rootStore.profileStore;
     const {allCategoriesOptionList} = rootStore.categoryStore;
     const {cities} = rootStore.commonStore;

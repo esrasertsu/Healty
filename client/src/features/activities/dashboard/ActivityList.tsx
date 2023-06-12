@@ -2,14 +2,14 @@ import React, { Fragment, useContext } from 'react'
 import { Grid, Header, Icon, Image, Item, Label, Message } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
 import ActivityListItem  from './ActivityListItem';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import { format } from 'date-fns';
 import tr  from 'date-fns/locale/tr'
 import { useMediaQuery } from 'react-responsive'
 
 const ActivityList: React.FC = () => {
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { activitiesByDate } = rootStore.activityStore;
   const list = [
     'Hata olduğunu düşünüyorsanız site yöneticisiyle iletişime geçebilir,',

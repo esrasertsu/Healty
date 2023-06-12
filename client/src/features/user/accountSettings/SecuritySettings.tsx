@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useState } from 'react'
 import { Segment, Header, Form, Button, Grid, Message } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
 import { useMediaQuery } from 'react-responsive'
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import { LoadingComponent } from '../../../app/layout/LoadingComponent';
 import { Form as FinalForm, Field } from 'react-final-form';
 import TextInput from '../../../app/common/form/TextInput';
@@ -14,7 +14,7 @@ import { toast } from 'react-toastify';
 
  const SecuritySettings: React.FC = () => {
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {
     cities
   } = rootStore.commonStore;

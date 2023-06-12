@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { Menu, Segment, Accordion, List, Placeholder, Label } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { useMediaQuery } from 'react-responsive'
 
 interface IProps{
@@ -11,7 +11,7 @@ interface IProps{
 
 const BlogFilters: React.FC<IProps> = ({setisAccOpen}) => {
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { setPredicate,predicate,clearPredicates, setClearedBeforeNewPredicateComing } = rootStore.blogStore; 
   const {
     allDetailedList,

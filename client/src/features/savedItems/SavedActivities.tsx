@@ -4,7 +4,7 @@ import React, { Fragment, useContext, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Button, Card, Grid, Header, Icon, Image, Segment, Tab } from 'semantic-ui-react';
 import { SemanticWIDTHS } from 'semantic-ui-react/dist/commonjs/generic';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import tr  from 'date-fns/locale/tr'
 import { useHistory } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ const twoItems:SemanticWIDTHS = 2;
 const SavedActivities = () => {
 
     const history = useHistory();
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { getSavedActivities, savedActivities, loading } = rootStore.activityStore;
 
     const { user } = rootStore.userStore;

@@ -3,11 +3,7 @@ using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,13 +11,13 @@ namespace CleanArchitecture.Application.User
 {
     public class ExternalLogin
     {
-        public class Query : IRequest<User>
+        public class Query : IRequest<AppUser>
         {
             public string AccessToken { get; set; }
 
         }
 
-        public class Handler : IRequestHandler<Query, User>
+        public class Handler : IRequestHandler<Query, AppUser>
         {
             private readonly UserManager<AppUser> _userManager;
             private readonly IUserAccessor _userAccessor;
@@ -37,7 +33,7 @@ namespace CleanArchitecture.Application.User
                 _facebookAccessor = facebookAccessor;
                 _userCultureInfo = userCultureInfo;
             }
-            public async Task<User> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<AppUser> Handle(Query request, CancellationToken cancellationToken)
             {
                 var userInfo = await _facebookAccessor.FacebookLogin(request.AccessToken);
 
@@ -46,15 +42,12 @@ namespace CleanArchitecture.Application.User
 
                 var user = await _userManager.FindByEmailAsync(userInfo.Email);
 
-                var resfreshToken = _jwtGenerator.GenerateRefreshToken();
-
                 if (user != null)
                 {
                     user.LastLoginDate = _userCultureInfo.GetUserLocalTime();
                     user.IsOnline = true;
-                    user.RefreshTokens.Add(resfreshToken);
                     await _userManager.UpdateAsync(user);
-                    return new User(user, _jwtGenerator, resfreshToken.Token);
+                    return user;
                 }
 
                 user = new AppUser
@@ -66,12 +59,7 @@ namespace CleanArchitecture.Application.User
                     Role = Role.User,
                     EmailConfirmed = true,
                     Issuer = "Facebook"
-
-                    // Token = _jwtGenerator.CreateToken(user),
-                    // Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
-                    //   Role = 
                 };
-
 
                 var photo = new Photo
                 {
@@ -81,7 +69,6 @@ namespace CleanArchitecture.Application.User
                 };
 
                 user.Photos.Add(photo);
-                user.RefreshTokens.Add(resfreshToken);
                 user.RegistrationDate = _userCultureInfo.GetUserLocalTime();
                 user.LastLoginDate = _userCultureInfo.GetUserLocalTime();
                 user.IsOnline = true;
@@ -91,8 +78,7 @@ namespace CleanArchitecture.Application.User
                 if (!result.Succeeded)
                     throw new RestException(HttpStatusCode.BadRequest, new { User = "Problem creating user" });
 
-
-                return new User(user, _jwtGenerator, resfreshToken.Token);
+                return user;
 
             }
         }

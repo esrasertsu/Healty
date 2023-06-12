@@ -7,7 +7,7 @@ import { Button, Confirm, Form, Grid, Header, Icon,  Image,  Message, Modal, Seg
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
 import { ITrainerCreationFormValues, ITrainerFormValues, TrainerFormValues } from '../../app/models/user';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { OnChange } from 'react-final-form-listeners';
 import { useMediaQuery } from 'react-responsive'
 import { action, runInAction } from 'mobx';
@@ -32,7 +32,7 @@ import { Category, ICategory } from '../../app/models/category';
 
 // })
 const FormPage1:React.FC = () =>{
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { trainerRegistering, tranierCreationForm,setTrainerCreationForm,userNameAndPhoneCheck,
     setTrainerFormMessage, trainerFormMessage,errorMessage,setErrorMessage,registerWaitingTrainer } = rootStore.userStore;
    // trainerForm, setTrainerForm,

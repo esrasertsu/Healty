@@ -1,7 +1,7 @@
 import React,  { useEffect, useContext, useState, Fragment}  from 'react';
 import { Accordion, Button, Card, Container, Grid, Header, Icon, Image, Label} from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import InfiniteScroll from 'react-infinite-scroller';
 import BlogFilters from './BlogFilters';
 import BlogMainPageItemsPlaceholder from './BlogMainPageItemsPlaceholder';
@@ -12,7 +12,7 @@ import { useMediaQuery } from 'react-responsive'
 
 
 const BlogList: React.FC = () => {
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {getBlogsByDate,loadBlogs, loadingPosts, setPage, page, totalPages,predicate,removeOnePredicate,removeSubCatPredicate
   ,predicateDisplayName} = rootStore.blogStore;
   const { predicateTexts} = rootStore.categoryStore;

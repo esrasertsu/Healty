@@ -2,11 +2,11 @@ import React, { useContext } from 'react';
 import { Button, Container, Header, Icon, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { useHistory } from 'react-router-dom';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 
 
 const ActivitySuccessPage:React.FC = () =>{
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const history = useHistory();
     const {user} = rootStore.userStore;
 

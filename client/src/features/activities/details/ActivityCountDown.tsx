@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from 'react'
 import { Segment, Header, Statistic } from 'semantic-ui-react'
-import { RootStoreContext } from '../../../app/stores/rootStore'
+import { useStore } from '../../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
 import { IActivity } from '../../../app/models/activity';
 import Countdown from 'react-countdown';
@@ -14,7 +14,7 @@ const Completionist = () => <div style={{textAlign:"center", marginTop:"20px"}}>
 
  const ActivityCountDown:React.FC<{activity:IActivity}> = ({activity}) =>  {
 
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { user } = rootStore.userStore;
 
 

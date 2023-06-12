@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import { Container, Grid } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import {  RouteComponentProps } from 'react-router-dom';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import BlogPageHeader from './BlogPageHeader';
 import BlogPageDesc from './BlogPageDesc';
@@ -19,7 +19,7 @@ interface DetailParams{
 
 const BlogPage: React.FC<RouteComponentProps<DetailParams>> = ({match, history}) => {
 
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { post, loadBlog, loadingPost ,setUpdatedBlog, updatedBlog, setBlogForm} = rootStore.blogStore;
     const [editMode, setEditMode] = useState(false);
 

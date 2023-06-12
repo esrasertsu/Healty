@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import {ActivityListItemAttendees } from './ActivityListItemAttendees';
 import { StarRating } from '../../../app/common/form/StarRating';
 import { borderColors, colors } from '../../../app/models/category';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import { useMediaQuery } from 'react-responsive'
 import tr  from 'date-fns/locale/tr'
 import { useHistory } from 'react-router-dom';
@@ -17,7 +17,7 @@ import { FcClock,FcOvertime,FcPositiveDynamic } from "react-icons/fc";
 
 
 const ActivityListItem: React.FC<{activity: IActivity}> = ({activity}) => {  
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {isLoggedIn,user} = rootStore.userStore;
     const {save,unsave} = rootStore.activityStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;

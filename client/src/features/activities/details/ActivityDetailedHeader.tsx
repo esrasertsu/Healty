@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { Segment, Item, Header, Button, Image, Modal, Icon, Confirm, Container, Grid, Label } from 'semantic-ui-react'
 import { ActivityStatus, IActivity } from '../../../app/models/activity';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import tr  from 'date-fns/locale/tr'
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -39,7 +39,7 @@ const ActivityDetailedHeader:React.FC<{activity:IActivity}> = ({activity}) => {
 
   const host = activity.attendees && activity.attendees.filter(x => x.isHost === true)[0];
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { cancelAttendance, loading, deleteActivity,changeActivityStatus} = rootStore.activityStore;
   const { getOrders, orderList } = rootStore.orderStore;
   const {isLoggedIn,user} = rootStore.userStore;

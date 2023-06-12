@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Tab, Grid, Header, Button, Icon, List, Modal } from 'semantic-ui-react';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import ProfileEditForm from './ProfileUpdateForm';
 import { observer } from 'mobx-react-lite';
 import { toast } from 'react-toastify';
@@ -8,7 +8,7 @@ import { Category, ICategory } from '../../app/models/category';
 import Documents from './Documents';
 
 const ProfileDescription = () => {
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { updateProfile, profile, isCurrentUser ,setUpdatedProfile, updatedProfile,deleteDocument,updatingProfile} = rootStore.profileStore;
   const [editMode, setEditMode] = useState(false);
   const {openModal,closeModal,modal} = rootStore.modalStore;

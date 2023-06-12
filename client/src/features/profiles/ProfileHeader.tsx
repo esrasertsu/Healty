@@ -6,7 +6,7 @@ import { StarRating } from '../../app/common/form/StarRating';
 import { colors } from '../../app/models/category';
 import PhotoWidgetDropzone from '../../app/common/photoUpload/PhotoWidgetDropzone';
 import PhotoWidgetCropper from '../../app/common/photoUpload/PhotoWidgetCropper';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { useMediaQuery } from 'react-responsive'
 import * as _screenfull from "screenfull";
 import ReactPlayer from 'react-player/youtube'
@@ -47,7 +47,7 @@ const ProfileHeader:React.FC<IProps> = ({profile, loading, follow, unfollow,isCu
 
 
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { uploadCoverPic,uploadingCoverImage } = rootStore.profileStore;
   const {openModal,closeModal,modal} = rootStore.modalStore;
   const {isLoggedIn ,user} = rootStore.userStore;

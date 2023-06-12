@@ -1,7 +1,7 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react';
 import { Container, Grid, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
 import MessageChat from './MessageChat';
 import ChatRoomList from './ChatRoomList';
@@ -11,7 +11,7 @@ import { useMediaQuery } from 'react-responsive'
 
 const MessagesPage: React.FC = () => {
 
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { loadingChatRooms, loadChatRooms , chatRoomId, setChatRoomId} = rootStore.messageStore;
     const { hubConnection,createHubConnection} = rootStore.userStore;
     const isMobile = useMediaQuery({ query: '(max-width: 767px)' })

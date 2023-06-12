@@ -1,7 +1,7 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react';
 import { Button, Container, Form, Icon, Item, Label, Loader, Popup, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
 import { Form as FinalForm, Field} from 'react-final-form';
 import TextAreaInput from '../../app/common/form/TextAreaInput';
@@ -16,7 +16,7 @@ interface IProps{
   }
 const MessageChat: React.FC<IProps> = ({setshowChatRoomList}) => {
     const history = useHistory();
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { messagesByDate, setPage,loadMessages ,page, totalPages ,chatRoomId,addComment, chatRooms} = rootStore.messageStore;
     const [loadingNext, setLoadingNext] = useState(false);
     const { user } = rootStore.userStore;

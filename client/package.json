@@ -7,7 +7,6 @@
     "name": "AfitApp.com",
     "url": "https://afitapp.com"
   },
-  "homepage": "https://afitapp.com",
   "private": true,
   "dependencies": {
     "@artsy/fresnel": "^3.5.0",
@@ -89,13 +88,13 @@
     "react-moment": "^1.1.2",
     "react-otp-input": "^2.4.0",
     "react-phone-number-input": "^3.1.26",
-    "react-photoswipe-gallery": "^1.3.6",
+    "react-photoswipe-gallery": "^1.3.10",
     "react-player": "^2.9.0",
     "react-quill": "^1.3.5",
     "react-rating-stars-component": "^2.2.0",
     "react-recaptcha": "^2.3.10",
     "react-responsive": "^8.2.0",
-    "react-scripts": "^3.4.4",
+    "react-scripts": "^4.0.3",
     "react-slick": "^0.28.1",
     "react-star-rating-component": "^1.4.1",
     "react-toastify": "^6.2.0",
@@ -115,7 +114,7 @@
     "react-error-overlay": "6.0.9"
   },
   "scripts": {
-    "start": "react-scripts --max_old_space_size=4096 start",
+    "start": "react-scripts --openssl-legacy-provider --max_old_space_size=4096 start",
     "build": "react-scripts --max_old_space_size=4096 build",
     "postbuild": "move build ../CleanArchitecture.API/wwwroot",
     "test": "react-scripts test",
@@ -153,6 +152,7 @@
     "@types/react-phone-number-input": "^3.0.11",
     "@types/react-recaptcha": "^2.3.4",
     "@types/react-responsive": "^8.0.3",
+    "@types/react-router": "^5.1.14",
     "@types/react-router-dom": "^5.3.2",
     "react-router-dom": "^5.3.0",
     "sass": "^1.45.0",

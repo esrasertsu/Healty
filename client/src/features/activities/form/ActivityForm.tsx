@@ -12,7 +12,7 @@ import TextAreaInput from "../../../app/common/form/TextAreaInput";
 import DateInput from "../../../app/common/form/DateInput";
 import { combineDateAndTime } from "../../../app/common/util/util";
 import {combineValidators, composeValidators, createValidator, hasLengthGreaterThan, isRequired} from 'revalidate';
-import { RootStoreContext } from "../../../app/stores/rootStore";
+import { useStore } from "../../../app/stores/rootStore";
 import DropdownMultiple from "../../../app/common/form/DropdownMultiple";
 import { Category, ICategory } from "../../../app/models/category";
 import DropdownInput from "../../../app/common/form/DropdownInput";
@@ -34,7 +34,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParams>> = ({
   match,
   history,
 }) => {
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {
     activityForm,
     setActivityForm,

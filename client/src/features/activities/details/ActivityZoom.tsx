@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Segment, Header, Button, Icon, Statistic, StatisticGroup } from 'semantic-ui-react'
-import { RootStoreContext } from '../../../app/stores/rootStore'
+import { useStore } from '../../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
 import { IActivity } from '../../../app/models/activity';
 import tr  from 'date-fns/locale/tr'
@@ -22,7 +22,7 @@ const meetConfig = {
 
  const ActivityZoom:React.FC<{activity:IActivity}> = ({activity}) =>  {
 
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { generateZoomToken } = rootStore.activityStore;
     const { user } = rootStore.userStore;
     const {openModal, closeModal} = rootStore.modalStore;

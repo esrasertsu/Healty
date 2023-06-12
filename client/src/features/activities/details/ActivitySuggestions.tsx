@@ -6,7 +6,7 @@ import { Segment, Header, Image, Container, Icon, Card, Item, Modal, Popup, Divi
 import { useMediaQuery } from 'react-responsive'
 import tr  from 'date-fns/locale/tr'
 import { IActivity } from '../../../app/models/activity';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import { useHistory } from 'react-router-dom';
 import LoginForm from '../../user/LoginForm';
 import { BsFillBookmarkStarFill } from 'react-icons/bs';
@@ -14,7 +14,7 @@ import { BsFillBookmarkStarFill } from 'react-icons/bs';
 
 const ActivitySuggestions:React.FC<{activity:IActivity}> = ({activity}) => {
   const history = useHistory();
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { activitySuggestions} = rootStore.activityStore;
   const isMobile = useMediaQuery({ query: '(max-width: 500px)' })
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })

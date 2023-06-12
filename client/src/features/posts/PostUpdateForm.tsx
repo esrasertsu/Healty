@@ -6,7 +6,7 @@ import { combineValidators, isRequired } from 'revalidate';
 import { Form, Button, Segment } from 'semantic-ui-react';
 import TextInput from '../../app/common/form/TextInput';
 import DropdownMultiple from '../../app/common/form/DropdownMultiple';
-import { RootStoreContext } from '../../app/stores/rootStore'
+import { useStore } from '../../app/stores/rootStore'
 import DropdownInput from '../../app/common/form/DropdownInput';
 import { OnChange } from 'react-final-form-listeners';
 import { IBlog, IBlogUpdateFormValues } from '../../app/models/blog';
@@ -24,7 +24,7 @@ interface IProps {
 
 const PostUpdateForm: React.FC<IProps> = ({ updatePost, blog }) => {
    
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { blogForm, setBlogForm} = rootStore.blogStore;
     const {allCategoriesOptionList} = rootStore.categoryStore;
     const categoryOptions: ICategory[] = [];

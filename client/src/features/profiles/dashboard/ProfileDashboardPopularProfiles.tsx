@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext} from 'react'
 import {Grid,  Header,  Label} from 'semantic-ui-react'
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import ProfileListItem from './ProfileListItem'
 import { useMediaQuery } from 'react-responsive';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
@@ -19,7 +19,7 @@ SwiperCore.use([Pagination,Navigation]);
 
  const ProfileDashboardPopularProfiles: React.FC = () => {
 
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {loadingPopularProfiles,popularProfileList} = rootStore.profileStore;
 
       

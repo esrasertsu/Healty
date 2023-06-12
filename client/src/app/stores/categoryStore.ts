@@ -1,17 +1,14 @@
 import { action, observable, runInAction,makeObservable } from "mobx";
 import agent from "../api/agent";
-import { RootStore } from "./rootStore";
+import { store } from "./rootStore";
 import { IAllCategoryList, IAllCategoryOption, ICategory, IPredicate, ISubCategory } from "../models/category";
 
 export default class CategoryStore{
-    rootStore: RootStore
-    constructor(rootStore: RootStore){
-        this.rootStore = rootStore;
+    constructor(){
         makeObservable(this);
-
     }
 
-    @observable category: ICategory | null = null;
+    category: ICategory | null = null;
     @observable loadingCategories = false;
     @observable loadingAllDetailedList = true;
     @observable categoryList: ICategory[] = [];

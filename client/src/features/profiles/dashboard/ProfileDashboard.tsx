@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { Fragment, useContext, useEffect,useState } from 'react'
 import {Button, Container, Grid, Header, Icon, Image, Label, Message, Segment, Select, Sticky } from 'semantic-ui-react'
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import ProfileListFilters from './ProfileListFilters';
 import { profileSortingOptions } from "../../../app/common/options/profileSortingOptions";
 import ProfileListItemsPlaceholder from './ProfileListItemsPlaceholder';
@@ -42,7 +42,7 @@ const sixItem:SemanticWIDTHS = 6;
 
  const ProfileDashboard= () => {
 
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {loadingPopularProfiles,popularProfileRegistery
     ,loadPopularProfiles,loadProfiles,setPage,page,totalProfileListPages,
     profilePageCount, clearProfileRegistery,loadingOnlyProfiles,sortingInput,setSortingInput,loadAccessibilities,

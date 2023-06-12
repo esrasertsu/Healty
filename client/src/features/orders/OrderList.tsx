@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Button, Card, Container, Grid, Header, Icon, Image, Item, Label, Message, Segment } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
 import tr  from 'date-fns/locale/tr'
 import { useMediaQuery } from 'react-responsive'
@@ -18,7 +18,7 @@ interface IProps{
 const OrderList: React.FC<IProps> = ({settings}) => {
   const history = useHistory();
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { getOrders, orderList, setOrderPage, orderPage,clearOrderRegistery, totalOrderPages, loadingOrders } = rootStore.orderStore;
   const {isLoggedIn} = rootStore.userStore;
   const [loadingNext, setLoadingNext] = useState(false);

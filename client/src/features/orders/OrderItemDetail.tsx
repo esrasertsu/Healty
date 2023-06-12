@@ -6,7 +6,7 @@ import { Button, Confirm, Container, Grid, Header, Icon, Image, Item, List, Moda
 import { SemanticICONS } from 'semantic-ui-react/dist/commonjs/generic';
 import { getStatusTranslate } from '../../app/common/util/util';
 import { LoadingComponent } from '../../app/layout/LoadingComponent';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import { format } from 'date-fns';
 import tr  from 'date-fns/locale/tr'
 import { Link } from 'react-router-dom';
@@ -18,7 +18,7 @@ interface DetailParams{
 }
 const OrderItemDetail:React.FC<RouteComponentProps<DetailParams>>  = ({match, history}) => {
 
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { getOrderDetails,order,loadingOrder ,deleteOrder} = rootStore.orderStore;
     const { loadingRefundPaymentPage,refundPayment }= rootStore.activityStore;
     const isTabletOrMobile = useMediaQuery({ query: '(max-width: 820px)' })

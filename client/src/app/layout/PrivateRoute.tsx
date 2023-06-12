@@ -1,18 +1,16 @@
 import { observer } from 'mobx-react-lite';
-import React, { useContext, useState } from 'react'
+import React from 'react'
 import { Route, RouteComponentProps, RouteProps, useHistory } from 'react-router-dom'
-import { Container, Image, Modal, Segment } from 'semantic-ui-react';
+import { Container, Segment } from 'semantic-ui-react';
 import  LoginForm from '../../features/user/LoginForm';
-import {RootStoreContext} from '../stores/rootStore';
+import { useStore} from '../stores/rootStore';
 
 interface IProps extends RouteProps{
    component: React.ComponentType<RouteComponentProps<any>>
 }
  const PrivateRoute: React.FC<IProps> = ({component: Component, ...rest}) => {
-    const rootStore = useContext(RootStoreContext);
-    const {isLoggedIn} = rootStore.userStore;
-   const [open, setOpen] = useState(true);
-
+   const rootStore = useStore();
+   const {isLoggedIn} = rootStore.userStore;
    const history = useHistory();
 
     return (

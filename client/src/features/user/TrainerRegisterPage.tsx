@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { observer } from 'mobx-react-lite';
 import FormPage1 from './FormPage1';
 import FormPage2 from './FormPage2';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import ReadyOnlyApplication from './ReadyOnlyApplication';
 
 
@@ -15,7 +15,7 @@ interface DetailParams{
     id:string
 }
 const TrainerRegisterPage : React.FC<RouteComponentProps<DetailParams>> = ({match, history}) =>{
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { user } = rootStore.userStore;
 
     return(

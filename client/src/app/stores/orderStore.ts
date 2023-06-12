@@ -2,19 +2,13 @@ import {observable, action, computed, runInAction, makeObservable} from 'mobx';
 import { toast } from 'react-toastify';
 import agent from '../api/agent';
 import { IOrder } from '../models/order';
-import { RootStore } from './rootStore';
 import { history } from '../..';
 
 const LIMIT = 6;
 export default class OrderStore {
 
-    rootStore:RootStore;
-    constructor(rootStore: RootStore){
-        this.rootStore = rootStore;
+    constructor(){
         makeObservable(this);
-
-
-       
     }
 
    

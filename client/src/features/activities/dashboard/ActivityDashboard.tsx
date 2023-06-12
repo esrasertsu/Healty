@@ -2,18 +2,15 @@ import React,  { useEffect, useContext, useState}  from 'react';
 import { Accordion, Button, Container, Grid, Icon, Label, Loader, Radio, Segment, Sidebar } from 'semantic-ui-react';
 import ActivityList from './ActivityList';
 import { observer } from 'mobx-react-lite';
-import { RootStoreContext } from '../../../app/stores/rootStore';
-import InfiniteScroll from 'react-infinite-scroller';
+import { useStore } from '../../../app/stores/rootStore';
 import ActivityFilters from './ActivityFilters';
 import ActivityListItemPlaceholder from './ActivityListItemPlaceHolder';
 import { useMediaQuery } from 'react-responsive'
 import { DateTimePicker } from 'react-widgets';
 import { IActivitySelectedFilter } from '../../../app/models/activity';
-import { format } from 'date-fns';
-import tr  from 'date-fns/locale/tr'
 
 const ActivityDashboard: React.FC = () => {
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {loadActivities, loadingInitial, setPage, page, totalPages,loadLevels,predicate,setPredicate
   ,setClearPredicateBeforeSearch,clearKeyPredicate,subCategoryIds,setSubCategoryIds,
   categoryIds, setCategoryIds, setLevelIds,levelList,

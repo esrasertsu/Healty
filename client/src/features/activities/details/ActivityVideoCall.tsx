@@ -6,13 +6,13 @@ import { useMediaQuery } from 'react-responsive';
 import { toast } from 'react-toastify';
 import { Button, Header, Icon, Segment } from 'semantic-ui-react';
 import { IActivity } from '../../../app/models/activity';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import { FcOvertime,FcClock } from "react-icons/fc";
 import { BiWifi, BiWifiOff } from "react-icons/bi";
 
 
 const ActivityVideoCall:React.FC<{activity:IActivity}> = ({activity}) => {
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {token} = rootStore.commonStore;
     const {user} = rootStore.userStore;
     const isTablet = useMediaQuery({ query: '(max-width: 820px)' })

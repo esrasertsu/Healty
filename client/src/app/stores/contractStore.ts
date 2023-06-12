@@ -1,12 +1,9 @@
-import { action, computed, makeObservable, observable, runInAction } from "mobx";
+import { action, makeObservable, observable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { RootStore } from "./rootStore";
-import { IAllCategoryList, IAllCategoryOption, ICategory, IPredicate, ISubCategory } from "../models/category";
 const LIMIT = 10;
+
 export default class ContractStore{
-    rootStore: RootStore
-    constructor(rootStore: RootStore){
-        this.rootStore = rootStore;
+    constructor(){
         makeObservable(this);
 
     }

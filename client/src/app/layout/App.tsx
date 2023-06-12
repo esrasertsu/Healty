@@ -1,17 +1,15 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react';
-import { Button, Container, Icon, Image, Menu, Modal, Segment, Sidebar } from 'semantic-ui-react';
-import NavBar from '../../features/nav/NavBar';
+import React, { Fragment, useEffect, useState } from 'react';
+import { Button, Image, Modal } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
-import { Redirect, Route , RouteComponentProps,Switch, withRouter, BrowserRouter as Router, useLocation, useHistory} from 'react-router-dom';
+import { Route , RouteComponentProps,Switch, withRouter, BrowserRouter as Router, useLocation, useHistory} from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
 import KVKKContract from '../../features/home/KVKKContract';
 import ActivityForm from '../../features/activities/form/ActivityForm';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
 import ActivityDetails from '../../features/activities/details/ActivityDetails';
 import NotFound from './NotFound';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import LoginForm from '../../features/user/LoginForm';
-import { RootStoreContext } from '../stores/rootStore';
 import { LoadingComponent } from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
 import ProfilePage  from '../../features/profiles/ProfilePage';
@@ -23,7 +21,6 @@ import MessagesPage from '../../features/messages/MessagesPage';
 import { runInAction } from 'mobx';
 import PrivateRoute from './PrivateRoute';
 import  LoginRequiredPage  from './LoginRequiredPage';
-import  Admin  from '../../features/admin/Admin';
 import { useMediaQuery } from 'react-responsive'
 import CookieConsent, { Cookies } from "react-cookie-consent";
 import ActivityPaymentPage from '../../features/activities/payment/ActivityPaymentPage';
@@ -40,7 +37,6 @@ import TrainerOnboardingPage from '../../features/user/TrainerOnboardingPage';
 import TrainerRegisterPage from '../../features/user/TrainerRegisterPage';
 import { AnalyticsWrapper, UseAnalytics } from '../common/util/util';
 import Forbidden from './Forbidden';
-import MainVideoPage from '../../features/videoCall/MainVideoPage';
 import SavedPage from '../../features/savedItems/SavedPage';
 import ActivitySuccessPage from '../../features/activities/form/ActivitySuccessPage';
 import TrainerActivityPage from '../../features/activities/personalDashboard/TrainerActivityPage';
@@ -55,7 +51,7 @@ import AcikRiza from '../../features/home/AcikRiza';
 import MesafeliSatis from '../../features/home/MesafeliSatis';
 import OnBilgilendirme from '../../features/home/OnBilgilendirme';
 import TrainerApplication from '../../features/user/OnBoarding/TrainerApplication';
-import {ScrollToTop} from './ScrollToTop';
+import { useStore } from '../stores/rootStore';
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
@@ -63,7 +59,7 @@ import {ScrollToTop} from './ScrollToTop';
 
 const App: React.FC<RouteComponentProps> = () => {
   const history = useHistory();
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const {setAppLoaded, token, appLoaded,loadCities} = rootStore.commonStore;
   const { getUser,user,createHubConnection,isLoggedIn,stopHubConnection ,loggingOut, getFacebookLoginStatus} = rootStore.userStore;
   const { loadCategories} = rootStore.categoryStore;
@@ -151,7 +147,7 @@ else
   useEffect(() => {
       if(token)
       {
-        getUser().then(async(res) => {
+        getUser().then(async(res:any) => {
           if(res){
             window.addEventListener('beforeunload', alertUser);
             createHubConnection(true)
@@ -244,7 +240,6 @@ else
                  <PrivateRoute exact path="/payment/error" component={PaymentErrorPage} />
                  <Route exact path="/orders" component={OrderList}/>
                  <PrivateRoute exact path="/orders/:id" component={OrderItemDetail}/>
-                 <PrivateRoute exact path="/videoMeeting/:id" component={MainVideoPage}/>
                  <PrivateRoute path="/saved" component={SavedPage}/>
                  <Route exact path="/about-us" component={AboutUs}/>
                  <Route exact path="/contact-us" component={ContactUs}/>

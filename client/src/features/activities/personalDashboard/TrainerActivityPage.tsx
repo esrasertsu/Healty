@@ -6,7 +6,7 @@ import tr  from 'date-fns/locale/tr'
 import { useMediaQuery } from 'react-responsive'
 import { Link } from 'react-router-dom';
 import { SemanticICONS } from 'semantic-ui-react/dist/commonjs/generic';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import LoginForm from '../../user/LoginForm';
 import { useHistory } from 'react-router-dom';
 import ActivityListItemPlaceholder from '../dashboard/ActivityListItemPlaceHolder';
@@ -18,7 +18,7 @@ interface IProps{
 
 const TrainerActivityPage: React.FC<IProps> = ({settings}) => {
   const history = useHistory();
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { getTrainerActivities, personalActivityList, setPersonalActivityPage, personalActivityPage,clearPersonalActRegistery, totalPersonalActPages, loadingActivity,
     personalActStatus, setPersonalActStatus } = rootStore.activityStore;
   const {isLoggedIn} = rootStore.userStore;

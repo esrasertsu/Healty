@@ -1,20 +1,11 @@
-import React, { Fragment, ReactElement, useContext, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom';
-import { Button, Container, Header, Segment, Image, Grid, Icon, Modal, List } from 'semantic-ui-react'
-import { useMediaQuery } from 'react-responsive';
-import { RootStoreContext } from '../stores/rootStore';
+import React, { Fragment} from 'react'
+import {  Container, Header, Segment, List } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
 import { Helmet } from 'react-helmet-async';
 
   
  const ContactUs = () => {
    
-    const isTablet = useMediaQuery({ query: '(max-width: 767px)' })
-    const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
-
-    const rootStore = useContext(RootStoreContext);
-    const {isLoggedIn, user} = rootStore.userStore;
-
 
   return (
 

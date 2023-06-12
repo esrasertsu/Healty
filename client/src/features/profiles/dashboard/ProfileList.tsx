@@ -2,7 +2,7 @@ import React, { Fragment, useContext } from 'react'
 import { Card } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite';
 import ProfileListItem from './ProfileListItem';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import { useStore } from '../../../app/stores/rootStore';
 import { SemanticWIDTHS } from 'semantic-ui-react/dist/commonjs/generic';
 import { useMediaQuery } from 'react-responsive'
 
@@ -17,7 +17,7 @@ const ProfileList: React.FC = () => {
   const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { profileRegistery } = rootStore.profileStore;
 
   

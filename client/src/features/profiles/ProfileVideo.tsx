@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import React, { useContext } from 'react'
 import { Button, Grid, Icon, Segment } from 'semantic-ui-react'
 import ReactPlayer from 'react-player/youtube'
-import { RootStoreContext } from '../../app/stores/rootStore'
+import { useStore } from '../../app/stores/rootStore'
 import ProfileVideoUploadForm from './ProfileVideoUploadForm'
 import * as _screenfull from "screenfull";
 
@@ -12,7 +12,7 @@ interface IProps {
 
 const ProfileVideo: React.FC<IProps> = ({videoUrl}) => {
 
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const {openModal, closeModal} = rootStore.modalStore;
     const {user} = rootStore.userStore;
     const { isCurrentUser,uploadProfileVideo, submittingVideo, profile } = rootStore.profileStore;

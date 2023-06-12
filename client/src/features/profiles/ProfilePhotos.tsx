@@ -1,13 +1,13 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext, useState } from "react";
 import { Button, Card, Grid, Header, Icon, Image, Label, Modal, Segment, Tab } from "semantic-ui-react";
-import { RootStoreContext } from "../../app/stores/rootStore";
+import { useStore } from "../../app/stores/rootStore";
 import PhotoWidgetCropper from "../../app/common/photoUpload/PhotoWidgetCropper";
 import PhotoWidgetDropzone from "../../app/common/photoUpload/PhotoWidgetDropzone";
 import { useMediaQuery } from 'react-responsive'
 
  const ProfilePhotos = () => {
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { profile, isCurrentUser, uploadPhoto , uploadingPhoto, setMainPhoto,loadingForPhotoDeleteMain,deletePhoto } = rootStore.profileStore;
   const { openModal,closeModal,modal } = rootStore.modalStore;
   const { user } = rootStore.userStore;

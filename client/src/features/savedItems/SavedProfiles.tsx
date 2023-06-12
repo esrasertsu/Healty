@@ -6,13 +6,13 @@ import { useHistory } from 'react-router-dom';
 import { StarRating } from '../../app/common/form/StarRating';
 import { colors } from '../../app/models/category';
 import { IProfile } from '../../app/models/profile';
-import { RootStoreContext } from '../../app/stores/rootStore';
+import { useStore } from '../../app/stores/rootStore';
 import LoginForm from '../user/LoginForm';
 
 
 const SavedProfiles = () => {
     const history = useHistory();
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useStore();
     const { getSavedProfiles, loading ,followings,follow,unfollow} = rootStore.profileStore;
     const {isLoggedIn} = rootStore.userStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import 'photoswipe/dist/photoswipe.css'
 import 'photoswipe/dist/default-skin/default-skin.css'
 import { Button, Grid, Header, Icon,  Modal,Segment } from 'semantic-ui-react'
-import { RootStoreContext } from '../../app/stores/rootStore'
+import { useStore } from '../../app/stores/rootStore'
 import { IPhoto, ReferancePhoto } from '../../app/models/profile'
 import { observer } from 'mobx-react-lite'
 import { useMediaQuery } from 'react-responsive'
@@ -26,7 +26,7 @@ interface IProps{
 
 const ProfileReferances:React.FC<IProps> = ({referencePics}) => {
 
-  const rootStore = useContext(RootStoreContext);
+  const rootStore = useStore();
   const { saveReferencePics,uploadingReferencePics , isCurrentUser } = rootStore.profileStore;
   const { user } = rootStore.userStore;
 

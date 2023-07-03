@@ -79,12 +79,12 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
       </Helmet>
       <Confirm
           key={"cancellationRez"}
-          content={'Bu rezervasyonu iptal etmek istediğinize emin misiniz?'}
+          content={'Are you sure cancel this reservation?'}
           open={cancellationUserOpen}
-          header="Rezervasyon iptali"
+          header="Cancel reservation"
           size='mini'
-          confirmButton="Devam et"
-          cancelButton="Geri"
+          confirmButton="Yes"
+          cancelButton="No"
           onCancel={() =>setcancellationUserOpen(false)}
           onConfirm={handleSendUserToOrders}
         />
@@ -149,7 +149,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
                  <ActivityVideoCall activity={activity} />
                  }  
                 { activity.isGoing && !isMobile && !activity.isHost &&  (((new Date(activity.date).getTime() - new Date().getTime()) / (1000 *3600 *24)) >= 1 ) &&(
-                      <Button circular style={{marginTop:"30px", width:"100%"}} loading={loading} color="red" onClick={()=>setcancellationUserOpen(true)}>Katılımı iptal et</Button>
+                      <Button circular style={{marginTop:"30px", width:"100%"}} loading={loading} color="red" onClick={()=>setcancellationUserOpen(true)}>Cannot join!</Button>
                  )}
                  {
                   user &&  isMobile &&
@@ -158,7 +158,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({match, hi
                 }
                 {
                    isMobile &&  activity.isGoing && !activity.isHost && (((new Date(activity.date).getTime() - new Date().getTime()) / (1000 *3600 *24)) >= 1 ) &&(
-                    <Button circular style={{marginTop:"50px", width:"100%"}} color="red" loading={loading} onClick={()=>setcancellationUserOpen(true)}>Katılımı iptal et</Button>
+                    <Button circular style={{marginTop:"50px", width:"100%"}} color="red" loading={loading} onClick={()=>setcancellationUserOpen(true)}>Cannot join!</Button>
                    )
                 }
 

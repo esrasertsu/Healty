@@ -15,7 +15,7 @@ import { Helmet } from 'react-helmet-async';
       </Helmet>
     <Segment textAlign='center' vertical className='masthead' id="slideImages" style={{height:"20vh"}}>
               <Header as='h1' inverted textAlign='center' style={{margin:"auto"}}>
-                Sıkça Sorulan Sorular
+                FAQ
                </Header>
        </Segment>
        <div style={{height:"50px"}} className="spacingContainer__small" />

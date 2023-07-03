@@ -1,8 +1,11 @@
 import React, { Fragment } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Segment, Placeholder, Container, Grid, Header, List, Icon, Image } from 'semantic-ui-react';
 
 const Footer = () => {
+  const { i18n, t } = useTranslation();
+
   return (
      <>
     <Segment id="footer" attached='bottom' inverted vertical style={{ padding: '5em 0em 0 0' }}>
@@ -12,18 +15,18 @@ const Footer = () => {
             <Grid.Column width={3}>
               <Header inverted as='h4' content='Afitapp' />
               <List link inverted>
-                <List.Item as='a'  href="/about-us">Hakkımızda</List.Item>
-                <List.Item as='a' href="/contact-us">İletişim</List.Item>
+                <List.Item as='a'  href="/about-us">{t("aboutUs")}</List.Item>
+                <List.Item as='a' href="/contact-us">{t("contact")}</List.Item>
                 {/* <List.Item as='a'>İş Ortaklarımız</List.Item> */}
                 <List.Item as='a' href="/mesafeli_satis">Mesafeli Satış Sözleşmesi</List.Item>
-                <List.Item as='a' href="/trainerOnboarding" target="_blank">Uzman Eğitmen Başvurusu</List.Item>
-                <List.Item as='a' href="/blog" target="_blank">Blog</List.Item>
+                <List.Item as='a' href="/trainerOnboarding" target="_blank">Become supply partner</List.Item>
+                <List.Item as='a' href="/blog" target="_blank">Blogs</List.Item>
               </List>
             </Grid.Column>
             <Grid.Column width={3}>
               <Header inverted as='h4' content='Yardım' />
               <List link inverted>
-                <List.Item as='a' href="/sikca-sorulan-sorualar" target="_blank">Sıkça Sorulan Sorular</List.Item>
+                <List.Item as='a' href="/sikca-sorulan-sorualar" target="_blank">{t("FAQ")}</List.Item>
                 <List.Item as='a' href="/kisisel_verilerin_korunmasi">Kişisel Verilerin Korunması</List.Item>
                 <List.Item as='a' href="/acik_riza">Açık Rıza Metni</List.Item>
                 <List.Item as='a' href="/cerez_politikasi">Çerez Politikası</List.Item>
@@ -40,7 +43,7 @@ const Footer = () => {
             </Grid.Column>
             <Grid.Column width={7}>
               <Header as='h4' inverted>
-                Güvenli Alışveriş
+                Secure Payment
               </Header>
               <List link inverted horizontal>
                 <List.Item className='footer-logo-div iyzico-img'> <Image className='footer-logo' src="/icons/iyzico.png" /> </List.Item>

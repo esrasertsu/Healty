@@ -13,7 +13,6 @@ interface IProps{
 }
 
 
-
 const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivitySelectedFilters,activitySelectedFilters}) => {
   
   const rootStore = useStore();
@@ -229,7 +228,7 @@ const ActivityFilters:React.FC<IProps> = ({setVisibleMobileFilterBar,setActivity
       value={predicate.get('startDate') || new Date()} /> */}
       {!isTabletOrMobile && 
        <Segment className="dtPicker_Container_Style">
-       <div style={{marginBottom:"1em", fontSize:"16px",lineHeight:"20px"}}>Aktivite aradığınız tarih/saat aralığını giriniz.</div>
+       <div style={{marginBottom:"1em", fontSize:"16px",lineHeight:"20px"}}>Select date and time</div>
       <DateTimePicker
          value={predicate.get('startDate') || new Date()}
          onChange={(date)=> {

@@ -1,23 +1,21 @@
-import { FORM_ERROR } from 'final-form';
 import { observer } from 'mobx-react-lite';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
 import { toast } from 'react-toastify';
 import { combineValidators, composeValidators, createValidator, isRequired } from 'revalidate';
-import { Button, Container, Divider, Form, Header, Icon, Image, Modal } from 'semantic-ui-react';
+import { Button, Divider, Form, Header, Icon, Image, Modal } from 'semantic-ui-react';
 import agent from '../../app/api/agent';
 import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
 import { IUserFormValues } from '../../app/models/user';
 import { useStore } from '../../app/stores/rootStore';
 import ForgotPassword from './ForgotPassword';
-import SocialLogin from './SocialLogin';
-import GoogleLogin from 'react-google-login';
 import ReCAPTCHA from "react-google-recaptcha";
 import  RegisterForm  from './RegisterForm';
 import { useMediaQuery } from 'react-responsive';
 import { AxiosResponse } from 'axios';
+import ValidationError from '../../app/common/form/ValidationError';
 
 
 const isValidEmailOrUserName = createValidator(
@@ -52,7 +50,7 @@ const LoginForm:React.FC<IProps> = ({location}) => {
   
     const [email, setEmail] = useState("");
     const recaptchaRef = React.createRef<any>();
-const [submitErr, setSubmitErr] = useState<AxiosResponse<any> | null>(null)
+    const [submitErr, setSubmitErr] = useState<AxiosResponse<any>|null>(null)
 
     useEffect(() => {
       setResendEmailVeriMessage(false);
@@ -88,20 +86,14 @@ const handleResetPassword = (e:any) => {
         }      
         )
     };
-
-
-  
    
 const handleLogin = async(values:IUserFormValues) =>{
-
-  setSubmitErr(null)
-
+     setSubmitErr(null)
      recaptchaRef.current.executeAsync().then((token:string) => {
-        values.reCaptcha = token;
-              
+        values.reCaptcha = token;     
         login(values,location)
         .catch((error) => 
-         setSubmitErr(error)
+          setSubmitErr(error)
         )
       })
  }
@@ -137,7 +129,7 @@ const handleLogin = async(values:IUserFormValues) =>{
               content="Giriş Yap"
               textAlign="center"
             />
-            <label id="lbl_Email">Email / Kullanıcı adı*</label>
+            <label id="lbl_Email">Email / Username*</label>
             <Field labelName="lbl_Email" name="emailOrUserName" placeholder="Email veya kullanıcı adı" component={TextInput}
             />
               <OnChange name="emailOrUserName">
@@ -148,7 +140,7 @@ const handleLogin = async(values:IUserFormValues) =>{
                 }}
             </OnChange>
 
-            <label id="lbl_Password">Şifre*</label>
+            <label id="lbl_Password">Password*</label>
             <Field
               labelName="lbl_Password"
               name="password"
@@ -157,22 +149,24 @@ const handleLogin = async(values:IUserFormValues) =>{
               component={TextInput}
             />
             {resendEmailVeriMessage &&
-                <a className="forgotPasswordLink" style={{cursor:"pointer", textDecoration:"underline"}} onClick={handleEmailResend}>Yeniden email doğrulama linki gönder!</a>
+               <div><a className="forgotPasswordLink" style={{cursor:"pointer", textDecoration:"underline"}} onClick={handleEmailResend}>Resend verification email!</a></div>
             }
-              <a className="forgotPasswordLink" style={{cursor:"pointer", textDecoration:"underline",float:"right"}} onClick={handleResetPassword}>Şifremi Unuttum!</a>
-            
+            {
+            !resendEmailVeriMessage &&
+              <div><a className="forgotPasswordLink" style={{cursor:"pointer", textDecoration:"underline",float:"right"}} onClick={handleResetPassword}>Forgot my password!</a></div>
+            }
             {submitErr && !dirtySinceLastSubmit && (
-             <ErrorMessage error={submitErr} text='Geçersiz email adresi / şifre' />
+             <ValidationError errors={submitErr} />
             )}
             <Button
               disabled={(invalid)}
               loading={submitting}
               className='orangeBtn'
               circular
-              content="Giriş"
+              content="Login"
               fluid
             />
-            <Divider horizontal>veya</Divider>
+            <Divider horizontal>OR</Divider>
             <Button
               circular
               basic
@@ -180,7 +174,7 @@ const handleLogin = async(values:IUserFormValues) =>{
               fluid
               onClick={openRegisterModal}
             >
-              Kayıt ol
+              Register
             </Button>
             <br></br>
             <Divider />
@@ -190,7 +184,7 @@ const handleLogin = async(values:IUserFormValues) =>{
               e.preventDefault();
               e.stopPropagation();
               facebookLogin(location)}}>
-                  <Icon name="facebook" />{" "} Facebook ile giriş yap
+                  <Icon name="facebook" />{" "} Sign in with Facebook
                 </Button>
             <br></br>
             {/* <GoogleLogin

@@ -6,12 +6,13 @@ import _ from 'lodash';
 import { IAllCategoryList } from '../../app/models/category';
 import { useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive'
+import { useTranslation } from 'react-i18next';
 
 
  const ActivitySearchArea:React.FC = () => {
   const history = useHistory();
     const rootStore = useStore();
-
+    const { i18n, t } = useTranslation();
     const {
       loadAllCategoryList,
       loadCategories,
@@ -70,7 +71,7 @@ import { useMediaQuery } from 'react-responsive'
                         value={value}
                         resultRenderer={resultRenderer}
                         className="SearchArea"
-                        placeholder={loadingAllDetailedList ? "Yükleniyor..." : isMobile ? "Kategori ismi girin" :"Arama yapmak istediğin kategori.." }
+                        placeholder={loadingAllDetailedList ? "Yükleniyor..." : t("categorySearch") }
                         noResultsMessage="Aradığınız kategori bulunamadı"
                 />
                       <Button size={isMobile ? 'tiny': 'big'}  color="blue" circular onClick={() => {
@@ -99,7 +100,7 @@ import { useMediaQuery } from 'react-responsive'
                               history.push('/activities');
                              
                         }}>
-                      <Icon name='search' inverted></Icon> Ara
+                      <Icon name='search' inverted></Icon> <span>{t("search")}</span>
                    </Button>
     </Container>
     );

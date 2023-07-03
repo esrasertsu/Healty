@@ -138,10 +138,6 @@ export default class UserStore {
               window.location.reload();
 
         } catch (error) {
-            if((error as any).data.errors.EmailVerification!==undefined)
-            {
-                this.setResendEmailVeriMessage(true);
-            }
             this.submitting = false;
             throw error;
         }

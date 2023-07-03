@@ -52,6 +52,7 @@ import MesafeliSatis from '../../features/home/MesafeliSatis';
 import OnBilgilendirme from '../../features/home/OnBilgilendirme';
 import TrainerApplication from '../../features/user/OnBoarding/TrainerApplication';
 import { useStore } from '../stores/rootStore';
+import { useTranslation } from 'react-i18next';
 
 // const libraries = ["places"] as LoadScriptUrlOptions["libraries"];
 
@@ -72,7 +73,8 @@ const App: React.FC<RouteComponentProps> = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1023px)' })
   const [visible, setVisible] = useState(false);
-  
+  const { i18n, t } = useTranslation();
+
   useEffect(() => {
  
     document.querySelector('body')!.scrollTo(0,0);
@@ -191,8 +193,8 @@ else
 
 
 
-  if(!appLoaded) return <LoadingComponent content='Yükleniyor...' />
-  if(loggingOut) return <LoadingComponent content='Çıkış yapılıyor...' />
+  if(!appLoaded) return <LoadingComponent content={t("loading")} />
+  if(loggingOut) return <LoadingComponent content={t("loggingOut")} />
   const reload = () => window.location.reload();
     
   return (
@@ -273,9 +275,9 @@ else
       buttonStyle={{ color: "#E36034" }}
       expires={30}
     ><p>
-      Size daha iyi hizmet sunabilmek için çerezler kullanıyoruz.
+     {t("welcomeCookie")}
       <span>
-      Detaylı bilgi için <a href="/cerez_politikasi" target="_blank">çerez politikamızı</a> ve <a href="/kisisel_verilerin_korunmasi" target="_blank">kişisel verilerin korunması</a> hakkında açıklama metnini inceleyebilirsiniz. 
+      <a href="/cerez_politikasi" target="_blank">{t("cookiePolicy")}</a> ve <a href="/kisisel_verilerin_korunmasi" target="_blank">{t("privacyPolicy")}</a> 
       </span></p>
     </CookieConsent>      
      

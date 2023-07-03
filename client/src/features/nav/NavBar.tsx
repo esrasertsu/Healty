@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Menu, Container, Image, Dropdown, Label, Icon, Button, Modal } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
@@ -9,6 +9,8 @@ import  RegisterForm from '../user/RegisterForm';
 import TrainerForm from '../user/TrainerRegisterModal';
 import { useMediaQuery } from 'react-responsive'
 import { history } from '../..';
+import { LANGUAGES } from '../../constants';
+import { useTranslation } from 'react-i18next';
 
 interface IProps{
   fixed:boolean;
@@ -19,9 +21,17 @@ const NavBar: React.FC<IProps> = ({fixed}) => {
     const { user, logout,isLoggedIn,loggingOut} = rootStore.userStore;
     const { activeMenu,setActiveMenu } = rootStore.commonStore;
     const { notificationCount } = rootStore.userStore;
-
+    const { i18n, t } = useTranslation();
+    const [transparentHeader, setTransparentHeader] = useState(false)
     const {openModal,closeModal,modal} = rootStore.modalStore;
 
+    useEffect(()=>{
+      if(window.location.pathname === "/")
+        setTransparentHeader(true)
+        return () => {
+          setTransparentHeader(false)
+        }
+    },[window.location.pathname])
 
     const smallDesktop  = useMediaQuery({ query: '(max-width: 1300px)' })
     const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
@@ -79,11 +89,10 @@ const NavBar: React.FC<IProps> = ({fixed}) => {
       <>
       {
       <Menu 
-      // fixed={fixed ? 'top' : undefined}
       pointing
       secondary
       size='massive'
-      className='mainMenu'
+      className={transparentHeader ? 'mainMenu transparentHeader' : 'mainMenu'}
        >
        <Container className='desktopNavBar'>
        <Menu.Item as='a' header  
@@ -95,7 +104,7 @@ const NavBar: React.FC<IProps> = ({fixed}) => {
           >
                 <div style={{display:"flex", alignItems:"center"}}>
                   <img
-                      src="/assets/afitapp.png"
+                      src={transparentHeader ? "/assets/afitapp.png" : "/assets/afitapp2.png"}
                       alt="afitapp"
                       style={{ height:"50px"}}
                     />
@@ -111,14 +120,14 @@ const NavBar: React.FC<IProps> = ({fixed}) => {
                    //setLoadingProfiles(true);
                    setActiveMenu(0);
                   //  history.push(`/profiles`);
-                    }} > <Icon name="graduation cap"></Icon> <span>Uzmanlar</span></Menu.Item> 
+                    }} > <Icon name="graduation cap"></Icon> <span>{t("trainers")}</span></Menu.Item> 
                <Menu.Item as={Link} to="/activities" className='desktopMenu'
                 active={activeMenu === 1}
                   onClick={() => {
                  //   setLoadingInitial(true);
                     setActiveMenu(1)
                    // history.push(`/activities`);
-                    }} ><Icon name="heartbeat"></Icon> <span>Aktiviteler</span></Menu.Item>
+                    }} ><Icon name="heartbeat"></Icon> <span>{t("activities")}</span></Menu.Item>
 
                 
           <Menu.Item as={Link} to="/blog" className='desktopMenu'
@@ -127,7 +136,7 @@ const NavBar: React.FC<IProps> = ({fixed}) => {
                  //  setLoadingPosts(true);
                    // history.push(`/blog`);
                     setActiveMenu(2)
-                    }} ><Icon name="newspaper outline"></Icon> <span>Blog</span></Menu.Item>
+                    }} ><Icon name="newspaper outline"></Icon> <span>{t("blogs")}</span></Menu.Item>
 
           {user && (
             <Menu.Item>
@@ -214,7 +223,7 @@ const NavBar: React.FC<IProps> = ({fixed}) => {
             <>
             <Menu.Item>
               <Button.Group>
-              <Button circular content="Uzman Başvurusu" key={"trainer-nav"} className='orangeBtn' style={{  borderRadius: "5rem", marginRight:"10px"}}
+              <Button circular content={t("trainerApplication")} key={"trainer-nav"} className='orangeBtn' style={{  borderRadius: "5rem", marginRight:"10px"}}
           
           onClick={(e:any)=>
             {
@@ -223,26 +232,22 @@ const NavBar: React.FC<IProps> = ({fixed}) => {
             
             }>
             </Button>
-              <Button key={"login-nav"} className='blueBtn'  content={"Giriş Yap"} style={{color:"#fff",borderRadius: "5rem", marginRight:"5px"}}
-               
-               onClick={handleLoginClick}></Button>
-                  <Button key={"reg-nav"} basic color="blue" content={"Kaydol"} style={{borderRadius: "5rem"}}
-          
-          onClick={(e:any)=>
-            {
-              handleRegisterClick(e);
-            }
-            
-            }></Button>
-            
-              </Button.Group>
-                  
+              <Button key={"login-nav"} className='blueBtn'  content={t("login")} style={{color:"#fff",borderRadius: "5rem", marginRight:"5px"}} onClick={handleLoginClick}></Button>
+              <Button key={"reg-nav"} inverted content={t("signup")} style={{borderRadius: "5rem"}} onClick={(e:any)=>{handleRegisterClick(e);}}></Button>
+              {/* <select defaultValue={"es"}>
+              {
+                LANGUAGES.map(({ code, label }) => (
+                <option key={code} value={code}>
+                  {label}
+                </option>
+                ))
+              }
+              </select> */}
+              </Button.Group>   
             </Menu.Item>
-            
        </>
           }
          </Container>         
-       
       </Menu>
 }
 {/* 

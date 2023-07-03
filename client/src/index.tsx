@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import './i18n'
 import 'semantic-ui-css/semantic.min.css';
 import './app/layout/fonts/GT-Eesti-Pro-Display-Medium.woff2'; 
 import './app/layout/fonts/GT-Eesti-Pro-Display-Regular.woff2';

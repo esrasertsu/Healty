@@ -51,15 +51,20 @@ namespace API.Controllers
             
             if (!_googleReCAPTHA.Success && _googleReCAPTHA.Score <= 0.5)
             {
-                throw new RestException(HttpStatusCode.BadRequest, new { Email = "Geçersiz giriş." });
+               return Unauthorized();
             }
                 
             var user = await _userManager.Users.Include(p => p.Photos)
                 .FirstOrDefaultAsync(x => x.Email == loginDto.EmailOrUserName.Trim() || x.UserName == loginDto.EmailOrUserName.Trim());
 
-            if (user == null) throw new RestException(HttpStatusCode.BadRequest, new { Email = "Sistemde bu kullanıcı adı veya email adresiyle kayıtlı bir kullanıcı bulunamadı." });
+            if (user == null) { 
+  ModelState.AddModelError("EmailVerification", "Please check your inbox to confirm your email account."); 
+                return ValidationProblem();            }
             
-            if (!user.EmailConfirmed) throw new RestException(HttpStatusCode.BadRequest, new { EmailVerification = "Email doğrulaması gerçekleştirilmedi." });
+            if (!user.EmailConfirmed) { 
+                ModelState.AddModelError("EmailVerification", "Please check your inbox to confirm your email account."); 
+                return ValidationProblem();
+            }
 
             var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
@@ -71,8 +76,7 @@ namespace API.Controllers
                     return CreateUserObject(user);
             }
 
-            //return Unauthorized();
-            throw new RestException(HttpStatusCode.BadRequest, new { NotValid = "Email veya şifre hatalı." });
+            return Unauthorized();
         }
 
         [AllowAnonymous]
@@ -88,16 +92,14 @@ namespace API.Controllers
 
             if (await _userManager.Users.AnyAsync(x => x.UserName == request.UserName))
             {
-                // ModelState.AddModelError("username", "Username taken");
-                // return ValidationProblem();
-               throw new RestException(HttpStatusCode.BadRequest, new { UserName = "UserName already exists." });
+                ModelState.AddModelError("UserName", "Username taken");
+                return ValidationProblem();
             }
 
             if (await _userManager.Users.AnyAsync(x => x.Email == request.Email))
             {
-                // ModelState.AddModelError("email", "Email taken");
-                // return ValidationProblem();
-                 throw new RestException(HttpStatusCode.BadRequest, new { Email = "Email already exists."});
+                ModelState.AddModelError("Email", "Email taken");
+                return ValidationProblem();
             }
 
 
@@ -114,7 +116,7 @@ namespace API.Controllers
 
                 var result = await _userManager.CreateAsync(user, request.Password);
 
-                if (!result.Succeeded) throw new RestException(HttpStatusCode.BadRequest, new { UserName = "Problem creating user" });
+                if (!result.Succeeded) return BadRequest(result.Errors);
 
                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 

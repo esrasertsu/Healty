@@ -4,13 +4,14 @@ import { useStore } from '../../app/stores/rootStore'
 import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
 import { IAllCategoryList } from '../../app/models/category';
-import { useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive'
+import { useTranslation } from 'react-i18next';
 
 
  const SearchArea:React.FC = () => {
 
     const rootStore = useStore();
+    const { i18n, t } = useTranslation();
 
     const {
       loadAllCategoryList,
@@ -91,7 +92,7 @@ import { useMediaQuery } from 'react-responsive'
                              
                             loadPopularProfiles();
                         }}>
-                      <Icon name='search' inverted></Icon> Ara
+                      <Icon name='search' inverted></Icon> <span>{t("search")}</span>
                    </Button>
     </Container>
     );

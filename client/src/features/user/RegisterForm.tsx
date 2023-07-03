@@ -1,20 +1,16 @@
-import { FORM_ERROR } from 'final-form';
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { Form as FinalForm , Field } from 'react-final-form';
 import { useMediaQuery } from 'react-responsive';
 import { combineValidators, composeValidators, createValidator, isRequired } from 'revalidate';
 import { Button, Divider, Form, Header,Icon, Image, Modal } from 'semantic-ui-react';
-import { ErrorMessage } from '../../app/common/form/ErrorMessage';
 import TextInput from '../../app/common/form/TextInput';
 import { IUserFormValues } from '../../app/models/user';
 import { useStore } from '../../app/stores/rootStore';
-import SocialLogin from './SocialLogin';
-import GoogleLogin from 'react-google-login';
 import { observer } from 'mobx-react';
 import TrainerForm from '../user/TrainerRegisterModal';
 import ReCAPTCHA from "react-google-recaptcha";
-import { runInAction } from 'mobx';
 import { AxiosResponse } from 'axios';
+import ValidationError from '../../app/common/form/ValidationError';
 
 const isValidEmail = createValidator(
   message => value => {
@@ -67,9 +63,6 @@ const RegisterForm:React.FC<IProps> = ({location}) =>{
         )
     };
 
-
-
-
     const handleTrainerFormClick= (e:any) => {
       setSubmitErr(null)
 
@@ -88,8 +81,6 @@ const RegisterForm:React.FC<IProps> = ({location}) =>{
       }
 
 
-
-      
 const handleRegister = async(values:IUserFormValues) =>{
   setSubmitErr(null)
   recaptchaRef.current.executeAsync().then((token:string) => {
@@ -121,18 +112,18 @@ const handleRegister = async(values:IUserFormValues) =>{
               content="Yeni Üye"
               textAlign="center"
             />
-            <h4>Uzman başvuru için <span className="registerLoginAnchor" onClick={handleTrainerFormClick}>tıkla!</span></h4>            
-            <Field name="username" placeholder="*Kullanıcı Adı" component={TextInput}/>
-            <Field name="displayname" placeholder="Ad Soyad" component={TextInput} />
+            <h3>Trainer register form <span className="registerLoginAnchor" onClick={handleTrainerFormClick}>here!</span></h3>            
+            <Field name="username" placeholder="*Username" component={TextInput}/>
+            <Field name="displayname" placeholder="Name Surname" component={TextInput} />
             <Field name="email" type="email" placeholder="*Email" component={TextInput} />
             <Field
               name="password"
-              placeholder="*Şifre"
+              placeholder="*Password"
               type="password"
               component={TextInput}
             />
             {submitErr && !dirtySinceLastSubmit && (
-             <ErrorMessage error={submitErr} text='Geçersiz email adresi / şifre' />
+             <ValidationError errors={submitErr} />
             )}
             <div style={
               isMobile ? {maxWidth:"100%", marginBottom:"10px", textAlign:"right"} :
@@ -143,19 +134,19 @@ const handleRegister = async(values:IUserFormValues) =>{
               disabled={(invalid && !dirtySinceLastSubmit) || pristine}
               loading={submitting}
               color="blue"
-              content="Kayıt Ol"
+              content="Register"
               circular
               basic
               fluid
             />
-              <Divider horizontal>veya</Divider>
+              <Divider horizontal>OR</Divider>
               <Button loading={loadingFbLogin} circular fluid color="facebook" className="fbtn"
             style={{marginBottom:"40px"}}
             onClick={(e)=>{
               e.preventDefault();
               e.stopPropagation();
               facebookLogin(location)}}>
-                  <Icon name="facebook" />{" "} Facebook ile giriş yap
+                  <Icon name="facebook" />{" "} Sign up with Facebook
                 </Button>
             <br></br>
             {/* <GoogleLogin

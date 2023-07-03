@@ -8,14 +8,15 @@ import { observer } from 'mobx-react-lite';
 import ActivityListItemPlaceholder from '../activities/dashboard/ActivityListItemPlaceHolder';
 import ActivityList from '../activities/dashboard/ActivityList';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const HomePage = () => {
   const history = useHistory();
     const rootStore = useStore();
     const {user} = rootStore.userStore;
-    const {openModal,closeModal,modal} = rootStore.modalStore;
     const [loading, setLoading] = useState(false);
-  
+    const { i18n, t } = useTranslation();
+
     const [open, setOpen] = React.useState(false)
     const [title, setTitle] = React.useState("")
 
@@ -41,7 +42,7 @@ const HomePage = () => {
     return (
       <>
         <Helmet>
-        <title>Afitapp - Sağlıklı Aktivite Platformu</title>
+        <title>Afitapp</title>
       </Helmet>
       <Modal
       dimmer="blurring"
@@ -67,7 +68,7 @@ const HomePage = () => {
           //  clearProfileRegistery();
             history.push('/profiles');
             }}>
-          <Icon style={{opacity:"1"}} name='users' size="large"/> Ara
+          <Icon style={{opacity:"1"}} name='users' size="large"/> {t("search")}
         </Button></p>
           </Segment>
           <Segment className="box">
@@ -137,15 +138,16 @@ const HomePage = () => {
       </Modal.Actions> */}
     </Modal>
         <Fragment>
-        <Segment textAlign='center' vertical className='masthead' id="slideImages">
+        <div className='masthead'>
+          <div id="slideImages"></div>
                <Container text>
                    <Header as='h1' inverted>
-                    {isMobile ? "Dilediğin kategoride aktivite ara!":"Dilediğin kategoride aktivite ara, sağlıklı sosyalleşmenin tadını çıkar!"}   
+                    {isMobile ? <span>{t("mainTitleMobile")}</span>:<span>{t("mainTitle")}</span>}   
                    </Header>
-                   {/* {isLoggedIn && user && token ? (  */}
+                   {/* {isLoggedIn && user && token ? (  
                    <Fragment>
                         <ActivitySearchArea />
-                   </Fragment>
+                   </Fragment>*/}
                    {/* ): (
                        <Fragment>
                             <Header as='h2' inverted content={`Afitapp'a Hoşgeldin!`} />
@@ -160,56 +162,17 @@ const HomePage = () => {
 
 
                </Container>
-           </Segment>
-          {/* {isTablet ?
-          <>   <Container text className='mobile_text_container'>
-                 <Header as='h1'>
-                     Dilediğin kategoride aktivite ara, sağlıklı sosyalleşmenin tadını çıkar!
-                 </Header>
-             </Container>
-          <Segment textAlign='center' vertical className='masthead' id="slideImages">
- 
-      </Segment>
-      <Fragment>
-                      <ActivitySearchArea />
-                 </Fragment>
-                   </>
-      :
-      <div className='masthead' id="slideImages" style={{display:"flex", flexDirection:"row", marginTop:"-66px"}}>
-         <Container text>
-              <Header as='h1'  style={{fontSize: '33px',  textAlign:'center', width:"100%" , textShadow: "1.5px 1.5px #f2f2f2"}}>
-                  Dilediğin kategoride aktivite ara, sağlıklı sosyalleşmenin tadını çıkar!
-              </Header>
-               <p style={{ fontSize: '1.3rem', color: "#222E50" }}>
-               İhtiyacın olan en doğru uzmanı en kolay şekilde bulabileceğin yerdesin. 
-               Yerinde ya da online olarak aktivitelere katılabilir, eğitmenlerin paylaştıkları blogları okuyarak ilgilendiğin alanda bilgi sahibi olabilirsin. 
-                </p> 
-          </Container>
-      </div>
-     
-
-          } */}
-           
+           </div>
            <Container className="pageContainer home">
            <div style={{height:"20px"}} className="spacingContainer__small" />
-           {/* <Header as='h3'  style={{fontSize: '30px',  textAlign:'center', width:"100%" }}>
-                Hoşgeldin!
-                </Header> */}
-          
-                <Header as='h1'  style={{fontSize: '30px',  textAlign:'center', width:"100%",textShadow: "1.5px 1.5px #f2f2f2", marginBottom:"20px" }}>
+                {/* <Header as='h1'  style={{fontSize: '30px',  textAlign:'center', width:"100%",textShadow: "1.5px 1.5px #f2f2f2", marginBottom:"20px" }}>
                  Doğru uzmanı ve doğru aktiviteyi AfitApp ile keşfet! 
-               {/* Yeni aktiviteler yeni insanlar keşfetme zamanı!*/}
-                </Header>
-              <Grid className="activityListGrid">
+                </Header> */}
+              <div className="activityListGrid">
               <Grid.Row>
               <Grid.Column width={16}>
               {loadingInitial && page === 0 ? <ActivityListItemPlaceholder/> :
               (
-              // <InfiniteScroll
-              // pageStart={0}
-              // loadMore={handleGetNext}
-              // hasMore={!loadingNext && page +1 < totalPages}
-              // initialLoad={false}>
               <>
                 <ActivityList />
                 {activityRegistery.size > 0 && 
@@ -222,7 +185,7 @@ const HomePage = () => {
                  className='orangeBtn'
                  onClick={()=> history.push("/activities")} 
                  style={{margin:"20px 0"}}
-               > Daha Fazla Aktivite </Button>
+               > {t("showMore")} </Button>
                </div>
                 }
                 
@@ -238,11 +201,11 @@ const HomePage = () => {
               <br></br>
               </Grid.Column>
               </Grid.Row>
-              </Grid>
+              </div>
 
 
               <Grid columns={3} textAlign='center'>
-
+{/* 
 <Grid.Row >
   <Grid.Column width={isMobile ? "16": "5"}>
     <Header as='h3' icon>
@@ -282,7 +245,7 @@ const HomePage = () => {
    
   </Grid.Column>
  
-</Grid.Row>
+</Grid.Row> */}
 </Grid>
 <div style={{display:"flex"}}>
         <div className="spacingContainer__small" />
@@ -348,20 +311,20 @@ const HomePage = () => {
        
         <Grid.Column style={{textAlign:"center"}}>
                 <Header as="h1">
-                    <Header.Content>Eğitmen misin?</Header.Content>
+                    <Header.Content>Join us as a supply partner</Header.Content>
                 </Header>
                 <Header.Subheader as="h2" style={{fontSize:"1.2rem",marginBottom:"20px", fontWeight:"500"}}>
-                      <div>AFitApp'da uzman olduğun alanda aktivite planlamak ve erişilebilirliğini arttırmak için buradan başvurabilirsin.
-                        </div>  
+                <Header size="small" style={{color:"#222E50"}} content="We’ll ask for some simple contact and company details, such as which products your business offers."/>
                             <div>
                             <Button  
                             primary
                             circular
+                            size="huge"
                             disabled={loading}
                             style={{ marginTop:"20px"}} 
                             onClick={()=>{history.push('/trainerOnboarding');}}
                             >
-                          Uzman Başvuru Formu 
+                          {t('getStarted')}
                         </Button>
                             </div>
                 </Header.Subheader>

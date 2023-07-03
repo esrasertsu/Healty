@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { IActivitiesEnvelope, IActivity, IActivityFormValues, IActivityOnlineJoinInfo, IActivityReview, ILevel, IPaymentCardInfo, IPaymentUserInfoDetails, IPersonalActivitiesEnvelope, IRefundPayment, PaymentThreeDResult } from '../models/activity';
 import { toast } from 'react-toastify';
 import { IAccountInfo, IAccountInfoValues, ISubMerchantInfo, ITrainerCreationFormValues, ITrainerFormValues, IUser, IUserFormValues, IyziSubMerchantResponse } from '../models/user';
@@ -23,20 +23,27 @@ axios.interceptors.request.use((config) => {
     return Promise.reject(error);
 })
 
-axios.interceptors.response.use(undefined, error => {
-
+axios.interceptors.response.use(undefined, (error: AxiosError) => {
+debugger;
     if(error.message === 'Network Error' && !error.response)
     {
-        toast.error('Network error - Sunucu bağlantı hatası!');//make sure API is running!
+        history.push('/notFound');
+        toast.error('Network error');//make sure API is running!
     }
-    const {status, data, config, headers} = error.response;
-    if(status === 401 && headers['www-authenticate'].startsWith('Bearer error="invalid_token"'))
+    const { data, status, config, headers } = error.response as AxiosResponse;
+    if(status === 401)
     {
-       
-       toast.info("Oturumunuzun süresi dolmuştur.")
-       store.userStore.logout();
-       window.localStorage.removeItem('jwt');
-       history.push('/login');
+      if(headers['www-authenticate'] && headers['www-authenticate'].startsWith('Bearer error="invalid_token"'))
+      {
+        toast.info("Your session expired.")
+        store.userStore.logout();
+        window.localStorage.removeItem('jwt');
+        history.push('/login');
+      }else{
+        const modalStateErrors = [];
+        modalStateErrors.push("Unauthorized")
+        throw modalStateErrors.flat();
+       }
     }   
     if(status === 404)
     {
@@ -46,22 +53,39 @@ axios.interceptors.response.use(undefined, error => {
     {
         history.push('/forbidden');
     }  
-    if(status === 400 && config.method === 'get' && data.errors.hasOwnProperty('id'))
+    if(status === 400)
     {
-        history.push('/notFound');
+        if (config.method === 'get' && data.errors.hasOwnProperty('id')) history.push('/notFound');
+
+        if (data.errors) {
+            const modalStateErrors = [];
+
+            if(typeof(data.errors) === 'string') 
+                modalStateErrors.push(data.errors);
+            else    
+            for (const key in data.errors) {
+                if (data.errors[key]) {
+                    modalStateErrors.push(data.errors[key])
+                    if(key == "EmailVerification") 
+                        store.userStore.setResendEmailVeriMessage(true);
+                }
+            }
+            throw modalStateErrors.flat();
+        } else {
+            toast.error(data);
+        }
     }
+    
     if( status === 500 )
     {
-        toast.error('Hata oluştu!');//Server error - check the terminal for more info!
+        // store.commonStore.setServerError(data);
+        //     router.navigate('/server-error');
+        toast.error('Server error - check the terminal for more info');//Server error - check the terminal for more info!
     }
-    throw error.response;
+   return Promise.reject(error);
 });
 
 const responseBody = (response: AxiosResponse) => response.data;
-
-// const sleep = (ms: number) => (response: AxiosResponse) =>
-//         new Promise<AxiosResponse>(resolve => setTimeout(()=> resolve(response), ms));
-
 
 const requests = {
     get: ( url: string ) => axios.get(url).then(responseBody),

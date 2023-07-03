@@ -5,12 +5,14 @@ import { Button, Container, Header, Segment, Image, Grid, Icon, Modal } from 'se
 import { useMediaQuery } from 'react-responsive';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../stores/rootStore';
+import { useTranslation } from 'react-i18next';
 
  const AboutUs = () => {
 
     const history = useHistory();
     const isTablet = useMediaQuery({ query: '(max-width: 767px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
+    const { i18n, t } = useTranslation();
 
     const rootStore = useStore();
     const {isLoggedIn, user} = rootStore.userStore;
@@ -19,11 +21,11 @@ import { useStore } from '../stores/rootStore';
 
     <Fragment>
           <Helmet>
-        <title>Afitapp - Hakkımızda</title>
+        <title>Afitapp - {t("aboutUs")}</title>
       </Helmet>
     <Segment textAlign='center' vertical className='masthead' id="slideImages" style={{height:"20vh"}}>
               <Header as='h1' inverted textAlign='center' style={{margin:"auto"}}>
-                Hakkımızda
+                {t("aboutUs")}
                </Header>
        </Segment>
       
@@ -117,10 +119,10 @@ import { useStore } from '../stores/rootStore';
    
     <Grid.Column style={{textAlign:"center"}}>
             <Header as="h1">
-                <Header.Content>Eğitmen misin?</Header.Content>
+            <Header.Content>{t("supplierTitle")}</Header.Content>
             </Header>
             <Header.Subheader as="h2" style={{fontSize:"1.2rem",marginBottom:"20px", fontWeight:"500"}}>
-                  <div>AFitApp'da uzman olduğun alanda aktivite planlamak ve erişilebilirliğini arttırmak için buradan başvurabilirsin.
+                  <div>{t("trainerInvite")}
                     </div>  
                         <div>
                         <Button  
@@ -129,7 +131,7 @@ import { useStore } from '../stores/rootStore';
                         style={{ marginTop:"20px"}} 
                         onClick={()=>{history.push('/trainerOnboarding');}}
                         >
-                      Uzman Başvuru Formu 
+                      {t("getStarted")}
                     </Button>
                         </div>
             </Header.Subheader>

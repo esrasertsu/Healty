@@ -7,6 +7,7 @@ import LoginForm from '../user/LoginForm';
 import  RegisterForm from '../user/RegisterForm';
 import TrainerForm from '../user/TrainerRegisterModal';
 import { useMediaQuery } from 'react-responsive'
+import { useTranslation } from 'react-i18next';
 
 interface IProps{
     setVisibleMobileNav:(visible:boolean) => void;
@@ -18,9 +19,9 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
     const { activeMenu,setActiveMenu, token } = rootStore.commonStore;
     const { notificationCount, isLoggedIn } = rootStore.userStore;
     const {openModal,closeModal,modal} = rootStore.modalStore;
+    const { i18n, t } = useTranslation();
 
 
-    
     const isTablet = useMediaQuery({ query: '(max-width: 820px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 450px)' })
 
@@ -48,8 +49,8 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
               </Modal.Description>
               </>,true,
               <div className="modalformFooter">
-              <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>
-              <p>Uzman başvuru için <span className="registerLoginAnchor" onClick={handleTrainerFormClick}>tıkla!</span></p>
+              <p>Already a member? <span className="registerLoginAnchor" onClick={handleLoginClick}>Login</span></p>
+              <p>Trainer application form <span className="registerLoginAnchor" onClick={handleTrainerFormClick}>here!</span></p>
               </div>) 
           }
   
@@ -64,7 +65,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                 <TrainerForm />
                 </Modal.Description>
                 </>,true,
-                <p>Zaten üye misin? <span className="registerLoginAnchor" onClick={handleLoginClick}>Giriş</span></p>) 
+                <p>Already a member? <span className="registerLoginAnchor" onClick={handleLoginClick}>Login</span></p>) 
                
             }
 
@@ -77,7 +78,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
            {!isLoggedIn && (
                <>
        <Menu.Item header className="mobileNavMenu_Header">
-               <h2 style={{fontWeight:500}}>Hoşgeldin!</h2>
+               <h2 style={{fontWeight:500}}>Welcome</h2>
                <p style={{ fontSize: '16px', fontWeight:500 }}>Uzmanlarla iletişime geçebilmek, aktivitelere katılabilmek ve çok daha fazlası için:</p>
                 <Button
                 circular
@@ -87,7 +88,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                      setActiveMenu(-1)
                      setVisibleMobileNav(false);
                  }}
-                 className="blueBtn">Hesap Oluştur</Button>
+                 className="blueBtn">{t("signup")}</Button>
                    <Button
                 circular
                 style={{marginTop:"20px"}}
@@ -97,7 +98,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                      setActiveMenu(-1)
                      setVisibleMobileNav(false);
                  }}
-                 className="loginRegMobileButton orangeBtn">Uzman Başvurusu</Button>
+                 className="loginRegMobileButton orangeBtn">{t("trainerApplication")}</Button>
                   
                   </Menu.Item>
            
@@ -111,7 +112,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                     }} >
                         <h3 className="mobileNavMenu_container_item login" style={{color:"blue"}}>
                         <Icon name="user" style={{marginRight:"10px"}} ></Icon>
-                          Giriş Yap
+                        {t("login")}
                         </h3>
                         </Menu.Item> 
                         </>
@@ -127,7 +128,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                     }} >
                         <h3 className="mobileNavMenu_container_item">
                         <Icon name="graduation cap" style={{marginRight:"10px"}} ></Icon>
-                          Uzmanlar
+                          Trainers
                         </h3>
                         </Menu.Item> 
                <Menu.Item as={Link} to="/activities" 
@@ -141,7 +142,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                 }}>
                       <h3 className="mobileNavMenu_container_item">
                         <Icon name="calendar alternate outline" style={{marginRight:"10px"}} ></Icon>
-                        Aktiviteler
+                        Activities
                         </h3>
                 </Menu.Item>
 
@@ -159,7 +160,7 @@ const MobileNavMenu: React.FC<IProps> = ({setVisibleMobileNav,visible}) =>{
                         
                       <h3 className="mobileNavMenu_container_item">
                       <Icon name="pencil alternate" style={{marginRight:"10px"}} ></Icon>
-                        Blog Yazılar
+                        Blogs
                         </h3>
                     </Menu.Item>
 

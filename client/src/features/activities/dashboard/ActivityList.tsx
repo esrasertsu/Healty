@@ -55,10 +55,10 @@ const ActivityList: React.FC = () => {
       {!isTabletOrMobile && <br></br> }
       <div style={isMobile? {textAlign:"center", marginBottom:"40px" } : {display:"flex", justifyContent:"center" , marginTop:"40px"}}>
         <div>
-        <Header size="large" style={{color:"#222E50"}} content="Merhaba!"/>
-        <Header size="medium" style={{color:"#222E50"}} content="Şimdilik arama kriterlerine uygun açılmış bir aktivite bulamadık ama senin için oluşturmaya devam ediyoruz. Takipte kal"/>
+        <Header size="large" style={{color:"#222E50"}} content="Welcome!"/>
+        <Header size="medium" style={{color:"#222E50"}} content="We'll meet you here with new activities soon. Please follow us on Instagram."/>
           </div>
-       <Image src={"/icons/clip-searching.png"} style={isMobile? {width:"100%", marginTop:"75px"} : {width:"50%", marginTop:"75px"}} />
+       {/* <Image src={"/icons/clip-searching.png"} style={isMobile? {width:"100%", marginTop:"75px"} : {width:"50%", marginTop:"75px"}} /> */}
       </div>
      </>
     }

@@ -45,7 +45,7 @@ const BlogPage: React.FC<RouteComponentProps<DetailParams>> = ({match, history})
     return (
       <>
        <Helmet>
-        <title>Afitapp - Sağlıklı Yaşam Platformu - {post!.title}</title>
+        <title>Afitapp - {post!.title}</title>
       </Helmet>
       <Container className="pageContainer">
  

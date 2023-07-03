@@ -87,7 +87,7 @@ html, body {
   line-height: 1rem;
   height: 55px;
   padding: 0.85714286em 0.64285714em;
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 .ui.secondary.pointing.menu .desktopMenu.item i.icon{
   font-size: 17px;
@@ -104,8 +104,55 @@ html, body {
 
 .masthead .ui.inverted.header{
   text-shadow: rgb(80 60 58) 1.5px 1.5px;
+  font-size: 4rem;
+  line-height: 4rem;
 }
 
+.masthead {
+  background: linear-gradient(267.71deg,rgba(12,24,47,0) 34.23%,rgba(12,24,47,.6) 97.86%) !important;
+  z-index: 1;
+  height: 500px;
+  display: block;
+  left: 0;
+  top: 0;
+  margin: 0 !important;
+
+  .ui.text.container{
+    top: 0;
+    left: 0;
+    position: absolute;
+    padding: 40px;
+  }
+}
+
+#slideImages {
+  box-shadow: none !important;
+  border: none !important;
+  z-index: -1;
+  position: relative;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 500px;
+
+}
+
+.ui.menu.transparentHeader.mainMenu{
+  display: block;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 2;
+    border-bottom: none !important;
+
+    .desktopNavBar.ui.container{
+      background: linear-gradient(180deg,#000,transparent);
+      position: absolute;
+      padding-left: 140px;
+    padding-right: 140px;
+    width: 100%;
+    }
+}
 .ui.secondary.pointing.menu .desktopMenu.item.active:after{
   bottom: 7px;
   visibility: visible;
@@ -842,7 +889,7 @@ p.baseline-pricing__value{
   font-weight: 600 !important;
 }
 .ui.mainMenu {
-    background-color: #fff !important;
+    background-color: transparent !important;
     height: 66px;
     border-bottom: 1px solid rgba(34,36,38,.15);
     position: inherit;
@@ -1113,9 +1160,12 @@ a.ui.card:hover {
   background-color: initial;
   -webkit-font-kerning: normal;
   font-kerning: normal;
-  font-weight: 600;
+  font-weight: 500;
 }
 
+.ui.secondary.menu.transparentHeader .item{
+  color: #fff;
+}
 
 .photoPreview img{
   height: 200px !important;
@@ -1409,19 +1459,17 @@ a.ui.card:hover {
 }
 
  .ui.text.container {
-  margin: 40px 0 41px 150px !important;
+  margin: 120px 0 0 120px !important;
   text-align: left;
-    font-family: AssistantRegular, Arial, sans-serif;
-    max-width: 500px !important;
+  font-family: AssistantRegular, Arial, sans-serif;
+  max-width: 550px !important;
 }
 }
 
 @media (min-width: 1200px){
-  #slideImages.masthead {
-    height: 25vw;
+  #slideImages {
+    height: 500px;
     width: 100%;
-    display: flex;
-    align-items: center;
     background-position: center center;
     background-size: cover !important;
     background-repeat: no-repeat;
@@ -1433,7 +1481,8 @@ a.ui.card:hover {
     animation-delay: 3s;
     animation-timing-function:step-start;
     animation-fill-mode: both;
-    background-position-y: -260px !important;
+    background-position-y: -100px !important;
+    background: linear-gradient(267.71deg,rgba(12,24,47,0) 34.23%,rgba(12,24,47,.6) 97.86%);
    }
   .ui.segment.profieHeader_segment{
     box-shadow: none !important;
@@ -1452,7 +1501,7 @@ a.ui.card:hover {
 
 
 @media (min-width:821px) and (max-width:1199px) {
-  #slideImages.masthead {
+  #slideImages {
     height: 40vw;
     width: 100%;
     display: flex;
@@ -1476,7 +1525,6 @@ a.ui.card:hover {
   }
 
   .ui.mainMenu, .pageContainer.ui.container{
-    padding: 0 50px;
     .ui.container{
       width: 100% !important;
     }
@@ -1723,7 +1771,7 @@ max-width: 95%;
 
 @media (min-width:540px) and (max-width:768px) {
   
-#slideImages.masthead {
+#slideImages {
   height: 430px;
   width: 100%;
   display: flex;
@@ -1746,7 +1794,7 @@ max-width: 95%;
 
 @media (min-width:769px) and (max-width:820px) {
   
-  #slideImages.masthead {
+  #slideImages {
     height: 460px;
     width: 100%;
     display: flex;
@@ -2694,11 +2742,6 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
   background-color: rgb(244, 245, 245)  !important;
 }
 
-#slideImages.masthead {
-  box-shadow: none !important;
-  border: none !important;
-}
-
 .pageContainer.ui.container {
  
   min-height: 90vh;
@@ -2712,7 +2755,7 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
 
 @media screen and (max-width: 539px){
   
-  #slideImages.masthead {
+  #slideImages {
     width: 100%;
     height: 300px;
     display: flex;
@@ -3364,7 +3407,7 @@ i.icon.heart.outline:before,i.icon.bookmark:before{
 .registerLoginAnchor{
    color:#345289 !important;
    cursor: pointer;
-   font-size: 15px;
+   font-size: 17px;
    margin-right: 10px;
 }
 

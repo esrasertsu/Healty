@@ -5,7 +5,7 @@ with CQRS + MediatR pattern implementing. <br>
 
 # Built With
 <ul>
-<li>Microsoft Visual Studio 2017</li>
+<li>Microsoft Visual Studio 2022</li>
 <li>ASP.NET Core Web Application Project - The project that includes WEB API. References ASP.NET Core 7.0. </li>
  <li>React(with TypeScript,React Hooks) - create-react-app package was used for UI infrastructure.</li> 
 <li>Entity Framework Core - Entity Framework Core is a lightweight ORM framework which is extensible version of Entity Framework.</li>
